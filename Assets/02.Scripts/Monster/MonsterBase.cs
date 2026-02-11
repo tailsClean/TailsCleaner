@@ -5,19 +5,23 @@ public enum MonsterType { Normal, SpecialPattern, Elite, Boss }
 [RequireComponent(typeof(Rigidbody2D), typeof(Collider2D))]
 public abstract class MonsterBase : MonoBehaviour
 {
+    [Header("--- 환경 설정 ---")]
+    [Tooltip("체크하면 3D(X,Z축 사용), 체크 해제하면 2D(X,Y축 사용)")]
+    public bool is3DMode = true;
+
     [Header("--- 몬스터 기본 정보 ---")]
     public int monsterId;
     public string monsterName;
     public MonsterType monsterType;
 
     [Header("--- 몬스터 스탯 ---")]
-    public float hp = 1.0f;        
+    public float hp = 1.0f;
     public float mass = 1.0f;
     public float moveSpeed = 1.0f;
     public float stoppingDistance = 0.1f;
 
-    [Header("--- 3D 좌표 설정 ---")]
-    public float fixedWorldHeightY = 0f;
+    [Header("--- 좌표 설정 ---")]
+    public float fixedWorldHeightY = 0f; // 3D일 때만 사용되는 고정 높이
     public Transform target;
 
     protected Rigidbody2D rb2D;
@@ -26,6 +30,7 @@ public abstract class MonsterBase : MonoBehaviour
     {
         rb2D = GetComponent<Rigidbody2D>();
 
+        // 물리 설정 초기화
         rb2D.bodyType = RigidbodyType2D.Kinematic;
         rb2D.gravityScale = 0f;
         rb2D.constraints = RigidbodyConstraints2D.FreezeRotation;
@@ -39,18 +44,21 @@ public abstract class MonsterBase : MonoBehaviour
     protected virtual void FixedUpdate()
     {
         if (target == null) return;
-
         MoveToTarget();
     }
 
     protected virtual void MoveToTarget()
     {
-        // 3D 위치 가져오기
-        Vector3 myPos3D = transform.position;
-        Vector3 targetPos3D = target.position;
+        Vector3 myPos = transform.position;
+        Vector3 targetPos = target.position;
 
-        // (X, Z) 벡터 계산
-        Vector3 diff = new Vector3(targetPos3D.x - myPos3D.x, 0, targetPos3D.z - myPos3D.z);
+        // 현재 환경에 맞는 '상하/앞뒤' 좌표값 추출
+        // 3D라면 Z값을, 2D라면 Y값을 가져옴.
+        float myVertical = is3DMode ? myPos.z : myPos.y;
+        float targetVertical = is3DMode ? targetPos.z : targetPos.y;
+
+        // 방향 계산 (2D 벡터로 통합 계산)
+        Vector2 diff = new Vector2(targetPos.x - myPos.x, targetVertical - myVertical);
         float distance = diff.magnitude;
 
         if (distance <= stoppingDistance)
@@ -60,22 +68,36 @@ public abstract class MonsterBase : MonoBehaviour
         }
 
         // 방향 벡터 생성 및 다음 위치 계산
-        Vector3 dir = diff.normalized;
-        Vector3 nextPos3D = myPos3D + dir * moveSpeed * Time.fixedDeltaTime;
+        Vector2 dir = diff.normalized;
+        Vector2 nextStep = dir * moveSpeed * Time.fixedDeltaTime;
 
-        // 3D 좌표를 2D 물리 좌표(X, Y)로 강제 매핑 (Z -> Y)
-        rb2D.position = new Vector2(nextPos3D.x, nextPos3D.z);
+        // 최종 좌표 확정
+        float finalX = myPos.x + nextStep.x;
+        float finalVertical = myVertical + nextStep.y;
 
-        // 실제 3D 오브젝트 위치 업데이트
-        transform.position = new Vector3(nextPos3D.x, fixedWorldHeightY, nextPos3D.z);
-
-        // 디버그 확인: 여기서 Z값이 변하는지 확인
-        //Debug.Log($"Target Z: {targetPos3D.z:F2} | My Z: {transform.position.z:F2} | Dir: {dir}");
+        // 물리 엔진 및 실제 Transform 업데이트
+        if (is3DMode)
+        {
+            // [3D 모드] 연산된 세로값을 Z에 할당
+            rb2D.position = new Vector2(finalX, finalVertical);
+            transform.position = new Vector3(finalX, fixedWorldHeightY, finalVertical);
+        }
+        else
+        {
+            // [2D 모드] 연산된 세로값을 Y에 할당
+            rb2D.position = new Vector2(finalX, finalVertical);
+            transform.position = new Vector3(finalX, finalVertical, myPos.z); // Z는 유지
+        }
     }
 
     public void SyncTransformToPhysics()
     {
-        if (rb2D != null)
+        if (rb2D == null) return;
+
+        // 초기 동기화도 모드에 따라 다르게 처리
+        if (is3DMode)
             rb2D.position = new Vector2(transform.position.x, transform.position.z);
+        else
+            rb2D.position = new Vector2(transform.position.x, transform.position.y);
     }
 }
