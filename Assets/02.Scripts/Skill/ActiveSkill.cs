@@ -10,6 +10,9 @@ public class ActiveSkill : MonoBehaviour
     public int CurrentLevel { get; private set; } = 0;      // 현재 레벨
     public int CurrentSubTag { get; private set; } = 0;     // 적용 중인 서브 태그
 
+    [Header("스킬 프리팹")]
+    [SerializeField] private GameObject _skillPrefab;
+
     // 스킬 타입
     private ATTACK_TYPE _attackType;
     private TARGETING_TYPE _targetingType;
@@ -21,7 +24,7 @@ public class ActiveSkill : MonoBehaviour
     private Dictionary<int, int> _upgradeLevels = new Dictionary<int, int>();
 
     // 초기화
-    public void Init(ActiveSkillBaseData baseData, ActiveSkillUpgradeData upgradeData)
+    public void Init(ActiveSkillBaseData baseData, ActiveSkillUpgradeData upgradeData, GameObject prefab)
     {   
         // 메인 태그
         MainTag = baseData.MainTag;
@@ -30,6 +33,9 @@ public class ActiveSkill : MonoBehaviour
         _attackType = baseData.AttackType;
         _targetingType = baseData.TargetingType;
         Debug.Log($"[ActiveSkill] {baseData.Name} 타입 설정완료 ({_attackType}, {_targetingType})");
+
+        // 스킬의 사용 프리팹
+        _skillPrefab = prefab;
 
         // 0 티어도 업그레이드 취급
         ApplyUpgrade(upgradeData);      

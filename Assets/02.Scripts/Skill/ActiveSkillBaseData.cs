@@ -18,17 +18,17 @@ public class ActiveSkillBaseData : MonoBehaviour
         Directional = 4204, // 이동방향형 (이동 방향)
     }
 
-    public int MainTag;                  // 메인 태그 41001
-    public string Name;                  // 스킬 이름
-    public ATTACK_TYPE AttackType;       // 공격 방식 4101
-    public TARGETING_TYPE TargetingType; // 조준 방식 4201
+    public string Name;                  // main_tag        스킬 이름
+    public int MainTag;                  // main_tag_name   메인 태그 41001
+    public ATTACK_TYPE AttackType;       // attack_type     공격 방식 4101
+    public TARGETING_TYPE TargetingType; // targeting_type  조준 방식 4201
 
 
     // 생성자
     public ActiveSkillBaseData(int mainTag, string name, ATTACK_TYPE aType, TARGETING_TYPE tType)
     {
-        MainTag = mainTag;
         Name = name;
+        MainTag = mainTag;
         AttackType = aType;
         TargetingType = tType;
     }

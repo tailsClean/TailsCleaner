@@ -29,6 +29,11 @@ public class SkillManager : MonoBehaviour
     // Key : MainTag, SubTag
     private Dictionary<int, SkillStatBonus> _skillBonuses = new Dictionary<int, SkillStatBonus>();
 
+
+    [Header("테스트 프리팹")]
+    [SerializeField] GameObject _bubblePrefab;
+    [SerializeField] GameObject _soapPrefab;
+
     private void Awake() { Instance = this; }
 
     private void Start()
@@ -70,16 +75,6 @@ public class SkillManager : MonoBehaviour
         return null;
     }
 
-    // 메인 태그의 액티브 스킬 기본 데이터 반환
-    public ActiveSkillBaseData GetBaseData(int mainTag)
-    {
-        if (_activeBaseDatas.TryGetValue(mainTag, out var data))
-            return data;
-
-        Debug.LogError($"[Manager] 메인 태그 {mainTag}에 해당하는 BaseData가 없음.");
-        return null;
-    }
-
     // 모든 스킬 만렙인지 확인
     public bool IsAllActiveMaxLevel()
     {
@@ -97,6 +92,8 @@ public class SkillManager : MonoBehaviour
         return true;
     }
 
+    #region 선택지 적용
+
     // 선택지 적용
     public void ApplyOption(ActiveSkillUpgradeData upgradeData)
     {
@@ -108,14 +105,18 @@ public class SkillManager : MonoBehaviour
             // 일단 스킬 매니저 하위로
             go.transform.SetParent(transform);
 
-            // 액티브 붙이기
-            ActiveSkill newSkill = go.AddComponent<ActiveSkill>();
 
-            // 액티브 기본 데이터
+            // 스킬 스크립트 
+            ActiveSkill newSkill = CreateSkillComponent(go, upgradeData.MainTag);
+
+            // 기본 데이터
             ActiveSkillBaseData baseData = GetBaseData(upgradeData.MainTag);
 
-            // 스킬 초기화
-            newSkill.Init(baseData, upgradeData);
+            // 스킬 프리팹
+            GameObject prefab = GetPrefabForSkill(upgradeData.MainTag);
+
+            // 초기화
+            newSkill.Init(baseData, upgradeData, prefab);
 
             // 보유 스킬에 추가
             if (MyActiveSkills.Contains(newSkill) == false)
@@ -136,6 +137,43 @@ public class SkillManager : MonoBehaviour
             }
         }
     }
+
+    // ------------------- 임시 ------------------------
+
+    // 실제 액티브 스킬 컴포넌트 적용
+    private ActiveSkill CreateSkillComponent(GameObject skillObject, int mainTag)
+    {
+        switch (mainTag)
+        {
+            case 41001: return skillObject.AddComponent<BubbleSkill>();
+            case 41002: return skillObject.AddComponent<SoapThrowSkill>();
+            default: return skillObject.AddComponent<ActiveSkill>();
+        }
+    }
+
+    // 액티브 스킬의 기본 데이터
+    public ActiveSkillBaseData GetBaseData(int mainTag)
+    {
+        if (_activeBaseDatas.TryGetValue(mainTag, out var data))
+            return data;
+
+        Debug.LogError($"[Manager] 메인 태그 {mainTag}에 해당하는 BaseData가 없음.");
+        return null;
+    }
+
+
+    // 액티브 스킬이 사용할 프리팹
+    private GameObject GetPrefabForSkill(int mainTag)
+    {
+        switch (mainTag)
+        {
+            case 41001: return _bubblePrefab;
+            case 41002: return _soapPrefab;
+            default: return null;
+        }
+    }
+    #endregion
+
 
     #region 초기화
 
