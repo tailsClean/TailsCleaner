@@ -1,7 +1,6 @@
 using System.Collections.Generic;
-using UnityEditor.SceneManagement;
 using UnityEngine;
-using static ActiveSkillBaseData;
+using static ActiveBaseData;
 
 [RequireComponent(typeof(UpgradeSelect))]
 public class SkillManager : MonoBehaviour
@@ -12,22 +11,23 @@ public class SkillManager : MonoBehaviour
     public const int MAX_PASSIVE_SLOTS = 6;     // 최대 패시브 스킬 수
 
     // 모든 액티브 스킬 업그레이드 데이터
-    public List<ActiveSkillUpgradeData> AllActiveUpgradeData { get; private set; } = new List<ActiveSkillUpgradeData>();
-
-    // 액티브 스킬 베이스 데이터 (공격 방식, 조준 방식)
-    // Key : MainTag
-    private Dictionary<int, ActiveSkillBaseData> _activeBaseDatas = new Dictionary<int, ActiveSkillBaseData>();
+    public List<ActiveUpgradeData> AllActiveUpgradeData { get; private set; } = new List<ActiveUpgradeData>();
 
     // 플레이어 보유 스킬 리스트
     public List<ActiveSkill> MyActiveSkills { get; private set; } = new List<ActiveSkill>();
     public List<PassiveSkill> MyPassiveSkills { get; private set; } = new List<PassiveSkill>();
 
-    // 액티브 슬롯 체크
-    public bool IsActiveSlotFull => MyActiveSkills.Count >= MAX_ACTIVE_SLOTS;
+    // 액티브 스킬 베이스 데이터 (공격 방식, 조준 방식)
+    // Key : MainTag
+    private Dictionary<int, ActiveBaseData> _activeBaseDatas = new Dictionary<int, ActiveBaseData>();
 
     // 태그별 스킬 스탯 합
     // Key : MainTag, SubTag
     private Dictionary<int, SkillStatBonus> _skillBonuses = new Dictionary<int, SkillStatBonus>();
+
+
+    // 액티브 슬롯 체크
+    public bool IsActiveSlotFull => MyActiveSkills.Count >= MAX_ACTIVE_SLOTS;
 
 
     [Header("테스트 프리팹")]
@@ -65,7 +65,7 @@ public class SkillManager : MonoBehaviour
     }
 
     // 메인 태그와 티어로 업그레이드 데이터 반환
-    public ActiveSkillUpgradeData FindUpgradeData(int mainTag, int tier)
+    public ActiveUpgradeData FindUpgradeData(int mainTag, int tier)
     {
         for (int i = 0; i < AllActiveUpgradeData.Count; i++)
         {
@@ -95,7 +95,7 @@ public class SkillManager : MonoBehaviour
     #region 선택지 적용
 
     // 선택지 적용
-    public void ApplyOption(ActiveSkillUpgradeData upgradeData)
+    public void ApplyOption(ActiveUpgradeData upgradeData)
     {
         // 0티어 신규 생성
         if (upgradeData.Tier == 0)
@@ -110,7 +110,7 @@ public class SkillManager : MonoBehaviour
             ActiveSkill newSkill = CreateSkillComponent(go, upgradeData.MainTag);
 
             // 기본 데이터
-            ActiveSkillBaseData baseData = GetBaseData(upgradeData.MainTag);
+            ActiveBaseData baseData = GetBaseData(upgradeData.MainTag);
 
             // 스킬 프리팹
             GameObject prefab = GetPrefabForSkill(upgradeData.MainTag);
@@ -152,7 +152,7 @@ public class SkillManager : MonoBehaviour
     }
 
     // 액티브 스킬의 기본 데이터
-    public ActiveSkillBaseData GetBaseData(int mainTag)
+    public ActiveBaseData GetBaseData(int mainTag)
     {
         if (_activeBaseDatas.TryGetValue(mainTag, out var data))
             return data;
@@ -203,13 +203,13 @@ public class SkillManager : MonoBehaviour
     // 대충 기본 데이터 생성
     private void AddBaseData(int mainTag, string name, ATTACK_TYPE aType, TARGETING_TYPE tType)
     {
-        _activeBaseDatas.Add(mainTag, new ActiveSkillBaseData(mainTag, name, aType, tType));
+        _activeBaseDatas.Add(mainTag, new ActiveBaseData(mainTag, name, aType, tType));
     }
 
     // 대충 업그레이드 데이터 생성
     private void AddData(int id, string name, int mainTag, int tier, int maxLevel, int subTag1, int subTag2 = 0, float dmg = 0)
     {
-        var data = new ActiveSkillUpgradeData
+        var data = new ActiveUpgradeData
         {
             Id = id,
             Name = name,
@@ -233,7 +233,7 @@ public class SkillManager : MonoBehaviour
     // 시작 기본 스킬
     private void AddDefaultSkill()
     {
-        ActiveSkillUpgradeData defaultSkill = AllActiveUpgradeData.Find(x => x.Id == 41009);
+        ActiveUpgradeData defaultSkill = AllActiveUpgradeData.Find(x => x.Id == 41009);
         if (defaultSkill != null)
         {
             Debug.Log("기본 스킬 지급");

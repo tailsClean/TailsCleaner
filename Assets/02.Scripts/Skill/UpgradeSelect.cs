@@ -9,7 +9,7 @@ public class UpgradeSelect : MonoBehaviour
     public const int ACTIVE_TIER_THREE_LEVEL = 7; // 티어 3 레벨
 
     // 현재 선택지
-    private List<ActiveSkillUpgradeData> _currentOptions = new List<ActiveSkillUpgradeData>();
+    private List<ActiveUpgradeData> _currentOptions = new List<ActiveUpgradeData>();
 
     // 선택지 옵션 설정
     public void GenerateOptions()
@@ -119,7 +119,7 @@ public class UpgradeSelect : MonoBehaviour
         return tempMainTags;
     }
 
-    private ActiveSkillUpgradeData PickOptionForTag(SkillManager sm, int mainTag)
+    private ActiveUpgradeData PickOptionForTag(SkillManager sm, int mainTag)
     {
         // 보유한 메인 태그 스킬 가져오기
         ActiveSkill mySkill = sm.GetActiveSkill(mainTag);
@@ -140,7 +140,7 @@ public class UpgradeSelect : MonoBehaviour
         if (level >= ACTIVE_TIER_THREE_LEVEL) tiers.Add(3);
 
         // 임시 업그레이드 후보
-        List<ActiveSkillUpgradeData> candidates = new List<ActiveSkillUpgradeData>();
+        List<ActiveUpgradeData> candidates = new List<ActiveUpgradeData>();
 
         // 전체에서 조건에 맞는 데이터 필터링
         for (int i = 0; i < sm.AllActiveUpgradeData.Count; i++)
@@ -175,7 +175,7 @@ public class UpgradeSelect : MonoBehaviour
         // 비정상 범위 체크
         if (index < 0 || index >= _currentOptions.Count) return;
 
-        ActiveSkillUpgradeData data = _currentOptions[index];
+        ActiveUpgradeData data = _currentOptions[index];
 
         // 매니저에서 선택지 적용
         SkillManager.Instance.ApplyOption(data);

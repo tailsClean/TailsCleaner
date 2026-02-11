@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-public class ActiveSkillBaseData : MonoBehaviour
+public class ActiveBaseData : MonoBehaviour
 {
     public enum ATTACK_TYPE  // 공격 방식
     {
@@ -25,7 +25,7 @@ public class ActiveSkillBaseData : MonoBehaviour
 
 
     // 생성자
-    public ActiveSkillBaseData(int mainTag, string name, ATTACK_TYPE aType, TARGETING_TYPE tType)
+    public ActiveBaseData(int mainTag, string name, ATTACK_TYPE aType, TARGETING_TYPE tType)
     {
         Name = name;
         MainTag = mainTag;

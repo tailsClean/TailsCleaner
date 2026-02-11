@@ -1,4 +1,4 @@
-public struct SkillStatBonus        // 스킬 스탯 추가
+public class SkillStatBonus         // 추가 스킬 스탯
 {
     public float Damage;            // 공격력 배율
     public float Cooldown;          // 쿨타임 감소
@@ -27,7 +27,7 @@ public struct SkillStatBonus        // 스킬 스탯 추가
 
 
 
-public struct PlayerStatBonus       // 플레이어 스탯 추가
+public class PlayerStatBonus        // 추가 플레이어 스탯
 {
     public int Defence;             // 방어력
     public float MoveSpeed;         // 이동 속도 

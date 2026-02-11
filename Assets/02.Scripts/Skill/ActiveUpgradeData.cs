@@ -1,8 +1,9 @@
-public class ActiveSkillUpgradeData // 액티브 스킬 업그레이드 데이터
+public class ActiveUpgradeData // 액티브 스킬 업그레이드 데이터
 {
     // 기본 정보
     public int Id;                  // active_skill_id     액티브 스킬 ID 40001
     public string Name;             // active_upgrade_name 액티브 스킬 이름 비누 거품
+    public string Desc;             // effect              설명
     public int Tier;                // upgrade_tier        0 기본, 1 ~ 3: 강화
     public int MaxLevel;            // upgrade_maxlev      최대 레벨
 

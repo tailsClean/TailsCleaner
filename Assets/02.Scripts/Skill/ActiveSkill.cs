@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
-using static ActiveSkillBaseData;
+using static ActiveBaseData;
 
 public class ActiveSkill : MonoBehaviour
 {
@@ -11,20 +11,23 @@ public class ActiveSkill : MonoBehaviour
     public int CurrentSubTag { get; private set; } = 0;     // 적용 중인 서브 태그
 
     [Header("스킬 프리팹")]
-    [SerializeField] private GameObject _skillPrefab;
+    [SerializeField] protected GameObject _skillPrefab;
 
     // 스킬 타입
-    private ATTACK_TYPE _attackType;
-    private TARGETING_TYPE _targetingType;
+    protected ATTACK_TYPE _attackType;
+    protected TARGETING_TYPE _targetingType;
 
     // 스킬 스탯 보너스
-    private SkillStatBonus _statBonus = new SkillStatBonus();
+    protected SkillStatBonus _statBonus = new SkillStatBonus();
     
     // 업그레이드 별 레벨 (Key: active_skill_id, Value: UpgradeLevel)
     private Dictionary<int, int> _upgradeLevels = new Dictionary<int, int>();
+    
+    // 모디파이어 목록
+    protected List<SkillModifier> _modifiers = new List<SkillModifier>();
 
     // 초기화
-    public void Init(ActiveSkillBaseData baseData, ActiveSkillUpgradeData upgradeData, GameObject prefab)
+    public void Init(ActiveBaseData baseData, ActiveUpgradeData upgradeData, GameObject prefab)
     {   
         // 메인 태그
         MainTag = baseData.MainTag;
@@ -32,10 +35,11 @@ public class ActiveSkill : MonoBehaviour
         // 타입 설정
         _attackType = baseData.AttackType;
         _targetingType = baseData.TargetingType;
-        Debug.Log($"[ActiveSkill] {baseData.Name} 타입 설정완료 ({_attackType}, {_targetingType})");
+        Debug.Log($"[ActiveSkill] {baseData.Name} 타입 설정 완료. ({_attackType}, {_targetingType})");
 
         // 스킬의 사용 프리팹
         _skillPrefab = prefab;
+        Debug.Log($"[ActiveSkill] {baseData.Name} 의 프리팹 {_skillPrefab.name} 설정 완료.");
 
         // 0 티어도 업그레이드 취급
         ApplyUpgrade(upgradeData);      
@@ -43,7 +47,7 @@ public class ActiveSkill : MonoBehaviour
     }
 
     // 스킬 업그레이드
-    public void ApplyUpgrade(ActiveSkillUpgradeData upgradeData)
+    public virtual void ApplyUpgrade(ActiveUpgradeData upgradeData)
     {
         // 업그레이드의 서브 태그 추가
         if (upgradeData.SubTag1 != 0) CurrentSubTag |= SubTagRegistry.GetFlag(upgradeData.SubTag1);
@@ -63,6 +67,14 @@ public class ActiveSkill : MonoBehaviour
 
         // 스탯 누적
         _statBonus.Add(upgradeData.GetSkillBonus());
+
+        // 모디파이어 생성 후 추가
+        SkillModifier modifier = SkillModifierRegistry.Create(upgradeData.Id);
+
+        if (modifier != null)
+        {
+            _modifiers.Add(modifier);
+        }
 
         Debug.Log($"[ActiveSkill] {MainTag} 번 액티브 스킬 업그레이드 완료.");
     }
