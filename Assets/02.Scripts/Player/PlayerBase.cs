@@ -3,9 +3,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
-using UnityEngine.InputSystem.Controls;
 
-public class PlayerBase : MonoBehaviour, IDamageable
+public class PlayerBase : MonoBehaviour, IDamageable, IEquipmentable
 {
     [SerializeField] private float _hp = 100;
     [SerializeField] private float _attackPower = 10;
@@ -25,7 +24,7 @@ public class PlayerBase : MonoBehaviour, IDamageable
     private Vector2 _attackDir;
     private bool _isInvincible;                                 // 피격 무적상태 여부
     private float _timer;
-    private Dictionary<EQUIPMENT, PlayerEquipment> _myItems;
+    private Dictionary<EQUIPMENT, PlayerEquipment> _myEquipment;
 
     public event Action<Vector2> OnMoveInput;
     public event Action<EQUIPMENT> OnSetEquipment;                         // 장비가 바뀌었다는 것을 알리는 신호
@@ -33,13 +32,13 @@ public class PlayerBase : MonoBehaviour, IDamageable
     public float Hp => Mathf.Max(_hp, 0);
     //public float FinalDamage => _attackPower;                   // 최종 데미지 수치
     public bool IsInvincible => _isInvincible;
-    public Dictionary<EQUIPMENT, PlayerEquipment> MyItems => _myItems;
+    public Dictionary<EQUIPMENT, PlayerEquipment> MyEquipment => _myEquipment;
 
 
     private void Awake()
     {
         _mySprite = GetComponent<SpriteRenderer>();
-        _myItems = new Dictionary<EQUIPMENT, PlayerEquipment>();
+        _myEquipment = new Dictionary<EQUIPMENT, PlayerEquipment>();
     }
 
     private void OnEnable()
@@ -161,8 +160,8 @@ public class PlayerBase : MonoBehaviour, IDamageable
     // 장비를 교체하는 메서드
     public void SetEquipment(PlayerEquipment equipment)
     {
-        if(!_myItems.TryAdd(equipment.EquipmentPart, equipment))
-            _myItems[equipment.EquipmentPart] = equipment;
+        if(!_myEquipment.TryAdd(equipment.EquipmentPart, equipment))
+            _myEquipment[equipment.EquipmentPart] = equipment;
 
         OnSetEquipment?.Invoke(equipment.EquipmentPart);
     }
