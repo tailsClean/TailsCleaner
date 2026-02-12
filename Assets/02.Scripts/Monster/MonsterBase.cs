@@ -3,7 +3,7 @@
 public enum MonsterType { Normal, SpecialPattern, Elite, Boss }
 
 [RequireComponent(typeof(Rigidbody2D), typeof(Collider2D))]
-public abstract class MonsterBase : MonoBehaviour
+public abstract class MonsterBase : MonoBehaviour, IDamageable
 {
     [Header("--- 환경 설정 ---")]
     [Tooltip("체크하면 3D(X,Z축 사용), 체크 해제하면 2D(X,Y축 사용)")]
@@ -99,5 +99,21 @@ public abstract class MonsterBase : MonoBehaviour
             rb2D.position = new Vector2(transform.position.x, transform.position.z);
         else
             rb2D.position = new Vector2(transform.position.x, transform.position.y);
+    }
+
+    public void TakeDamage(float damage)
+    {
+        hp -= damage;
+        Debug.Log($"{monsterName} 남은 체력: {hp}");
+        if (hp <= 0) Die();
+    }
+
+    protected virtual void Die()
+    {
+        // 몬스터 사망 로그 
+        Debug.Log($"<color=red><b>[사망]</b></color> {monsterName}(ID: {monsterId})가 처치되었습니다!");
+
+        // 확인을 위한 객체 삭제
+        Destroy(gameObject);
     }
 }

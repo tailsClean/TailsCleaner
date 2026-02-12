@@ -1,4 +1,4 @@
-using UnityEngine;
+﻿using UnityEngine;
 
 public class BulletTest : MonoBehaviour, IBullet
 {
@@ -20,7 +20,7 @@ public class BulletTest : MonoBehaviour, IBullet
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.CompareTag("Player"))
+        if (collision.CompareTag("Monster"))
         {
             var player = collision.GetComponent<IDamageable>();
 
