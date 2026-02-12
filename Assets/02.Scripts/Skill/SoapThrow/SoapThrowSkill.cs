@@ -17,6 +17,7 @@ public class SoapThrowSkill : GenericActiveSkill<SoapProjectile, SoapModifierDat
         for (int i = 0; i < count; i++)
         {
             // 랜덤 원 방향 (임시)
+            // 공격 방향에서 가까운 적으로 변경해야 함
             Vector2 randomDir = Random.insideUnitCircle.normalized;
 
             // 발사
