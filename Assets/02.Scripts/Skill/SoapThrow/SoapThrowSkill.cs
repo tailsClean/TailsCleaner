@@ -22,7 +22,6 @@ public class SoapThrowSkill : GenericActiveSkill<SoapProjectile, SoapModifierDat
             // 발사
             SpawnSoap(randomDir);
         }
-
     }
 
     // 비누 투사체 생성

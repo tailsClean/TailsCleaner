@@ -118,7 +118,8 @@ public abstract class ActiveSkill : MonoBehaviour
         // 스탯 갱신
         CalculateStats();
 
-        Debug.Log($"[ActiveSkill] {MainTag} 번 액티브 스킬 업그레이드 완료.");
+        Debug.Log($"[ActiveSkill] {MainTag} 번 액티브 스킬 {SkillManager.Instance.ActiveBaseDatas[MainTag].Name} 의 {upgradeData.Name} ({upgradeData.Id}) 업그레이드 완료. " +
+            $"\n업그레이드 레벨 : {GetUpgradeLevel(upgradeData.Id)} / {upgradeData.MaxLevel}  ,  액티브 스킬 레벨 : {CurrentLevel} / {MAX_SKILL_LEVEL}");
     }
 
     // 업그레이드의 현재 레벨
