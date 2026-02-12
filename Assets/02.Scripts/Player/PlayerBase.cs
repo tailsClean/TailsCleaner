@@ -28,11 +28,12 @@ public class PlayerBase : MonoBehaviour, IDamageable
     private Dictionary<EQUIPMENT, PlayerEquipment> _myItems;
 
     public event Action<Vector2> OnMoveInput;
+    public event Action<EQUIPMENT> OnSetEquipment;                         // 장비가 바뀌었다는 것을 알리는 신호
 
     public float Hp => Mathf.Max(_hp, 0);
     //public float FinalDamage => _attackPower;                   // 최종 데미지 수치
     public bool IsInvincible => _isInvincible;
-
+    public Dictionary<EQUIPMENT, PlayerEquipment> MyItems => _myItems;
 
 
     private void Awake()
@@ -152,11 +153,22 @@ public class PlayerBase : MonoBehaviour, IDamageable
         Vector2 itemPos = item.MyTransform.position;
         Vector2 myPos = transform.position;
         
-        // 마지막 파라미터는 이동 속도
+        // 마지막 인자갑은 이동 속도
         item.MyTransform.position = Vector2.MoveTowards(itemPos, myPos, 1f * Time.deltaTime);
     }
 
-    private enum EQUIPMENT
+
+    // 장비를 교체하는 메서드
+    public void SetEquipment(PlayerEquipment equipment)
+    {
+        if(!_myItems.TryAdd(equipment.EquipmentPart, equipment))
+            _myItems[equipment.EquipmentPart] = equipment;
+
+        OnSetEquipment?.Invoke(equipment.EquipmentPart);
+    }
+
+
+    public enum EQUIPMENT
     {
         Hat, Cloak, Weapon, Shoes, Relic
     }
