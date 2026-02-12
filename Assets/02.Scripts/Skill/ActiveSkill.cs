@@ -55,8 +55,7 @@ public abstract class ActiveSkill : MonoBehaviour
         // 기본 스탯
         _baseStat = upgradeData.GetSkillStat();
 
-        // 0 티어도 업그레이드 취급
-        ApplyUpgrade(upgradeData);
+        Debug.Log($"[ActiveSkill] 업그레이드 기본 스탯 Speed : {_baseStat.ProjectileSpeed}");
 
         // 스탯 계산
         CalculateStats();
@@ -147,6 +146,7 @@ public abstract class ActiveSkill : MonoBehaviour
         _finalStat.Add(_baseStat);
         _finalStat.Add(_bonusStat);
 
+        Debug.Log($"[ActiveSkill] 업그레이드 최종 스탯 Speed : {_finalStat.ProjectileSpeed}");
         // 추가로 플레이어, 패시브 스탯 계산하면 될 듯
     }
 }

@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Unity.Android.Gradle.Manifest;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -88,15 +89,15 @@ public class UpgradeSelect : MonoBehaviour
         if (sm.MyActiveSkills.Count < SkillManager.MAX_ACTIVE_SLOTS)
         {
             // 전체 업그레이드 데이터 순회
-            for (int i = 0; i < sm.AllActiveUpgradeData.Count; i++)
+            foreach (var upgradeData in sm.AllActiveUpgradeData.Values)
             {
-                var data = sm.AllActiveUpgradeData[i];
-
                 // 0티어 && 미습득 && 미중복
-                if (data.Tier == 0 && sm.GetActiveSkill(data.MainTag) == null && tempMainTags.Contains(data.MainTag) == false)
+                if (upgradeData.Tier == 0 &&
+                    sm.GetActiveSkill(upgradeData.MainTag) == null &&
+                    tempMainTags.Contains(upgradeData.MainTag) == false)
                 {
                     // 후보에 추가
-                    tempMainTags.Add(data.MainTag);
+                    tempMainTags.Add(upgradeData.MainTag);
                 }
             }
         }

@@ -11,11 +11,8 @@ public class SkillManager : MonoBehaviour
     public const int MAX_PASSIVE_SLOTS = 6;     // 최대 패시브 스킬 수
 
     // 모든 액티브 스킬 업그레이드 데이터
-    public List<ActiveUpgradeData> AllActiveUpgradeData { get; private set; } = new List<ActiveUpgradeData>();
-
-    // 플레이어 보유 스킬 리스트
-    public List<ActiveSkill> MyActiveSkills { get; private set; } = new List<ActiveSkill>();
-    public List<PassiveSkill> MyPassiveSkills { get; private set; } = new List<PassiveSkill>();
+    // Key : active_skill_id
+    public Dictionary<int, ActiveUpgradeData> AllActiveUpgradeData { get; private set; } = new Dictionary<int, ActiveUpgradeData>();
 
     // 액티브 스킬 베이스 데이터 (공격 방식, 조준 방식)
     // Key : MainTag
@@ -24,6 +21,10 @@ public class SkillManager : MonoBehaviour
     // 태그별 스킬 스탯 합
     // Key : MainTag, SubTag
     private Dictionary<int, SkillStat> _skillBonuses = new Dictionary<int, SkillStat>();
+
+    // 플레이어 보유 스킬 리스트
+    public List<ActiveSkill> MyActiveSkills { get; private set; } = new List<ActiveSkill>();
+    public List<PassiveSkill> MyPassiveSkills { get; private set; } = new List<PassiveSkill>();
 
 
     // 액티브 슬롯 체크
@@ -187,13 +188,13 @@ public class SkillManager : MonoBehaviour
         // 업그레이드 데이터 생성
 
         // 비누 거품
-        AddData(40001, "비누 거품", 41001, 0, 1, 0, 0, 0.3f, 1f);
+        AddData(40001, "비누 거품", 41001, 0, 1, 0, 0, 0.3f, 1f, 5f, 0f, 1f);
         AddData(40002, "자동 추척 비누 지우개", 41001, 1, 10, 40102);
         AddData(40003, "버블버블", 41001, 2, 1, 40101);
         AddData(40004, "빨래당함", 41001, 2, 1, 40103);
         AddData(40005, "흐르는 거품", 41001, 3, 1, 40112);
         // 비누 던지기
-        AddData(41009, "비누 던지기", 41002, 0, 1, 0, 0, 1f, 1f);
+        AddData(41009, "비누 던지기", 41002, 0, 1, 0, 0, 1f, 1f, 5f, 1f, 1f);
         AddData(41010, "미끄러지기", 41002, 1, 10, 40114);
         AddData(41011, "감나빗!", 41002, 2, 10, 40114, 40102);
 
@@ -207,7 +208,8 @@ public class SkillManager : MonoBehaviour
     }
 
     // 대충 업그레이드 데이터 생성
-    private void AddData(int id, string name, int mainTag, int tier, int maxLevel, int subTag1, int subTag2 = 0, float dmg = 0f, float cooldown = 0f)
+    private void AddData(int id, string name, int mainTag, int tier, int maxLevel, int subTag1, int subTag2 = 0,
+        float dmg = 1f, float cooldown = 1f, float duration = 1f, float speed = 1f, float size = 1f)
     {
         var data = new ActiveUpgradeData
         {
@@ -220,9 +222,17 @@ public class SkillManager : MonoBehaviour
             SubTag2 = subTag2,
             Damage = dmg,
             Cooldown = cooldown,
+            Duration = duration,
+            ProjectileSpeed = speed,
+            Size = size,
         };
 
-        AllActiveUpgradeData.Add(data);
+        if (AllActiveUpgradeData.ContainsKey(id) == false)
+        {
+            AllActiveUpgradeData.Add(id, data);
+        }
+        else
+            Debug.LogError($"[SkillManager] 중복된 active_skill_id : {id}");
     }
 
     // 서브 태그 초기화 (임시)
@@ -235,8 +245,7 @@ public class SkillManager : MonoBehaviour
     // 시작 기본 스킬
     private void AddDefaultSkill()
     {
-        ActiveUpgradeData defaultSkill = AllActiveUpgradeData.Find(x => x.Id == 41009);
-        if (defaultSkill != null)
+        if (AllActiveUpgradeData.TryGetValue(41009, out ActiveUpgradeData defaultSkill))
         {
             Debug.Log("기본 스킬 지급");
             ApplyOption(defaultSkill);

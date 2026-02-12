@@ -16,8 +16,8 @@ public class SoapThrowSkill : GenericActiveSkill<SoapProjectile, SoapModifierDat
 
         for (int i = 0; i < count; i++)
         {
-            // 랜덤 원 방향
-            Vector3 randomDir = Random.insideUnitCircle.normalized;
+            // 랜덤 원 방향 (임시)
+            Vector2 randomDir = Random.insideUnitCircle.normalized;
 
             // 발사
             SpawnSoap(randomDir);
@@ -27,16 +27,12 @@ public class SoapThrowSkill : GenericActiveSkill<SoapProjectile, SoapModifierDat
     }
 
     // 비누 투사체 생성
-    private void SpawnSoap(Vector3 dir)
+    private void SpawnSoap(Vector2 dir)
     {
-        // 프리팹 생성
-        GameObject obj = Instantiate(_skillPrefab, transform.position, Quaternion.identity);
-        SoapProjectile soap = obj.GetComponent<SoapProjectile>();
+        // 비누 생성
+        SoapProjectile soap = Instantiate(_skillPrefabComponent, transform.position, Quaternion.identity);
 
-        if (soap != null)
-        {
-            // 최종 스탯, 방향, ModifierData 넘김
-            //soap.Init(_finalStat, dir, ModifierData);
-        }
+        // 데이터 주입
+        soap.Init(_finalStat, dir, ModifierData);
     }
 }
