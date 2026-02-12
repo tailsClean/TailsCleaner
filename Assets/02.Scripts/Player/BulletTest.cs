@@ -1,4 +1,4 @@
-using UnityEngine;
+﻿using UnityEngine;
 
 public class BulletTest : MonoBehaviour, IBullet
 {
@@ -27,6 +27,5 @@ public class BulletTest : MonoBehaviour, IBullet
             if (player != null)
                 player.TakeDamage(_attackDamage);
         }
-        
     }
 }
