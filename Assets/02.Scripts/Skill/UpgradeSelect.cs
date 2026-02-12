@@ -144,18 +144,16 @@ public class UpgradeSelect : MonoBehaviour
         List<ActiveUpgradeData> candidates = new List<ActiveUpgradeData>();
 
         // 전체에서 조건에 맞는 데이터 필터링
-        for (int i = 0; i < sm.AllActiveUpgradeData.Count; i++)
+        foreach (var upgradeData in sm.AllActiveUpgradeData.Values)
         {
-            var data = sm.AllActiveUpgradeData[i];
-
             // 태그 일치 && 티어 포함
-            if (data.MainTag == mainTag && tiers.Contains(data.Tier))
+            if (upgradeData.MainTag == mainTag && tiers.Contains(upgradeData.Tier))
             {
                 // 업그레이드 최대 레벨인지 체크
-                if (mySkill.GetUpgradeLevel(data.Id) < data.MaxLevel)
+                if (mySkill.GetUpgradeLevel(upgradeData.Id) < upgradeData.MaxLevel)
                 {
                     // 아니면 후보에 추가
-                    candidates.Add(data);
+                    candidates.Add(upgradeData);
                 }
             }
         }

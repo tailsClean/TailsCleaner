@@ -28,7 +28,6 @@ public class SoapProjectile : MonoBehaviour
 
         // 크기 설정
         transform.localScale = Vector3.one * _stat.Size;
-        Debug.Log($"Dir : {_dir} , Speed : {_stat.ProjectileSpeed} , Size : {_stat.Size}");
     }
 
     private void Update()

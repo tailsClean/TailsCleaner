@@ -18,9 +18,9 @@ public class SkillManager : MonoBehaviour
     // Key : MainTag
     private Dictionary<int, ActiveBaseData> _activeBaseDatas = new Dictionary<int, ActiveBaseData>();
 
-    // 태그별 스킬 스탯 합
-    // Key : MainTag, SubTag
-    private Dictionary<int, SkillStat> _skillBonuses = new Dictionary<int, SkillStat>();
+    // 메인 태그의 업그레이드 데이터 목록
+    // Key : MainTag
+    public Dictionary<int, List<ActiveUpgradeData>> SkillUpgradeMap { get; private set; } = new Dictionary<int, List<ActiveUpgradeData>>();
 
     // 플레이어 보유 스킬 리스트
     public List<ActiveSkill> MyActiveSkills { get; private set; } = new List<ActiveSkill>();
@@ -68,10 +68,10 @@ public class SkillManager : MonoBehaviour
     // 메인 태그와 티어로 업그레이드 데이터 반환
     public ActiveUpgradeData FindUpgradeData(int mainTag, int tier)
     {
-        for (int i = 0; i < AllActiveUpgradeData.Count; i++)
+        foreach(var upgradeData in AllActiveUpgradeData.Values)
         {
-            if (AllActiveUpgradeData[i].MainTag == mainTag && AllActiveUpgradeData[i].Tier == tier)
-                return AllActiveUpgradeData[i];
+            if (upgradeData.MainTag == mainTag && upgradeData.Tier == tier)
+                return upgradeData;
         }
         return null;
     }
@@ -105,7 +105,6 @@ public class SkillManager : MonoBehaviour
             GameObject go = new GameObject($"Skill_{upgradeData.MainTag}");
             // 일단 스킬 매니저 하위로
             go.transform.SetParent(transform);
-
 
             // 스킬 스크립트 
             ActiveSkill newSkill = CreateSkillComponent(go, upgradeData.MainTag);
@@ -188,15 +187,15 @@ public class SkillManager : MonoBehaviour
         // 업그레이드 데이터 생성
 
         // 비누 거품
-        AddData(40001, "비누 거품", 41001, 0, 1, 0, 0, 0.3f, 1f, 5f, 0f, 1f);
-        AddData(40002, "자동 추척 비누 지우개", 41001, 1, 10, 40102);
-        AddData(40003, "버블버블", 41001, 2, 1, 40101);
-        AddData(40004, "빨래당함", 41001, 2, 1, 40103);
-        AddData(40005, "흐르는 거품", 41001, 3, 1, 40112);
+        AddData(40001, "비누 거품", 41001, 0, 1, 0, 0, size : 2f, dmg : 0.3f, cooldown : 1f,  duration : 2f, projectileCount : 1 ,tick : 1);
+        AddData(40002, "자동 추척 비누 지우개", 41001, 1, 10, 40102, 0, speed: 1f);
+        AddData(40003, "버블버블", 41001, 2, 1, 40101, 0);
+        AddData(40004, "빨래당함", 41001, 2, 1, 40103, 0);
+        AddData(40005, "흐르는 거품", 41001, 3, 1, 40112, 0, duration: 2f);
         // 비누 던지기
-        AddData(41009, "비누 던지기", 41002, 0, 1, 0, 0, 1f, 1f, 5f, 1f, 1f);
-        AddData(41010, "미끄러지기", 41002, 1, 10, 40114);
-        AddData(41011, "감나빗!", 41002, 2, 10, 40114, 40102);
+        AddData(41009, "비누 던지기", 41002, 0, 1, 0, 0, size: 1f, dmg: 1f, cooldown: 1f, duration: 5f, speed: 1f, projectileCount: 1);
+        AddData(41010, "미끄러지기", 41002, 1, 10, 40114, 0, pierceCount: 2);
+        AddData(41011, "감나빗!", 41002, 2, 10, 40114, 40102, pierceCount: 1);
 
         Debug.Log($"[SkillManager] 로드 완료. ({AllActiveUpgradeData.Count}개)");
     }
@@ -208,8 +207,8 @@ public class SkillManager : MonoBehaviour
     }
 
     // 대충 업그레이드 데이터 생성
-    private void AddData(int id, string name, int mainTag, int tier, int maxLevel, int subTag1, int subTag2 = 0,
-        float dmg = 1f, float cooldown = 1f, float duration = 1f, float speed = 1f, float size = 1f)
+    private void AddData(int id, string name, int mainTag, int tier, int maxLevel, int subTag1, int subTag2,
+        float size = 0f, float dmg = 0f, float cooldown = 0f, float duration = 0f, float speed = 0f, int projectileCount = 0, int pierceCount = 0, int tick = 0, int knockback = 0, bool barrier = false)
     {
         var data = new ActiveUpgradeData
         {
@@ -220,11 +219,16 @@ public class SkillManager : MonoBehaviour
             MaxLevel = maxLevel,
             SubTag1 = subTag1,
             SubTag2 = subTag2,
+            Size = size,
             Damage = dmg,
             Cooldown = cooldown,
             Duration = duration,
+            ProjectileCount = projectileCount,
             ProjectileSpeed = speed,
-            Size = size,
+            PierceCount = pierceCount,
+            TickRate = tick,
+            Knockback = knockback,
+            HasBarrier = barrier,
         };
 
         if (AllActiveUpgradeData.ContainsKey(id) == false)

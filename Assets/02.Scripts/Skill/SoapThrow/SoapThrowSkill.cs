@@ -23,7 +23,6 @@ public class SoapThrowSkill : GenericActiveSkill<SoapProjectile, SoapModifierDat
             SpawnSoap(randomDir);
         }
 
-        Debug.Log("비누 던지기 실행");
     }
 
     // 비누 투사체 생성

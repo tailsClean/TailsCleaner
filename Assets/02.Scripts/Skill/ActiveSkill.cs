@@ -146,7 +146,6 @@ public abstract class ActiveSkill : MonoBehaviour
         _finalStat.Add(_baseStat);
         _finalStat.Add(_bonusStat);
 
-        Debug.Log($"[ActiveSkill] 업그레이드 최종 스탯 Speed : {_finalStat.ProjectileSpeed}");
         // 추가로 플레이어, 패시브 스탯 계산하면 될 듯
     }
 }
