@@ -8,6 +8,7 @@ public abstract class MonsterBase : MonoBehaviour, IDamageable
     [Header("--- 환경 설정 ---")]
     [Tooltip("체크하면 3D(X,Z축 사용), 체크 해제하면 2D(X,Y축 사용)")]
     public bool is3DMode = true;
+    public Transform target;
 
     [Header("--- 몬스터 기본 정보 ---")]
     public int monsterId;
@@ -22,7 +23,9 @@ public abstract class MonsterBase : MonoBehaviour, IDamageable
 
     [Header("--- 좌표 설정 ---")]
     public float fixedWorldHeightY = 0f; // 3D일 때만 사용되는 고정 높이
-    public Transform target;
+
+    [Header("--- Drop Items ---")]
+    [SerializeField] private GameObject TestItem; // TestItem 프리팹 할당
 
     protected Rigidbody2D rb2D;
 
@@ -47,6 +50,7 @@ public abstract class MonsterBase : MonoBehaviour, IDamageable
         MoveToTarget();
     }
 
+    // 타겟을 따라가는 로직
     protected virtual void MoveToTarget()
     {
         Vector3 myPos = transform.position;
@@ -90,6 +94,7 @@ public abstract class MonsterBase : MonoBehaviour, IDamageable
         }
     }
 
+    // Rigidbody2D 위치 동기화 로직
     public void SyncTransformToPhysics()
     {
         if (rb2D == null) return;
@@ -101,17 +106,25 @@ public abstract class MonsterBase : MonoBehaviour, IDamageable
             rb2D.position = new Vector2(transform.position.x, transform.position.y);
     }
 
+    // 피격 및 판정 로직
     public void TakeDamage(float damage)
     {
         hp -= damage;
-        Debug.Log($"{monsterName} 남은 체력: {hp}");
+        //Debug.Log($"{monsterName} 남은 체력: {hp}");
         if (hp <= 0) Die();
     }
 
+    // 몬스터 사망 로직
     protected virtual void Die()
     {
         // 몬스터 사망 로그 
-        Debug.Log($"<color=red><b>[사망]</b></color> {monsterName}(ID: {monsterId})가 처치되었습니다!");
+        //Debug.Log($"<color=red><b>[사망]</b></color> {monsterName}(ID: {monsterId})가 처치되었습니다!");
+
+        // 드롭 아이템 생성 로직
+        if (TestItem != null)
+        {
+            Instantiate(TestItem, transform.position, Quaternion.identity);
+        }
 
         // 확인을 위한 객체 삭제
         Destroy(gameObject);
