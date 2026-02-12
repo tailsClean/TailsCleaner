@@ -23,7 +23,7 @@ public class SkillManager : MonoBehaviour
 
     // 태그별 스킬 스탯 합
     // Key : MainTag, SubTag
-    private Dictionary<int, SkillStatBonus> _skillBonuses = new Dictionary<int, SkillStatBonus>();
+    private Dictionary<int, SkillStat> _skillBonuses = new Dictionary<int, SkillStat>();
 
 
     // 액티브 슬롯 체크
@@ -187,13 +187,13 @@ public class SkillManager : MonoBehaviour
         // 업그레이드 데이터 생성
 
         // 비누 거품
-        AddData(40001, "비누 거품", 41001, 0, 1, 0, 0, 0.3f);
+        AddData(40001, "비누 거품", 41001, 0, 1, 0, 0, 0.3f, 1f);
         AddData(40002, "자동 추척 비누 지우개", 41001, 1, 10, 40102);
         AddData(40003, "버블버블", 41001, 2, 1, 40101);
         AddData(40004, "빨래당함", 41001, 2, 1, 40103);
         AddData(40005, "흐르는 거품", 41001, 3, 1, 40112);
         // 비누 던지기
-        AddData(41009, "비누 던지기", 41002, 0, 1, 0, 0, 1f);
+        AddData(41009, "비누 던지기", 41002, 0, 1, 0, 0, 1f, 1f);
         AddData(41010, "미끄러지기", 41002, 1, 10, 40114);
         AddData(41011, "감나빗!", 41002, 2, 10, 40114, 40102);
 
@@ -207,7 +207,7 @@ public class SkillManager : MonoBehaviour
     }
 
     // 대충 업그레이드 데이터 생성
-    private void AddData(int id, string name, int mainTag, int tier, int maxLevel, int subTag1, int subTag2 = 0, float dmg = 0)
+    private void AddData(int id, string name, int mainTag, int tier, int maxLevel, int subTag1, int subTag2 = 0, float dmg = 0f, float cooldown = 0f)
     {
         var data = new ActiveUpgradeData
         {
@@ -218,6 +218,8 @@ public class SkillManager : MonoBehaviour
             MaxLevel = maxLevel,
             SubTag1 = subTag1,
             SubTag2 = subTag2,
+            Damage = dmg,
+            Cooldown = cooldown,
         };
 
         AllActiveUpgradeData.Add(data);
