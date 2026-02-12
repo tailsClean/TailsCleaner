@@ -1,6 +1,5 @@
 ﻿using UnityEngine;
-
-public enum MonsterType { Normal, SpecialPattern, Elite, Boss }
+using MonsterEnum;
 
 [RequireComponent(typeof(Rigidbody2D), typeof(Collider2D))]
 public abstract class MonsterBase : MonoBehaviour, IDamageable
@@ -9,23 +8,26 @@ public abstract class MonsterBase : MonoBehaviour, IDamageable
     [Tooltip("체크하면 3D(X,Z축 사용), 체크 해제하면 2D(X,Y축 사용)")]
     public bool is3DMode = true;
     public Transform target;
+    public float stoppingDistance = 0.1f; // 타겟 정지 거리
 
-    [Header("--- 몬스터 기본 정보 ---")]
-    public int monsterId;
-    public string monsterName;
+    [Header("--- 몬스터 정체성 ---")]
     public MonsterType monsterType;
+    public MonsterMove moveType;
 
-    [Header("--- 몬스터 스탯 ---")]
+    [Header("--- 기준 몬스터 ---")]
     public float hp = 1.0f;
-    public float mass = 1.0f;
+    public float power = 1.0f;
     public float moveSpeed = 1.0f;
-    public float stoppingDistance = 0.1f;
+    public float hitBox = 1.0f;
+    public float mass = 1.0f;
+    public float KBResist = 1.0f;
 
     [Header("--- 좌표 설정 ---")]
     public float fixedWorldHeightY = 0f; // 3D일 때만 사용되는 고정 높이
 
     [Header("--- Drop Items ---")]
     [SerializeField] private GameObject TestItem; // TestItem 프리팹 할당
+
 
     protected Rigidbody2D rb2D;
 

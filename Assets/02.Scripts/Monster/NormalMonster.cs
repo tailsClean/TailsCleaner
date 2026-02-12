@@ -1,5 +1,5 @@
 ﻿using UnityEngine;
-
+using MonsterEnum;
 public class NormalMonster : MonsterBase
 {
     protected override void Awake()
