@@ -86,6 +86,7 @@ public class StageController : MonoBehaviour
 
     private void HandleMainTimerReachedLimit()
     {
+        Debug.Log("[Stage] Main timer reached limit -> BossState");
         // 메인타이머 15분 도달 → 보스 상태로 전환
         IStageState _bossState = new BossState(_timer, _registry, _spawner, _plan.bossId);
         _stateMachine.ChangeState(_bossState);
@@ -93,6 +94,7 @@ public class StageController : MonoBehaviour
 
     private void HandleBossTimerExpired()
     {
+        Debug.Log("[Stage] Boss timer expired -> FAIL");
         //보스타이머 0초 도달 했을 때 -> 아마 실패 판정
     }
 }
