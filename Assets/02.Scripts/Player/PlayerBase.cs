@@ -27,11 +27,12 @@ public class PlayerBase : MonoBehaviour, IDamageable, IEquipmentable
     private Dictionary<EQUIPMENT, PlayerEquipment> _myEquipment;
 
     public event Action<Vector2> OnMoveInput;
-    public event Action<EQUIPMENT> OnSetEquipment;                         // 장비가 바뀌었다는 것을 알리는 신호
+    public event Action<EQUIPMENT> OnSetEquipment;              // 장비가 바뀌었다는 것을 알리는 신호
 
     public float Hp => Mathf.Max(_hp, 0);
     //public float FinalDamage => _attackPower;                   // 최종 데미지 수치
     public bool IsInvincible => _isInvincible;
+    public Transform AttackTarget => GetTarget(_attackDir);     // 조준형 스킬 사용을 위한 타겟
     public Dictionary<EQUIPMENT, PlayerEquipment> MyEquipment => _myEquipment;
 
 
@@ -166,6 +167,16 @@ public class PlayerBase : MonoBehaviour, IDamageable, IEquipmentable
         OnSetEquipment?.Invoke(equipment.EquipmentPart);
     }
 
+
+    // 조준형 스킬을 위한 타겟 검사
+    private Transform GetTarget(Vector2 dir)
+    {
+        Vector2 origine = (Vector2)transform.position + dir;
+        var hit = Physics2D.Raycast(origine, dir);
+        Debug.Log(hit.collider.gameObject.name);
+
+        return hit.transform;
+    }
 
     public enum EQUIPMENT
     {
