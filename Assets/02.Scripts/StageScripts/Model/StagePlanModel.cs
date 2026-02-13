@@ -1,0 +1,46 @@
+﻿using UnityEngine;
+using System.Collections.Generic;
+
+//파싱 제작 후 주입 받을 데이터 전송 객체(DTO)
+public class StagePlan
+{
+    public int stageId;
+
+    public int mainLimitSeconds;
+    public int bossLimitSeconds;
+
+    public int bossId;
+
+    public IReadOnlyList<WavePlan> wavePlans;
+}
+
+// 웨이브의 특정 시간 구간에 어떤 스폰 구성이 활성인지 정의
+public class WavePlan
+{
+    public int waveIndex;
+    public int startTimeSeconds;
+    public int endTimeSeconds;
+
+    public SpawnPattern spawnPattern;
+    public IReadOnlyList<MonsterSpawnPlan> spawns;
+
+    public int midBossId; // 웨이브 중간 보스가 있을 경우
+}
+
+// 웨이브 내부 몬스터 스폰 구성
+public class MonsterSpawnPlan
+{
+    public int monsterId;
+    public int spawnAmount;
+    public float spawnIntervalSeconds; // 몬스터 간 스폰 간격
+    public int weightPercent; // 70/30 같은 몬스터 소환 비율(총합은 100으로 가정)
+    
+}
+
+// 몬스터 소환 패턴
+public enum SpawnPattern
+{
+    Random = 1,
+    Squad = 2,
+    Circle = 3,
+}
