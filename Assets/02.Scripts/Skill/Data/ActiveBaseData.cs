@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-public class ActiveBaseData : MonoBehaviour
+public class ActiveBaseData
 {
     public enum ATTACK_TYPE  // 공격 방식
     {

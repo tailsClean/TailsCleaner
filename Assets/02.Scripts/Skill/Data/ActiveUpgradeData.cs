@@ -37,9 +37,9 @@ public class ActiveUpgradeData // 액티브 스킬 업그레이드 데이터
     }
 
     // 스킬 스탯 반환
-    public SkillStatBonus GetSkillBonus()
+    public SkillStat GetSkillStat()
     {
-        SkillStatBonus bonus = new SkillStatBonus();
+        SkillStat bonus = new SkillStat();
         bonus.Damage = Damage;
         bonus.Cooldown = Cooldown;
         bonus.Duration = Duration;

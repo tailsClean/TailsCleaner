@@ -1,4 +1,4 @@
-public class SkillStatBonus         // 추가 스킬 스탯
+public class SkillStat         // 추가 스킬 스탯
 {
     public float Damage;            // 공격력 배율
     public float Cooldown;          // 쿨타임 감소
@@ -11,7 +11,7 @@ public class SkillStatBonus         // 추가 스킬 스탯
     public float Size;              // 크기 비율
 
     // 스탯 더하기
-    public void Add(SkillStatBonus other)
+    public void Add(SkillStat other)
     {
         Damage += other.Damage;
         Cooldown += other.Cooldown;

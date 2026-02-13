@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class SkillModifierRegistry : MonoBehaviour
+public static class SkillModifierRegistry
 {
     // 업그레이드 모디파이어
     // Key : active_skill_id, Value : 모디파이어 컴포넌트

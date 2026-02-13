@@ -1,29 +1,37 @@
 ﻿using UnityEngine;
 
-
 // 비누 던지기 모디파이어
 public class SoapModifierData
 {
     public bool Retracking = false;
 }
 
-
-public class SoapThrowSkill : ActiveSkill
+public class SoapThrowSkill : GenericActiveSkill<SoapProjectile, SoapModifierData>
 {
-    public SoapModifierData ModifierData;
-
-    // 업그레이드 시 모디파이어 설정
-    public override void ApplyUpgrade(ActiveUpgradeData upgradeData)
+    // 스킬 발동
+    protected override void Active()
     {
-        base.ApplyUpgrade(upgradeData);
+        // 투사체 수
+        int count = Mathf.Max(1, _finalStat.ProjectileCount);
 
-        // 초기화
-        ModifierData = new SoapModifierData();
-
-        // 모디파이어 순회해서 적용
-        foreach (var modifier in _modifiers)
+        for (int i = 0; i < count; i++)
         {
-            modifier.Apply(this);
+            // 랜덤 원 방향 (임시)
+            // 공격 방향에서 가까운 적으로 변경해야 함
+            Vector2 randomDir = Random.insideUnitCircle.normalized;
+
+            // 발사
+            SpawnSoap(randomDir);
         }
+    }
+
+    // 비누 투사체 생성
+    private void SpawnSoap(Vector2 dir)
+    {
+        // 비누 생성
+        SoapProjectile soap = Instantiate(_skillPrefabComponent, transform.position, Quaternion.identity);
+
+        // 데이터 주입
+        soap.Init(_finalStat, dir, ModifierData);
     }
 }

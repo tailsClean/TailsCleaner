@@ -1,45 +1,61 @@
 using System.Collections.Generic;
-using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine;
 
 public class UpgradeSelect : MonoBehaviour
 {
+    private class SelectOptionInfo     // 선택한 선택지의 정보
+    {
+        public int TargetMainTag;       // 업그레이드를 적용할 메인 태그
+        public ActiveUpgradeData Data;  // 업그레이드 데이터
+        public SelectOptionInfo(int mainTag, ActiveUpgradeData data)
+        {
+            TargetMainTag = mainTag;
+            Data = data;
+        }
+    }
+
+
     public const int MAX_SELECT_OPTIONS = 3;      // 최대 선택지 수
     public const int ACTIVE_TIER_TWO_LEVEL = 4;   // 티어 2 레벨
     public const int ACTIVE_TIER_THREE_LEVEL = 7; // 티어 3 레벨
 
     // 현재 선택지
-    private List<ActiveUpgradeData> _currentOptions = new List<ActiveUpgradeData>();
+    private List<SelectOptionInfo> _currentOptions = new List<SelectOptionInfo>();
 
     // 선택지 옵션 설정
     public void GenerateOptions()
     {
         _currentOptions.Clear();
 
-        var sm = SkillManager.Instance;
+        var skillManager = SkillManager.Instance;
 
         // 상태 체크 (액티브 최대, 레벨 최대)
-        bool isActiveFull = sm.IsActiveSlotFull;
-        bool isAllLevelMax = sm.IsAllActiveMaxLevel();
+        bool isActiveFull = skillManager.IsActiveSlotFull;
+        bool isAllLevelMax = skillManager.IsAllActiveMaxLevel();
 
         // 두 조건 중 하나라도 아닐 때
         // 액티브 스킬 후보 생성
         if (isActiveFull == false || isAllLevelMax == false)
         {
             // 메인 태그 후보 추리기 (0티어)
-            List<int> candidateMainTags = GetCandidateMainTags(sm);
+            List<int> candidateMainTags = GetCandidateMainTags(skillManager);
 
-            // 추려진 메인 태그 순회
+            // 추려진 후보 셔플
+            Shuffle(candidateMainTags);
+
+            // 섞은 메인 태그 순회
             foreach (int mainTag in candidateMainTags)
             {
                 // 선택지 꽉 찼으면 중단
                 if (_currentOptions.Count >= MAX_SELECT_OPTIONS) break;
 
-                // 메인 태그로 선택지 뽑기
-                var option = PickOptionForTag(sm, mainTag);
+                // 메인 태그의 랜덤 업그레이드 뽑기
+                var upgradeData = GetRandomSkillUpgrade(skillManager, mainTag);
 
-                // 유효하면 추가
-                if (option != null) _currentOptions.Add(option);
+                // 유효하면 선택지에 추가
+                if (upgradeData != null)
+                    _currentOptions.Add(new SelectOptionInfo(mainTag, upgradeData));
             }
         }
 
@@ -49,7 +65,7 @@ public class UpgradeSelect : MonoBehaviour
             // 패시브 추가 로직
         }
 
-        // 패시브에도 자리가 없다면
+        // 그래도 다 못 채웠을 경우엔
         if (_currentOptions.Count < MAX_SELECT_OPTIONS)
         {
             // 회복 추가 로직
@@ -59,75 +75,54 @@ public class UpgradeSelect : MonoBehaviour
         PrintLog();
     }
 
-    // 테스트용 선택지 로그
-    private void PrintLog()
-    {
-        Debug.Log("[UpgradeSelect] 선택지 생성");
-        for (int i = 0; i < _currentOptions.Count; i++)
-        {
-            Debug.Log($"{i + 1}. {_currentOptions[i].Name}");
-        }
-    }
-
-
     // 메인 태그 후보 추리기
-    private List<int> GetCandidateMainTags(SkillManager sm)
+    private List<int> GetCandidateMainTags(SkillManager skillManager)
     {
         // 임시 태그 후보 리스트
         List<int> tempMainTags = new List<int>();
 
         // 보유 중인 액티브 스킬 중
-        for (int i = 0; i < sm.MyActiveSkills.Count; i++)
+        foreach (ActiveSkill skill in skillManager.MyActiveSkills)
         {
-            // 최대 레벨 아닌 스킬 후보에 추가
-            if (sm.MyActiveSkills[i].CurrentLevel < ActiveSkill.MAX_SKILL_LEVEL)
-                tempMainTags.Add(sm.MyActiveSkills[i].MainTag);
+            // 최대 레벨 아니면 후보에 추가
+            if (skill.CurrentLevel < ActiveSkill.MAX_SKILL_LEVEL)
+                tempMainTags.Add(skill.MainTag);
         }
 
-        // 미보유 스킬 (슬롯 남으면)
-        if (sm.MyActiveSkills.Count < SkillManager.MAX_ACTIVE_SLOTS)
+        // 신규 스킬 (액티브 스킬 슬롯 남으면)
+        if (skillManager.MyActiveSkills.Count < SkillManager.MAX_ACTIVE_SLOTS)
         {
-            // 전체 업그레이드 데이터 순회
-            for (int i = 0; i < sm.AllActiveUpgradeData.Count; i++)
+            // 스킬 맵 순회 하면서
+            foreach (int mainTag in skillManager.SkillUpgradeMap.Keys)
             {
-                var data = sm.AllActiveUpgradeData[i];
-
-                // 0티어 && 미습득 && 미중복
-                if (data.Tier == 0 && sm.GetActiveSkill(data.MainTag) == null && tempMainTags.Contains(data.MainTag) == false)
-                {
-                    // 후보에 추가
-                    tempMainTags.Add(data.MainTag);
-                }
+                // 미습득 스킬 후보에 추가
+                if (skillManager.GetActiveSkill(mainTag) == null)
+                    tempMainTags.Add(mainTag);
             }
         }
 
-        // 셔플
-        return Shuffle(tempMainTags);
-    }
-
-    // 셔플 (Fisher-Yates)
-    private List<int> Shuffle(List<int> tempMainTags)
-    {
-        for (int i = tempMainTags.Count - 1; i > 0; i--)
-        {
-            int rand = Random.Range(0, i + 1);
-            int temp = tempMainTags[i];
-            tempMainTags[i] = tempMainTags[rand];
-            tempMainTags[rand] = temp;
-        }
-
+        // 메인 태그 후보 반환
         return tempMainTags;
     }
 
-    private ActiveUpgradeData PickOptionForTag(SkillManager sm, int mainTag)
-    {
-        // 보유한 메인 태그 스킬 가져오기
-        ActiveSkill mySkill = sm.GetActiveSkill(mainTag);
 
-        // 없으면 신규 스킬 (0티어)
+    // 메인 태그의 랜덤 업그레이드 뽑기
+    private ActiveUpgradeData GetRandomSkillUpgrade(SkillManager skillManager, int mainTag)
+    {
+        // 업그레이드 맵에 메인 태그가 등록되어있지 않다면 null 반환
+        if (skillManager.SkillUpgradeMap.TryGetValue(mainTag, out List<ActiveUpgradeData> upgradeList) == false)
+        {
+            Debug.LogError($"[UpgradeSelect] {mainTag} 가 업그레이드 맵에 등록되지 않았음");
+            return null;
+        }
+
+        // 보유한 메인 태그 스킬 가져오기
+        ActiveSkill mySkill = skillManager.GetActiveSkill(mainTag);
+
+        // 없으면 신규 스킬 바로 후보에 추가 (0티어)
         if (mySkill == null)
         {
-            return sm.FindUpgradeData(mainTag, 0);
+            return skillManager.GetTierZeroData(mainTag);
         }
 
         // 보유 스킬 (티어 계산)
@@ -142,32 +137,52 @@ public class UpgradeSelect : MonoBehaviour
         // 임시 업그레이드 후보
         List<ActiveUpgradeData> candidates = new List<ActiveUpgradeData>();
 
-        // 전체에서 조건에 맞는 데이터 필터링
-        for (int i = 0; i < sm.AllActiveUpgradeData.Count; i++)
+        // 업그레이드 리스트에서 조건에 맞는 데이터 필터링
+        foreach (var upgradeData in upgradeList)
         {
-            var data = sm.AllActiveUpgradeData[i];
+            // 티어 체크 (현재 레벨에서 나올 수 있는지)
+            if (tiers.Contains(upgradeData.Tier) == false) continue;
+            // 만렙 체크 (이미 업그레이드를 다 했는지)
+            if (mySkill.GetUpgradeLevel(upgradeData.Id) >= upgradeData.MaxLevel) continue;
 
-            // 태그 일치 && 티어 포함
-            if (data.MainTag == mainTag && tiers.Contains(data.Tier))
-            {
-                // 업그레이드 최대 레벨인지 체크
-                if (mySkill.GetUpgradeLevel(data.Id) < data.MaxLevel)
-                {
-                    // 아니면 후보에 추가
-                    candidates.Add(data);
-                }
-            }
+            // 통과하면 후보에 추가
+            candidates.Add(upgradeData);
         }
 
         // 하나라도 있으면 그 중 랜덤
         if (candidates.Count > 0)
-            return candidates[Random.Range(0, candidates.Count)];
+        {
+            int rand = Random.Range(0, candidates.Count);
+            return candidates[rand];
+        }
 
-        // 조건에 맞는 업그레이드 없으면
+        // 조건에 맞는 업그레이드 없음
         return null;
     }
 
 
+
+    // 셔플 (Fisher-Yates)
+    private void Shuffle<T>(List<T> list)
+    {
+        for (int i = list.Count - 1; i > 0; i--)
+        {
+            int rand = Random.Range(0, i + 1);
+            T temp = list[i];
+            list[i] = list[rand];
+            list[rand] = temp;
+        }
+    }
+
+    // 테스트용 선택지 로그
+    private void PrintLog()
+    {
+        Debug.Log("[UpgradeSelect] 선택지 생성");
+        for (int i = 0; i < _currentOptions.Count; i++)
+        {
+            Debug.Log($"{i + 1}. {_currentOptions[i].TargetMainTag} 의 {_currentOptions[i].Data.Name}");
+        }
+    }
 
     // 임시 테스트용 선택지 선택
     public void SelectOption(int index)
@@ -175,17 +190,15 @@ public class UpgradeSelect : MonoBehaviour
         // 비정상 범위 체크
         if (index < 0 || index >= _currentOptions.Count) return;
 
-        ActiveUpgradeData data = _currentOptions[index];
-
         // 매니저에서 선택지 적용
-        SkillManager.Instance.ApplyOption(data);
+        SkillManager.Instance.ApplyOption(_currentOptions[index].TargetMainTag, _currentOptions[index].Data);
 
         _currentOptions.Clear();
     }
 
 
    // 선택지 테스트용 인풋
-   private  void Update()
+   private void Update()
     {
         // 스페이스바 선택지 생성
         if (Keyboard.current.spaceKey.wasPressedThisFrame == true)
