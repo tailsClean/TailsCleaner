@@ -17,22 +17,22 @@ public abstract class ActiveSkill : MonoBehaviour
     protected ATTACK_TYPE _attackType;
     protected TARGETING_TYPE _targetingType;
 
-    // 기본 스탯
-    protected SkillStat _baseStat = new SkillStat();
+    
+    protected SkillStat _baseStat = new();                           // 기본 스탯
+    
+    protected SkillStat _commonStat = SkillStat.CreateMultiplier();  // 공용 스탯 (곱연산)
+    
+    protected SkillStat _upgradeStat = new();                        // 업그레이드 스탯 (합연산)
+    
+    protected SkillStat _finalStat = new();                          // 최종 스탯  (_baseStat * _commonStat) + _upgradeStat
 
-    // 스킬 스탯 보너스
-    protected SkillStat _bonusStat = new SkillStat();
-
-    // 최종 스탯
-    protected SkillStat _finalStat = new SkillStat();
+    // 모디파이어 목록
+    protected List<SkillModifier> _modifiers = new();
 
     // 업그레이드 별 레벨 (Key: active_skill_id, Value: UpgradeLevel)
-    private Dictionary<int, int> _upgradeLevels = new Dictionary<int, int>();
-    
-    // 모디파이어 목록
-    protected List<SkillModifier> _modifiers = new List<SkillModifier>();
+    private Dictionary<int, int> _upgradeLevels = new();
 
-    protected float _lastActiveTime = 0f;
+    protected float _lastActiveTime = 0f; // 최근 스킬 실행 시간
 
     // 초기화 (0티어 획득)
     public void Init(ActiveBaseData baseData, ActiveUpgradeData upgradeData, GameObject prefab)
@@ -92,28 +92,14 @@ public abstract class ActiveSkill : MonoBehaviour
         if (upgradeData.SubTag1 != 0) CurrentSubTag |= SubTagRegistry.GetFlag(upgradeData.SubTag1);
         if (upgradeData.SubTag2 != 0) CurrentSubTag |= SubTagRegistry.GetFlag(upgradeData.SubTag2);
 
-        // 레벨 증가
-        CurrentLevel++;
-
-        // 업그레이드 처음일 시 추가
-        if (_upgradeLevels.ContainsKey(upgradeData.Id) == false)
-        {   
-            _upgradeLevels.Add(upgradeData.Id, 0);
-        }
-
-        // 업그레이드 레벨 증가
-        _upgradeLevels[upgradeData.Id]++;
+        // 스킬 레벨, 업그레이드 레벨 증가
+        LevelUp(upgradeData);
 
         // 스탯 누적
-        _bonusStat.Add(upgradeData.GetSkillStat());
+        AddStat(upgradeData);
 
-        // 모디파이어 생성 후 추가
-        SkillModifier modifier = SkillModifierRegistry.Create(upgradeData.Id);
-
-        if (modifier != null)
-        {
-            _modifiers.Add(modifier);
-        }
+        // 모디파이어 추가
+        AddModifier(upgradeData.Id);
 
         // 스탯 갱신
         CalculateStats();
@@ -122,6 +108,69 @@ public abstract class ActiveSkill : MonoBehaviour
                   $" - 업그레이드 : {upgradeData.Name} (Active_Skill_ID : {upgradeData.Id})\n" +
                   $" - 업그레이드 Lv : {GetUpgradeLevel(upgradeData.Id)} / {upgradeData.MaxLevel}\n" +
                   $" - 스킬 전체 Lv : {CurrentLevel} / {MAX_SKILL_LEVEL}");
+    }
+
+    // 레벨 증가
+    private void LevelUp(ActiveUpgradeData upgradeData)
+    {
+        // 레벨 증가
+        CurrentLevel++;
+
+        // 업그레이드 처음일 시 추가
+        if (_upgradeLevels.ContainsKey(upgradeData.Id) == false)
+        {
+            _upgradeLevels.Add(upgradeData.Id, 0);
+        }
+
+        // 업그레이드 레벨 증가
+        _upgradeLevels[upgradeData.Id]++;
+    }
+
+
+    // 스탯 누적
+    private void AddStat(ActiveUpgradeData upgradeData)
+    {
+        // 공용
+        if (upgradeData.MainTag == SkillManager.COMMON_MAIN_TAG)
+        {
+            // 곱연산 누적
+            SkillStat multiplier = upgradeData.GetSkillStat();
+            _commonStat.Multiply(multiplier);
+        }
+        // 전용
+        else
+        {
+            // 합연산 누적
+            _upgradeStat.Add(upgradeData.GetSkillStat());
+        }
+    }
+
+    // 모디파이어 추가
+    private void AddModifier(int upgradeId)
+    {
+        // 모디파이어 생성 후 추가
+        SkillModifier modifier = SkillModifierRegistry.Create(upgradeId);
+
+        if (modifier != null)
+        {
+            _modifiers.Add(modifier);
+        }
+    }
+
+    // 최종 스탯 계산
+    protected void CalculateStats()
+    {
+        // 초기화
+        _finalStat = new SkillStat();
+
+        // 계산 (_baseStat * _commonStat) + _upgradeStat
+        _finalStat.Add(_baseStat);
+        _finalStat.Multiply(_commonStat);
+        _finalStat.Add(_upgradeStat);
+
+        Debug.Log($"최종 공격력 : {_finalStat.Damage} = ( {_baseStat.Damage} * {_commonStat.Damage} ) + {_upgradeStat.Damage}");
+
+        // 추가로 플레이어, 패시브 스탯 계산하면 될 듯
     }
 
     // 업그레이드의 현재 레벨
@@ -138,17 +187,4 @@ public abstract class ActiveSkill : MonoBehaviour
         return 0;
     }
 
-
-    // 최종 스탯 계산
-    protected void CalculateStats()
-    {
-        // 초기화
-        _finalStat = new SkillStat();
-
-        // 합산
-        _finalStat.Add(_baseStat);
-        _finalStat.Add(_bonusStat);
-
-        // 추가로 플레이어, 패시브 스탯 계산하면 될 듯
-    }
 }

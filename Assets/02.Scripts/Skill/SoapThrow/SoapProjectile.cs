@@ -13,7 +13,7 @@ public class SoapProjectile : MonoBehaviour
     private void Awake()
     {
         _rigidbody = GetComponent<Rigidbody2D>();
-        _collider = GetComponent<Collider2D>();
+        _collider = GetComponentInChildren<Collider2D>();
     }
 
     public void Init(SkillStat stat, Vector2 dir, SoapModifierData modifierData)

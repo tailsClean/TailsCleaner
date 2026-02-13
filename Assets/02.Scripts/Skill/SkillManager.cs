@@ -24,8 +24,8 @@ public class SkillManager : MonoBehaviour
     public Dictionary<int, List<ActiveUpgradeData>> SkillUpgradeMap { get; private set; } = new();
 
     // 플레이어 보유 스킬 리스트
-    public List<ActiveSkill> MyActiveSkills { get; private set; } = new List<ActiveSkill>();
-    public List<PassiveSkill> MyPassiveSkills { get; private set; } = new List<PassiveSkill>();
+    public List<ActiveSkill> MyActiveSkills { get; private set; } = new();
+    public List<PassiveSkill> MyPassiveSkills { get; private set; } = new();
 
 
     // 액티브 슬롯 체크
@@ -109,6 +109,9 @@ public class SkillManager : MonoBehaviour
             GameObject go = new GameObject($"Skill_{targetMainTag}");
             // 일단 스킬 매니저 하위로
             go.transform.SetParent(transform);
+
+            // 위치 초기화
+            go.transform.localPosition = Vector2.zero; 
 
             // 스킬 스크립트 
             ActiveSkill newSkill = CreateSkillComponent(go, targetMainTag);
