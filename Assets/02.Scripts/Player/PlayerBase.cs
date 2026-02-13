@@ -6,11 +6,12 @@ using UnityEngine.InputSystem;
 
 public class PlayerBase : MonoBehaviour, IDamageable, IEquipmentable
 {
-    [SerializeField] private float _hp = 100;
-    [SerializeField] private float _attackPower = 10;
-    [SerializeField] private float _defensePower = 5;
+    [SerializeField] private float _Maxhp = 100;
+    //[SerializeField] private float _attackPower = 10;
+    //[SerializeField] private float _defensePower = 5;
     [SerializeField] private float _level = 1;
     [SerializeField] private float _currentExp;
+    [SerializeField] private float _maxExp = 50;
     [SerializeField] private float _pickupRange = 2;
 
     [SerializeField] private float _moveSpeed = 5;
@@ -18,7 +19,7 @@ public class PlayerBase : MonoBehaviour, IDamageable, IEquipmentable
     [SerializeField] private ItemPickup _itemPickup;            // 아이템 줍는 범위(콜라이더)를 가짐
     [SerializeField] private GameObject _bulletPrefab;
 
-
+    private float _hp;
     private SpriteRenderer _mySprite;
     private Vector2 _moveDir;
     private Vector2 _attackDir;
@@ -26,8 +27,9 @@ public class PlayerBase : MonoBehaviour, IDamageable, IEquipmentable
     private float _timer;
     private Dictionary<EQUIPMENT, PlayerEquipment> _myEquipment;
 
-    public event Action<Vector2> OnMoveInput;
+    public event Action<float, float> OnGainExp;                // 경험치 획득시 알리는 신호
     public event Action<EQUIPMENT> OnSetEquipment;              // 장비가 바뀌었다는 것을 알리는 신호
+    public event Action<float> OnUpdateUI;
 
     public float Hp => Mathf.Max(_hp, 0);
     //public float FinalDamage => _attackPower;                   // 최종 데미지 수치
@@ -36,10 +38,12 @@ public class PlayerBase : MonoBehaviour, IDamageable, IEquipmentable
     public Dictionary<EQUIPMENT, PlayerEquipment> MyEquipment => _myEquipment;
 
 
+
     private void Awake()
     {
         _mySprite = GetComponent<SpriteRenderer>();
         _myEquipment = new Dictionary<EQUIPMENT, PlayerEquipment>();
+        _hp = _Maxhp;
     }
 
     private void OnEnable()
@@ -77,7 +81,6 @@ public class PlayerBase : MonoBehaviour, IDamageable, IEquipmentable
     public void OnMove(InputAction.CallbackContext ctx)
     {
         Vector2 dir = ctx.ReadValue<Vector2>();
-        OnMoveInput?.Invoke(dir);
 
         _moveDir = dir.normalized;
         if(_moveDir.x < 0)
@@ -122,6 +125,7 @@ public class PlayerBase : MonoBehaviour, IDamageable, IEquipmentable
             return;
 
         _hp -= damage;
+        OnUpdateUI?.Invoke(Hp);
         Debug.Log("현재 체력: " + Hp);
 
         StartCoroutine(StartHitInvincibility());
@@ -147,6 +151,19 @@ public class PlayerBase : MonoBehaviour, IDamageable, IEquipmentable
     }
 
 
+    // 경험치 획득 로직
+    public void GainExperience(float experience)
+    {
+        _currentExp += experience;
+
+        if(_currentExp >= _maxExp)
+        {
+            _currentExp -= _maxExp;
+            _level++;
+        }
+
+        OnGainExp?.Invoke(_level, _currentExp);
+    }
     // 주위 아이템(경험치) 끌어모으는 메서드
     private void OnItemPickup(IPickable item)
     {
