@@ -61,7 +61,7 @@ public class StageTimer
     public void StopBoss() => _isBossRunning = false;
 
     // 컷신 / 팝업 / 백그라운드 대응용 일시정지
-    public void SetPaused(bool _isPaused) => _isPaused = _isPaused;
+    public void SetPaused(bool _isPaused) => this._isPaused = _isPaused;
 
     public int GetMainTimeSecondsInt() => Mathf.FloorToInt(_mainTimeSeconds);
     public int GetBossTimeSecondsLeftInt() => Mathf.CeilToInt(_bossTimeSecondsLeft);

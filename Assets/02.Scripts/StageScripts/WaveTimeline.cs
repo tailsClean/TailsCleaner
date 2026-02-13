@@ -10,7 +10,7 @@ public class WaveTimeline
 
     public WaveTimeline(IReadOnlyList<WavePlan> _waves)
     {
-        _waves = waves;
+        waves = _waves;
     }
 
     //시간에 따라 웨이브를 찾아주는 함수

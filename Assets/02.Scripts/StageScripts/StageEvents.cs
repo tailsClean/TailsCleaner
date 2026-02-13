@@ -6,7 +6,8 @@ public class StageEvents
     public event Action<int> OnMainSecondTick;
     public event Action OnMainTimerReachedLimit;
 
-    // 보스 타이머 관련 이벤트 -> 이후 삭제될 수도 있음
+    // 보스 타이머 관련 이벤트
+    // - UI 표시(남은 시간) 및 타임오버 패배 처리에 사용
     public event Action<int> OnBossSecondTick;
     public event Action OnBossTimerExpired;
 
