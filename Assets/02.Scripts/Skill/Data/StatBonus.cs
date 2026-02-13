@@ -25,6 +25,8 @@ public class SkillStat         // 추가 스킬 스탯
     }
 
     // 곱 (공용)
+    // 현재 공용 업그레이드는 특정 수치를 제외하고 전부 0 이기 때문에 0 을 체크하고 있는데
+    // 만약 의도적으로 0 으로 만드는 공용 업그레이드가 있다면 수정 필요함...
     public void Multiply(SkillStat multiplier)
     {
         if (multiplier.Damage != 0) Damage *= multiplier.Damage;
