@@ -2,11 +2,11 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public static class SkillModifierRegistry
+public static class ActiveModifierRegistry
 {
     // 업그레이드 모디파이어
     // Key : active_skill_id, Value : 모디파이어 컴포넌트
-    private static Dictionary<int, Type> _upgradeModifier = new Dictionary<int, Type>();
+    private static Dictionary<int, Type> _upgradeModifier = new();
 
     // 초기화
     public static void Init()
@@ -25,7 +25,13 @@ public static class SkillModifierRegistry
 
         // -----비누 던지기-----
         // 감나빗! (관통 후 재추적)
-        Register(41011, typeof(SoapRetargetModifier));
+        Register(40011, typeof(SoapRetargetModifier));
+        // 거품내기 (관통 시 추가 피해)
+        Register(40012, typeof(SoapPierceDamageModifier));
+        // 거품 가속 (관통 시 추가 속도)
+        Register(40014, typeof(SoapPierceSpeedModifier));
+        // 비누 덩어리 (관통 제거, 감소한 만큼 추가 피해)
+        Register(40016, typeof(SoapRemovePierceModifier));
 
         Debug.Log($"[ModifierRegistry] 특수 로직 모디파이어 {_upgradeModifier.Count}개 등록 완료.");
     }
@@ -44,13 +50,13 @@ public static class SkillModifierRegistry
     }
 
     // 생성 (액티브 생성 시 호출)
-    public static SkillModifier Create(int activeSkillId)
+    public static ActiveModifier Create(int activeSkillId)
     {
         // 등록된 모디파이어 있는지 확인
         if (_upgradeModifier.TryGetValue(activeSkillId, out Type type))
         {
             // 있으면 생성 (리플렉션)
-            SkillModifier modifier = Activator.CreateInstance(type) as SkillModifier;
+            ActiveModifier modifier = Activator.CreateInstance(type) as ActiveModifier;
             if (modifier != null)
             {
                 modifier.UpgradeId = activeSkillId; // ID 주입

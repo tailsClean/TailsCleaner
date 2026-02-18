@@ -56,6 +56,14 @@ public class SkillStat         // 추가 스킬 스탯
             Size = 1f
         };
     }
+
+    // 복제
+    public SkillStat Clone()
+    {
+        SkillStat clone = new SkillStat();
+        clone.Add(this);
+        return clone;
+    }
 }
 
 

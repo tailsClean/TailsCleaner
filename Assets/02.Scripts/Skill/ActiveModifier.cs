@@ -1,4 +1,4 @@
-﻿public abstract class SkillModifier
+﻿public abstract class ActiveModifier
 {
     // active_skill_id
     public int UpgradeId;

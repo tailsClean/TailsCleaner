@@ -17,20 +17,25 @@ public abstract class ActiveSkill : MonoBehaviour
     protected ATTACK_TYPE _attackType;
     protected TARGETING_TYPE _targetingType;
 
-    
-    protected SkillStat _baseStat = new();                           // 기본 스탯
-    
-    protected SkillStat _commonStat = SkillStat.CreateMultiplier();  // 공용 스탯 (곱연산)
-    
-    protected SkillStat _upgradeStat = new();                        // 업그레이드 스탯 (합연산)
-    
-    protected SkillStat _finalStat = new();                          // 최종 스탯  (_baseStat * _commonStat) + _upgradeStat
+    // 외부 참조용 (패시브 모디파이어, 스킬 투사체)
+    public SkillStat BaseStat => _baseStat;
+    public SkillStat CommonStat => _commonStat;
+    public SkillStat UpgradeStat => _upgradeStat;
+    public SkillStat FinalStat => _finalStat;
 
-    // 모디파이어 목록
-    protected List<SkillModifier> _modifiers = new();
+
+    protected SkillStat _baseStat = new();                           // 기본 스탯
+    protected SkillStat _commonStat = SkillStat.CreateMultiplier();  // 공용 스탯       (곱연산)
+    protected SkillStat _upgradeStat = new();                        // 업그레이드 스탯  (합연산)
+    protected SkillStat _finalStat = new();                          // 최종 스탯       ((_baseStat + 패시브 스탯) * 패시브 스탯 * _commonStat) + _upgradeStat
+
+    public HashSet<int> ActivePassiveIds { get; private set; } = new HashSet<int>();
+
+    // 전용 모디파이어 목록
+    protected List<ActiveModifier> _modifiers = new();
 
     // 업그레이드 별 레벨 (Key: active_skill_id, Value: UpgradeLevel)
-    private Dictionary<int, int> _upgradeLevels = new();
+    protected Dictionary<int, int> _upgradeLevels = new();
 
     protected float _lastActiveTime = 0f; // 최근 스킬 실행 시간
 
@@ -39,6 +44,9 @@ public abstract class ActiveSkill : MonoBehaviour
     {   
         // 메인 태그
         MainTag = baseData.MainTag;
+
+        // 서브 태그
+        AddSubTag(upgradeData);
 
         // 타입 설정
         _attackType = baseData.AttackType;
@@ -54,8 +62,6 @@ public abstract class ActiveSkill : MonoBehaviour
 
         // 기본 스탯
         _baseStat = upgradeData.GetSkillStat();
-
-        Debug.Log($"[ActiveSkill] 업그레이드 기본 스탯 Speed : {_baseStat.ProjectileSpeed}");
 
         // 스탯 계산
         CalculateStats();
@@ -88,26 +94,24 @@ public abstract class ActiveSkill : MonoBehaviour
     // 스킬 업그레이드
     public virtual void ApplyUpgrade(ActiveUpgradeData upgradeData)
     {
+        AddSubTag(upgradeData);         // 업그레이드의 서브 태그 추가
+        LevelUp(upgradeData);           // 스킬 레벨, 업그레이드 레벨 증가
+        AddStat(upgradeData);           // 공용, 업그레이드 스탯 누적
+        AddModifier(upgradeData.Id);    // 전용 모디파이어 추가
+
+        // 자식인 GenericActiveSkill에서
+        // 전용 모디파이어 다 설정하고
+        // 패시브 설정하면서 스탯, 로직 적용(RecheckPassives)
+    }
+
+
+    // 서브 태그 추가
+
+    private void AddSubTag(ActiveUpgradeData upgradeData)
+    {
         // 업그레이드의 서브 태그 추가
         if (upgradeData.SubTag1 != 0) CurrentSubTag |= SubTagRegistry.GetFlag(upgradeData.SubTag1);
         if (upgradeData.SubTag2 != 0) CurrentSubTag |= SubTagRegistry.GetFlag(upgradeData.SubTag2);
-
-        // 스킬 레벨, 업그레이드 레벨 증가
-        LevelUp(upgradeData);
-
-        // 스탯 누적
-        AddStat(upgradeData);
-
-        // 모디파이어 추가
-        AddModifier(upgradeData.Id);
-
-        // 스탯 갱신
-        CalculateStats();
-
-        Debug.Log($"[ActiveSkill] 업그레이드 완료: [{SkillManager.Instance.ActiveBaseDatas[MainTag].Name}] (MainTag : {MainTag})\n" +
-                  $" - 업그레이드 : {upgradeData.Name} (Active_Skill_ID : {upgradeData.Id})\n" +
-                  $" - 업그레이드 Lv : {GetUpgradeLevel(upgradeData.Id)} / {upgradeData.MaxLevel}\n" +
-                  $" - 스킬 전체 Lv : {CurrentLevel} / {MAX_SKILL_LEVEL}");
     }
 
     // 레벨 증가
@@ -145,11 +149,11 @@ public abstract class ActiveSkill : MonoBehaviour
         }
     }
 
-    // 모디파이어 추가
+    // 전용 모디파이어 추가
     private void AddModifier(int upgradeId)
     {
-        // 모디파이어 생성 후 추가
-        SkillModifier modifier = SkillModifierRegistry.Create(upgradeId);
+        // 전용 모디파이어 생성 후 추가
+        ActiveModifier modifier = ActiveModifierRegistry.Create(upgradeId);
 
         if (modifier != null)
         {
@@ -157,20 +161,63 @@ public abstract class ActiveSkill : MonoBehaviour
         }
     }
 
-    // 최종 스탯 계산
+    // 초기화, 업그레이드 시 스탯 설정
     protected void CalculateStats()
     {
-        // 초기화
-        _finalStat = new SkillStat();
+        _finalStat = GetFinalStat(_baseStat, _commonStat, _upgradeStat);
+    }
 
-        // 계산 (_baseStat * _commonStat) + _upgradeStat
-        _finalStat.Add(_baseStat);
-        _finalStat.Multiply(_commonStat);
-        _finalStat.Add(_upgradeStat);
+    // 최종 스탯 계산 후 반환 (초기화, 업그레이드, 투사체 내부 로직)
+    public SkillStat GetFinalStat(SkillStat baseStat, SkillStat commonStat, SkillStat upgradeStat)
+    {
+        // 결과 스탯 생성
+        SkillStat resultStat = new SkillStat();
 
-        Debug.Log($"최종 공격력 : {_finalStat.Damage} = ( {_baseStat.Damage} * {_commonStat.Damage} ) + {_upgradeStat.Damage}");
+        // 기본 스탯
+        resultStat.Add(baseStat);
 
-        // 추가로 플레이어, 패시브 스탯 계산하면 될 듯
+        // 패시브 스탯 합하기
+        foreach (var passive in SkillManager.Instance.MyPassiveSkills)
+        {
+            // 서브태그 플래그 가져와서
+            int flag = SubTagRegistry.GetFlag(passive.SubTag);
+
+            // 플래그 존재하고 스킬의 서브 태그에 맞다면 스탯 계산
+            if (flag != 0 && (CurrentSubTag & flag) != 0)
+                passive.ModifyStatAdd(this, resultStat);
+        }
+
+        // 패시브 스탯 곱하기
+        foreach (var passive in SkillManager.Instance.MyPassiveSkills)
+        {
+            int flag = SubTagRegistry.GetFlag(passive.SubTag);
+            if (flag != 0 && (CurrentSubTag & flag) != 0)
+                passive.ModifyStatMul(this, resultStat);
+        }
+
+        // 공용 스탯 (곱)
+        resultStat.Multiply(commonStat);
+
+        // 업그레이드 스탯 (합)
+        resultStat.Add(upgradeStat);
+
+        // 최종 스탯 = ((baseStat + 패시브 스탯) * 패시브 스탯 * 공용 스탯) + 업그레이드 스탯
+        Debug.Log($"최종 공격력 : {resultStat.Damage} = ( {resultStat.Damage} * {resultStat.Damage} ) + {resultStat.Damage}");
+
+        // 최종 결과 스탯 반환
+        return resultStat;
+    }
+
+
+    // 패시브 로직 적용
+    protected void ApplyPassiveLogics()
+    {
+        foreach (var passive in SkillManager.Instance.MyPassiveSkills)
+        {
+            int flag = SubTagRegistry.GetFlag(passive.SubTag);
+            if (flag != 0 && (CurrentSubTag & flag) != 0)
+                passive.ModifyLogic(this);
+        }
     }
 
     // 업그레이드의 현재 레벨
@@ -187,4 +234,11 @@ public abstract class ActiveSkill : MonoBehaviour
         return 0;
     }
 
+    // 패시브 재적용
+    // 스킬 업그레이드, 패시브 습득 시 호출
+    public void RecheckPassives()
+    {
+        CalculateStats();       // 스탯
+        ApplyPassiveLogics();   // 로직
+    }
 }
