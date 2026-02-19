@@ -11,7 +11,7 @@ public static class PassiveModifierRegistry
     public static void Init()
     {
         // 42002 목표를 중앙에 두고 스위치 (추적 40102)
-        Register(42002, typeof(TargetCenterSwitchModifier));
+        Register(42002, typeof(CenterSwitchModifier));
 
         // 42004 추가 추가 피해 (추가피해 40104)
         Register(42004, typeof(DoubleExtraDamageModifier));
@@ -20,7 +20,7 @@ public static class PassiveModifierRegistry
         Register(42014, typeof(ImplantModifier));
         
         // 42016 냥빨래 (넉백 강화 40116)
-        Register(42016, typeof(LaundryModifier));
+        Register(42016, typeof(CatLaundryModifier));
 
         Debug.Log($"[PassiveModifierRegistry] 패시브 모디파이어 {_passiveModifier.Count}개 등록 완료.");
     }

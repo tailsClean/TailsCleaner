@@ -1,6 +1,4 @@
-﻿using UnityEngine;
-
-
+﻿
 // 40011 감나빗!    /      재추적
 public class SoapRetargetModifier : ActiveModifier
 {

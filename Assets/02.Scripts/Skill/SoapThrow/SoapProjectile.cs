@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
+using static PassiveModifier;
 
 public class SoapProjectile : MonoBehaviour
 {
@@ -122,26 +123,26 @@ public class SoapProjectile : MonoBehaviour
     private bool PierceDamage()
     {
         // 관통 시 추가 피해
-        if (_modifierData.PierceDamage == true && _modifierData.DamagePerPierce > 0f)
-        {
-            // 전용 모디파이어
-            float bonus = _modifierData.DamagePerPierce;
-
-            // 임플란트 패시브
-            if (_activePassiveIds.Contains(PassiveModifier.PASSIVE_IMPLANT) == true)
-                bonus += 0.2f;  // 이것도 인스펙터에서 조절 가능하게 빼야함
-
-            // 추가추가피해 패시브
-            if (_activePassiveIds.Contains(PassiveModifier.PASSIVE_EXTRA_DAMAGE) == true)
-                bonus *= 2f;
-
-            // baseStat에 더하고 재계산
-            _runtimeBaseStat.Damage += bonus;
-
-            // 재계산
-            return true;
-        }
-
+        //if (_modifierData.PierceDamage == true && _modifierData.DamagePerPierce > 0f)
+        //{
+        //    // 전용 모디파이어
+        //    float bonus = _modifierData.DamagePerPierce;
+        //
+        //    // 임플란트 패시브
+        //    if (_activePassiveIds.Contains((int)PASSIVE_ID.Implant) == true)
+        //        bonus += 0.2f;  // 이것도 인스펙터에서 조절 가능하게 빼야함
+        //
+        //    // 추가추가피해 패시브
+        //    if (_activePassiveIds.Contains((int)PASSIVE_ID.DoubleExtraDmg) == true)
+        //        bonus *= 2f;
+        //
+        //    // baseStat에 더하고 재계산
+        //    _runtimeBaseStat.Damage += bonus;
+        //
+        //    // 재계산
+        //    return true;
+        //}
+        //
         return false;
     }
 
@@ -149,18 +150,18 @@ public class SoapProjectile : MonoBehaviour
     private bool PierceSpeed()
     {
         // 관통 시 추가 속도
-        if (_modifierData.PierceSpeed == true && _modifierData.SpeedPerPierce > 0f)
-        {
-            // 전용 모디파이어
-            float bonus = _modifierData.SpeedPerPierce;
-
-            // baseStat에 더하고 재계산
-            _runtimeBaseStat.ProjectileSpeed += bonus;
-
-            // 재계산
-            return true;
-        }
-
+        //if (_modifierData.PierceSpeed == true && _modifierData.SpeedPerPierce > 0f)
+        //{
+        //    // 전용 모디파이어
+        //    float bonus = _modifierData.SpeedPerPierce;
+        //
+        //    // baseStat에 더하고 재계산
+        //    _runtimeBaseStat.ProjectileSpeed += bonus;
+        //
+        //    // 재계산
+        //    return true;
+        //}
+        //
         return false;
     }
 

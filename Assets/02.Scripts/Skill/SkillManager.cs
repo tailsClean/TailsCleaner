@@ -46,6 +46,10 @@ public class SkillManager : MonoBehaviour
 
     private void Start()
     {
+        // 스킬 데이터 불러오기
+        SkillDataLoader.Init();
+
+
         // 테스트용 더미 데이터 (나중에 CSV로드로 교체) 
         LoadDummyData();
 

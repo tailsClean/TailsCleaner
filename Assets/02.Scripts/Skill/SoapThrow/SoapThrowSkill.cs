@@ -7,8 +7,6 @@ public class SoapModifierData
     public bool PierceDamage = false;   // 관통 추가 피해
     public bool PierceSpeed = false;    // 관통 추가 속도
     public bool RemovePierce = false;   // 관통 제거
-    public float DamagePerPierce = 0.2f;// 관통 시 추가 피해
-    public float SpeedPerPierce = 1f;   // 관통 시 추가 속도
 }
 
 public class SoapThrowSkill : GenericActiveSkill<SoapProjectile, SoapModifierData>

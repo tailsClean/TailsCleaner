@@ -187,6 +187,12 @@ public abstract class ActiveSkill : MonoBehaviour
                 passive.ModifyStatAdd(this, resultStat);
         }
 
+        // 공용 스탯 (곱)
+        resultStat.Multiply(commonStat);
+
+        // 업그레이드 스탯 (합)
+        resultStat.Add(upgradeStat);
+
         // 패시브 스탯 곱하기
         foreach (var passive in SkillManager.Instance.MyPassiveSkills)
         {
@@ -195,13 +201,7 @@ public abstract class ActiveSkill : MonoBehaviour
                 passive.ModifyStatMul(this, resultStat);
         }
 
-        // 공용 스탯 (곱)
-        resultStat.Multiply(commonStat);
-
-        // 업그레이드 스탯 (합)
-        resultStat.Add(upgradeStat);
-
-        // 최종 스탯 = ((baseStat + 패시브 스탯) * 패시브 스탯 * 공용 스탯) + 업그레이드 스탯
+        // 최종 스탯 = ((baseStat + 패시브 스탯) * 공용 스탯) + 업그레이드 스탯 * 패시브 스탯
         Debug.Log($"최종 공격력 : {resultStat.Damage} = ( {resultStat.Damage} * {resultStat.Damage} ) + {resultStat.Damage}");
 
         // 최종 결과 스탯 반환
