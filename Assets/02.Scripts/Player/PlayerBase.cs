@@ -38,7 +38,6 @@ public class PlayerBase : MonoBehaviour, IDamageable, IEquipmentable
     public Dictionary<EQUIPMENT, PlayerEquipment> MyEquipment => _myEquipment;
 
 
-
     private void Awake()
     {
         _mySprite = GetComponent<SpriteRenderer>();
