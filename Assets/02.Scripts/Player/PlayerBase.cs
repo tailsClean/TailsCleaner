@@ -13,11 +13,11 @@ public class PlayerBase : MonoBehaviour, IDamageable, IEquipmentable
     [SerializeField] private float _criticalChance = 10;
     [SerializeField] private float _criticalResistance = 10;
     [SerializeField] private float _healthRegen = 10;
-    [SerializeField] private uint _metaLevel = 1;
+    [SerializeField] private int _metaLevel = 1;
     [SerializeField] private float _metaMaxExp = 50;
 
     
-    [SerializeField] private uint _combatLevel = 1;
+    [SerializeField] private int _combatLevel = 1;
     [SerializeField] private float _combatMaxExp = 50;
     [SerializeField] private float _experienceGainRate = 10;        // 경험치 획득률
     [SerializeField] private float _moveSpeed = 5;
