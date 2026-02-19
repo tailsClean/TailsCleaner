@@ -8,26 +8,32 @@ public class EnergySystem : MonoBehaviour
     [SerializeField] private float _increaseEnergyTime = 30;
     [SerializeField] private Text _energyCountText;
     [SerializeField] private Text _energyTimeText;
-
-    public Action<int> OnUpdateUI;
+    [SerializeField] private IntEventChannelSO _onIncreaseEnergy;
+    [SerializeField] private IntEventChannelSO _onStartInGame;
 
     private int _currentEnergy;
     private float _timer;
 
+    public event Action<int> OnUpdateUI;
+
     public int Timer => (int)_timer;
+    public bool IsStartInGame => _currentEnergy > 0;
+
 
 
     private void OnEnable()
     {
         OnUpdateUI += UpdateTimerUI;
+        _onIncreaseEnergy.AddListener(IncreaseEnergy);
+        _onStartInGame.AddListener(SpendEnergy);
     }
 
     private void OnDisable()
     {
         OnUpdateUI -= UpdateTimerUI;
+        _onIncreaseEnergy.RemoveListener(IncreaseEnergy);
+        _onStartInGame.RemoveListener(SpendEnergy);
     }
-
-
 
     private void Update()
     {
@@ -36,10 +42,15 @@ public class EnergySystem : MonoBehaviour
         OnUpdateUI?.Invoke(Timer);
     }
 
+
+    // 타이머 증가 메서드
     private void IncreaseTimer()
     {
         if(_currentEnergy >= _maxEnergy)
+        {
+            _timer = 0;
             return;
+        }
 
         if(_timer >= _increaseEnergyTime)
         {
@@ -49,6 +60,7 @@ public class EnergySystem : MonoBehaviour
 
         _timer += Time.deltaTime;
     }
+
 
     private void UpdateTimerUI(int time)
     {
@@ -66,6 +78,11 @@ public class EnergySystem : MonoBehaviour
         _energyTimeText.text = formatted;
     }
 
+
+    public void IncreaseEnergy(int count) => _currentEnergy += count;
+    public void SpendEnergy(int count) => _currentEnergy -= count;
+
+
     //
     [ContextMenu("에너지 초기화")]
     public void Init()
@@ -74,7 +91,7 @@ public class EnergySystem : MonoBehaviour
     }
 
     [ContextMenu("에너지 상승")]
-    public void IncreaseEnergy()
+    public void AddEnergyTest()
     {
         _currentEnergy++;
         _timer = 0;
