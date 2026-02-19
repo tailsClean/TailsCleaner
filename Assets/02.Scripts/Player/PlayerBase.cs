@@ -6,35 +6,45 @@ using UnityEngine.InputSystem;
 
 public class PlayerBase : MonoBehaviour, IDamageable, IEquipmentable
 {
-    [SerializeField] private float _Maxhp = 100;
-    //[SerializeField] private float _attackPower = 10;
-    //[SerializeField] private float _defensePower = 5;
-    [SerializeField] private float _level = 1;
-    [SerializeField] private float _currentExp;
-    [SerializeField] private float _maxExp = 50;
-    [SerializeField] private float _pickupRange = 2;
+    [SerializeField] private float _Maxhp = 15;
+    [SerializeField] private float _attackPower = 2;
+    [SerializeField] private float _defensePower = 1;
+    [SerializeField] private float _evasionChance = 10;              // 회피율
+    [SerializeField] private float _criticalChance = 10;
+    [SerializeField] private float _criticalResistance = 10;
+    [SerializeField] private float _healthRegen = 10;
+    [SerializeField] private uint _metaLevel = 1;
+    [SerializeField] private float _metaMaxExp = 50;
 
+    
+    [SerializeField] private uint _combatLevel = 1;
+    [SerializeField] private float _combatMaxExp = 50;
+    [SerializeField] private float _experienceGainRate = 10;        // 경험치 획득률
     [SerializeField] private float _moveSpeed = 5;
-    [SerializeField] private float _attackInterval = 0.5f;      // 자동공격 주기
-    [SerializeField] private ItemPickup _itemPickup;            // 아이템 줍는 범위(콜라이더)를 가짐
+    [SerializeField] private float _pickupRange = 1;
+    [SerializeField] private float _attackInterval = 0.5f;          // 자동공격 주기
+    [SerializeField] private ItemPickup _itemPickup;                // 아이템 줍는 범위(콜라이더)를 가짐
     [SerializeField] private GameObject _bulletPrefab;
 
     private float _hp;
+    private float _metaCurrentExp;
+    private float _combatCurrentExp;
+
     private SpriteRenderer _mySprite;
     private Vector2 _moveDir;
     private Vector2 _attackDir;
-    private bool _isInvincible;                                 // 피격 무적상태 여부
+    private bool _isInvincible;                                     // 피격 무적상태 여부
     private float _timer;
     private Dictionary<EQUIPMENT, PlayerEquipment> _myEquipment;
 
-    public event Action<float, float> OnGainExp;                // 경험치 획득시 알리는 신호
-    public event Action<EQUIPMENT> OnSetEquipment;              // 장비가 바뀌었다는 것을 알리는 신호
+    public event Action<float, float> OnGainExp;                    // 경험치 획득시 알리는 신호
+    public event Action<EQUIPMENT> OnSetEquipment;                  // 장비가 바뀌었다는 것을 알리는 신호
     public event Action<float> OnUpdateUI;
 
     public float Hp => Mathf.Max(_hp, 0);
-    //public float FinalDamage => _attackPower;                   // 최종 데미지 수치
+    public float FinalDamage => _attackPower;                       // 최종 데미지 수치
     public bool IsInvincible => _isInvincible;
-    public Transform AttackTarget => GetTarget(_attackDir);     // 조준형 스킬 사용을 위한 타겟
+    public Transform AttackTarget => GetTarget(_attackDir);         // 조준형 스킬 사용을 위한 타겟
     public Dictionary<EQUIPMENT, PlayerEquipment> MyEquipment => _myEquipment;
 
 
@@ -153,15 +163,15 @@ public class PlayerBase : MonoBehaviour, IDamageable, IEquipmentable
     // 경험치 획득 로직
     public void GainExperience(float experience)
     {
-        _currentExp += experience;
+        _combatCurrentExp += experience;
 
-        if(_currentExp >= _maxExp)
+        if(_combatCurrentExp >= _combatMaxExp)
         {
-            _currentExp -= _maxExp;
-            _level++;
+            _combatCurrentExp -= _combatMaxExp;
+            _combatLevel++;
         }
 
-        OnGainExp?.Invoke(_level, _currentExp);
+        OnGainExp?.Invoke(_combatLevel, _combatCurrentExp);
     }
     // 주위 아이템(경험치) 끌어모으는 메서드
     private void OnItemPickup(IPickable item)
