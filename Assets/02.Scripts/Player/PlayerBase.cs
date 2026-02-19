@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-public class PlayerBase : MonoBehaviour, IDamageable, IEquipmentable
+public class PlayerBase : MonoBehaviour, IDamageable
 {
     [SerializeField] private float _Maxhp = 15;
     [SerializeField] private float _attackPower = 2;

@@ -1,7 +1,7 @@
 ﻿using System;
 using UnityEngine;
 
-public abstract class EventChannelBase<T> : ScriptableObject
+public class EventChannelBase<T> : ScriptableObject
 {
     private event Action<T> _eventChannel;
 

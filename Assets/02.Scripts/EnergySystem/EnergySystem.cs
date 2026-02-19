@@ -80,7 +80,15 @@ public class EnergySystem : MonoBehaviour
 
 
     public void IncreaseEnergy(int count) => _currentEnergy += count;
-    public void SpendEnergy(int count) => _currentEnergy -= count;
+    public void SpendEnergy(int count) 
+    {
+        if(_currentEnergy <= 0)
+        {
+            _currentEnergy = 0;
+            return;
+        }    
+        _currentEnergy -= count;
+    }
 
 
     //

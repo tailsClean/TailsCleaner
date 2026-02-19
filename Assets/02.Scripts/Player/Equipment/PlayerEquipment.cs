@@ -1,10 +1,42 @@
-﻿using System.Collections;
-using UnityEngine;
+﻿using UnityEngine;
+using UnityEngine.UI;
 
 public class PlayerEquipment : MonoBehaviour
 {
+    [SerializeField] private EquipmentEventChannelSO _onChangeEquipment;
+
     [field: SerializeField] public PlayerBase.EQUIPMENT EquipmentPart { get; private set; }
     [field: SerializeField] public Sprite SpriteImage { get; private set; }
 
+    private Button _button;
 
+
+
+    private void Awake()
+    {
+        _button = GetComponent<Button>();
+        _button.onClick.AddListener(() => OnChangeEquipment(this));
+    }
+
+
+
+    public void OnChangeEquipment(PlayerEquipment equipment) => _onChangeEquipment.OnStartEvent(equipment);
+
+
+
+
+
+#if UNITY_EDITOR
+    private void OnValidate()
+    {
+        var image = GetComponent<Image>();
+        if(image == null)
+        {
+            Debug.LogWarning($"{gameObject.name}에 Image컴포넌트가 없음");
+            return;
+        }
+        if (SpriteImage != null)
+            image.sprite = SpriteImage;
+    }
+#endif
 }
