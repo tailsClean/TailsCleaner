@@ -3,11 +3,20 @@ using UnityEngine;
 
 public static class SkillDataLoader     // 사실상 스킬 데이터 매니저
 {
-    public static Dictionary<int, ActiveSkillData> ActiveSkillMap { get; private set; } = new();
-    public static Dictionary<int, PassiveSkillData> PassiveSkillMap { get; private set; } = new();
 
+    // SO
+    private static Dictionary<int, ActiveSkillData> _activeSkillMap = new();
+    private static Dictionary<int, PassiveSkillData> _passiveSkillMap = new();
+
+    // SO에서 뽑은 id 별 모디파이어 설정
     private static Dictionary<int, ActiveModifierConfig> _upgradeConfigMap = new();
     private static Dictionary<int, PassiveModifierConfig> _passiveConfigMap = new();
+
+    // 메인태그의 업그레이드 묶음
+    private static Dictionary<int, List<ActiveUpgradeData>> _upgradeMap = new();
+
+    // 공용 업그레이드 리스트
+    private static List<ActiveUpgradeData> _commonUpgrades = new();
 
     private const string ACTIVE_PATH = "Active";
     private const string PASSIVE_PATH = "Passive";
@@ -17,20 +26,20 @@ public static class SkillDataLoader     // 사실상 스킬 데이터 매니저
     {
         LoadActiveSkills();
         LoadPassiveSkills();
-        Debug.Log($"[SkillDataLoader] 액티브 {ActiveSkillMap.Count}개, 패시브 {PassiveSkillMap.Count}개 로드 완료.");
+        Debug.Log($"[SkillDataLoader] 액티브 {_activeSkillMap.Count}개, 패시브 {_passiveSkillMap.Count}개 로드 완료.");
     }
     
     // 액티브 스킬 불러오기
     private static void LoadActiveSkills()
     {
-        ActiveSkillMap.Clear();
+        _activeSkillMap.Clear();
         _upgradeConfigMap.Clear();
-    
+
         // 액티브 스킬 경로에 모든 SO 불러오기
         foreach (var so in Resources.LoadAll<ActiveSkillData>(ACTIVE_PATH))
         {
             // 메인태그에 SO 등록
-            if (ActiveSkillMap.TryAdd(so.MainTag, so) == false)
+            if (_activeSkillMap.TryAdd(so.MainTag, so) == false)
             {
                 // 혹시나 중복이면 스킵
                 Debug.LogWarning($"[SkillDataLoader] 중복 MainTag: {so.MainTag} ({so.name})");
@@ -38,7 +47,7 @@ public static class SkillDataLoader     // 사실상 스킬 데이터 매니저
             }
 
             // 스킬의 업그레이드 설정 순회
-            foreach (var upgradeConfig in so.UpgradeConfigs)
+            foreach (var upgradeConfig in so.UpgradeModifierDatas)
             {
                 // 업그레이드 ID 에 설정 추가
                 if (upgradeConfig.Config != null)
@@ -50,14 +59,14 @@ public static class SkillDataLoader     // 사실상 스킬 데이터 매니저
     // 패시브 스킬 불러오기
     private static void LoadPassiveSkills()
     {
-        PassiveSkillMap.Clear();
+        _passiveSkillMap.Clear();
         _passiveConfigMap.Clear();
 
         // 패시브 스킬 경로에 모든 SO 불러오기
         foreach (var so in Resources.LoadAll<PassiveSkillData>(PASSIVE_PATH))
         {
             // 패시브 ID 에 SO 등록
-            if (PassiveSkillMap.TryAdd(so.PassiveId, so) == false)
+            if (_passiveSkillMap.TryAdd(so.PassiveId, so) == false)
             {
                 // 혹시나 중복이면 스킵
                 Debug.LogWarning($"[SkillDataLoader] 중복 PassiveId: {so.PassiveId} ({so.name})");
@@ -66,15 +75,17 @@ public static class SkillDataLoader     // 사실상 스킬 데이터 매니저
 
             // 패시브 ID 에 설정 추가
             if (so.Config != null) _passiveConfigMap.TryAdd(so.PassiveId, so.Config);
+            // 서브태그 레지스트리에 등록
+            if (so.SubTag != 0) SubTagRegistry.Register(so.SubTag);
         }
     }
     
 
     // 스킬 데이터
     public static ActiveSkillData GetActiveSkillData(int mainTag)
-        => ActiveSkillMap.TryGetValue(mainTag, out var data) ? data : null;
+        => _activeSkillMap.TryGetValue(mainTag, out var data) ? data : null;
     public static PassiveSkillData GetPassiveSkillData(int passiveId)
-        => PassiveSkillMap.TryGetValue(passiveId, out var data) ? data : null;
+        => _passiveSkillMap.TryGetValue(passiveId, out var data) ? data : null;
 
 
     // 설정 데이터
@@ -90,5 +101,5 @@ public static class SkillDataLoader     // 사실상 스킬 데이터 매니저
     
     // 투사체
     public static GameObject GetSkillPrefab(int mainTag)
-        => ActiveSkillMap.TryGetValue(mainTag, out var so) ? so.SkillProjectilePrefab : null;
+        => _activeSkillMap.TryGetValue(mainTag, out var so) ? so.SkillProjectilePrefab : null;
 }

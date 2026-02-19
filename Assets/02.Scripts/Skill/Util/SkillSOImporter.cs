@@ -4,6 +4,7 @@ using System.IO;
 using UnityEditor;
 using UnityEngine;
 using static ActiveBaseData;
+using static UnityEngine.EventSystems.EventTrigger;
 
 
 // CSV -> ScriptableObject 
@@ -75,20 +76,23 @@ public class SkillSOImporter : EditorWindow
             so.AttackType = skill.AttackType;
             so.TargetingType = skill.TargetingType;
 
-            // 기존 Config 보존
+            // 기존 Modifier, Config 보존
+            var existingModifiers = new Dictionary<int, ActiveModifier>();
             var existingConfigs = new Dictionary<int, ActiveModifierConfig>();
-            foreach (var upgradeConfig in so.UpgradeConfigs)
+            foreach (var upgradeModifierData in so.UpgradeModifierDatas)
             {
-                if (upgradeConfig.Config != null)
-                    existingConfigs[upgradeConfig.UpgradeId] = upgradeConfig.Config;
+                if (upgradeModifierData.Modifier != null)    // Modifier
+                    existingModifiers[upgradeModifierData.UpgradeId] = upgradeModifierData.Modifier;
+                if (upgradeModifierData.Config != null)      // Config
+                    existingConfigs[upgradeModifierData.UpgradeId] = upgradeModifierData.Config;
             }
 
-            // Config 싹 청소
-            so.UpgradeConfigs.Clear();
+            // 모디파이어 데이터 싹 청소
+            so.UpgradeModifierDatas.Clear();
 
-            // 스킬 전용 업그레이드 설정 추가
+            // 스킬 전용 업그레이드 모디파이어, 설정 추가
             if (upgradeMap.TryGetValue(skill.MainTag, out var myUpgrades))
-                AddUpgradeConfigs(so, myUpgrades, existingConfigs);
+                AddUpgradeConfigs(so, myUpgrades, existingModifiers, existingConfigs);
 
             // 경로에 SO 저장, 생성
             SaveOrCreate(so, path);
@@ -100,26 +104,36 @@ public class SkillSOImporter : EditorWindow
     }
 
     // 전용 업그레이드 설정 추가
-    private void AddUpgradeConfigs(ActiveSkillData so, List<UpgradeRow> upgrades, Dictionary<int, ActiveModifierConfig> existing)
+    private void AddUpgradeConfigs(ActiveSkillData so, List<UpgradeRow> upgrades,
+        Dictionary<int, ActiveModifier> existingModifiers, Dictionary<int, ActiveModifierConfig> existingConfigs)
     {
         // 업그레이드마다
         foreach (var upgrade in upgrades)
         {
-            // 기존 데이터 있는지 확인 후 설정 빼오기
-            bool hasExisting = existing.TryGetValue(upgrade.Id, out var existingConfig);
-
             // 설정 추가
-            so.UpgradeConfigs.Add(new UpgradeModifierConfig
+            so.UpgradeModifierDatas.Add(new UpgradeModifierData
             {
-                UpgradeId = upgrade.Id,                                             // active_skill_id
-                Name = upgrade.Name,                                                // active_upgrade_name
-                Desc = upgrade.Desc,                                                // effect
-                Config = hasExisting && existingConfig != null                      // 모디파이어 설정
-                ? existingConfig                                                    // 기존 설정 있으면 기존 사용, 없으면 생성
-                : CreateActiveModifierConfig(upgrade.Id)
+                UpgradeId = upgrade.Id,                                                  // active_skill_id
+                Name = upgrade.Name,                                                     // active_upgrade_name
+                Desc = upgrade.Desc,                                                     // effect
+
+                Modifier = existingModifiers.TryGetValue(upgrade.Id, out var modifier)   // 모디파이어
+                ? modifier : CreateActiveModifier(upgrade.Id),                           // 기존 설정 있으면 기존 사용, 없으면 생성
+
+                Config = existingConfigs.TryGetValue(upgrade.Id, out var config)         // 모디파이어 설정
+                ? config : CreateActiveModifierConfig(upgrade.Id)                        
             });
         }
     }
+    // 액티브 모디파이어 생성
+    private ActiveModifier CreateActiveModifier(int upgradeId) => upgradeId switch
+    {
+        40011 => new SoapRetargetModifier(),        // 감나빗!
+        40012 => new SoapPierceDamageModifier(),    // 거품내기
+        40014 => new SoapPierceSpeedModifier(),     // 거품 가속
+        40016 => new SoapRemovePierceModifier(),    // 비누 덩어리
+        _ => null  // 매핑된거 없으면 깡통
+    };
 
     // 액티브 모디파이어 설정 생성
     private ActiveModifierConfig CreateActiveModifierConfig(int upgradeId)
@@ -158,6 +172,10 @@ public class SkillSOImporter : EditorWindow
             so.SubTag = passive.SubTag;
             so.Desc = passive.Desc;
 
+
+            if (so.Modifier == null)
+                so.Modifier = CreatePassiveModifier(passive.Id);
+
             // Config는 처음 생성 때만 기본
             // 업데이트시 수동 수치 보존
             if (so.Config == null)
@@ -173,16 +191,26 @@ public class SkillSOImporter : EditorWindow
     }
 
 
-    // 패시브 설정 생성
+    // 패시브 모디파이어 생성
+    private PassiveModifier CreatePassiveModifier(int passiveId) => passiveId switch
+    {
+        42002 => new CenterSwitchModifier(),        // 목표를 중앙에 두고 스위치
+        42004 => new DoubleExtraDamageModifier(),   // 추가 추가 피해
+        42014 => new ImplantModifier(),             // 기초적인 임플란트입니다
+        42016 => new CatLaundryModifier(),          // 냥빨래
+        _ => null
+    };
+
+    // 패시브 모디파이어 설정 생성
     private PassiveModifierConfig CreatePassiveConfig(int id)
     {
         return id switch
         {
             //42001 => new RaccoonConfig(),
-            42002 => new CenterSwitchConfig(),
-            //42003 => new FocusAttackConfig(),
-            42004 => new DoubleExtraDamageConfig(),
-            //42005 => new SuperCleanConfig(),
+            42002 => new CenterSwitchConfig(),      // 목표를 중앙에 두고 스위치
+            //42003 => new FocusAttackConfig(),     
+            42004 => new DoubleExtraDamageConfig(), // 추가 추가 피해
+            //42005 => new SuperCleanConfig(),      
             //42006 => new BravadoConfig(),
             //42007 => new VinylCoatConfig(),
             //42008 => new ClassicSecretConfig(),
@@ -191,9 +219,9 @@ public class SkillSOImporter : EditorWindow
             //42011 => new ADCarryConfig(),
             //42012 => new SnowballingConfig(),
             //42013 => new AmbiConfig(),
-            42014 => new ImplantConfig(),
+            42014 => new ImplantConfig(),           // 기초적인 임플란트입니다
             //42015 => new SodaWaterConfig(),
-            42016 => new CatLaundryConfig(),
+            42016 => new CatLaundryConfig(),        // 냥빨래
             //42017 => new NimbleBlockConfig(),
             _ => null
         };

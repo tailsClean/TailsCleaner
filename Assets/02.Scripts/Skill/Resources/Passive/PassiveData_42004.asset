@@ -15,7 +15,10 @@ MonoBehaviour:
   PassiveId: 42004
   PassiveName: "\uCD94\uAC00 \uCD94\uAC00 \uD53C\uD574"
   SubTag: 40104
-  EffectDesc: 
+  Desc: "\uCD94\uAC00 \uD53C\uD574\uC5D0 \uCD94\uAC00 \uD53C\uD574\uAC00 1\uD68C
+    \uB354 \uC801\uC6A9\uB429\uB2C8\uB2E4."
+  Modifier:
+    rid: 3004722717777723569
   Config:
     rid: 3004722717777723531
   references:
@@ -23,4 +26,10 @@ MonoBehaviour:
     RefIds:
     - rid: 3004722717777723531
       type: {class: DoubleExtraDamageConfig, ns: , asm: Assembly-CSharp}
-      data: 
+      data:
+        ExtraDamageTimes: 1
+    - rid: 3004722717777723569
+      type: {class: DoubleExtraDamageModifier, ns: , asm: Assembly-CSharp}
+      data:
+        PassiveId: 0
+        SubTag: 0

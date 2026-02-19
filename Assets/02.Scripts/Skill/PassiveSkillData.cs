@@ -11,6 +11,9 @@ public class PassiveSkillData : ScriptableObject
     [TextArea(2, 4)]
     public string Desc;
 
-    [Header("패시브 수치 (수동)")]
+    [Header("패시브 모디파이어")]
+    [SerializeReference] public PassiveModifier Modifier;
+
+    [Header("패시브 모디파이어 설정 (수동)")]
     [SerializeReference] public PassiveModifierConfig Config;
 }

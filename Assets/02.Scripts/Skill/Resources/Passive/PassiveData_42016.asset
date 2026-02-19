@@ -15,7 +15,11 @@ MonoBehaviour:
   PassiveId: 42016
   PassiveName: "\uB0E5\uBE68\uB798"
   SubTag: 40116
-  EffectDesc: 
+  Desc: "\uB109\uBC31\uC774 \uAC15\uD574\uC9D1\uB2C8\uB2E4. \uBC00\uC838\uCE5C \uC801\uC774
+    \uD654\uBA74 \uBC16\uC73C\uB85C \uB098\uAC00\uBA74 \uCCB4\uB825 \uBE44\uB840
+    \uACE0\uC815\uD53C\uD574\uB97C \uC90D\uB2C8\uB2E4."
+  Modifier:
+    rid: 3004722717777723567
   Config:
     rid: 3004722717777723533
   references:
@@ -26,3 +30,8 @@ MonoBehaviour:
       data:
         KnockbackBonus: 1
         OffScreenDamageRatio: 0.1
+    - rid: 3004722717777723567
+      type: {class: CatLaundryModifier, ns: , asm: Assembly-CSharp}
+      data:
+        PassiveId: 0
+        SubTag: 0

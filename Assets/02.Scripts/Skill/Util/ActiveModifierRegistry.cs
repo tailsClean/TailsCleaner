@@ -57,11 +57,7 @@ public static class ActiveModifierRegistry
         {
             // 있으면 생성 (리플렉션)
             ActiveModifier modifier = Activator.CreateInstance(type) as ActiveModifier;
-            if (modifier != null)
-            {
-                modifier.UpgradeId = activeSkillId; // ID 주입
-                return modifier;
-            }
+            if (modifier != null) return modifier;
         }
 
         // 없으면 null 반환 (단순 스탯 업그레이드)
