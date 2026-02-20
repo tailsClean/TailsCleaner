@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
+using static PassiveSkillData;
 
 public class SoapThrowProjectile : MonoBehaviour
 {
@@ -16,8 +17,8 @@ public class SoapThrowProjectile : MonoBehaviour
     private float _createTime;                  // 생성 시간
     private int _currentPierceCount = 0;        // 현재 관통 횟수
 
-    private SoapThrowModifierData _modifierData;     // 전용 모디파이어
-    private HashSet<int> _activePassiveIds;     // 활성화된 패시브 로직 ID
+    private SoapThrowModifierData _modifierData;    // 전용 모디파이어
+    private HashSet<int> _activePassiveIds;         // 활성화된 패시브 로직 ID
 
     private void Awake()
     {
@@ -122,26 +123,31 @@ public class SoapThrowProjectile : MonoBehaviour
     private bool PierceDamage()
     {
         // 관통 시 추가 피해
-        //if (_modifierData.PierceDamage == true && _modifierData.DamagePerPierce > 0f)
-        //{
-        //    // 전용 모디파이어
-        //    float bonus = _modifierData.DamagePerPierce;
-        //
-        //    // 임플란트 패시브
-        //    if (_activePassiveIds.Contains((int)PASSIVE_ID.Implant) == true)
-        //        bonus += 0.2f;  // 이것도 인스펙터에서 조절 가능하게 빼야함
-        //
-        //    // 추가추가피해 패시브
-        //    if (_activePassiveIds.Contains((int)PASSIVE_ID.DoubleExtraDmg) == true)
-        //        bonus *= 2f;
-        //
-        //    // baseStat에 더하고 재계산
-        //    _runtimeBaseStat.Damage += bonus;
-        //
-        //    // 재계산
-        //    return true;
-        //}
-        //
+        if (_modifierData.PierceDamage == true && _modifierData.DamagePerPierce > 0f)
+        {
+            // 전용 모디파이어
+            float bonus = _modifierData.DamagePerPierce;
+
+            // 패시브 ID
+            int implantId = (int)PASSIVE_ID.Implant;
+            int DoubleExtraDmg = (int)PASSIVE_ID.DoubleExtraDmg;
+
+            // 임플란트 패시브
+            //if (_activePassiveIds.Contains(implantId) == true)
+            //    bonus += SkillDataLoader.GetPassiveSkillData(implantId).Config as ImplantConfig;
+        
+            // 추가추가피해 패시브
+            if (_activePassiveIds.Contains(DoubleExtraDmg) == true)
+                bonus *= 2f;
+        
+            // baseStat에 더하고 재계산
+            _runtimeBaseStat.Damage += bonus;
+        
+            // 재계산
+            return true;
+        }
+        
+
         return false;
     }
 

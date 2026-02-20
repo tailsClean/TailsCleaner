@@ -38,7 +38,7 @@ public static class SkillDataLoader     // 사실상 스킬 데이터 매니저 
     {
         LoadActiveSkills();     // 액티브
         LoadPassiveSkills();    // 패시브
-        LoadActiveUpgrades();   // 액티브 업그레이드 스탯
+        LoadActiveUpgrades();   // 액티브 업그레이드
         Debug.Log($"[SkillDataLoader] 액티브 {_activeSkillMap.Count}개, 패시브 {_passiveSkillMap.Count}개 로드 완료.");
     }
     

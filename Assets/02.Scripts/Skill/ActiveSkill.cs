@@ -200,8 +200,8 @@ public abstract class ActiveSkill : MonoBehaviour
                 passive.ModifyStatMul(this, resultStat);
         }
 
-        // 최종 스탯 = ((baseStat + 패시브 스탯) * 공용 스탯) + 업그레이드 스탯 * 패시브 스탯
-        Debug.Log($"최종 공격력 : {resultStat.Damage} = ( {resultStat.Damage} * {resultStat.Damage} ) + {resultStat.Damage}");
+        // 최종 스탯 = ((baseStat + 패시브 스탯) * 공용 스탯 + 업그레이드 스탯) * 패시브 스탯
+        Debug.Log($"최종 공격력 : {resultStat.Damage} = ( {baseStat.Damage} + (패시브 스탯)) * {resultStat.Damage}  + {resultStat.Damage}) * 패시브 스탯");
 
         // 최종 결과 스탯 반환
         return resultStat;

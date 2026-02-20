@@ -12,10 +12,10 @@ public class ActiveSkillData : ScriptableObject
     public ATTACK_TYPE AttackType;
     public TARGETING_TYPE TargetingType;
 
-    [Header("스킬 프리팹 (수동)")]
+    [Header("스킬 프리팹")]
     public ActiveSkill SkillPrefab;
 
-    [Header("투사체 프리팹 (수동)")]
+    [Header("투사체 프리팹")]
     public GameObject SkillProjectilePrefab;
 
     [Header("업그레이드별 모디파이어 설정")]
