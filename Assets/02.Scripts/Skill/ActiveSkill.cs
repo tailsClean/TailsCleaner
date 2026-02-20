@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
-using static ActiveBaseData;
+using static ActiveSkillData;
 
 public abstract class ActiveSkill : MonoBehaviour
 {
@@ -40,22 +40,22 @@ public abstract class ActiveSkill : MonoBehaviour
     protected float _lastActiveTime = 0f; // 최근 스킬 실행 시간
 
     // 초기화 (0티어 획득)
-    public void Init(ActiveBaseData baseData, ActiveUpgradeData upgradeData, GameObject prefab)
+    public void Init(ActiveSkillData skillData, ActiveUpgradeData upgradeData, GameObject prefab)
     {   
         // 메인 태그
-        MainTag = baseData.MainTag;
+        MainTag = skillData.MainTag;
 
         // 서브 태그
         AddSubTag(upgradeData);
 
         // 타입 설정
-        _attackType = baseData.AttackType;
-        _targetingType = baseData.TargetingType;
-        Debug.Log($"[ActiveSkill] {baseData.Name} 타입 설정 완료. ({_attackType}, {_targetingType})");
+        _attackType = skillData.AttackType;
+        _targetingType = skillData.TargetingType;
+        Debug.Log($"[ActiveSkill] {skillData.SkillName} 타입 설정 완료. ({_attackType}, {_targetingType})");
 
         // 스킬의 사용 프리팹
         _skillPrefab = prefab;
-        Debug.Log($"[ActiveSkill] {baseData.Name} 의 프리팹 {_skillPrefab.name} 설정 완료.");
+        Debug.Log($"[ActiveSkill] {skillData.SkillName} 의 프리팹 {_skillPrefab.name} 설정 완료.");
 
         // 레벨 1 시작
         CurrentLevel = 1;
@@ -135,7 +135,7 @@ public abstract class ActiveSkill : MonoBehaviour
     private void AddStat(ActiveUpgradeData upgradeData)
     {
         // 공용
-        if (upgradeData.MainTag == SkillManager.COMMON_MAIN_TAG)
+        if (upgradeData.MainTag == SkillDataLoader.COMMON_MAIN_TAG)
         {
             // 곱연산 누적
             SkillStat multiplier = upgradeData.GetSkillStat();
@@ -153,8 +153,8 @@ public abstract class ActiveSkill : MonoBehaviour
     private void AddModifier(int upgradeId)
     {
         // 전용 모디파이어 생성 후 추가
-        ActiveModifier modifier = ActiveModifierRegistry.Create(upgradeId);
-
+        ActiveModifier modifier = SkillDataLoader.GetActiveModifier(upgradeId);
+        
         if (modifier != null)
         {
             _modifiers.Add(modifier);
@@ -212,11 +212,14 @@ public abstract class ActiveSkill : MonoBehaviour
     // 패시브 로직 적용
     protected void ApplyPassiveLogics()
     {
+        // 보유 패시브 순회
         foreach (var passive in SkillManager.Instance.MyPassiveSkills)
         {
+            // 패시브의 서브태그 플래그
             int flag = SubTagRegistry.GetFlag(passive.SubTag);
+            // 현재 액티브 스킬에 적용되어있을 때 추가 (해시셋이라 중복추가안됨)
             if (flag != 0 && (CurrentSubTag & flag) != 0)
-                passive.ModifyLogic(this);
+                ActivePassiveIds.Add(passive.PassiveId);
         }
     }
 

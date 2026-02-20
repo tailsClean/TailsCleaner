@@ -1,4 +1,9 @@
-public class ActiveUpgradeData // 액티브 스킬 업그레이드 데이터
+
+
+using UnityEngine;
+
+[CreateAssetMenu(fileName = "ActiveUpgradeData", menuName = "Skill/ActiveUpgradeData")]
+public class ActiveUpgradeData : ScriptableObject // 액티브 스킬 업그레이드 데이터
 {
     // 기본 정보
     public int Id;                  // active_skill_id     액티브 스킬 ID 40001

@@ -3,8 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using UnityEditor;
 using UnityEngine;
-using static ActiveBaseData;
-using static UnityEngine.EventSystems.EventTrigger;
+using static ActiveSkillData;
 
 
 // CSV -> ScriptableObject 
@@ -12,10 +11,14 @@ public class SkillSOImporter : EditorWindow
 {
     private string _activeSkillCsvPath = "Assets/02.Scripts/Skill/CSV/active_skill.csv";          // 액티브 베이스
     private string _activeUpgradeCsvPath = "Assets/02.Scripts/Skill/CSV/active_upgrade.csv";      // 액티브 업그레이드
+    private string _activeStatusCsvPath = "Assets/02.Scripts/Skill/CSV/active_status.csv";        // 업그레이드 스탯
     private string _passiveSkillCsvPath = "Assets/02.Scripts/Skill/CSV/passive_skill.csv";        // 패시브
 
-    private string _activeSavePath = "Assets/02.Scripts/Skill/Resources/Active";                     // 액티브 저장 경로
-    private string _passiveSavePath = "Assets/02.Scripts/Skill/Resources/Passive";                   // 패시브 저장 경로
+    // 저장 경로
+    private string _activeSavePath = "Assets/02.Scripts/Skill/Resources/Active";                     // 액티브
+    private string _passiveSavePath = "Assets/02.Scripts/Skill/Resources/Passive";                   // 패시브  
+    private string _upgradeSavePath = "Assets/02.Scripts/Skill/Resources/UpgradeStat";               // 업그레이드 
+    private string _commonUpgradeSavePath = "Assets/02.Scripts/Skill/Resources/UpgradeStat/Common";  // 공용 업그레이드
 
     [MenuItem("Tools/Skill SO Importer")]   // 메뉴창
     public static void Open() => GetWindow<SkillSOImporter>("Skill SO Importer");
@@ -25,16 +28,22 @@ public class SkillSOImporter : EditorWindow
         GUILayout.Label("CSV 경로", EditorStyles.boldLabel);
         _activeSkillCsvPath = EditorGUILayout.TextField("active_skill", _activeSkillCsvPath);
         _activeUpgradeCsvPath = EditorGUILayout.TextField("active_upgrade", _activeUpgradeCsvPath);
+        _activeStatusCsvPath = EditorGUILayout.TextField("active_status", _activeStatusCsvPath);
         _passiveSkillCsvPath = EditorGUILayout.TextField("passive_skill", _passiveSkillCsvPath);
 
         EditorGUILayout.Space(6);
         GUILayout.Label("SO 저장 경로", EditorStyles.boldLabel);
         _activeSavePath = EditorGUILayout.TextField("Active", _activeSavePath);
         _passiveSavePath = EditorGUILayout.TextField("Passive", _passiveSavePath);
+        _upgradeSavePath = EditorGUILayout.TextField("Upgrade", _upgradeSavePath);
+        _commonUpgradeSavePath = EditorGUILayout.TextField("CommonUpgrade", _commonUpgradeSavePath);
 
         EditorGUILayout.Space(10);
         if (GUILayout.Button("Import Active Skills", GUILayout.Height(20))) ImportActive();
+        EditorGUILayout.Space(4);
         if (GUILayout.Button("Import Passive Skills", GUILayout.Height(20))) ImportPassive();
+        EditorGUILayout.Space(4);
+        if (GUILayout.Button("Import Active Upgrades", GUILayout.Height(20))) ImportActiveUpgrade();
     }
 
 
@@ -228,7 +237,64 @@ public class SkillSOImporter : EditorWindow
     }
     #endregion
 
+    #region Upgrade
+    private void ImportActiveUpgrade()
+    {
+        // 폴더 보장 (없으면 생성)
+        EnsureFolder(_commonUpgradeSavePath);
 
+        var upgrades = ReadActiveUpgrades();                           // 기본 정보
+        var statusMap = ReadActiveStatus();                            // ID → 스탯 행
+
+        // 업그레이드 순회
+        foreach (var upgrade in upgrades)
+        {
+            // 업그레이드의 메인 태그가 공용인지 체크 
+            bool isCommon = (upgrade.MainTag == SkillDataLoader.COMMON_MAIN_TAG);
+
+            // 전용, 공용 업그레이드 경로
+            string path = isCommon
+                ? $"{_commonUpgradeSavePath}/ActiveUpgradeStat_{upgrade.Id}.asset"
+                : $"{_upgradeSavePath}/ActiveUpgradeStat_{upgrade.Id}.asset";
+
+
+            // 경로에 SO 있으면 가져오고 없으면 새로만들기
+            var so = AssetDatabase.LoadAssetAtPath<ActiveUpgradeData>(path)
+                     ?? CreateInstance<ActiveUpgradeData>();
+
+            // 기본 정보 (active_upgrade.csv)
+            so.Id = upgrade.Id;
+            so.Name = upgrade.Name;
+            so.Desc = upgrade.Desc;
+            so.Tier = upgrade.Tier;
+            so.MaxLevel = upgrade.MaxLev;
+            so.MainTag = upgrade.MainTag;
+            so.SubTag1 = upgrade.SubTag1;
+            so.SubTag2 = upgrade.SubTag2;
+
+            // 스탯 정보 (active_status.csv)
+            if (statusMap.TryGetValue(upgrade.Id, out var upgradeStat))
+            {
+                so.Size = upgradeStat.Size;
+                so.Damage = upgradeStat.Damage;
+                so.Cooldown = upgradeStat.Cooldown;
+                so.Duration = upgradeStat.Duration;
+                so.ProjectileSpeed = upgradeStat.Speed;
+                so.ProjectileCount = upgradeStat.Projectiles;
+                so.PierceCount = upgradeStat.Piercing;
+                so.TickRate = upgradeStat.Tick;
+                so.Knockback = upgradeStat.Knockback;
+                so.HasBarrier = upgradeStat.Barrier;
+            }
+
+            SaveOrCreate(so, path);
+        }
+
+        AssetDatabase.SaveAssets();
+        Debug.Log("[SkillSOImporter] Active Upgrade Import 완료.");
+    }
+
+    #endregion
 
     #region CSV 파싱
 
@@ -290,8 +356,38 @@ public class SkillSOImporter : EditorWindow
         }
         return result;
     }
-    
-    
+
+    // 업그레이드 스탯 정보 CSV 읽기
+    private Dictionary<int, StatusRow> ReadActiveStatus()
+    {
+        var result = new Dictionary<int, StatusRow>();
+        var lines = File.ReadAllLines(_activeStatusCsvPath);
+
+        for (int i = 3; i < lines.Length; i++)
+        {
+            var items = Split(lines[i]);
+
+            if (int.TryParse(items[0], out int id) == false) continue;
+
+            result[id] = new StatusRow
+            {
+                Id = id,                                                 // active_skill_id
+                Size = ParseFloatSafe(items, 1),                         // skill_size
+                Damage = ParseFloatSafe(items, 2),                       // skill_damage
+                Cooldown = ParseFloatSafe(items, 3),                     // skill_cooldown
+                Duration = ParseFloatSafe(items, 4),                     // skill_duration
+                Speed = ParseFloatSafe(items, 5),                        // skill_speed
+                Projectiles = ParseIntSafe(items, 6),                    // skill_projectiles
+                Piercing = ParseIntSafe(items, 7),                       // skill_piercing
+                Tick = ParseFloatSafe(items, 8),                         // skill_tick
+                Knockback = ParseFloatSafe(items, 9),                    // skill_knockback
+                Barrier = ParseBoolSafe(items, 10)                       // skill_barrier
+            };
+        }
+        return result;
+    }
+
+
     // 패시브 스킬 정보 CSV 읽기
     private List<PassiveRow> ReadPassiveSkills()
     {
@@ -378,13 +474,28 @@ public class SkillSOImporter : EditorWindow
         return result.ToArray();
     }
 
-    // 업그레이드 데이터용 int 값 체크
+    // 업그레이드 데이터용 값 체크
     private int ParseIntSafe(string[] columns, int index)
     {
         if (index >= columns.Length) return 0;              // 정상 범위인지 체크
         string s = columns[index].Trim();                   // 앞뒤 공백 제거
         return s == "-" || string.IsNullOrEmpty(s) ? 0      // -나 공백,null 은 0 아니면 int Parse 시도 후 성공 하면 value반환
              : int.TryParse(s, out int value) ? value : 0;
+    }
+    private float ParseFloatSafe(string[] columns, int index)
+    {
+        if (index >= columns.Length) return 0f;
+        string s = columns[index].Trim();
+        return s == "-" || string.IsNullOrEmpty(s) ? 0f
+             : float.TryParse(s, out float value) ? value : 0f;
+    }
+
+    private bool ParseBoolSafe(string[] columns, int index)
+    {
+        if (index >= columns.Length) return false;
+        string s = columns[index].Trim();
+        if (s == "-" || string.IsNullOrEmpty(s)) return false;
+        return s != "0" && s.ToLower() != "false";
     }
     #endregion
 
@@ -393,6 +504,12 @@ public class SkillSOImporter : EditorWindow
     private struct ActiveSkillRow { public string Name; public int MainTag; public ATTACK_TYPE AttackType; public TARGETING_TYPE TargetingType; }
     private struct UpgradeRow { public int Id, Tier, MaxLev, MainTag, SubTag1, SubTag2; public string Name, Desc; }
     private struct PassiveRow { public int Id, SubTag; public string Name, Desc; }
+    private struct StatusRow
+    {
+        public int Id, Projectiles, Piercing;
+        public float Size, Damage, Cooldown, Duration, Speed, Tick, Knockback;
+        public bool Barrier;
+    }
 }
 
 #endif

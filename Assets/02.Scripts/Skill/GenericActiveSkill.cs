@@ -30,7 +30,7 @@ public abstract class GenericActiveSkill<TController, TData> : ActiveSkill
         // 스탯 재계산, 로직 재적용
         RecheckPassives();
 
-        Debug.Log($"[ActiveSkill] 업그레이드 완료: [{SkillManager.Instance.ActiveBaseDatas[MainTag].Name}] (MainTag : {MainTag})\n" +
+        Debug.Log($"[ActiveSkill] 업그레이드 완료: [{SkillDataLoader.GetActiveSkillData(MainTag).SkillName}] (MainTag : {MainTag})\n" +
                   $" - 업그레이드 : {upgradeData.Name} (Active_Skill_ID : {upgradeData.Id})\n" +
                   $" - 업그레이드 Lv : {GetUpgradeLevel(upgradeData.Id)} / {upgradeData.MaxLevel}\n" +
                   $" - 스킬 전체 Lv : {CurrentLevel} / {MAX_SKILL_LEVEL}");
