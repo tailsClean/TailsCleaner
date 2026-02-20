@@ -1,0 +1,110 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 518aadcd99d59244b926a53624b75d00, type: 3}
+  m_Name: ActiveData_41002
+  m_EditorClassIdentifier: Assembly-CSharp::ActiveSkillData
+  MainTag: 41002
+  SkillName: "\uBE44\uB204 \uB358\uC9C0\uAE30"
+  AttackType: 4102
+  TargetingType: 4202
+  SkillPrefab: {fileID: 4850343801496461098, guid: 6416bc341867cba4eabc29a69c32c834, type: 3}
+  SkillProjectilePrefab: {fileID: 8058755425168676450, guid: ae25a63334bf73344aa47b1f1190a4c3, type: 3}
+  UpgradeModifierDatas:
+  - Name: "\uBE44\uB204 \uB358\uC9C0\uAE30"
+    UpgradeId: 40009
+    Desc: "\uC77C\uC815 \uC2DC\uAC04\uB9C8\uB2E4 \uD50C\uB808\uC774\uC5B4 \uACF5\uACA9
+      \uBC29\uD5A5\uC758 \uAC00\uC7A5 \uAC00\uAE4C\uC6B4 \uB300\uC0C1\uC5D0\uAC8C
+      \uBE44\uB204\uB97C \uB358\uC838 \uD53C\uD574\uB97C \uC90D\uB2C8\uB2E4."
+    Modifier:
+      rid: -2
+    Config:
+      rid: -2
+  - Name: "\uBBF8\uB044\uB7EC\uC9C0\uAE30"
+    UpgradeId: 40010
+    Desc: "\uBE44\uB204\uAC00 \uC801\uC744 \uB450 \uBC88 \uAD00\uD1B5 \uD569\uB2C8\uB2E4."
+    Modifier:
+      rid: -2
+    Config:
+      rid: -2
+  - Name: "\uAC10\uB098\uBE57!"
+    UpgradeId: 40011
+    Desc: "\uBE44\uB204\uAC00 \uC801\uC744 \uAD00\uD1B5 \uD569\uB2C8\uB2E4., \uAD00\uD1B5\uD55C
+      \uBE44\uB204\uB294 \uACF5\uACA9 \uBC29\uD5A5\uC758 \uAC00\uC7A5 \uAC00\uAE4C\uC6B4
+      \uC801\uC5D0\uAC8C \uB0A0\uB77C\uAC11\uB2C8\uB2E4"
+    Modifier:
+      rid: 3004722717777723561
+    Config:
+      rid: -2
+  - Name: "\uAC70\uD488\uB0B4\uAE30"
+    UpgradeId: 40012
+    Desc: "\uAD00\uD1B5 +1, \uAD00\uD1B5\uD55C \uBE44\uB204\uB294 \uCD94\uAC00 \uD53C\uD574\uB97C
+      \uC90D\uB2C8\uB2E4."
+    Modifier:
+      rid: 3004722717777723562
+    Config:
+      rid: 3004722717777723563
+  - Name: "\uBC84\uBE14 \uC2AC\uB77C\uC774\uB4DC"
+    UpgradeId: 40013
+    Desc: "\uAD00\uD1B5 +1, \uB109\uBC31 +1"
+    Modifier:
+      rid: -2
+    Config:
+      rid: -2
+  - Name: "\uAC70\uD488 \uAC00\uC18D"
+    UpgradeId: 40014
+    Desc: "\uAD00\uD1B5 +1, \uD22C\uC0AC\uCCB4\uC758 \uC18D\uB3C4\uAC00 \uAD00\uD1B5\uD560
+      \uB54C \uB9C8\uB2E4 \uBE68\uB77C\uC9D1\uB2C8\uB2E4."
+    Modifier:
+      rid: 3004722717777723564
+    Config:
+      rid: 3004722717777723565
+  - Name: "\uBBF8\uB04C\uBBF8\uB04C"
+    UpgradeId: 40015
+    Desc: "\uAD00\uD1B5 +5"
+    Modifier:
+      rid: -2
+    Config:
+      rid: -2
+  - Name: "\uBE44\uB204 \uB369\uC5B4\uB9AC"
+    UpgradeId: 40016
+    Desc: "\uAD00\uD1B5 +1, \uBE44\uB204\uB294 \uB354\uC774\uC0C1 \uAD00\uD1B5\uD558\uC9C0
+      \uC54A\uACE0 \uAD00\uD1B5 \uC218\uCE58\uB9CC\uD07C \uCD94\uAC00 \uD53C\uD574\uB97C
+      \uC90D\uB2C8\uB2E4."
+    Modifier:
+      rid: 3004722717777723566
+    Config:
+      rid: -2
+  references:
+    version: 2
+    RefIds:
+    - rid: -2
+      type: {class: , ns: , asm: }
+    - rid: 3004722717777723561
+      type: {class: SoapRetargetModifier, ns: , asm: Assembly-CSharp}
+      data: 
+    - rid: 3004722717777723562
+      type: {class: SoapPierceDamageModifier, ns: , asm: Assembly-CSharp}
+      data: 
+    - rid: 3004722717777723563
+      type: {class: SoapPierceDamageConfig, ns: , asm: Assembly-CSharp}
+      data:
+        DamagePerPierce: 0.2
+    - rid: 3004722717777723564
+      type: {class: SoapPierceSpeedModifier, ns: , asm: Assembly-CSharp}
+      data: 
+    - rid: 3004722717777723565
+      type: {class: SoapPierceSpeedConfig, ns: , asm: Assembly-CSharp}
+      data:
+        SpeedPerPierce: 1
+    - rid: 3004722717777723566
+      type: {class: SoapRemovePierceModifier, ns: , asm: Assembly-CSharp}
+      data: 

@@ -1,4 +1,4 @@
-using UnityEngine;
+ï»¿using UnityEngine;
 
 public abstract class GenericActiveSkill<TController, TData> : ActiveSkill
     where TController : Component
@@ -7,23 +7,38 @@ public abstract class GenericActiveSkill<TController, TData> : ActiveSkill
     protected TController _skillPrefabComponent;
     public TData ModifierData = new TData();
     
-    // ÇÁ¸®ÆÕ Ä³½Ì
-    protected virtual void Start()
+    // í”„ë¦¬íŒ¹ ìºì‹±
+    public override void Init(ActiveSkillData skillData, ActiveUpgradeData upgradeData, GameObject prefab)
     {
-        if (_skillPrefab != null) _skillPrefabComponent = _skillPrefab.GetComponent<TController>();
+        // ë¶€ëª¨ Init ë¨¼ì €
+        base.Init(skillData, upgradeData, prefab);
+
+        if (_skillPrefab != null)
+        {
+            _skillPrefabComponent = _skillPrefab.GetComponent<TController>();
+        }
     }
 
-    // µ¥ÀÌÅÍ °»½Å
-    public override void ApplyUpgrade(ActiveUpgradeData data)
+    // ë°ì´í„° ê°±ì‹ 
+    public override void ApplyUpgrade(ActiveUpgradeData upgradeData)
     { 
-        base.ApplyUpgrade(data);
+        base.ApplyUpgrade(upgradeData);
 
-        // ¸ğµğÆÄÀÌ¾î µ¥ÀÌÅÍ °»½Å
+        // ëª¨ë””íŒŒì´ì–´ ë°ì´í„° ê°±ì‹ 
         ModifierData = new TData();
         foreach (var mod in _modifiers)
         {
-            // ¸ğµğÆÄÀÌ¾î Àû¿ë
+            // ëª¨ë””íŒŒì´ì–´ ì ìš©
             mod.Apply(this);
         }
+
+        // íŒ¨ì‹œë¸Œ ì¬ì ìš© (CalculateStats + ApplyPassiveLogics)
+        // ìŠ¤íƒ¯ ì¬ê³„ì‚°, ë¡œì§ ì¬ì ìš©
+        RecheckPassives();
+
+        Debug.Log($"[ActiveSkill] ì—…ê·¸ë ˆì´ë“œ ì™„ë£Œ: [{SkillDataLoader.GetActiveSkillData(MainTag).SkillName}] (MainTag : {MainTag})\n" +
+                  $" - ì—…ê·¸ë ˆì´ë“œ : {upgradeData.Name} (Active_Skill_ID : {upgradeData.Id})\n" +
+                  $" - ì—…ê·¸ë ˆì´ë“œ Lv : {GetUpgradeLevel(upgradeData.Id)} / {upgradeData.MaxLevel}\n" +
+                  $" - ìŠ¤í‚¬ ì „ì²´ Lv : {CurrentLevel} / {MAX_SKILL_LEVEL}");
     }
 }

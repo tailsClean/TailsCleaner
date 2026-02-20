@@ -6,12 +6,24 @@ public class UpgradeSelect : MonoBehaviour
 {
     private class SelectOptionInfo     // 선택한 선택지의 정보
     {
-        public int TargetMainTag;       // 업그레이드를 적용할 메인 태그
-        public ActiveUpgradeData Data;  // 업그레이드 데이터
-        public SelectOptionInfo(int mainTag, ActiveUpgradeData data)
+        public bool IsPassive;                // 패시브인지 체크
+
+        // 액티브
+        public ActiveUpgradeData ActiveData;       // 업그레이드 데이터
+        // 패시브
+        public PassiveSkillData PassiveData; 
+
+        // 액티브 생성자
+        public SelectOptionInfo(ActiveUpgradeData data)
         {
-            TargetMainTag = mainTag;
-            Data = data;
+            ActiveData = data;
+        }
+
+        // 패시브 생성자
+        public SelectOptionInfo(PassiveSkillData data)
+        {
+            IsPassive = true;
+            PassiveData = data;
         }
     }
 
@@ -55,7 +67,7 @@ public class UpgradeSelect : MonoBehaviour
 
                 // 유효하면 선택지에 추가
                 if (upgradeData != null)
-                    _currentOptions.Add(new SelectOptionInfo(mainTag, upgradeData));
+                    _currentOptions.Add(new SelectOptionInfo(upgradeData));
             }
         }
 
@@ -63,6 +75,23 @@ public class UpgradeSelect : MonoBehaviour
         if (_currentOptions.Count < MAX_SELECT_OPTIONS)
         {
             // 패시브 추가 로직
+            // 패시브 슬롯 체크
+            bool isPassiveFull = skillManager.IsPassiveSlotFull;
+
+            // 패시브 자리 남으면
+            if(isPassiveFull == false)
+            {
+                // 패시브 후보 목록
+                List<PassiveSkillData> candidatePassives = GetCandidatePassives(skillManager);
+                // 셔플
+                Shuffle(candidatePassives);
+
+                foreach (var passive in candidatePassives)
+                {
+                    if (_currentOptions.Count >= MAX_SELECT_OPTIONS) break;
+                    _currentOptions.Add(new SelectOptionInfo(passive));
+                }
+            }
         }
 
         // 그래도 다 못 채웠을 경우엔
@@ -93,7 +122,7 @@ public class UpgradeSelect : MonoBehaviour
         if (skillManager.MyActiveSkills.Count < SkillManager.MAX_ACTIVE_SLOTS)
         {
             // 스킬 맵 순회 하면서
-            foreach (int mainTag in skillManager.SkillUpgradeMap.Keys)
+            foreach (int mainTag in SkillDataLoader.UpgradeMap.Keys)
             {
                 // 미습득 스킬 후보에 추가
                 if (skillManager.GetActiveSkill(mainTag) == null)
@@ -110,7 +139,7 @@ public class UpgradeSelect : MonoBehaviour
     private ActiveUpgradeData GetRandomSkillUpgrade(SkillManager skillManager, int mainTag)
     {
         // 업그레이드 맵에 메인 태그가 등록되어있지 않다면 null 반환
-        if (skillManager.SkillUpgradeMap.TryGetValue(mainTag, out List<ActiveUpgradeData> upgradeList) == false)
+        if (SkillDataLoader.UpgradeMap.TryGetValue(mainTag, out List<ActiveUpgradeData> upgradeList) == false)
         {
             Debug.LogError($"[UpgradeSelect] {mainTag} 가 업그레이드 맵에 등록되지 않았음");
             return null;
@@ -174,13 +203,53 @@ public class UpgradeSelect : MonoBehaviour
         }
     }
 
+    // 패시브 후보 목록
+    private List<PassiveSkillData> GetCandidatePassives(SkillManager skillManager)
+    {
+        List<PassiveSkillData> result = new();
+
+        // 패시브 전체 가져와서 순회
+        foreach (var pair in SkillDataLoader.PassiveSkillMap)
+        {
+            // 패시브 데이터
+            PassiveSkillData passive = pair.Value;
+
+            // 이미 보유 중이면 제외
+            if (skillManager.MyPassiveSkills.Exists(p => p.PassiveId == passive.PassiveId)) continue;
+
+            // 서브태그 플래그
+            int subTagFlag = SubTagRegistry.GetFlag(passive.SubTag);
+
+            // 매칭되는 액티브 스킬 수 카운트
+            int matchCount = 0;
+            foreach (var skill in skillManager.MyActiveSkills)
+            {
+                if (subTagFlag != 0 && (skill.CurrentSubTag & subTagFlag) != 0)
+                    matchCount++;
+            }
+
+            // 2개 이상이면 후보에 추가
+            if (matchCount >= 2)
+                result.Add(passive);
+        }
+
+        return result;
+    }
+
     // 테스트용 선택지 로그
     private void PrintLog()
     {
         Debug.Log("[UpgradeSelect] 선택지 생성");
         for (int i = 0; i < _currentOptions.Count; i++)
         {
-            Debug.Log($"{i + 1}. {_currentOptions[i].TargetMainTag} 의 {_currentOptions[i].Data.Name}");
+            if (_currentOptions[i].IsPassive)
+            {
+                Debug.Log($"{i + 1}. {_currentOptions[i].PassiveData.PassiveName} ({_currentOptions[i].PassiveData.PassiveId}) ");
+            }
+            else
+            {
+                Debug.Log($"{i + 1}. {_currentOptions[i].ActiveData.Name} (MainTag : {_currentOptions[i].ActiveData.MainTag}) / UpgradeID : {_currentOptions[i].ActiveData.Id}");
+            }
         }
     }
 
@@ -190,8 +259,14 @@ public class UpgradeSelect : MonoBehaviour
         // 비정상 범위 체크
         if (index < 0 || index >= _currentOptions.Count) return;
 
+        // 선택지 정보
+        var option = _currentOptions[index];
+
         // 매니저에서 선택지 적용
-        SkillManager.Instance.ApplyOption(_currentOptions[index].TargetMainTag, _currentOptions[index].Data);
+        if (option.IsPassive)
+            SkillManager.Instance.ApplyPassiveOption(option.PassiveData);
+        else
+            SkillManager.Instance.ApplyActiveOption(option.ActiveData);
 
         _currentOptions.Clear();
     }

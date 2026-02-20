@@ -1,4 +1,9 @@
-public class ActiveUpgradeData // 액티브 스킬 업그레이드 데이터
+
+
+using UnityEngine;
+
+[CreateAssetMenu(fileName = "ActiveUpgradeData", menuName = "Skill/ActiveUpgradeData")]
+public class ActiveUpgradeData : ScriptableObject // 액티브 스킬 업그레이드 데이터
 {
     // 기본 정보
     public int Id;                  // active_skill_id     액티브 스킬 ID 40001
@@ -13,6 +18,7 @@ public class ActiveUpgradeData // 액티브 스킬 업그레이드 데이터
     public int SubTag2;             // sub_tag_2           없으면 0
 
     // 스탯 정보
+    public float Size;              // skill_size          크기 비율
     public float Damage;            // skill_damage        공격력 배율
     public float Cooldown;          // skill_cooldown      쿨타임 감소
     public float Duration;          // skill_duration      지속 시간
@@ -22,7 +28,6 @@ public class ActiveUpgradeData // 액티브 스킬 업그레이드 데이터
     public float TickRate;          // skill_tick          장판 피해 주기
     public float Knockback;         // skill_knockback     넉백 수치
     public bool HasBarrier;         // skill_barrier       0,1 bool 변환
-    public float Size;              // skill_size          크기 비율
 
 
     // 업그레이드의 서브 태그 id를 플래그로 변환 후 반환
@@ -40,13 +45,13 @@ public class ActiveUpgradeData // 액티브 스킬 업그레이드 데이터
     public SkillStat GetSkillStat()
     {
         SkillStat bonus = new SkillStat();
+        bonus.Size = Size;
         bonus.Damage = Damage;
         bonus.Cooldown = Cooldown;
         bonus.Duration = Duration;
         bonus.ProjectileSpeed = ProjectileSpeed;
         bonus.ProjectileCount = ProjectileCount;
         bonus.PierceCount = PierceCount;
-        bonus.Size = Size;
         return bonus;
     }
 }
