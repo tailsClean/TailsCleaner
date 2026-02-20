@@ -7,13 +7,17 @@ public class EquipmentUI : MonoBehaviour
     [SerializeField] private GameObject _playerObj;
 
     private IEquipmentable _player;
-    private Dictionary<PlayerBase.EQUIPMENT, PlayerEquipment> _equipments;
-    private Image _image;
+    private Dictionary<Equipment.PARTS, Equipment> _equipments;
+    public Image _weaponImage;
+    public Image _hatImage;
+    public Image _cloakImage;
+    public Image _shoseImage;
 
     private void Awake()
     {
-        _image = GetComponent<Image>();
         _player = _playerObj.GetComponent<IEquipmentable>();
+        if (_player == null)
+            Debug.LogWarning("UI출력을 위한 플레이어가 제대로 세팅되지 않음");
     }
 
     private void OnEnable()
@@ -35,10 +39,25 @@ public class EquipmentUI : MonoBehaviour
     }
 
     // UI갱신 메서드
-    private void UpdateImage(PlayerBase.EQUIPMENT equipmentType)
+    private void UpdateImage(Equipment.PARTS equipmentType)
     {
-        var equipments = _player.MyEquipment;
+        var equipment = _player.MyEquipment[equipmentType];
 
-        _image.sprite = equipments[equipmentType].SpriteImage;
+        switch (equipmentType)
+        {
+            case Equipment.PARTS.Weapon:
+                _weaponImage.sprite = equipment.SpriteImage;
+                break;
+            case Equipment.PARTS.Hat:
+                _hatImage.sprite = equipment.SpriteImage;
+                break;
+            case Equipment.PARTS.Shoes:
+                _shoseImage.sprite = equipment.SpriteImage;
+                break;
+            case Equipment.PARTS.Cloak:
+                _cloakImage.sprite = equipment.SpriteImage;
+                break;
+        }
+
     }
 }

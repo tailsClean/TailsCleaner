@@ -6,9 +6,9 @@ public class EquipmentTest : MonoBehaviour, IEquipmentable
 {
     [SerializeField] private EquipmentEventChannelSO _onChangeEquipment;
 
-    public Dictionary<PlayerBase.EQUIPMENT, PlayerEquipment> MyEquipment { get; private set; } = new();
+    public Dictionary<Equipment.PARTS, Equipment> MyEquipment { get; private set; } = new();
 
-    public event Action<PlayerBase.EQUIPMENT> OnSetEquipment;
+    public event Action<Equipment.PARTS> OnSetEquipment;
 
     private void OnEnable()
     {
@@ -20,8 +20,15 @@ public class EquipmentTest : MonoBehaviour, IEquipmentable
         _onChangeEquipment.RemoveListener(SetEquipment);
     }
 
+    //
+    private void Update()
+    {
+        PlayerDataTransfer.SetEquipments(MyEquipment);
+    }
+    //
+
     // 장비를 교체하는 메서드
-    public void SetEquipment(PlayerEquipment equipment)
+    public void SetEquipment(Equipment equipment)
     {
         if (!MyEquipment.TryAdd(equipment.EquipmentPart, equipment))
             MyEquipment[equipment.EquipmentPart] = equipment;

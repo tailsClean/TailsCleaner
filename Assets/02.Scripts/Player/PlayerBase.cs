@@ -1,4 +1,5 @@
-﻿using System;
+﻿using NUnit.Framework;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -9,18 +10,18 @@ public class PlayerBase : MonoBehaviour, IDamageable
     [SerializeField] private int _maxhp = 15;
     [SerializeField] private int _attackPower = 2;
     [SerializeField] private int _defensePower = 1;
-    [SerializeField] private int _evasionChance = 10;              // 회피율
+    [SerializeField] private int _evasionChance = 10;               // 회피율
     [SerializeField] private int _criticalChance = 10;
-    [SerializeField] private int _criticalResistance = 10;
-    [SerializeField] private int _healthRegen = 10;                // Hp 회복량
+    [SerializeField] private int _criticalResistance = 10;          // 치명 저항
+    [SerializeField] private int _moveSpeed = 5;
+    [SerializeField] private int _healthRegen = 10;                 // Hp 회복량
     [SerializeField] private int _metaLevel = 1;
     [SerializeField] private int _metaMaxExp = 50;  
 
-    // 인게임 스텟
+    [Header("인게임 정보")]
     [SerializeField] private int _combatLevel = 1;
     [SerializeField] private int _combatMaxExp = 50;
     [SerializeField] private float _experienceGainRate = 10;        // 경험치 획득률
-    [SerializeField] private int _moveSpeed = 5;
     [SerializeField] private int _pickupRange = 1;
     [SerializeField] private float _attackInterval = 0.5f;          // 자동공격 주기
     [SerializeField] private ItemPickup _itemPickup;                // 아이템 줍는 범위(콜라이더)를 가짐
@@ -35,23 +36,23 @@ public class PlayerBase : MonoBehaviour, IDamageable
     private Vector2 _attackDir;
     private bool _isInvincible;                                     // 피격 무적상태 여부
     private float _timer;
-    private Dictionary<EQUIPMENT, PlayerEquipment> _myEquipment;
+    private Dictionary<Equipment.PARTS, Equipment> _myEquipment;
 
     public event Action<float, float> OnGainExp;                    // 경험치 획득시 알리는 신호
-    public event Action<EQUIPMENT> OnSetEquipment;                  // 장비가 바뀌었다는 것을 알리는 신호
+    public event Action<Equipment.PARTS> OnSetEquipment;                  // 장비가 바뀌었다는 것을 알리는 신호
     public event Action<float> OnUpdateUI;
 
     public float Hp => Mathf.Max(_hp, 0);
     public float FinalDamage => _attackPower;                       // 최종 데미지 수치
     public bool IsInvincible => _isInvincible;
     public Transform AttackTarget => GetTarget(_attackDir);         // 조준형 스킬 사용을 위한 타겟
-    public Dictionary<EQUIPMENT, PlayerEquipment> MyEquipment => _myEquipment;
+    public Dictionary<Equipment.PARTS, Equipment> MyEquipment => _myEquipment;
 
 
     private void Awake()
     {
         _mySprite = GetComponent<SpriteRenderer>();
-        _myEquipment = new Dictionary<EQUIPMENT, PlayerEquipment>();
+        _myEquipment = new Dictionary<Equipment.PARTS, Equipment>();
         _hp = _maxhp;
     }
 
@@ -167,17 +168,23 @@ public class PlayerBase : MonoBehaviour, IDamageable
 
         if(_combatCurrentExp >= _combatMaxExp)
         {
-
+            Debug.Log("레벨업으로 스텟증가(수치 입력해야 함");
         }
 
         OnGainExp?.Invoke(_combatLevel, _combatCurrentExp);
     }
+    //레벨업 시, 스텟변화량을 받아서 증가
     private void LevelUp(StatDelta statDelta)
     {
         _combatCurrentExp -= _combatMaxExp;
         _combatLevel++;
 
-        _maxhp
+        _maxhp += statDelta.MaxHp;
+        _attackPower += statDelta.AttackPower;
+        _defensePower += statDelta.DefensePower;
+        _healthRegen += statDelta.HealthRegen;
+        _combatLevel += statDelta.CombatLevel;
+        _combatMaxExp += statDelta.CombatMaxExp;
     }
     // 주위 아이템(경험치) 끌어모으는 메서드
     private void OnItemPickup(IPickable item)
@@ -187,16 +194,6 @@ public class PlayerBase : MonoBehaviour, IDamageable
         
         // 마지막 인자갑은 이동 속도
         item.MyTransform.position = Vector2.MoveTowards(itemPos, myPos, 1f * Time.deltaTime);
-    }
-
-
-    // 장비를 교체하는 메서드
-    public void SetEquipment(PlayerEquipment equipment)
-    {
-        if(!_myEquipment.TryAdd(equipment.EquipmentPart, equipment))
-            _myEquipment[equipment.EquipmentPart] = equipment;
-
-        OnSetEquipment?.Invoke(equipment.EquipmentPart);
     }
 
 
@@ -210,14 +207,54 @@ public class PlayerBase : MonoBehaviour, IDamageable
         return hit.transform;
     }
 
+    [ContextMenu("장비 반영")]
+    // 플레이어 스텟에 장비스텟값 추가 메서드
+    public void Init()
+    {
+        _myEquipment = PlayerDataTransfer.Equipments;
+        foreach(var equipment in _myEquipment.Values)
+        {
+            if(equipment != null)
+                ApplyStats(equipment);
+        }
+    }
+    // 부위별 장비 스탯 반영 메서드
+    private void ApplyStats(Equipment equipment)
+    {
+        switch(equipment)
+        {
+            case WeaponEquipment weapon:
+                _attackPower += weapon.AttackPowerIncrease;
+                Debug.Log($"{equipment.gameObject.name} 반영 / 공격증: {weapon.AttackPowerIncrease}");
+                break;
+            case HatEquipment hat:
+                _criticalChance += hat.CriticalChanceIncrease;
+                Debug.Log($"{equipment.gameObject.name} 반영 / 크확증: {hat.CriticalChanceIncrease}");
+                break;
+            case CloakEquipment cloak:
+                _maxhp += cloak.MaxHpIncrease;
+                _defensePower += cloak.DefensePowerIncrease;
+                Debug.Log($"{equipment.gameObject.name} 반영 / Hp증: {cloak.MaxHpIncrease}");
+                Debug.Log($"{equipment.gameObject.name} 반영 / 방증: {cloak.DefensePowerIncrease}");
+                break;
+            case ShoesEquipment shoes:
+                _moveSpeed += shoes.MoveSpeedIncrease;
+                _evasionChance += shoes.EvasionChanceIncrease;
+                Debug.Log($"{equipment.gameObject.name} 반영 / 이속증: {shoes.MoveSpeedIncrease}");
+                Debug.Log($"{equipment.gameObject.name} 반영 / 회피증: {shoes.EvasionChanceIncrease}");
+                break;
+        }
+    }
+
+
     public struct StatDelta
     {
-        int MaxHp;
-        int AttackPower;
-        int DefensePower;
-        int HealthRegen;
-        int CombatLevel;
-        int CombatMaxExp;
+        public int MaxHp;
+        public int AttackPower;
+        public int DefensePower;
+        public int HealthRegen;
+        public int CombatLevel;
+        public int CombatMaxExp;
 
         public StatDelta(int maxHp, int att, int def, int healthRegen, int maxExp)
         {
@@ -228,11 +265,5 @@ public class PlayerBase : MonoBehaviour, IDamageable
             CombatLevel = 1;
             CombatMaxExp = maxExp;
         }
-
-    }
-
-    public enum EQUIPMENT
-    {
-        Hat, Cloak, Weapon, Shoes, Relic
     }
 }

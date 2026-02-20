@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 public interface IEquipmentable
 {
-    public event Action<PlayerBase.EQUIPMENT> OnSetEquipment;
+    public event Action<Equipment.PARTS> OnSetEquipment;
 
-    Dictionary<PlayerBase.EQUIPMENT, PlayerEquipment> MyEquipment { get; }
+    Dictionary<Equipment.PARTS, Equipment> MyEquipment { get; }
 }

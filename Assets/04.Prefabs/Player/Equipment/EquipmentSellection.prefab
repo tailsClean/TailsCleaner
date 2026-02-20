@@ -31,11 +31,11 @@ RectTransform:
   m_LocalScale: {x: 0, y: 0, z: 0}
   m_ConstrainProportionsScale: 0
   m_Children:
+  - {fileID: 2495047705664841656}
   - {fileID: 7475805261229890530}
   - {fileID: 1137399921531580867}
   - {fileID: 688902688621723649}
   - {fileID: 2569587482102887601}
-  - {fileID: 2495047705664841656}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
@@ -116,7 +116,6 @@ GameObject:
   m_Component:
   - component: {fileID: 7475805261229890530}
   - component: {fileID: 5965858467989834779}
-  - component: {fileID: 1207964781284119008}
   - component: {fileID: 915862248520541381}
   m_Layer: 5
   m_Name: EquipmentUI
@@ -152,36 +151,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3496457196911102989}
   m_CullTransparentMesh: 1
---- !u!114 &1207964781284119008
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3496457196911102989}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
-  m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_RaycastTarget: 1
-  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
-  m_Maskable: 1
-  m_OnCullStateChanged:
-    m_PersistentCalls:
-      m_Calls: []
-  m_Sprite: {fileID: 0}
-  m_Type: 0
-  m_PreserveAspect: 0
-  m_FillCenter: 1
-  m_FillMethod: 4
-  m_FillAmount: 1
-  m_FillClockwise: 1
-  m_FillOrigin: 0
-  m_UseSpriteMesh: 0
-  m_PixelsPerUnitMultiplier: 1
 --- !u!114 &915862248520541381
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -195,6 +164,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EquipmentUI
   _playerObj: {fileID: 6012969347779926579}
+  _weaponImage: {fileID: 0}
+  _hatImage: {fileID: 0}
+  _cloakImage: {fileID: 0}
+  _shoseImage: {fileID: 0}
 --- !u!1 &6012969347779926579
 GameObject:
   m_ObjectHideFlags: 0

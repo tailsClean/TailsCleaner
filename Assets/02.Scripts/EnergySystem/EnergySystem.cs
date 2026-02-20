@@ -80,7 +80,9 @@ public class EnergySystem : MonoBehaviour
 
 
     public void IncreaseEnergy(int count) => _currentEnergy += count;
-    public void SpendEnergy(int count) 
+
+    // 에너지 감소(사용) 메서드
+    public void SpendEnergy(int count)
     {
         if(_currentEnergy <= 0)
         {
