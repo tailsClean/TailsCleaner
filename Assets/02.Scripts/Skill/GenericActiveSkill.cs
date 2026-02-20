@@ -8,12 +8,13 @@ public abstract class GenericActiveSkill<TController, TData> : ActiveSkill
     public TData ModifierData = new TData();
     
     // 프리팹 캐싱
-    protected virtual void Start()
+    public override void Init(ActiveSkillData skillData, ActiveUpgradeData upgradeData, GameObject prefab)
     {
-        Debug.Log("프리팹 컴포넌트 가져오기 시도");
+        // 부모 Init 먼저
+        base.Init(skillData, upgradeData, prefab);
+
         if (_skillPrefab != null)
         {
-            Debug.Log("프리팹 컴포넌트 가져오기 성공");
             _skillPrefabComponent = _skillPrefab.GetComponent<TController>();
         }
     }

@@ -39,7 +39,7 @@ public abstract class ActiveSkill : MonoBehaviour
     protected float _lastActiveTime = 0f; // 최근 스킬 실행 시간
 
     // 초기화 (0티어 획득)
-    public void Init(ActiveSkillData skillData, ActiveUpgradeData upgradeData, GameObject prefab)
+    public virtual void Init(ActiveSkillData skillData, ActiveUpgradeData upgradeData, GameObject prefab)
     {   
         // 메인 태그
         MainTag = skillData.MainTag;

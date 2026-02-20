@@ -94,20 +94,17 @@ public class SkillManager : MonoBehaviour
             // 액티브 데이터
             ActiveSkillData skillData = SkillDataLoader.GetActiveSkillData(targetMainTag);
 
-            // 스킬 프리팹
-            ActiveSkill newSkill = skillData.SkillPrefab;
+            // 스킬 프리팹을 자식으로 생성
+            ActiveSkill newSkill = Instantiate(skillData.SkillPrefab, transform);
 
-            // 스킬 투사체 프리팹 (나중에 이것도 스크립트로 변경)
-            GameObject prefab = skillData.SkillProjectilePrefab;
-
-            // 자식으로 생성
-            Instantiate(newSkill, transform);
+            // 스킬 투사체 프리팹
+            GameObject projectile = skillData.SkillProjectilePrefab;
 
             // 위치 초기화
             newSkill.transform.localPosition = Vector2.zero;
 
             // 초기화
-            newSkill.Init(skillData, upgradeData, prefab);
+            newSkill.Init(skillData, upgradeData, projectile);
 
             // 보유 스킬에 추가
             if (MyActiveSkills.Contains(newSkill) == false)
