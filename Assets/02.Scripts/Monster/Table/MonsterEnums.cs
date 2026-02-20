@@ -13,7 +13,7 @@ namespace MonsterEnum
     public enum MonsterType
     {
         Normal,             // 일반
-        SpecialPattern,     // 특수
+        Special,            // 특수
         Elite,              // 엘리트
         Boss                // 보스
     }
