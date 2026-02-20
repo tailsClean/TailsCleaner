@@ -91,14 +91,6 @@ public class SkillManager : MonoBehaviour
         // 0티어 신규 생성
         if (upgradeData.Tier == 0)
         {
-            // 오브젝트 생성 후 이름 변경
-            GameObject go = new GameObject($"Skill_{targetMainTag}");
-            // 일단 스킬 매니저 하위로
-            go.transform.SetParent(transform);
-
-            // 위치 초기화
-            go.transform.localPosition = Vector2.zero;
-
             // 액티브 데이터
             ActiveSkillData skillData = SkillDataLoader.GetActiveSkillData(targetMainTag);
 
@@ -110,6 +102,9 @@ public class SkillManager : MonoBehaviour
 
             // 자식으로 생성
             Instantiate(newSkill, transform);
+
+            // 위치 초기화
+            newSkill.transform.localPosition = Vector2.zero;
 
             // 초기화
             newSkill.Init(skillData, upgradeData, prefab);

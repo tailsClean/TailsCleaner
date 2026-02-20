@@ -10,7 +10,12 @@ public abstract class GenericActiveSkill<TController, TData> : ActiveSkill
     // 프리팹 캐싱
     protected virtual void Start()
     {
-        if (_skillPrefab != null) _skillPrefabComponent = _skillPrefab.GetComponent<TController>();
+        Debug.Log("프리팹 컴포넌트 가져오기 시도");
+        if (_skillPrefab != null)
+        {
+            Debug.Log("프리팹 컴포넌트 가져오기 성공");
+            _skillPrefabComponent = _skillPrefab.GetComponent<TController>();
+        }
     }
 
     // 데이터 갱신

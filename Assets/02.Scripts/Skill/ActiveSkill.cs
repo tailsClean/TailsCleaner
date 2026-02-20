@@ -10,8 +10,7 @@ public abstract class ActiveSkill : MonoBehaviour
     public int CurrentLevel { get; private set; } = 0;      // 현재 레벨
     public int CurrentSubTag { get; private set; } = 0;     // 적용 중인 서브 태그
 
-    [Header("스킬 프리팹")]
-    [SerializeField] protected GameObject _skillPrefab;
+    protected GameObject _skillPrefab;  // 스킬 장판,투사체
 
     // 스킬 타입
     protected ATTACK_TYPE _attackType;

@@ -20,12 +20,16 @@ public class SkillSOImporter : EditorWindow
     private string _upgradeSavePath = "Assets/02.Scripts/Skill/Resources/UpgradeStat";               // 업그레이드 
     private string _commonUpgradeSavePath = "Assets/02.Scripts/Skill/Resources/UpgradeStat/Common";  // 공용 업그레이드
 
+    // 스킬 프리팹 경로
+    private string _skillPrefabPath = "Assets/04.Prefabs/Skills/Skill";
+    private string _skillProjectilePrefabPath = "Assets/04.Prefabs/Skills/Projectile";
+
     [MenuItem("Tools/Skill SO Importer")]   // 메뉴창
     public static void Open() => GetWindow<SkillSOImporter>("Skill SO Importer");
 
     private void OnGUI()
     {
-        GUILayout.Label("CSV 경로", EditorStyles.boldLabel);
+        GUILayout.Label("CSV 검색 경로", EditorStyles.boldLabel);
         _activeSkillCsvPath = EditorGUILayout.TextField("active_skill", _activeSkillCsvPath);
         _activeUpgradeCsvPath = EditorGUILayout.TextField("active_upgrade", _activeUpgradeCsvPath);
         _activeStatusCsvPath = EditorGUILayout.TextField("active_status", _activeStatusCsvPath);
@@ -37,6 +41,11 @@ public class SkillSOImporter : EditorWindow
         _passiveSavePath = EditorGUILayout.TextField("Passive", _passiveSavePath);
         _upgradeSavePath = EditorGUILayout.TextField("Upgrade", _upgradeSavePath);
         _commonUpgradeSavePath = EditorGUILayout.TextField("CommonUpgrade", _commonUpgradeSavePath);
+
+        EditorGUILayout.Space(6);
+        GUILayout.Label("프리팹 검색 경로", EditorStyles.boldLabel);
+        _skillPrefabPath = EditorGUILayout.TextField("Skill Prefabs", _skillPrefabPath);
+        _skillProjectilePrefabPath = EditorGUILayout.TextField("Skill Projectile Prefabs", _skillProjectilePrefabPath);
 
         EditorGUILayout.Space(10);
         if (GUILayout.Button("Import Active Skills", GUILayout.Height(20))) ImportActive();
@@ -85,6 +94,16 @@ public class SkillSOImporter : EditorWindow
             so.AttackType = skill.AttackType;
             so.TargetingType = skill.TargetingType;
 
+            // 스킬 프리팹 연결
+            ActiveSkill skillPrefab = FindSkillPrefabById(skill.MainTag);
+            if (skillPrefab != null) so.SkillPrefab = skillPrefab;
+            else Debug.LogWarning($"[SkillSOImporter] {skill.MainTag} ID를 포함한 스킬 프리팹 찾지 못함. (경로: {_skillPrefabPath})");
+
+            // 스킬 투사체 프리팹 연결
+            GameObject skillProjectilePrefab = FindSkillProjectilePrefabById(skill.MainTag);
+            if (skillProjectilePrefab != null) so.SkillProjectilePrefab = skillProjectilePrefab;
+            else Debug.LogWarning($"[SkillSOImporter] {skill.MainTag} ID를 포함한 투사체 프리팹 찾지 못함. (경로: {_skillProjectilePrefabPath})");
+
             // 기존 Modifier, Config 보존
             var existingModifiers = new Dictionary<int, ActiveModifier>();
             var existingConfigs = new Dictionary<int, ActiveModifierConfig>();
@@ -110,6 +129,62 @@ public class SkillSOImporter : EditorWindow
         // 에셋 저장
         AssetDatabase.SaveAssets();
         Debug.Log("[SkillSOImporter] Active Import 완료.");
+    }
+
+
+    // 스킬 프리팹 찾기
+    private ActiveSkill FindSkillPrefabById(int id)
+    {
+        // 폴더 경로 유효한지 체크
+        if (AssetDatabase.IsValidFolder(_skillPrefabPath) == false) return null;
+
+        // 해당 폴더 내의 모든 프리팹 검색 후 GUID 반환
+        string[] guids = AssetDatabase.FindAssets("t:Prefab", new[] { _skillPrefabPath });
+
+        // 모든 GUID 순회
+        foreach (string guid in guids)
+        {
+            // GUID를 읽을 수 있는 경로로 변경
+            string assetPath = AssetDatabase.GUIDToAssetPath(guid);
+            // 경로에서 확장자 떼고 파일 이름만 추출
+            string fileName = Path.GetFileNameWithoutExtension(assetPath);
+
+            // 파일 이름에 ID가 포함되어 있다면 (예: 40101_SoapBubble)
+            if (fileName.Contains(id.ToString()) == true)
+            {
+                // 경로의 프리팹 오브젝트의 ActiveSkill 반환
+                GameObject skillPrefab = AssetDatabase.LoadAssetAtPath<GameObject>(assetPath);
+                return skillPrefab.GetComponent<ActiveSkill>();
+            }
+        }
+        return null; // 못 찾으면 깡통 반환
+    }
+    
+    // 스킬 투사체 프리팹 찾기
+    private GameObject FindSkillProjectilePrefabById(int id)
+    {
+        // 폴더 경로 유효한지 체크
+        if (AssetDatabase.IsValidFolder(_skillProjectilePrefabPath) == false) return null;
+
+        // 해당 폴더 내의 모든 프리팹 검색 후 GUID 반환
+        string[] guids = AssetDatabase.FindAssets("t:Prefab", new[] { _skillProjectilePrefabPath });
+
+        // 모든 GUID 순회
+        foreach (string guid in guids)
+        {
+            // GUID를 읽을 수 있는 경로로 변경
+            string assetPath = AssetDatabase.GUIDToAssetPath(guid);
+            // 경로에서 확장자 떼고 파일 이름만 추출
+            string fileName = Path.GetFileNameWithoutExtension(assetPath);
+
+            // 파일 이름에 ID가 포함되어 있다면 (예: 40102_SoapThrowProjectile)
+            if (fileName.Contains(id.ToString()) == true)
+            {
+                // 경로의 투사체 프리팹반환
+                return AssetDatabase.LoadAssetAtPath<GameObject>(assetPath);
+            }
+        }
+        return null; // 못 찾으면 깡통 반환
     }
 
     // 전용 업그레이드 설정 추가
