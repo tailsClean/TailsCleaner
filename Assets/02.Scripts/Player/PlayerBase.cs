@@ -177,7 +177,6 @@ public class PlayerBase : MonoBehaviour, IDamageable
         _combatCurrentExp -= _combatMaxExp;
         _combatLevel++;
 
-        _maxhp
     }
     // 주위 아이템(경험치) 끌어모으는 메서드
     private void OnItemPickup(IPickable item)

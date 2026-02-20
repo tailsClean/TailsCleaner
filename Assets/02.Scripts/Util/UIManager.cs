@@ -24,7 +24,7 @@ public class UIManager : MonoBehaviour
         DontDestroyOnLoad(gameObject);
     }
 
-    public Action OnUIInitialized;
+    public Action _OnUIInitialized;
 
     private void Start()
     {
@@ -32,25 +32,23 @@ public class UIManager : MonoBehaviour
     }
     #region  Scene 초기 설정
     //▼ UI 설정 오브젝트 
-    [SerializeField] private GameObject currentSceneUI;
-    public Transform stageTrans;
+    [SerializeField] private GameObject _currentSceneUI;
+    public Transform _stageTrans;
 
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
-        if(currentSceneUI != null)
+        if(_currentSceneUI != null)
         {
-            Destroy(currentSceneUI);
+            Destroy(_currentSceneUI);
         }
         
-        currentSceneUI = OpenSceneUI($"{scene.name}");
+        _currentSceneUI = OpenSceneUI($"{scene.name}");
     }
 
     private GameObject OpenSceneUI(string sceneName)
     {
        GameObject sceneUI = null;
        GameObject prefab = Resources.Load<GameObject>($"Prefabs/UI/{sceneName}UI");
-
-       Debug.Log($"[UIManager] 로드 시도: Prefabs/UI/{sceneName}UI → {(prefab == null ? "NULL ❌" : "성공 ✅")}");
 
        if(prefab != null)
        {

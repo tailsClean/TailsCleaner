@@ -5,32 +5,35 @@ using UnityEngine.UI;
 public class EnergySystem : MonoBehaviour
 {
     [SerializeField] private int _maxEnergy = 5;
+    public int MaxEnergy => _maxEnergy;
     [SerializeField] private float _increaseEnergyTime = 30;
-    [SerializeField] private Text _energyCountText;
-    [SerializeField] private Text _energyTimeText;
+    // [SerializeField] private Text _energyCountText;
+    // [SerializeField] private Text _energyTimeText;
     [SerializeField] private IntEventChannelSO _onIncreaseEnergy;
     [SerializeField] private IntEventChannelSO _onStartInGame;
 
     private int _currentEnergy;
+    public int CurrentEnergy => _currentEnergy;
     private float _timer;
 
     public event Action<int> OnUpdateUI;
 
     public int Timer => (int)_timer;
     public bool IsStartInGame => _currentEnergy > 0;
-
-
-
+    void Awake()
+    {
+        _currentEnergy = _maxEnergy;
+    }
     private void OnEnable()
     {
-        OnUpdateUI += UpdateTimerUI;
+        // OnUpdateUI += UpdateTimerUI;
         _onIncreaseEnergy.AddListener(IncreaseEnergy);
         _onStartInGame.AddListener(SpendEnergy);
     }
 
     private void OnDisable()
     {
-        OnUpdateUI -= UpdateTimerUI;
+        // OnUpdateUI -= UpdateTimerUI;
         _onIncreaseEnergy.RemoveListener(IncreaseEnergy);
         _onStartInGame.RemoveListener(SpendEnergy);
     }
@@ -62,21 +65,21 @@ public class EnergySystem : MonoBehaviour
     }
 
 
-    private void UpdateTimerUI(int time)
-    {
-        _energyCountText.text = _currentEnergy.ToString();
+    // private void UpdateTimerUI(int time)
+    // {
+    //     _energyCountText.text = _currentEnergy.ToString();
 
-        if (_currentEnergy >= _maxEnergy)
-        {
-            _energyTimeText.text = string.Empty;
-            return;
-        }
+    //     if (_currentEnergy >= _maxEnergy)
+    //     {
+    //         _energyTimeText.text = string.Empty;
+    //         return;
+    //     }
 
-        TimeSpan timeUI = TimeSpan.FromSeconds(time);
-        string formatted = timeUI.ToString(@"mm\:ss");
+    //     TimeSpan timeUI = TimeSpan.FromSeconds(time);
+    //     string formatted = timeUI.ToString(@"mm\:ss");
 
-        _energyTimeText.text = formatted;
-    }
+    //     _energyTimeText.text = formatted;
+    // }
 
 
     public void IncreaseEnergy(int count) => _currentEnergy += count;
@@ -90,8 +93,6 @@ public class EnergySystem : MonoBehaviour
         _currentEnergy -= count;
     }
 
-
-    //
     [ContextMenu("에너지 초기화")]
     public void Init()
     {
@@ -104,5 +105,5 @@ public class EnergySystem : MonoBehaviour
         _currentEnergy++;
         _timer = 0;
     }
-    //
+    
 }
