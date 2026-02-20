@@ -6,22 +6,22 @@ using UnityEngine.InputSystem;
 
 public class PlayerBase : MonoBehaviour, IDamageable
 {
-    [SerializeField] private float _Maxhp = 15;
-    [SerializeField] private float _attackPower = 2;
-    [SerializeField] private float _defensePower = 1;
-    [SerializeField] private float _evasionChance = 10;              // 회피율
-    [SerializeField] private float _criticalChance = 10;
-    [SerializeField] private float _criticalResistance = 10;
-    [SerializeField] private float _healthRegen = 10;
+    [SerializeField] private int _maxhp = 15;
+    [SerializeField] private int _attackPower = 2;
+    [SerializeField] private int _defensePower = 1;
+    [SerializeField] private int _evasionChance = 10;              // 회피율
+    [SerializeField] private int _criticalChance = 10;
+    [SerializeField] private int _criticalResistance = 10;
+    [SerializeField] private int _healthRegen = 10;                // Hp 회복량
     [SerializeField] private int _metaLevel = 1;
-    [SerializeField] private float _metaMaxExp = 50;
+    [SerializeField] private int _metaMaxExp = 50;  
 
-    
+    // 인게임 스텟
     [SerializeField] private int _combatLevel = 1;
-    [SerializeField] private float _combatMaxExp = 50;
+    [SerializeField] private int _combatMaxExp = 50;
     [SerializeField] private float _experienceGainRate = 10;        // 경험치 획득률
-    [SerializeField] private float _moveSpeed = 5;
-    [SerializeField] private float _pickupRange = 1;
+    [SerializeField] private int _moveSpeed = 5;
+    [SerializeField] private int _pickupRange = 1;
     [SerializeField] private float _attackInterval = 0.5f;          // 자동공격 주기
     [SerializeField] private ItemPickup _itemPickup;                // 아이템 줍는 범위(콜라이더)를 가짐
     [SerializeField] private GameObject _bulletPrefab;
@@ -52,7 +52,7 @@ public class PlayerBase : MonoBehaviour, IDamageable
     {
         _mySprite = GetComponent<SpriteRenderer>();
         _myEquipment = new Dictionary<EQUIPMENT, PlayerEquipment>();
-        _hp = _Maxhp;
+        _hp = _maxhp;
     }
 
     private void OnEnable()
@@ -161,17 +161,23 @@ public class PlayerBase : MonoBehaviour, IDamageable
 
 
     // 경험치 획득 로직
-    public void GainExperience(float experience)
+    public void GainExperience(int experience)
     {
         _combatCurrentExp += experience;
 
         if(_combatCurrentExp >= _combatMaxExp)
         {
-            _combatCurrentExp -= _combatMaxExp;
-            _combatLevel++;
+
         }
 
         OnGainExp?.Invoke(_combatLevel, _combatCurrentExp);
+    }
+    private void LevelUp(StatDelta statDelta)
+    {
+        _combatCurrentExp -= _combatMaxExp;
+        _combatLevel++;
+
+        _maxhp
     }
     // 주위 아이템(경험치) 끌어모으는 메서드
     private void OnItemPickup(IPickable item)
@@ -202,6 +208,27 @@ public class PlayerBase : MonoBehaviour, IDamageable
         Debug.Log(hit.collider.gameObject.name);
 
         return hit.transform;
+    }
+
+    public struct StatDelta
+    {
+        int MaxHp;
+        int AttackPower;
+        int DefensePower;
+        int HealthRegen;
+        int CombatLevel;
+        int CombatMaxExp;
+
+        public StatDelta(int maxHp, int att, int def, int healthRegen, int maxExp)
+        {
+            MaxHp = maxHp;
+            AttackPower = att;
+            DefensePower = def;
+            HealthRegen = healthRegen;
+            CombatLevel = 1;
+            CombatMaxExp = maxExp;
+        }
+
     }
 
     public enum EQUIPMENT
