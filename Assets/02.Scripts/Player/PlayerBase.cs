@@ -42,8 +42,9 @@ public class PlayerBase : MonoBehaviour, IDamageable
     public event Action<Equipment.PARTS> OnSetEquipment;                  // 장비가 바뀌었다는 것을 알리는 신호
     public event Action<float> OnUpdateUI;
 
-    public float Hp => Mathf.Max(_hp, 0);
-    public float FinalDamage => _attackPower;                       // 최종 데미지 수치
+    public int Hp => (int)Mathf.Max(_hp, 0);
+    public int FinalDamage => _attackPower;                       // 최종 데미지 수치
+    public int FinalMoveSpeed => _moveSpeed + ApplyEquipment<ShoesEquipment>(Equipment.PARTS.Shoes).MoveSpeedIncrease;
     public bool IsInvincible => _isInvincible;
     public Transform AttackTarget => GetTarget(_attackDir);         // 조준형 스킬 사용을 위한 타겟
     public Dictionary<Equipment.PARTS, Equipment> MyEquipment => _myEquipment;
@@ -51,8 +52,8 @@ public class PlayerBase : MonoBehaviour, IDamageable
 
     private void Awake()
     {
+        _myEquipment = PlayerDataTransfer.Equipments;
         _mySprite = GetComponent<SpriteRenderer>();
-        _myEquipment = new Dictionary<Equipment.PARTS, Equipment>();
         _hp = _maxhp;
     }
 
@@ -74,7 +75,7 @@ public class PlayerBase : MonoBehaviour, IDamageable
 
     private void Update()
     {
-        transform.Translate(_moveDir * Time.deltaTime * _moveSpeed);
+        transform.Translate(_moveDir * Time.deltaTime * FinalMoveSpeed);
 
         _timer += Time.deltaTime;
 
@@ -221,30 +222,34 @@ public class PlayerBase : MonoBehaviour, IDamageable
     // 부위별 장비 스탯 반영 메서드
     private void ApplyStats(Equipment equipment)
     {
-        switch(equipment)
-        {
-            case WeaponEquipment weapon:
-                _attackPower += weapon.AttackPowerIncrease;
-                Debug.Log($"{equipment.gameObject.name} 반영 / 공격증: {weapon.AttackPowerIncrease}");
-                break;
-            case HatEquipment hat:
-                _criticalChance += hat.CriticalChanceIncrease;
-                Debug.Log($"{equipment.gameObject.name} 반영 / 크확증: {hat.CriticalChanceIncrease}");
-                break;
-            case CloakEquipment cloak:
-                _maxhp += cloak.MaxHpIncrease;
-                _defensePower += cloak.DefensePowerIncrease;
-                Debug.Log($"{equipment.gameObject.name} 반영 / Hp증: {cloak.MaxHpIncrease}");
-                Debug.Log($"{equipment.gameObject.name} 반영 / 방증: {cloak.DefensePowerIncrease}");
-                break;
-            case ShoesEquipment shoes:
-                _moveSpeed += shoes.MoveSpeedIncrease;
-                _evasionChance += shoes.EvasionChanceIncrease;
-                Debug.Log($"{equipment.gameObject.name} 반영 / 이속증: {shoes.MoveSpeedIncrease}");
-                Debug.Log($"{equipment.gameObject.name} 반영 / 회피증: {shoes.EvasionChanceIncrease}");
-                break;
-        }
+        _myEquipment = PlayerDataTransfer.Equipments;
+        //switch (equipment)
+        //{
+        //    case WeaponEquipment weapon:
+        //        _attackPower += weapon.AttackPowerIncrease;
+        //        Debug.Log($"{equipment.gameObject.name} 반영 / 공격증: {weapon.AttackPowerIncrease}");
+        //        break;
+        //    case HatEquipment hat:
+        //        _criticalChance += hat.CriticalChanceIncrease;
+        //        Debug.Log($"{equipment.gameObject.name} 반영 / 크확증: {hat.CriticalChanceIncrease}");
+        //        break;
+        //    case CloakEquipment cloak:
+        //        _maxhp += cloak.MaxHpIncrease;
+        //        _defensePower += cloak.DefensePowerIncrease;
+        //        Debug.Log($"{equipment.gameObject.name} 반영 / Hp증: {cloak.MaxHpIncrease}");
+        //        Debug.Log($"{equipment.gameObject.name} 반영 / 방증: {cloak.DefensePowerIncrease}");
+        //        break;
+        //    case ShoesEquipment shoes:
+        //        _moveSpeed += shoes.MoveSpeedIncrease;
+        //        _evasionChance += shoes.EvasionChanceIncrease;
+        //        Debug.Log($"{equipment.gameObject.name} 반영 / 이속증: {shoes.MoveSpeedIncrease}");
+        //        Debug.Log($"{equipment.gameObject.name} 반영 / 회피증: {shoes.EvasionChanceIncrease}");
+        //        break;
+        //}
     }
+
+    private T ApplyEquipment<T>(Equipment.PARTS part) where T : Equipment => 
+        _myEquipment[part].ApplyEquipment<T>();
 
 
     public struct StatDelta

@@ -22,6 +22,11 @@ public class Equipment : MonoBehaviour
 
 
 
+    public T ApplyEquipment<T>() where T : Equipment
+    {
+        return GetComponent<T>();
+    }
+
     public void OnChangeEquipment(Equipment equipment) => _onChangeEquipment.OnStartEvent(equipment);
 
 
