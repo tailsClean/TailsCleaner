@@ -2,7 +2,7 @@
 public class WaterBombModifierData
 {
 }
-public class WaterBombSkill : GenericActiveSkill<WaterBombArea, WaterBombModifierData>
+public class WaterBombSkill : ActiveSkill<WaterBombArea, WaterBombModifierData>
 {
     protected override void Active()
     {

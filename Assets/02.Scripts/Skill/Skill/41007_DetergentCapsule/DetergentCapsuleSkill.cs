@@ -6,7 +6,7 @@ public class DetergentCapsuleModifierData
 }
 
 
-public class DetergentCapsuleSkill : GenericActiveSkill<DetergentCapsuleProjectile, DetergentCapsuleModifierData>
+public class DetergentCapsuleSkill : ActiveSkill<DetergentCapsuleProjectile, DetergentCapsuleModifierData>
 {
     protected override void Active()
     {

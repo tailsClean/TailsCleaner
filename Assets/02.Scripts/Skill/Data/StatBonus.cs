@@ -10,6 +10,8 @@ public class SkillStat         // 추가 스킬 스탯
     public float Knockback;         // 넉백 수치
     public float Size;              // 크기 비율
 
+    public int ExtraDamageMultiplier = 1; // 추가추가피해 패시브용 
+
     // 합
     public void Add(SkillStat other)
     {

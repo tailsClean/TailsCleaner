@@ -14,7 +14,7 @@ public class SoapThrowModifierData
     public float DamagePerRemovalPierce = 0f;
 }
 
-public class SoapThrowSkill : GenericActiveSkill<SoapThrowProjectile, SoapThrowModifierData>
+public class SoapThrowSkill : ActiveSkill<SoapThrowProjectile, SoapThrowModifierData>
 {
     // 스킬 발동
     protected override void Active()

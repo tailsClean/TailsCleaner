@@ -7,9 +7,10 @@ public class SoapThrowProjectile : MonoBehaviour
     private SkillStat _runtimeBaseStat;         // 런타임 기본 스탯
     private SkillStat _runtimeCommonStat;       // 런타임 공용 스탯
     private SkillStat _runtimeUpgradeStat;      // 런타임 업그레이드 스탯
+    private SkillStat _runtimePassiveMulStat;   // 런타임 패시브 배율 합 , 임플란트 누적
     private SkillStat _runtimeFinalStat;        // 최종 스탯
 
-    private ActiveSkill _skill;                 // 액티브 스킬 (패시브 접근용)
+    private ActiveSkill _skill;                 // 액티브 스킬 (스탯 재계산용)
     private Rigidbody2D _rigidbody;             // 리지드바디
     private Collider2D _collider;               // 콜라이더
 
@@ -17,8 +18,8 @@ public class SoapThrowProjectile : MonoBehaviour
     private float _createTime;                  // 생성 시간
     private int _currentPierceCount = 0;        // 현재 관통 횟수
 
-    private SoapThrowModifierData _modifierData;    // 전용 모디파이어
-    private HashSet<int> _activePassiveIds;         // 활성화된 패시브 로직 ID
+    private SoapThrowModifierData _modifierData;        // 전용 모디파이어  (나중에 제네릭으로 T 타입으로 바꾸면될듯)
+    private List<PassiveModifier> _passiveModifiers;    // 패시브 모디파이어
 
     private void Awake()
     {
@@ -28,37 +29,50 @@ public class SoapThrowProjectile : MonoBehaviour
 
     public void Init(ActiveSkill owner, SoapThrowModifierData modifierData, Vector2 dir)
     {
+        // 스킬 참조
+        _skill = owner;
         // 스킬 스탯 복사
         _runtimeBaseStat = owner.BaseStat.Clone();
         _runtimeCommonStat = owner.CommonStat.Clone();
         _runtimeUpgradeStat = owner.UpgradeStat.Clone();
+        _runtimePassiveMulStat = owner.PassiveMulStat.Clone();
         _runtimeFinalStat = owner.FinalStat.Clone();
         // 전용 모디파이어 장착
         _modifierData = modifierData;
-        // 패시브 로직 설정
-        _activePassiveIds = new HashSet<int>(owner.ActivePassiveIds);
+        // 패시브 모디파이어 캐싱
+        _passiveModifiers = new List<PassiveModifier>(owner.PassiveModifiers);
         // 방향
         _dir = dir;
         // 생성 시간
         _createTime = Time.time;
 
-        // 속도, 크기 적용
-        ApplyPhysics();
-
         // 재계산 여부
         bool recalcul = false;
 
         // 비누 덩어리 (관통 제거)
-        if (_modifierData.RemovePierce == true)
+        if (_modifierData.RemovePierce)
         {
-            _runtimeBaseStat.Damage = _runtimeFinalStat.PierceCount * 2f;
-            _runtimeFinalStat.PierceCount = 0;
+            // 업그레이드 피해 계수에 사라진 관통 스택만큼 피해 계수 추가
+            _runtimeUpgradeStat.Damage += _runtimeFinalStat.PierceCount * _modifierData.DamagePerRemovalPierce;
+            _runtimeBaseStat.PierceCount = 0;
+            _runtimeUpgradeStat.PierceCount = 0;
             recalcul = true;
         }
 
+        // 투사체 생성 시 패시브 조건부 스탯 적용
+        foreach (var passive in _passiveModifiers)
+        {
+            if (passive.OnProjectileInit(_runtimeBaseStat, _runtimeFinalStat))
+            {
+                recalcul = true;
+            }
+        }
 
-        if (recalcul == true)
-            CalculateStat();
+        // 스탯 재계산
+        if (recalcul == true) CalculateStat();
+
+        // 속도, 크기 적용
+        ApplyPhysics();
     }
 
     private void Update()
@@ -90,19 +104,21 @@ public class SoapThrowProjectile : MonoBehaviour
             // 관통 증가
             _currentPierceCount++;
 
-            // 재계산 여부
-            bool recalcul = false;
+            // 거품내기 관통 시 추가 피해
+            PierceDamage();
 
-            // 관통 시 추가 피해, 속도
-            recalcul = PierceDamage() || PierceSpeed();
+            // 거품 가속 : 관통 시 속도 증가
+            PierceSpeed();
 
-            // 만약 목표를 중앙에 두고 스위치 패시브가
-            // 런타임 도중에도 추가 넉백 수치가 적용 된다면
-            // 추가해야함
+            // 패시브 관통 효과 (임플란트)
+            foreach (var passive in _passiveModifiers)
+                passive.OnPierce(_runtimePassiveMulStat);
 
             // 재계산
-            if (recalcul == true)
-                CalculateStat();
+            CalculateStat();
+
+            // 물리 적용
+            ApplyPhysics();
 
             // 관통 횟수 초과 시 파괴
             if (_currentPierceCount > _runtimeFinalStat.PierceCount)
@@ -118,64 +134,36 @@ public class SoapThrowProjectile : MonoBehaviour
     }
 
     // 관통 추가 피해
-    private bool PierceDamage()
+    private void PierceDamage()
     {
-        // 관통 시 추가 피해
-        if (_modifierData.PierceDamage == true && _modifierData.DamagePerPierce > 0f)
-        {
-            // 전용 모디파이어
-            float bonus = _modifierData.DamagePerPierce;
+        // 패시브 없거나 혹시나 관통당 추가 피해 없으면 무시
+        if (_modifierData.PierceDamage == false || _modifierData.DamagePerPierce <= 0f) return;
 
-            // 패시브 ID
-            int implantId = (int)PASSIVE_ID.Implant;
-            int DoubleExtraDmg = (int)PASSIVE_ID.DoubleExtraDmg;
+        // 전용 모디파이어 관통 추가 피해
+        float bonus = _modifierData.DamagePerPierce;
 
-            // 임플란트 패시브
-            //if (_activePassiveIds.Contains(implantId) == true)
-            //    bonus += SkillDataLoader.GetPassiveSkillData(implantId).Config as ImplantConfig;
-        
-            // 추가추가피해 패시브
-            if (_activePassiveIds.Contains(DoubleExtraDmg) == true)
-                bonus *= 2f;
-        
-            // baseStat에 더하고 재계산
-            _runtimeBaseStat.Damage += bonus;
-        
-            // 재계산
-            return true;
-        }
-        
+        // 추가 추가 피해 있을 때 (0.5 * 2)
+        if (_runtimeFinalStat.ExtraDamageMultiplier > 1)
+            bonus *= _runtimeFinalStat.ExtraDamageMultiplier;
 
-        return false;
+        // 업그레이드 피해에 추가
+        _runtimeUpgradeStat.Damage += bonus;
     }
 
     // 관통 추가 속도
-    private bool PierceSpeed()
+    private void PierceSpeed()
     {
-        // 관통 시 추가 속도
-        //if (_modifierData.PierceSpeed == true && _modifierData.SpeedPerPierce > 0f)
-        //{
-        //    // 전용 모디파이어
-        //    float bonus = _modifierData.SpeedPerPierce;
-        //
-        //    // baseStat에 더하고 재계산
-        //    _runtimeBaseStat.ProjectileSpeed += bonus;
-        //
-        //    // 재계산
-        //    return true;
-        //}
-        //
-        return false;
+        // 패시브 없거나 혹시나 관통당 추가 속도 없으면 무시
+        if (_modifierData.PierceSpeed == false || _modifierData.SpeedPerPierce <= 0f) return;
+
+        // 업그레이드 스탯에 추가
+        _runtimeUpgradeStat.ProjectileSpeed += _modifierData.SpeedPerPierce;
     }
-
-
-
-
 
     // 스탯 계산
     private void CalculateStat()
     {
-        _runtimeFinalStat = _skill.GetFinalStat(_runtimeBaseStat, _runtimeCommonStat, _runtimeUpgradeStat);
+        _runtimeFinalStat = _skill.GetFinalStat(_runtimeBaseStat, _runtimeCommonStat, _runtimeUpgradeStat, _runtimePassiveMulStat);
     }
 
     // 속도, 크기 적용

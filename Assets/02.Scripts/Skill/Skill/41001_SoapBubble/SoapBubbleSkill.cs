@@ -5,7 +5,7 @@ public class SoapBubbleModifierData
 {
 }
 
-public class SoapBubbleSkill : GenericActiveSkill<SoapBubbleArea, SoapBubbleModifierData>
+public class SoapBubbleSkill : ActiveSkill<SoapBubbleArea, SoapBubbleModifierData>
 {
     // 스킬 발동
     protected override void Active()

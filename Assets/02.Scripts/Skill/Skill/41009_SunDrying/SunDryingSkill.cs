@@ -3,7 +3,7 @@ public class SunDryingModifierData
 {
 }
 
-public class SunDryingSkill : GenericActiveSkill<SunDryingArea, SunDryingModifierData>
+public class SunDryingSkill : ActiveSkill<SunDryingArea, SunDryingModifierData>
 {
     protected override void Active()
     {
