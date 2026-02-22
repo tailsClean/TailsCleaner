@@ -20,7 +20,6 @@ public static class SkillDataLoader     // 사실상 스킬 데이터 매니저 
 
     // 액티브 SO에서 뽑은 id 별 모디파이어 설정
     private static Dictionary<int, ActiveModifier> _upgradeModifierMap = new();
-    private static Dictionary<int, ActiveModifierConfig> _upgradeModifierConfigMap = new();
 
     // 메인태그의 업그레이드 묶음
     private static Dictionary<int, List<ActiveUpgradeData>> _upgradeMap = new();
@@ -46,7 +45,6 @@ public static class SkillDataLoader     // 사실상 스킬 데이터 매니저 
     private static void LoadActiveSkills()
     {
         _activeSkillMap.Clear();
-        _upgradeModifierConfigMap.Clear();
 
         // 액티브 스킬 경로에 모든 SO 불러오기
         foreach (var so in Resources.LoadAll<ActiveSkillData>(ACTIVE_PATH))
@@ -65,10 +63,6 @@ public static class SkillDataLoader     // 사실상 스킬 데이터 매니저 
                 // 업그레이드 ID 에 모디파이어 추가
                 if (upgradeConfig.Modifier != null)
                     _upgradeModifierMap.TryAdd(upgradeConfig.UpgradeId, upgradeConfig.Modifier);
-
-                // 업그레이드 ID 에 설정 추가
-                if (upgradeConfig.Config != null)
-                    _upgradeModifierConfigMap.TryAdd(upgradeConfig.UpgradeId, upgradeConfig.Config);
             }
         }
     }
@@ -174,14 +168,6 @@ public static class SkillDataLoader     // 사실상 스킬 데이터 매니저 
     // Modifier
     public static ActiveModifier GetActiveModifier(int upgradeId)
         => _upgradeModifierMap.TryGetValue(upgradeId, out var modifier) ? modifier : null;
-
-
-
-    // Config
-    public static ActiveModifierConfig GetActiveConfig(int upgradeId)
-        => _upgradeModifierConfigMap.TryGetValue(upgradeId, out var config) ? config : null;
-    public static PassiveModifierConfig GetPassiveConfig(int passiveId)
-        => _passiveSkillMap.TryGetValue(passiveId, out var data) ? data.Config : null;
 
 
     // 스킬 업그레이드 리스트

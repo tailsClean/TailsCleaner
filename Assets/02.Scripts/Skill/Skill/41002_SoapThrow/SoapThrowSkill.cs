@@ -11,6 +11,7 @@ public class SoapThrowModifierData
     // Config에서 설정
     public float DamagePerPierce = 0f;  
     public float SpeedPerPierce = 0f;
+    public float DamagePerRemovalPierce = 0f;
 }
 
 public class SoapThrowSkill : GenericActiveSkill<SoapThrowProjectile, SoapThrowModifierData>

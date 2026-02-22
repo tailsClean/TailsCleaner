@@ -1,16 +1,8 @@
 ﻿
+using UnityEngine;
+
 public abstract class PassiveModifier
 {
-    public int PassiveId;               // passive_skill_id
-    public int SubTag;                  // 서브 태그
-    //public PassiveConfigBase Config;    // 패시브 수치
-
-    public void Init(int id)
-    {
-        PassiveId = id;
-        //Config = SkillDataLoader.GetPassiveConfig((PASSIVE_ID)PassiveId);
-    }
-
     // 스탯 계산 곱
     // 황금왕관(* 3), 양손잡이(* 0.5) 등
     public virtual void ModifyStatMul(ActiveSkill skill, SkillStat baseStat) { }
@@ -27,24 +19,34 @@ public abstract class PassiveModifier
 // 목표를 중앙에 두고 스위치 (투사체 속도 증가, 넉백 강화)
 public class CenterSwitchModifier : PassiveModifier
 {
+    [Header("추가 속도")] public float ProjectileSpeedBonus = 1f;
+    [Header("필요 넉백")] public float RequireKnockback = 1f;
+    [Header("추가 넉백")] public float KnockbackBonus = 2f;
+
     public override void ModifyStatAdd(ActiveSkill skill, SkillStat baseStat)
     {
         // 일단 수치 대충
-        baseStat.ProjectileSpeed += 1f;
+        baseStat.ProjectileSpeed += ProjectileSpeedBonus;
 
-        if (baseStat.Knockback > 0)
-            baseStat.Knockback += 2;
+        if (baseStat.Knockback >= RequireKnockback)
+            baseStat.Knockback += KnockbackBonus;
     }
 }
 
 
 // ID 42004 / SubTag 40104
 // 추가 추가 피해 (추가 피해 * 2)
-public class DoubleExtraDamageModifier : PassiveModifier { }
+public class DoubleExtraDamageModifier : PassiveModifier
+{
+    [Header("추가 횟수")] public int ExtraDamageTimes = 1;
+}
 
 // ID 42014 / SubTag 40114
 // 기초적인 임플란트입니다 (투사체 관통 시 추가 피해 부여)
-public class ImplantModifier : PassiveModifier { }
+public class ImplantModifier : PassiveModifier
+{
+    [Header("추가 피해")] public float DamagePerPierce = 0.2f;
+}
 
 
 // ID 42016 / SubTag 40116
@@ -52,10 +54,13 @@ public class ImplantModifier : PassiveModifier { }
 
 public class CatLaundryModifier : PassiveModifier
 {
+    [Header("추가 넉백")] public float KnockbackBonus = 1f;
+    [Header("체력 비례 피해")] public float OffScreenDamageRatio = 0.1f;
+
     public override void ModifyStatAdd(ActiveSkill skill, SkillStat baseStat)
     {
         // 일단 수치 대충
-        baseStat.Knockback += 1f;
+        baseStat.Knockback += KnockbackBonus;
     }
 }
 

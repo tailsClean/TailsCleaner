@@ -13,7 +13,7 @@ public class SkillManager : MonoBehaviour
 
     // 플레이어 보유 스킬 리스트
     public List<ActiveSkill> MyActiveSkills { get; private set; } = new();
-    public List<PassiveModifier> MyPassiveSkills { get; private set; } = new();
+    public List<PassiveSkillData> MyPassiveSkills { get; private set; } = new();
 
 
     // 스킬 슬롯 체크
@@ -127,16 +127,12 @@ public class SkillManager : MonoBehaviour
     }
 
     // 패시브 선택지 적용
-    public void ApplyPassiveOption(PassiveSkillData data)
+    public void ApplyPassiveOption(PassiveSkillData passiveData)
     {
-        PassiveSkillData passive = new PassiveSkillData();
-
-        // 모디파이어 생성
-        PassiveModifier modifier = SkillDataLoader.GetPassiveSkillData(passive.PassiveId).Modifier;
-        if (modifier == null) return;
+        if (passiveData == null) return;
 
         // 패시브에 추가
-        MyPassiveSkills.Add(modifier);
+        MyPassiveSkills.Add(passiveData);
 
         // 모든 액티브 스킬에
         foreach (var skill in MyActiveSkills)
@@ -145,7 +141,7 @@ public class SkillManager : MonoBehaviour
             skill.RecheckPassives();
         }
 
-        Debug.Log($"[SkillManager] 패시브 획득: {data.PassiveName} (SubTag: {data.SubTag})");
+        Debug.Log($"[SkillManager] 패시브 획득: {passiveData.PassiveName} (SubTag: {passiveData.SubTag})");
     }
 
     #endregion

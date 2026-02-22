@@ -48,8 +48,6 @@ public class SoapThrowProjectile : MonoBehaviour
         // 재계산 여부
         bool recalcul = false;
 
-        // 나중에 수치들 SO로 빼서 인스펙터에서 관리가능하게 만들어야함. (기획팀 수정 용이)
-
         // 비누 덩어리 (관통 제거)
         if (_modifierData.RemovePierce == true)
         {

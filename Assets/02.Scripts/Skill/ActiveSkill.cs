@@ -183,7 +183,7 @@ public abstract class ActiveSkill : MonoBehaviour
 
             // 플래그 존재하고 스킬의 서브 태그에 맞다면 스탯 계산
             if (flag != 0 && (CurrentSubTag & flag) != 0)
-                passive.ModifyStatAdd(this, resultStat);
+                passive.Modifier.ModifyStatAdd(this, resultStat);
         }
 
         // 공용 스탯 (곱)
@@ -197,11 +197,11 @@ public abstract class ActiveSkill : MonoBehaviour
         {
             int flag = SubTagRegistry.GetFlag(passive.SubTag);
             if (flag != 0 && (CurrentSubTag & flag) != 0)
-                passive.ModifyStatMul(this, resultStat);
+                passive.Modifier.ModifyStatAdd(this, resultStat);
         }
 
-        // 최종 스탯 = ((baseStat + 패시브 스탯) * 공용 스탯 + 업그레이드 스탯) * 패시브 스탯
-        Debug.Log($"최종 공격력 : {resultStat.Damage} = ( {baseStat.Damage} + (패시브 스탯)) * {resultStat.Damage}  + {resultStat.Damage}) * 패시브 스탯");
+        // 최종 스탯 = ((baseStat + 패시브 스탯) * 공용 스탯 + 업그레이드 스탯) * 패시브 스탯 합
+        Debug.Log($"최종 공격력 : {resultStat.Damage} = ( {baseStat.Damage} + (패시브 스탯)) * {resultStat.Damage}  + {resultStat.Damage}) * (패시브 스탯 합)");
 
         // 최종 결과 스탯 반환
         return resultStat;
