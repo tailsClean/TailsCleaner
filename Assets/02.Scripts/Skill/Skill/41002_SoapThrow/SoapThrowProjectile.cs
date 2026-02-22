@@ -12,7 +12,6 @@ public class SoapThrowProjectile : MonoBehaviour
 
     private ActiveSkill _skill;                 // 액티브 스킬 (스탯 재계산용)
     private Rigidbody2D _rigidbody;             // 리지드바디
-    private Collider2D _collider;               // 콜라이더
 
     private Vector2 _dir;                       // 방향
     private float _createTime;                  // 생성 시간
@@ -24,7 +23,6 @@ public class SoapThrowProjectile : MonoBehaviour
     private void Awake()
     {
         _rigidbody = GetComponent<Rigidbody2D>();
-        _collider = GetComponentInChildren<Collider2D>();
     }
 
     public void Init(ActiveSkill owner, SoapThrowModifierData modifierData, Vector2 dir)
@@ -78,7 +76,7 @@ public class SoapThrowProjectile : MonoBehaviour
     private void Update()
     {
         // 수명 시간 체크
-        if (Time.time >= _createTime + _runtimeBaseStat.Duration)
+        if (Time.time >= _createTime + _runtimeFinalStat.Duration)
         {
             DestroyProjectile();
         }
@@ -170,10 +168,10 @@ public class SoapThrowProjectile : MonoBehaviour
     private void ApplyPhysics()
     {
         // 속도 설정
-        if (_rigidbody != null) _rigidbody.linearVelocity = _dir * _runtimeBaseStat.ProjectileSpeed;
+        if (_rigidbody != null) _rigidbody.linearVelocity = _dir * _runtimeFinalStat.ProjectileSpeed;
 
         // 크기 설정
-        transform.localScale = Vector3.one * _runtimeBaseStat.Size;
+        transform.localScale = Vector3.one * _runtimeFinalStat.Size;
     }
 
 

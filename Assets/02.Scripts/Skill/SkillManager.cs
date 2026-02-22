@@ -83,11 +83,8 @@ public class SkillManager : MonoBehaviour
     #region 선택지 적용
 
     // 액티브 선택지 적용
-    public void ApplyActiveOption(ActiveUpgradeData upgradeData)
+    public void ApplyActiveOption(int targetMainTag, ActiveUpgradeData upgradeData)
     {
-        // 목표 메인 태그
-        int targetMainTag = upgradeData.MainTag;
-
         // 0티어 신규 생성
         if (upgradeData.Tier == 0)
         {
@@ -158,7 +155,7 @@ public class SkillManager : MonoBehaviour
         if (defualtSkillData != null)
         {
             Debug.Log($"기본 스킬 {defualtSkillData.Name} ({DEFAULT_ACTIVE_MAIN_TAG}) 지급");
-            ApplyActiveOption(defualtSkillData);
+            ApplyActiveOption(DEFAULT_ACTIVE_MAIN_TAG, defualtSkillData);
         }
         else
         {

@@ -209,7 +209,7 @@ public abstract class ActiveSkill : MonoBehaviour
         }
 
         // 최종 스탯 = ((baseStat + 깡 추가 패시브 스탯) * 공용 스탯 + (업그레이드 스탯 * 추가추가피해 패시브)) * 패시브 스탯 배율 합 * 최종 배율 (황금왕관, 양손잡이, 냥빨래)
-        Debug.Log($"최종 공격력 : {resultStat.Damage} = ( {baseStat.Damage} + 패시브 깡 스탯) * {commonStat.Damage}  + {upgradeStat.Damage}) * 패시브 배율 합 * 패시브 최종 배율");
+        Debug.Log($"최종 공격력 : {resultStat.Damage} = (( {baseStat.Damage}(기본) + 패시브 깡 스탯) * {commonStat.Damage}(공용)  + ({upgradeStat.Damage}(업그레이드) * 추가추가피해)) * {passiveMulStat.Damage}(패시브 배율) * 패시브 최종 배율");
 
         // 최종 결과 스탯 반환
         return resultStat;
