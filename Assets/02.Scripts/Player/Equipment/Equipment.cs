@@ -3,11 +3,19 @@ using UnityEngine.UI;
 
 public class Equipment : MonoBehaviour
 {
-    [SerializeField] private EquipmentEventChannelSO _onChangeEquipment;
-
+    [field: SerializeField] public int EquipmentID { get; private set; }
+    [field: SerializeField] public string Name { get; private set; }
+    [field: SerializeField] public string Description { get; private set; }
     [field: SerializeField] public PARTS EquipmentPart { get; private set; }
+    [field: SerializeField] public int MaxQuantity { get; private set; }
+    [field: SerializeField] public string Icon { get; private set; }
+    [field: SerializeField] public string IconClickEffect { get; private set; }
+    [field: SerializeField] public string IconClickSound { get; private set; }
+
+
     [field: SerializeField] public Sprite SpriteImage { get; private set; }
 
+    [SerializeField] private EquipmentEventChannelSO _onChangeEquipment;
     
     //
     private Button _button;
@@ -34,7 +42,12 @@ public class Equipment : MonoBehaviour
 
     public enum PARTS
     {
-        Weapon, Hat, Cloak, Shoes, Relic
+        Weapon, Hat, Cloak, Shoes
+    }
+
+    public enum StatType
+    {
+        AttackPower, CriticalChance, MaxHp, DefensePower, MoveSpeed, EvasionChance
     }
 
 

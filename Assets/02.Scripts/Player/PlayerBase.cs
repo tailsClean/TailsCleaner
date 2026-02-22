@@ -37,23 +37,23 @@ public class PlayerBase : MonoBehaviour, IDamageable
     private bool _isInvincible;                                     // 피격 무적상태 여부
     private float _timer;
     private Dictionary<Equipment.PARTS, Equipment> _myEquipment;
+    private StatCalculator _calculator;                             // 스텟 계산기
 
     public event Action<float, float> OnGainExp;                    // 경험치 획득시 알리는 신호
-    public event Action<Equipment.PARTS> OnSetEquipment;                  // 장비가 바뀌었다는 것을 알리는 신호
+    public event Action<Equipment.PARTS> OnSetEquipment;            // 장비가 바뀌었다는 것을 알리는 신호
     public event Action<float> OnUpdateUI;
 
     public int Hp => (int)Mathf.Max(_hp, 0);
-    public int FinalDamage => _attackPower;                       // 최종 데미지 수치
-    public int FinalMoveSpeed => _moveSpeed + ApplyEquipment<ShoesEquipment>(Equipment.PARTS.Shoes).MoveSpeedIncrease;
-    public bool IsInvincible => _isInvincible;
+    public int FinalDamage => _attackPower;                         // 최종 데미지 수치
+    public int FinalMoveSpeed => _calculator.GetMoveSpeed(_moveSpeed, _myEquipment);
     public Transform AttackTarget => GetTarget(_attackDir);         // 조준형 스킬 사용을 위한 타겟
-    public Dictionary<Equipment.PARTS, Equipment> MyEquipment => _myEquipment;
 
 
     private void Awake()
     {
         _myEquipment = PlayerDataTransfer.Equipments;
         _mySprite = GetComponent<SpriteRenderer>();
+        _calculator = new StatCalculator();
         _hp = _maxhp;
     }
 
@@ -193,7 +193,7 @@ public class PlayerBase : MonoBehaviour, IDamageable
         Vector2 itemPos = item.MyTransform.position;
         Vector2 myPos = transform.position;
         
-        // 마지막 인자갑은 이동 속도
+        // 마지막 인자갑은 끌어당기는 속도
         item.MyTransform.position = Vector2.MoveTowards(itemPos, myPos, 1f * Time.deltaTime);
     }
 
