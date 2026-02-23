@@ -8,6 +8,9 @@ public interface IMonsterSpawnSystem
     void ApplyWave(WavePlan _wave);
     void SpawnMidBoss(int _midBossId);
     void SpawnBoss(int _bossId);
+
+    //보스 소환 시 스폰 정지
+    void SetSpawningEnabled(bool _isenabled);
 }
 
 // 필드에 존재하는 몬스터들을 추적/제어하는 레지스트리.
