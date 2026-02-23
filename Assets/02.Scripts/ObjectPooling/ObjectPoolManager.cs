@@ -46,7 +46,7 @@ public class ObjectPoolManager : MonoBehaviour
     // --- 풀링 이벤트 함수들 ---
     private GameObject CreateNewObject(GameObject prefab, string tag)
     {
-        Debug.Log($"<color=yellow>[Pool]</color> {tag} 오브젝트 신규 생성!");
+        //Debug.Log($"<color=yellow>[Pool]</color> {tag} 오브젝트 신규 생성!");
 
         GameObject obj = Instantiate(prefab);
         obj.name = tag;
@@ -56,7 +56,7 @@ public class ObjectPoolManager : MonoBehaviour
 
     private void OnGetFromPool(GameObject obj)
     {
-        Debug.Log($"<color=cyan>[Pool]</color> 창고에서 {obj.name} 꺼냄 (재사용)");
+        //Debug.Log($"<color=cyan>[Pool]</color> 창고에서 {obj.name} 꺼냄 (재사용)");
 
         obj.SetActive(true);
 
