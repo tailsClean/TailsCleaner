@@ -5,7 +5,6 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "ActiveData", menuName = "Skill/ActiveData")]
 public class ActiveSkillData : ScriptableObject
 {
-
     [Header("기본 정보")]
     public int MainTag;
     public string SkillName;
@@ -53,7 +52,4 @@ public class UpgradeModifierData
 
     // 전용 모디파이어
     [SerializeReference] public ActiveModifier Modifier;
-
-    // 특수 로직 수치 설정
-    [SerializeReference] public ActiveModifierConfig Config;
 }

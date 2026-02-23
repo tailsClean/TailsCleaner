@@ -6,6 +6,7 @@ public class UpgradeSelect : MonoBehaviour
 {
     private class SelectOptionInfo     // 선택한 선택지의 정보
     {
+        public int TargetMainTag;             // 목표 메인 태그
         public bool IsPassive;                // 패시브인지 체크
 
         // 액티브
@@ -14,8 +15,9 @@ public class UpgradeSelect : MonoBehaviour
         public PassiveSkillData PassiveData; 
 
         // 액티브 생성자
-        public SelectOptionInfo(ActiveUpgradeData data)
+        public SelectOptionInfo(int mainTag, ActiveUpgradeData data)
         {
+            TargetMainTag = mainTag;
             ActiveData = data;
         }
 
@@ -67,7 +69,7 @@ public class UpgradeSelect : MonoBehaviour
 
                 // 유효하면 선택지에 추가
                 if (upgradeData != null)
-                    _currentOptions.Add(new SelectOptionInfo(upgradeData));
+                    _currentOptions.Add(new SelectOptionInfo(mainTag, upgradeData));
             }
         }
 
@@ -248,7 +250,7 @@ public class UpgradeSelect : MonoBehaviour
             }
             else
             {
-                Debug.Log($"{i + 1}. {_currentOptions[i].ActiveData.Name} (MainTag : {_currentOptions[i].ActiveData.MainTag}) / UpgradeID : {_currentOptions[i].ActiveData.Id}");
+                Debug.Log($"{i + 1}. {_currentOptions[i].ActiveData.Name} (MainTag : {_currentOptions[i].TargetMainTag}) / UpgradeID : {_currentOptions[i].ActiveData.Id}");
             }
         }
     }
@@ -266,7 +268,7 @@ public class UpgradeSelect : MonoBehaviour
         if (option.IsPassive)
             SkillManager.Instance.ApplyPassiveOption(option.PassiveData);
         else
-            SkillManager.Instance.ApplyActiveOption(option.ActiveData);
+            SkillManager.Instance.ApplyActiveOption(option.TargetMainTag, option.ActiveData);
 
         _currentOptions.Clear();
     }

@@ -4,7 +4,7 @@ public class BluetoothShowerModifierData
 
 }
 
-public class BluetoothShowerSkill : GenericActiveSkill<BluetoothShowerProjectile, BluetoothShowerModifierData>
+public class BluetoothShowerSkill : ActiveSkill<BluetoothShowerProjectile, BluetoothShowerModifierData>
 {
     protected override void Active()
     {

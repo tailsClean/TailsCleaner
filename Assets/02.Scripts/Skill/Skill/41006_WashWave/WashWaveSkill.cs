@@ -2,7 +2,7 @@
 public class WashWaveModifierData
 {
 }
-public class WashWaveSkill : GenericActiveSkill<WashWaveProjectile, WashWaveModifierData>
+public class WashWaveSkill : ActiveSkill<WashWaveProjectile, WashWaveModifierData>
 {
     protected override void Active()
     {

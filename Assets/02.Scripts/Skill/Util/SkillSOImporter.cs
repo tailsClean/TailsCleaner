@@ -104,23 +104,20 @@ public class SkillSOImporter : EditorWindow
             if (skillProjectilePrefab != null) so.SkillProjectilePrefab = skillProjectilePrefab;
             else Debug.LogWarning($"[SkillSOImporter] {skill.MainTag} ID를 포함한 투사체 프리팹 찾지 못함. (경로: {_skillProjectilePrefabPath})");
 
-            // 기존 Modifier, Config 보존
+            // 기존 Modifier 보존
             var existingModifiers = new Dictionary<int, ActiveModifier>();
-            var existingConfigs = new Dictionary<int, ActiveModifierConfig>();
             foreach (var upgradeModifierData in so.UpgradeModifierDatas)
             {
                 if (upgradeModifierData.Modifier != null)    // Modifier
                     existingModifiers[upgradeModifierData.UpgradeId] = upgradeModifierData.Modifier;
-                if (upgradeModifierData.Config != null)      // Config
-                    existingConfigs[upgradeModifierData.UpgradeId] = upgradeModifierData.Config;
             }
 
             // 모디파이어 데이터 싹 청소
             so.UpgradeModifierDatas.Clear();
 
-            // 스킬 전용 업그레이드 모디파이어, 설정 추가
+            // 스킬 전용 업그레이드 모디파이어 설정 추가
             if (upgradeMap.TryGetValue(skill.MainTag, out var myUpgrades))
-                AddUpgradeConfigs(so, myUpgrades, existingModifiers, existingConfigs);
+                AddUpgradeModifiers(so, myUpgrades, existingModifiers);
 
             // 경로에 SO 저장, 생성
             SaveOrCreate(so, path);
@@ -188,8 +185,8 @@ public class SkillSOImporter : EditorWindow
     }
 
     // 전용 업그레이드 설정 추가
-    private void AddUpgradeConfigs(ActiveSkillData so, List<UpgradeRow> upgrades,
-        Dictionary<int, ActiveModifier> existingModifiers, Dictionary<int, ActiveModifierConfig> existingConfigs)
+    private void AddUpgradeModifiers(ActiveSkillData so, List<UpgradeRow> upgrades,
+        Dictionary<int, ActiveModifier> existingModifiers)
     {
         // 업그레이드마다
         foreach (var upgrade in upgrades)
@@ -202,10 +199,7 @@ public class SkillSOImporter : EditorWindow
                 Desc = upgrade.Desc,                                                     // effect
 
                 Modifier = existingModifiers.TryGetValue(upgrade.Id, out var modifier)   // 모디파이어
-                ? modifier : CreateActiveModifier(upgrade.Id),                           // 기존 설정 있으면 기존 사용, 없으면 생성
-
-                Config = existingConfigs.TryGetValue(upgrade.Id, out var config)         // 모디파이어 설정
-                ? config : CreateActiveModifierConfig(upgrade.Id)                        
+                ? modifier : CreateActiveModifier(upgrade.Id),                           // 기존 설정 있으면 기존 사용, 없으면 생성                
             });
         }
     }
@@ -215,21 +209,9 @@ public class SkillSOImporter : EditorWindow
         40011 => new SoapRetargetModifier(),        // 감나빗!
         40012 => new SoapPierceDamageModifier(),    // 거품내기
         40014 => new SoapPierceSpeedModifier(),     // 거품 가속
-        40016 => new SoapRemovePierceModifier(),    // 비누 덩어리
+        40016 => new SoapRemovalPierceModifier(),    // 비누 덩어리
         _ => null  // 매핑된거 없으면 깡통
     };
-
-    // 액티브 모디파이어 설정 생성
-    private ActiveModifierConfig CreateActiveModifierConfig(int upgradeId)
-    {
-        return upgradeId switch
-        {
-            // 비누 던지기
-            40012 => new SoapPierceDamageConfig(), // 거품내기
-            40014 => new SoapPierceSpeedConfig(),  // 거품 가속
-            _ => null // 매핑된거 없으면 깡통
-        };
-    }
     #endregion
 
     #region Passive
@@ -257,13 +239,10 @@ public class SkillSOImporter : EditorWindow
             so.Desc = passive.Desc;
 
 
+            // 처음 생성 때만 기본
+            // 업데이트시 수동 수치 보존
             if (so.Modifier == null)
                 so.Modifier = CreatePassiveModifier(passive.Id);
-
-            // Config는 처음 생성 때만 기본
-            // 업데이트시 수동 수치 보존
-            if (so.Config == null)
-                so.Config = CreatePassiveConfig(passive.Id);
 
             // 경로에 SO 저장, 생성
             SaveOrCreate(so, path);
@@ -284,32 +263,6 @@ public class SkillSOImporter : EditorWindow
         42016 => new CatLaundryModifier(),          // 냥빨래
         _ => null
     };
-
-    // 패시브 모디파이어 설정 생성
-    private PassiveModifierConfig CreatePassiveConfig(int id)
-    {
-        return id switch
-        {
-            //42001 => new RaccoonConfig(),
-            42002 => new CenterSwitchConfig(),      // 목표를 중앙에 두고 스위치
-            //42003 => new FocusAttackConfig(),     
-            42004 => new DoubleExtraDamageConfig(), // 추가 추가 피해
-            //42005 => new SuperCleanConfig(),      
-            //42006 => new BravadoConfig(),
-            //42007 => new VinylCoatConfig(),
-            //42008 => new ClassicSecretConfig(),
-            //42009 => new BiggerBetterConfig(),
-            //42010 => new GoldenCrownConfig(),
-            //42011 => new ADCarryConfig(),
-            //42012 => new SnowballingConfig(),
-            //42013 => new AmbiConfig(),
-            42014 => new ImplantConfig(),           // 기초적인 임플란트입니다
-            //42015 => new SodaWaterConfig(),
-            42016 => new CatLaundryConfig(),        // 냥빨래
-            //42017 => new NimbleBlockConfig(),
-            _ => null
-        };
-    }
     #endregion
 
     #region Upgrade

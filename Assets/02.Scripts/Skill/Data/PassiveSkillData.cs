@@ -14,9 +14,6 @@ public class PassiveSkillData : ScriptableObject
     [Header("패시브 모디파이어")]
     [SerializeReference] public PassiveModifier Modifier;
 
-    [Header("패시브 모디파이어 설정")]
-    [SerializeReference] public PassiveModifierConfig Config;
-
     // 패시브 ID
     public enum PASSIVE_ID
     {

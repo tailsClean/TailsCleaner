@@ -4,7 +4,7 @@ public class SpinningToyModifierData
 {
 }
 
-public class SpinningToySkill : GenericActiveSkill<SpinningToyProjectile, SpinningToyModifierData>
+public class SpinningToySkill : ActiveSkill<SpinningToyProjectile, SpinningToyModifierData>
 {
     protected override void Active()
     {
