@@ -129,9 +129,8 @@ public class RuleBasedMonsterSpawner : MonoBehaviour, IMonsterSpawnSystem
         _monster.name = _name;
 
         // --- MonsterBase 요구사항 충족(2D) ---
-        _monster.is3DMode = false;     // 2D 게임이므로 강제
         _monster.target = _playerTransform;     // 타겟 없으면 안 움직임
-        _monster.SyncTransformToPhysics();
+        
 
         _registry.Register(_monster.gameObject);
     }
