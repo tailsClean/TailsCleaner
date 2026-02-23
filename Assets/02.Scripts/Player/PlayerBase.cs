@@ -1,7 +1,5 @@
-﻿using NUnit.Framework;
-using System;
+﻿using System;
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -24,8 +22,11 @@ public class PlayerBase : MonoBehaviour, IDamageable
     [SerializeField] private float _experienceGainRate = 10;        // 경험치 획득률
     [SerializeField] private int _pickupRange = 1;
     [SerializeField] private float _attackInterval = 0.5f;          // 자동공격 주기
-    [SerializeField] private ItemPickup _itemPickup;                // 아이템 줍는 범위(콜라이더)를 가짐
+    [SerializeField] private ItemPickup _itemPickupCollider;        // 아이템 줍는 범위(콜라이더)를 가짐
     [SerializeField] private GameObject _bulletPrefab;
+
+    [Header("이벤트 채널")]
+    [SerializeField] private IntEventChannelSO _onPickupExp;
 
     private float _hp;
     private float _metaCurrentExp;
@@ -36,7 +37,7 @@ public class PlayerBase : MonoBehaviour, IDamageable
     private Vector2 _attackDir;
     private bool _isInvincible;                                     // 피격 무적상태 여부
     private float _timer;
-    private Dictionary<Equipment.PARTS, Equipment> _myEquipment;
+    private PlayerEquipment _myEquipment;
     private StatCalculator _calculator;                             // 스텟 계산기
 
     public event Action<float, float> OnGainExp;                    // 경험치 획득시 알리는 신호
@@ -45,13 +46,13 @@ public class PlayerBase : MonoBehaviour, IDamageable
 
     public int Hp => (int)Mathf.Max(_hp, 0);
     public int FinalDamage => _attackPower;                         // 최종 데미지 수치
-    public int FinalMoveSpeed => _calculator.GetMoveSpeed(_moveSpeed, _myEquipment);
+    public int FinalMoveSpeed => _moveSpeed + _myEquipment.GetMoveSpeedIncrease();
     public Transform AttackTarget => GetTarget(_attackDir);         // 조준형 스킬 사용을 위한 타겟
 
 
     private void Awake()
     {
-        _myEquipment = PlayerDataTransfer.Equipments;
+        _myEquipment = new PlayerEquipment(PlayerDataTransfer.Equipments);
         _mySprite = GetComponent<SpriteRenderer>();
         _calculator = new StatCalculator();
         _hp = _maxhp;
@@ -59,17 +60,19 @@ public class PlayerBase : MonoBehaviour, IDamageable
 
     private void OnEnable()
     {
-        _itemPickup.OnEnterPickupRange += OnItemPickup;
+        _itemPickupCollider.OnEnterPickupRange += OnItemPickup;
+        _onPickupExp.AddListener(GainExperience);
     }
 
     private void OnDisable()
     {
-        _itemPickup.OnEnterPickupRange -= OnItemPickup;
+        _itemPickupCollider.OnEnterPickupRange -= OnItemPickup;
+        _onPickupExp.RemoveListener(GainExperience);
     }
 
     private void Start()
     {
-        _itemPickup.SetColliderRange(_pickupRange);
+        _itemPickupCollider.SetColliderRange(_pickupRange);
         _attackDir = new Vector2(transform.localScale.x, 0);
     }
 
@@ -169,23 +172,23 @@ public class PlayerBase : MonoBehaviour, IDamageable
 
         if(_combatCurrentExp >= _combatMaxExp)
         {
-            Debug.Log("레벨업으로 스텟증가(수치 입력해야 함");
+            LevelUp();
         }
 
         OnGainExp?.Invoke(_combatLevel, _combatCurrentExp);
     }
     //레벨업 시, 스텟변화량을 받아서 증가
-    private void LevelUp(StatDelta statDelta)
+    private void LevelUp()
     {
         _combatCurrentExp -= _combatMaxExp;
         _combatLevel++;
 
-        _maxhp += statDelta.MaxHp;
-        _attackPower += statDelta.AttackPower;
-        _defensePower += statDelta.DefensePower;
-        _healthRegen += statDelta.HealthRegen;
-        _combatLevel += statDelta.CombatLevel;
-        _combatMaxExp += statDelta.CombatMaxExp;
+        //_maxhp += statDelta.MaxHp;
+        //_attackPower += statDelta.AttackPower;
+        //_defensePower += statDelta.DefensePower;
+        //_healthRegen += statDelta.HealthRegen;
+        //_combatLevel += statDelta.CombatLevel;
+        //_combatMaxExp += statDelta.CombatMaxExp;
     }
     // 주위 아이템(경험치) 끌어모으는 메서드
     private void OnItemPickup(IPickable item)
@@ -207,49 +210,6 @@ public class PlayerBase : MonoBehaviour, IDamageable
 
         return hit.transform;
     }
-
-    [ContextMenu("장비 반영")]
-    // 플레이어 스텟에 장비스텟값 추가 메서드
-    public void Init()
-    {
-        _myEquipment = PlayerDataTransfer.Equipments;
-        foreach(var equipment in _myEquipment.Values)
-        {
-            if(equipment != null)
-                ApplyStats(equipment);
-        }
-    }
-    // 부위별 장비 스탯 반영 메서드
-    private void ApplyStats(Equipment equipment)
-    {
-        _myEquipment = PlayerDataTransfer.Equipments;
-        //switch (equipment)
-        //{
-        //    case WeaponEquipment weapon:
-        //        _attackPower += weapon.AttackPowerIncrease;
-        //        Debug.Log($"{equipment.gameObject.name} 반영 / 공격증: {weapon.AttackPowerIncrease}");
-        //        break;
-        //    case HatEquipment hat:
-        //        _criticalChance += hat.CriticalChanceIncrease;
-        //        Debug.Log($"{equipment.gameObject.name} 반영 / 크확증: {hat.CriticalChanceIncrease}");
-        //        break;
-        //    case CloakEquipment cloak:
-        //        _maxhp += cloak.MaxHpIncrease;
-        //        _defensePower += cloak.DefensePowerIncrease;
-        //        Debug.Log($"{equipment.gameObject.name} 반영 / Hp증: {cloak.MaxHpIncrease}");
-        //        Debug.Log($"{equipment.gameObject.name} 반영 / 방증: {cloak.DefensePowerIncrease}");
-        //        break;
-        //    case ShoesEquipment shoes:
-        //        _moveSpeed += shoes.MoveSpeedIncrease;
-        //        _evasionChance += shoes.EvasionChanceIncrease;
-        //        Debug.Log($"{equipment.gameObject.name} 반영 / 이속증: {shoes.MoveSpeedIncrease}");
-        //        Debug.Log($"{equipment.gameObject.name} 반영 / 회피증: {shoes.EvasionChanceIncrease}");
-        //        break;
-        //}
-    }
-
-    private T ApplyEquipment<T>(Equipment.PARTS part) where T : Equipment => 
-        _myEquipment[part].ApplyEquipment<T>();
 
 
     public struct StatDelta

@@ -1,9 +1,9 @@
 ﻿
-public class AttackState : IPlayerState
+public class MoveState : IPlayerState
 {
     private PlayerBase _player;
 
-    public AttackState(PlayerBase player)
+    public MoveState(PlayerBase player)
     {
         _player = player;
     }

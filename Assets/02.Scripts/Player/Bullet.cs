@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-public class BulletTest : MonoBehaviour, IBullet
+public class Bullet : MonoBehaviour, IBullet
 {
     [SerializeField] private float _moveSpeed = 5;
     [SerializeField] private float _attackDamage = 10;
@@ -9,7 +9,7 @@ public class BulletTest : MonoBehaviour, IBullet
 
     void Update()
     {
-        transform.Translate(_dir*  Time.deltaTime * _moveSpeed);
+        transform.Translate(_dir *  Time.deltaTime * _moveSpeed);
         Destroy(gameObject, 2f);
     }
 
@@ -25,7 +25,10 @@ public class BulletTest : MonoBehaviour, IBullet
             var player = collision.GetComponent<IDamageable>();
 
             if (player != null)
+            {
                 player.TakeDamage(_attackDamage);
+                Destroy(gameObject);
+            }
         }
     }
 }
