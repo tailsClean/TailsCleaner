@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 589190850602362903}
   - component: {fileID: 2632319729818317982}
   m_Layer: 0
-  m_Name: ItemPickup
+  m_Name: ItemPickupCollider
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -217,15 +217,23 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 309561c5c5a7bad498453460d92c4fdd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerBase
-  _hp: 100
+  _maxhp: 15
   _attackPower: 10
   _defensePower: 5
-  _level: 1
-  _currentExp: 0
-  _pickupRange: 2
+  _evasionChance: 10
+  _criticalChance: 10
+  _criticalResistance: 10
   _moveSpeed: 5
+  _healthRegen: 10
+  _metaLevel: 1
+  _metaMaxExp: 50
+  _combatLevel: 1
+  _combatMaxExp: 50
+  _experienceGainRate: 10
+  _pickupRange: 2
   _attackInterval: 0.5
-  _itemPickup: {fileID: 2632319729818317982}
+  _itemPickupCollider: {fileID: 2632319729818317982}
+  _onPickupExp: {fileID: 11400000, guid: ef0b1edeb1f74694c954542395d441da, type: 2}
   _bulletPrefab: {fileID: 6143993512590710387, guid: fcee192d9ea4c5e49acfd33c7001422e, type: 3}
 --- !u!114 &2359834465883610264
 MonoBehaviour:
@@ -290,30 +298,6 @@ MonoBehaviour:
     m_ActionName: 'Player/Attack[/Mouse/leftButton,/Keyboard/enter]'
   - m_PersistentCalls:
       m_Calls: []
-    m_ActionId: 852140f2-7766-474d-8707-702459ba45f3
-    m_ActionName: 'Player/Interact[/Keyboard/e]'
-  - m_PersistentCalls:
-      m_Calls: []
-    m_ActionId: 27c5f898-bc57-4ee1-8800-db469aca5fe3
-    m_ActionName: 'Player/Crouch[/Keyboard/c]'
-  - m_PersistentCalls:
-      m_Calls: []
-    m_ActionId: f1ba0d36-48eb-4cd5-b651-1c94a6531f70
-    m_ActionName: 'Player/Jump[/Keyboard/space]'
-  - m_PersistentCalls:
-      m_Calls: []
-    m_ActionId: 2776c80d-3c14-4091-8c56-d04ced07a2b0
-    m_ActionName: 'Player/Previous[/Keyboard/1]'
-  - m_PersistentCalls:
-      m_Calls: []
-    m_ActionId: b7230bb6-fc9b-4f52-8b25-f5e19cb2c2ba
-    m_ActionName: 'Player/Next[/Keyboard/2]'
-  - m_PersistentCalls:
-      m_Calls: []
-    m_ActionId: 641cd816-40e6-41b4-8c3d-04687c349290
-    m_ActionName: 'Player/Sprint[/Keyboard/leftShift]'
-  - m_PersistentCalls:
-      m_Calls: []
     m_ActionId: c95b2375-e6d9-4b88-9c4c-c5e76515df4b
     m_ActionName: 'UI/Navigate[/Keyboard/w,/Keyboard/upArrow,/Keyboard/s,/Keyboard/downArrow,/Keyboard/a,/Keyboard/leftArrow,/Keyboard/d,/Keyboard/rightArrow]'
   - m_PersistentCalls:
@@ -354,10 +338,34 @@ MonoBehaviour:
     m_ActionName: UI/TrackedDeviceOrientation
   - m_PersistentCalls:
       m_Calls: []
+    m_ActionId: 852140f2-7766-474d-8707-702459ba45f3
+    m_ActionName: 'Player/Interact[/Keyboard/e]'
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 27c5f898-bc57-4ee1-8800-db469aca5fe3
+    m_ActionName: 'Player/Crouch[/Keyboard/c]'
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: f1ba0d36-48eb-4cd5-b651-1c94a6531f70
+    m_ActionName: 'Player/Jump[/Keyboard/space]'
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 2776c80d-3c14-4091-8c56-d04ced07a2b0
+    m_ActionName: 'Player/Previous[/Keyboard/1]'
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: b7230bb6-fc9b-4f52-8b25-f5e19cb2c2ba
+    m_ActionName: 'Player/Next[/Keyboard/2]'
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 641cd816-40e6-41b4-8c3d-04687c349290
+    m_ActionName: 'Player/Sprint[/Keyboard/leftShift]'
+  - m_PersistentCalls:
+      m_Calls: []
     m_ActionId: b36957a4-9987-46b3-b4ec-e48f39c6d214
     m_ActionName: 'Player/Attack[/Mouse/leftButton,/Keyboard/enter]'
   m_NeverAutoSwitchControlSchemes: 0
-  m_DefaultControlScheme: MultiScheme
+  m_DefaultControlScheme: 
   m_DefaultActionMap: Player
   m_SplitScreenIndex: -1
   m_Camera: {fileID: 0}
