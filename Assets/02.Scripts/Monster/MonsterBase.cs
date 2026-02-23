@@ -104,7 +104,7 @@ public abstract class MonsterBase : MonoBehaviour, IDamageable
                     lastAttackTime = Time.time;    // 쿨타임 초기화
 
                     // 확인을 위한 로그
-                    Debug.Log($"{gameObject.name}가 트리거로 플레이어에게 데미지를 입혔음.");
+                    //Debug.Log($"{gameObject.name}가 트리거로 플레이어에게 데미지를 입혔음.");
                 }
             }
         }
