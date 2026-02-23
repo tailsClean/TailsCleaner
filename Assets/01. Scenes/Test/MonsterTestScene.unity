@@ -507,7 +507,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5939852413248465278, guid: f1d7566061b437642929eb0d55f61230, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8674726135315812162, guid: f1d7566061b437642929eb0d55f61230, type: 3}
       propertyPath: hp
@@ -531,6 +531,14 @@ PrefabInstance:
       objectReference: {fileID: 353544400213195327, guid: e91f8c4bfab49f044bb700150c2443b8, type: 3}
     - target: {fileID: 8674726135315812162, guid: f1d7566061b437642929eb0d55f61230, type: 3}
       propertyPath: monsterType
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8674726135315812162, guid: f1d7566061b437642929eb0d55f61230, type: 3}
+      propertyPath: damageCooldown
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 9185847162285972448, guid: f1d7566061b437642929eb0d55f61230, type: 3}
+      propertyPath: m_SleepingMode
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
@@ -662,13 +670,17 @@ PrefabInstance:
       propertyPath: m_Name
       value: Test_SpecialMonster
       objectReference: {fileID: 0}
+    - target: {fileID: 899191179583652646, guid: 56ded763630db0f47a2dad2087013af0, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 4623907807441698298, guid: 56ded763630db0f47a2dad2087013af0, type: 3}
       propertyPath: target
       value: 
       objectReference: {fileID: 238114699}
     - target: {fileID: 4623907807441698298, guid: 56ded763630db0f47a2dad2087013af0, type: 3}
       propertyPath: moveType
-      value: 2
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4690416171218522885, guid: 56ded763630db0f47a2dad2087013af0, type: 3}
       propertyPath: m_LocalPosition.x
@@ -708,6 +720,10 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4690416171218522885, guid: 56ded763630db0f47a2dad2087013af0, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7069551867210678986, guid: 56ded763630db0f47a2dad2087013af0, type: 3}
+      propertyPath: m_SleepingMode
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []

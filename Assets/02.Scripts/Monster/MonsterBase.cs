@@ -22,6 +22,10 @@ public abstract class MonsterBase : MonoBehaviour, IDamageable
     [Header("--- Drop Items ---")]
     [SerializeField] private GameObject TestItem;
 
+    [Header("--- 공격 설정 ---")]
+    public float damageCooldown = 1.0f; // 공격 간격
+    private float lastAttackTime;       // 마지막 공격 시간
+
     protected Rigidbody2D rb2D;
     protected bool isAttacking = false; // 패턴 중 이동 정지용
 
@@ -32,6 +36,8 @@ public abstract class MonsterBase : MonoBehaviour, IDamageable
         rb2D.bodyType = RigidbodyType2D.Kinematic;
         rb2D.gravityScale = 0f;
         rb2D.constraints = RigidbodyConstraints2D.FreezeRotation;
+
+        rb2D.sleepMode = RigidbodySleepMode2D.NeverSleep;
     }
 
     protected virtual void Start()
@@ -79,6 +85,29 @@ public abstract class MonsterBase : MonoBehaviour, IDamageable
     {
         hp -= damage;
         if (hp <= 0) Die();
+    }
+
+    protected virtual void OnTriggerStay2D(Collider2D other)
+    {
+        // 닿은 대상이 target인지 확인
+        if (target != null && other.gameObject == target.gameObject)
+        {
+            // 공격 주기가 되었는지 확인
+            if (Time.time >= lastAttackTime + damageCooldown)
+            {
+                // 플레이어에게 데미지 전달 시도
+                IDamageable player = other.gameObject.GetComponent<IDamageable>();
+
+                if (player != null)
+                {
+                    player.TakeDamage(this.power); // 플레이어의 함수 호출
+                    lastAttackTime = Time.time;    // 쿨타임 초기화
+
+                    // 확인을 위한 로그
+                    //Debug.Log($"{gameObject.name}가 트리거로 플레이어에게 데미지를 입혔음.");
+                }
+            }
+        }
     }
 
     protected virtual void Die()

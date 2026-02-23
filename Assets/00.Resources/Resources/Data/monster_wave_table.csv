@@ -1,0 +1,9 @@
+﻿스테이지와 연결되는 그룹 id,웨이브 순서,웨이브 시작 시간,웨이브 종료 시간,등장 몬스터 id,주기당 생성 수,생성 패턴 1: random 2: squad 3: circle,웨이브 종료 시 등장할 중간 보스 id,
+group_id,wave_index,start_time,end_time,monster_id,spawn_amount,spawn_pattern,mid_boss_id,weight_percent
+int,int,int,int,int,int,enum,int,int
+201,1,0,180,0,5,Random,-1,100
+201,2,180,360,0,5,Random,-1,100
+201,3,360,540,0,5,Random,-1,100
+201,4,540,660,0,5,Random,-1,100
+201,5,660,840,0,5,Random,-1,100
+201,6,840,900,0,5,Random,-1,100
