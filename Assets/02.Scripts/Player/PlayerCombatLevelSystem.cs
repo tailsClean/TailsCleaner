@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 
 
-public class PlayerLevelSystem
+public class PlayerCombatLevelSystem
 {
     private PlayerBase _player;
     private int _maxExp;
@@ -9,7 +9,7 @@ public class PlayerLevelSystem
     public StatDelta LevelUpDelta { get; private set; }
     public bool IsLevelUp { get; private set; }
 
-    public PlayerLevelSystem(PlayerBase player, int maxExp)
+    public PlayerCombatLevelSystem(PlayerBase player, int maxExp)
     {
         _player = player;
         _maxExp = maxExp;

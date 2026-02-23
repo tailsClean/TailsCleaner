@@ -1,7 +1,7 @@
 ﻿using System;
-using System.Collections;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using static UnityEditor.Experimental.GraphView.GraphView;
 
 public class PlayerBase : MonoBehaviour, IDamageable
 {
@@ -23,7 +23,7 @@ public class PlayerBase : MonoBehaviour, IDamageable
     [SerializeField] private int _pickupRange = 1;
     [SerializeField] private float _attackInterval = 0.5f;          // 자동공격 주기
     [SerializeField] private ItemPickup _itemPickupCollider;        // 아이템 줍는 범위(콜라이더)를 가짐
-    [SerializeField] private GameObject _bulletPrefab;
+    [SerializeField] private Bullet _bulletPrefab;
 
     [Header("이벤트 채널")]
     [SerializeField] private IntEventChannelSO _onPickupExp;
@@ -37,8 +37,9 @@ public class PlayerBase : MonoBehaviour, IDamageable
     private Vector2 _attackDir;
     private float _timer;
     private PlayerHit _hitSystem;
-    private PlayerLevelSystem _levelSystem;
+    private PlayerCombatLevelSystem _levelSystem;
     private PlayerEquipment _myEquipment;
+    private PlayerStateMachine _stateMachine;
 
     public event Action<float, float> OnGainExp;                    // 경험치 획득시 알리는 신호
     public event Action<Equipment.PARTS> OnSetEquipment;            // 장비가 바뀌었다는 것을 알리는 신호
@@ -48,14 +49,17 @@ public class PlayerBase : MonoBehaviour, IDamageable
     public int FinalDamage => _attackPower;                         // 최종 데미지 수치
     public int FinalMoveSpeed => _moveSpeed + _myEquipment.GetMoveSpeedIncrease();
     public Transform AttackTarget => GetTarget(_attackDir);         // 조준형 스킬 사용을 위한 타겟
-
+    public Bullet BulletPrefab => _bulletPrefab;
+    public Vector2 AttackDir { get; private set; }
 
     private void Awake()
     {
-        _myEquipment = new PlayerEquipment(PlayerDataTransfer.Equipments);
-        _hitSystem = new PlayerHit(this);
-        _levelSystem = new PlayerLevelSystem(this, _combatMaxExp);
         _currentHp = _maxhp;
+        _hitSystem = new PlayerHit(this);
+        _levelSystem = new PlayerCombatLevelSystem(this, _combatMaxExp);
+        _stateMachine = new PlayerStateMachine(this);
+
+        _myEquipment = new PlayerEquipment(PlayerDataTransfer.Equipments);
     }
 
     private void OnEnable()
@@ -73,7 +77,7 @@ public class PlayerBase : MonoBehaviour, IDamageable
     private void Start()
     {
         _itemPickupCollider.SetColliderRange(_pickupRange);
-        _attackDir = new Vector2(transform.localScale.x, 0);
+        _attackDir = new Vector2(0, -transform.localScale.y);
     }
 
     private void Update()
@@ -107,18 +111,29 @@ public class PlayerBase : MonoBehaviour, IDamageable
     // 공격 기능
     private void OnAttack()
     {
+        //_stateMachine.SetState(PlayerStateMachine.State.Attack);
         if (!_bulletPrefab)
             return;
 
         Vector2 spawnPos = (Vector2)transform.position + _attackDir.normalized;
         var obj = Instantiate(_bulletPrefab, spawnPos, Quaternion.identity);
 
-         if (obj.TryGetComponent<IBullet>(out var bullet))
+        if (obj.TryGetComponent<IBullet>(out var bullet))
             bullet.SetDirection(_attackDir.normalized);
     }
+
+    public Bullet FireBullet(Bullet bullet, Vector2 spawnPos) => Instantiate(bullet, spawnPos, Quaternion.identity);
+
     // 조이스틱 방향으로 공격
     public void StickAttackDir(InputAction.CallbackContext ctx)
     {
+        if (ctx.canceled)
+        {
+            Debug.Log("띄어줫다.");
+            _attackDir = new Vector2(0, -transform.localScale.y);
+
+        }
+
         if (!ctx.performed)
             return;
 
