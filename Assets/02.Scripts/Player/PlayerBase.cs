@@ -14,7 +14,7 @@ public class PlayerBase : MonoBehaviour, IDamageable
     [SerializeField] private int _moveSpeed = 5;
     [SerializeField] private int _healthRegen = 10;                 // Hp 회복량
     [SerializeField] private int _metaLevel = 1;
-    [SerializeField] private int _metaMaxExp = 50;  
+    [SerializeField] private int _metaMaxExp = 50;
 
     [Header("인게임 정보")]
     [SerializeField] private int _combatLevel = 1;
@@ -27,24 +27,24 @@ public class PlayerBase : MonoBehaviour, IDamageable
 
     [Header("이벤트 채널")]
     [SerializeField] private IntEventChannelSO _onPickupExp;
+    
 
-    private float _hp;
-    private float _metaCurrentExp;
-    private float _combatCurrentExp;
+    private int _currentHp;
+    private int _metaCurrentExp;
+    private int _combatCurrentExp;
 
-    private SpriteRenderer _mySprite;
     private Vector2 _moveDir;
     private Vector2 _attackDir;
-    private bool _isInvincible;                                     // 피격 무적상태 여부
     private float _timer;
+    private PlayerHit _hitSystem;
+    private PlayerLevelSystem _levelSystem;
     private PlayerEquipment _myEquipment;
-    private StatCalculator _calculator;                             // 스텟 계산기
 
     public event Action<float, float> OnGainExp;                    // 경험치 획득시 알리는 신호
     public event Action<Equipment.PARTS> OnSetEquipment;            // 장비가 바뀌었다는 것을 알리는 신호
     public event Action<float> OnUpdateUI;
 
-    public int Hp => (int)Mathf.Max(_hp, 0);
+    public int Hp => (int)Mathf.Max(_currentHp, 0);
     public int FinalDamage => _attackPower;                         // 최종 데미지 수치
     public int FinalMoveSpeed => _moveSpeed + _myEquipment.GetMoveSpeedIncrease();
     public Transform AttackTarget => GetTarget(_attackDir);         // 조준형 스킬 사용을 위한 타겟
@@ -53,9 +53,9 @@ public class PlayerBase : MonoBehaviour, IDamageable
     private void Awake()
     {
         _myEquipment = new PlayerEquipment(PlayerDataTransfer.Equipments);
-        _mySprite = GetComponent<SpriteRenderer>();
-        _calculator = new StatCalculator();
-        _hp = _maxhp;
+        _hitSystem = new PlayerHit(this);
+        _levelSystem = new PlayerLevelSystem(this, _combatMaxExp);
+        _currentHp = _maxhp;
     }
 
     private void OnEnable()
@@ -135,70 +135,29 @@ public class PlayerBase : MonoBehaviour, IDamageable
     // 피격시, 발동되는 메서드
     public void TakeDamage(float damage)
     {
-        if (_isInvincible)
-            return;
+        int hp = _hitSystem.TakeDamage((int)_currentHp, (int)damage);
 
-        _hp -= damage;
-        OnUpdateUI?.Invoke(Hp);
-        Debug.Log("현재 체력: " + Hp);
-
-        StartCoroutine(StartHitInvincibility());
-    }
-    // 피격 시, 무적 + 피격이펙트(깜빡임)
-    private IEnumerator StartHitInvincibility()
-    {
-        _isInvincible = true;
-
-        // 깜빡이는 메서드
-        var wait = new WaitForSeconds(0.2f);
-        Color original = _mySprite.color;
-        for(int i = 0; i < 3; i++)
+        if(_currentHp != hp)
         {
-            _mySprite.color = new Color(0, 0, 0);
-            yield return wait;
-
-            _mySprite.color = original;
-            yield return wait;
+            _currentHp = hp;
+            OnUpdateUI?.Invoke(Hp);
         }
-
-        _isInvincible = false;
     }
 
 
     // 경험치 획득 로직
     public void GainExperience(int experience)
     {
-        _combatCurrentExp += experience;
+        _combatCurrentExp = _levelSystem.GainExperience(_combatCurrentExp, experience);
 
-        if(_combatCurrentExp >= _combatMaxExp)
-        {
-            LevelUp();
-        }
+        if (_levelSystem.IsLevelUp)
+            _combatLevel += _levelSystem.LevelUpDelta.CombatLevel;
 
         OnGainExp?.Invoke(_combatLevel, _combatCurrentExp);
     }
-    //레벨업 시, 스텟변화량을 받아서 증가
-    private void LevelUp()
-    {
-        _combatCurrentExp -= _combatMaxExp;
-        _combatLevel++;
-
-        //_maxhp += statDelta.MaxHp;
-        //_attackPower += statDelta.AttackPower;
-        //_defensePower += statDelta.DefensePower;
-        //_healthRegen += statDelta.HealthRegen;
-        //_combatLevel += statDelta.CombatLevel;
-        //_combatMaxExp += statDelta.CombatMaxExp;
-    }
+   
     // 주위 아이템(경험치) 끌어모으는 메서드
-    private void OnItemPickup(IPickable item)
-    {
-        Vector2 itemPos = item.MyTransform.position;
-        Vector2 myPos = transform.position;
-        
-        // 마지막 인자갑은 끌어당기는 속도
-        item.MyTransform.position = Vector2.MoveTowards(itemPos, myPos, 1f * Time.deltaTime);
-    }
+    private void OnItemPickup(IPickable item) => _levelSystem.ItemPickup(transform, item);
 
 
     // 조준형 스킬을 위한 타겟 검사
@@ -209,26 +168,5 @@ public class PlayerBase : MonoBehaviour, IDamageable
         Debug.Log(hit.collider.gameObject.name);
 
         return hit.transform;
-    }
-
-
-    public struct StatDelta
-    {
-        public int MaxHp;
-        public int AttackPower;
-        public int DefensePower;
-        public int HealthRegen;
-        public int CombatLevel;
-        public int CombatMaxExp;
-
-        public StatDelta(int maxHp, int att, int def, int healthRegen, int maxExp)
-        {
-            MaxHp = maxHp;
-            AttackPower = att;
-            DefensePower = def;
-            HealthRegen = healthRegen;
-            CombatLevel = 1;
-            CombatMaxExp = maxExp;
-        }
     }
 }
