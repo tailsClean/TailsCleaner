@@ -208,7 +208,7 @@ public abstract class ActiveSkill : MonoBehaviour
             passive.Modifier.ModifyFinal(resultStat);
         }
 
-        // 최종 스탯 = ((baseStat + 깡 추가 패시브 스탯) * 공용 스탯 + (업그레이드 스탯 * 추가추가피해 패시브)) * 패시브 스탯 배율 합 * 최종 배율 (황금왕관, 양손잡이, 냥빨래)
+        // 최종 스탯 = ((baseStat + 패시브 깡 스탯) * 공용 스탯 + (업그레이드 스탯 * 추가추가피해 패시브)) * 패시브 스탯 배율 합 * 최종 배율 (황금왕관, 양손잡이, 냥빨래)
         Debug.Log($"최종 공격력 : {resultStat.Damage} = (( {baseStat.Damage}(기본) + 패시브 깡 스탯) * {commonStat.Damage}(공용)  + ({upgradeStat.Damage}(업그레이드) * 추가추가피해)) * {passiveMulStat.Damage}(패시브 배율) * 패시브 최종 배율");
 
         // 최종 결과 스탯 반환
@@ -275,13 +275,13 @@ public abstract class ActiveSkill : MonoBehaviour
     }
 }
 
-
-public abstract class ActiveSkill<TController, TData> : ActiveSkill
-    where TController : Component
-    where TData : class, new()
+// 프리팹과 모디파이어 타입 결정
+public abstract class ActiveSkill<TSkillObject, TModifierData> : ActiveSkill
+    where TSkillObject : Component
+    where TModifierData : class, new()
 {
-    protected TController _skillPrefabComponent;
-    public TData ModifierData = new TData();
+    protected TSkillObject _skillObjectPrefab;
+    public TModifierData _modifierData = new TModifierData();
 
     // 프리팹 캐싱
     public override void Init(ActiveSkillData skillData, ActiveUpgradeData upgradeData, GameObject prefab)
@@ -291,7 +291,7 @@ public abstract class ActiveSkill<TController, TData> : ActiveSkill
 
         if (_skillPrefab != null)
         {
-            _skillPrefabComponent = _skillPrefab.GetComponent<TController>();
+            _skillObjectPrefab = _skillPrefab.GetComponent<TSkillObject>();
         }
     }
 
@@ -301,7 +301,7 @@ public abstract class ActiveSkill<TController, TData> : ActiveSkill
         base.ApplyUpgrade(upgradeData);
 
         // 모디파이어 데이터 갱신
-        ModifierData = new TData();
+        _modifierData = new TModifierData();
         foreach (var mod in _skillModifiers)
         {
             // 모디파이어 적용

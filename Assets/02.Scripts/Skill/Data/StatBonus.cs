@@ -10,7 +10,10 @@ public class SkillStat         // 추가 스킬 스탯
     public float Knockback;         // 넉백 수치
     public float Size;              // 크기 비율
 
-    public int ExtraDamageMultiplier = 1; // 추가추가피해 패시브용 
+    // 패시브용
+    public float MaxHpDecreaseRate = 0f;     // 집중공략 최대 체력 감소
+    public int ExtraDamageMultiplier = 1;    // 추가추가피해 추가 횟수
+    public float DurationTickInterval = 0f;  // 스노우볼링 지속시간 체크 간격
 
     // 합
     public void Add(SkillStat other)
