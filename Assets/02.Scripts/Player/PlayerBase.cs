@@ -37,14 +37,13 @@ public class PlayerBase : MonoBehaviour, IDamageable, ISkillable
     private int _combatCurrentExp;
 
     private PlayerHit _hitSystem;
-    private PlayerAttack _attackSystem;
     private PlayerCombatLevelSystem _levelSystem;
     private PlayerEquipment _myEquipment;
     private PlayerStateMachine _stateMachine;
 
 
     public int Hp => Mathf.Max(_currentHp, 0);
-    public Transform AttackTarget => GetTarget(_attackSystem.AttackDir);  // 조준형 스킬 사용을 위한 타겟
+    public Transform AttackTarget => GetTarget(AttackDir);  // 조준형 스킬 사용을 위한 타겟
     public Bullet BulletPrefab => _bulletPrefab;
 
 
@@ -58,7 +57,7 @@ public class PlayerBase : MonoBehaviour, IDamageable, ISkillable
     public float ExperienceGainRate => _experienceGainRate;
     public float PickupRange => _pickupRange;
     public Vector2 MoveDir => _stateMachine.MoveDir;
-    public Vector2 AttackDir => _attackSystem.AttackDir;
+    public Vector2 AttackDir { get; private set; }
 
 
 
@@ -66,7 +65,6 @@ public class PlayerBase : MonoBehaviour, IDamageable, ISkillable
     {
         _currentHp = _maxhp;
         _hitSystem = new PlayerHit(this);
-        _attackSystem = new PlayerAttack(this, _bulletPrefab, _attackInterval);
         _levelSystem = new PlayerCombatLevelSystem(this, _combatMaxExp);
         _myEquipment = new PlayerEquipment(PlayerDataTransfer.Equipments);
 
@@ -88,21 +86,19 @@ public class PlayerBase : MonoBehaviour, IDamageable, ISkillable
     private void Start()
     {
         _itemPickupCollider.SetColliderRange(_pickupRange);
-        _attackSystem.SetDirection(new Vector2(0, -1));
+        AttackDir = new Vector2(0, -1);
     }
 
     private void Update()
     {
         _stateMachine.Update();
-
-        _attackSystem.OnAttack();
     }
 
 
 
     // 이동 기능
     public void OnMove(InputAction.CallbackContext ctx) => 
-        _stateMachine.MoveInput(ctx.ReadValue<Vector2>());
+        _stateMachine.MoveInput(ctx.ReadValue<Vector2>().normalized);
 
     // 공격 기능
     public Bullet FireBullet(Bullet bulletPrefab, Vector2 spawnPos) => 
@@ -113,14 +109,13 @@ public class PlayerBase : MonoBehaviour, IDamageable, ISkillable
     {
         if (!ctx.performed)
             return;
-
-        _attackSystem.SetDirection(ctx.ReadValue<Vector2>());
+        AttackDir = ctx.ReadValue<Vector2>().normalized;
     }
     // 마우스 방향으로 공격
     public void MouseAttackDir(InputAction.CallbackContext ctx)
     {
         Vector2 mousePos = Camera.main.ScreenToWorldPoint(ctx.ReadValue<Vector2>());
-        _attackSystem.SetDirection(mousePos - (Vector2)transform.position);
+        AttackDir = (mousePos - (Vector2)transform.position).normalized;
     }
     
 
@@ -142,8 +137,8 @@ public class PlayerBase : MonoBehaviour, IDamageable, ISkillable
 
     private void OnDead()
     {
-        Destroy(gameObject);
         _onDead.OnStartEvent();
+        Destroy(gameObject);
     }
 
     // 경험치 획득 로직
