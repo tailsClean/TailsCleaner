@@ -209,7 +209,9 @@ public abstract class ActiveSkill : MonoBehaviour
         }
 
         // 최종 스탯 = ((baseStat + 패시브 깡 스탯) * 공용 스탯 + (업그레이드 스탯 * 추가추가피해 패시브)) * 패시브 스탯 배율 합 * 최종 배율 (황금왕관, 양손잡이, 냥빨래)
-        Debug.Log($"최종 공격력 : {resultStat.Damage} = (( {baseStat.Damage}(기본) + 패시브 깡 스탯) * {commonStat.Damage}(공용)  + ({upgradeStat.Damage}(업그레이드) * 추가추가피해)) * {passiveMulStat.Damage}(패시브 배율) * 패시브 최종 배율");
+        //Debug.Log($"최종 공격력 : {resultStat.Damage} = (( {baseStat.Damage}(기본) + 패시브 깡 스탯) * {commonStat.Damage}(공용)  + ({upgradeStat.Damage}(업그레이드) * 추가추가피해)) * {passiveMulStat.Damage}(패시브 배율) * 패시브 최종 배율");
+        //Debug.Log($"최종 지속시간 : {resultStat.Duration} = (( {baseStat.Duration}(기본) + 패시브 깡 스탯) * {commonStat.Duration}(공용)  + ({upgradeStat.Duration}(업그레이드) * 추가추가피해)) * {passiveMulStat.Duration}(패시브 배율) * 패시브 최종 배율");
+        //Debug.Log($"최종 틱 주기 : {resultStat.TickRate} = (( {baseStat.TickRate}(기본) + 패시브 깡 스탯) * {commonStat.TickRate}(공용)  + ({upgradeStat.TickRate}(업그레이드) * 추가추가피해)) * {passiveMulStat.TickRate}(패시브 배율) * 패시브 최종 배율");
 
         // 최종 결과 스탯 반환
         return resultStat;

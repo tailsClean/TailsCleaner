@@ -26,6 +26,7 @@ public abstract class PassiveModifier
     public virtual bool OnProjectileInit(SkillStat runtimeBaseStat, SkillStat runtimeFinalStat) { return false; }   // 투사체 생성 시, bool은 재계산 확인용
     public virtual void OnDamage(MonsterBase monster) { }                             // 적 피해 시
     public virtual void OnPierce(SkillStat runTimePassiveMulStat) { }                 // 관통 시
+    public virtual void OnEnterArea(MonsterBase monster) { }                          // 장판 올라갈 시
     public virtual void OnDurationTick(SkillStat runTimePassiveMulStat) { }           // 지속시간마다
     public virtual void OnStun(MonsterBase monster) { }                               // 군중제어
 }
@@ -37,8 +38,8 @@ public class RaccoonCrateModifier : PassiveModifier
 {
     [Header("강화 태그 1개당 증가량")]
     public int DefencePerTag = 2;
-    public float EvasionRatePerTag = 0.01f;       // 1%
-    public float CriticalRatePerTag = 0.01f;      // 1%
+    public float EvasionChancePerTag = 0.01f;       // 1%
+    public float CriticalChancePerTag = 0.01f;      // 1%
     public float CriticalDamagePerTag = 0.05f;    // 5%
 
     // 반환해서 플레이어에게 적용시켜야함
@@ -46,10 +47,10 @@ public class RaccoonCrateModifier : PassiveModifier
     {
         return new PlayerStatBonus
         {
-            Defence          = DefencePerTag        * tagCount,
-            EvasionRate      = EvasionRatePerTag    * tagCount,
-            CriticalRate     = CriticalRatePerTag   * tagCount,
-            CriticalDamage   = CriticalDamagePerTag * tagCount,
+            Defence         = DefencePerTag         * tagCount,
+            EvasionChance   = EvasionChancePerTag   * tagCount,
+            CriticalChance  = CriticalChancePerTag  * tagCount,
+            CriticalDamage  = CriticalDamagePerTag  * tagCount,
         };
     }
 }
@@ -90,9 +91,9 @@ public class FocusAttackModifier : PassiveModifier
     [Header("최대 체력 감소율")]
     public float MaxHpDecreaseRate = 0.05f;
     
-    public override void ModifyBaseAdd(SkillStat baseStat)
+    public override void OnEnterArea(MonsterBase monster)
     {
-        baseStat.MaxHpDecreaseRate += MaxHpDecreaseRate;
+        //monster.DecreaseMaxHp(MaxHpDecreaseRate);
     }
 }
 

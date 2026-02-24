@@ -30,7 +30,10 @@ public class PlayerBase : MonoBehaviour, IDamageable
     [SerializeField] private IntEventChannelSO _onGainExp;              // 경험치 획득시 알리는 신호
     [SerializeField] private IntEventChannelSO _onLevelUp;
     //[SerializeField] private EquipmentEventChannelSO _onSetEquipment;   // 장비가 바뀌었다는 것을 알리는 신호
-    public event Action<Equipment.PARTS> OnSetEquipment;            
+    public event Action<Equipment.PARTS> OnSetEquipment;
+
+    [Header("공격 레이어")]
+    [SerializeField] private LayerMask _monsterLayer;
     
 
     private int _currentHp;
@@ -176,9 +179,12 @@ public class PlayerBase : MonoBehaviour, IDamageable
     private Transform GetTarget(Vector2 dir)
     {
         Vector2 origine = (Vector2)transform.position + dir;
-        var hit = Physics2D.Raycast(origine, dir);
-        Debug.Log(hit.collider.gameObject.name);
 
-        return hit.transform;
+        var hit = Physics2D.Raycast(origine, dir, Mathf.Infinity, _monsterLayer);
+
+        if (hit.collider != null)
+            return hit.transform;
+
+        return null;
     }
 }

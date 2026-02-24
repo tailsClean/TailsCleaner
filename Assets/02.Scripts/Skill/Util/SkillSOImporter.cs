@@ -206,10 +206,18 @@ public class SkillSOImporter : EditorWindow
     // 액티브 모디파이어 생성
     private ActiveModifier CreateActiveModifier(int upgradeId) => upgradeId switch
     {
-        40011 => new SoapRetargetModifier(),        // 감나빗!
-        40012 => new SoapPierceDamageModifier(),    // 거품내기
-        40014 => new SoapPierceSpeedModifier(),     // 거품 가속
-        40016 => new SoapRemovalPierceModifier(),    // 비누 덩어리
+        // 비누 거품
+        40002 => new SoapBubbleTrackingModifier(),        // 자동 추척 비누 지우개
+        40003 => new SoapBubblePlayerDefenseModifier(),   // 버블버블
+        40004 => new SoapBubbleSlowModifier(),            // 빨래당함
+        40007 => new SoapBubbleStunModifier(),            // 슬랩스틱
+        40008 => new SoapBubbleBurstModifier(),           // 거품 펑!
+
+        // 비누 던지기
+        40011 => new SoapRetargetModifier(),              // 감나빗!
+        40012 => new SoapPierceDamageModifier(),          // 거품내기
+        40014 => new SoapPierceSpeedModifier(),           // 거품 가속
+        40016 => new SoapRemovalPierceModifier(),         // 비누 덩어리
         _ => null  // 매핑된거 없으면 깡통
     };
     #endregion
@@ -257,8 +265,12 @@ public class SkillSOImporter : EditorWindow
     // 패시브 모디파이어 생성
     private PassiveModifier CreatePassiveModifier(int passiveId) => passiveId switch
     {
+        42001 => new RaccoonCrateModifier(),        // 매이크 라쿤 크레이트 어겐!
         42002 => new CenterSwitchModifier(),        // 목표를 중앙에 두고 스위치
+        42003 => new FocusAttackModifier(),         // 집중공략
         42004 => new DoubleExtraDamageModifier(),   // 추가 추가 피해
+        42005 => new SuperCleanModifier(),          // SuperClean
+        42012 => new SnowballingModifier(),         // 스노우볼링
         42014 => new ImplantModifier(),             // 기초적인 임플란트입니다
         42016 => new CatLaundryModifier(),          // 냥빨래
         _ => null
