@@ -1,4 +1,4 @@
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 using static ActiveSkillData;
 
@@ -77,21 +77,49 @@ public abstract class ActiveSkill : MonoBehaviour
 
     protected virtual void Update()
     {
-        // 발동 가능 체크
-        if (CanActive() == true)
+        // 쿨타임이 됐고 발동 조건도 맞으면 발동
+        if (IsCooldownReady() && CanFire())
         {
-            // 발동
             Active();
             _lastActiveTime = Time.time;
         }
     }
-    
-    // 발동 가능 체크
-    protected virtual bool CanActive()
+
+    // 쿨타임 체크
+    private bool IsCooldownReady()
     {
-        // 최소 쿨타임 0.1초
         float cooldown = Mathf.Max(MIN_SKILL_COOLDOWN, _finalStat.Cooldown);
         return Time.time >= _lastActiveTime + cooldown;
+    }
+
+    protected virtual bool CanFire()
+    {
+        var player = SkillManager.Instance.Player;
+
+        switch (_targetingType)
+        {
+            case TARGETING_TYPE.Barrier:                    // 베리어형 항상 발동
+                return true;
+
+            case TARGETING_TYPE.NonTarget:                  // 비대상형 공격 방향 있어야 발동
+                return player.AttackDir != Vector2.zero;
+
+            case TARGETING_TYPE.Closest:                    // 조준형 공격방향, 타겟 트랜스폼 둘 다 있어야 발동
+                return player.AttackDir != Vector2.zero && player.AttackTarget != null;
+
+            case TARGETING_TYPE.Directional:                // 이동방향형 이동 방향 있어야 발동
+                // return player.MoveDir != Vector2.zero;
+                return true;
+
+            default:
+                return true;
+        }
+    }
+
+    // 자식에서 쿨타임, 조건 변경 해야하면 이걸로 오버라이드
+    protected virtual bool CanActive()
+    {
+        return IsCooldownReady() && CanFire();
     }
 
     // 스킬 발동 로직 (자식에서)
