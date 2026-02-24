@@ -1,22 +1,32 @@
 using System.Collections.Generic;
-using UnityEngine.InputSystem;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
-public class UpgradeSelect : MonoBehaviour
+public class LevelUpSelect : MonoBehaviour
 {
-    private class SelectOptionInfo     // 선택한 선택지의 정보
+    public enum OPTION_TYPE  // 선택지 타입
     {
+        Active,
+        Passive,
+        Heal
+    }
+
+    public class SelectOptionInfo             // 선택한 선택지의 정보
+    {
+        public OPTION_TYPE Type;              // 선택지 타입
         public int TargetMainTag;             // 목표 메인 태그
-        public bool IsPassive;                // 패시브인지 체크
 
         // 액티브
-        public ActiveUpgradeData ActiveData;       // 업그레이드 데이터
+        public ActiveUpgradeData ActiveData;  // 업그레이드 데이터
         // 패시브
-        public PassiveSkillData PassiveData; 
+        public PassiveSkillData PassiveData;
+        // 회복
+        public IntEventChannelSO OnHealSelect;   // 회복 이벤트
 
         // 액티브 생성자
         public SelectOptionInfo(int mainTag, ActiveUpgradeData data)
         {
+            Type = OPTION_TYPE.Active;
             TargetMainTag = mainTag;
             ActiveData = data;
         }
@@ -24,8 +34,15 @@ public class UpgradeSelect : MonoBehaviour
         // 패시브 생성자
         public SelectOptionInfo(PassiveSkillData data)
         {
-            IsPassive = true;
+            Type = OPTION_TYPE.Passive;
             PassiveData = data;
+        }
+
+        // 회복 생성자
+        public SelectOptionInfo(IntEventChannelSO healEvent)
+        {
+            Type = OPTION_TYPE.Heal;
+            OnHealSelect = healEvent;
         }
     }
 
@@ -33,9 +50,15 @@ public class UpgradeSelect : MonoBehaviour
     public const int MAX_SELECT_OPTIONS = 3;      // 최대 선택지 수
     public const int ACTIVE_TIER_TWO_LEVEL = 4;   // 티어 2 레벨
     public const int ACTIVE_TIER_THREE_LEVEL = 7; // 티어 3 레벨
+    public const int HEAL_OPTION_RATIO = 30;      // 체력 회복 비율
 
     // 현재 선택지
     private List<SelectOptionInfo> _currentOptions = new List<SelectOptionInfo>();
+
+    public IReadOnlyList<SelectOptionInfo> CurrentOptions => _currentOptions;
+
+    [Header("체력 회복 선택지 이벤트 채널")]
+    [SerializeField] IntEventChannelSO _onHealSelect;   // 회복 이벤트
 
     // 선택지 옵션 설정
     public void GenerateOptions()
@@ -97,13 +120,12 @@ public class UpgradeSelect : MonoBehaviour
         }
 
         // 그래도 다 못 채웠을 경우엔
-        if (_currentOptions.Count < MAX_SELECT_OPTIONS)
+        // 다 채울 때까지
+        while (_currentOptions.Count < MAX_SELECT_OPTIONS)
         {
             // 회복 추가 로직
+            _currentOptions.Add(new SelectOptionInfo(_onHealSelect));
         }
-
-        // UI 없으니 임시 로그
-        PrintLog();
     }
 
     // 메인 태그 후보 추리기
@@ -126,6 +148,9 @@ public class UpgradeSelect : MonoBehaviour
             // 스킬 맵 순회 하면서
             foreach (int mainTag in SkillDataLoader.UpgradeMap.Keys)
             {
+                // 액티브 스킬 등록 안되어있으면 스킵
+                if (SkillDataLoader.GetActiveSkillData(mainTag) == null) continue;
+
                 // 미습득 스킬 후보에 추가
                 if (skillManager.GetActiveSkill(mainTag) == null)
                     tempMainTags.Add(mainTag);
@@ -237,25 +262,7 @@ public class UpgradeSelect : MonoBehaviour
 
         return result;
     }
-
-    // 테스트용 선택지 로그
-    private void PrintLog()
-    {
-        Debug.Log("[UpgradeSelect] 선택지 생성");
-        for (int i = 0; i < _currentOptions.Count; i++)
-        {
-            if (_currentOptions[i].IsPassive)
-            {
-                Debug.Log($"{i + 1}. {_currentOptions[i].PassiveData.PassiveName} ({_currentOptions[i].PassiveData.PassiveId}) ");
-            }
-            else
-            {
-                Debug.Log($"{i + 1}. {_currentOptions[i].ActiveData.Name} (MainTag : {_currentOptions[i].TargetMainTag}) / UpgradeID : {_currentOptions[i].ActiveData.Id}");
-            }
-        }
-    }
-
-    // 임시 테스트용 선택지 선택
+    // 선택지 선택
     public void SelectOption(int index)
     {
         // 비정상 범위 체크
@@ -264,29 +271,23 @@ public class UpgradeSelect : MonoBehaviour
         // 선택지 정보
         var option = _currentOptions[index];
 
-        // 매니저에서 선택지 적용
-        if (option.IsPassive)
-            SkillManager.Instance.ApplyPassiveOption(option.PassiveData);
-        else
-            SkillManager.Instance.ApplyActiveOption(option.TargetMainTag, option.ActiveData);
-
-        _currentOptions.Clear();
-    }
-
-
-   // 선택지 테스트용 인풋
-   private void Update()
-    {
-        // 스페이스바 선택지 생성
-        if (Keyboard.current.spaceKey.wasPressedThisFrame == true)
-            GenerateOptions();
-
-        // 숫자키 선택 및 적용
-        if (_currentOptions.Count > 0)
+        // 선택지 타입에 맞게 적용
+        switch (option.Type)
         {
-            if (Keyboard.current.digit1Key.wasPressedThisFrame) SelectOption(0);
-            if (Keyboard.current.digit2Key.wasPressedThisFrame) SelectOption(1);
-            if (Keyboard.current.digit3Key.wasPressedThisFrame) SelectOption(2);
-        }
+            case OPTION_TYPE.Active:    // 액티브
+                SkillManager.Instance.ApplyActiveOption(option.TargetMainTag, option.ActiveData);
+                break;
+
+            case OPTION_TYPE.Passive:   // 패시브
+                SkillManager.Instance.ApplyPassiveOption(option.PassiveData);
+                break;
+
+            case OPTION_TYPE.Heal:      // 회복
+                option.OnHealSelect.OnStartEvent(HEAL_OPTION_RATIO);
+                break;
+            }
+
+        // 선택지 정리
+        _currentOptions.Clear();
     }
 }

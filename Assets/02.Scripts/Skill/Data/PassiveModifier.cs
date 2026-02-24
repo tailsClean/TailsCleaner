@@ -42,6 +42,8 @@ public class RaccoonCrateModifier : PassiveModifier
     public float CriticalChancePerTag = 0.01f;      // 1%
     public float CriticalDamagePerTag = 0.05f;    // 5%
 
+    private int _lastTagCount;  // 최근 태그 수
+
     // 반환해서 플레이어에게 적용시켜야함
     public override PlayerStatBonus GetPlayerBonus(int tagCount)
     {

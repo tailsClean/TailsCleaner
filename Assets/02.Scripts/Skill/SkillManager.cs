@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-[RequireComponent(typeof(UpgradeSelect))]
+[RequireComponent(typeof(LevelUpSelect))]
 public class SkillManager : MonoBehaviour
 {
     public static SkillManager Instance;
