@@ -164,8 +164,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b02b8afd51bbe8749819f876e1b88cc1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SkillManager
-  _bubblePrefab: {fileID: 0}
-  _soapPrefab: {fileID: 0}
 --- !u!1 &504285888
 GameObject:
   m_ObjectHideFlags: 0
@@ -330,6 +328,14 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 2359834465883610264, guid: 1d22e24c33ab46e4386a4162918e7702, type: 3}
+      propertyPath: m_Actions
+      value: 
+      objectReference: {fileID: -944628639613478452, guid: a371a27b02cdbc245b8c9686ca3723e7, type: 3}
+    - target: {fileID: 2359834465883610264, guid: 1d22e24c33ab46e4386a4162918e7702, type: 3}
+      propertyPath: m_ActionEvents.Array.size
+      value: 13
+      objectReference: {fileID: 0}
     - target: {fileID: 5385765747078865120, guid: 1d22e24c33ab46e4386a4162918e7702, type: 3}
       propertyPath: m_LocalPosition.x
       value: 2.495894
@@ -369,6 +375,10 @@ PrefabInstance:
     - target: {fileID: 5385765747078865120, guid: 1d22e24c33ab46e4386a4162918e7702, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7566682362595537252, guid: 1d22e24c33ab46e4386a4162918e7702, type: 3}
+      propertyPath: _monsterLayer.m_Bits
+      value: 64
       objectReference: {fileID: 0}
     - target: {fileID: 8060241405893911967, guid: 1d22e24c33ab46e4386a4162918e7702, type: 3}
       propertyPath: m_Name

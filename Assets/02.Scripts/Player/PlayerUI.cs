@@ -16,6 +16,7 @@ public class PlayerUI : MonoBehaviour
         _onChangeHp.AddListener(UpdateHp);
         _onGainExp.AddListener(UpdateExp);
         _onLevelUp.AddListener(UpdateLevel);
+        _player = FindAnyObjectByType<PlayerBase>();
     }
 
     private void OnDisable()

@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 7069551867210678986}
   - component: {fileID: 5676767321155858366}
   - component: {fileID: 4623907807441698298}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: SpecialMonster
   m_TagString: Monster
   m_Icon: {fileID: 0}
@@ -187,7 +187,12 @@ MonoBehaviour:
   mass: 1
   KBResist: 1
   TestItem: {fileID: 353544400213195327, guid: 7bd74e2913a4ea44aa66ef718bc20d47, type: 3}
+  damageCooldown: 1
   moveType: 3
   patternAmplitude: 2
   patternFrequency: 5
   fleeDistance: 4
+  stateDuration: 3
+  idleDuration: 1
+  jumpCooldown: 3
+  jumpDuration: 0.8
