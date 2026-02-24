@@ -3,37 +3,46 @@
 public class MoveState : IPlayerState
 {
     private PlayerBase _player;
-
-    public Vector2 MoveDir {  get; private set; }
+    private int _moveSpeed;
+    private Vector2 _moveDir;
     
 
     public MoveState(PlayerBase player)
     {
         _player = player;
+        _moveSpeed = player.MoveSpeed;
     }
 
-    public void Enter()
-    {
-    }
+    public void Enter() { }
 
-    public void Exit()
-    {
-    }
+    public void Exit() { }
 
     public void Update()
     {
+        OnMove();
     }
 
-    //public void OnMove(InputAction.CallbackContext ctx)
-    //{
-    //    Vector2 dir = ctx.ReadValue<Vector2>();
+    public void HandleInput(PlayerInputData input)
+    {
+        _moveDir = input.MoveDir;
+    }
 
-    //    _moveDir = dir.normalized;
-    //    if (_moveDir.x < 0)
-    //        transform.localScale = new Vector3(-1, 1, 1);
-    //    else if (_moveDir.x > 0)
-    //        transform.localScale = new Vector3(1, 1, 1);
-    //}
 
-    public void SetDirection(Vector2 direction) => MoveDir = direction;
+
+    private void OnMove()
+    {
+        _player.transform.Translate(_moveDir * Time.deltaTime * _moveSpeed);
+
+        ChangeFlip();
+    }
+
+    private void ChangeFlip()
+    {
+        if (_moveDir.x < 0)
+            _player.transform.localScale = new Vector3(-1, 1, 1);
+        else if (_moveDir.x > 0)
+            _player.transform.localScale = new Vector3(1, 1, 1);
+    }
+
+
 }

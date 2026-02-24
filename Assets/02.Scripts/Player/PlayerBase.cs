@@ -38,7 +38,6 @@ public class PlayerBase : MonoBehaviour, IDamageable, ISkillable
     private int _metaCurrentExp;
     private int _combatCurrentExp;
 
-    private Vector2 _moveDir;
     private PlayerHit _hitSystem;
     private PlayerAttack _attackSystem;
     private PlayerCombatLevelSystem _levelSystem;
@@ -51,15 +50,17 @@ public class PlayerBase : MonoBehaviour, IDamageable, ISkillable
     public Bullet BulletPrefab => _bulletPrefab;
 
 
-    // 스킬데이터
+    // 스킬 공유 데이터
     public int AttackDamage => _attackPower;                               // 최종 데미지 수치
     public int DefensePower => _defensePower;
-    public int MoveSpeed => _moveSpeed + _myEquipment.GetMoveSpeedIncrease();
+    public int MoveSpeed => _moveSpeed /*+ _myEquipment.GetMoveSpeedIncrease()*/;
     public int CriticalChance => _criticalChance;
     public int CriticalDamageMultiplier => 2;
     public int EvasionChance => _evasionChance;
     public float ExperienceGainRate => _experienceGainRate;
     public float PickupRange => _pickupRange;
+    public Vector2 MoveDir => _stateMachine.MoveDir;
+    public Vector2 AttackDir => _attackSystem.AttackDir;
 
 
 
@@ -93,7 +94,7 @@ public class PlayerBase : MonoBehaviour, IDamageable, ISkillable
 
     private void Update()
     {
-        transform.Translate(_moveDir * Time.deltaTime * MoveSpeed);
+        _stateMachine.Update();
 
         _attackSystem.OnAttack();
     }
@@ -101,20 +102,12 @@ public class PlayerBase : MonoBehaviour, IDamageable, ISkillable
 
 
     // 이동 기능
-    public void OnMove(InputAction.CallbackContext ctx)
-    {
-        _stateMachine.SetState(PlayerStateMachine.State.Move);
-        Vector2 dir = ctx.ReadValue<Vector2>();
+    public void OnMove(InputAction.CallbackContext ctx) => 
+        _stateMachine.MoveInput(ctx.ReadValue<Vector2>());
 
-        _moveDir = dir.normalized;
-        if(_moveDir.x < 0)
-            transform.localScale = new Vector3(-1, 1, 1);
-        else if(_moveDir.x > 0)
-            transform.localScale = new Vector3(1, 1, 1);
-    }
-
-
-    public Bullet FireBullet(Bullet bulletPrefab, Vector2 spawnPos) => Instantiate(bulletPrefab, spawnPos, Quaternion.identity);
+    // 공격 기능
+    public Bullet FireBullet(Bullet bulletPrefab, Vector2 spawnPos) => 
+        Instantiate(bulletPrefab, spawnPos, Quaternion.identity);
 
     // 조이스틱 방향으로 공격
     public void StickAttackDir(InputAction.CallbackContext ctx)
@@ -144,13 +137,15 @@ public class PlayerBase : MonoBehaviour, IDamageable, ISkillable
         }
 
         if (Hp <= 0)
-        {
             OnDead();
-            _onDead.OnStartEvent();
-        }
     }
 
-    private void OnDead() => Destroy(gameObject);
+
+    private void OnDead()
+    {
+        Destroy(gameObject);
+        _onDead.OnStartEvent();
+    }
 
     // 경험치 획득 로직
     public void GainExperience(int experience)

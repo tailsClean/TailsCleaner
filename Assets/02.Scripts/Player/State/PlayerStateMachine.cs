@@ -1,10 +1,12 @@
-﻿
+﻿using UnityEngine;
 using System.Collections.Generic;
 
 public class PlayerStateMachine
 {
     private Dictionary<State, IPlayerState> _stateDict;
     public IPlayerState CurrentState { get; private set; }
+
+    public Vector2 MoveDir { get; private set; }
 
     public PlayerStateMachine(PlayerBase player)
     {
@@ -19,6 +21,18 @@ public class PlayerStateMachine
         CurrentState?.Exit();
         CurrentState = _stateDict[nextState];
         CurrentState?.Enter();
+    }
+
+    public void Update() => CurrentState.Update();
+
+    public void MoveInput(Vector2 dir)
+    {
+        MoveDir = dir;
+        _stateDict[State.Move].HandleInput(new PlayerInputData(MoveDir));
+        SetState(State.Move);
+
+        if(dir == Vector2.zero)
+            SetState(State.Idle);
     }
 
     public enum State
