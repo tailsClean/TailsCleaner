@@ -23,6 +23,6 @@ public class PlayerStateMachine
 
     public enum State
     {
-        Idle, Move, Attack
+        Idle, Move
     }
 }

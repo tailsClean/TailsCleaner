@@ -37,8 +37,7 @@ public class PlayerAttack
             return;
         }
 
-        if(_player.AttackDir != Vector2.zero)
-            _attackDir = _player.AttackDir.normalized;
+        _attackDir = _player.AttackDir.normalized;
 
         Vector2 spawnPos = (Vector2)_player.transform.position + _attackDir;
         var bullet = _player.FireBullet(_bullet, spawnPos);

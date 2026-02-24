@@ -29,6 +29,7 @@ public class PlayerBase : MonoBehaviour, IDamageable
     [SerializeField] private IntEventChannelSO _onPickupExp;
     [SerializeField] private IntEventChannelSO _onGainExp;              // 경험치 획득시 알리는 신호
     [SerializeField] private IntEventChannelSO _onLevelUp;
+    [SerializeField] private VoidEventChannelSO _onDead;
     //[SerializeField] private EquipmentEventChannelSO _onSetEquipment;   // 장비가 바뀌었다는 것을 알리는 신호
     public event Action<Equipment.PARTS> OnSetEquipment;            
     
@@ -85,14 +86,6 @@ public class PlayerBase : MonoBehaviour, IDamageable
         transform.Translate(_moveDir * Time.deltaTime * FinalMoveSpeed);
 
         _attackSystem.OnAttack();
-
-        //_timer += Time.deltaTime;
-
-        //if(_timer > _attackInterval)
-        //{
-        //    OnAttack();
-        //    _timer -= _attackInterval;
-        //}
     }
 
 
@@ -110,23 +103,11 @@ public class PlayerBase : MonoBehaviour, IDamageable
     }
 
 
-    // 공격 기능
-    private void OnAttack()
-    {
-        _stateMachine.SetState(PlayerStateMachine.State.Attack);
-    }
-
     public Bullet FireBullet(Bullet bulletPrefab, Vector2 spawnPos) => Instantiate(bulletPrefab, spawnPos, Quaternion.identity);
 
     // 조이스틱 방향으로 공격
     public void StickAttackDir(InputAction.CallbackContext ctx)
     {
-        if (ctx.canceled)
-        {
-            _attackDir = new Vector2(0, -transform.localScale.y);
-            AttackDir = new Vector2(0, -transform.localScale.y);
-        }
-
         if (!ctx.performed)
             return;
 
@@ -144,15 +125,22 @@ public class PlayerBase : MonoBehaviour, IDamageable
     // 피격시, 발동되는 메서드
     public void TakeDamage(float damage)
     {
-        int hp = _hitSystem.TakeDamage((int)_currentHp, (int)damage);
+        int hp = _hitSystem.OnHit(_currentHp, (int)damage);
 
         if(_currentHp != hp)
         {
             _currentHp = hp;
             _onHit.OnStartEvent(Hp);
         }
+
+        if (Hp <= 0)
+        {
+            OnDead();
+            _onDead.OnStartEvent();
+        }
     }
 
+    private void OnDead() => Destroy(gameObject);
 
     // 경험치 획득 로직
     public void GainExperience(int experience)
@@ -170,6 +158,8 @@ public class PlayerBase : MonoBehaviour, IDamageable
    
     // 주위 아이템(경험치) 끌어모으는 메서드
     private void OnItemPickup(IPickable item) => _levelSystem.ItemPickup(transform, item);
+
+
 
 
     // 조준형 스킬을 위한 타겟 검사
