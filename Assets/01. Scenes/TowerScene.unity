@@ -151,8 +151,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2824e90f1913e6b4aaedbcb4d7e2ce56, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::UIManager
-  currentSceneUI: {fileID: 758867722}
-  stageTrans: {fileID: 0}
+  _currentSceneUI: {fileID: 0}
+  _stageTrans: {fileID: 0}
 --- !u!114 &712395829
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -236,11 +236,6 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 0}
---- !u!1 &758867722 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 6531991450064886475, guid: 67fb5a67b32c760429e289c6122948d7, type: 3}
-  m_PrefabInstance: {fileID: 3558534337684356773}
-  m_PrefabAsset: {fileID: 0}
 --- !u!224 &758867723 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 819717528942735072, guid: 67fb5a67b32c760429e289c6122948d7, type: 3}
@@ -503,6 +498,14 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 819717528942735072, guid: 67fb5a67b32c760429e289c6122948d7, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2847910073857972449, guid: 67fb5a67b32c760429e289c6122948d7, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2847910073857972449, guid: 67fb5a67b32c760429e289c6122948d7, type: 3}
+      propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4430639013754153059, guid: 67fb5a67b32c760429e289c6122948d7, type: 3}
