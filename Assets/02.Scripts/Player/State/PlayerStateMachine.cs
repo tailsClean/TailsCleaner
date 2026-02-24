@@ -11,7 +11,6 @@ public class PlayerStateMachine
         _stateDict = new Dictionary<State, IPlayerState>();
         _stateDict.Add(State.Idle, new IdleState(player));
         _stateDict.Add(State.Move, new MoveState(player));
-        _stateDict.Add(State.Attack, new AttackState(player, player.BulletPrefab));
         CurrentState = _stateDict[State.Idle];
     }
 

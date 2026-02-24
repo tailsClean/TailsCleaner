@@ -1,22 +1,35 @@
 ﻿using UnityEngine;
 
 
-public class AttackState : IPlayerState
+public class PlayerAttack 
 {
     private PlayerBase _player;
     private Bullet _bullet;
+    private float _attackInterval;
     private Vector2 _attackDir;
+    private float _timer;
 
-
-    public AttackState(PlayerBase player, Bullet bullet)
+    public PlayerAttack(PlayerBase player, Bullet bullet, float attackInterval)
     {
         _player = player;
         _bullet = bullet;
+        _attackInterval = attackInterval;
         _attackDir = _attackDir = new Vector2(0, -player.transform.localScale.y);
-        Debug.Log(bullet);
     }
 
-    public void Enter()
+
+    public void OnAttack()
+    {
+        _timer += Time.deltaTime;
+
+        if (_timer > _attackInterval)
+        {
+            FireBullet();
+            _timer -= _attackInterval;
+        }
+    }
+
+    private void FireBullet()
     {
         if(_bullet == null)
         {
@@ -32,15 +45,4 @@ public class AttackState : IPlayerState
 
         bullet.SetDirection(_attackDir.normalized);
     }
-
-    public void Exit()
-    {
-        _attackDir = new Vector2(0, -_player.transform.localScale.y);
-    }
-
-    public void Update()
-    {
-
-    }
-
 }
