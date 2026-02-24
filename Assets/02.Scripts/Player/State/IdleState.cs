@@ -1,16 +1,17 @@
 ﻿
 
-public class AttackState : IPlayerState
+public class IdleState : IPlayerState
 {
     private PlayerBase _player;
 
-    public AttackState(PlayerBase player)
+    public IdleState(PlayerBase player)
     {
         _player = player;
     }
 
     public void Enter()
     {
+
     }
 
     public void Exit()
@@ -19,5 +20,7 @@ public class AttackState : IPlayerState
 
     public void Update()
     {
+
     }
+
 }
