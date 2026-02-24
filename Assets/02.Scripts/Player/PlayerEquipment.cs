@@ -3,9 +3,9 @@ using System.Collections.Generic;
 
 public class PlayerEquipment
 {
-    private Dictionary<Equipment.PARTS, Equipment> _myEquipments;
+    private Dictionary<EquipmentBase.PARTS, EquipmentBase> _myEquipments;
 
-    public PlayerEquipment(Dictionary<Equipment.PARTS, Equipment> equipments)
+    public PlayerEquipment(Dictionary<EquipmentBase.PARTS, EquipmentBase> equipments)
     {
         _myEquipments = equipments;
         if (equipments == null)
@@ -14,13 +14,11 @@ public class PlayerEquipment
 
     public int GetMoveSpeedIncrease()
     {
-        if (_myEquipments == null || _myEquipments[Equipment.PARTS.Shoes] == null)
+        if (_myEquipments == null || _myEquipments[EquipmentBase.PARTS.Shoes] == null)
             return 0;
 
-        var shoes = _myEquipments[Equipment.PARTS.Shoes].ApplyEquipment<ShoesEquipment>();
-        if( shoes == null )
-            return 0;
+        var shoes = _myEquipments[EquipmentBase.PARTS.Shoes];
 
-        return shoes.MoveSpeedIncrease;
+        return shoes.GetIncreaseStat(EquipmentIncreaseStat.STAT.MoveSpeed);
     }
 }

@@ -30,8 +30,6 @@ public class PlayerBase : MonoBehaviour, IDamageable, ISkillable
     [SerializeField] private IntEventChannelSO _onGainExp;              // 경험치 획득시 알리는 신호
     [SerializeField] private IntEventChannelSO _onLevelUp;
     [SerializeField] private VoidEventChannelSO _onDead;
-    //[SerializeField] private EquipmentEventChannelSO _onSetEquipment;   // 장비가 바뀌었다는 것을 알리는 신호
-    public event Action<Equipment.PARTS> OnSetEquipment;            
     
 
     private int _currentHp;
@@ -53,7 +51,7 @@ public class PlayerBase : MonoBehaviour, IDamageable, ISkillable
     // 스킬 공유 데이터
     public int AttackDamage => _attackPower;                               // 최종 데미지 수치
     public int DefensePower => _defensePower;
-    public int MoveSpeed => _moveSpeed /*+ _myEquipment.GetMoveSpeedIncrease()*/;
+    public int MoveSpeed => _moveSpeed + _myEquipment.GetMoveSpeedIncrease();
     public int CriticalChance => _criticalChance;
     public int CriticalDamageMultiplier => 2;
     public int EvasionChance => _evasionChance;
@@ -70,8 +68,9 @@ public class PlayerBase : MonoBehaviour, IDamageable, ISkillable
         _hitSystem = new PlayerHit(this);
         _attackSystem = new PlayerAttack(this, _bulletPrefab, _attackInterval);
         _levelSystem = new PlayerCombatLevelSystem(this, _combatMaxExp);
-        _stateMachine = new PlayerStateMachine(this);
         _myEquipment = new PlayerEquipment(PlayerDataTransfer.Equipments);
+
+        _stateMachine = new PlayerStateMachine(this);
     }
 
     private void OnEnable()
