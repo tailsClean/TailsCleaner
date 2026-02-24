@@ -121,7 +121,7 @@ public class LevelUpSelect : MonoBehaviour
 
         // 그래도 다 못 채웠을 경우엔
         // 다 채울 때까지
-        while (_currentOptions.Count >= MAX_SELECT_OPTIONS)
+        while (_currentOptions.Count < MAX_SELECT_OPTIONS)
         {
             // 회복 추가 로직
             _currentOptions.Add(new SelectOptionInfo(_onHealSelect));
@@ -148,6 +148,9 @@ public class LevelUpSelect : MonoBehaviour
             // 스킬 맵 순회 하면서
             foreach (int mainTag in SkillDataLoader.UpgradeMap.Keys)
             {
+                // 액티브 스킬 등록 안되어있으면 스킵
+                if (SkillDataLoader.GetActiveSkillData(mainTag) == null) continue;
+
                 // 미습득 스킬 후보에 추가
                 if (skillManager.GetActiveSkill(mainTag) == null)
                     tempMainTags.Add(mainTag);
