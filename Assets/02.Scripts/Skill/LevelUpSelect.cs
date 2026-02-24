@@ -2,15 +2,15 @@ using System.Collections.Generic;
 using UnityEngine.InputSystem;
 using UnityEngine;
 
-public class UpgradeSelect : MonoBehaviour
+public class LevelUpSelect : MonoBehaviour
 {
-    private class SelectOptionInfo     // 선택한 선택지의 정보
+    public class SelectOptionInfo             // 선택한 선택지의 정보
     {
         public int TargetMainTag;             // 목표 메인 태그
         public bool IsPassive;                // 패시브인지 체크
 
         // 액티브
-        public ActiveUpgradeData ActiveData;       // 업그레이드 데이터
+        public ActiveUpgradeData ActiveData;  // 업그레이드 데이터
         // 패시브
         public PassiveSkillData PassiveData; 
 
@@ -36,6 +36,8 @@ public class UpgradeSelect : MonoBehaviour
 
     // 현재 선택지
     private List<SelectOptionInfo> _currentOptions = new List<SelectOptionInfo>();
+
+    public IReadOnlyList<SelectOptionInfo> CurrentOptions => _currentOptions;
 
     // 선택지 옵션 설정
     public void GenerateOptions()
@@ -255,7 +257,7 @@ public class UpgradeSelect : MonoBehaviour
         }
     }
 
-    // 임시 테스트용 선택지 선택
+    // 선택지 선택
     public void SelectOption(int index)
     {
         // 비정상 범위 체크
@@ -271,22 +273,5 @@ public class UpgradeSelect : MonoBehaviour
             SkillManager.Instance.ApplyActiveOption(option.TargetMainTag, option.ActiveData);
 
         _currentOptions.Clear();
-    }
-
-
-   // 선택지 테스트용 인풋
-   private void Update()
-    {
-        // 스페이스바 선택지 생성
-        if (Keyboard.current.spaceKey.wasPressedThisFrame == true)
-            GenerateOptions();
-
-        // 숫자키 선택 및 적용
-        if (_currentOptions.Count > 0)
-        {
-            if (Keyboard.current.digit1Key.wasPressedThisFrame) SelectOption(0);
-            if (Keyboard.current.digit2Key.wasPressedThisFrame) SelectOption(1);
-            if (Keyboard.current.digit3Key.wasPressedThisFrame) SelectOption(2);
-        }
     }
 }
