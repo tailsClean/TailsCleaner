@@ -42,6 +42,6 @@ public class PlayerAttack
         Vector2 spawnPos = (Vector2)_player.transform.position + _attackDir;
         var bullet = _player.FireBullet(_bullet, spawnPos);
 
-        bullet.SetDirection(_attackDir.normalized);
+        bullet.Init(_attackDir.normalized, _player.FinalDamage);
     }
 }

@@ -3,7 +3,7 @@
 public class Bullet : MonoBehaviour
 {
     [SerializeField] private float _moveSpeed = 5;
-    [SerializeField] private float _attackDamage = 10;
+    private float _attackDamage;
 
     private Vector2 _dir;
 
@@ -13,9 +13,10 @@ public class Bullet : MonoBehaviour
         Destroy(gameObject, 2f);
     }
 
-    public void SetDirection(Vector3 dir)
+    public void Init(Vector3 dir, int attackDamage)
     {
         _dir = dir.normalized;
+        _attackDamage = attackDamage;
     }
 
     private void OnTriggerEnter2D(Collider2D collision)

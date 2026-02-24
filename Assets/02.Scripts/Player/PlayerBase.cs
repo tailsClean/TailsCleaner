@@ -5,7 +5,7 @@ using UnityEngine.InputSystem;
 public class PlayerBase : MonoBehaviour, IDamageable
 {
     [SerializeField] private int _maxhp = 15;
-    [SerializeField] private int _attackPower = 2;
+    [SerializeField] private int _attackPower = 10;
     [SerializeField] private int _defensePower = 1;
     [SerializeField] private int _evasionChance = 10;                   // 회피율
     [SerializeField] private int _criticalChance = 10;
