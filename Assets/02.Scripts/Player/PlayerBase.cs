@@ -2,7 +2,7 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-public class PlayerBase : MonoBehaviour, IDamageable
+public class PlayerBase : MonoBehaviour, IDamageable, ISkillable
 {
     [SerializeField] private int _maxhp = 15;
     [SerializeField] private int _attackPower = 10;
@@ -18,10 +18,10 @@ public class PlayerBase : MonoBehaviour, IDamageable
     [Header("인게임 정보")]
     [SerializeField] private int _combatLevel = 1;
     [SerializeField] private int _combatMaxExp = 50;
-    [SerializeField] private float _experienceGainRate = 10;            // 경험치 획득률
-    [SerializeField] private int _pickupRange = 1;
+    [SerializeField] private float _experienceGainRate = 10;            // 경험치 획득량
     [SerializeField] private float _attackInterval = 0.5f;              // 자동공격 주기
-    [SerializeField] private ItemPickup _itemPickupCollider;            // 아이템 줍는 범위(콜라이더)를 가짐
+    [SerializeField] private float _pickupRange = 1;                    // 아이템 줍는 범위
+    [SerializeField] private ItemPickup _itemPickupCollider;            // 아이템 줍는 범위 콜라이더
     [SerializeField] private Bullet _bulletPrefab;
 
     [Header("이벤트 채널")]
@@ -39,7 +39,6 @@ public class PlayerBase : MonoBehaviour, IDamageable
     private int _combatCurrentExp;
 
     private Vector2 _moveDir;
-    private Vector2 _attackDir;
     private PlayerHit _hitSystem;
     private PlayerAttack _attackSystem;
     private PlayerCombatLevelSystem _levelSystem;
@@ -48,11 +47,21 @@ public class PlayerBase : MonoBehaviour, IDamageable
 
 
     public int Hp => Mathf.Max(_currentHp, 0);
-    public int FinalDamage => _attackPower;                             // 최종 데미지 수치
-    public int FinalMoveSpeed => _moveSpeed + _myEquipment.GetMoveSpeedIncrease();
-    public Transform AttackTarget => GetTarget(AttackDir);              // 조준형 스킬 사용을 위한 타겟
+    public Transform AttackTarget => GetTarget(_attackSystem.AttackDir);  // 조준형 스킬 사용을 위한 타겟
     public Bullet BulletPrefab => _bulletPrefab;
-    public Vector2 AttackDir { get; private set; }
+
+
+    // 스킬데이터
+    public int AttackDamage => _attackPower;                               // 최종 데미지 수치
+    public int DefensePower => _defensePower;
+    public int MoveSpeed => _moveSpeed + _myEquipment.GetMoveSpeedIncrease();
+    public int CriticalChance => _criticalChance;
+    public int CriticalDamageMultiplier => 2;
+    public int EvasionChance => _evasionChance;
+    public float ExperienceGainRate => _experienceGainRate;
+    public float PickupRange => _pickupRange;
+
+
 
     private void Awake()
     {
@@ -79,13 +88,12 @@ public class PlayerBase : MonoBehaviour, IDamageable
     private void Start()
     {
         _itemPickupCollider.SetColliderRange(_pickupRange);
-        AttackDir = new Vector2(0, -1);
-
+        _attackSystem.SetDirection(new Vector2(0, -1));
     }
 
     private void Update()
     {
-        transform.Translate(_moveDir * Time.deltaTime * FinalMoveSpeed);
+        transform.Translate(_moveDir * Time.deltaTime * MoveSpeed);
 
         _attackSystem.OnAttack();
     }
@@ -95,6 +103,7 @@ public class PlayerBase : MonoBehaviour, IDamageable
     // 이동 기능
     public void OnMove(InputAction.CallbackContext ctx)
     {
+        _stateMachine.SetState(PlayerStateMachine.State.Move);
         Vector2 dir = ctx.ReadValue<Vector2>();
 
         _moveDir = dir.normalized;
@@ -113,14 +122,13 @@ public class PlayerBase : MonoBehaviour, IDamageable
         if (!ctx.performed)
             return;
 
-        _attackDir = ctx.ReadValue<Vector2>();
-        AttackDir = ctx.ReadValue<Vector2>();
+        _attackSystem.SetDirection(ctx.ReadValue<Vector2>());
     }
     // 마우스 방향으로 공격
     public void MouseAttackDir(InputAction.CallbackContext ctx)
     {
-        _attackDir = ctx.ReadValue<Vector2>();
-        _attackDir = Camera.main.ScreenToWorldPoint(_attackDir) - transform.position;
+        Vector2 mousePos = Camera.main.ScreenToWorldPoint(ctx.ReadValue<Vector2>());
+        _attackSystem.SetDirection(mousePos - (Vector2)transform.position);
     }
     
 
