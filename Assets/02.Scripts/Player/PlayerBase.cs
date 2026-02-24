@@ -79,6 +79,8 @@ public class PlayerBase : MonoBehaviour, IDamageable
     private void Start()
     {
         _itemPickupCollider.SetColliderRange(_pickupRange);
+        AttackDir = new Vector2(0, -1);
+
     }
 
     private void Update()
