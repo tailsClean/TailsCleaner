@@ -1,5 +1,5 @@
-﻿using System.Collections.Generic;
-using System.Threading;
+﻿using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class SoapBubbleArea : SkillArea<SoapBubbleModifierData>
@@ -7,11 +7,21 @@ public class SoapBubbleArea : SkillArea<SoapBubbleModifierData>
     // 적 체류 시작 시간
     private readonly Dictionary<MonsterBase, float> _monsterEnterTimes = new();
 
+
+    private MonsterBase _trackTarget = null;    // 현재 추적 대상
+    private Coroutine _searchCoroutine = null;  // 탐색 코루틴
+
     public override void Init(ActiveSkill owner, SoapBubbleModifierData modifierData, Vector2 dir = default)
     {
         _monsterEnterTimes.Clear();
+        _trackTarget = null;
+        _searchCoroutine = null;
 
         base.Init(owner, modifierData, dir);
+
+        // 생성 즉시 탐색 한 번
+        if (_modifierData.Tracking)
+            StartSearch();
     }
 
     protected override void Update()
@@ -31,7 +41,50 @@ public class SoapBubbleArea : SkillArea<SoapBubbleModifierData>
     // 가장 가까운 적 추적
     private void TrackClosestEnemy()
     {
+        // 타겟 유효 확인
+        if (_trackTarget == null)
+        {
+            // 탐색 코루틴 없으면 시작
+            if (_searchCoroutine == null)
+                StartSearch();
+            return;
+        }
 
+        // 이동 속도
+        float speed = _runtimeFinalStat.ProjectileSpeed;
+        if (speed <= 0f) return;
+
+        // 타겟 방향으로 이동
+        transform.position = Vector2.MoveTowards( transform.position, _trackTarget.transform.position, speed * Time.deltaTime );
+    }
+
+    // 탐색 코루틴 시작
+    private void StartSearch()
+    {
+        // 이미 실행중이면 무시
+        if (_searchCoroutine != null) return;
+
+        _searchCoroutine = StartCoroutine(SearchTargetCoroutine());
+    }
+
+    // 적 탐색 코루틴
+    private IEnumerator SearchTargetCoroutine()
+    {
+        while (true)
+        {
+            _trackTarget = SkillManager.Instance.FindClosestMonster(transform);
+
+            if (_trackTarget != null)
+            {
+                // 찾으면 비우고 종료
+                // Update에서 추적 시작
+                _searchCoroutine = null;
+                yield break;
+            }
+
+            // 탐색 대기 시간
+            yield return SkillManager.Instance.SearchInterval;
+        }
     }
 
 

@@ -1,4 +1,4 @@
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 
 [RequireComponent(typeof(LevelUpSelect))]
@@ -9,7 +9,10 @@ public class SkillManager : MonoBehaviour
     public const int MAX_ACTIVE_SLOTS = 6;              // 최대 액티브 스킬 수
     public const int MAX_PASSIVE_SLOTS = 6;             // 최대 패시브 스킬 수
     public const int DEFAULT_ACTIVE_MAIN_TAG = 41002;   // 기본 지급 스킬 메인 태그 (비누 던지기)
+    public const float DEFAULT_SEARCH_RADIUS = 20f;     // 가장 가까운 적 탐색용 범위
+    public const float SEARCH_INTERVAL = 0.2f;          // 탐색 주기
 
+    public WaitForSeconds SearchInterval { get; } = new WaitForSeconds(SEARCH_INTERVAL);
 
     // 플레이어 보유 스킬 리스트
     public List<ActiveSkill> MyActiveSkills { get; private set; } = new();
@@ -22,6 +25,9 @@ public class SkillManager : MonoBehaviour
 
 
     public PlayerBase Player { get; private set; }
+
+    [Header("적 탐색 레이어")]
+    [SerializeField] LayerMask _monsterLayer; 
 
 
 
@@ -164,4 +170,34 @@ public class SkillManager : MonoBehaviour
     }
 
     #endregion
+
+
+
+    // 공용 적 탐색
+    public MonsterBase FindClosestMonster(Transform origin, float radius = DEFAULT_SEARCH_RADIUS)
+    {
+        // 범위 내 몬스터 레이어 수집
+        Collider2D[] hits = Physics2D.OverlapCircleAll(origin.position, radius, _monsterLayer);
+
+        MonsterBase closest = null;
+        float minSqrDist = float.MaxValue;
+
+        foreach (var hit in hits)
+        {
+            // 몬스터 베이스 없으면 패스
+            if (hit.TryGetComponent<MonsterBase>(out var monster) == false) continue;
+
+            // sqrMagnitude 사용으로 sqrt 회피
+            float sqrDist = ((Vector2)origin.position - (Vector2)hit.transform.position).sqrMagnitude;
+
+            // 최소 거리 갱신
+            if (sqrDist < minSqrDist)
+            {
+                minSqrDist = sqrDist;
+                closest = monster;
+            }
+        }
+
+        return closest;
+    }
 }
