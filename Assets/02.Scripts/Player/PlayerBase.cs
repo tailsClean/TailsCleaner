@@ -25,7 +25,7 @@ public class PlayerBase : MonoBehaviour, IDamageable
     [SerializeField] private Bullet _bulletPrefab;
 
     [Header("이벤트 채널")]
-    [SerializeField] private IntEventChannelSO _onChangeHp;
+    [SerializeField] private IntEventChannelSO _onHit;
     [SerializeField] private IntEventChannelSO _onPickupExp;
     [SerializeField] private IntEventChannelSO _onGainExp;              // 경험치 획득시 알리는 신호
     [SerializeField] private IntEventChannelSO _onLevelUp;
@@ -149,7 +149,7 @@ public class PlayerBase : MonoBehaviour, IDamageable
         if(_currentHp != hp)
         {
             _currentHp = hp;
-            _onChangeHp.OnStartEvent(Hp);
+            _onHit.OnStartEvent(Hp);
         }
     }
 
