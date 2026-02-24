@@ -54,7 +54,7 @@ public class SkillObjectBase : MonoBehaviour
         if (_expired == false && Time.time >= _createTime + _runtimeFinalStat.Duration)
             ExpireObject();
 
-        // 스킬 지속 시간 틱 체크
+        // 스킬 지속 시간 틱 체크 (스노우볼링)
         if (_runtimeFinalStat.DurationTickInterval <= 0f) return;
         if (Time.time >= _lastDurationTickTime + _runtimeFinalStat.DurationTickInterval)
         {
@@ -76,7 +76,10 @@ public class SkillObjectBase : MonoBehaviour
     // 물리 적용 (속도, 크기)
     protected void ApplyPhysics()
     {
-        if (_rigidbody != null) _rigidbody.linearVelocity = _dir * _runtimeFinalStat.ProjectileSpeed;
+        if (_rigidbody != null)
+        {
+            _rigidbody.linearVelocity = _dir * _runtimeFinalStat.ProjectileSpeed;
+        }
 
         transform.localScale = Vector3.one * _runtimeFinalStat.Size;
     }
@@ -92,11 +95,12 @@ public class SkillObjectBase : MonoBehaviour
 
     // 수명 만료
     protected void ExpireObject()
-    {
+    {        
         if (_expired == true) return;
         _expired = true;
 
         OnExpire();
+
         Destroy(gameObject);
         // 풀링 반환으로 변경
     }

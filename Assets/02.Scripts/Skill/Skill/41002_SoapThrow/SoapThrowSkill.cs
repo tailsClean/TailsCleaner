@@ -10,12 +10,27 @@ public class SoapThrowSkill : ActiveSkill<SoapThrowProjectile, SoapThrowModifier
 
         for (int i = 0; i < count; i++)
         {
-            // 랜덤 원 방향 (임시)
-            // 공격 방향에서 가까운 적으로 변경해야 함
-            Vector2 randomDir = Random.insideUnitCircle.normalized;
+            // 공격 방향에서 가장 가까운 적 위치 가져오기
+            Transform targetTrans = SkillManager.Instance.Player.AttackTarget;
+            Vector2 dir;
+
+            // 타겟이 있다면
+            if (targetTrans != null)
+                dir = (targetTrans.position - transform.position).normalized;
+
+            // 타겟이 없다면
+            else
+            {
+                // 마지막 공격 방향
+                dir = SkillManager.Instance.Player.AttackDir.normalized;
+
+                // 혹시나 시작 시 안건들면 0 이니까 
+                if (dir == Vector2.zero)
+                    dir = new Vector2(SkillManager.Instance.Player.transform.localScale.x, 0);
+            }
 
             // 발사
-            SpawnSoap(randomDir);
+            SpawnSoap(dir);
         }
     }
 

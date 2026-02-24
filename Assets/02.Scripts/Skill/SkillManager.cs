@@ -21,11 +21,11 @@ public class SkillManager : MonoBehaviour
     public bool IsPassiveSlotFull => MyPassiveSkills.Count >= MAX_PASSIVE_SLOTS;
 
 
-    [Header("테스트 프리팹")]
-    [SerializeField] GameObject _bubblePrefab;
-    [SerializeField] GameObject _soapPrefab;
+    public PlayerBase Player { get; private set; }
 
-    private void Awake() { Instance = this; }
+
+
+    private void Awake() { Instance = this; Player = GetComponent<PlayerBase>(); }
 
     private void Start()
     {
