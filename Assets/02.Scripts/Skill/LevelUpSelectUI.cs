@@ -13,6 +13,11 @@ public class LevelUpSelectUI : MonoBehaviour
     [Header("레벨업 이벤트 채널")]
     [SerializeField] private IntEventChannelSO _onLevelUp;
 
+    [Header("체력 회복 선택지 설정")]
+    [SerializeField] string _healName = "체력 회복";
+    [SerializeField] string _healDesc = "최대 체력의 30%를 회복한다";
+    [SerializeField] Sprite _healIcon;
+
     private LevelUpSelect _levelUpSelect;
 
     private void Start()
@@ -111,11 +116,31 @@ public class LevelUpSelectUI : MonoBehaviour
             OptionButtons[i].gameObject.SetActive(true);
             var optionData = options[i];
 
-            // 패시브,액티브 데이터 분기
-            string name = optionData.IsPassive ? optionData.PassiveData.PassiveName : optionData.ActiveData.Name;
-            string desc = optionData.IsPassive ? optionData.PassiveData.Desc : optionData.ActiveData.Desc;
+            string name = "";
+            string desc = "";
+            Sprite icon = null;
 
-            Sprite icon = null; // 나중에 데이터에서 아이콘 꺼내오기
+            // 타입에 맞게
+            switch (optionData.Type)
+            {
+                case LevelUpSelect.OPTION_TYPE.Active:      // 액티브
+                    name = optionData.ActiveData.Name;
+                    desc = optionData.ActiveData.Desc;
+                    // icon = optionData.ActiveData.Icon;
+                    break;
+
+                case LevelUpSelect.OPTION_TYPE.Passive:     // 패시브
+                    name = optionData.PassiveData.PassiveName;
+                    desc = optionData.PassiveData.Desc;
+                    // icon = optionData.PassiveData.Icon;
+                    break;
+
+                case LevelUpSelect.OPTION_TYPE.Heal:        // 회복
+                    name = _healName;
+                    desc = _healDesc;
+                    icon = _healIcon;
+                    break;
+            }
 
             // 선택지 내용 설정
             OptionButtons[i].Setup(name, desc, icon);
