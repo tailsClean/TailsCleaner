@@ -48,15 +48,13 @@ public class LevelUpSelectUI : MonoBehaviour
     // 레벨 업 시 호출
     public void LevelUp(int level)
     {
-        Debug.Log("레벨업");
-
         gameObject.SetActive(true);
 
         // 상단 보유 스킬 아이콘 갱신
         UpdateSkillIcons(); 
 
         // 새로운 선택지 생성
-        _levelUpSelect.GenerateOptions();
+        _levelUpSelect.GenerateOptions(level);
 
         // 생성된 선택지 데이터 버튼들에 채워넣기
         UpdateOptionButtons();
