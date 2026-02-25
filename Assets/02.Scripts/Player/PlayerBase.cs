@@ -9,6 +9,7 @@ public class PlayerBase : MonoBehaviour, IDamageable, ISkillable
     [SerializeField] private int _defensePower = 1;
     [SerializeField] private int _evasionChance = 10;                   // 회피율
     [SerializeField] private int _criticalChance = 10;
+    [SerializeField] private int _criticalDamageMultiplier = 2;
     [SerializeField] private int _criticalResistance = 10;              // 치명 저항
     [SerializeField] private int _moveSpeed = 5;
     [SerializeField] private int _healthRegen = 10;                     // Hp 회복량
@@ -55,7 +56,7 @@ public class PlayerBase : MonoBehaviour, IDamageable, ISkillable
     public int DefensePower => _defensePower;
     public int MoveSpeed => _moveSpeed + _myEquipment.GetMoveSpeedIncrease();
     public int CriticalChance => _criticalChance;
-    public int CriticalDamageMultiplier => 2;
+    public int CriticalDamageMultiplier => _criticalDamageMultiplier;
     public int EvasionChance => _evasionChance;
     public float ExperienceGainRate => _experienceGainRate;
     public float PickupRange => _pickupRange;

@@ -66,13 +66,18 @@ public class UpgradeManager : MonoBehaviour
         }
     }
 
+    // 최대 등급 확인
     private void CheckMaxGrade()
     {
+        if (!_isUpgradable)
+            return;
+
         _isUpgradable = !_upgradeEquipment.IsGradeMaxGrade;
         if (!_isUpgradable)
             Debug.Log("최대 등급의 장비입니다.");
     }
 
+    // 재료의 등급 확인
     private void CheckMaterialGrade()
     {
         if (!_isUpgradable)
@@ -95,6 +100,7 @@ public class UpgradeManager : MonoBehaviour
             Debug.Log("재료 장비의 등급이 적합하지 않습니다.");
     }
 
+    // 재료의 부위 확인
     private bool CheckMaterialParts(EquipmentBase equip)
     {
         _isUpgradable = _upgradeEquipment.EquipmentPart == equip.EquipmentPart;
@@ -104,9 +110,14 @@ public class UpgradeManager : MonoBehaviour
         return _isUpgradable;
     }
 
-    private void CheckMaterialCount() => 
+    // 필요 재료 갯수 확인
+    private void CheckMaterialCount()
+    {
         _isUpgradable = _upgradeEquipment.GradeCostCount >= _materialEquipments.Count;
 
+        if (!_isUpgradable)
+            Debug.Log("재료장비의 개수가 부족합니다.");
+    }
     private void ResetMaterials()
     {
         foreach(var equip in _materialEquipments)
