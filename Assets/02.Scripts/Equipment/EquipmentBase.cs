@@ -16,7 +16,7 @@ public class EquipmentBase : MonoBehaviour
     [field: SerializeField] public string IconClickEffect { get; private set; }
     [field: SerializeField] public string IconClickSound { get; private set; }
 
-    [SerializeField] private EquipmentEventChannelSO _onChangeEquipment;
+    [SerializeField] private EquipmentEventChannelSO _onWearEquipment;
 
 
     // 임시 스텟
@@ -39,6 +39,17 @@ public class EquipmentBase : MonoBehaviour
     [field: SerializeField] public int EnhanceBluePrintID { get; private set; }
 
 
+    // 임시 등급
+    [field: SerializeField] public int GradeID { get; private set; }
+    [field: SerializeField] public int GradeGroupID { get; private set; }
+    [field: SerializeField] public GRADE Grade { get; private set; }
+    [field: SerializeField] public bool GradeMaxGrade { get; private set; }
+    [field: SerializeField] public int GradeCostID { get; private set; }
+    [field: SerializeField] public int GradeCostCount { get; private set; }
+    [field: SerializeField] public float GradeStatRate { get; private set; } = 1;   // 스텟 증가량(곱연산)
+    [field: SerializeField] public int GradePrice { get; private set; }             // 등급별 판매 가격
+
+
 
     //
     [field: SerializeField] public Sprite SpriteImage { get; private set; }
@@ -49,7 +60,7 @@ public class EquipmentBase : MonoBehaviour
     private void Awake()
     {
         _button = GetComponent<Button>();
-        _button.onClick.AddListener(() => OnChangeEquipment(this));
+        _button.onClick.AddListener(() => OnWearEquipment(this));
     }
 
     // 장비별 스텟 증가량 부여
@@ -58,14 +69,22 @@ public class EquipmentBase : MonoBehaviour
         var stat = new EquipmentIncreaseStat(id, groupID, type, value);
     }
 
-    public void OnChangeEquipment(EquipmentBase equipment) => _onChangeEquipment.OnStartEvent(equipment);
+    public void OnWearEquipment(EquipmentBase equipment) => _onWearEquipment.OnStartEvent(equipment);
 
-    public int GetIncreaseStat(EquipmentIncreaseStat.STAT stat) => StatValue;
+    public int GetIncreaseStat(EquipmentIncreaseStat.STAT stat) => (int)((StatValue + EnhanceAddValue) * GradeStatRate);
 
 
     public enum PARTS
     {
         Weapon, Hat, Cloak, Shoes
+    }
+
+    public enum GRADE
+    {
+        Grimy,     // 꼬질
+        Fresh,     // 향긋
+        Shiny,     // 반짝
+        Pristine   // 깔끔
     }
 
     #region 에디터 설정

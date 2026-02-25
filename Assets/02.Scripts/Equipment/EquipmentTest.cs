@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class EquipmentTest : MonoBehaviour, IEquipmentable
 {
-    [SerializeField] private EquipmentEventChannelSO _onChangeEquipment;
+    [SerializeField] private EquipmentEventChannelSO _onWearEquipment;
 
     public Dictionary<EquipmentBase.PARTS, EquipmentBase> MyEquipment { get; private set; } = new();
 
@@ -12,12 +12,12 @@ public class EquipmentTest : MonoBehaviour, IEquipmentable
 
     private void OnEnable()
     {
-        _onChangeEquipment.AddListener(SetEquipment);
+        _onWearEquipment.AddListener(SetEquipment);
     }
 
     private void OnDisable()
     {
-        _onChangeEquipment.RemoveListener(SetEquipment);
+        _onWearEquipment.RemoveListener(SetEquipment);
     }
 
     //
