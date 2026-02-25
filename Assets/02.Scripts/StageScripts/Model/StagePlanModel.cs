@@ -11,7 +11,11 @@ public class StagePlan
 
     public int bossId;
 
+    public int specialGroupId;
+
     public IReadOnlyList<WavePlan> wavePlans;
+    public IReadOnlyList<SpecialMonsterRow> specialRows;
+
 }
 
 // 웨이브의 특정 시간 구간에 어떤 스폰 구성이 활성인지 정의

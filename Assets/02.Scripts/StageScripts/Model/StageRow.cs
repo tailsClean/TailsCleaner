@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.Rendering;
 
 public sealed class StageTableRow
 {
@@ -6,11 +7,18 @@ public sealed class StageTableRow
     public int main_time;
     public int boss_time;
     public int monster_group_id;
+    public int special_group_id;
     public int boss_id;
+    public int stage_index;
+    public float hp_modifier;
+    public float power_modifier;
 }
 
 public sealed class MonsterWaveRow
 {
+    public int wave_id;
+    public string _description;
+
     public int group_id;
     public int wave_index;
     public int start_time;
@@ -22,6 +30,29 @@ public sealed class MonsterWaveRow
 
     public int mid_boss_id;
 
-    // 없으면 CSV에 추가하거나, Builder에서 기본값으로 처리
+    public float hp_modifier;
+    public float power_modifier;
+
     public int weight_percent;
+}
+
+public sealed class SpecialMonsterRow
+{
+    public int special_id;
+    public string _description;
+
+    public int special_group_id;
+    public int spawn_type; // CSV가 enum이긴 한데, 숫자로 올 가능성이 높아서 int로 받는게 안전
+
+    public int start_time;
+    public int end_time;
+
+    public int generation_time; // 생성 주기 -- spawn_type이 Periodic일 때, 이 시간마다 반복해서 소환한다는 의미(초 단위)
+    public int monster_id;
+}
+
+public enum SpecialSpawnType
+{
+    Periodic = 1, // 일정 주기 반복
+    Once = 2,     // 1회성
 }

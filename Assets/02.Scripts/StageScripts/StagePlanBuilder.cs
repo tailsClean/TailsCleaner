@@ -6,7 +6,7 @@ public class StagePlanBuilder
     private const int DEFAULT_WEIGHT = 100; // 기본값으로 사용할 가중치
     private const int NO_BOSS_ID = -1; // 보스가 없는 경우의 ID
 
-    public StagePlan Build(StageTableRow _stage, List<MonsterWaveRow> _waveRows)
+    public StagePlan Build(StageTableRow _stage, List<MonsterWaveRow> _waveRows, List<SpecialMonsterRow> specialRows)
     {
         if (_stage == null || _waveRows == null)
             return null;
@@ -65,6 +65,8 @@ public class StagePlanBuilder
             mainLimitSeconds = _stage.main_time,
             bossLimitSeconds = _stage.boss_time,
             bossId = _stage.boss_id,
+            specialGroupId = _stage.special_group_id,
+            specialRows = specialRows,
             wavePlans = _waves
         };
     }

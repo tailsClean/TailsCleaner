@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class MonsterRegistry : MonoBehaviour, IMonsterRegistry
@@ -8,6 +9,11 @@ public class MonsterRegistry : MonoBehaviour, IMonsterRegistry
 
     private readonly HashSet<GameObject> _aliveMonsters = new HashSet<GameObject>();
 
+    public event Action<GameObject> OnRegistered;
+    public event Action<GameObject> OnUnregistered;
+
+    private GameObject _bossObject;
+
     public int GetAliveCount()
     {
         return _aliveMonsters.Count;
@@ -16,6 +22,16 @@ public class MonsterRegistry : MonoBehaviour, IMonsterRegistry
     public bool CanSpawnMore()
     {
         return _aliveMonsters.Count < MAX_FIELD_MONSTER_COUNT;
+    }
+
+    public void MarkBoss(GameObject _boss)
+    {
+        _bossObject = _boss;
+    }
+
+    public bool IsBoss(GameObject _boss)
+    {
+        return _boss != null && _boss == _bossObject;
     }
 
     public void Register(GameObject _monster)
@@ -33,6 +49,8 @@ public class MonsterRegistry : MonoBehaviour, IMonsterRegistry
         }
 
         _hook.Bind(this, _monster);
+
+        OnRegistered?.Invoke(_monster);
     }
 
     public void Unregister(GameObject _monster)
@@ -41,6 +59,8 @@ public class MonsterRegistry : MonoBehaviour, IMonsterRegistry
         { return; }
 
         _aliveMonsters.Remove(_monster);
+
+        OnUnregistered?.Invoke(_monster);
     }
 
     public void KillAllMonsters()
