@@ -80,7 +80,18 @@ public class SoapThrowProjectile : SkillProjectile<SoapThrowModifierData>
     // 관통 후 새로운 적 재추적
     private void RetargetEnemy()
     {
-        Debug.Log("[SoapProjectile] 재추적 로직 실행");
-        // 공격 방향 기준 가장 가까운 적 탐색 후 _dir 갱신
+        // 공격 방향에서 가장 가까운 적
+        Transform target = SkillManager.Instance.Player.AttackTarget;
+
+        // 없으면 그냥 쭉 가기
+        if (target == null) return;
+
+        // 새 방향 설정
+        Vector2 newDir = (target.position - transform.position).normalized;
+        SetDirection(newDir);
+
+        // 회전도 방향에 맞게 갱신
+        float angle = Mathf.Atan2(newDir.y, newDir.x) * Mathf.Rad2Deg;
+        transform.rotation = Quaternion.Euler(0f, 0f, angle);
     }
 }

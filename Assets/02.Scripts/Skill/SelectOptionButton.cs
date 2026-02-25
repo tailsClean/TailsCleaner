@@ -1,15 +1,15 @@
-using TMPro;
+ï»¿using TMPro;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UI;
 
 public class SelectOptionButton : MonoBehaviour
 {
-    [Header("UI ¿¬°á")]
-    public Image IconImage;             // ¾ÆÀÌÄÜ ÀÌ¹ÌÁö
-    public TextMeshProUGUI NameText;    // ½ºÅ³ ÀÌ¸§ ÅØ½ºÆ®
-    public TextMeshProUGUI DescText;    // ½ºÅ³ ¼³¸í ÅØ½ºÆ®
-    private Button _button;             // ¹öÆ°
+    [Header("UI ì—°ê²°")]
+    public Image IconImage;             // ì•„ì´ì½˜ ì´ë¯¸ì§€
+    public TextMeshProUGUI NameText;    // ìŠ¤í‚¬ ì´ë¦„ í…ìŠ¤íŠ¸
+    public TextMeshProUGUI DescText;    // ìŠ¤í‚¬ ì„¤ëª… í…ìŠ¤íŠ¸
+    private Button _button;             // ë²„íŠ¼
 
     private void Awake()
     {
@@ -22,7 +22,7 @@ public class SelectOptionButton : MonoBehaviour
         _button.onClick.AddListener(onClickAction);
     }
 
-    // ¹öÆ° ÄÁÅÙÃ÷ ¼³Á¤
+    // ë²„íŠ¼ ì»¨í…ì¸  ì„¤ì •
     public void Setup(string name, string desc, Sprite icon)
     {
         NameText.text = name;

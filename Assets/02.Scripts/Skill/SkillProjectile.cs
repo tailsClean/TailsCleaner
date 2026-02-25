@@ -19,6 +19,15 @@ public class SkillProjectile<TModifierData> : SkillObjectBase
         base.Init(owner, dir);
     }
 
+    // 방향 설정
+    protected void SetDirection(Vector2 newDir)
+    {
+        _dir = newDir;
+        // 방향 변경 후 물리 재적용
+        ApplyPhysics();
+    }
+
+
     // 트리거 충돌 체크
     protected virtual void OnTriggerEnter2D(Collider2D col)
     {
@@ -38,12 +47,21 @@ public class SkillProjectile<TModifierData> : SkillObjectBase
         // 내부에서 파괴되면 뒤는 무시
         if (destroy) return;
 
+        bool mulChanged = false;
+
         // 패시브 관통 효과 (임플란트 등)
         foreach (var passive in _passiveModifiers)
+        {
             passive.OnPierce(_runtimePassiveMulStat);
+            mulChanged = true;
+        }
 
-        CalculateStat();    // 스탯 재계산
-        ApplyPhysics();     // 물리 재적용
+        if (mulChanged)
+        {
+            SetDirty();
+            CalculateStat();
+            ApplyPhysics();     // 물리 재적용
+        }
 
         // 최대 관통 초과 시 파괴
         if (_currentPierceCount > _runtimeFinalStat.PierceCount)

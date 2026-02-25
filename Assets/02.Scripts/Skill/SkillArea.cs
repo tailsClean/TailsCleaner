@@ -9,6 +9,9 @@ public class SkillArea<TModifierData> : SkillObjectBase
 
     // 장판 범위 내 적
     protected HashSet<MonsterBase> _monstersInArea = new();
+    
+    // 캐싱 버퍼
+    private List<MonsterBase> _tickBuffer = new List<MonsterBase>(32);
 
     // 최근 틱 피해 시간
     protected float _lastTickTime;
@@ -47,7 +50,7 @@ public class SkillArea<TModifierData> : SkillObjectBase
     private void OnTriggerEnter2D(Collider2D col)
     {
         if (col.TryGetComponent<MonsterBase>(out var monster))
-        {
+        {   
             _monstersInArea.Add(monster);
             OnMonsterEnter(monster);
         }
@@ -83,18 +86,33 @@ public class SkillArea<TModifierData> : SkillObjectBase
         // 범위 내 적이 null인 경우 삭제
         _monstersInArea.RemoveWhere(m => m == null);
 
-        // 범위 내 적 순회
+        // 버퍼 초기화
+        _tickBuffer.Clear();
+
+        // 범위 내 몬스터들 버퍼에 복사
         foreach (var monster in _monstersInArea)
         {
-            // 피해
+            _tickBuffer.Add(monster);
+        }
+
+        // 버퍼 순회
+        for (int i = 0; i < _tickBuffer.Count; i++)
+        {
+            var monster = _tickBuffer[i];
+
+            // 원본에서 죽은 애들 청소
+            if (monster == null)
+            {
+                _monstersInArea.Remove(monster);
+                continue;
+            }
+
+            // 데미지 처리 
             monster.TakeDamage(_runtimeFinalStat.Damage);
+
             // 전용 모디파이어 로직
             OnTick(monster);
         }
-
-        // 틱마다 스탯·크기 재적용
-        CalculateStat();
-        transform.localScale = Vector3.one * _runtimeFinalStat.Size;
     }
 
     // 틱마다 적에게 호출
