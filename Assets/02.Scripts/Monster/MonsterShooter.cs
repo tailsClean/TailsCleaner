@@ -32,45 +32,66 @@ public class MonsterShooter : MonoBehaviour
         //}
     }
 
+    //public void Shoot()
+    //{
+    //    // Debug.Log("1. Shoot 함수 진입 성공");
+
+    //    if (projectilePrefab == null)
+    //    {
+    //        // Debug.LogError("에러: projectilePrefab(총알 프리팹)이 인스펙터에 연결 안 됨");
+    //        return;
+    //    }
+    //    if (firePoint == null)
+    //    {
+    //        // Debug.LogError("에러: firePoint가 인스펙터에 연결 안 됨");
+    //        return;
+    //    }
+
+    //    // Debug.Log("2. Instantiate(생성) 직전");
+
+    //    // 생성 시도
+    //    GameObject go = Instantiate(projectilePrefab, firePoint.position, firePoint.rotation);
+
+    //    if (go != null)
+    //    {
+    //        // Debug.Log("3. 생성 성공! 이름: " + go.name);
+    //    }
+    //    else
+    //    {
+    //        // Debug.LogError("4. 생성 실패");
+    //        return;
+    //    }
+
+    //    MonsterProjectile projectile = go.GetComponent<MonsterProjectile>();
+    //    if (projectile != null)
+    //    {
+    //        // Debug.Log("5. MonsterProjectile 스크립트 발견, Launch 호출");
+    //        projectile.Launch(playerTarget);
+    //    }
+    //    else
+    //    {
+    //        // Debug.LogError("6. 에러: 생성된 총알에 MonsterProjectile 스크립트가 없음");
+    //    }
+    //}
+
+
     public void Shoot()
     {
-        // Debug.Log("1. Shoot 함수 진입 성공");
+        if (projectilePrefab == null || firePoint == null || playerTarget == null) return;
 
-        if (projectilePrefab == null)
-        {
-            // Debug.LogError("에러: projectilePrefab(총알 프리팹)이 인스펙터에 연결 안 됨");
-            return;
-        }
-        if (firePoint == null)
-        {
-            // Debug.LogError("에러: firePoint가 인스펙터에 연결 안 됨");
-            return;
-        }
+        // 생성 위치를 플레이어 방향으로 약간 보정
+        // 몬스터 중심에서 플레이어 방향으로 약 1.0f 정도 떨어진 곳에서 생성
+        Vector2 dirToPlayer = (playerTarget.position - transform.position).normalized;
+        float offsetDistance = 1.0f; // 몬스터의 반지름보다 조금 더 크게 설정
+        Vector3 spawnPos = transform.position + (Vector3)(dirToPlayer * offsetDistance);
 
-        // Debug.Log("2. Instantiate(생성) 직전");
-
-        // 생성 시도
-        GameObject go = Instantiate(projectilePrefab, firePoint.position, firePoint.rotation);
-
-        if (go != null)
-        {
-            // Debug.Log("3. 생성 성공! 이름: " + go.name);
-        }
-        else
-        {
-            // Debug.LogError("4. 생성 실패");
-            return;
-        }
+        // 보정된 위치에서 생성
+        GameObject go = Instantiate(projectilePrefab, spawnPos, Quaternion.identity);
 
         MonsterProjectile projectile = go.GetComponent<MonsterProjectile>();
         if (projectile != null)
         {
-            // Debug.Log("5. MonsterProjectile 스크립트 발견, Launch 호출");
             projectile.Launch(playerTarget);
-        }
-        else
-        {
-            // Debug.LogError("6. 에러: 생성된 총알에 MonsterProjectile 스크립트가 없음");
         }
     }
 }
