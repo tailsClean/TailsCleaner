@@ -26,6 +26,10 @@ public abstract class MonsterBase : MonoBehaviour, IDamageable
     public float damageCooldown = 1.0f; // 공격 간격
     private float lastAttackTime;       // 마지막 공격 시간
 
+    [Header("--- 보상 설정(Test) ---")]
+    [SerializeField] protected int scoreReward = 1000; // 잡았을 때 줄 점수
+    [SerializeField] protected int goldReward = 500;   // 잡았을 때 줄 골드
+
     protected Rigidbody2D rb2D;
     protected bool isAttacking = false; // 패턴 중 이동 정지용
 
@@ -112,6 +116,15 @@ public abstract class MonsterBase : MonoBehaviour, IDamageable
 
     protected virtual void Die()
     {
+        PlayerRewardHandler handler = Object.FindFirstObjectByType<PlayerRewardHandler>();
+
+        // 몬스터를 잡으면 획득 가능한 골드를 획득 가능
+        if (handler != null)
+        {
+            handler.AddReward(scoreReward, goldReward);
+        }
+
+        // 드랍 아이템 로직
         if (TestItem != null)
         {
             Instantiate(TestItem, transform.position, Quaternion.identity);
