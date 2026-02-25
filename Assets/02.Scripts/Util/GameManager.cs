@@ -5,10 +5,13 @@ public class GameManager : MonoBehaviour
     private static GameManager instance;
     public static GameManager Instance { get => instance; private set => instance = value;}
 
+
     public EnergySystem _energySystem;
 
     public static int EnergyCount;
     public const int SPEND_ENERGY = 1;
+    public int _maxEnergy;
+
     
     private void Awake()
     {
@@ -23,21 +26,25 @@ public class GameManager : MonoBehaviour
         }
 
         DontDestroyOnLoad(gameObject);
-        EnergyCount = _energySystem.MaxEnergy;
+        _maxEnergy = _energySystem.MaxEnergy;
+        EnergyCount = _maxEnergy;
     }
 
     public void EnterStage()
     {
         if(_energySystem.IsStartInGame)
         {
-            _energySystem.SpendEnergy(SPEND_ENERGY);
-            EnergyCount = _energySystem.CurrentEnergy;
             UIManager.Instance.GoToStage();
         }
         else
         {
             Debug.Log($"에너지가 부족합니다. 현재 에너지: {_energySystem.CurrentEnergy}");
         }
+    }
+
+    public void UpdateEnergyCount(int energy)
+    {
+        EnergyCount = energy;
     }
 
 }

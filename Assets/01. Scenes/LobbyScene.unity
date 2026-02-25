@@ -241,7 +241,7 @@ MonoBehaviour:
   _maxEnergy: 5
   _increaseEnergyTime: 30
   _onIncreaseEnergy: {fileID: 11400000, guid: eed7a2cb22cc4a045afde24782b101f2, type: 2}
-  _onStartInGame: {fileID: 11400000, guid: 40053951dd69bea44a3e052e7b964b17, type: 2}
+  _onStartStage: {fileID: 11400000, guid: bb5af9a30899d5441ae60b98e54bf231, type: 2}
 --- !u!114 &880417374
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -255,6 +255,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GameManager
   _energySystem: {fileID: 880417373}
+  _maxEnergy: 0
 --- !u!4 &880417375
 Transform:
   m_ObjectHideFlags: 0
@@ -387,6 +388,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::UIManager
   _currentSceneUI: {fileID: 40993809}
   _stageTrans: {fileID: 0}
+  _onStartInGame: {fileID: 11400000, guid: bb5af9a30899d5441ae60b98e54bf231, type: 2}
 --- !u!1 &1241114480
 GameObject:
   m_ObjectHideFlags: 0

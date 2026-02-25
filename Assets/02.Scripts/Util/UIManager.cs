@@ -54,16 +54,12 @@ public class UIManager : MonoBehaviour
        {
            sceneUI = Instantiate(prefab, transform);
 
-            if(sceneName.Equals("StageScene"))
-            {
-                
-            }
        }
        return sceneUI;
     }
 
     #endregion
-
+    [SerializeField]private VoidEventChannelSO _onStartInGame;
 
     public void GoToTower()
     {
@@ -77,6 +73,7 @@ public class UIManager : MonoBehaviour
 
     public void GoToStage()
     {
+        _onStartInGame.OnStartEvent();
         SceneManager.LoadScene("StageScene");
     }
 
@@ -88,4 +85,6 @@ public class UIManager : MonoBehaviour
         Application.Quit(); // 빌드된 게임을 종료
 #endif    
     }
+
+    
 }

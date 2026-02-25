@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -7,16 +7,12 @@ public class EnergySystem : MonoBehaviour
     [SerializeField] private int _maxEnergy = 5;
     public int MaxEnergy => _maxEnergy;
     [SerializeField] private float _increaseEnergyTime = 30;
-    // [SerializeField] private Text _energyCountText;
-    // [SerializeField] private Text _energyTimeText;
     [SerializeField] private IntEventChannelSO _onIncreaseEnergy;
-    [SerializeField] private IntEventChannelSO _onStartInGame;
+    [SerializeField] private VoidEventChannelSO _onStartStage;
 
     private int _currentEnergy;
     public int CurrentEnergy => _currentEnergy;
     private float _timer;
-
-    public event Action<int> OnUpdateUI;
 
     public int Timer => (int)_timer;
     public bool IsStartInGame => _currentEnergy > 0;
@@ -28,23 +24,20 @@ public class EnergySystem : MonoBehaviour
     {
         // OnUpdateUI += UpdateTimerUI;
         _onIncreaseEnergy.AddListener(IncreaseEnergy);
-        _onStartInGame.AddListener(SpendEnergy);
+        _onStartStage.AddPriorityListener(SpendEnergy, 0);
     }
 
     private void OnDisable()
     {
         // OnUpdateUI -= UpdateTimerUI;
         _onIncreaseEnergy.RemoveListener(IncreaseEnergy);
-        _onStartInGame.RemoveListener(SpendEnergy);
+        _onStartStage.RemovePriorityListener(SpendEnergy, 0);
     }
 
     private void Update()
     {
         IncreaseTimer();
-
-        OnUpdateUI?.Invoke(Timer);
     }
-
 
     // 타이머 증가 메서드
     private void IncreaseTimer()
@@ -85,14 +78,15 @@ public class EnergySystem : MonoBehaviour
     public void IncreaseEnergy(int count) => _currentEnergy += count;
 
     // 에너지 감소(사용) 메서드
-    public void SpendEnergy(int count)
+    public void SpendEnergy()
     {
         if(_currentEnergy <= 0)
         {
             _currentEnergy = 0;
             return;
         }    
-        _currentEnergy -= count;
+        _currentEnergy -= GameManager.SPEND_ENERGY;
+        GameManager.Instance.UpdateEnergyCount(_currentEnergy);
     }
 
     [ContextMenu("에너지 초기화")]
