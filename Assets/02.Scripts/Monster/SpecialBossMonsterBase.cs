@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using System.Collections;
 using System.Linq; // 밀집도 계산
 using MonsterEnum;
 
@@ -24,17 +25,70 @@ public abstract class SpecialBossMonsterBase : MonsterBase
     [Header("--- 점프 상세 설정 ---")]
     public float jumpCooldown = 3.0f;     // 점프 간격
     public float jumpDuration = 0.8f;     // 공중 체류 시간
-    
-    
-    private bool isJumping = false;
-    private Vector2 jumpStartPos;
-    private Vector2 jumpTargetPos;
-    private float jumpProgress = 0f;
+
+    private bool isJumping = false;       // 점프여부
+    private Vector2 jumpStartPos;         // 점프 시작 위치
+    private Vector2 jumpTargetPos;        // 점프 목표 위치
+    private float jumpProgress = 0f;      // 점프 진행률
+
+    [Header("--- 자폭(PATTERN) 설정 ---")]
+    public bool isSuicideUnit = false;      // 이 몬스터가 자폭병인지 여부
+    public float pattern_multiply = 1.5f;   // 자폭 시 이동 속도 배율
+    public float cast_time = 2.0f;          // 예고 시간 
+    public float explosion_range = 3.0f;    // 폭발 반경
+
+    private bool hasExploded = false;       // 중복 실행 방지
+    private float currentCastTimer;         // 시전 시간
+
+    protected override void Start()
+    {
+        base.Start();
+        if (isSuicideUnit)
+        {
+            // 스폰 즉시 시전 상태로 진입
+            currentCastTimer = cast_time;
+        }
+    }
+
+    protected override void FixedUpdate()
+    {
+        if (target == null || hasExploded) return;
+
+        if (isSuicideUnit)
+        {
+            // 시전 시간 동안 카운트다운
+            if (currentCastTimer > 0)
+            {
+                currentCastTimer -= Time.fixedDeltaTime;
+      
+                UpdateWarningVisuals(currentCastTimer / cast_time);
+            }
+            else
+            {
+                // cast_time = 0이 되면 즉시 자폭
+                ExecuteExplosion();
+            }
+        }
+
+        if (!isAttacking) MoveToTarget();
+    }
+
+    private void UpdateWarningVisuals(float progressNormalized)
+    {
+        float intensity = 1.0f - progressNormalized;
+    }
 
     protected override void MoveToTarget()
     {
         patternTimer += Time.fixedDeltaTime;
         stateTimer += Time.fixedDeltaTime;
+
+        // 자폭병일 경우 속도 보정
+        float originalSpeed = moveSpeed;
+        if (isSuicideUnit)
+        {
+            moveSpeed *= pattern_multiply;
+        }
 
         // 점프 패턴인 경우 대기 로직
         if (moveType == MonsterMove.Jump && isWaiting)
@@ -67,7 +121,14 @@ public abstract class SpecialBossMonsterBase : MonsterBase
                 StraightChase();
                 break;
         }
+
+       
+
+        // 다시 원래 속도로 복구
+        moveSpeed = originalSpeed;
     }
+
+
 
     // 지그재그
     protected void ZigzagMove()
@@ -86,7 +147,7 @@ public abstract class SpecialBossMonsterBase : MonsterBase
     // 점프
     protected void JumpMove()
     {
-        // 1. 점프 중 상태 (플레이어 위치로 이동)
+        // 점프 중 상태 (플레이어 위치로 이동)
         if (isJumping)
         {
             jumpProgress += Time.fixedDeltaTime / jumpDuration;
@@ -171,5 +232,30 @@ public abstract class SpecialBossMonsterBase : MonsterBase
         Vector2 center = Vector2.zero;
         foreach (var pos in neighbors) center += pos;
         return center / neighbors.Count;
+    }
+
+    // 자폭
+    private void ExecuteExplosion()
+    {
+        if (hasExploded) return;
+        hasExploded = true;
+
+        // 일단 범위 내의 콜라이더를 가져옴 
+        Collider2D[] hits = Physics2D.OverlapCircleAll(rb2D.position, explosion_range);
+
+        // 루프를 돌며 태그가 Player인 녀석을 찾음
+        foreach (var hit in hits)
+        {
+            if (hit.CompareTag("Player"))
+            {
+                IDamageable player = hit.GetComponent<IDamageable>();
+                player?.TakeDamage(this.power);
+
+                // 플레이어 찾았으면 즉시 루프 종료
+                break;
+            }
+        }
+
+        Die();
     }
 }
