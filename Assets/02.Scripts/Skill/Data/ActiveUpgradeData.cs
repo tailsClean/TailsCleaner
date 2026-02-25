@@ -52,6 +52,8 @@ public class ActiveUpgradeData : ScriptableObject // 액티브 스킬 업그레�
         bonus.ProjectileSpeed = ProjectileSpeed;
         bonus.ProjectileCount = ProjectileCount;
         bonus.PierceCount = PierceCount;
+        bonus.TickRate = TickRate;
+        bonus.Knockback = Knockback;
         return bonus;
     }
 }

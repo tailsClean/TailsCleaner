@@ -7,24 +7,31 @@ public class SoapBubbleArea : SkillArea<SoapBubbleModifierData>
     // 적 체류 시작 시간
     private readonly Dictionary<MonsterBase, float> _monsterEnterTimes = new();
 
-    // 이미 기절 처리된 적 (1회 제한)
-    private readonly HashSet<MonsterBase> _stunnedMonsters = new();
-
     public override void Init(ActiveSkill owner, SoapBubbleModifierData modifierData, Vector2 dir = default)
     {
         _monsterEnterTimes.Clear();
-        _stunnedMonsters.Clear();
 
         base.Init(owner, modifierData, dir);
     }
 
     protected override void Update()
     {
-        // 스턴 체류 체크 추가해야함
-        // 
+        // 가장 가까운 적 추적
+        if (_modifierData.Tracking == true)
+            TrackClosestEnemy();
+
+        // 스턴 체류 체크
+        if (_modifierData.StunOnArea == true)
+            CheckStunInArea();
 
         // 틱 주기 처리 추가 base를 통해 수명 체크 ,스노우 볼링
         base.Update();
+    }
+    
+    // 가장 가까운 적 추적
+    private void TrackClosestEnemy()
+    {
+
     }
 
 
@@ -32,8 +39,11 @@ public class SoapBubbleArea : SkillArea<SoapBubbleModifierData>
     {
         // 약화 상태 체크
         // 약화 상태인지 체크 후 최대 체력 감소
-        //if (_runTimeFinalStat.MaxHpDecreaseRate >= 0 && monster.IsDebuffed)
-        //    monster.DecreaseMaxHp(MaxHpDecreaseRate);  
+        foreach (var passive in _passiveModifiers)
+        {
+            // if (monster.IsDebuffed)
+            //     passive.OnEnterArea(monster);
+        }
 
         // 빨래당함 슬로우
         if (_modifierData.SlowOnArea == true)
@@ -95,39 +105,50 @@ public class SoapBubbleArea : SkillArea<SoapBubbleModifierData>
     }
 
 
+    // 장판 스턴 체류 시간 체크
+    private void CheckStunInArea()
+    {
+        foreach (var monster in _monstersInArea)
+        {
+            if (monster == null) continue;
+
+            // 기절 상태 몬스터 스킵
+            // if (monster.IsStunned) continue;
+
+            // 몬스터 체류 시간 꺼내기
+            if (_monsterEnterTimes.TryGetValue(monster, out float enterTime) == false) continue;
+
+            // 체류 시간이 기준 이상이면 기절
+            if (Time.time - enterTime >= _modifierData.StunRequiredTime)
+            {
+                StunMonster(monster);
+            }
+        }
+    }
+
     // 몬스터 스턴
     private void StunMonster(MonsterBase monster)
     {
-        // 해당 장판에 기절 기록 안된 적이면
-        if (_stunnedMonsters.Contains(monster) == false)
-        {
-            // 체류 시간 체크
-            if (_monsterEnterTimes.TryGetValue(monster, out float enterTime))
-            {
-                // 체류 시간이 일정 시간 넘으면
-                if (Time.time - enterTime >= _modifierData.StunRequiredTime)
-                {
-                    // 스턴
-                    //monster.ApplyStun(_modifierData.StunDuration);
-                    // 등록해서 다시 기절 안당하게
-                    _stunnedMonsters.Add(monster);
-                }
-            }
-        }
+        // 몬스터 지속 시간동안 기절 
+        //monster.Stun(_modifierData.StunDuration);
+
+        // 스턴 패시브 추가 효과 (SuperClean)
+        foreach (var passive in _passiveModifiers)
+            passive.OnStun(monster);
     }
 
     // 소멸 시
     protected override void OnExpire()
     {
-        // 발동 횟수
-        int count = _runtimeFinalStat.ExtraDamageMultiplier;
-
-        // 추가추가피해로 여러번 발동 가능
-        for(int i = 0; i < count; i++)
+        // 거품 펑!
+        if (_modifierData.BurstOnExpire == true)
         {
-            // 거품 펑!
+            // 발동 횟수
+            int count = _runtimeFinalStat.ExtraDamageMultiplier;
+
+            // 추가추가피해로 여러번 발동 가능
             // _monstersInArea에 등록된 적 모두 최대 체력 피해
-            if (_modifierData.BurstOnExpire == true)
+            for (int i = 0; i < count; i++)
                 BurstDamage();
         }
 
@@ -142,11 +163,11 @@ public class SoapBubbleArea : SkillArea<SoapBubbleModifierData>
         // 와중에 null된거 삭제
         _monstersInArea.RemoveWhere(m => m == null);
 
-        // 적 최대 체력 가져와서 BurstDamage 퍼센트의 데미지를 줌
-        // float burstDamage = monster.MaxHp * _modifierData.BurstDamage;
-
         foreach (var monster in _monstersInArea)
         {
+            // 적 최대 체력 가져와서 BurstDamage 퍼센트의 데미지를 줌
+            // float burstDamage = monster.MaxHp * _modifierData.BurstDamage;
+
             //monster.TakeDamage(burstDamage);
         }
     }

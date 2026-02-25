@@ -31,20 +31,20 @@ MonoBehaviour:
     Desc: "\uBE44\uB204 \uC7A5\uD310\uC774 \uD50C\uB808\uC774\uC5B4 \uACF5\uACA9
       \uBC29\uD5A5\uC758 \uAC00\uC7A5 \uAC00\uAE4C\uC6B4 \uC801\uC5D0\uAC8C \uC774\uB3D9\uD569\uB2C8\uB2E4."
     Modifier:
-      rid: -2
+      rid: 3004722808339038502
   - Name: "\uBC84\uBE14\uBC84\uBE14"
     UpgradeId: 40003
     Desc: "\uBE44\uB204 \uC7A5\uD310 \uC704\uC5D0 \uD50C\uB808\uC774\uC5B4\uAC00
       \uC788\uC744 \uB54C \uBC1B\uB294 \uBC29\uC5B4\uB825 \uC99D\uAC00 \uBC84\uD504
       \uBD80\uC5EC"
     Modifier:
-      rid: -2
+      rid: 3004722808339038503
   - Name: "\uBE68\uB798\uB2F9\uD568"
     UpgradeId: 40004
     Desc: "\uBE44\uB204 \uC7A5\uD310 \uC704\uC5D0 \uC801\uC774 \uC788\uC744 \uB54C
       \uC801\uC774 \uB290\uB824\uC9D0"
     Modifier:
-      rid: -2
+      rid: 3004722808339038504
   - Name: "\uD750\uB974\uB294 \uAC70\uD488"
     UpgradeId: 40005
     Desc: "\uAC70\uD488 \uC720\uC9C0\uC2DC\uAC04 \uC99D\uAC00"
@@ -60,15 +60,35 @@ MonoBehaviour:
     Desc: "\uBE44\uB204 \uC7A5\uD310 \uC704\uC5D0 1\uCD08 \uC774\uC0C1 \uBA38\uBB38
       \uC801\uC774 1\uD68C 2\uCD08\uAC04 \uAE30\uC808\uD569\uB2C8\uB2E4."
     Modifier:
-      rid: -2
+      rid: 3004722808339038505
   - Name: "\uAC70\uD488 \uD391!"
     UpgradeId: 40008
     Desc: "\uBE44\uB204 \uC7A5\uD310\uC774 \uC0AC\uB77C\uC9C0\uAE30 \uC804\uC5D0
       \uD070 \uB370\uBBF8\uC9C0\uB97C \uC90D\uB2C8\uB2E4"
     Modifier:
-      rid: -2
+      rid: 3004722808339038506
   references:
     version: 2
     RefIds:
     - rid: -2
       type: {class: , ns: , asm: }
+    - rid: 3004722808339038502
+      type: {class: SoapBubbleTrackingModifier, ns: , asm: Assembly-CSharp}
+      data: 
+    - rid: 3004722808339038503
+      type: {class: SoapBubblePlayerDefenseModifier, ns: , asm: Assembly-CSharp}
+      data:
+        IncreasePlayerDefence: 5
+    - rid: 3004722808339038504
+      type: {class: SoapBubbleSlowModifier, ns: , asm: Assembly-CSharp}
+      data:
+        SlowAmount: 0.2
+    - rid: 3004722808339038505
+      type: {class: SoapBubbleStunModifier, ns: , asm: Assembly-CSharp}
+      data:
+        StunRequiredTime: 2
+        StunDuration: 1
+    - rid: 3004722808339038506
+      type: {class: SoapBubbleBurstModifier, ns: , asm: Assembly-CSharp}
+      data:
+        BurstDamage: 0.01

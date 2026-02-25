@@ -11,7 +11,6 @@ public class SkillStat         // 추가 스킬 스탯
     public float Size;              // 크기 비율
 
     // 패시브용
-    public float MaxHpDecreaseRate = 0f;     // 집중공략 최대 체력 감소
     public int ExtraDamageMultiplier = 1;    // 추가추가피해 추가 횟수
     public float DurationTickInterval = 0f;  // 스노우볼링 지속시간 체크 간격
 
@@ -77,9 +76,10 @@ public class PlayerStatBonus        // 추가 플레이어 스탯
 {
     public int Defence;             // 방어력
     public float MoveSpeed;         // 이동 속도 
-    public float CriticalRate;      // 치명타율
-    public float CriticalDamage;    // 치명타 피해
-    public float EvasionRate;       // 회피율
+    public float CriticalChance;    // 치명타 확률
+    public float CriticalDamage;    // 치명타 피해 계수
+    public float EvasionChance;     // 회피율
+    public float PickupRange;       // 경험치 획득 범위
     public float ExpGain;           // 획득 경험치 증가량
 
     // 스탯 더하기
@@ -87,9 +87,10 @@ public class PlayerStatBonus        // 추가 플레이어 스탯
     {
         Defence += other.Defence;
         MoveSpeed += other.MoveSpeed;
-        CriticalRate += other.CriticalRate;
+        CriticalChance += other.CriticalChance;
         CriticalDamage += other.CriticalDamage;
-        EvasionRate += other.EvasionRate;
+        EvasionChance += other.EvasionChance;
+        PickupRange += other.PickupRange;
         ExpGain += other.ExpGain;
     }
 }

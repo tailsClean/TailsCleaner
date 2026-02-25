@@ -4,7 +4,7 @@ using MonsterEnum;
 
 public abstract class SpecialBossMonsterBase : MonsterBase
 {
-    [Header("--- 특수 패턴 설정 ---")]
+    [Header("--- 이동 특수 패턴 설정 ---")]
     public MonsterMove moveType;
 
     [Header("--- 패턴 상세 수치 ---")]
@@ -22,7 +22,7 @@ public abstract class SpecialBossMonsterBase : MonsterBase
     protected bool isFleeingState = false; // 현재 도망 상태인지 여부
 
     [Header("--- 점프 상세 설정 ---")]
-    public float jumpCooldown = 3.0f;     // 점프 간격 (기획: 일정 시간마다)
+    public float jumpCooldown = 3.0f;     // 점프 간격
     public float jumpDuration = 0.8f;     // 공중 체류 시간
     
     

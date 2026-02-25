@@ -30,6 +30,9 @@ public class PlayerBase : MonoBehaviour, IDamageable, ISkillable
     [SerializeField] private IntEventChannelSO _onGainExp;              // 경험치 획득시 알리는 신호
     [SerializeField] private IntEventChannelSO _onLevelUp;
     [SerializeField] private VoidEventChannelSO _onDead;
+
+    [Header("공격 레이어")]
+    [SerializeField] private LayerMask _monsterLayer;
     
 
     private int _currentHp;
@@ -165,9 +168,12 @@ public class PlayerBase : MonoBehaviour, IDamageable, ISkillable
     private Transform GetTarget(Vector2 dir)
     {
         Vector2 origine = (Vector2)transform.position + dir;
-        var hit = Physics2D.Raycast(origine, dir);
-        Debug.Log(hit.collider.gameObject.name);
 
-        return hit.transform;
+        var hit = Physics2D.Raycast(origine, dir, Mathf.Infinity, _monsterLayer);
+
+        if (hit.collider != null)
+            return hit.transform;
+
+        return null;
     }
 }
