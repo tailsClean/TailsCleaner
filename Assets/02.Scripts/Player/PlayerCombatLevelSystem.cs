@@ -32,7 +32,7 @@ public class PlayerCombatLevelSystem
     //레벨업 시, 스텟변화량을 받아서 증가
     private void LevelUp()
     {
-        LevelUpDelta = new StatDelta(1);
+        LevelUpDelta = new StatDelta(_player.LevelUpTestStat);
     }
 
 
@@ -63,6 +63,16 @@ public class PlayerCombatLevelSystem
             HealthRegen = 0;
             CombatLevel = lelTest;
             CombatMaxExp = 0;
+        }
+
+        public StatDelta(LevelupTestStat test)
+        {
+            MaxHp = test.MaxHp;
+            AttackPower = test.AttackPower;
+            DefensePower = test.DefensePower;
+            HealthRegen = test.HealthRegen;
+            CombatLevel = 1;
+            CombatMaxExp = test.CombatMaxExp;
         }
 
         //public StatDelta(int maxHp, int att, int def, int healthRegen, int maxExp, int currentExp)

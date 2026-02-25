@@ -1,5 +1,4 @@
-﻿using System;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.InputSystem;
 
 public class PlayerBase : MonoBehaviour, IDamageable, ISkillable
@@ -37,7 +36,6 @@ public class PlayerBase : MonoBehaviour, IDamageable, ISkillable
     
 
     private int _currentHp;
-    private int _metaCurrentExp;
     private int _combatCurrentExp;
 
     private PlayerHit _hitSystem;
@@ -64,9 +62,17 @@ public class PlayerBase : MonoBehaviour, IDamageable, ISkillable
     public Vector2 AttackDir { get; private set; }
 
 
+    //
+    public LevelupTestStat LevelUpTestStat { get; private set; }
+    //
+
 
     private void Awake()
     {
+        //
+        LevelUpTestStat = GetComponent<LevelupTestStat>();
+        //
+
         _currentHp = _maxhp;
         _hitSystem = new PlayerHit(this);
         _levelSystem = new PlayerCombatLevelSystem(this, _combatMaxExp);

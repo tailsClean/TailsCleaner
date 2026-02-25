@@ -119,6 +119,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5385765747078865120}
   - component: {fileID: 4910411865821873109}
+  - component: {fileID: -5625884646748208213}
   - component: {fileID: 7566682362595537252}
   - component: {fileID: 2359834465883610264}
   - component: {fileID: 6972170408732417574}
@@ -205,6 +206,23 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!114 &-5625884646748208213
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8060241405893911967}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cb4a0ea03496c834f80d5cc0da18ebbc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::LevelupTestStat
+  MaxHp: 10
+  AttackPower: 3
+  DefensePower: 2
+  HealthRegen: 1
+  CombatMaxExp: 10
 --- !u!114 &7566682362595537252
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -222,6 +240,7 @@ MonoBehaviour:
   _defensePower: 5
   _evasionChance: 10
   _criticalChance: 10
+  _criticalDamageMultiplier: 2
   _criticalResistance: 10
   _moveSpeed: 5
   _healthRegen: 10
@@ -230,14 +249,15 @@ MonoBehaviour:
   _combatLevel: 1
   _combatMaxExp: 50
   _experienceGainRate: 10
-  _pickupRange: 2
   _attackInterval: 0.5
+  _pickupRange: 2
   _itemPickupCollider: {fileID: 2632319729818317982}
   _bulletPrefab: {fileID: -8237817391362048391, guid: fcee192d9ea4c5e49acfd33c7001422e, type: 3}
   _onHit: {fileID: 11400000, guid: 3cc90d4d43686484ab87715c305268d8, type: 2}
   _onPickupExp: {fileID: 11400000, guid: ef0b1edeb1f74694c954542395d441da, type: 2}
   _onGainExp: {fileID: 11400000, guid: 2782b6835d5ba0247bd9a0dc07286fd3, type: 2}
   _onLevelUp: {fileID: 11400000, guid: ab8beb8fde613eb48accc579d6b4ae5a, type: 2}
+  _onDead: {fileID: 11400000, guid: 93b987dd3bf0ca04e97359b3aa995913, type: 2}
   _monsterLayer:
     serializedVersion: 2
     m_Bits: 0
