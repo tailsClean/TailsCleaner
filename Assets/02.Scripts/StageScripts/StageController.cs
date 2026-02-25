@@ -4,6 +4,9 @@ using UnityEngine;
 public class StageController : MonoBehaviour
 {
     [SerializeField] private StageResultHandler _resultHandler;
+    [SerializeField] private PlayerRewardHandler _playerRewardHandler;
+
+    public PlayerRewardHandler RewardHandler => _playerRewardHandler;
 
     private StageEvents _events;
     private StageTimer _timer;
@@ -33,9 +36,11 @@ public class StageController : MonoBehaviour
         {
             _events.OnMainTimerReachedLimit -= HandleMainTimerReachedLimit;
             _events.OnBossTimerExpired -= HandleBossTimerExpired;
+
+            _events.OnStageCleared -= HandleStageClearedSignal;
+            _events.OnStageFailed -= HandleStageFailedSignal;
         }
 
-        // ✅ Registry 이벤트 구독 해제
         if (_registry is MonsterRegistry mr)
         {
             mr.OnUnregistered -= HandleMonsterUnregistered;
@@ -95,7 +100,6 @@ public class StageController : MonoBehaviour
             mr.OnUnregistered += HandleMonsterUnregistered;
         }
 
-        //  SetMainSeconds는 직접만
         if (spawner is RuleBasedMonsterSpawner rb)
         {
             _events.OnMainSecondTick -= rb.SetMainSeconds;
@@ -175,9 +179,9 @@ public class StageController : MonoBehaviour
 
         // 4) 결과 상태로 전환 (보상/플로우는 상태에서 처리)
         if (result == StageResult.Clear)
-            _stateMachine.ChangeState(new SuccessState(/*reward ctx*/));
+            _stateMachine.ChangeState(new SuccessState(this));
         else
-            _stateMachine.ChangeState(new FailState(reason /*, reward ctx*/));
+            _stateMachine.ChangeState(new FailState(this, reason));
 
         // 5) UI/로그용 단일 이벤트
         _events.RaiseStageResult(result, reason);

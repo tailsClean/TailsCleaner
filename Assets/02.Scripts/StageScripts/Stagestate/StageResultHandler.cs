@@ -1,10 +1,6 @@
 ﻿using UnityEngine;
 
-/// <summary>
-/// 스테이지 결과(승/패)를 “정리하고 멈추는” 최소 처리기.
-/// - FAIL/CLEAR 시 스폰 정지 + 몬스터 정리 + 스테이지 Pause
-/// - 테스트용: F7=Clear, F8=Fail
-/// </summary>
+// - 테스트용: F7=Clear, F8=Fail
 public class StageResultHandler : MonoBehaviour
 {
     [Header("Debug")]
@@ -19,8 +15,8 @@ public class StageResultHandler : MonoBehaviour
         _events = events;
         _controller = controller;
 
-        if (_events != null)
-            _events.OnStageResult += HandleStageResult;
+        if (_events == null) return;
+        _events.OnStageResult += HandleStageResult;
     }
 
     public void Unbind()
