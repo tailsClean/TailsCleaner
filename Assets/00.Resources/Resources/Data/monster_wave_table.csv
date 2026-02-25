@@ -1,9 +1,9 @@
-﻿스테이지와 연결되는 그룹 id,웨이브 순서,웨이브 시작 시간,웨이브 종료 시간,등장 몬스터 id,주기당 생성 수,생성 패턴 1: random 2: squad 3: circle,웨이브 종료 시 등장할 중간 보스 id,
-group_id,wave_index,start_time,end_time,monster_id,spawn_amount,spawn_pattern,mid_boss_id,weight_percent
-int,int,int,int,int,int,enum,int,int
-201,1,0,180,0,5,Random,-1,100
-201,2,180,360,0,5,Random,-1,100
-201,3,360,540,0,5,Random,-1,100
-201,4,540,660,0,5,Random,-1,100
-201,5,660,840,0,5,Random,-1,100
-201,6,840,900,0,5,Random,-1,100
+﻿고유 id,기획자 소통용,스테이지와 연결되는 그룹 id,웨이브 순서,웨이브 시작 시간,웨이브 종료 시간,등장 몬스터 id,주기당 생성 수,생성 패턴 1: random 2: squad 3: circle,웨이브 종료 시 등장할 중간 보스 id,몬스터 hp 증가량 계산식,몬스터 공격력 증가량 계산식
+wave_id,_description,group_id,wave_index,start_time,end_time,monster_id,spawn_amount,spawn_pattern,mid_boss_id,hp_modifier,power_modifier
+int,string,int,int,int,int,int,int,enum,int,float,float
+520101,2번 탑 1스테이지,201,1,0,180,,5,1,,,
+520102,2번 탑 1스테이지,201,2,180,360,,5,1,,,
+520103,2번 탑 1스테이지,201,3,360,540,,5,1,,,
+520104,2번 탑 1스테이지,201,4,540,660,,5,1,,,
+520105,2번 탑 1스테이지,201,5,660,840,,5,1,,,
+520106,2번 탑 1스테이지,201,6,840,900,,5,1,,,

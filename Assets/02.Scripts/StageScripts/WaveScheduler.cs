@@ -10,7 +10,7 @@ public class WaveScheduler
 
     private readonly StageEvents _events;
     private readonly WaveTimeline _timeline;
-    private readonly IMonsterSpawnSystem _spawner;
+    public readonly IMonsterSpawnSystem _spawner;
 
     private WavePlan _currentWave;
     private int _currentWaveIndex;
@@ -32,6 +32,7 @@ public class WaveScheduler
     // StageController.Update에서 매 프레임(또는 매 초) 호출하는 것을 권장.
     public void Tick(int _mainSeconds)
     {
+
         WavePlan _wave = _timeline.GetWaveByTimeSeconds(_mainSeconds);
         if (_wave == null)
             return;
@@ -58,6 +59,7 @@ public class WaveScheduler
             // (프레임 드랍 등으로 변경 순간을 놓치는 케이스 방지)
             TryTriggerMidBossByEndTime(_currentWave, _mainSeconds);
         }
+
     }
 
     private void TryTriggerMidBossByEndTime(WavePlan _wave, int _mainSeconds)

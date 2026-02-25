@@ -1,7 +1,10 @@
-﻿using UnityEngine;
+﻿using System.Collections.Generic;
+using UnityEngine;
 
 public class StageController : MonoBehaviour
 {
+    [SerializeField] private StageResultHandler _resultHandler;
+
     private StageEvents _events;
     private StageTimer _timer;
     private StageStateMachine _stateMachine;
@@ -15,15 +18,13 @@ public class StageController : MonoBehaviour
     private StagePlan _plan;
 
     private bool _isPaused;
+    private bool _ended;
 
     private void Awake()
     {
         _events = new StageEvents();
         _timer = new StageTimer(_events);
         _stateMachine = new StageStateMachine();
-
-        //이후 더 추가 할 거 있으면 추가할 예정
-
     }
 
     private void OnDestroy()
@@ -31,19 +32,28 @@ public class StageController : MonoBehaviour
         if (_events != null)
         {
             _events.OnMainTimerReachedLimit -= HandleMainTimerReachedLimit;
-        }
-
-        if(_events != null)
-        {
             _events.OnBossTimerExpired -= HandleBossTimerExpired;
         }
-    }
 
+        // ✅ Registry 이벤트 구독 해제
+        if (_registry is MonsterRegistry mr)
+        {
+            mr.OnUnregistered -= HandleMonsterUnregistered;
+        }
+
+        if (_spawner is RuleBasedMonsterSpawner rb)
+        {
+            _events.OnMainSecondTick -= rb.SetMainSeconds;
+        }
+    }
 
     private void Update()
     {
         // 타이머 일시정지(컷신/팝업/백그라운드 등)
         _timer.SetPaused(_isPaused);
+
+        if (_ended) return;
+        if (_isPaused) return;
 
         float _deltaTime = Time.deltaTime;
 
@@ -58,25 +68,50 @@ public class StageController : MonoBehaviour
         _spawner = spawner;
         _registry = registry;
 
-        // 타이머 제한 시간 설정
+        _ended = false;
+        _isPaused = false;
+
         _timer.Configure(_plan.mainLimitSeconds, _plan.bossLimitSeconds);
 
-        //웨이브 검색용 타임라인
-        _timeline = new WaveTimeline(_plan.wavePlans); ;
-
-        // 웨이브 트리거/이벤트 담당 스케줄러 연걸
+        _timeline = new WaveTimeline(_plan.wavePlans);
         _waveScheduler = new WaveScheduler(_events, _timeline, _spawner);
 
-        // 상태 전환 트리거 구독
+        // 타이머/보스 타임아웃 트리거
         _events.OnMainTimerReachedLimit -= HandleMainTimerReachedLimit;
         _events.OnBossTimerExpired -= HandleBossTimerExpired;
-
         _events.OnMainTimerReachedLimit += HandleMainTimerReachedLimit;
         _events.OnBossTimerExpired += HandleBossTimerExpired;
 
-        // 시작 상태 설정 -> Combat
-        IStageState _combatState = new CombatState(_timer, _waveScheduler);
-        _stateMachine.ChangeState(_combatState);
+        //  종료 신호를 EndStage로 수렴
+        _events.OnStageCleared -= HandleStageClearedSignal;
+        _events.OnStageFailed -= HandleStageFailedSignal;
+        _events.OnStageCleared += HandleStageClearedSignal;
+        _events.OnStageFailed += HandleStageFailedSignal;
+
+        // Registry 이벤트(보스 죽음 감지)
+        if (_registry is MonsterRegistry mr)
+        {
+            mr.OnUnregistered -= HandleMonsterUnregistered;
+            mr.OnUnregistered += HandleMonsterUnregistered;
+        }
+
+        //  SetMainSeconds는 직접만
+        if (spawner is RuleBasedMonsterSpawner rb)
+        {
+            _events.OnMainSecondTick -= rb.SetMainSeconds;
+            _events.OnMainSecondTick += rb.SetMainSeconds;
+
+            rb.ApplySpecialGroup(new List<SpecialMonsterRow>(plan.specialRows ?? new List<SpecialMonsterRow>()));
+        }
+
+        if (_resultHandler != null)
+        {
+            // Handler는 UI/입력만 하도록 바뀔 예정이라 controller도 넘기는게 좋음
+            _resultHandler.Bind(_events, this);
+        }
+
+        _stateMachine.ChangeState(new CombatState(_timer, _waveScheduler));
+        _spawner.SetSpawningEnabled(true);
     }
 
     public void SetPaused(bool isPaused)
@@ -98,6 +133,53 @@ public class StageController : MonoBehaviour
     private void HandleBossTimerExpired()
     {
         Debug.Log("[Stage] Boss timer expired -> FAIL");
-        //보스타이머 0초 도달 했을 때 -> 아마 실패 판정
+        _events.RaiseStageFailed(StageFailReason.BossTimeout);
+    }
+
+    // 보스 사망 판정
+    private void HandleMonsterUnregistered(GameObject obj)
+    {
+        if (!(_registry is MonsterRegistry mr)) return;
+
+        if (mr.IsBoss(obj))
+        {
+            Debug.Log("[Stage] Boss destroyed -> CLEAR");
+            _events.RaiseStageCleared();
+        }
+    }
+
+    private void HandleStageClearedSignal()
+    {
+        EndStage(StageResult.Clear, StageFailReason.기타);
+    }
+
+    private void HandleStageFailedSignal(StageFailReason reason)
+    {
+        EndStage(StageResult.Fail, reason);
+    }
+
+    public void EndStage(StageResult result, StageFailReason reason)
+    {
+        if (_ended) return;
+        _ended = true;
+
+        // 1) 스폰 정지
+        _spawner?.SetSpawningEnabled(false);
+
+        // 2) 몬스터 정리 (기획에 맞게 Clear에서도 정리할지 선택)
+        _registry?.KillAllMonsters();
+
+        // 3) 타이머 정지
+        _timer?.StopMain();
+        _timer?.StopBoss();
+
+        // 4) 결과 상태로 전환 (보상/플로우는 상태에서 처리)
+        if (result == StageResult.Clear)
+            _stateMachine.ChangeState(new SuccessState(/*reward ctx*/));
+        else
+            _stateMachine.ChangeState(new FailState(reason /*, reward ctx*/));
+
+        // 5) UI/로그용 단일 이벤트
+        _events.RaiseStageResult(result, reason);
     }
 }

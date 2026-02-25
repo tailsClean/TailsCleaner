@@ -2,7 +2,11 @@
 
 public class StageEntry : MonoBehaviour
 {
-    [SerializeField] private int _stageId = 1;
+    [SerializeField] private int _stageId = 50201;
+
+    [SerializeField] private bool _useTimeOverride;
+    [SerializeField] private int _overrideMainTimeSeconds = 60; 
+    [SerializeField] private int _overrideBossTimeSeconds = 30; 
 
     [SerializeField] private StageController _stageController;
     [SerializeField] private RuleBasedMonsterSpawner _spawner;
@@ -21,6 +25,12 @@ public class StageEntry : MonoBehaviour
         if(_plan == null)
         {
             return;
+        }
+
+        if(_useTimeOverride)
+        {
+            _plan.mainLimitSeconds = _overrideMainTimeSeconds;
+            _plan.bossLimitSeconds = _overrideBossTimeSeconds;
         }
 
         _stageController.StartStage(_plan, _spawner, _register);
