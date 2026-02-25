@@ -218,6 +218,18 @@ public class SkillSOImporter : EditorWindow
         40012 => new SoapPierceDamageModifier(),          // 거품내기
         40014 => new SoapPierceSpeedModifier(),           // 거품 가속
         40016 => new SoapRemovalPierceModifier(),         // 비누 덩어리
+
+
+        // 회전 장난감
+        40042 => new SpinningToyTrainModifier(),          // 기차 장난감
+        40043 => new SpinningToyTopModifier(),            // 팽이 장난감
+        40044 => new SpinningToyMoonModifier(),           // 달 장난감
+        40045 => new SpinningToyDuckModifier(),           // 오리 장난감
+        40046 => new SpinningToyPirateModifier(),         // 해적선 장난감
+        40047 => new SpinningToySharkModifier(),          // 상어 장난감
+        40048 => new SpinningToyBurstModifier(),          // 물놀이 끝!
+
+
         _ => null  // 매핑된거 없으면 깡통
     };
     #endregion

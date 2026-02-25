@@ -34,7 +34,7 @@ public abstract class ActiveSkill : MonoBehaviour
 
 
     // 전용 모디파이어 목록
-    protected List<ActiveModifier> _skillModifiers = new();
+    protected List<(ActiveModifier modifier, ActiveUpgradeData upgradeData)> _skillModifiers = new();
     // 패시브 모디파이어 목록
     public List<PassiveModifier> PassiveModifiers { get; private set; } = new();
 
@@ -98,18 +98,17 @@ public abstract class ActiveSkill : MonoBehaviour
 
         switch (_targetingType)
         {
-            case TARGETING_TYPE.Barrier:                    // 베리어형 항상 발동
+            case TARGETING_TYPE.Barrier:                    // 베리어형     항상 발동
                 return true;
 
-            case TARGETING_TYPE.NonTarget:                  // 비대상형 공격 방향 있어야 발동
+            case TARGETING_TYPE.NonTarget:                  // 비대상형    공격 방향 있어야 발동
                 return player.AttackDir != Vector2.zero;
 
-            case TARGETING_TYPE.Closest:                    // 조준형 공격방향, 타겟 트랜스폼 둘 다 있어야 발동
+            case TARGETING_TYPE.Closest:                    // 조준형      공격방향, 타겟 트랜스폼 둘 다 있어야 발동
                 return player.AttackDir != Vector2.zero && player.AttackTarget != null;
 
-            case TARGETING_TYPE.Directional:                // 이동방향형 이동 방향 있어야 발동
-                // return player.MoveDir != Vector2.zero;
-                return true;
+            case TARGETING_TYPE.Directional:                // 이동방향형  이동 방향 있어야 발동
+                return player.MoveDir != Vector2.zero;
 
             default:
                 return true;
@@ -131,7 +130,7 @@ public abstract class ActiveSkill : MonoBehaviour
         AddSubTag(upgradeData);         // 업그레이드의 서브 태그 추가
         LevelUp(upgradeData);           // 스킬 레벨, 업그레이드 레벨 증가
         AddStat(upgradeData);           // 공용, 업그레이드 스탯 누적
-        AddModifier(upgradeData.Id);    // 전용 모디파이어 추가
+        AddModifier(upgradeData);       // 전용 모디파이어 추가
 
         // 자식인 GenericActiveSkill에서
         // 전용 모디파이어 다 설정하고
@@ -184,14 +183,14 @@ public abstract class ActiveSkill : MonoBehaviour
     }
 
     // 전용 모디파이어 추가
-    private void AddModifier(int upgradeId)
+    private void AddModifier(ActiveUpgradeData upgradeData)
     {
         // 전용 모디파이어 생성 후 추가
-        ActiveModifier modifier = SkillDataLoader.GetActiveModifier(upgradeId);
+        ActiveModifier modifier = SkillDataLoader.GetActiveModifier(upgradeData.Id);
         
         if (modifier != null)
         {
-            _skillModifiers.Add(modifier);
+            _skillModifiers.Add((modifier, upgradeData));
         }
     }
 
@@ -332,10 +331,10 @@ public abstract class ActiveSkill<TSkillObject, TModifierData> : ActiveSkill
 
         // 모디파이어 데이터 갱신
         _modifierData = new TModifierData();
-        foreach (var mod in _skillModifiers)
+        foreach (var pair in _skillModifiers)
         {
             // 모디파이어 적용
-            mod.Apply(this);
+            pair.modifier.Apply(this, pair.upgradeData);
         }
 
         // 패시브 재적용 (CalculateStats + ApplyPassiveModifier)
