@@ -6,15 +6,16 @@ public class PlayerAttack
     private PlayerBase _player;
     private Bullet _bullet;
     private float _attackInterval;
-    private Vector2 _attackDir;
     private float _timer;
+
+    public Vector2 AttackDir { get; private set; }
 
     public PlayerAttack(PlayerBase player, Bullet bullet, float attackInterval)
     {
         _player = player;
         _bullet = bullet;
         _attackInterval = attackInterval;
-        _attackDir = _attackDir = new Vector2(0, -player.transform.localScale.y);
+        AttackDir = AttackDir = new Vector2(0, -player.transform.localScale.y);
     }
 
 
@@ -37,12 +38,13 @@ public class PlayerAttack
             return;
         }
 
-        if(_player.AttackDir != Vector2.zero)
-            _attackDir = _player.AttackDir.normalized;
+        //_attackDir = _player.AttackDir.normalized;
 
-        Vector2 spawnPos = (Vector2)_player.transform.position + _attackDir;
+        Vector2 spawnPos = (Vector2)_player.transform.position + AttackDir;
         var bullet = _player.FireBullet(_bullet, spawnPos);
 
-        bullet.SetDirection(_attackDir.normalized);
+        bullet.Init(AttackDir.normalized, _player.AttackDamage);
     }
+
+    public void SetDirection(Vector2 direction) => AttackDir = direction;
 }

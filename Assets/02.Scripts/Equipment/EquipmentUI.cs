@@ -7,7 +7,7 @@ public class EquipmentUI : MonoBehaviour
     [SerializeField] private GameObject _playerObj;
 
     private IEquipmentable _player;
-    private Dictionary<Equipment.PARTS, Equipment> _equipments;
+    private Dictionary<EquipmentBase.PARTS, EquipmentBase> _equipments;
     public Image _weaponImage;
     public Image _hatImage;
     public Image _cloakImage;
@@ -39,22 +39,22 @@ public class EquipmentUI : MonoBehaviour
     }
 
     // UI갱신 메서드
-    private void UpdateImage(Equipment.PARTS equipmentType)
+    private void UpdateImage(EquipmentBase.PARTS equipmentType)
     {
         var equipment = _player.MyEquipment[equipmentType];
 
         switch (equipmentType)
         {
-            case Equipment.PARTS.Weapon:
+            case EquipmentBase.PARTS.Weapon:
                 _weaponImage.sprite = equipment.SpriteImage;
                 break;
-            case Equipment.PARTS.Hat:
+            case EquipmentBase.PARTS.Hat:
                 _hatImage.sprite = equipment.SpriteImage;
                 break;
-            case Equipment.PARTS.Shoes:
+            case EquipmentBase.PARTS.Shoes:
                 _shoseImage.sprite = equipment.SpriteImage;
                 break;
-            case Equipment.PARTS.Cloak:
+            case EquipmentBase.PARTS.Cloak:
                 _cloakImage.sprite = equipment.SpriteImage;
                 break;
         }

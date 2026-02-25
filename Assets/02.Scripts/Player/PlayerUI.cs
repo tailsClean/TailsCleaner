@@ -7,13 +7,13 @@ public class PlayerUI : MonoBehaviour
     [SerializeField] private Text _lvl;
     [SerializeField] private Slider _expBar;
     [SerializeField] private PlayerBase _player;
-    [SerializeField] private IntEventChannelSO _onChangeHp;
+    [SerializeField] private IntEventChannelSO _onHit;
     [SerializeField] private IntEventChannelSO _onGainExp;
     [SerializeField] private IntEventChannelSO _onLevelUp;
 
     private void OnEnable()
     {
-        _onChangeHp.AddListener(UpdateHp);
+        _onHit.AddListener(UpdateHp);
         _onGainExp.AddListener(UpdateExp);
         _onLevelUp.AddListener(UpdateLevel);
         _player = FindAnyObjectByType<PlayerBase>();
@@ -21,7 +21,7 @@ public class PlayerUI : MonoBehaviour
 
     private void OnDisable()
     {
-        _onChangeHp.RemoveListener(UpdateHp);
+        _onHit.RemoveListener(UpdateHp);
         _onGainExp.RemoveListener(UpdateExp);
         _onLevelUp.RemoveListener(UpdateLevel);
     }

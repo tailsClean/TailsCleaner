@@ -6,9 +6,9 @@
 public static class PlayerDataTransfer
 {
 
-    public static Dictionary<Equipment.PARTS, Equipment> Equipments { get; private set; }
+    public static Dictionary<EquipmentBase.PARTS, EquipmentBase> Equipments { get; private set; }
 
-    public static void SetEquipments(Dictionary<Equipment.PARTS, Equipment> dict) =>
+    public static void SetEquipments(Dictionary<EquipmentBase.PARTS, EquipmentBase> dict) =>
         Equipments = dict;
 }
 

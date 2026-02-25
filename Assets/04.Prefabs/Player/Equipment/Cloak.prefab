@@ -91,7 +91,7 @@ GameObject:
   - component: {fileID: 9033299428100014175}
   - component: {fileID: 1284409248872255150}
   - component: {fileID: 3406304102776380729}
-  - component: {fileID: 273319034715776244}
+  - component: {fileID: 6506618286174441906}
   m_Layer: 5
   m_Name: Cloak
   m_TagString: Untagged
@@ -201,7 +201,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls: []
---- !u!114 &273319034715776244
+--- !u!114 &6506618286174441906
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -210,11 +210,21 @@ MonoBehaviour:
   m_GameObject: {fileID: 4450357880248267958}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 233ee1cd58312c6458174488da3f8b57, type: 3}
+  m_Script: {fileID: 11500000, guid: 2d8d682a58fd02741bd3795b786a3755, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::CloakEquipment
-  _onChangeEquipment: {fileID: 11400000, guid: ca4e79137e788dc4789b0eb57e223fb0, type: 2}
+  m_EditorClassIdentifier: Assembly-CSharp::EquipmentBase
+  <EquipmentID>k__BackingField: 0
   <EquipmentPart>k__BackingField: 2
+  <MaxStack>k__BackingField: 0
+  <GroupID>k__BackingField: 100
+  <Name>k__BackingField: 
+  <Description>k__BackingField: 
+  <IconSprite>k__BackingField: 
+  <IconClickEffect>k__BackingField: 
+  <IconClickSound>k__BackingField: 
+  _onChangeEquipment: {fileID: 11400000, guid: ca4e79137e788dc4789b0eb57e223fb0, type: 2}
+  <StatID>k__BackingField: 0
+  <StatGroupID>k__BackingField: 100
+  <StatType>k__BackingField: 3
+  <StatValue>k__BackingField: 5
   <SpriteImage>k__BackingField: {fileID: 21300000, guid: cd7ebb588e0cca34fbb520f4096f7726, type: 3}
-  _maxHpIncrease: 0
-  _defensePowerIncrease: 0
