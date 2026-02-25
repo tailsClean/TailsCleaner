@@ -3,6 +3,7 @@ using DG.Tweening;
 using TMPro;
 using System;
 using UnityEngine.SceneManagement;
+public interface UIContainer{}
 
 public class UIManager : MonoBehaviour
 {
@@ -22,14 +23,10 @@ public class UIManager : MonoBehaviour
         }
 
         DontDestroyOnLoad(gameObject);
+
+        SceneManager.sceneLoaded += OnSceneLoaded;
     }
 
-    public Action _OnUIInitialized;
-
-    private void Start()
-    {
-       SceneManager.sceneLoaded += OnSceneLoaded;
-    }
     #region  Scene 초기 설정
     //▼ UI 설정 오브젝트 
     [SerializeField] private GameObject _currentSceneUI;
@@ -53,9 +50,20 @@ public class UIManager : MonoBehaviour
        if(prefab != null)
        {
            sceneUI = Instantiate(prefab, transform);
-
+           SetUpReference(sceneUI);
        }
        return sceneUI;
+    }
+    private void SetUpReference(GameObject sceneUI)
+    {
+        if(sceneUI.TryGetComponent(out UIContainer container))
+        {
+            if(container is StageUIContainer stageUI)
+            {
+                this._exitPanel = stageUI.ExitPanel;
+            }
+        }
+
     }
 
     #endregion
@@ -85,6 +93,19 @@ public class UIManager : MonoBehaviour
         Application.Quit(); // 빌드된 게임을 종료
 #endif    
     }
+
+    #region ExitPanel
+    [SerializeField] private GameObject _exitPanel;
+
+    public void ChangeStateExitPanel()
+    {
+        if(_exitPanel != null)
+        {
+            _exitPanel.SetActive(!_exitPanel.activeSelf);
+        }
+    }
+    
+    #endregion
 
     
 }

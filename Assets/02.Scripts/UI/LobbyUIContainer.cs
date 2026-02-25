@@ -1,12 +1,13 @@
 using UnityEngine;
 using UnityEngine.UI;
 
-public class LobbyUIContainer : MonoBehaviour
+public class LobbyUIContainer : MonoBehaviour, UIContainer
 {
-    [SerializeField] private Button TowerButton;
+    [SerializeField] private Button _towerButton;
+    
     void Start()
     {
-        TowerButton.onClick.AddListener(() => UIManager.Instance.GoToTower());
+        _towerButton.onClick.AddListener(() => UIManager.Instance.GoToTower());
     }
 
 }

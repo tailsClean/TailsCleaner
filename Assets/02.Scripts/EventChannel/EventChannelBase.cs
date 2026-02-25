@@ -12,9 +12,13 @@ public class EventChannelBase<T> : ScriptableObject
     //우선 순위가 높은 리스너가 먼저 실행되도록 하는 메서드 (낮은 숫자가 높은 우선 순위를 나타냄)
     public void AddPriorityListener(Action<T> action, int priority)
     {
-        _priorityListeners.Add(priority, new List<Action<T>>());
-       
-       _priorityListeners[priority].Add(action);
+        if(!_priorityListeners.ContainsKey(priority))
+        {
+            _priorityListeners.Add(priority, new List<Action<T>>());
+        }
+
+        _priorityListeners[priority].Add(action);
+        
     }
     
     public void RemoveListener(Action<T> action) => _eventChannel -= action;
