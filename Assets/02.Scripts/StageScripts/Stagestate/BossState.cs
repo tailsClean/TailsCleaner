@@ -40,16 +40,19 @@ public class BossState : IStageState
             return;
         }
 
+        _spawner.SetSpawningEnabled(false);
         //필드 몬스터 정리
         _registry.KillAllMonsters();
         //보스 소환
         _spawner.SpawnBoss(_bossId);
+        
+        if (_registry is MonsterRegistry mr && _spawner is RuleBasedMonsterSpawner rb)
+        {
+            mr.MarkBoss(rb.LastSpawnedBoss);
+        }
+
         //보스 타이머 시작
         _timer.StartBoss();
-
-        // 보스전 시작: 일반 스폰 끄기
-        if (_spawner is RuleBasedMonsterSpawner ruleSpawner)
-            ruleSpawner.SetSpawningEnabled(false);
     }
 
     public void Tick(float _deltatime)
@@ -58,12 +61,6 @@ public class BossState : IStageState
 
     public void Exit()
     {
-        // 보스전 종료: 일반 스폰 다시 켜기 (클리어/실패 처리 시점에서 호출되게)
-        if (_spawner is RuleBasedMonsterSpawner ruleSpawner)
-        {
-            ruleSpawner.SetSpawningEnabled(true);
-        }
-
         _timer.StopBoss();
     }
 }

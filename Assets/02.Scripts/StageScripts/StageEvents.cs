@@ -14,6 +14,12 @@ public class StageEvents
     //웨이브 바뀌는 이벤트
     public event Action<int> OnWaveChanged;
 
+    //스테이지 클리어/실패 이벤트
+    public event Action OnStageCleared;
+    public event Action<StageFailReason> OnStageFailed;
+
+    public event Action<StageResult, StageFailReason> OnStageResult;
+
     public void RaiseMainSecondTick(int _seconds) => OnMainSecondTick?.Invoke(_seconds);
     public void RaiseMainTimerReachedLimit() => OnMainTimerReachedLimit?.Invoke();
 
@@ -21,4 +27,23 @@ public class StageEvents
     public void RaiseBossTimerExpired() => OnBossTimerExpired?.Invoke();
 
     public void RaiseWaveChanged(int _waveIndex) => OnWaveChanged?.Invoke(_waveIndex);
+
+    public void RaiseStageResult(StageResult result, StageFailReason reason)
+      => OnStageResult?.Invoke(result, reason);
+
+    public void RaiseStageCleared() => OnStageCleared?.Invoke();
+    public void RaiseStageFailed(StageFailReason reason) => OnStageFailed?.Invoke(reason);
+}
+
+public enum StageResult
+{
+    Clear,
+    Fail
+}
+
+public enum StageFailReason
+{
+    BossTimeout,     // 보스 타임오버
+    PlayerDead,      // (추후) 플레이어 사망
+    기타
 }

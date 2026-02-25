@@ -154,6 +154,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::StageEntry
   _stageId: 50201
+  _useTimeOverride: 1
+  _overrideMainTimeSeconds: 60
+  _overrideBossTimeSeconds: 30
   _stageController: {fileID: 1604158827}
   _spawner: {fileID: 1010008093}
   _register: {fileID: 831274281}
@@ -167,6 +170,51 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &689309967
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 689309969}
+  - component: {fileID: 689309968}
+  m_Layer: 0
+  m_Name: StageResultHandler
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &689309968
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 689309967}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: da678085f86d17343b9ef03ebbe10b20, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::StageResultHandler
+  _enableDebugHotkeys: 1
+--- !u!4 &689309969
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 689309967}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -14.42557, y: -1.13654, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -441,9 +489,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::RuleBasedMonsterSpawner
   _playerTransform: {fileID: 307744215}
   _registry: {fileID: 831274281}
-  _normalMonsterPrefab: {fileID: 6240592141271003890, guid: 8072f9ecf377f86439a0e31ec06ad2f2, type: 3}
-  _midBossPrefab: {fileID: 6240592141271003890, guid: 551500205ddc50b41bd59e11d44bc9d2, type: 3}
-  _bossPrefab: {fileID: 6240592141271003890, guid: fea3bff49cf33c044800a00459fc3b75, type: 3}
+  _normalMonsterPrefab: {fileID: 8674726135315812162, guid: f1d7566061b437642929eb0d55f61230, type: 3}
+  _specialMonsterPrefab: {fileID: 4623907807441698298, guid: 56ded763630db0f47a2dad2087013af0, type: 3}
+  _midBossPrefab: {fileID: 8674726135315812162, guid: f1d7566061b437642929eb0d55f61230, type: 3}
+  _bossPrefab: {fileID: 8674726135315812162, guid: f1d7566061b437642929eb0d55f61230, type: 3}
 --- !u!4 &1010008094
 Transform:
   m_ObjectHideFlags: 0
@@ -488,6 +537,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cdfa1fecf5a51534faec55939601c841, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::StageController
+  _resultHandler: {fileID: 689309968}
 --- !u!4 &1604158828
 Transform:
   m_ObjectHideFlags: 0
@@ -513,3 +563,4 @@ SceneRoots:
   - {fileID: 831274282}
   - {fileID: 1010008094}
   - {fileID: 938952874}
+  - {fileID: 689309969}

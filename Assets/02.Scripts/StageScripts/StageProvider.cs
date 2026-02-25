@@ -11,6 +11,7 @@ public sealed class DataParserStagePlanProvider : IStagePlanProvider
 {
     private const string STAGE_TABLE_FILE = "stage_table";
     private const string WAVE_TABLE_FILE = "monster_wave_table";
+    private const string SPECIAL_TABLE_FILE = "special_monster_table";
 
     private readonly StagePlanBuilder _builder = new StagePlanBuilder();
 
@@ -18,8 +19,9 @@ public sealed class DataParserStagePlanProvider : IStagePlanProvider
     {
         List<StageTableRow> _stages = DataParser.Parse<StageTableRow>(STAGE_TABLE_FILE);
         List<MonsterWaveRow> _waves = DataParser.Parse<MonsterWaveRow>(WAVE_TABLE_FILE);
+        List<SpecialMonsterRow> _specialRows = DataParser.Parse<SpecialMonsterRow>(SPECIAL_TABLE_FILE);
 
-        if (_stages == null || _waves == null)
+        if (_stages == null || _waves == null || _specialRows == null)
         {
             Debug.LogError("[StagePlanProvider] CSV parse failed.");
             return null;
@@ -48,6 +50,13 @@ public sealed class DataParserStagePlanProvider : IStagePlanProvider
                 _group.Add(_waves[i]);
         }
 
+        List<SpecialMonsterRow> specialGroup = new List<SpecialMonsterRow>();
+        for (int i = 0; i < _specialRows.Count; i++)
+        {
+            if (_specialRows[i].special_group_id == _stage.special_group_id)
+                specialGroup.Add(_specialRows[i]);
+        }
+
         if (_group.Count == 0)
         {
             Debug.LogError($"[StagePlanProv" +
@@ -55,6 +64,6 @@ public sealed class DataParserStagePlanProvider : IStagePlanProvider
             return null;
         }
 
-        return _builder.Build(_stage, _group);
+        return _builder.Build(_stage, _group, specialGroup);
     }
 }
