@@ -23,4 +23,7 @@ public class IdleState : IPlayerState
 
     }
 
+    public void HandleInput(PlayerInputData input)
+    {
+    }
 }

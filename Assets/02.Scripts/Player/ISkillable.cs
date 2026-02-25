@@ -1,4 +1,4 @@
-﻿
+﻿﻿using UnityEngine;
 
 public interface ISkillable
 {
@@ -10,5 +10,9 @@ public interface ISkillable
     public int EvasionChance { get; }               // 회피율
     public float PickupRange { get; }               // 경험치 획득 범위
     public float ExperienceGainRate { get; }        // 경헝치 획득량
+
+    public Vector2 MoveDir { get; }
+    public Vector2 AttackDir { get; }
+    public Transform AttackTarget {  get; }
 }
 

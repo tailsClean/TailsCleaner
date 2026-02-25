@@ -15,12 +15,11 @@ public class PlayerHit
     }
 
 
-    public int TakeDamage(int hp, int damage)
+    public int OnHit(int hp, int damage)
     {
         if(!_isInvincible)
         {
             hp -= damage;
-            Debug.Log("피격");
             _player.StartCoroutine(StartHitInvincibility());
         }
         return hp;
