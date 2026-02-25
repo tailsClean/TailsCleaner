@@ -11,6 +11,11 @@ public class MonsterShooter : MonoBehaviour
     public float fireRate = 2.0f;       // 2초마다 발사
     private float nextFireTime = 0f;    // 다음 총알이 나가기까지의 시간
 
+    void Start()
+    {
+        playerTarget = FindAnyObjectByType<PlayerBase>()?.transform;
+    }
+
     public void Update()
     {
         // 방법 1: 일정 시간마다 자동으로 Shoot() 호출
