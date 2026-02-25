@@ -91,9 +91,9 @@ GameObject:
   - component: {fileID: 9033299428100014175}
   - component: {fileID: 1284409248872255150}
   - component: {fileID: 3406304102776380729}
-  - component: {fileID: 6506618286174441906}
+  - component: {fileID: 3407258402209864608}
   m_Layer: 5
-  m_Name: Cloak
+  m_Name: Shose
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -147,7 +147,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: cd7ebb588e0cca34fbb520f4096f7726, type: 3}
+  m_Sprite: {fileID: 21300000, guid: a61ba4b070f31034eb76a51829b236e3, type: 3}
   m_Type: 1
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -201,7 +201,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls: []
---- !u!114 &6506618286174441906
+--- !u!114 &3407258402209864608
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -214,7 +214,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EquipmentBase
   <EquipmentID>k__BackingField: 0
-  <EquipmentPart>k__BackingField: 2
+  <EquipmentPart>k__BackingField: 3
   <MaxStack>k__BackingField: 0
   <GroupID>k__BackingField: 100
   <Name>k__BackingField: 
@@ -225,7 +225,7 @@ MonoBehaviour:
   _onWearEquipment: {fileID: 11400000, guid: ca4e79137e788dc4789b0eb57e223fb0, type: 2}
   <StatID>k__BackingField: 0
   <StatGroupID>k__BackingField: 100
-  <StatType>k__BackingField: 3
+  <StatType>k__BackingField: 4
   <StatValue>k__BackingField: 5
   <EnhanceID>k__BackingField: 0
   <EnhanceGroupID>k__BackingField: 0
@@ -235,6 +235,7 @@ MonoBehaviour:
   <EnhanceCostGold>k__BackingField: 0
   <EnhanceCostBluePrint>k__BackingField: 0
   <EnhanceBluePrintID>k__BackingField: 0
+  _onStartEnhanceEquipment: {fileID: 11400000, guid: d594f0a602dd4d14ab6521d48ce5fa11, type: 2}
   <GradeID>k__BackingField: 0
   <GradeGroupID>k__BackingField: 0
   <Grade>k__BackingField: 0
@@ -243,4 +244,4 @@ MonoBehaviour:
   <GradeCostCount>k__BackingField: 0
   <GradeStatRate>k__BackingField: 1
   <GradePrice>k__BackingField: 0
-  <SpriteImage>k__BackingField: {fileID: 21300000, guid: cd7ebb588e0cca34fbb520f4096f7726, type: 3}
+  <SpriteImage>k__BackingField: {fileID: 21300000, guid: a61ba4b070f31034eb76a51829b236e3, type: 3}
