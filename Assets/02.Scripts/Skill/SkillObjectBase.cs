@@ -3,11 +3,14 @@ using UnityEngine;
 
 public class SkillObjectBase : MonoBehaviour
 {
-    protected SkillStat _runtimeBaseStat;         // 런타임 기본 스탯
-    protected SkillStat _runtimeCommonStat;       // 런타임 공용 스탯
-    protected SkillStat _runtimeUpgradeStat;      // 런타임 업그레이드 스탯
-    protected SkillStat _runtimePassiveMulStat;   // 런타임 패시브 배율 합 , 임플란트 누적
-    protected SkillStat _runtimeFinalStat;        // 최종 스탯
+    protected SkillStat _runtimeBaseStat;            // 런타임 기본 스탯
+    protected SkillStat _runtimeCommonStat;          // 런타임 공용 스탯
+    protected SkillStat _runtimeUpgradeStat;         // 런타임 업그레이드 스탯
+    protected SkillStat _runtimePassiveMulStat;      // 런타임 패시브 배율 합 , 임플란트 누적
+    protected SkillStat _runtimeFinalStat;           // 최종 스탯
+    private SkillStat _calcBuffer = new SkillStat(); // 스탯 계산 버퍼 (GC 방지)
+    private SkillStat _staticStat;                   // 정적 스탯 베이스(baseStat + passiveBaseAdds) * commonStat
+    private bool _statDirty = false;                 // 더티 플래그 / true일 때 재계산
 
     protected ActiveSkill _skill;                 // 액티브 스킬 (스탯 재계산용)
     protected Rigidbody2D _rigidbody;             // 속도용
@@ -42,6 +45,10 @@ public class SkillObjectBase : MonoBehaviour
         _createTime = Time.time;
         _expired = false;
 
+        // 정적 스탯 베이크
+        BakeStaticStat();
+        
+        // 초기화 시 전용 모디파이어, 패시브 처리
         OnInit();
 
         // 물리 적용
@@ -63,14 +70,47 @@ public class SkillObjectBase : MonoBehaviour
         }
     }
 
+    // (baseStat + passiveBaseAdds) * commonStat 를 _staticBase에 저장
+    // 지금 구조상 Init에서만 호출하면 되는데 패시브 구성이 바뀔 때 호출하면 됨
+    private void BakeStaticStat()
+    {
+        if (_staticStat == null) _staticStat = new SkillStat();
+
+        // 기본 스탯 복사
+        _staticStat.CopyFrom(_runtimeBaseStat);
+
+        // 패시브 깡 스탯 적용
+        foreach (var passive in _passiveModifiers)
+            passive.ModifyBaseAdd(_staticStat);
+
+        // 공용 스탯 곱
+        _staticStat.Multiply(_runtimeCommonStat);
+    }
+
     // 스탯 재계산
     protected void CalculateStat()
     {
-        _runtimeFinalStat = _skill.GetFinalStat(
-            _runtimeBaseStat,
-            _runtimeCommonStat,
-            _runtimeUpgradeStat,
-            _runtimePassiveMulStat);
+        // 더티 플래그 활성화 되면
+        if (_statDirty == false) return;
+
+        // 버퍼에 staticBase 복사 (baseStat + passiveBaseAdds) * commonStat
+        _calcBuffer.CopyFrom(_staticStat);
+
+        // 업그레이드 스탯 합 (관통 시 추가 피해, 추가추가피해 패시브 등)
+        _calcBuffer.Add(_runtimeUpgradeStat);
+
+        // 패시브 계수 합을 곱 (임플란트, 스노우볼링 등)
+        _calcBuffer.Multiply(_runtimePassiveMulStat);
+
+        // 패시브 최종 곱 (냥빨래, 황금왕관 등)
+        foreach (var passive in _passiveModifiers)
+            passive.ModifyFinal(_calcBuffer);
+
+        // 결과를 _runtimeFinalStat에 덮어쓰기 (new X)
+        _runtimeFinalStat.CopyFrom(_calcBuffer);
+
+        // 계산 했으니 끄기
+        _statDirty = false;
     }
 
     // 물리 적용 (속도, 크기)
@@ -83,15 +123,6 @@ public class SkillObjectBase : MonoBehaviour
 
         transform.localScale = Vector3.one * _runtimeFinalStat.Size;
     }
-
-    // 방향 설정
-    protected void SetDirection(Vector2 newDir)
-    {
-        _dir = newDir;
-        // 방향 변경 후 물리 재적용
-        ApplyPhysics();
-    }
-
 
     // 수명 만료
     protected void ExpireObject()
@@ -123,7 +154,11 @@ public class SkillObjectBase : MonoBehaviour
 
         // 스탯 재계산
         if (recalcul)
+        {
+            BakeStaticStat();   // OnCustomInit에서 _runtimeBaseStat 바꼈을 수 있음 그래서 딱 한 번 다시 굽기
+            SetDirty();
             CalculateStat();
+        }
     }
 
     // 전용 모디파이어 처리 후 재계산 여부
@@ -140,10 +175,14 @@ public class SkillObjectBase : MonoBehaviour
             passive.OnDurationTick(_runtimePassiveMulStat);
 
         // 스탯 재계산
+        SetDirty();
         CalculateStat();
     }
 
     // 수명 만료시 호출
     // 파괴될 때 추가 로직, 연출 후 파괴되게
-    protected virtual void OnExpire() { }   
+    protected virtual void OnExpire() { }
+
+    // 스탯 재계산 더티 플래그
+    protected void SetDirty() => _statDirty = true;
 }

@@ -1,4 +1,4 @@
-public class SkillStat         // 추가 스킬 스탯
+﻿public class SkillStat         // 추가 스킬 스탯
 {
     public float Damage;            // 공격력 배율
     public float Cooldown;          // 쿨타임 감소
@@ -59,6 +59,23 @@ public class SkillStat         // 추가 스킬 스탯
             Knockback = 1f,
             Size = 1f
         };
+    }
+
+    // new 없이 기존 객체에 덮어쓰기
+    //CalculateStat GC 방지용
+    public void CopyFrom(SkillStat sc)
+    {
+        Damage = sc.Damage;
+        Cooldown = sc.Cooldown;
+        Duration = sc.Duration;
+        ProjectileSpeed = sc.ProjectileSpeed;
+        ProjectileCount = sc.ProjectileCount;
+        PierceCount = sc.PierceCount;
+        TickRate = sc.TickRate;
+        Knockback = sc.Knockback;
+        Size = sc.Size;
+        ExtraDamageMultiplier = sc.ExtraDamageMultiplier;
+        DurationTickInterval = sc.DurationTickInterval;
     }
 
     // 복제

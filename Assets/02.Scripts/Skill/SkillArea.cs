@@ -50,7 +50,7 @@ public class SkillArea<TModifierData> : SkillObjectBase
     private void OnTriggerEnter2D(Collider2D col)
     {
         if (col.TryGetComponent<MonsterBase>(out var monster))
-        {
+        {   
             _monstersInArea.Add(monster);
             OnMonsterEnter(monster);
         }
@@ -113,10 +113,6 @@ public class SkillArea<TModifierData> : SkillObjectBase
             // 전용 모디파이어 로직
             OnTick(monster);
         }
-
-        // 틱마다 스탯·크기 재적용
-        CalculateStat();
-        transform.localScale = Vector3.one * _runtimeFinalStat.Size;
     }
 
     // 틱마다 적에게 호출
