@@ -1,6 +1,5 @@
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.InputSystem;
 
 public class LevelUpSelect : MonoBehaviour
 {
@@ -48,6 +47,7 @@ public class LevelUpSelect : MonoBehaviour
 
 
     public const int MAX_SELECT_OPTIONS = 3;      // 최대 선택지 수
+    public const int PASSIVE_SELECT_LEVEL = 5;    // 패시브 선택 레벨
     public const int ACTIVE_TIER_TWO_LEVEL = 4;   // 티어 2 레벨
     public const int ACTIVE_TIER_THREE_LEVEL = 7; // 티어 3 레벨
     public const int HEAL_OPTION_RATIO = 30;      // 체력 회복 비율
@@ -61,12 +61,47 @@ public class LevelUpSelect : MonoBehaviour
     [SerializeField] IntEventChannelSO _onHealSelect;   // 회복 이벤트
 
     // 선택지 옵션 설정
-    public void GenerateOptions()
+    public void GenerateOptions(int level)
     {
         _currentOptions.Clear();
 
         var skillManager = SkillManager.Instance;
 
+        // 패시브 선택 레벨 아니면
+        if (level % PASSIVE_SELECT_LEVEL != 0)
+        {
+            // 액티브 선택지 옵션 추가
+            GenerateActiveOption(skillManager);
+
+            // 선택지 칸 남아있으면
+            if (_currentOptions.Count < MAX_SELECT_OPTIONS)
+                // 패시브 선택지 옵션 추가
+                GeneratePassiveOption(skillManager);
+        }
+        // 패시브 선택 레벨
+        else
+        {
+            // 패시브 선택지 옵션 추가
+            GeneratePassiveOption(skillManager);
+
+            // 선택지 칸 남아있으면
+            if (_currentOptions.Count < MAX_SELECT_OPTIONS)
+                // 액티브 선택지 옵션 추가
+                GenerateActiveOption(skillManager);
+        }
+
+        // 그래도 다 못 채웠을 경우엔
+        // 다 채울 때까지
+        while (_currentOptions.Count < MAX_SELECT_OPTIONS)
+        {
+            // 회복 추가 로직
+            _currentOptions.Add(new SelectOptionInfo(_onHealSelect));
+        }
+    }
+
+    // 액티브 선택지 옵션
+    private void GenerateActiveOption(SkillManager skillManager)
+    {
         // 상태 체크 (액티브 최대, 레벨 최대)
         bool isActiveFull = skillManager.IsActiveSlotFull;
         bool isAllLevelMax = skillManager.IsAllActiveMaxLevel();
@@ -95,38 +130,31 @@ public class LevelUpSelect : MonoBehaviour
                     _currentOptions.Add(new SelectOptionInfo(mainTag, upgradeData));
             }
         }
+    }
 
-        // 액티브 체크 했는데 선택지 남았으면
-        if (_currentOptions.Count < MAX_SELECT_OPTIONS)
+    // 패시브 선택지 옵션
+    private void GeneratePassiveOption(SkillManager skillManager)
+    {
+        // 패시브 추가 로직
+        // 패시브 슬롯 체크
+        bool isPassiveFull = skillManager.IsPassiveSlotFull;
+
+        // 패시브 자리 남으면
+        if (isPassiveFull == false)
         {
-            // 패시브 추가 로직
-            // 패시브 슬롯 체크
-            bool isPassiveFull = skillManager.IsPassiveSlotFull;
+            // 패시브 후보 목록
+            List<PassiveSkillData> candidatePassives = GetCandidatePassives(skillManager);
+            // 셔플
+            Shuffle(candidatePassives);
 
-            // 패시브 자리 남으면
-            if(isPassiveFull == false)
+            foreach (var passive in candidatePassives)
             {
-                // 패시브 후보 목록
-                List<PassiveSkillData> candidatePassives = GetCandidatePassives(skillManager);
-                // 셔플
-                Shuffle(candidatePassives);
-
-                foreach (var passive in candidatePassives)
-                {
-                    if (_currentOptions.Count >= MAX_SELECT_OPTIONS) break;
-                    _currentOptions.Add(new SelectOptionInfo(passive));
-                }
+                if (_currentOptions.Count >= MAX_SELECT_OPTIONS) break;
+                _currentOptions.Add(new SelectOptionInfo(passive));
             }
         }
-
-        // 그래도 다 못 채웠을 경우엔
-        // 다 채울 때까지
-        while (_currentOptions.Count < MAX_SELECT_OPTIONS)
-        {
-            // 회복 추가 로직
-            _currentOptions.Add(new SelectOptionInfo(_onHealSelect));
-        }
     }
+
 
     // 메인 태그 후보 추리기
     private List<int> GetCandidateMainTags(SkillManager skillManager)
@@ -217,7 +245,6 @@ public class LevelUpSelect : MonoBehaviour
     }
 
 
-
     // 셔플 (Fisher-Yates)
     private void Shuffle<T>(List<T> list)
     {
@@ -262,6 +289,8 @@ public class LevelUpSelect : MonoBehaviour
 
         return result;
     }
+
+
     // 선택지 선택
     public void SelectOption(int index)
     {
