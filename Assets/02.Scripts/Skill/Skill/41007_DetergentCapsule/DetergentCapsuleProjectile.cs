@@ -1,5 +1,5 @@
 ﻿using UnityEngine;
 
-public class DetergentCapsuleProjectile : MonoBehaviour
+public class DetergentCapsuleProjectile : SkillProjectile<DetergentCapsuleModifierData>
 {
 }

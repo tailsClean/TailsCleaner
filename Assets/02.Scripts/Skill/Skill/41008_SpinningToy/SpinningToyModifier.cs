@@ -5,7 +5,7 @@ using static SpinningToySkill;
 public class SpinningToyModifierData
 {
     public bool BurstOnExpire = false;
-    public float BurstDelay = 0f;
+    public WaitForSeconds BurstDelay;
 
     // 업그레이드로 추가된 타입별 투사체 목록
     public List<(TOY_TYPE type, int count)> AddedToys = new();
@@ -68,7 +68,8 @@ public class SpinningToyBurstModifier : ActiveModifier<SpinningToySkill>
 
     public override void ApplyModifier(SpinningToySkill skill, ActiveUpgradeData upgradeData)
     {
-        skill._modifierData.BurstDelay += _burstDelay;
+        if(skill._modifierData.BurstDelay == null)
+            skill._modifierData.BurstDelay = new WaitForSeconds(_burstDelay);
         skill._modifierData.BurstOnExpire = true;
     }
 }

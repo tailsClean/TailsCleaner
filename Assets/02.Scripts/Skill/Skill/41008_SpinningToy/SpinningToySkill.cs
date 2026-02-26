@@ -19,9 +19,13 @@ public class SpinningToySkill : ActiveSkill<SpinningToyProjectile, SpinningToyMo
     public const float ORBIT_SPEED_MULTI = 120f;
 
     [Header("공전 설정")]
-    [SerializeField] float _orbitRadius = 2.5f;
+    [SerializeField] float _orbitRadius = 2.5f;         // 공전 반지름
+    [SerializeField] float _startAngle = 90f;           // 시작 각도 (12시)
 
-    protected override void Active()
+    protected override void OnActive(int index, int totalCount) { }
+
+
+    protected override IEnumerator ActiveCoroutine()
     {
         // 스폰할 투사체 리스트
         List<TOY_TYPE> spawnList = BuildSpawnList();
@@ -29,17 +33,68 @@ public class SpinningToySkill : ActiveSkill<SpinningToyProjectile, SpinningToyMo
         // 투사체 수
         int count = spawnList.Count;
 
+        // 이번 발사 때 생성될 장난감
+        List<SpinningToyProjectile> currentWaveToys = new List<SpinningToyProjectile>();
+
+        // 투사체의 공전 각속도 (초당 몇 도)
+        float angularSpeedDeg = (_finalStat.ProjectileSpeed / _orbitRadius) * Mathf.Rad2Deg;
+
+        // 투사체 간 벌어져야 하는 간격
+        float anglePerItem = count > 0 ? 360f / count : 0f;
+
+        // 투사체가 anglePerItem 만큼 이동하는 데 걸리는 시간 = 스폰 텀
+        float spawnInterval = anglePerItem / angularSpeedDeg;
+
+        // 생성 시작 시간
+        float startTime = Time.time;
+
+        // 최종 스폰 딜레이
+        WaitForSeconds spawnDelay = new WaitForSeconds(spawnInterval);
+
         for (int i = 0; i < count; i++)
         {
-            // 투사체 수만큼 각 나누기
-            float angle = i * 360f / count;
-            Vector2 spawnPos = (Vector2)transform.position + GetOrbitOffset(angle);
+            // 생성 위치는 항상 12시
+            Vector2 spawnPos = (Vector2)transform.position + GetOrbitOffset(_startAngle);
 
             // 투사체 생성
             SpinningToyProjectile toy = Instantiate(_skillObjectPrefab, spawnPos, Quaternion.identity);
-            
+
             // 공전상태로 초기화
-            toy.InitOrbit(this, _modifierData, spawnList[i], angle, _orbitRadius);
+            toy.InitOrbit(this, _modifierData, spawnList[i], _startAngle, _orbitRadius);
+
+            // 생성된 장난감에 추가
+            currentWaveToys.Add(toy);
+
+            // 다음 투사체 생성 시간
+            float nextSpawnTargetTime = startTime + (spawnInterval * (i + 1));
+
+            // 대기 시간 (프레임 밀린 시간만큼 덜 대기)
+            float waitTime = nextSpawnTargetTime - Time.time;
+
+            if (waitTime > 0)
+            {
+                yield return new WaitForSeconds(waitTime);
+            }
+        }
+
+        // 전체 스폰에 걸린 시간
+        float totalSpawnTime = Time.time - startTime;
+
+        // 생성 시간 제외 남은 지속 시간
+        float remainDuration = Mathf.Max(0f, _finalStat.Duration - totalSpawnTime);
+
+        yield return new WaitForSeconds(remainDuration);
+
+        // 대기 시간이 끝나면
+        // 리스트에 있는 모든 투사체 버스트
+        foreach (var toy in currentWaveToys)
+        {
+            // 투사체 살아있으면
+            if (toy != null)
+            {
+                // 버스트
+                toy.TriggerBurst();
+            }
         }
     }
 
@@ -102,4 +157,5 @@ public class SpinningToySkill : ActiveSkill<SpinningToyProjectile, SpinningToyMo
         float rad = angleDeg * Mathf.Deg2Rad;
         return new Vector2(Mathf.Cos(rad), Mathf.Sin(rad)) * _orbitRadius;
     }
+
 }

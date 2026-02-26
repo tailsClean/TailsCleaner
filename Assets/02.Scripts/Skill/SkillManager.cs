@@ -8,7 +8,7 @@ public class SkillManager : MonoBehaviour
 
     public const int MAX_ACTIVE_SLOTS = 6;              // 최대 액티브 스킬 수
     public const int MAX_PASSIVE_SLOTS = 6;             // 최대 패시브 스킬 수
-    public const int DEFAULT_ACTIVE_MAIN_TAG = 41002;   // 기본 지급 스킬 메인 태그 (비누 던지기)
+    public const int DEFAULT_ACTIVE_MAIN_TAG = 41007;   // 기본 지급 스킬 메인 태그 (세제 캡슐 41007)
     public const float DEFAULT_SEARCH_RADIUS = 20f;     // 가장 가까운 적 탐색용 범위
     public const float SEARCH_INTERVAL = 0.2f;          // 탐색 주기
 
@@ -24,14 +24,21 @@ public class SkillManager : MonoBehaviour
     public bool IsPassiveSlotFull => MyPassiveSkills.Count >= MAX_PASSIVE_SLOTS;
 
 
-    public PlayerBase Player { get; private set; }
+    public PlayerBase Player { get; private set; }                  // 플레이어
+    public TargetingSystem TargetingSystem { get; private set; }    // 타겟 시스템
+    public LayerMask MonsterLayer => _monsterLayer;
 
-    [Header("적 탐색 레이어")]
+
+    [Header("적 레이어")]
     [SerializeField] LayerMask _monsterLayer; 
 
 
-
-    private void Awake() { Instance = this; Player = GetComponent<PlayerBase>(); }
+    private void Awake()
+    {
+        Instance = this;
+        Player = GetComponent<PlayerBase>();
+        TargetingSystem = new TargetingSystem(Player.transform, _monsterLayer);
+    }
 
     private void Start()
     {
@@ -41,6 +48,21 @@ public class SkillManager : MonoBehaviour
         // 기본 스킬 추가
         // 기획서 상에서는 못봤는데 기본 공격이 없으면 공격 못하니까 일단 추가
         AddDefaultSkill();
+
+        // 테스트용 업그레이드 
+        //ApplyPassiveOption(SkillDataLoader.PassiveSkillMap[42004]); // 추가추가피해
+        //ApplyPassiveOption(SkillDataLoader.PassiveSkillMap[42012]); // 스노우볼링
+        //ApplyPassiveOption(SkillDataLoader.PassiveSkillMap[42013]); // 양손잡이
+        //ApplyActiveOption(DEFAULT_ACTIVE_MAIN_TAG, SkillDataLoader.GetActiveUpgradeData(40045));  // 오리 장난감
+        //ApplyActiveOption(DEFAULT_ACTIVE_MAIN_TAG, SkillDataLoader.GetActiveUpgradeData(40046));  // 해적선 장난감
+        //ApplyActiveOption(DEFAULT_ACTIVE_MAIN_TAG, SkillDataLoader.GetActiveUpgradeData(40048));  // 물놀이 끝
+        //ApplyActiveOption(DEFAULT_ACTIVE_MAIN_TAG, SkillDataLoader.GetActiveUpgradeData(40005));  // 흐르는 거품
+        //ApplyActiveOption(DEFAULT_ACTIVE_MAIN_TAG, SkillDataLoader.GetActiveUpgradeData(40050));  // 따스한 태양
+        //ApplyActiveOption(DEFAULT_ACTIVE_MAIN_TAG, SkillDataLoader.GetActiveUpgradeData(40011));  // 감나빗!
+        //ApplyActiveOption(DEFAULT_ACTIVE_MAIN_TAG, SkillDataLoader.GetActiveUpgradeData(40016));  // 비누덩어리
+
+        //ApplyActiveOption(DEFAULT_ACTIVE_MAIN_TAG, SkillDataLoader.GetActiveUpgradeData(40037));  // 상큼하게 터져볼래?
+        //ApplyActiveOption(DEFAULT_ACTIVE_MAIN_TAG, SkillDataLoader.GetActiveUpgradeData(40040));  // 1만 시간의 법칙
 
     }
 

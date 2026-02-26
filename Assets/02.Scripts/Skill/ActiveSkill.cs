@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using static ActiveSkillData;
 
@@ -24,6 +25,8 @@ public abstract class ActiveSkill : MonoBehaviour
     public SkillStat PassiveMulStat => _passiveMulStat;
     public SkillStat FinalStat => _finalStat;
 
+    public Transform CurrentTarget => _currentTarget;
+
 
     protected SkillStat _baseStat = new();                              // 기본 스탯
     protected SkillStat _commonStat = SkillStat.CreateMultiplier();     // 공용 스탯    
@@ -44,6 +47,22 @@ public abstract class ActiveSkill : MonoBehaviour
     protected Dictionary<int, int> _upgradeLevels = new();
 
     protected float _lastActiveTime = 0f; // 최근 스킬 실행 시간
+    protected WaitForSeconds _fireDelay;    // 순차 발사 딜레이
+
+    protected Transform _currentTarget = null;      // 타겟
+    protected Coroutine _searchCoroutine = null;    // 탐색 코루틴
+
+
+    [Header("스킬 설정")]
+    [SerializeField] protected float _fireInterval = 0.1f;      // 여러 투사체 발사 시 텀
+    [SerializeField] protected float _angle = 15f;             // 범위 각도
+    [SerializeField] protected float _distance = 50f;           // 타겟 탐색 거리
+
+    private void Awake()
+    {
+        _fireDelay = new WaitForSeconds(_fireInterval);
+    }
+
 
     // 초기화 (0티어 획득)
     public virtual void Init(ActiveSkillData skillData, ActiveUpgradeData upgradeData, GameObject prefab)
@@ -69,19 +88,78 @@ public abstract class ActiveSkill : MonoBehaviour
         // 기본 스탯
         _baseStat = upgradeData.GetSkillStat();
 
-        // 스탯 계산
-        CalculateStats();
+        // 패시브 스탯, 패시브 모디파이어, 최종 스탯 계산
+        RecheckPassives();
 
         Debug.Log($"[ActiveSkill] {upgradeData.Name} 생성 완료.");
     }
 
     protected virtual void Update()
     {
+        // 조준형 타겟팅
+        Targeting();
+
         // 쿨타임이 됐고 발동 조건도 맞으면 발동
         if (IsCooldownReady() && CanFire())
         {
             Active();
             _lastActiveTime = Time.time;
+        }
+    }
+    private void Targeting()
+    {
+        // 조준형일 때만 작동
+        if (_targetingType == TARGETING_TYPE.Closest)
+        {
+            // 공격 방향
+            Vector2 attackDir = SkillManager.Instance.Player.AttackDir;
+
+            // 공격 방향이 존재하면
+            if (attackDir != Vector2.zero)
+            {
+                // 코루틴이 안 돌고 있다면 켜기
+                if (_searchCoroutine == null)
+                    _searchCoroutine = StartCoroutine(SearchTargetCoroutine());
+            }
+            else
+            {
+                // 공격 방향 없으면
+                // 코루틴 끄고 타겟 비우기
+                StopSearch();
+            }
+        }
+    }
+
+    // 탐색 중지
+    private void StopSearch()
+    {
+        // 코루틴 돌고있으면 중지
+        if (_searchCoroutine != null)
+        {
+            StopCoroutine(_searchCoroutine);
+            _searchCoroutine = null;
+        }
+
+        // 타겟 비우기
+        _currentTarget = null;
+    }
+
+    // 타겟 탐색 코루틴
+    private IEnumerator SearchTargetCoroutine()
+    {
+        while (true)
+        {
+            // 공격 방향
+            Vector2 attackDir = SkillManager.Instance.Player.AttackDir;
+
+            // 방향 있을 때 탐색
+            if (attackDir != Vector2.zero)
+                _currentTarget = SkillManager.Instance.TargetingSystem.GetTarget(attackDir, _distance, _angle);
+            else
+                _currentTarget = null;
+
+            // 탐색 0.2초 대기
+            yield return SkillManager.Instance.SearchInterval;
         }
     }
 
@@ -105,7 +183,7 @@ public abstract class ActiveSkill : MonoBehaviour
                 return player.AttackDir != Vector2.zero;
 
             case TARGETING_TYPE.Closest:                    // 조준형      공격방향, 타겟 트랜스폼 둘 다 있어야 발동
-                return player.AttackDir != Vector2.zero && player.AttackTarget != null;
+                return player.AttackDir != Vector2.zero && _currentTarget != null;
 
             case TARGETING_TYPE.Directional:                // 이동방향형  이동 방향 있어야 발동
                 return player.MoveDir != Vector2.zero;
@@ -121,8 +199,32 @@ public abstract class ActiveSkill : MonoBehaviour
         return IsCooldownReady() && CanFire();
     }
 
-    // 스킬 발동 로직 (자식에서)
-    protected abstract void Active();
+    // 스킬 발동 로직
+    private void Active()
+    {
+        StartCoroutine(ActiveCoroutine());
+    }
+
+    // 투사체 수만큼 순차 발사
+    protected virtual IEnumerator ActiveCoroutine()
+    {
+        // 투사체 수
+        int count = Mathf.Max(1, _finalStat.ProjectileCount);
+
+        for (int i = 0; i < count; i++)
+        {
+            // 실제 발사 로직은 자식에서
+            OnActive(i, count);
+
+            // 발사 텀
+            yield return _fireDelay;
+        }
+    }
+    
+    // 자식 개별 
+    protected abstract void OnActive(int index, int totalCount);
+
+
 
     // 스킬 업그레이드
     public virtual void ApplyUpgrade(ActiveUpgradeData upgradeData)
@@ -239,6 +341,7 @@ public abstract class ActiveSkill : MonoBehaviour
         //Debug.Log($"최종 공격력 : {resultStat.Damage} = (( {baseStat.Damage}(기본) + 패시브 깡 스탯) * {commonStat.Damage}(공용)  + ({upgradeStat.Damage}(업그레이드) * 추가추가피해)) * {passiveMulStat.Damage}(패시브 배율) * 패시브 최종 배율");
         //Debug.Log($"최종 지속시간 : {resultStat.Duration} = (( {baseStat.Duration}(기본) + 패시브 깡 스탯) * {commonStat.Duration}(공용)  + ({upgradeStat.Duration}(업그레이드) * 추가추가피해)) * {passiveMulStat.Duration}(패시브 배율) * 패시브 최종 배율");
         //Debug.Log($"최종 틱 주기 : {resultStat.TickRate} = (( {baseStat.TickRate}(기본) + 패시브 깡 스탯) * {commonStat.TickRate}(공용)  + ({upgradeStat.TickRate}(업그레이드) * 추가추가피해)) * {passiveMulStat.TickRate}(패시브 배율) * 패시브 최종 배율");
+        //Debug.Log($"최종 투사체 수 : {resultStat.ProjectileCount} = (( {baseStat.ProjectileCount}(기본) + 패시브 깡 스탯) * {commonStat.ProjectileCount}(공용)  + ({upgradeStat.ProjectileCount}(업그레이드) * 추가추가피해)) * {passiveMulStat.ProjectileCount}(패시브 배율) * 패시브 최종 배율");
 
         // 최종 결과 스탯 반환
         return resultStat;
@@ -289,11 +392,11 @@ public abstract class ActiveSkill : MonoBehaviour
 
     // 패시브 재적용
     // 스킬 업그레이드, 패시브 습득 시 호출
-    public void RecheckPassives()
+    public virtual void RecheckPassives()
     {
         SetPassiveMulStat();    // 패시브 배율 합
-        CalculateStats();       // finalStat 계산
         AddPassiveModifier();   // 패시브 모디파이어
+        CalculateStats();       // finalStat 계산
     }
     
     // 패시브 서브태그가 현재 스킬에 해당하는지
@@ -331,6 +434,7 @@ public abstract class ActiveSkill<TSkillObject, TModifierData> : ActiveSkill
 
         // 모디파이어 데이터 갱신
         _modifierData = new TModifierData();
+
         foreach (var pair in _skillModifiers)
         {
             // 모디파이어 적용

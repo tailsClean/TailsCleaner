@@ -6,6 +6,8 @@ public class SpinningToyProjectile : SkillProjectile<SpinningToyModifierData>
     // 장난감 타입 (스프라이트 분기용)
     public SpinningToySkill.TOY_TYPE ToyType { get; private set; }
 
+    SpinningToySkill toySkill;
+
     private bool _isOrbiting = false; // 공전 상태
     private float _orbitAngle;        // 현재 공전 각도
     private float _orbitRadius;       // 공전 반지름
@@ -20,10 +22,9 @@ public class SpinningToyProjectile : SkillProjectile<SpinningToyModifierData>
         _orbitRadius = radius;
         _isOrbiting = true;
 
-        base.Init(owner, modifierData, Vector2.zero);
+        toySkill = owner as SpinningToySkill;
 
-        // 공전 수명, 버스트 처리
-        StartCoroutine(OrbitLifetimeRoutine());
+        base.Init(owner, modifierData, Vector2.zero);
     }
 
     protected override void Update()
@@ -60,11 +61,19 @@ public class SpinningToyProjectile : SkillProjectile<SpinningToyModifierData>
         if (_expired == false)
             ExpireObject();
     }
-    private IEnumerator OrbitLifetimeRoutine()
-    {
-        // 지속 시간 대기
-        yield return new WaitForSeconds(_runtimeFinalStat.Duration);
 
+    // 버스트 실행
+    public void TriggerBurst()
+    {
+        // 강제 만료 상태가 아닐 때, 하이어라키에 있을 때 안전장치
+        if (_expired == false && gameObject.activeInHierarchy)
+        {
+            StartCoroutine(BurstCoroutine());
+        }
+    }
+
+    private IEnumerator BurstCoroutine()
+    {
         // 혹시 만료 상태면 바로 공전 끝
         if (_expired == true) yield break;
 
@@ -75,8 +84,7 @@ public class SpinningToyProjectile : SkillProjectile<SpinningToyModifierData>
             yield break;
         }
 
-        // 형변환 실패 시 소멸
-        SpinningToySkill toySkill = _skill as SpinningToySkill;
+        // 스킬 없을 시 소멸
         if (toySkill == null)
         {
             ExpireObject();
@@ -110,8 +118,9 @@ public class SpinningToyProjectile : SkillProjectile<SpinningToyModifierData>
                 // 복사본 발사
                 // 자신은 공전 유지
                 toySkill.SpawnBurstCopy(transform.position, dir);
+
                 // 버스트 대기 시간
-                yield return new WaitForSeconds(_modifierData.BurstDelay);
+                yield return _modifierData.BurstDelay;
             }
         }
     }
