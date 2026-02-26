@@ -155,11 +155,11 @@ public class RuleBasedMonsterSpawner : MonoBehaviour, IMonsterSpawnSystem
         _monster.name = _name;
         _monster.target = _playerTransform;
 
-        // ✅ wave modifier (현재 웨이브 기반)
+        // wave modifier (현재 웨이브 기반)
         float waveHp = _currentWave != null ? _currentWave.waveHpModifier : 0f;
         float wavePower = _currentWave != null ? _currentWave.wavePowerModifier : 0f;
 
-        // ✅ 기획서 방식: 1 + tower + stage + wave
+        // 기획서 방식: 1 + tower + stage + wave
         float hpScale = 1f + _towerHpMod + _stageHpMod + waveHp;
         float powerScale = 1f + _towerPowerMod + _stagePowerMod + wavePower;
 
@@ -167,7 +167,7 @@ public class RuleBasedMonsterSpawner : MonoBehaviour, IMonsterSpawnSystem
         hpScale = Mathf.Max(0.1f, hpScale);
         powerScale = Mathf.Max(0.1f, powerScale);
 
-        // _monster.ApplyScaling(hpScale, powerScale);
+        _monster.ApplyScaling(hpScale, powerScale);
 
         _registry.Register(_monster.gameObject);
         return _monster;

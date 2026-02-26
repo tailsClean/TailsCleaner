@@ -19,6 +19,10 @@ public abstract class MonsterBase : MonoBehaviour, IDamageable
     public float mass = 1.0f;
     public float KBResist = 1.0f;
 
+    private bool _baseCached;
+    private float _baseHp;
+    private float _basePower;
+
     [Header("--- Drop Items ---")]
     [SerializeField] private GameObject TestItem;
 
@@ -42,6 +46,8 @@ public abstract class MonsterBase : MonoBehaviour, IDamageable
         rb2D.constraints = RigidbodyConstraints2D.FreezeRotation;
 
         rb2D.sleepMode = RigidbodySleepMode2D.NeverSleep;
+
+        CacheBaseStats();
     }
 
     protected virtual void Start()
@@ -112,6 +118,21 @@ public abstract class MonsterBase : MonoBehaviour, IDamageable
                 }
             }
         }
+    }
+
+    private void CacheBaseStats()
+    {
+        if (_baseCached) return;
+        _baseCached = true;
+        _baseHp = hp;
+        _basePower = power;
+    }
+
+    public void ApplyScaling(float hpScale, float powerScale)
+    {
+        CacheBaseStats();
+        hp = _baseHp * hpScale;
+        power = _basePower * powerScale;
     }
 
     protected virtual void Die()
