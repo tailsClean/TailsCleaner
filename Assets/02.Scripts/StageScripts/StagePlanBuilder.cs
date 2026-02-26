@@ -53,7 +53,9 @@ public class StagePlanBuilder
                 endTimeSeconds = _first.end_time,
                 spawnPattern = _first.spawn_pattern,
                 midBossId = _midBoss,
-                spawns = _spawns
+                spawns = _spawns,
+                waveHpModifier = _first.hp_modifier,
+                wavePowerModifier = _first.power_modifier
             });
         }
 
@@ -67,7 +69,11 @@ public class StagePlanBuilder
             bossId = _stage.boss_id,
             specialGroupId = _stage.special_group_id,
             specialRows = specialRows,
-            wavePlans = _waves
+            wavePlans = _waves,
+            stageHpModifier = _stage.hp_modifier,
+            stagePowerModifier = _stage.power_modifier,
+            towerHpModifier = 0f,
+            towerPowerModifier = 0f
         };
     }
 }
