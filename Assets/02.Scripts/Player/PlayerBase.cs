@@ -1,5 +1,4 @@
-﻿using System;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.InputSystem;
 
 public class PlayerBase : MonoBehaviour, IDamageable, ISkillable
@@ -9,6 +8,7 @@ public class PlayerBase : MonoBehaviour, IDamageable, ISkillable
     [SerializeField] private int _defensePower = 1;
     [SerializeField] private int _evasionChance = 10;                   // 회피율
     [SerializeField] private int _criticalChance = 10;
+    [SerializeField] private int _criticalDamageMultiplier = 2;
     [SerializeField] private int _criticalResistance = 10;              // 치명 저항
     [SerializeField] private int _moveSpeed = 5;
     [SerializeField] private int _healthRegen = 10;                     // Hp 회복량
@@ -36,7 +36,6 @@ public class PlayerBase : MonoBehaviour, IDamageable, ISkillable
     
 
     private int _currentHp;
-    private int _metaCurrentExp;
     private int _combatCurrentExp;
 
     private PlayerHit _hitSystem;
@@ -55,7 +54,7 @@ public class PlayerBase : MonoBehaviour, IDamageable, ISkillable
     public int DefensePower => _defensePower;
     public int MoveSpeed => _moveSpeed + _myEquipment.GetMoveSpeedIncrease();
     public int CriticalChance => _criticalChance;
-    public int CriticalDamageMultiplier => 2;
+    public int CriticalDamageMultiplier => _criticalDamageMultiplier;
     public int EvasionChance => _evasionChance;
     public float ExperienceGainRate => _experienceGainRate;
     public float PickupRange => _pickupRange;
@@ -63,9 +62,17 @@ public class PlayerBase : MonoBehaviour, IDamageable, ISkillable
     public Vector2 AttackDir { get; private set; }
 
 
+    //
+    public LevelupTestStat LevelUpTestStat { get; private set; }
+    //
+
 
     private void Awake()
     {
+        //
+        LevelUpTestStat = GetComponent<LevelupTestStat>();
+        //
+
         _currentHp = _maxhp;
         _hitSystem = new PlayerHit(this);
         _levelSystem = new PlayerCombatLevelSystem(this, _combatMaxExp);
