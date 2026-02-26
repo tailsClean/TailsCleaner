@@ -16,6 +16,11 @@ public class StagePlan
     public IReadOnlyList<WavePlan> wavePlans;
     public IReadOnlyList<SpecialMonsterRow> specialRows;
 
+    public float stageHpModifier;
+    public float stagePowerModifier;
+
+    public float towerHpModifier;
+    public float towerPowerModifier;
 }
 
 // 웨이브의 특정 시간 구간에 어떤 스폰 구성이 활성인지 정의
@@ -29,6 +34,9 @@ public class WavePlan
     public IReadOnlyList<MonsterSpawnPlan> spawns;
 
     public int midBossId; // 웨이브 중간 보스가 있을 경우
+    
+    public float waveHpModifier;
+    public float wavePowerModifier;
 }
 
 // 웨이브 내부 몬스터 스폰 구성

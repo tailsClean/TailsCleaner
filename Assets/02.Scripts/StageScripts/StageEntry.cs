@@ -1,8 +1,11 @@
-﻿using UnityEngine;
+﻿using System.Collections.Generic;
+using UnityEngine;
 
 public class StageEntry : MonoBehaviour
 {
     [SerializeField] private int _stageId = 50201;
+
+    [SerializeField] private int _towerId = 0; // 0이면 자동 추론
 
     [SerializeField] private bool _useTimeOverride;
     [SerializeField] private int _overrideMainTimeSeconds = 60; 
@@ -22,18 +25,60 @@ public class StageEntry : MonoBehaviour
     void Start()
     {
         StagePlan _plan = _planProvider.GetStagePlan(_stageId);
-        if(_plan == null)
+        if (_plan == null)
         {
             return;
         }
 
-        if(_useTimeOverride)
+        if (_useTimeOverride)
         {
             _plan.mainLimitSeconds = _overrideMainTimeSeconds;
             _plan.bossLimitSeconds = _overrideBossTimeSeconds;
         }
 
+        ApplyTowerModifier(_plan, _stageId);
         _stageController.StartStage(_plan, _spawner, _register);
     }
 
+    private void ApplyTowerModifier(StagePlan plan, int stageId)
+    {
+        List<TowerTableRow> towers = DataParser.Parse<TowerTableRow>("tower_table");
+        if (towers == null || towers.Count == 0)
+        {
+            plan.towerHpModifier = 0f;
+            plan.towerPowerModifier = 0f;
+            return;
+        }
+
+        TowerTableRow selected = null;
+
+        if (_towerId > 0)
+        {
+            for (int i = 0; i < towers.Count; i++)
+                if (towers[i].tower_id == _towerId) { selected = towers[i]; break; }
+        }
+        else
+        {
+            // 자동: need_stage_id <= stageId 중 가장 큰 need_stage_id를 가진 tower
+            for (int i = 0; i < towers.Count; i++)
+            {
+                var t = towers[i];
+                if (t.need_stage_id <= stageId)
+                {
+                    if (selected == null || t.need_stage_id > selected.need_stage_id)
+                        selected = t;
+                }
+            }
+        }
+
+        if (selected == null)
+        {
+            plan.towerHpModifier = 0f;
+            plan.towerPowerModifier = 0f;
+            return;
+        }
+
+        plan.towerHpModifier = selected.hp_modifier;
+        plan.towerPowerModifier = selected.power_modifier;
+    }
 }

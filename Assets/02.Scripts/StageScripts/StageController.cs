@@ -78,6 +78,8 @@ public class StageController : MonoBehaviour
 
         _timer.Configure(_plan.mainLimitSeconds, _plan.bossLimitSeconds);
 
+        Time.timeScale = 1;
+
         _timeline = new WaveTimeline(_plan.wavePlans);
         _waveScheduler = new WaveScheduler(_events, _timeline, _spawner);
 
@@ -102,6 +104,9 @@ public class StageController : MonoBehaviour
 
         if (spawner is RuleBasedMonsterSpawner rb)
         {
+            rb.SetStageModifiers(plan.stageHpModifier, plan.stagePowerModifier,
+        plan.towerHpModifier, plan.towerPowerModifier);
+
             _events.OnMainSecondTick -= rb.SetMainSeconds;
             _events.OnMainSecondTick += rb.SetMainSeconds;
 
@@ -143,6 +148,8 @@ public class StageController : MonoBehaviour
     // 보스 사망 판정
     private void HandleMonsterUnregistered(GameObject obj)
     {
+        if (_ended) return;
+
         if (!(_registry is MonsterRegistry mr)) return;
 
         if (mr.IsBoss(obj))
@@ -154,11 +161,13 @@ public class StageController : MonoBehaviour
 
     private void HandleStageClearedSignal()
     {
+        if (_ended) return;
         EndStage(StageResult.Clear, StageFailReason.기타);
     }
 
     private void HandleStageFailedSignal(StageFailReason reason)
     {
+        if (_ended) return;
         EndStage(StageResult.Fail, reason);
     }
 
@@ -167,23 +176,32 @@ public class StageController : MonoBehaviour
         if (_ended) return;
         _ended = true;
 
-        // 1) 스폰 정지
+        Time.timeScale = 0;
+
+        // 스폰 정지
         _spawner?.SetSpawningEnabled(false);
 
-        // 2) 몬스터 정리 (기획에 맞게 Clear에서도 정리할지 선택)
+        if (_registry is MonsterRegistry mr)
+        {
+            mr.OnUnregistered -= HandleMonsterUnregistered;
+            mr.MarkBoss(null); // 보스 마킹 제거 (null 허용)
+        }
+
+        // 몬스터 정리
         _registry?.KillAllMonsters();
 
-        // 3) 타이머 정지
+        // 타이머 정지
         _timer?.StopMain();
         _timer?.StopBoss();
 
-        // 4) 결과 상태로 전환 (보상/플로우는 상태에서 처리)
+        // 결과 상태로 전환 (보상/플로우는 상태에서 처리)
         if (result == StageResult.Clear)
             _stateMachine.ChangeState(new SuccessState(this));
         else
             _stateMachine.ChangeState(new FailState(this, reason));
 
-        // 5) UI/로그용 단일 이벤트
+        // UI/로그용 단일 이벤트
         _events.RaiseStageResult(result, reason);
     }
+
 }
