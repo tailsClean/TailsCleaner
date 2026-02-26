@@ -19,7 +19,7 @@ public class SoapBubbleModifierData
 // 40002 자동 추척 비누 지우개     /      장판 적 추적
 public class SoapBubbleTrackingModifier : ActiveModifier<SoapBubbleSkill>
 {
-    public override void ApplyModifier(SoapBubbleSkill skill)
+    public override void ApplyModifier(SoapBubbleSkill skill, ActiveUpgradeData upgradeData)
     {
         skill._modifierData.Tracking = true;
     }
@@ -31,7 +31,7 @@ public class SoapBubblePlayerDefenseModifier : ActiveModifier<SoapBubbleSkill>
     [Header("방어력 증가량")]
     public int IncreasePlayerDefence = 5;
 
-    public override void ApplyModifier(SoapBubbleSkill skill)
+    public override void ApplyModifier(SoapBubbleSkill skill, ActiveUpgradeData upgradeData)
     {
         skill._modifierData.PlayerDefenseBoost = true;
         skill._modifierData.PlayerDefenseBonus += IncreasePlayerDefence;
@@ -45,7 +45,7 @@ public class SoapBubbleSlowModifier : ActiveModifier<SoapBubbleSkill>
     [Header("이동속도 감소율")]
     public float SlowAmount = 0.2f;
 
-    public override void ApplyModifier(SoapBubbleSkill skill)
+    public override void ApplyModifier(SoapBubbleSkill skill, ActiveUpgradeData upgradeData)
     {
         skill._modifierData.SlowOnArea = true;
         skill._modifierData.SlowAmount += SlowAmount;
@@ -60,7 +60,7 @@ public class SoapBubbleStunModifier : ActiveModifier<SoapBubbleSkill>
     [Header("기절 지속 시간")]
     public float StunDuration = 1f;
 
-    public override void ApplyModifier(SoapBubbleSkill skill)
+    public override void ApplyModifier(SoapBubbleSkill skill, ActiveUpgradeData upgradeData)
     {
         skill._modifierData.StunOnArea = true;
         skill._modifierData.StunRequiredTime += StunRequiredTime;
@@ -74,7 +74,7 @@ public class SoapBubbleBurstModifier : ActiveModifier<SoapBubbleSkill>
     [Header("소멸 시 최대 체력 피해")]
     public float BurstDamage = 0.01f;
 
-    public override void ApplyModifier(SoapBubbleSkill skill)
+    public override void ApplyModifier(SoapBubbleSkill skill, ActiveUpgradeData upgradeData)
     {
         skill._modifierData.BurstOnExpire = true;
         skill._modifierData.BurstDamage += BurstDamage;

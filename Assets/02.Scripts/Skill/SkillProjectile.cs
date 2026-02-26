@@ -60,7 +60,6 @@ public class SkillProjectile<TModifierData> : SkillObjectBase
         {
             SetDirty();
             CalculateStat();
-            ApplyPhysics();     // 물리 재적용
         }
 
         // 최대 관통 초과 시 파괴

@@ -161,6 +161,8 @@ public static class SkillDataLoader     // 사실상 스킬 데이터 매니저 
     // 스킬 데이터
     public static ActiveSkillData GetActiveSkillData(int mainTag)
         => _activeSkillMap.TryGetValue(mainTag, out var data) ? data : null;
+    public static ActiveUpgradeData GetActiveUpgradeData(int upgradeId)
+        => _upgradeDataMap.TryGetValue(upgradeId, out var data) ? data : null;
 
 
     // Modifier

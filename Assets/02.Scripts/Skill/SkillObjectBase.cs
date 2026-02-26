@@ -62,6 +62,12 @@ public class SkillObjectBase : MonoBehaviour
             ExpireObject();
 
         // 스킬 지속 시간 틱 체크 (스노우볼링)
+        UpdateDurationTick();
+    }
+
+    // 수명체크 따로 하는 애들 때문에 분리
+    protected void UpdateDurationTick()
+    {
         if (_runtimeFinalStat.DurationTickInterval <= 0f) return;
         if (Time.time >= _lastDurationTickTime + _runtimeFinalStat.DurationTickInterval)
         {
@@ -108,6 +114,9 @@ public class SkillObjectBase : MonoBehaviour
 
         // 결과를 _runtimeFinalStat에 덮어쓰기 (new X)
         _runtimeFinalStat.CopyFrom(_calcBuffer);
+
+        // 물리 적용
+        ApplyPhysics();
 
         // 계산 했으니 끄기
         _statDirty = false;
@@ -179,7 +188,7 @@ public class SkillObjectBase : MonoBehaviour
         CalculateStat();
     }
 
-    // 수명 만료시 호출
+    // 수명 만료 시 호출
     // 파괴될 때 추가 로직, 연출 후 파괴되게
     protected virtual void OnExpire() { }
 

@@ -3,7 +3,8 @@
 public class SoapBubbleSkill : ActiveSkill<SoapBubbleArea, SoapBubbleModifierData>
 {
     // 스킬 발동
-    protected override void Active()
+
+    protected override void OnActive(int index, int totalCount)
     {
         // 장판 플레이어 위치에 생성 (나중에 풀링)
         SoapBubbleArea area = Instantiate(_skillObjectPrefab, transform.position, Quaternion.identity);

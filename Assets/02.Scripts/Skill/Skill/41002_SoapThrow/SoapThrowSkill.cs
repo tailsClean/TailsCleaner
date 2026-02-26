@@ -3,22 +3,16 @@
 public class SoapThrowSkill : ActiveSkill<SoapThrowProjectile, SoapThrowModifierData>
 {
     // 스킬 발동
-    protected override void Active()
+    protected override void OnActive(int index, int totalCount)
     {
-        // 투사체 수
-        int count = Mathf.Max(1, _finalStat.ProjectileCount);
-
-        // 대상 트랜스폼
-        Transform targetTrans = SkillManager.Instance.Player.AttackTarget;
+        // 혹시나 비어있으면 스킵
+        if (_currentTarget == null) return;
 
         // 방향
-        Vector2 dir = (targetTrans.position - transform.position).normalized;
+        Vector2 dir = (_currentTarget.position - transform.position).normalized;
 
-        for (int i = 0; i < count; i++)
-        {
-            // 발사
-            SpawnSoap(dir);
-        }
+        // 발사
+        SpawnSoap(dir);
     }
 
     // 비누 투사체 생성

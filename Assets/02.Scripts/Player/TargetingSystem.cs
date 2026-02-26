@@ -8,13 +8,15 @@ public class TargetingSystem
     private float _searchDistance;
     private float _searchAngle;
     private Queue<Transform> _targets;
+    private LayerMask _monsterLayer;
 
 
-    public TargetingSystem(Transform startPoinTr)
+    public TargetingSystem(Transform startPoinTr, LayerMask monsterLayer)
     {
         _startPointTr = startPoinTr;
         _searchAngle *= Mathf.Deg2Rad;
         _targets = new Queue<Transform>();
+        _monsterLayer = monsterLayer;
     }
 
 
@@ -29,7 +31,7 @@ public class TargetingSystem
         return CalculateDistance();
     }
 
-    private Collider2D[] SearchTarget() => Physics2D.OverlapCircleAll(_startPointTr.position, _searchDistance);
+    private Collider2D[] SearchTarget() => Physics2D.OverlapCircleAll(_startPointTr.position, _searchDistance, _monsterLayer);
 
     private void CalculateAngle(Collider2D[] targetsAll, Vector2 attackDir)
     {
