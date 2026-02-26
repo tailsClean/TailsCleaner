@@ -64,8 +64,8 @@ public class StagePlanBuilder
         return new StagePlan
         {
             stageId = _stage.stage_id,
-            mainLimitSeconds = _stage.main_time,
-            bossLimitSeconds = _stage.boss_time,
+            mainLimitSeconds = Mathf.Max(0, _stage.main_time) * 60,
+            bossLimitSeconds = Mathf.Max(0, _stage.boss_time) * 60,
             bossId = _stage.boss_id,
             specialGroupId = _stage.special_group_id,
             specialRows = specialRows,
