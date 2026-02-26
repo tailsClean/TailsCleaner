@@ -31,7 +31,7 @@ public class PlayerRewardHandler : MonoBehaviour
         myReward.goldEarned += gold;
 
         // 획득 예정 수치 로그 출력
-        Debug.Log($"<color=cyan>[인게임 보상 누적]</color> 점수: {myReward.score}, 예상 골드: {myReward.goldEarned}");
+        //Debug.Log($"<color=cyan>[인게임 보상 누적]</color> 점수: {myReward.score}, 예상 골드: {myReward.goldEarned}");
     }
 
     // 외부에서 게임 종료 신호를 줄 때 호출

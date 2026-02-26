@@ -9,7 +9,7 @@ public class MonsterProjectile : MonoBehaviour
     private int currentBounce = 0;
     private Vector2 lastVelocity;
     private bool isInitialized = false;
-    private float reflectTimer = 0f; // 반사 직후 유도 로직 일시 정지용
+    private float reflectTimer = 0f;
 
     [Header("--- 기획 데이터 연동 ---")]
     [Tooltip("발사 속도")] public float projectile_speed = 10f;
@@ -22,6 +22,11 @@ public class MonsterProjectile : MonoBehaviour
     void Awake()
     {
         rb2D = GetComponent<Rigidbody2D>();
+
+        // 플레이어가 Trigger이므로 투사체도 감지를 위해 IsTrigger를 기본적으로 켜줌
+        // (Launch에서 pierce_type에 따라 다시 설정)
+        if (GetComponent<Collider2D>() != null)
+            GetComponent<Collider2D>().isTrigger = true;
     }
 
     public void Launch(Transform playerTarget)
@@ -29,11 +34,8 @@ public class MonsterProjectile : MonoBehaviour
         target = playerTarget;
         isInitialized = true;
 
-        // 관통 모드면 유령처럼 통과(Trigger), 아니면 딱딱하게 충돌(Collision)
-        if (pierce_type == PierceType.PIERCE)
-            GetComponent<Collider2D>().isTrigger = true;
-        else
-            GetComponent<Collider2D>().isTrigger = false;
+        // 관통/기본/반사 모두 플레이어(Trigger) 감지를 위해 isTrigger를 true로 유지
+        GetComponent<Collider2D>().isTrigger = true;
 
         if (arc_height > 0)
         {
@@ -46,7 +48,6 @@ public class MonsterProjectile : MonoBehaviour
             rb2D.linearVelocity = dir * projectile_speed;
         }
 
-        // 수명이 다하면 삭제
         Destroy(gameObject, life_time);
     }
 
@@ -54,7 +55,6 @@ public class MonsterProjectile : MonoBehaviour
     {
         if (!isInitialized) return;
 
-        // 반사 타이머: 벽에 튕긴 직후에는 유도 로직이 방해하지 못하게 함
         if (reflectTimer > 0)
         {
             reflectTimer -= Time.fixedDeltaTime;
@@ -62,7 +62,6 @@ public class MonsterProjectile : MonoBehaviour
             return;
         }
 
-        // 유도 로직 (직선탄이면서 유도 활성 시)
         if (is_homing && target != null && arc_height <= 0)
         {
             Vector2 direction = ((Vector2)target.position - rb2D.position).normalized;
@@ -71,10 +70,11 @@ public class MonsterProjectile : MonoBehaviour
             rb2D.angularVelocity = -rotateAmount * 250f;
             rb2D.linearVelocity = transform.right * projectile_speed;
         }
+        else
+        {
+            UpdateRotation();
+        }
 
-        UpdateRotation();
-
-        // 반사 계산을 위해 물리 연산 전 속도 저장
         if (rb2D.linearVelocity.sqrMagnitude > 0.1f)
             lastVelocity = rb2D.linearVelocity;
     }
@@ -88,69 +88,58 @@ public class MonsterProjectile : MonoBehaviour
         }
     }
 
-    private void OnCollisionEnter2D(Collision2D collision)
-    {
-        HandleHit(collision.gameObject, collision);
-    }
-
+    // 이 메서드에서 모든 충돌을 처리
     private void OnTriggerEnter2D(Collider2D other)
     {
-        HandleHit(other.gameObject, null);
-    }
-
-    private void HandleHit(GameObject hitObject, Collision2D collision)
-    {
-        bool isPlayer = hitObject.CompareTag("Player");
-        bool isWall = hitObject.CompareTag("Wall");
+        bool isPlayer = other.CompareTag("Player");
+        bool isWall = other.CompareTag("Wall");
 
         if (!isPlayer && !isWall) return;
 
-        // --- 관통(PIERCE) 모드 ---
-        if (pierce_type == PierceType.PIERCE)
+        // --- 상단 투척(Arc) 특수 처리 ---
+        // 곡사탄은 플레이어와 충돌해도 삭제하지 않고 통과시킴
+        if (arc_height > 0 && isPlayer)
         {
-            // 기획서: 벽과 플레이어를 관통하며 데미지만 주고 유지
+          
             return;
         }
 
-        // --- 반사(REFLECT) 모드 ---
+        // 관통 모드(PIERCE): 무시하고 통과
+        if (pierce_type == PierceType.PIERCE) return;
+
+        // 반사 모드(REFLECT) + 벽 충돌: 반사 처리
         if (pierce_type == PierceType.REFLECT && isWall)
         {
-            if (collision != null && currentBounce < reflect_count)
+            if (currentBounce < reflect_count)
             {
-                Vector2 reflectDir = Vector2.Reflect(lastVelocity.normalized, collision.contacts[0].normal);
+                // 트리거 충돌 시 벽의 법선을 구하기 위한 계산
+                Vector2 closestPoint = other.ClosestPoint(transform.position);
+                Vector2 normal = ((Vector2)transform.position - closestPoint).normalized;
+
+                Vector2 reflectDir = Vector2.Reflect(lastVelocity.normalized, normal);
                 rb2D.linearVelocity = reflectDir * projectile_speed;
 
-                reflectTimer = 0.15f; // 반사 직후 잠시 유도 중지 (끼임 방지)
+                reflectTimer = 0.15f;
                 currentBounce++;
-                Debug.Log($"[반사] {currentBounce}/{reflect_count}");
-                return;
+                return; // 반사 성공 시 삭제 안 함
             }
         }
 
-        // --- 상단 투척(Arc) 특수 처리 ---
-        if (arc_height > 0 && isPlayer)
-        {
-            // 상단 투척 탄환은 플레이어와 충돌해도 life_time까지 유지되어야 함
-            //Debug.Log("[상단투척] 플레이어 충돌 - 파괴 안 함");
-            return;
-        }
-
-        // --- 기본 모드 (DISAPPEAR 모드 / 반사 횟수 초과 / 일반 탄환 플레이어 적중 시) ---
-        //Debug.Log($"[파괴] 원인: {hitObject.name}");
+        //   파괴 조건 (여기에 도달하면 무조건 삭제)
+        // - DISAPPEAR 모드 (전체)
+        // - REFLECT 모드에서 플레이어와 부딪힌 경우 (isWall이 false이므로 2번을 건너뜀)
+        // - REFLECT 모드에서 반사 횟수 초과 시
         Destroy(gameObject);
     }
 
     private void ApplyArcShot()
     {
-        rb2D.gravityScale = 2.0f; // 기획 의도에 따른 무게감 설정
+        rb2D.gravityScale = 2.0f;
         Vector3 diff = target.position - transform.position;
         float g = Physics2D.gravity.y * rb2D.gravityScale;
 
-        // 수직 속도 계산
         float vy = Mathf.Sqrt(-2 * g * arc_height);
-        // 체공 시간 계산
         float time = 2 * vy / -g;
-        // 수평 속도 계산
         float vx = diff.x / time;
 
         rb2D.linearVelocity = new Vector2(vx, vy);
