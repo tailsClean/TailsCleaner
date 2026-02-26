@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 4623907807441698298}
   - component: {fileID: 5514830495199837496}
   m_Layer: 6
-  m_Name: Test_SpecialMonster
+  m_Name: Test_Boss
   m_TagString: Monster
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -85,7 +85,7 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_Sprite: {fileID: 7482667652216324306, guid: 75f5f34dc1b5347e0b8351032682f224, type: 3}
-  m_Color: {r: 1, g: 0.840152, b: 0, a: 1}
+  m_Color: {r: 0.95686275, g: 0, b: 0.74488807, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -198,7 +198,7 @@ MonoBehaviour:
   pattern_multiply: 0
   explosion_range: 0
   pattern_damage: 0
-  moveType: 1
+  moveType: 3
   patternAmplitude: 2
   patternFrequency: 5
   jump_height: 2
@@ -217,7 +217,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 91e90c980cd2b54429434b66344f9b0c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::MonsterShooter
-  projectilePrefab: {fileID: 2559287183428765651, guid: 7b877991fe532504184f3d2ef78a026a, type: 3}
+  projectilePrefab: {fileID: 2559287183428765651, guid: 2bae763d4c0fa8942b75f3ff111dbc6f, type: 3}
   firePoint: {fileID: 8364492714931052297}
   playerTarget: {fileID: 0}
   pattern_cooldown: 5
