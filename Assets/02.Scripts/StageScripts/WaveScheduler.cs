@@ -71,7 +71,7 @@ public class WaveScheduler
         if (_wave.waveIndex == _lastWaveIndex)
             return;
 
-        if (_wave.midBossId == NO_BOSS_ID)
+        if (_wave.midBossId <= 0)
             return;
 
         // end_time을 “통과한 순간”에만 1회 트리거
