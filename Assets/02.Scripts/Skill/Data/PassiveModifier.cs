@@ -116,6 +116,23 @@ public class SuperCleanModifier : PassiveModifier
     }
 }
 
+
+// ID 42010 / SubTag 40110
+// 크고 아름다운 황금 왕관!(물에 뜹니다.)  (데미지 계수가 3배, 플레이어의 이동 속도 절반)
+public class GoldCrownModifier : PassiveModifier
+{
+    [Header("데미지 계수")]
+    public float DamageMultiplier = 3f;
+    [Header("이동속도 계수")]
+    public float SpeedMultiplier = 0.5f;
+
+    public override void ModifyFinal(SkillStat finalStat)
+    {
+        finalStat.Damage *= DamageMultiplier;
+        finalStat.ProjectileSpeed *= SpeedMultiplier;
+    }
+}
+
 // ID 42012 / SubTag 40112
 // 스노우볼링 (스킬 지속 시간 동안 일정 시간마다 스탯 증가)
 public class SnowballingModifier : PassiveModifier

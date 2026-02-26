@@ -294,6 +294,7 @@ public class SkillSOImporter : EditorWindow
         42003 => new FocusAttackModifier(),         // 집중공략
         42004 => new DoubleExtraDamageModifier(),   // 추가 추가 피해
         42005 => new SuperCleanModifier(),          // SuperClean
+        42010 => new GoldCrownModifier(),           // 황금왕관
         42012 => new SnowballingModifier(),         // 스노우볼링
         42013 => new AmbiModifier(),                // 양손잡이
         42014 => new ImplantModifier(),             // 기초적인 임플란트입니다
