@@ -61,14 +61,15 @@ public class PlayerBase : MonoBehaviour, IDamageable, ISkillable
 
 
     //
-    private LevelupTestStat _levelUpTestStat;
+    public LevelupTestStat TestLevelStat;
     //
 
 
     private void Awake()
     {
         //
-        _levelUpTestStat = GetComponent<LevelupTestStat>();
+        if(TestLevelStat == null)
+            TestLevelStat = GetComponent<LevelupTestStat>();
         //
 
         _currentHp = _maxhp;
