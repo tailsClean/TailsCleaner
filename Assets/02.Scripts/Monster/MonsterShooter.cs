@@ -1,57 +1,88 @@
 ﻿using UnityEngine;
+using System.Collections; 
+
+// 몬스터 상태 정의
+public enum MonsterState { MOVE, PATTERN }
 
 public class MonsterShooter : MonoBehaviour
 {
-    public GameObject projectilePrefab; // 탄환 프리팹
-    public Transform firePoint;         // 탄환이 나갈 위치
-    public Transform playerTarget;      // 플레이어 위치
+    public GameObject projectilePrefab;
+    public Transform firePoint;
+    public Transform playerTarget;
 
+    [Header("--- 기획 데이터 연동 ---")]
+    public float pattern_cooldown = 5.0f;     // 기획 1, 11번
+    public float detect_range = 10.0f;        // 기획 2번
+    public int projectile_count = 3;          // 기획 6번
+    public float fire_interval = 0.2f;        // 기획 7번
 
-    [Header("--- 공격 설정 ---")]
-    public float fireRate = 2.0f;       // 2초마다 발사
-    private float nextFireTime = 0f;    // 다음 총알이 나가기까지의 시간
+    public MonsterState state = MonsterState.MOVE; // 기획 4, 10번
+    private float current_cooldown = 0f;
 
     void Start()
     {
-        playerTarget = FindAnyObjectByType<PlayerBase>()?.transform;
+        playerTarget = GameObject.FindWithTag("Player")?.transform;
     }
 
-    public void Update()
+    void Update()
     {
-        // 방법 1: 일정 시간마다 자동으로 Shoot() 호출
-        if (Time.time >= nextFireTime)
+        // 1번: 쿨타임 상시 검사
+        if (current_cooldown > 0)
         {
-            Shoot();
-            nextFireTime = Time.time + fireRate;
+            current_cooldown -= Time.deltaTime;
         }
-    }
 
-    
-    public void Shoot()
-    {
-        if (playerTarget == null)
+        // 1, 2번: 쿨타임이 끝났고 플레이어가 사거리 안에 있으면 패턴 시작
+        if (state == MonsterState.MOVE && current_cooldown <= 0)
         {
-            GameObject player = GameObject.FindWithTag("Player");
-            if (player != null)
+            if (playerTarget != null && Vector2.Distance(transform.position, playerTarget.position) <= detect_range)
             {
-                playerTarget = player.transform;
+                StartCoroutine(AttackPatternRoutine());
             }
         }
+    }
 
-        // 타겟이 없으면 발사 취소
-        if (projectilePrefab == null || firePoint == null || playerTarget == null) return;
+    IEnumerator AttackPatternRoutine()
+    {
+        // 1. 특수 몬스터 베이스를 가져옵니다.
+        SpecialBossMonsterBase specialBase = GetComponent<SpecialBossMonsterBase>();
 
-        // 플레이어 방향 벡터 계산
+        // 2. 공격 시작 (이동 정지)
+        if (specialBase != null)
+        {
+            specialBase.SetAttackingState(true);
+            state = MonsterState.PATTERN; // 슈터 자신의 상태도 갱신
+        }
+
+        // 3. 발사 루프
+        for (int i = 0; i < projectile_count; i++)
+        {
+            Shoot();
+            yield return new WaitForSeconds(fire_interval);
+        }
+
+        // 4. 공격 종료 (이동 재개)
+        if (specialBase != null)
+        {
+            specialBase.SetAttackingState(false);
+            state = MonsterState.MOVE;
+        }
+
+        current_cooldown = pattern_cooldown;
+    }
+
+    public void Shoot()
+    {
+        if (projectilePrefab == null || playerTarget == null) return;
+
+        // 5, 8번: 플레이어 방향으로 투사체 생성 및 발사
         Vector2 dirToPlayer = (playerTarget.position - transform.position).normalized;
-
-        // 생성 위치 계산
-        float offsetDistance = 1.0f; // 몬스터의 반지름보다 조금 더 크게 설정
+        float offsetDistance = 1.0f;
         Vector3 spawnPos = transform.position + (Vector3)(dirToPlayer * offsetDistance);
 
-        // 보정된 위치에서 생성
         GameObject go = Instantiate(projectilePrefab, spawnPos, Quaternion.identity);
-
         MonsterProjectile projectile = go.GetComponent<MonsterProjectile>();
+
         if (projectile != null)
         {
             projectile.Launch(playerTarget);

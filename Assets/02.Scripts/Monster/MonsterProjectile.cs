@@ -88,7 +88,7 @@ public class MonsterProjectile : MonoBehaviour
         }
     }
 
-    // 플레이어가 Is Trigger이므로 이 메서드에서 모든 충돌을 처리
+    // 이 메서드에서 모든 충돌을 처리
     private void OnTriggerEnter2D(Collider2D other)
     {
         bool isPlayer = other.CompareTag("Player");
