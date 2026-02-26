@@ -3,32 +3,33 @@ using UnityEngine.InputSystem;
 
 public class PlayerBase : MonoBehaviour, IDamageable, ISkillable
 {
-    [SerializeField] private int _maxhp = 15;
-    [SerializeField] private int _attackPower = 10;
-    [SerializeField] private int _defensePower = 1;
-    [SerializeField] private int _evasionChance = 10;                   // 회피율
-    [SerializeField] private int _criticalChance = 10;
-    [SerializeField] private int _criticalDamageMultiplier = 2;
-    [SerializeField] private int _criticalResistance = 10;              // 치명 저항
-    [SerializeField] private int _moveSpeed = 5;
-    [SerializeField] private int _healthRegen = 10;                     // Hp 회복량
-    [SerializeField] private int _metaLevel = 1;
-    [SerializeField] private int _metaMaxExp = 50;
+    [SerializeField] public int _maxhp = 15;
+    [SerializeField] public int _attackPower = 10;
+    [SerializeField] public int _defensePower = 1;
+    [SerializeField] public int _evasionChance = 10;                   // 회피율
+    [SerializeField] public int _criticalChance = 10;
+    [SerializeField] public int _criticalDamageMultiplier = 2;
+    [SerializeField] public int _criticalResistance = 10;              // 치명 저항
+    [SerializeField] public int _moveSpeed = 5;
+    [SerializeField] public int _healthRegen = 10;                     // Hp 회복량
+    [SerializeField] public int _outGameLevel = 1;
+    [SerializeField] public int _outGameMaxExp = 50;
 
     [Header("인게임 정보")]
-    [SerializeField] private int _combatLevel = 1;
-    [SerializeField] private int _combatMaxExp = 50;
-    [SerializeField] private float _experienceGainRate = 10;            // 경험치 획득량
-    [SerializeField] private float _attackInterval = 0.5f;              // 자동공격 주기
-    [SerializeField] private float _pickupRange = 1;                    // 아이템 줍는 범위
+    [SerializeField] public int _inGameLevel = 1;
+    [SerializeField] public int _inGameMaxExp = 50;
+    [SerializeField] public float _experienceGainRate = 10;            // 경험치 획득량
+    [SerializeField] public float _attackInterval = 0.5f;              // 자동공격 주기
+    [SerializeField] public float _pickupRange = 1;                    // 아이템 줍는 범위
     [SerializeField] private ItemPickup _itemPickupCollider;            // 아이템 줍는 범위 콜라이더
-    [SerializeField] private Bullet _bulletPrefab;
 
     [Header("이벤트 채널")]
     [SerializeField] private IntEventChannelSO _onHit;
     [SerializeField] private IntEventChannelSO _onPickupExp;
-    [SerializeField] private IntEventChannelSO _onGainExp;              // 경험치 획득시 알리는 신호
-    [SerializeField] private IntEventChannelSO _onLevelUp;
+    [SerializeField] private IntEventChannelSO _onGainInGameExp;
+    [SerializeField] private IntEventChannelSO _onInGameLevelUp;
+    [SerializeField] private IntEventChannelSO _onGainOutGameExp;
+    [SerializeField] private IntEventChannelSO _onOutGameLevelUp;
     [SerializeField] private VoidEventChannelSO _onDead;
 
     [Header("공격 레이어")]
@@ -36,21 +37,18 @@ public class PlayerBase : MonoBehaviour, IDamageable, ISkillable
     
 
     private int _currentHp;
-    private int _combatCurrentExp;
-
     private PlayerHit _hitSystem;
-    private PlayerCombatLevelSystem _levelSystem;
+    private PlayerLevelSystem _levelSystem;
     private PlayerEquipment _myEquipment;
     private PlayerStateMachine _stateMachine;
 
 
     public int Hp => Mathf.Max(_currentHp, 0);
     public Transform AttackTarget => GetTarget(AttackDir);  // 조준형 스킬 사용을 위한 타겟
-    public Bullet BulletPrefab => _bulletPrefab;
 
 
     // 스킬 공유 데이터
-    public int AttackDamage => _attackPower;                               // 최종 데미지 수치
+    public int AttackDamage => _attackPower;
     public int DefensePower => _defensePower;
     public int MoveSpeed => _moveSpeed + _myEquipment.GetMoveSpeedIncrease();
     public int CriticalChance => _criticalChance;
@@ -63,19 +61,19 @@ public class PlayerBase : MonoBehaviour, IDamageable, ISkillable
 
 
     //
-    public LevelupTestStat LevelUpTestStat { get; private set; }
+    private LevelupTestStat _levelUpTestStat;
     //
 
 
     private void Awake()
     {
         //
-        LevelUpTestStat = GetComponent<LevelupTestStat>();
+        _levelUpTestStat = GetComponent<LevelupTestStat>();
         //
 
         _currentHp = _maxhp;
         _hitSystem = new PlayerHit(this);
-        _levelSystem = new PlayerCombatLevelSystem(this, _combatMaxExp);
+        _levelSystem = new PlayerLevelSystem(this);
         _myEquipment = new PlayerEquipment(PlayerDataTransfer.Equipments);
 
         _stateMachine = new PlayerStateMachine(this);
@@ -84,13 +82,13 @@ public class PlayerBase : MonoBehaviour, IDamageable, ISkillable
     private void OnEnable()
     {
         _itemPickupCollider.OnEnterPickupRange += OnItemPickup;
-        _onPickupExp.AddListener(GainExperience);
+        _onPickupExp.AddListener(GainInGameExp);
     }
 
     private void OnDisable()
     {
         _itemPickupCollider.OnEnterPickupRange -= OnItemPickup;
-        _onPickupExp.RemoveListener(GainExperience);
+        _onPickupExp.RemoveListener(GainInGameExp);
     }
 
     private void Start()
@@ -151,20 +149,28 @@ public class PlayerBase : MonoBehaviour, IDamageable, ISkillable
         Destroy(gameObject);
     }
 
-    // 경험치 획득 로직
-    public void GainExperience(int experience)
+    // 인게임 경험치 획득 로직
+    public void GainInGameExp(int exp)
     {
-        _combatCurrentExp = _levelSystem.GainExperience(_combatCurrentExp, experience);
+        bool isLevelUp = _levelSystem.GainExp(PlayerLevelSystem.GameMode.InGame, exp);
 
-        if (_levelSystem.IsLevelUp)
-        {
-            _combatLevel += _levelSystem.LevelUpDelta.CombatLevel;
-            _onLevelUp.OnStartEvent(_combatLevel);
-        }
+        _onGainInGameExp.OnStartEvent(_levelSystem.InGameCurrentExp);
 
-        _onGainExp.OnStartEvent(_combatCurrentExp);
+        if (isLevelUp)
+            _onInGameLevelUp.OnStartEvent(_levelSystem.InGameLevel);
     }
-   
+    // 아웃게임 경험치 획득 로직
+    public void GainOutGameExp(int exp)
+    {
+        bool isLevelUp = _levelSystem.GainExp(PlayerLevelSystem.GameMode.OutGame, exp);
+
+        _onGainOutGameExp.OnStartEvent(_levelSystem.OutGameCurrentExp);
+
+        if (isLevelUp)
+            _onOutGameLevelUp.OnStartEvent(_levelSystem.OutGameLevel);
+    }
+
+
     // 주위 아이템(경험치) 끌어모으는 메서드
     private void OnItemPickup(IPickable item) => _levelSystem.ItemPickup(transform, item);
 
