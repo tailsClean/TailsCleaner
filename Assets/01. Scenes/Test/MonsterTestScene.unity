@@ -190,7 +190,7 @@ PrefabInstance:
       objectReference: {fileID: 1292016556}
     - target: {fileID: 4623907807441698298, guid: 5176187c00e994a419731b96c5933ae4, type: 3}
       propertyPath: moveType
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4623907807441698298, guid: 5176187c00e994a419731b96c5933ae4, type: 3}
       propertyPath: cast_time
@@ -198,7 +198,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4623907807441698298, guid: 5176187c00e994a419731b96c5933ae4, type: 3}
       propertyPath: isSuicideUnit
-      value: 0
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4623907807441698298, guid: 5176187c00e994a419731b96c5933ae4, type: 3}
+      propertyPath: pattern_multiply
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4690416171218522885, guid: 5176187c00e994a419731b96c5933ae4, type: 3}
       propertyPath: m_LocalPosition.x
@@ -246,7 +250,7 @@ PrefabInstance:
       objectReference: {fileID: 338404963}
     - target: {fileID: 5514830495199837496, guid: 5176187c00e994a419731b96c5933ae4, type: 3}
       propertyPath: m_Enabled
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5514830495199837496, guid: 5176187c00e994a419731b96c5933ae4, type: 3}
       propertyPath: playerTarget
@@ -491,7 +495,11 @@ MonoBehaviour:
   projectilePrefab: {fileID: 2559287183428765651, guid: 7b877991fe532504184f3d2ef78a026a, type: 3}
   firePoint: {fileID: 850226991}
   playerTarget: {fileID: 1292016556}
-  fireRate: 2
+  pattern_cooldown: 5
+  detect_range: 10
+  projectile_count: 3
+  fire_interval: 0.2
+  state: 0
 --- !u!1 &927556343
 GameObject:
   m_ObjectHideFlags: 0

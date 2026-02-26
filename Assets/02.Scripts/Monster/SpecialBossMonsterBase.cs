@@ -61,27 +61,32 @@ public abstract class SpecialBossMonsterBase : MonsterBase
 
     protected override void FixedUpdate()
     {
-        // 타겟이 없거나 이미 터진 경우 로직 중단
-        if (target == null || hasExploded) return;
+        if (target == null) { Debug.LogError($"{gameObject.name}: 타겟(플레이어)이 없습니다!"); return; }
+        if (hasExploded) return;
 
-        // [자폭 로직] 자폭 유닛일 경우 시간 깎음
         if (isSuicideUnit)
         {
+            //Debug.Log($"{gameObject.name}: 자폭 추적 중 - 타이머: {currentCastTimer}, 속도배율: {pattern_multiply}");
+
             if (currentCastTimer > 0)
             {
                 currentCastTimer -= Time.fixedDeltaTime;
-                // 예고 이펙트
-                UpdateWarningVisuals(currentCastTimer / cast_time);
+                MoveToTarget();
             }
             else
             {
-                // 시간이 다 되면 폭발
                 ExecuteExplosion();
+                return;
             }
         }
-
-        // 공격 중이 아닐 때만 이동 로직 실행
-        if (!isAttacking) MoveToTarget();
+        else
+        {
+            // 일반 유닛: 공격 중이 아닐 때만 이동
+            if (!isAttacking)
+            {
+                MoveToTarget();
+            }
+        }
     }
 
     protected override void MoveToTarget()
@@ -89,16 +94,21 @@ public abstract class SpecialBossMonsterBase : MonsterBase
         patternTimer += Time.fixedDeltaTime;
         stateTimer += Time.fixedDeltaTime;
 
-        // 원본 속도 보존
-        float originalSpeed = move_speed;
-
-        // 자폭 돌진 혹은 점프/도망 중일 때 pattern_multiply 적용
-        if ((isSuicideUnit && !hasExploded) || isJumping || isFleeingState)
+        // 자폭 유닛 전용 이동 (가장 우선순위 높음)
+        if (isSuicideUnit && !hasExploded)
         {
-            move_speed *= pattern_multiply;
+            float suicideSpeed = move_speed * pattern_multiply;
+            Vector2 dir = ((Vector2)target.position - rb2D.position).normalized;
+
+            // 이동 실행
+            rb2D.MovePosition(rb2D.position + dir * suicideSpeed * Time.fixedDeltaTime);
+            return;
         }
 
-        // 이동 타입별 분기
+        // 일반 유닛 이동 로직
+        float originalSpeed = move_speed;
+        if (isJumping || isFleeingState) move_speed *= pattern_multiply;
+
         switch (moveType)
         {
             case MonsterMove.StraightChase: StraightChase(); break;
@@ -108,7 +118,6 @@ public abstract class SpecialBossMonsterBase : MonsterBase
             default: StraightChase(); break;
         }
 
-        // 속도 복구
         move_speed = originalSpeed;
     }
 
@@ -299,7 +308,9 @@ public abstract class SpecialBossMonsterBase : MonsterBase
         if (hasExploded) return;
         hasExploded = true;
 
-        // 범위 안의 모든 충돌체 감지
+        //Debug.Log($"{gameObject.name}: 펑! 자폭했습니다.");
+
+        // 1. 범위 안의 플레이어 감지 및 데미지
         Collider2D[] hits = Physics2D.OverlapCircleAll(rb2D.position, explosion_range);
         foreach (var hit in hits)
         {
@@ -310,7 +321,8 @@ public abstract class SpecialBossMonsterBase : MonsterBase
                 break;
             }
         }
-        
+
+        Destroy(gameObject);
     }
 
     private void UpdateWarningVisuals(float progressNormalized)
