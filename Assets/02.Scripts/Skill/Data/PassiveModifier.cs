@@ -116,6 +116,13 @@ public class SuperCleanModifier : PassiveModifier
     }
 }
 
+// ID 42009 / SubTag 40109
+// 더 크게! 더! 더더! 크고 아름답게! (투사체 크기에 비례해 넉백과 데미지 계수가 증가)
+public class BiggerBetterModifier : PassiveModifier
+{
+
+}
+
 
 // ID 42010 / SubTag 40110
 // 크고 아름다운 황금 왕관!(물에 뜹니다.)  (데미지 계수가 3배, 플레이어의 이동 속도 절반)
@@ -132,6 +139,14 @@ public class GoldCrownModifier : PassiveModifier
         finalStat.ProjectileSpeed *= SpeedMultiplier;
     }
 }
+
+// ID 42011 / SubTag 40111
+// 원딜의 정석 (공격 시전 속도에 비례해 치명타 확률 증가)
+public class ADCarryModifier : PassiveModifier
+{
+
+}
+
 
 // ID 42012 / SubTag 40112
 // 스노우볼링 (스킬 지속 시간 동안 일정 시간마다 스탯 증가)
@@ -184,6 +199,14 @@ public class ImplantModifier : PassiveModifier
         runTimePassiveMulSum.Damage += DamagePerPierce; // 1.0 -> 1.2 -> 1.4
     }
 }
+
+// ID 42015 / SubTag 40115
+// 탄산수 (데미지 틱이 피해를 입힐 때 마다 적의 최대 체력비례 피해)
+public class SodaWaterModifier : PassiveModifier
+{
+
+}
+
 
 
 // ID 42016 / SubTag 40116

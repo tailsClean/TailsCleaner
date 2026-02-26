@@ -294,11 +294,19 @@ public class SkillSOImporter : EditorWindow
         42003 => new FocusAttackModifier(),         // 집중공략
         42004 => new DoubleExtraDamageModifier(),   // 추가 추가 피해
         42005 => new SuperCleanModifier(),          // SuperClean
+        //42006 => new 
+        //42007 => new 
+        //42008 => new 
+        42009 => new BiggerBetterModifier(),        // 더 크게! 더! 더더! 크고 아름답게!
         42010 => new GoldCrownModifier(),           // 황금왕관
+        42011 => new ADCarryModifier(),             // 원딜의 정석
         42012 => new SnowballingModifier(),         // 스노우볼링
         42013 => new AmbiModifier(),                // 양손잡이
         42014 => new ImplantModifier(),             // 기초적인 임플란트입니다
+        42015 => new SodaWaterModifier(),           // 탄산수
         42016 => new CatLaundryModifier(),          // 냥빨래
+        //42017 => new 
+
         _ => null
     };
     #endregion
