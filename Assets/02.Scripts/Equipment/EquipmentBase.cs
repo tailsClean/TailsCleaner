@@ -4,19 +4,11 @@ using UnityEngine.UI;
 using static EquipmentIncreaseStat;
 using static EquipmentGrade;
 
-public class EquipmentBase : MonoBehaviour
+public class EquipmentBase : EquipAndRelicBase
 {
-
-    [Header("장비 기본 정보")]
-    [field: SerializeField] public int EquipmentID { get; private set; }
+    [Header("장비 정보")]
     [field: SerializeField] public PARTS EquipmentPart { get; private set; }
     [field: SerializeField] public int MaxStack { get; private set; }        // 최대 소지 수량
-    [field: SerializeField] public int GroupID { get; private set; }         // 해당 파츠 고유ID
-    [field: SerializeField] public string Name { get; private set; }
-    [field: SerializeField] public string Description { get; private set; }
-    [field: SerializeField] public string IconSprite { get; private set; }
-    [field: SerializeField] public string IconClickEffect { get; private set; }
-    [field: SerializeField] public string IconClickSound { get; private set; }
 
     [SerializeField] private EquipmentEventChannelSO _onWearEquipment;
 

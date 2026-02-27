@@ -109,9 +109,6 @@ public class PlayerBase : MonoBehaviour, IDamageable, ISkillable
     public void OnMove(InputAction.CallbackContext ctx) => 
         _stateMachine.MoveInput(ctx.ReadValue<Vector2>().normalized);
 
-    // 공격 기능
-    public Bullet FireBullet(Bullet bulletPrefab, Vector2 spawnPos) => 
-        Instantiate(bulletPrefab, spawnPos, Quaternion.identity);
 
     // 조이스틱 방향으로 공격
     public void StickAttackDir(InputAction.CallbackContext ctx)
