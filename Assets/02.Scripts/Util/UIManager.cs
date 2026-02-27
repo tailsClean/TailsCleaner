@@ -1,9 +1,9 @@
-using UnityEngine;
+﻿using UnityEngine;
 using DG.Tweening;
 using TMPro;
 using System;
 using UnityEngine.SceneManagement;
-public interface UIContainer{}
+public interface UIContainer { }
 
 public class UIManager : MonoBehaviour
 {
@@ -60,6 +60,8 @@ public class UIManager : MonoBehaviour
         {
             if(container is StageUIContainer stageUI) // UI 참조 연경
             {
+                // StageUIContainer 참조로 들고 있기
+                this._stageUI = stageUI;
                 this._exitPanel = stageUI.ExitPanel;
             }
         }
@@ -103,8 +105,12 @@ public class UIManager : MonoBehaviour
             _exitPanel.SetActive(!_exitPanel.activeSelf);
         }
     }
-    
+
     #endregion
 
     //여기에 UI패널별  활성화 기능들 추가
+    [SerializeField] private StageUIContainer _stageUI;
+
+    public void ShowUI(UIGroup.UISTATE uiState) => _stageUI.SetActiveUiGroup(uiState, true);
+    public void HideUI(UIGroup.UISTATE uiState) => _stageUI.SetActiveUiGroup(uiState, false);
 }

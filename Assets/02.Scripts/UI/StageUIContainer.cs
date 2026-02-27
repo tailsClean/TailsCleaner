@@ -1,3 +1,4 @@
+﻿using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -6,11 +7,36 @@ public class StageUIContainer : MonoBehaviour, UIContainer // stageUI에서 연�
     [SerializeField] private Button _settingButton;
     [SerializeField] private GameObject _exitPanel;
     public GameObject ExitPanel => _exitPanel;
+
+
+    [SerializeField] private List<UIGroup> _uiGroupList;
+    public Dictionary<UIGroup.UISTATE, UIGroup> _uiDict;
+
+    private void Awake()
+    {
+        _uiDict = new Dictionary<UIGroup.UISTATE, UIGroup>();
+        foreach (var uiGroup in _uiGroupList)
+        {
+            _uiDict.Add(uiGroup.UIState, uiGroup);
+        }
+    }
+
+
     void Start()
     {
         _settingButton.onClick.AddListener(() => {
         Debug.Log("버튼 클릭됨!"); // 이게 뜨나요?
         UIManager.Instance.ChangeStateExitPanel();
     });
+    }
+
+
+
+    public void SetActiveUiGroup(UIGroup.UISTATE uiState, bool active)
+    {
+        if (_uiDict.TryGetValue(uiState, out var uIGroup))
+            uIGroup.gameObject.SetActive(active);
+        else
+            Debug.LogWarning(uiState + "에 해당하는 UI그룹이 없습니다.");
     }
 }
