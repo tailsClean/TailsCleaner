@@ -218,6 +218,30 @@ public class SkillSOImporter : EditorWindow
         40012 => new SoapPierceDamageModifier(),          // 거품내기
         40014 => new SoapPierceSpeedModifier(),           // 거품 가속
         40016 => new SoapRemovalPierceModifier(),         // 비누 덩어리
+
+        // 세제 캡슐
+        40040 => new DetergentRapidFireModifier(),        // 1만 시간의 법칙
+
+        // 회전 장난감
+        40042 => new SpinningToyTrainModifier(),          // 기차 장난감
+        40043 => new SpinningToyTopModifier(),            // 팽이 장난감
+        40044 => new SpinningToyMoonModifier(),           // 달 장난감
+        40045 => new SpinningToyDuckModifier(),           // 오리 장난감
+        40046 => new SpinningToyPirateModifier(),         // 해적선 장난감
+        40047 => new SpinningToySharkModifier(),          // 상어 장난감
+        40048 => new SpinningToyBurstModifier(),          // 물놀이 끝!
+
+
+        // 일광건조
+        40050 => new SunDryingDamagePerTickModifier(),    // 따스한 태양
+        40051 => new SunDryingKnockbackModifier(),        // 이불 털기
+        40052 => new SunDryingSlowModifier(),             // 으슬으슬
+        40053 => new SunDryingDefenseModifier(),          // 이불 두르기
+        40054 => new SunDryingShieldModifier(),           // 두꺼운 이불
+        40055 => new SunDryingHealModifier(),             // 기상!
+
+
+
         _ => null  // 매핑된거 없으면 깡통
     };
     #endregion
@@ -270,7 +294,9 @@ public class SkillSOImporter : EditorWindow
         42003 => new FocusAttackModifier(),         // 집중공략
         42004 => new DoubleExtraDamageModifier(),   // 추가 추가 피해
         42005 => new SuperCleanModifier(),          // SuperClean
+        42010 => new GoldCrownModifier(),           // 황금왕관
         42012 => new SnowballingModifier(),         // 스노우볼링
+        42013 => new AmbiModifier(),                // 양손잡이
         42014 => new ImplantModifier(),             // 기초적인 임플란트입니다
         42016 => new CatLaundryModifier(),          // 냥빨래
         _ => null

@@ -14,10 +14,13 @@ public class PlayerEquipment
 
     public int GetMoveSpeedIncrease()
     {
-        // if (_myEquipments.TryGetValue(EquipmentBase.PARTS.Shoes, out var shoes))
-        //     return shoes.GetIncreaseStat(EquipmentIncreaseStat.STAT.MoveSpeed);
-
-
+        if(_myEquipments == null )
             return 0;
+
+        if (_myEquipments.TryGetValue(EquipmentBase.PARTS.Shoes, out var shoes))
+            return shoes.GetIncreaseStat(EquipmentIncreaseStat.STAT.MoveSpeed);
+
+
+        return 0;
     }
 }

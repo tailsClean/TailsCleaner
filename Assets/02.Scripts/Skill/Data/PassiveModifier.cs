@@ -16,17 +16,12 @@ public abstract class PassiveModifier
     // ex) 양손잡이, 냥빨래, 황금왕관
     public virtual void ModifyFinal(SkillStat finalStat) { }
 
-    // 플레이어 강화
-    // 매이크 라쿤 크레이트 어겐!
-    public virtual PlayerStatBonus GetPlayerBonus(int playerStrengthTagCount) { return new PlayerStatBonus(); }     
-
-
-
 
     public virtual bool OnProjectileInit(SkillStat runtimeBaseStat, SkillStat runtimeFinalStat) { return false; }   // 투사체 생성 시, bool은 재계산 확인용
     public virtual void OnDamage(MonsterBase monster) { }                             // 적 피해 시
     public virtual void OnPierce(SkillStat runTimePassiveMulStat) { }                 // 관통 시
-    public virtual void OnEnterArea(MonsterBase monster) { }                          // 장판 올라갈 시
+    public virtual void OnEnterArea(MonsterBase monster) { }                          // 장판 올라갈 시 (몬스터)
+    public virtual void OnEnterArea(PlayerBase player) { }                            // 장판 올라갈 시 (플레이어)
     public virtual void OnDurationTick(SkillStat runTimePassiveMulStat) { }           // 지속시간마다
     public virtual void OnStun(MonsterBase monster) { }                               // 군중제어
 }
@@ -44,17 +39,10 @@ public class RaccoonCrateModifier : PassiveModifier
 
     private int _lastTagCount;  // 최근 태그 수
 
-    // 반환해서 플레이어에게 적용시켜야함
-    public override PlayerStatBonus GetPlayerBonus(int tagCount)
-    {
-        return new PlayerStatBonus
-        {
-            Defence         = DefencePerTag         * tagCount,
-            EvasionChance   = EvasionChancePerTag   * tagCount,
-            CriticalChance  = CriticalChancePerTag  * tagCount,
-            CriticalDamage  = CriticalDamagePerTag  * tagCount,
-        };
-    }
+    //Defence         = DefencePerTag* tagCount,
+    //EvasionChance = EvasionChancePerTag * tagCount,
+    //CriticalChance = CriticalChancePerTag * tagCount,
+    //CriticalDamage = CriticalDamagePerTag * tagCount,
 }
 
 
@@ -107,7 +95,7 @@ public class DoubleExtraDamageModifier : PassiveModifier
     public override void ModifyBaseAdd(SkillStat baseStat)
     {
         // 1회 추가
-        baseStat.ExtraDamageMultiplier = ExtraDamageMultiplier;
+        baseStat.ExtraDamageMultiplier += ExtraDamageMultiplier;
     }
 }
 
@@ -125,6 +113,23 @@ public class SuperCleanModifier : PassiveModifier
         // 군중제어 서브태그의 효과 발동 시
         // 적 속도 추가로 느려지게 적용
         //monster.ApplySlow(SlowAmount, SlowDuration);
+    }
+}
+
+
+// ID 42010 / SubTag 40110
+// 크고 아름다운 황금 왕관!(물에 뜹니다.)  (데미지 계수가 3배, 플레이어의 이동 속도 절반)
+public class GoldCrownModifier : PassiveModifier
+{
+    [Header("데미지 계수")]
+    public float DamageMultiplier = 3f;
+    [Header("이동속도 계수")]
+    public float SpeedMultiplier = 0.5f;
+
+    public override void ModifyFinal(SkillStat finalStat)
+    {
+        finalStat.Damage *= DamageMultiplier;
+        finalStat.ProjectileSpeed *= SpeedMultiplier;
     }
 }
 
@@ -148,6 +153,25 @@ public class SnowballingModifier : PassiveModifier
         runTimePassiveMulStat.ProjectileSpeed   += MultiplierPerTick;
     }
 }
+
+
+// ID 42013 / SubTag 40113
+// 양손잡이 (데미지 계수 절반. 투사체가 두배)
+public class AmbiModifier : PassiveModifier
+{
+    [Header("데미지 계수")]
+    public float DamageMultiplier = 0.5f;
+    [Header("투사체 계수")]
+    public int ProjectileCountMultiplier = 2;
+
+    public override void ModifyFinal(SkillStat finalStat)
+    {
+        finalStat.Damage *= DamageMultiplier;
+        finalStat.ProjectileCount *= ProjectileCountMultiplier;
+    }
+}
+
+
 
 // ID 42014 / SubTag 40114
 // 기초적인 임플란트입니다 (투사체 관통 시 추가 피해 부여)

@@ -201,6 +201,50 @@ Transform:
   m_Children: []
   m_Father: {fileID: 1545055642}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &638314647
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 638314648}
+  - component: {fileID: 638314649}
+  m_Layer: 0
+  m_Name: RewardManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &638314648
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 638314647}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1545055642}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &638314649
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 638314647}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5337a5024e10b74429bbc8113a3a4a34, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::RewardManager
 --- !u!1 &679197704
 GameObject:
   m_ObjectHideFlags: 0
@@ -390,6 +434,22 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 11400000, guid: 93b987dd3bf0ca04e97359b3aa995913, type: 2}
     - target: {fileID: 7566682362595537252, guid: 1d22e24c33ab46e4386a4162918e7702, type: 3}
+      propertyPath: _onGainInGameExp
+      value: 
+      objectReference: {fileID: 11400000, guid: 2782b6835d5ba0247bd9a0dc07286fd3, type: 2}
+    - target: {fileID: 7566682362595537252, guid: 1d22e24c33ab46e4386a4162918e7702, type: 3}
+      propertyPath: _onInGameLevelUp
+      value: 
+      objectReference: {fileID: 11400000, guid: ab8beb8fde613eb48accc579d6b4ae5a, type: 2}
+    - target: {fileID: 7566682362595537252, guid: 1d22e24c33ab46e4386a4162918e7702, type: 3}
+      propertyPath: _onGainOutGameExp
+      value: 
+      objectReference: {fileID: 11400000, guid: f572ed355f113e247935b92f8be3a62f, type: 2}
+    - target: {fileID: 7566682362595537252, guid: 1d22e24c33ab46e4386a4162918e7702, type: 3}
+      propertyPath: _onOutGameLevelUp
+      value: 
+      objectReference: {fileID: 11400000, guid: 50f56765f4cf7744989271a2b4228429, type: 2}
+    - target: {fileID: 7566682362595537252, guid: 1d22e24c33ab46e4386a4162918e7702, type: 3}
       propertyPath: _monsterLayer.m_Bits
       value: 64
       objectReference: {fileID: 0}
@@ -457,7 +517,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::StageEntry
   _stageId: 50201
-  _useTimeOverride: 0
+  _towerId: 0
+  _useTimeOverride: 1
   _overrideMainTimeSeconds: 60
   _overrideBossTimeSeconds: 30
   _stageController: {fileID: 1499286055}
@@ -581,6 +642,58 @@ MonoBehaviour:
   _stageTrans: {fileID: 0}
   _onStartInGame: {fileID: 11400000, guid: bb5af9a30899d5441ae60b98e54bf231, type: 2}
   _exitPanel: {fileID: 0}
+--- !u!1 &1385904951
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1385904953}
+  - component: {fileID: 1385904952}
+  m_Layer: 0
+  m_Name: PlayerRewardHandler
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1385904952
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1385904951}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5655864abaeb1ac44830999c78277e4e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PlayerRewardHandler
+  myReward:
+    Stage_ID: 
+    isFirstClear: 0
+    score: 0
+    goldEarned: 0
+    rank: 
+    multiplier: 0
+    Coin: 0
+--- !u!4 &1385904953
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1385904951}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1545055642}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1389569646
 GameObject:
   m_ObjectHideFlags: 0
@@ -722,6 +835,51 @@ BoxCollider2D:
   m_AutoTiling: 0
   m_Size: {x: 76.799995, y: 43.199997}
   m_EdgeRadius: 0
+--- !u!1 &1476404924
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1476404926}
+  - component: {fileID: 1476404925}
+  m_Layer: 0
+  m_Name: StageResultHandler
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1476404925
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1476404924}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: da678085f86d17343b9ef03ebbe10b20, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::StageResultHandler
+  _enableDebugHotkeys: 1
+--- !u!4 &1476404926
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1476404924}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1545055642}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1493428059
 GameObject:
   m_ObjectHideFlags: 0
@@ -801,8 +959,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cdfa1fecf5a51534faec55939601c841, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::StageController
-  _resultHandler: {fileID: 0}
-  _playerRewardHandler: {fileID: 0}
+  _resultHandler: {fileID: 1476404925}
+  _playerRewardHandler: {fileID: 1385904952}
 --- !u!4 &1499286056
 Transform:
   m_ObjectHideFlags: 0
@@ -866,10 +1024,13 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
+  - {fileID: 1476404926}
+  - {fileID: 1385904953}
   - {fileID: 504285890}
   - {fileID: 809572061}
   - {fileID: 1493428060}
   - {fileID: 1499286056}
+  - {fileID: 638314648}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1546692383

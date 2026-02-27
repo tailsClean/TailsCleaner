@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Rendering.Universal;
 
 public class SkillArea<TModifierData> : SkillObjectBase
     where TModifierData : class, new()

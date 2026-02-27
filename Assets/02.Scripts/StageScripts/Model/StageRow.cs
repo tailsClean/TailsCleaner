@@ -51,6 +51,17 @@ public sealed class SpecialMonsterRow
     public int monster_id;
 }
 
+public sealed class TowerTableRow
+{
+    public int tower_id;
+    public string tower_name_key;
+    public int need_stage_id;
+    public float hp_modifier;
+    public float power_modifier;
+    public string tower_icon_resource;
+    public string bgm_resource;
+}
+
 public enum SpecialSpawnType
 {
     Periodic = 1, // 일정 주기 반복

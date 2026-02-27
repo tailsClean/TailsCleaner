@@ -18,7 +18,7 @@ public class SoapThrowModifierData
 // 40011 감나빗!    /      재추적
 public class SoapRetargetModifier : ActiveModifier<SoapThrowSkill>
 {
-    public override void ApplyModifier(SoapThrowSkill skill)
+    public override void ApplyModifier(SoapThrowSkill skill, ActiveUpgradeData upgradeData)
     {
         // 재추적 설정
         skill._modifierData.Retracking = true;
@@ -31,7 +31,7 @@ public class SoapPierceDamageModifier : ActiveModifier<SoapThrowSkill>
     [Header("관통당 추가 피해")]
     public float DamagePerPierce = 0.5f;
 
-    public override void ApplyModifier(SoapThrowSkill skill)
+    public override void ApplyModifier(SoapThrowSkill skill, ActiveUpgradeData upgradeData)
     {
         // 관통 추가 피해 설정
         skill._modifierData.PierceDamage = true;
@@ -45,7 +45,7 @@ public class SoapPierceSpeedModifier : ActiveModifier<SoapThrowSkill>
     [Header("관통당 추가 속도")]
     public float SpeedPerPierce = 1f;
 
-    public override void ApplyModifier(SoapThrowSkill skill)
+    public override void ApplyModifier(SoapThrowSkill skill, ActiveUpgradeData upgradeData)
     {
         // 관통 추가 속도 설정
         skill._modifierData.PierceSpeed = true;
@@ -59,7 +59,7 @@ public class SoapRemovalPierceModifier : ActiveModifier<SoapThrowSkill>
     [Header("감소 관통당 추가 피해")]
     public float DamagePerRemovalPierce = 2f;
 
-    public override void ApplyModifier(SoapThrowSkill skill)
+    public override void ApplyModifier(SoapThrowSkill skill, ActiveUpgradeData upgradeData)
     {
         // 관통 제거 설정
         skill._modifierData.RemovePierce = true;

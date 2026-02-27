@@ -58,12 +58,11 @@ public class UIManager : MonoBehaviour
     {
         if(sceneUI.TryGetComponent(out UIContainer container))
         {
-            if(container is StageUIContainer stageUI)
+            if(container is StageUIContainer stageUI) // UI 참조 연경
             {
                 this._exitPanel = stageUI.ExitPanel;
             }
         }
-
     }
 
     #endregion
@@ -107,5 +106,5 @@ public class UIManager : MonoBehaviour
     
     #endregion
 
-    
+    //여기에 UI패널별  활성화 기능들 추가
 }

@@ -22,6 +22,12 @@ public class RuleBasedMonsterSpawner : MonoBehaviour, IMonsterSpawnSystem
     [SerializeField] private MonsterBase _midBossPrefab;
     [SerializeField] private MonsterBase _bossPrefab;
 
+    //스테이지 및 웨이브 상승 시, 공격력 및 체력 증가를 위한 변수값
+    private float _stageHpMod;
+    private float _stagePowerMod;
+    private float _towerHpMod;
+    private float _towerPowerMod;
+
     private WavePlan _currentWave;
 
     private bool _isSpawningEnabled = true; //스폰 활성화 여부
@@ -146,11 +152,32 @@ public class RuleBasedMonsterSpawner : MonoBehaviour, IMonsterSpawnSystem
 
         MonsterBase _monster = Instantiate(_prefab, _spawnPos, Quaternion.identity);
         _monster.name = _name;
-
         _monster.target = _playerTransform;
+
+        // wave modifier (현재 웨이브 기반)
+        float waveHp = _currentWave != null ? _currentWave.waveHpModifier : 0f;
+        float wavePower = _currentWave != null ? _currentWave.wavePowerModifier : 0f;
+
+        // 기획서 방식: 1 + tower + stage + wave
+        float hpScale = 1f + _towerHpMod + _stageHpMod + waveHp;
+        float powerScale = 1f + _towerPowerMod + _stagePowerMod + wavePower;
+
+        // 안전 클램프(음수 방지)
+        hpScale = Mathf.Max(0.1f, hpScale);
+        powerScale = Mathf.Max(0.1f, powerScale);
+
+        _monster.ApplyScaling(hpScale, powerScale);
 
         _registry.Register(_monster.gameObject);
         return _monster;
+    }
+
+    public void SetStageModifiers(float stageHp, float stagePower, float towerHp, float towerPower)
+    {
+        _stageHpMod = stageHp;
+        _stagePowerMod = stagePower;
+        _towerHpMod = towerHp;
+        _towerPowerMod = towerPower;
     }
 
     private Vector2 GetSpawnPositionByPattern(bool _isBoss)

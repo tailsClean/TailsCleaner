@@ -82,7 +82,9 @@
     public SkillStat Clone()
     {
         SkillStat clone = new SkillStat();
-        clone.Add(this);
+
+        clone.CopyFrom(this);
+
         return clone;
     }
 }

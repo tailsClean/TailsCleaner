@@ -80,13 +80,14 @@ public class SoapThrowProjectile : SkillProjectile<SoapThrowModifierData>
     // 관통 후 새로운 적 재추적
     private void RetargetEnemy()
     {
-        // 공격 방향에서 가장 가까운 적
-        Transform target = SkillManager.Instance.Player.AttackTarget;
+        // 현재 공격 방향에 찍혀있는 타겟
+        Transform target = _skill.CurrentTarget;
 
-        // 없으면 그냥 쭉 가기
+        // 타겟이 없거나 죽었다면 그냥 직진
         if (target == null) return;
 
-        // 새 방향 설정
+        // 타겟 있다면
+        // 관통한 현재 위치에서 타겟 방향으로 꺾기
         Vector2 newDir = (target.position - transform.position).normalized;
         SetDirection(newDir);
 
