@@ -6,6 +6,8 @@ public class StageController : MonoBehaviour
     [SerializeField] private StageResultHandler _resultHandler;
     [SerializeField] private PlayerRewardHandler _playerRewardHandler;
 
+    [SerializeField] private StageTimerTextUI _timerUI;
+
     public PlayerRewardHandler RewardHandler => _playerRewardHandler;
 
     private StageEvents _events;
@@ -118,6 +120,9 @@ public class StageController : MonoBehaviour
             // Handler는 UI/입력만 하도록 바뀔 예정이라 controller도 넘기는게 좋음
             _resultHandler.Bind(_events, this);
         }
+
+        if (_timerUI != null)
+            _timerUI.Bind(_events);
 
         _stateMachine.ChangeState(new CombatState(_timer, _waveScheduler));
         _spawner.SetSpawningEnabled(true);
