@@ -181,12 +181,12 @@ RectTransform:
   m_LocalScale: {x: 0, y: 0, z: 0}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 2495047705664841656}
   - {fileID: 7475805261229890530}
+  - {fileID: 2495047705664841656}
   - {fileID: 2500641608837354273}
   - {fileID: 4234086033384368175}
-  - {fileID: 8462839882739651113}
   - {fileID: 5969571354979415751}
+  - {fileID: 8462839882739651113}
   - {fileID: 3806032359527101799}
   - {fileID: 4321969710581894313}
   - {fileID: 3084048845101509499}
@@ -406,6 +406,8 @@ MonoBehaviour:
   _hatImage: {fileID: 6845491137385011764}
   _cloakImage: {fileID: 863557780142531983}
   _shoseImage: {fileID: 1921075695604331660}
+  _relicSlot: []
+  baseImg: {fileID: 0}
 --- !u!1 &3607112674202279935
 GameObject:
   m_ObjectHideFlags: 0
@@ -508,7 +510,7 @@ Transform:
   m_GameObject: {fileID: 6012969347779926579}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -688.255, y: -384.262, z: 0}
+  m_LocalPosition: {x: -963.89, y: -540, z: 0}
   m_LocalScale: {x: 2.057328, y: 2.057328, z: 2.057328}
   m_ConstrainProportionsScale: 1
   m_Children: []
@@ -584,7 +586,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 850af79a10ce44d498e144f9ca96795f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EquipmentTest
-  _onChangeEquipment: {fileID: 11400000, guid: ca4e79137e788dc4789b0eb57e223fb0, type: 2}
+  _onEquipEnhancement: {fileID: 11400000, guid: ca4e79137e788dc4789b0eb57e223fb0, type: 2}
+  <MyRelic>k__BackingField: []
 --- !u!1001 &486344462577453932
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -699,6 +702,10 @@ PrefabInstance:
       propertyPath: m_Sprite
       value: 
       objectReference: {fileID: 21300000, guid: 198a7c6901698314297643c0f07eb099, type: 3}
+    - target: {fileID: 3407258402209864608, guid: e5365ec8d3d3a4742bf258618ff339b0, type: 3}
+      propertyPath: <StatValue>k__BackingField
+      value: 3
+      objectReference: {fileID: 0}
     - target: {fileID: 3407258402209864608, guid: e5365ec8d3d3a4742bf258618ff339b0, type: 3}
       propertyPath: <SpriteImage>k__BackingField
       value: 
@@ -1033,6 +1040,10 @@ PrefabInstance:
       propertyPath: m_Sprite
       value: 
       objectReference: {fileID: 21300000, guid: a61ba4b070f31034eb76a51829b236e3, type: 3}
+    - target: {fileID: 3407258402209864608, guid: e5365ec8d3d3a4742bf258618ff339b0, type: 3}
+      propertyPath: <StatValue>k__BackingField
+      value: 10
+      objectReference: {fileID: 0}
     - target: {fileID: 4450357880248267958, guid: e5365ec8d3d3a4742bf258618ff339b0, type: 3}
       propertyPath: m_Name
       value: Shose

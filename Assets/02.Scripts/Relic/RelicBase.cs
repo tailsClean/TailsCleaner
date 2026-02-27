@@ -1,14 +1,14 @@
 ﻿using UnityEngine;
 
 
-public class RelicBase : EquipAndRelicBase
+public class RelicBase : PlayerEnhancement
 {
     [Header("유물 정보")]
-    [field: SerializeField] public int ID { get; private set; }
 
     [field: SerializeField] public STAT StatUp { get; private set; }
     [field: SerializeField] public int StatUpValue { get; private set; }
     [field: SerializeField] public DIVISION Division { get; private set; }
+
 
 
     public enum STAT

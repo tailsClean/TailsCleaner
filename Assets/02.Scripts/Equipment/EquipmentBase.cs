@@ -1,22 +1,13 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-using static EquipmentIncreaseStat;
 using static EquipmentGrade;
 
-public class EquipmentBase : EquipAndRelicBase
+public class EquipmentBase : PlayerEnhancement
 {
     [Header("장비 정보")]
     [field: SerializeField] public PARTS EquipmentPart { get; private set; }
     [field: SerializeField] public int MaxStack { get; private set; }        // 최대 소지 수량
-
-    [SerializeField] private EquipmentEventChannelSO _onWearEquipment;
-
-    //
-    [field: SerializeField] public Sprite SpriteImage { get; private set; }
-    private Button _button;
-    //
-
 
     #region 장비 스텟
     // 임시 스텟
@@ -31,24 +22,8 @@ public class EquipmentBase : EquipAndRelicBase
     public void AddIncreaseStat(STAT statType) => IncreaseStat.Add(statType, new EquipmentIncreaseStat(this));
     #endregion
 
-    #region 강화 데이터
-    // 임시 강화
-    [Header("강화 데이터")]
-    [field: SerializeField] public int EnhanceID { get; private set; }
-    [field: SerializeField] public int EnhanceGroupID { get; private set; }
-    [field: SerializeField] public int EnhanceLevel { get; private set; } = 1;
-    [field: SerializeField] public bool IsEnhanceMaxLevel { get; private set; }
-    [field: SerializeField] public float EnhanceAddValue { get; private set; }
-    [field: SerializeField] public int EnhanceCostGold { get; private set; }
-    [field: SerializeField] public int EnhanceCostBluePrint { get; private set; }
-    [field: SerializeField] public int EnhanceBluePrintID { get; private set; }
 
-    public EquipemtEnhance EquipEnhance { get; private set; }
-
-    public void OnEnhance() => EnhanceLevel++;
-    #endregion
-
-    #region 등급 데이터
+    #region 장비 등급 데이터
     // 임시 등급
     [field: SerializeField] public int GradeID { get; private set; }
     [field: SerializeField] public int GradeGroupID { get; private set; }
@@ -69,18 +44,16 @@ public class EquipmentBase : EquipAndRelicBase
     }
 
 
-    private void Awake()
+    protected override void Awake()
     {
+        base.Awake();
         IncreaseStat = new();
         AddIncreaseStat(StatType);
-        EquipEnhance = new EquipemtEnhance(this);
         EquipGrade = new EquipmentGrade(this);
-        _button = GetComponent<Button>();
-        _button.onClick.AddListener(() => OnWearEquipment(this));
     }
 
-    public void OnWearEquipment(EquipmentBase equipment) => _onWearEquipment.OnStartEvent(equipment);
 
+    // 최종 스텟 증가량 제공 메서드(장비 증가량, 강화 증가량, 등급 증가량)
     public int GetIncreaseStat(STAT stat)
     {
         float statValue = IncreaseStat[stat].Value;
@@ -90,7 +63,23 @@ public class EquipmentBase : EquipAndRelicBase
         return (int)result;
     }
 
-    public void Remove() => Destroy(gameObject);
+
+    // 장비의 스텟증가량을 저장하는 클래스
+    public class EquipmentIncreaseStat
+    {
+        public int ID { get; private set; }
+        public int GroupID { get; private set; }
+        public STAT Type { get; private set; }
+        public int Value { get; private set; }
+
+        public EquipmentIncreaseStat(EquipmentBase equip)
+        {
+            ID = equip.StatID;
+            GroupID = equip.StatGroupID;
+            Type = equip.StatType;
+            Value = equip.StatValue;
+        }
+    }
 
 
     public enum PARTS
@@ -98,21 +87,9 @@ public class EquipmentBase : EquipAndRelicBase
         Weapon, Hat, Cloak, Shoes
     }
 
-    
-
-    #region 에디터 설정
-#if UNITY_EDITOR
-    private void OnValidate()
+    public enum STAT
     {
-        var image = GetComponent<Image>();
-        if (image == null)
-        {
-            Debug.LogWarning($"{gameObject.name}에 Image컴포넌트가 없음");
-            return;
-        }
-        if (SpriteImage != null)
-            image.sprite = SpriteImage;
+        AttackPower, CriticalChance, MaxHp, DefensePower, MoveSpeed, EvasionChance
     }
-#endif
-    #endregion
+
 }

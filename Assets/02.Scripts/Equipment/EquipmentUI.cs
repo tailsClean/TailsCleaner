@@ -6,16 +6,19 @@ public class EquipmentUI : MonoBehaviour
 {
     [SerializeField] private GameObject _playerObj;
 
-    private IEquipmentable _player;
+    private PlayerEnhanceInventory _player;
     private Dictionary<EquipmentBase.PARTS, EquipmentBase> _equipments;
     public Image _weaponImage;
     public Image _hatImage;
     public Image _cloakImage;
     public Image _shoseImage;
+    public Image[] _relicSlot;
+
+    public Sprite baseImg;
 
     private void Awake()
     {
-        _player = _playerObj.GetComponent<IEquipmentable>();
+        _player = _playerObj.GetComponent<PlayerEnhanceInventory>();
         if (_player == null)
             Debug.LogWarning("UI출력을 위한 플레이어가 제대로 세팅되지 않음");
     }
@@ -23,6 +26,7 @@ public class EquipmentUI : MonoBehaviour
     private void OnEnable()
     {
         _player.OnSetEquipment += UpdateImage;
+        _player.OnSetRelic += UpdateImage;
     }
 
     private void OnDisable()
@@ -58,6 +62,20 @@ public class EquipmentUI : MonoBehaviour
                 _cloakImage.sprite = equipment.SpriteImage;
                 break;
         }
+    }
 
+    private void UpdateImage()
+    {
+        var relics = _player.MyRelic;
+        for(int i = 0; i < relics.Count; i++)
+        {
+            if(relics[i] == null)
+            {
+                _relicSlot[i].sprite = baseImg;
+                continue;
+            }
+
+            _relicSlot[i].sprite = relics[i].SpriteImage;
+        }
     }
 }
