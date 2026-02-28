@@ -8,7 +8,7 @@ public class PlayerBase : MonoBehaviour, IDamageable, ISkillable
     [SerializeField] public int _defensePower = 1;
     [SerializeField] public int _evasionChance = 10;                   // 회피율
     [SerializeField] public int _criticalChance = 10;
-    [SerializeField] public int _criticalDamageMultiplier = 2;
+    [SerializeField] public int _criticalDamageMultiplier = 2;         // 치명타 피해 배율
     [SerializeField] public int _criticalResistance = 10;              // 치명 저항
     [SerializeField] public int _moveSpeed = 5;
     [SerializeField] public int _healthRegen = 10;                     // Hp 회복량
@@ -18,10 +18,9 @@ public class PlayerBase : MonoBehaviour, IDamageable, ISkillable
     [Header("인게임 정보")]
     [SerializeField] public int _inGameLevel = 1;
     [SerializeField] public int _inGameMaxExp = 50;
-    [SerializeField] public float _experienceGainRate = 10;            // 경험치 획득량
-    [SerializeField] public float _attackInterval = 0.5f;              // 자동공격 주기
+    [SerializeField] public float _expGainRate = 10;                   // 경험치 획득량
     [SerializeField] public float _pickupRange = 1;                    // 아이템 줍는 범위
-    [SerializeField] private ItemPickup _itemPickupCollider;            // 아이템 줍는 범위 콜라이더
+    [SerializeField] private ItemPickup _itemPickupCollider;           // 아이템 줍는 범위 콜라이더
 
     [Header("이벤트 채널")]
     [SerializeField] private IntEventChannelSO _onHit;
@@ -34,27 +33,34 @@ public class PlayerBase : MonoBehaviour, IDamageable, ISkillable
 
     [Header("공격 레이어")]
     [SerializeField] private LayerMask _monsterLayer;
+
+    [Header("추가가 필요한 데이터")]
+    [SerializeField] private float _itemDropRate = 1;
+    [SerializeField] private float _goldGainRate = 1;
     
 
     private int _currentHp;
     private PlayerHit _hitSystem;
     private PlayerLevelSystem _levelSystem;
-    private PlayerEquipment _myEquipment;
+    private PlayerEnhanceInventory _myEnhancement;
+    private PlayerStatCalculator _statCalculator;
     private PlayerStateMachine _stateMachine;
 
 
     public int Hp => Mathf.Max(_currentHp, 0);
     public Transform AttackTarget => GetTarget(AttackDir);  // 조준형 스킬 사용을 위한 타겟
+    public float ItemDropRate => _statCalculator.GetFinalSat(_itemDropRate, RelicBase.STAT.ItemDropRate);
+    public float GoldGainRate => _statCalculator.GetFinalSat(_goldGainRate, RelicBase.STAT.GoldGainRate);
 
 
     // 스킬 공유 데이터
-    public int AttackDamage => _attackPower;
-    public int DefensePower => _defensePower;
-    public int MoveSpeed => _moveSpeed + _myEquipment.GetMoveSpeedIncrease();
-    public int CriticalChance => _criticalChance;
+    public int AttackPower => _statCalculator.GetFinalSat(_attackPower, EquipmentBase.STAT.AttackPower);
+    public int DefensePower => _statCalculator.GetFinalSat(_defensePower, EquipmentBase.STAT.DefensePower);
+    public int MoveSpeed => _statCalculator.GetFinalSat(_moveSpeed, EquipmentBase.STAT.MoveSpeed);
+    public int CriticalChance => _statCalculator.GetFinalSat(_criticalChance, EquipmentBase.STAT.CriticalChance);
+    public int EvasionChance => _statCalculator.GetFinalSat(_evasionChance, EquipmentBase.STAT.EvasionChance);
     public int CriticalDamageMultiplier => _criticalDamageMultiplier;
-    public int EvasionChance => _evasionChance;
-    public float ExperienceGainRate => _experienceGainRate;
+    public float ExperienceGainRate => _statCalculator.GetFinalSat(_expGainRate, RelicBase.STAT.ExpGainRate);
     public float PickupRange => _pickupRange;
     public Vector2 MoveDir => _stateMachine.MoveDir;
     public Vector2 AttackDir { get; private set; }
@@ -75,7 +81,11 @@ public class PlayerBase : MonoBehaviour, IDamageable, ISkillable
         _currentHp = _maxhp;
         _hitSystem = new PlayerHit(this);
         _levelSystem = new PlayerLevelSystem(this);
-        _myEquipment = new PlayerEquipment(PlayerDataTransfer.Equipments);
+        _myEnhancement = new PlayerEnhanceInventory(
+            PlayerDataTransfer.Equipments, 
+            PlayerDataTransfer.Relics
+            );
+        _statCalculator = new PlayerStatCalculator(_myEnhancement);
 
         _stateMachine = new PlayerStateMachine(this);
     }
@@ -186,5 +196,20 @@ public class PlayerBase : MonoBehaviour, IDamageable, ISkillable
             return hit.transform;
 
         return null;
+    }
+
+    [ContextMenu("스텟출력")]
+    public void TestStat()
+    {
+        float a = 0;
+        a = AttackPower;
+        a = DefensePower;
+        a = MoveSpeed;
+        a = CriticalChance;
+        a = EvasionChance;
+        a = CriticalDamageMultiplier;
+        a = ExperienceGainRate;
+        a = ItemDropRate;
+        a = GoldGainRate;
     }
 }

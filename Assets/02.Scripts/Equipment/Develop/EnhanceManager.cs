@@ -3,7 +3,7 @@ using UnityEngine.UI;
 
 public class EnhanceManager : MonoBehaviour
 {
-    [SerializeField] private EquipmentBase _enhanceEquipment;
+    [SerializeField] private PlayerEnhancement _playerEnhancement;
     [SerializeField] private Image _image;
     [SerializeField] private Button _enhanceButton;
     [SerializeField] private Button _backButton;
@@ -17,16 +17,17 @@ public class EnhanceManager : MonoBehaviour
     private int _money = 100;
     //
 
+    //
     private void Update()
     {
         
         _moneyText.text = "재화: " + _money.ToString();
 
-        if (_enhanceEquipment != null)
+        if (_playerEnhancement != null)
         {
-            _image.sprite = _enhanceEquipment.SpriteImage;
-            _costText.text = "비용: " + _enhanceEquipment.EnhanceCostGold.ToString();
-            _enhanceLevelText.text = "강화수치: " + _enhanceEquipment.EnhanceLevel.ToString();
+            _image.sprite = _playerEnhancement.SpriteImage;
+            _costText.text = "비용: " + _playerEnhancement.EnhanceCostGold.ToString();
+            _enhanceLevelText.text = "강화수치: " + _playerEnhancement.EnhanceLevel.ToString();
         }
         else
         {
@@ -34,6 +35,7 @@ public class EnhanceManager : MonoBehaviour
             _enhanceLevelText.text = "강화수치: 0";
         }
     }
+    //
 
 
     public void OnEnhance()
@@ -46,7 +48,7 @@ public class EnhanceManager : MonoBehaviour
         if(_isEnhancable)
         {
             SpendCost();
-            _enhanceEquipment.OnEnhance();
+            _playerEnhancement.OnEnhance();
             Debug.Log("강화성공!");
         }    
     }
@@ -54,7 +56,7 @@ public class EnhanceManager : MonoBehaviour
     // 재화와 코스트 비교
     private void CheckCost()
     {
-        int cost = _enhanceEquipment.EnhanceCostGold;
+        int cost = _playerEnhancement.EnhanceCostGold;
         _isEnhancable = _money >= cost;
 
         if(!_isEnhancable)
@@ -64,13 +66,13 @@ public class EnhanceManager : MonoBehaviour
     // 최대 강화수치인지 확인
     private void CheckMaxLevel()
     {
-        _isEnhancable = !_enhanceEquipment.IsEnhanceMaxLevel;
+        _isEnhancable = !_playerEnhancement.IsEnhanceMaxLevel;
 
         if (!_isEnhancable)
             Debug.Log("강화수치가 최대입니다.");
     }
 
     // 코스트 소모
-    private void SpendCost() => _money -= _enhanceEquipment.EnhanceCostGold;
+    private void SpendCost() => _money -= _playerEnhancement.EnhanceCostGold;
     public void OnBack() => Debug.Log("뒤로 돌아가기 눌림");
 }

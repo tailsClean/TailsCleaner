@@ -1,11 +1,11 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
-using static EquipmentGrade;
+using static EquipmentGradeData;
 
 public class EquipmentBase : PlayerEnhancement
 {
     [Header("장비 정보")]
+    public bool IsEquip;
     [field: SerializeField] public PARTS EquipmentPart { get; private set; }
     [field: SerializeField] public int MaxStack { get; private set; }        // 최대 소지 수량
 
@@ -19,12 +19,14 @@ public class EquipmentBase : PlayerEnhancement
 
     public Dictionary<STAT , EquipmentIncreaseStat> IncreaseStat { get; private set; }
 
-    public void AddIncreaseStat(STAT statType) => IncreaseStat.Add(statType, new EquipmentIncreaseStat(this));
+    public void SetIncreaseStat(STAT statType) => IncreaseStat.Add(statType, new EquipmentIncreaseStat(this));
     #endregion
 
 
     #region 장비 등급 데이터
     // 임시 등급
+    [Header("장비 등급")]
+    public bool IsGrade;
     [field: SerializeField] public int GradeID { get; private set; }
     [field: SerializeField] public int GradeGroupID { get; private set; }
     [field: SerializeField] public GRADE Grade { get; private set; }
@@ -34,29 +36,34 @@ public class EquipmentBase : PlayerEnhancement
     [field: SerializeField] public float GradeStatRate { get; private set; } = 1;   // 스텟 증가량(곱연산)
     [field: SerializeField] public int GradePrice { get; private set; }             // 등급별 판매 가격
 
-    public EquipmentGrade EquipGrade { get; private set; }
-    #endregion
+    public EquipmentGradeData EquipGrade { get; private set; }
 
     public void OnUpgrade()
     {
         Grade++;
         EquipGrade.OnUpgrade();
     }
+    #endregion
 
 
     protected override void Awake()
     {
         base.Awake();
         IncreaseStat = new();
-        AddIncreaseStat(StatType);
-        EquipGrade = new EquipmentGrade(this);
+        SetIncreaseStat(StatType);
+        EquipGrade = new EquipmentGradeData(this);
     }
 
 
     // 최종 스텟 증가량 제공 메서드(장비 증가량, 강화 증가량, 등급 증가량)
     public int GetIncreaseStat(STAT stat)
     {
-        float statValue = IncreaseStat[stat].Value;
+        //
+        float statValue = 0;
+        if (IncreaseStat.TryGetValue(stat, out var equipmentStat))
+            statValue = equipmentStat.StatUpValue;
+        //
+        
         float enhanceValue = EquipEnhance.AddValue;
         float gradeValue = EquipGrade.StatRate;
         float result = statValue * (1 + enhanceValue) * gradeValue;
@@ -69,15 +76,15 @@ public class EquipmentBase : PlayerEnhancement
     {
         public int ID { get; private set; }
         public int GroupID { get; private set; }
-        public STAT Type { get; private set; }
-        public int Value { get; private set; }
+        public STAT StatUp { get; private set; }
+        public int StatUpValue { get; private set; }
 
         public EquipmentIncreaseStat(EquipmentBase equip)
         {
             ID = equip.StatID;
             GroupID = equip.StatGroupID;
-            Type = equip.StatType;
-            Value = equip.StatValue;
+            StatUp = equip.StatType;
+            StatUpValue = equip.StatValue;
         }
     }
 

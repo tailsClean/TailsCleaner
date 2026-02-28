@@ -1,0 +1,28 @@
+﻿using System.Collections.Generic;
+using UnityEngine;
+
+/// <summary>
+/// 플레이어 스텟 계산기
+/// </summary>
+public class PlayerStatCalculator
+{
+    private PlayerEnhanceInventory _enhanceInventory;
+
+    public PlayerStatCalculator(PlayerEnhanceInventory enhanceInventory)
+    {
+        _enhanceInventory = enhanceInventory;
+    }
+
+    // 장비로 인한 증가값 계산
+    public int GetFinalSat(int initialStat, EquipmentBase.STAT increaseStat)
+    {
+        return initialStat + _enhanceInventory.GetIncreaseStat(increaseStat);
+    }
+
+    // 유물로 인한 증가값 계산
+    public float GetFinalSat(float initialStat, RelicBase.STAT increaseStat)
+    {
+        float increaseRate = 1 + _enhanceInventory.GetIncreaseStat(increaseStat);
+        return initialStat * increaseRate;
+    }
+}

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerEnhanceInventory : MonoBehaviour
+public class PlayerEnhancementSelector : MonoBehaviour
 {
     [SerializeField] private EnhancementEventChannelSO _onEquipEnhancement;
 
@@ -29,6 +29,7 @@ public class PlayerEnhanceInventory : MonoBehaviour
     private void Update()
     {
         PlayerDataTransfer.SetEquipments(MyEquipment);
+        PlayerDataTransfer.SetRelics(MyRelic);
         CompactRelicSlot();
         OnSetRelic?.Invoke();
     }

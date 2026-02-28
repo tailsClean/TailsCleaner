@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 
 
-public class EquipmentGrade
+public class EquipmentGradeData
 {
     public int ID { get; private set; }
     public int GroupID { get; private set; }
@@ -12,7 +12,7 @@ public class EquipmentGrade
     public float StatRate { get; private set; }
     public int Price { get; private set; }
 
-    public EquipmentGrade(EquipmentBase equip)
+    public EquipmentGradeData(EquipmentBase equip)
     {
         ID = equip.GradeID;
         GroupID = equip.GradeGroupID;

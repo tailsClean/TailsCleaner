@@ -2,7 +2,7 @@
 
 public interface ISkillable
 {
-    public int AttackDamage { get; }
+    public int AttackPower { get; }
     public int DefensePower { get; }
     public int MoveSpeed { get; }
     public int CriticalChance { get; }

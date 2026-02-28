@@ -6,7 +6,7 @@ public class EquipmentUI : MonoBehaviour
 {
     [SerializeField] private GameObject _playerObj;
 
-    private PlayerEnhanceInventory _player;
+    private PlayerEnhancementSelector _player;
     private Dictionary<EquipmentBase.PARTS, EquipmentBase> _equipments;
     public Image _weaponImage;
     public Image _hatImage;
@@ -18,7 +18,7 @@ public class EquipmentUI : MonoBehaviour
 
     private void Awake()
     {
-        _player = _playerObj.GetComponent<PlayerEnhanceInventory>();
+        _player = _playerObj.GetComponent<PlayerEnhancementSelector>();
         if (_player == null)
             Debug.LogWarning("UI출력을 위한 플레이어가 제대로 세팅되지 않음");
     }

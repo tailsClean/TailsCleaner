@@ -5,6 +5,7 @@ using UnityEngine.UI;
 public abstract class PlayerEnhancement : MonoBehaviour
 {
     [Header("공통 기본 정보")]
+    public bool Isbase;
     [field: SerializeField] public int ID { get; private set; }
     [field: SerializeField] public int GroupID { get; private set; }                // 해당 파츠 고유ID
     [field: SerializeField] public string Name { get; private set; }
@@ -24,6 +25,7 @@ public abstract class PlayerEnhancement : MonoBehaviour
     #region 강화 데이터
     // 임시 강화
     [Header("강화 데이터")]
+    public bool IsEnhance;
     [field: SerializeField] public int EnhanceID { get; private set; }
     [field: SerializeField] public int EnhanceGroupID { get; private set; }
     [field: SerializeField] public int EnhanceLevel { get; private set; } = 1;
@@ -34,7 +36,7 @@ public abstract class PlayerEnhancement : MonoBehaviour
     [field: SerializeField] public int EnhanceBluePrintID { get; private set; }
 
     // 강화 관련 정보와 메서드 저장 공간
-    protected EnhanceSystem EquipEnhance { get; private set; }
+    protected EnhanceData EquipEnhance { get; private set; }
 
 
     public void OnEnhance() => EnhanceLevel++;
@@ -42,7 +44,7 @@ public abstract class PlayerEnhancement : MonoBehaviour
 
     protected virtual void Awake()
     {
-        EquipEnhance = new EnhanceSystem(this);
+        EquipEnhance = new EnhanceData(this);
 
 
 

@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-public class EnhanceSystem
+public class EnhanceData
 {
     public int ID { get; private set; }
     public int GroupID { get; private set; }
@@ -11,7 +11,7 @@ public class EnhanceSystem
     public int CostBluePrint { get; private set; }
     public int BluePrintID { get; private set; }
 
-    public EnhanceSystem(PlayerEnhancement enhancement)
+    public EnhanceData(PlayerEnhancement enhancement)
     {
         ID = enhancement.EnhanceID;
         GroupID = enhancement.EnhanceGroupID;
