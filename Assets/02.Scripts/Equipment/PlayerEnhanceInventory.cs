@@ -29,6 +29,8 @@ public class PlayerEnhanceInventory : MonoBehaviour
     private void Update()
     {
         PlayerDataTransfer.SetEquipments(MyEquipment);
+        CompactRelicSlot();
+        OnSetRelic?.Invoke();
     }
     //
 
@@ -55,18 +57,19 @@ public class PlayerEnhanceInventory : MonoBehaviour
     private void CompactRelicSlot()
     {
         Queue<RelicBase> que = new Queue<RelicBase>();
-        foreach(var relic in MyRelic)
+        for(int i = 0; i < MyRelic.Count; i++)
         {
-            que.Enqueue(relic);
+            if(MyRelic[i] != null)
+                que.Enqueue(MyRelic[i]);
+
+            MyRelic[i] = null;
         }
 
         for(int i = 0; i < MyRelic.Count; i++)
         {
-            if(que.Count == 0)
-            {
-                MyRelic[i] = null;
-                continue;
-            }
+            if (que.Count == 0)
+                break;
+
             MyRelic[i] = que.Dequeue();
         }
     }

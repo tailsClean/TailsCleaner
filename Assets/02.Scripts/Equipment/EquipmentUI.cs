@@ -42,6 +42,7 @@ public class EquipmentUI : MonoBehaviour
             UpdateImage(equip.Key);
     }
 
+
     // UI갱신 메서드
     private void UpdateImage(EquipmentBase.PARTS equipmentType)
     {
