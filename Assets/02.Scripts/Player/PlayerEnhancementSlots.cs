@@ -6,14 +6,14 @@ using static EquipmentBase;
 /// <summary>
 /// 플레이어의 장비, 유물 인벤토리
 /// </summary>
-public class PlayerEnhanceInventory
+public class PlayerEnhancementSlots
 {
     private Dictionary<EquipmentBase.PARTS, EquipmentBase> _myEquipments;
     private List<RelicBase> _myRelics;
 
     private Dictionary<RelicBase.STAT, int> _relicncreaseValue;
 
-    public PlayerEnhanceInventory(
+    public PlayerEnhancementSlots(
         Dictionary<EquipmentBase.PARTS, EquipmentBase> equipments, 
         List<RelicBase> relics
         )

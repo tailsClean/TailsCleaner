@@ -6,9 +6,9 @@ using UnityEngine;
 /// </summary>
 public class PlayerStatCalculator
 {
-    private PlayerEnhanceInventory _enhanceInventory;
+    private PlayerEnhancementSlots _enhanceInventory;
 
-    public PlayerStatCalculator(PlayerEnhanceInventory enhanceInventory)
+    public PlayerStatCalculator(PlayerEnhancementSlots enhanceInventory)
     {
         _enhanceInventory = enhanceInventory;
     }

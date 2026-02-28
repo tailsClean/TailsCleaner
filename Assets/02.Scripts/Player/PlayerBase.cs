@@ -6,21 +6,21 @@ public class PlayerBase : MonoBehaviour, IDamageable, ISkillable
     [SerializeField] public int _maxhp = 15;
     [SerializeField] public int _attackPower = 10;
     [SerializeField] public int _defensePower = 1;
-    [SerializeField] public int _evasionChance = 10;                   // 회피율
+    [SerializeField] public int _evasionChance = 10;                    // 회피율
     [SerializeField] public int _criticalChance = 10;
-    [SerializeField] public int _criticalDamageMultiplier = 2;         // 치명타 피해 배율
-    [SerializeField] public int _criticalResistance = 10;              // 치명 저항
+    [SerializeField] public int _criticalDamageMultiplier = 2;          // 치명타 피해 배율
+    [SerializeField] public int _criticalResistance = 10;               // 치명 저항
     [SerializeField] public int _moveSpeed = 5;
-    [SerializeField] public int _healthRegen = 10;                     // Hp 회복량
+    [SerializeField] public int _healthRegen = 10;                      // Hp 회복량
     [SerializeField] public int _outGameLevel = 1;
     [SerializeField] public int _outGameMaxExp = 50;
 
     [Header("인게임 정보")]
     [SerializeField] public int _inGameLevel = 1;
     [SerializeField] public int _inGameMaxExp = 50;
-    [SerializeField] public float _expGainRate = 10;                   // 경험치 획득량
-    [SerializeField] public float _pickupRange = 1;                    // 아이템 줍는 범위
-    [SerializeField] private ItemPickup _itemPickupCollider;           // 아이템 줍는 범위 콜라이더
+    [SerializeField] public float _expGainRate = 10;                    // 경험치 획득량
+    [SerializeField] public float _pickupRange = 1;                     // 아이템 줍는 범위
+    [SerializeField] private ItemPickupSystem _itemPickupSystem;        // 아이템 줍는 범위 콜라이더
 
     [Header("이벤트 채널")]
     [SerializeField] private IntEventChannelSO _onHit;
@@ -42,7 +42,7 @@ public class PlayerBase : MonoBehaviour, IDamageable, ISkillable
     private int _currentHp;
     private PlayerHit _hitSystem;
     private PlayerLevelSystem _levelSystem;
-    private PlayerEnhanceInventory _myEnhancement;
+    private PlayerEnhancementSlots _myEnhancement;
     private PlayerStatCalculator _statCalculator;
     private PlayerStateMachine _stateMachine;
 
@@ -58,17 +58,19 @@ public class PlayerBase : MonoBehaviour, IDamageable, ISkillable
     public int DefensePower => _statCalculator.GetFinalSat(_defensePower, EquipmentBase.STAT.DefensePower);
     public int MoveSpeed => _statCalculator.GetFinalSat(_moveSpeed, EquipmentBase.STAT.MoveSpeed);
     public int CriticalChance => _statCalculator.GetFinalSat(_criticalChance, EquipmentBase.STAT.CriticalChance);
-    public int EvasionChance => _statCalculator.GetFinalSat(_evasionChance, EquipmentBase.STAT.EvasionChance);
     public int CriticalDamageMultiplier => _criticalDamageMultiplier;
-    public float ExperienceGainRate => _statCalculator.GetFinalSat(_expGainRate, RelicBase.STAT.ExpGainRate);
+    public int EvasionChance => _statCalculator.GetFinalSat(_evasionChance, EquipmentBase.STAT.EvasionChance);
+    public float ExpGainRate => _statCalculator.GetFinalSat(_expGainRate, RelicBase.STAT.ExpGainRate);
     public float PickupRange => _pickupRange;
     public Vector2 MoveDir => _stateMachine.MoveDir;
     public Vector2 AttackDir { get; private set; }
 
 
     //
+    // 아웃 게임 레벨업시, 증가하는 스탯을 위해 붙여둠
     public LevelupTestStat TestLevelStat;
     //
+
 
 
     private void Awake()
@@ -81,7 +83,7 @@ public class PlayerBase : MonoBehaviour, IDamageable, ISkillable
         _currentHp = _maxhp;
         _hitSystem = new PlayerHit(this);
         _levelSystem = new PlayerLevelSystem(this);
-        _myEnhancement = new PlayerEnhanceInventory(
+        _myEnhancement = new PlayerEnhancementSlots(
             PlayerDataTransfer.Equipments, 
             PlayerDataTransfer.Relics
             );
@@ -92,19 +94,19 @@ public class PlayerBase : MonoBehaviour, IDamageable, ISkillable
 
     private void OnEnable()
     {
-        _itemPickupCollider.OnEnterPickupRange += OnItemPickup;
+        _itemPickupSystem.OnEnterPickupRange += OnItemPickup;
         _onPickupExp.AddListener(GainInGameExp);
     }
 
     private void OnDisable()
     {
-        _itemPickupCollider.OnEnterPickupRange -= OnItemPickup;
+        _itemPickupSystem.OnEnterPickupRange -= OnItemPickup;
         _onPickupExp.RemoveListener(GainInGameExp);
     }
 
     private void Start()
     {
-        _itemPickupCollider.SetColliderRange(_pickupRange);
+        _itemPickupSystem.SetColliderRange(_pickupRange);
         AttackDir = new Vector2(0, -1);
     }
 
@@ -149,19 +151,17 @@ public class PlayerBase : MonoBehaviour, IDamageable, ISkillable
         if (Hp <= 0)
             OnDead();
     }
-
-
     private void OnDead()
     {
         _onDead.OnStartEvent();
         Destroy(gameObject);
     }
 
+
     // 인게임 경험치 획득 로직
     public void GainInGameExp(int exp)
     {
         bool isLevelUp = _levelSystem.GainExp(PlayerLevelSystem.GameMode.InGame, exp);
-
         _onGainInGameExp.OnStartEvent(_levelSystem.InGameCurrentExp);
 
         if (isLevelUp)
@@ -171,7 +171,6 @@ public class PlayerBase : MonoBehaviour, IDamageable, ISkillable
     public void GainOutGameExp(int exp)
     {
         bool isLevelUp = _levelSystem.GainExp(PlayerLevelSystem.GameMode.OutGame, exp);
-
         _onGainOutGameExp.OnStartEvent(_levelSystem.OutGameCurrentExp);
 
         if (isLevelUp)
@@ -180,7 +179,7 @@ public class PlayerBase : MonoBehaviour, IDamageable, ISkillable
 
 
     // 주위 아이템(경험치) 끌어모으는 메서드
-    private void OnItemPickup(IPickable item) => _levelSystem.ItemPickup(transform, item);
+    private void OnItemPickup(IPickable item) => _itemPickupSystem.ItemPickup(transform, item);
 
 
 
@@ -198,6 +197,7 @@ public class PlayerBase : MonoBehaviour, IDamageable, ISkillable
         return null;
     }
 
+    //
     [ContextMenu("스텟출력")]
     public void TestStat()
     {
@@ -208,8 +208,9 @@ public class PlayerBase : MonoBehaviour, IDamageable, ISkillable
         a = CriticalChance;
         a = EvasionChance;
         a = CriticalDamageMultiplier;
-        a = ExperienceGainRate;
+        a = ExpGainRate;
         a = ItemDropRate;
         a = GoldGainRate;
     }
+    //
 }
