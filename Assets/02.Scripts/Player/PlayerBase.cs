@@ -3,21 +3,21 @@ using UnityEngine.InputSystem;
 
 public class PlayerBase : MonoBehaviour, IDamageable, ISkillable
 {
-    [SerializeField] public int _maxhp = 15;
-    [SerializeField] public int _attackPower = 10;
-    [SerializeField] public int _defensePower = 1;
-    [SerializeField] public int _evasionChance = 10;                    // 회피율
-    [SerializeField] public int _criticalChance = 10;
-    [SerializeField] public int _criticalDamageMultiplier = 2;          // 치명타 피해 배율
-    [SerializeField] public int _criticalResistance = 10;               // 치명 저항
-    [SerializeField] public int _moveSpeed = 5;
-    [SerializeField] public int _healthRegen = 10;                      // Hp 회복량
+    [SerializeField] public float _maxhp = 15;
+    [SerializeField] public float _attackPower = 10;
+    [SerializeField] public float _defensePower = 1;
+    [SerializeField] public float _evasionChance = 10;                    // 회피율
+    [SerializeField] public float _criticalChance = 10;
+    [SerializeField] public float _criticalDamageMultiplier = 2;          // 치명타 피해 배율
+    [SerializeField] public float _criticalResistance = 10;               // 치명 저항
+    [SerializeField] public float _moveSpeed = 5;
+    [SerializeField] public float _healthRegen = 10;                      // Hp 회복량
+    [SerializeField] public float _outGameMaxExp = 50;
     [SerializeField] public int _outGameLevel = 1;
-    [SerializeField] public int _outGameMaxExp = 50;
 
     [Header("인게임 정보")]
     [SerializeField] public int _inGameLevel = 1;
-    [SerializeField] public int _inGameMaxExp = 50;
+    [SerializeField] public float _inGameMaxExp = 50;
     [SerializeField] public float _expGainRate = 10;                    // 경험치 획득량
     [SerializeField] public float _pickupRange = 1;                     // 아이템 줍는 범위
     [SerializeField] private ItemPickupSystem _itemPickupSystem;        // 아이템 줍는 범위 콜라이더
@@ -39,7 +39,7 @@ public class PlayerBase : MonoBehaviour, IDamageable, ISkillable
     [SerializeField] private float _goldGainRate = 1;
     
 
-    private int _currentHp;
+    private float _currentHp;
     private PlayerHit _hitSystem;
     private PlayerLevelSystem _levelSystem;
     private PlayerEnhancementSlots _myEnhancement;
@@ -47,18 +47,18 @@ public class PlayerBase : MonoBehaviour, IDamageable, ISkillable
     private PlayerStateMachine _stateMachine;
 
 
-    public int Hp => Mathf.Max(_currentHp, 0);
+    public float Hp => Mathf.Max(_currentHp, 0);
     public Transform AttackTarget => GetTarget(AttackDir);  // 조준형 스킬 사용을 위한 타겟
     public float ItemDropRate => _statCalculator.GetFinalSat(_itemDropRate, RelicBase.STAT.ItemDropRate);
     public float GoldGainRate => _statCalculator.GetFinalSat(_goldGainRate, RelicBase.STAT.GoldGainRate);
 
 
-    // 스킬 공유 데이터
+    // 스킬 공유 데이터 (인트 수정 필요)
     public int AttackPower => _statCalculator.GetFinalSat(_attackPower, EquipmentBase.STAT.AttackPower);
     public int DefensePower => _statCalculator.GetFinalSat(_defensePower, EquipmentBase.STAT.DefensePower);
     public int MoveSpeed => _statCalculator.GetFinalSat(_moveSpeed, EquipmentBase.STAT.MoveSpeed);
     public int CriticalChance => _statCalculator.GetFinalSat(_criticalChance, EquipmentBase.STAT.CriticalChance);
-    public int CriticalDamageMultiplier => _criticalDamageMultiplier;
+    public int CriticalDamageMultiplier => (int)_criticalDamageMultiplier;
     public int EvasionChance => _statCalculator.GetFinalSat(_evasionChance, EquipmentBase.STAT.EvasionChance);
     public float ExpGainRate => _statCalculator.GetFinalSat(_expGainRate, RelicBase.STAT.ExpGainRate);
     public float PickupRange => _pickupRange;
@@ -140,12 +140,12 @@ public class PlayerBase : MonoBehaviour, IDamageable, ISkillable
     // 피격시, 발동되는 메서드
     public void TakeDamage(float damage)
     {
-        int hp = _hitSystem.OnHit(_currentHp, (int)damage);
+        float hp = _hitSystem.OnHit(_currentHp, damage);
 
         if(_currentHp != hp)
         {
             _currentHp = hp;
-            _onHit.OnStartEvent(Hp);
+            _onHit.OnStartEvent((int)Hp);                                                   // 인트 수정필요
         }
 
         if (Hp <= 0)
@@ -162,7 +162,7 @@ public class PlayerBase : MonoBehaviour, IDamageable, ISkillable
     public void GainInGameExp(int exp)
     {
         bool isLevelUp = _levelSystem.GainExp(PlayerLevelSystem.GameMode.InGame, exp);
-        _onGainInGameExp.OnStartEvent(_levelSystem.InGameCurrentExp);
+        _onGainInGameExp.OnStartEvent((int)_levelSystem.InGameCurrentExp);                  // 인트 수정필요
 
         if (isLevelUp)
             _onInGameLevelUp.OnStartEvent(_levelSystem.InGameLevel);
@@ -171,7 +171,7 @@ public class PlayerBase : MonoBehaviour, IDamageable, ISkillable
     public void GainOutGameExp(int exp)
     {
         bool isLevelUp = _levelSystem.GainExp(PlayerLevelSystem.GameMode.OutGame, exp);
-        _onGainOutGameExp.OnStartEvent(_levelSystem.OutGameCurrentExp);
+        _onGainOutGameExp.OnStartEvent((int)_levelSystem.OutGameCurrentExp);                // 인트 수정필요
 
         if (isLevelUp)
             _onOutGameLevelUp.OnStartEvent(_levelSystem.OutGameLevel);

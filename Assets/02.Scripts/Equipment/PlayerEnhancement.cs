@@ -2,7 +2,7 @@
 using UnityEngine.UI;
 
 
-public abstract class PlayerEnhancement : MonoBehaviour
+public abstract class PlayerEnhancement : MonoBehaviour, IDBable
 {
     [Header("공통 기본 정보")]
     public bool Isbase;

@@ -2,6 +2,6 @@
 using UnityEngine;
 
 
-public class PlayerEnhancementInventory : MonoBehaviour
+public class PlayerInventory : MonoBehaviour
 {
 }

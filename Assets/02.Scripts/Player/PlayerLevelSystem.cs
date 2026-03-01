@@ -2,12 +2,12 @@
 
 public class PlayerLevelSystem
 {
-    public int InGameCurrentExp { get; private set; }
-    public int InGameMaxExp { get; private set; }
+    public float InGameCurrentExp { get; private set; }
+    public float InGameMaxExp { get; private set; }
     public int InGameLevel { get; private set; }
 
-    public int OutGameCurrentExp { get; private set; }
-    public int OutGameMaxExp { get; private set; }
+    public float OutGameCurrentExp { get; private set; }
+    public float OutGameMaxExp { get; private set; }
     public int OutGameLevel { get; private set; }
 
 
