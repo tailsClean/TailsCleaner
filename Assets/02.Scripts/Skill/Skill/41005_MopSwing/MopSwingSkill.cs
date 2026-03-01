@@ -53,7 +53,7 @@ public class MopSwingSkill : ActiveSkill<MopSwingArea, SwingModifierData>, ISwin
     private void SpawnMainArea(Vector2 dir)
     {
         MopSwingArea area = Instantiate(_skillObjectPrefab, transform.position, Quaternion.identity);
-        area.InitSwing(this, _modifierData, dir);
+        area.Init(this, _modifierData, dir);
     }
 
 
@@ -68,7 +68,7 @@ public class MopSwingSkill : ActiveSkill<MopSwingArea, SwingModifierData>, ISwin
 
         // 초승달 장판 생성
         CrescentSwingArea crescent = Instantiate(_crescentPrefab, transform.position, Quaternion.identity);
-        crescent.InitSwing(this, _modifierData, dir);
+        crescent.Init(this, _modifierData, dir);
     }
 
     // 패시브 갱신

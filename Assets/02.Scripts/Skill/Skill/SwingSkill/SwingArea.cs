@@ -9,7 +9,7 @@ public abstract class SwingArea<TModifierData> : SkillArea<TModifierData> where 
     private Vector2 _dirOffset;
 
     // 초기화
-    public void InitSwing(ActiveSkill owner, TModifierData modifierData, Vector2 dir)
+    public override void Init(ActiveSkill owner, TModifierData modifierData, Vector2 dir)
     {
         // 방향의 옵셋
         _dirOffset = dir.normalized * _swingDistance;
@@ -60,16 +60,15 @@ public abstract class SwingArea<TModifierData> : SkillArea<TModifierData> where 
         }
     }
 
-    // 틱 처리
-    // 패링 (탄환 제거)
-    protected override void OnTick(MonsterBase monster)
+    // 장판에 적 투사체 들어올시
+    protected override void OnBulletEnter(MonsterProjectile projectile)
     {
-        if (_modifierData.BulletClear)
-        {
-            // 범위 내 적 탄환 Destroy (풀 반환)
-            // NimbleBlock 탄환 제거 시 방어막 충전
-            Debug.Log("[SwingArea] 패링 - 탄환 제거");
-        }
+        if (_modifierData.BulletClear == false) return;
+
+        // 탄환 Destroy (풀 반환)
+
+        // 하지만 이렇게 간단하게 피했습니다.
+        // 탄환 제거 시 방어막 충전
     }
 
     // 플레이어 위치

@@ -219,6 +219,11 @@ public class SkillSOImporter : EditorWindow
         40014 => new SoapPierceSpeedModifier(),           // 거품 가속
         40016 => new SoapRemovalPierceModifier(),         // 비누 덩어리
 
+        // 물폭탄
+        40018 => new WaterBombSplashModifier(),           // 물바다
+        40019 => new WaterBombVortexModifier(),           // 소용돌이
+        40020 => new WaterBombBulletClearModifier(),      // 폭발은 예술이다!
+
         // 타올 휘두르기
         40022 => new TowelRecycleModifier(),              // 타올 리사이클
         40024 => new TowelParryModifier(),                // 패링
@@ -250,8 +255,6 @@ public class SkillSOImporter : EditorWindow
         40053 => new SunDryingDefenseModifier(),          // 이불 두르기
         40054 => new SunDryingShieldModifier(),           // 두꺼운 이불
         40055 => new SunDryingHealModifier(),             // 기상!
-
-
 
         _ => null  // 매핑된거 없으면 깡통
     };
@@ -305,8 +308,8 @@ public class SkillSOImporter : EditorWindow
         42003 => new FocusAttackModifier(),         // 집중공략
         42004 => new DoubleExtraDamageModifier(),   // 추가 추가 피해
         42005 => new SuperCleanModifier(),          // SuperClean
-        //42006 => new 
-        //42007 => new 
+        42006 => new BravadoModifier(),             // 객기
+        42007 => new CleanerVinylSuitModifier(),    // 청소용 비닐옷
         42008 => new ClassicSecretModifier(),       // 고전비급
         42009 => new BiggerBetterModifier(),        // 더 크게! 더! 더더! 크고 아름답게!
         42010 => new GoldCrownModifier(),           // 황금왕관

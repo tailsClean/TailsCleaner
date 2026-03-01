@@ -12,13 +12,13 @@ public class SkillObjectBase : MonoBehaviour
     private SkillStat _staticStat;                   // 정적 스탯 베이스(baseStat + passiveBaseAdds) * commonStat
     private bool _statDirty = false;                 // 더티 플래그 / true일 때 재계산
 
-    protected ActiveSkill _skill;                 // 액티브 스킬 (스탯 재계산용)
-    protected Rigidbody2D _rigidbody;             // 속도용
-
-    protected Vector2 _dir;                       // 방향
-    protected float _createTime;                  // 생성 시간
-    protected float _lastDurationTickTime;        // 최근 지속시간 틱 시간
-    protected bool _expired = false;              // 수명 만료 상태 (중복 방지, 추후 연출용)
+    protected ActiveSkill _skill;                    // 액티브 스킬 (스탯 재계산용)
+    protected Rigidbody2D _rigidbody;                // 속도용
+                                                     
+    protected Vector2 _dir;                          // 방향
+    protected float _createTime;                     // 생성 시간
+    protected float _lastDurationTickTime;           // 최근 지속시간 틱 시간
+    protected bool _expired = false;                 // 수명 만료 상태 (중복 방지, 추후 연출용)
 
     protected List<PassiveModifier> _passiveModifiers;    // 패시브 모디파이어
 

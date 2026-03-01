@@ -36,7 +36,10 @@ public class SkillProjectile<TModifierData> : SkillObjectBase
 
         // 몬스터 컴포넌트 참조 시도 후 피해
         if (col.TryGetComponent<MonsterBase>(out MonsterBase monster))
+        {
+            if (monster.hp <= 0) return;
             monster.TakeDamage(_runtimeFinalStat.Damage);
+        }
 
         // 현재 관통 추가
         _currentPierceCount++;

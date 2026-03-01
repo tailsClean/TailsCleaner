@@ -52,7 +52,7 @@ public class TowelSwingSkill : ActiveSkill<TowelSwingArea, SwingModifierData>, I
     private void SpawnMainArea(Vector2 dir)
     {
         TowelSwingArea area = Instantiate(_skillObjectPrefab, transform.position, Quaternion.identity);
-        area.InitSwing(this, _modifierData, dir);
+        area.Init(this, _modifierData, dir);
     }
 
 
@@ -67,7 +67,7 @@ public class TowelSwingSkill : ActiveSkill<TowelSwingArea, SwingModifierData>, I
 
         // 초승달 장판 생성
         CrescentSwingArea crescent = Instantiate(_crescentPrefab, transform.position, Quaternion.identity);
-        crescent.InitSwing(this, _modifierData, dir);
+        crescent.Init(this, _modifierData, dir);
     }
 
     // 모디파이어 갱신 (전용, 패시브)

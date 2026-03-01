@@ -114,6 +114,22 @@ public class SuperCleanModifier : PassiveModifier
     }
 }
 
+// ID 42006 / SubTag 40106
+// 객기 (저주 수만큼 플레이어 방어력 증가)
+
+public class BravadoModifier : PassiveModifier
+{
+    [Header("저주당 추가 방어력")]
+    public int DefencePerCurse = 1;
+}
+// ID 42007 / SubTag 40107
+// 청소용 비닐옷 (체력 초과 회복 시 방어막 1회 생성)
+public class CleanerVinylSuitModifier : PassiveModifier
+{
+
+}
+
+
 // ID 42008 / SubTag 40108
 // 고전비급  (타올 <-> 걸레 기본 스탯 공유)
 public class ClassicSecretModifier : PassiveModifier
