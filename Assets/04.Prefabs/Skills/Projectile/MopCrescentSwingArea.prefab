@@ -9,10 +9,10 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6327752412020813156}
-  - component: {fileID: 4476414161684936345}
   - component: {fileID: 1806253664848169780}
+  - component: {fileID: 1439305912963191471}
   m_Layer: 0
-  m_Name: 41005_MopSwingArea
+  m_Name: MopCrescentSwingArea
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -34,19 +34,6 @@ Transform:
   - {fileID: 1275493553443892464}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &4476414161684936345
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1457600225023999490}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: bdd0939ba315d8544b16cfd865d07720, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::MopSwingArea
-  _swingDistance: 2
 --- !u!50 &1806253664848169780
 Rigidbody2D:
   serializedVersion: 5
@@ -74,6 +61,19 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 0
+--- !u!114 &1439305912963191471
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1457600225023999490}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 02b4fb871ded5ab44bbf1d55ae6af29e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::CrescentSwingArea
+  _swingDistance: 2
 --- !u!1 &6109869476398693914
 GameObject:
   m_ObjectHideFlags: 0
@@ -101,8 +101,8 @@ Transform:
   m_GameObject: {fileID: 6109869476398693914}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.45, y: 0, z: 0}
-  m_LocalScale: {x: 0.9, y: 0.4, z: 0.4}
+  m_LocalPosition: {x: 0.1, y: 0, z: 0}
+  m_LocalScale: {x: 0.2, y: 0.3, z: 0.3}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 6327752412020813156}
@@ -155,7 +155,7 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_Sprite: {fileID: 7482667652216324306, guid: 311925a002f4447b3a28927169b83ea6, type: 3}
-  m_Color: {r: 0.5045426, g: 1, b: 0.28235292, a: 1}
+  m_Color: {r: 0.72588927, g: 1, b: 0.60188675, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0

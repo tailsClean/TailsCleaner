@@ -219,6 +219,17 @@ public class SkillSOImporter : EditorWindow
         40014 => new SoapPierceSpeedModifier(),           // 거품 가속
         40016 => new SoapRemovalPierceModifier(),         // 비누 덩어리
 
+        // 타올 휘두르기
+        40022 => new TowelRecycleModifier(),              // 타올 리사이클
+        40024 => new TowelParryModifier(),                // 패링
+        40025 => new TowelSyncModifier(),                 // 타올 휘날리며
+                                                          
+        // 걸레 휘두르기                                   
+        40027 => new MopRecycleModifier(),                // 걸레 리사이클
+        40028 => new MopSlowModifier(),                   // 젖은 걸레
+        40029 => new MopStunModifier(),                   // 어질어질
+        40030 => new MopSyncModifier(),                   // 걸레 휘날리며
+
         // 세제 캡슐
         40040 => new DetergentRapidFireModifier(),        // 1만 시간의 법칙
 
@@ -296,7 +307,7 @@ public class SkillSOImporter : EditorWindow
         42005 => new SuperCleanModifier(),          // SuperClean
         //42006 => new 
         //42007 => new 
-        //42008 => new 
+        42008 => new ClassicSecretModifier(),       // 고전비급
         42009 => new BiggerBetterModifier(),        // 더 크게! 더! 더더! 크고 아름답게!
         42010 => new GoldCrownModifier(),           // 황금왕관
         42011 => new ADCarryModifier(),             // 원딜의 정석
@@ -305,7 +316,7 @@ public class SkillSOImporter : EditorWindow
         42014 => new ImplantModifier(),             // 기초적인 임플란트입니다
         42015 => new SodaWaterModifier(),           // 탄산수
         42016 => new CatLaundryModifier(),          // 냥빨래
-        //42017 => new 
+        42017 => new NimbleBlockModifier(),         // 하지만 이렇게 간단하게 피했습니다
 
         _ => null
     };

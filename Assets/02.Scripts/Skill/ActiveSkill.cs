@@ -53,9 +53,10 @@ public abstract class ActiveSkill : MonoBehaviour
     protected Coroutine _searchCoroutine = null;    // 탐색 코루틴
 
 
-    [Header("스킬 설정")]
+    [Header("스킬 실행 간격")]
     [SerializeField] protected float _fireInterval = 0.1f;      // 여러 투사체 발사 시 텀
-    [SerializeField] protected float _angle = 15f;             // 범위 각도
+    [Header("조준형 설정")]
+    [SerializeField] protected float _angle = 15f;              // 범위 각도
     [SerializeField] protected float _distance = 50f;           // 타겟 탐색 거리
 
     private void Awake()
@@ -87,9 +88,6 @@ public abstract class ActiveSkill : MonoBehaviour
 
         // 기본 스탯
         _baseStat = upgradeData.GetSkillStat();
-
-        // 패시브 스탯, 패시브 모디파이어, 최종 스탯 계산
-        RecheckPassives();
 
         Debug.Log($"[ActiveSkill] {upgradeData.Name} 생성 완료.");
     }
@@ -392,7 +390,7 @@ public abstract class ActiveSkill : MonoBehaviour
 
     // 패시브 재적용
     // 스킬 업그레이드, 패시브 습득 시 호출
-    public virtual void RecheckPassives()
+    public virtual void RecheckModifiers()
     {
         SetPassiveMulStat();    // 패시브 배율 합
         AddPassiveModifier();   // 패시브 모디파이어
@@ -440,10 +438,6 @@ public abstract class ActiveSkill<TSkillObject, TModifierData> : ActiveSkill
             // 모디파이어 적용
             pair.modifier.Apply(this, pair.upgradeData);
         }
-
-        // 패시브 재적용 (CalculateStats + ApplyPassiveModifier)
-        // 스탯 재계산, 로직 재적용
-        RecheckPassives();
 
         Debug.Log($"[ActiveSkill] 업그레이드 완료: [{SkillDataLoader.GetActiveSkillData(MainTag).SkillName}] (MainTag : {MainTag})\n" +
                   $" - 업그레이드 : {upgradeData.Name} (Active_Skill_ID : {upgradeData.Id})\n" +

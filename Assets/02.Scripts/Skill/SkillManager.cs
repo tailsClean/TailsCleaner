@@ -8,7 +8,7 @@ public class SkillManager : MonoBehaviour
 
     public const int MAX_ACTIVE_SLOTS = 6;              // 최대 액티브 스킬 수
     public const int MAX_PASSIVE_SLOTS = 6;             // 최대 패시브 스킬 수
-    public const int DEFAULT_ACTIVE_MAIN_TAG = 41007;   // 기본 지급 스킬 메인 태그 (세제 캡슐 41007)
+    public const int DEFAULT_ACTIVE_MAIN_TAG = 41004;   // 기본 지급 스킬 메인 태그 (세제 캡슐 41007)
     public const float DEFAULT_SEARCH_RADIUS = 20f;     // 가장 가까운 적 탐색용 범위
     public const float SEARCH_INTERVAL = 0.2f;          // 탐색 주기
 
@@ -49,21 +49,33 @@ public class SkillManager : MonoBehaviour
         // 기획서 상에서는 못봤는데 기본 공격이 없으면 공격 못하니까 일단 추가
         AddDefaultSkill();
 
+
         // 테스트용 업그레이드 
         //ApplyPassiveOption(SkillDataLoader.PassiveSkillMap[42004]); // 추가추가피해
         //ApplyPassiveOption(SkillDataLoader.PassiveSkillMap[42012]); // 스노우볼링
         //ApplyPassiveOption(SkillDataLoader.PassiveSkillMap[42013]); // 양손잡이
-        //ApplyActiveOption(DEFAULT_ACTIVE_MAIN_TAG, SkillDataLoader.GetActiveUpgradeData(40045));  // 오리 장난감
-        //ApplyActiveOption(DEFAULT_ACTIVE_MAIN_TAG, SkillDataLoader.GetActiveUpgradeData(40046));  // 해적선 장난감
-        //ApplyActiveOption(DEFAULT_ACTIVE_MAIN_TAG, SkillDataLoader.GetActiveUpgradeData(40048));  // 물놀이 끝
-        //ApplyActiveOption(DEFAULT_ACTIVE_MAIN_TAG, SkillDataLoader.GetActiveUpgradeData(40005));  // 흐르는 거품
-        //ApplyActiveOption(DEFAULT_ACTIVE_MAIN_TAG, SkillDataLoader.GetActiveUpgradeData(40050));  // 따스한 태양
-        //ApplyActiveOption(DEFAULT_ACTIVE_MAIN_TAG, SkillDataLoader.GetActiveUpgradeData(40011));  // 감나빗!
-        //ApplyActiveOption(DEFAULT_ACTIVE_MAIN_TAG, SkillDataLoader.GetActiveUpgradeData(40016));  // 비누덩어리
+        //ApplyPassiveOption(SkillDataLoader.PassiveSkillMap[42008]); // 고전비급
+
+        //ApplyActiveOption(41001, SkillDataLoader.GetActiveUpgradeData(40005));  // 흐르는 거품
+
+        //ApplyActiveOption(41002, SkillDataLoader.GetActiveUpgradeData(40011));  // 감나빗!
+        //ApplyActiveOption(41002, SkillDataLoader.GetActiveUpgradeData(40016));  // 비누덩어리
+
+        //ApplyActiveOption(41004, SkillDataLoader.GetActiveUpgradeData(40022));  // 타올 리사이클 
+        //ApplyActiveOption(41004, SkillDataLoader.GetActiveUpgradeData(40025));  // 타올 휘두르며
+
+        //ApplyActiveOption(41005, SkillDataLoader.GetActiveUpgradeData(40026));  // 걸레 휘두르기
+        //ApplyActiveOption(41005, SkillDataLoader.GetActiveUpgradeData(40027));  // 걸레 리사이클
+        //ApplyActiveOption(41005, SkillDataLoader.GetActiveUpgradeData(40030));  // 걸레 휘두르며
+
+        //ApplyActiveOption(41008, SkillDataLoader.GetActiveUpgradeData(40045));  // 오리 장난감
+        //ApplyActiveOption(41008, SkillDataLoader.GetActiveUpgradeData(40046));  // 해적선 장난감
+        //ApplyActiveOption(41008, SkillDataLoader.GetActiveUpgradeData(40048));  // 물놀이 끝
 
         //ApplyActiveOption(DEFAULT_ACTIVE_MAIN_TAG, SkillDataLoader.GetActiveUpgradeData(40037));  // 상큼하게 터져볼래?
         //ApplyActiveOption(DEFAULT_ACTIVE_MAIN_TAG, SkillDataLoader.GetActiveUpgradeData(40040));  // 1만 시간의 법칙
 
+        //ApplyActiveOption(DEFAULT_ACTIVE_MAIN_TAG, SkillDataLoader.GetActiveUpgradeData(40050));  // 따스한 태양
     }
 
 
@@ -136,6 +148,9 @@ public class SkillManager : MonoBehaviour
             {
                 MyActiveSkills.Add(newSkill);
             }
+
+            // 모든 스킬 모디파이어 갱신
+            RecheckAllModifiers();
         }
         // 1티어 이상 스킬 업그레이드
         else
@@ -147,8 +162,18 @@ public class SkillManager : MonoBehaviour
             if (skill != null)
             {
                 skill.ApplyUpgrade(upgradeData);
+
+                // 모든 스킬 모디파이어 갱신
+                RecheckAllModifiers();
             }
         }
+    }
+
+    // 모든 스킬 모디파이어 갱신 (전용, 패시브)
+    public void RecheckAllModifiers()
+    {
+        foreach (var skill in MyActiveSkills)
+            skill.RecheckModifiers();
     }
 
     // 패시브 선택지 적용
@@ -159,12 +184,8 @@ public class SkillManager : MonoBehaviour
         // 패시브에 추가
         MyPassiveSkills.Add(passiveData);
 
-        // 모든 액티브 스킬에
-        foreach (var skill in MyActiveSkills)
-        {
-            // 스탯 계산 + 로직 적용
-            skill.RecheckPassives();
-        }
+        // 모든 액티브 스킬에 모디파이어 갱신
+        RecheckAllModifiers();
 
         Debug.Log($"[SkillManager] 패시브 획득: {passiveData.PassiveName} (SubTag: {passiveData.SubTag})");
     }

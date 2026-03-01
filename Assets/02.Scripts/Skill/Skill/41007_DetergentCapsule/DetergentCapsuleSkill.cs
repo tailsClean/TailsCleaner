@@ -4,10 +4,10 @@
 
 public class DetergentCapsuleSkill : ActiveSkill<DetergentCapsuleProjectile, DetergentCapsuleModifierData>
 {
-    public override void RecheckPassives()
+    public override void RecheckModifiers()
     { 
         // FinalStat 완전 계산 완료 후
-        base.RecheckPassives();
+        base.RecheckModifiers();
 
         // 1만시간의 법칙 처리
         if (_modifierData.RapidFire)
