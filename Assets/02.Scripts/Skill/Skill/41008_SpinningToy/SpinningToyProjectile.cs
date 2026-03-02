@@ -92,7 +92,7 @@ public class SpinningToyProjectile : SkillProjectile<SpinningToyModifierData>
         }
 
         // 버스트 횟수 = ExtraDamageMultiplier (기본 1, 추가추가피해 패시브 2)
-        int burstCount = Mathf.Max(1, _runtimeFinalStat.ExtraDamageMultiplier);
+        int burstCount = Mathf.Max(1, _runtimeFinalStat.ExtraMultiplier);
 
         for (int burst = 0; burst < burstCount; burst++)
         {

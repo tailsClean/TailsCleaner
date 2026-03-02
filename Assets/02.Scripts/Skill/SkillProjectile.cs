@@ -55,8 +55,11 @@ public class SkillProjectile<TModifierData> : SkillObjectBase
         // 패시브 관통 효과 (임플란트 등)
         foreach (var passive in _passiveModifiers)
         {
-            passive.OnPierce(_runtimePassiveMulStat);
-            mulChanged = true;
+            // 관통으로 true 반환할 때
+            if (passive.OnPierce(_runtimePassiveMulStat))
+            {
+                mulChanged = true;
+            }
         }
 
         if (mulChanged)

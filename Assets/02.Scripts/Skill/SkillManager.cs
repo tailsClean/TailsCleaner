@@ -8,7 +8,7 @@ public class SkillManager : MonoBehaviour
 
     public const int MAX_ACTIVE_SLOTS = 6;              // 최대 액티브 스킬 수
     public const int MAX_PASSIVE_SLOTS = 6;             // 최대 패시브 스킬 수
-    public const int DEFAULT_ACTIVE_MAIN_TAG = 41007;   // 기본 지급 스킬 메인 태그 (세제 캡슐 41007)
+    public const int DEFAULT_ACTIVE_MAIN_TAG = 41010;   // 기본 지급 스킬 메인 태그 (세제 캡슐 41007)
     public const float DEFAULT_SEARCH_RADIUS = 20f;     // 가장 가까운 적 탐색용 범위
     public const float SEARCH_INTERVAL = 0.2f;          // 탐색 주기
 
@@ -52,9 +52,10 @@ public class SkillManager : MonoBehaviour
 
         // 테스트용 업그레이드 
         //ApplyPassiveOption(SkillDataLoader.PassiveSkillMap[42004]); // 추가추가피해
+        //ApplyPassiveOption(SkillDataLoader.PassiveSkillMap[42008]); // 고전비급
         //ApplyPassiveOption(SkillDataLoader.PassiveSkillMap[42012]); // 스노우볼링
         //ApplyPassiveOption(SkillDataLoader.PassiveSkillMap[42013]); // 양손잡이
-        //ApplyPassiveOption(SkillDataLoader.PassiveSkillMap[42008]); // 고전비급
+        //ApplyPassiveOption(SkillDataLoader.PassiveSkillMap[42016]); // 냥빨래
 
         //ApplyActiveOption(41001, SkillDataLoader.GetActiveUpgradeData(40005));  // 흐르는 거품
 
@@ -71,6 +72,8 @@ public class SkillManager : MonoBehaviour
         //ApplyActiveOption(41005, SkillDataLoader.GetActiveUpgradeData(40027));  // 걸레 리사이클
         //ApplyActiveOption(41005, SkillDataLoader.GetActiveUpgradeData(40030));  // 걸레 휘두르며
 
+        //ApplyActiveOption(41006, SkillDataLoader.GetActiveUpgradeData(40033));  // 밀물 썰물
+
         //ApplyActiveOption(41007, SkillDataLoader.GetActiveUpgradeData(40037));  // 상큼하게 터져볼래?
         //ApplyActiveOption(41007, SkillDataLoader.GetActiveUpgradeData(40040));  // 1만 시간의 법칙
 
@@ -80,7 +83,14 @@ public class SkillManager : MonoBehaviour
 
         //ApplyActiveOption(41009, SkillDataLoader.GetActiveUpgradeData(40050));  // 따스한 태양
 
-        //ApplyActiveOption(41003, SkillDataLoader.GetActiveUpgradeData(40067));  // 연사 (투사체 수)
+        //ApplyActiveOption(41010, SkillDataLoader.GetActiveUpgradeData(40057));  // 수압 최대로!
+        //ApplyActiveOption(41010, SkillDataLoader.GetActiveUpgradeData(40058));  // 온수샤워
+        //ApplyActiveOption(41010, SkillDataLoader.GetActiveUpgradeData(40059));  // 냉수마찰
+        //ApplyActiveOption(41010, SkillDataLoader.GetActiveUpgradeData(40060));  // 예열완료
+        //ApplyActiveOption(41010, SkillDataLoader.GetActiveUpgradeData(40061));  // 방수코팅
+        //ApplyActiveOption(41010, SkillDataLoader.GetActiveUpgradeData(40062));  // 키친건!
+
+        //ApplyActiveOption(41010, SkillDataLoader.GetActiveUpgradeData(40067));  // 연사 (투사체 수)
     }
 
 

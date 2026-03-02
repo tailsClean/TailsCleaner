@@ -1,5 +1,5 @@
 ﻿using UnityEngine;
 
-public class WashWaveProjectile : MonoBehaviour
+public class WashWaveProjectile : SkillProjectile<WashWaveModifierData>
 {
 }

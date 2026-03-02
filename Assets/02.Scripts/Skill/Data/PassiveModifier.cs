@@ -19,7 +19,7 @@ public abstract class PassiveModifier
 
     public virtual bool OnProjectileInit(SkillStat runtimeBaseStat, SkillStat runtimeFinalStat) { return false; }   // 투사체 생성 시, bool은 재계산 확인용
     public virtual void OnDamage(MonsterBase monster) { }                             // 적 피해 시
-    public virtual void OnPierce(SkillStat runTimePassiveMulStat) { }                 // 관통 시
+    public virtual bool OnPierce(SkillStat runTimePassiveMulStat) { return false; }   // 관통 시
     public virtual void OnEnterArea(MonsterBase monster) { }                          // 장판 올라갈 시 (몬스터)
     public virtual void OnEnterArea(PlayerBase player) { }                            // 장판 올라갈 시 (플레이어)
     public virtual void OnDurationTick(SkillStat runTimePassiveMulStat) { }           // 지속시간마다
@@ -89,11 +89,11 @@ public class FocusAttackModifier : PassiveModifier
 // 추가 추가 피해 (추가 피해 * 2)
 public class DoubleExtraDamageModifier : PassiveModifier
 {
-    [Header("추가 횟수")] public int ExtraDamageMultiplier = 1;
+    [Header("추가 횟수")] public int ExtraMultiplier = 1;
     public override void ModifyBaseAdd(SkillStat baseStat)
     {
         // 1회 추가
-        baseStat.ExtraDamageMultiplier += ExtraDamageMultiplier;
+        baseStat.ExtraMultiplier += ExtraMultiplier;
     }
 }
 
@@ -216,9 +216,10 @@ public class ImplantModifier : PassiveModifier
 {
     [Header("관통 추가 피해 계수")] public float DamagePerPierce = 0.2f;
 
-    public override void OnPierce(SkillStat runTimePassiveMulSum)
+    public override bool OnPierce(SkillStat runTimePassiveMulSum)
     {
         runTimePassiveMulSum.Damage += DamagePerPierce; // 1.0 -> 1.2 -> 1.4
+        return true;
     }
 }
 

@@ -34,7 +34,7 @@ public class TowelSwingSkill : ActiveSkill<TowelSwingArea, SwingModifierData>, I
         if (hasOwn == false && hasSync == false) yield break;
 
         // 추가추가피해 횟수
-        int crescentCount = Mathf.Max(1, _finalStat.ExtraDamageMultiplier);
+        int crescentCount = Mathf.Max(1, _finalStat.ExtraMultiplier);
 
         for (int i = 0; i < crescentCount; i++)
         {

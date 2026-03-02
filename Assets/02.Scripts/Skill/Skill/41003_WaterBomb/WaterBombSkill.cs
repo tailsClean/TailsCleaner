@@ -51,12 +51,11 @@ public class WaterBombSkill : ActiveSkill<WaterBombArea, WaterBombModifierData>
     private IEnumerator SplashCoroutine(Vector2 spawnPos, SkillStat stat)
     {
         // 추가추가피해
-        // 0.5초 텀 두고 2회 발사
-        int burstCount = Mathf.Max(1, stat.ExtraDamageMultiplier);
+        // 0.5초 텀 두고 발사
+        int burstCount = Mathf.Max(1, stat.ExtraMultiplier);
 
         for (int i = 0; i < burstCount; i++)
         {
-            Debug.Log("물바다 발사");
             // 투사체 발사
             FireSplash(spawnPos);
 

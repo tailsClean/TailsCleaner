@@ -99,6 +99,8 @@ public class SkillObjectBase : MonoBehaviour
         // 더티 플래그 활성화 되면
         if (_statDirty == false) return;
 
+        Debug.Log("투사체 런타임 스탯 재계산");
+
         // 버퍼에 staticBase 복사 (baseStat + passiveBaseAdds) * commonStat
         _calcBuffer.CopyFrom(_staticStat);
 

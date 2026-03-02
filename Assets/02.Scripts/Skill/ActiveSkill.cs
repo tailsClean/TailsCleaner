@@ -18,13 +18,12 @@ public abstract class ActiveSkill : MonoBehaviour
     protected ATTACK_TYPE _attackType;
     protected TARGETING_TYPE _targetingType;
 
-    // 외부 참조용 (패시브 모디파이어, 스킬 투사체)
+    // 외부 참조용 (패시브 모디파이어, 스킬 투사체, 타겟)
     public SkillStat BaseStat => _baseStat;
     public SkillStat CommonStat => _commonStat;
     public SkillStat UpgradeStat => _upgradeStat;
     public SkillStat PassiveMulStat => _passiveMulStat;
     public SkillStat FinalStat => _finalStat;
-
     public Transform CurrentTarget => _currentTarget;
 
 
@@ -285,11 +284,15 @@ public abstract class ActiveSkill : MonoBehaviour
     // 전용 모디파이어 추가
     private void AddModifier(ActiveUpgradeData upgradeData)
     {
-        // 전용 모디파이어 생성 후 추가
+        // id에 맞는 전용 모디파이어 가져오기
         ActiveModifier modifier = SkillDataLoader.GetActiveModifier(upgradeData.Id);
         
         if (modifier != null)
         {
+            // 이미 있는 모디파이어는 스킵
+            if (_skillModifiers.Exists(pair => pair.upgradeData.Id == upgradeData.Id)) return;
+
+            // 모디파이어 추가
             _skillModifiers.Add((modifier, upgradeData));
         }
     }
@@ -340,6 +343,7 @@ public abstract class ActiveSkill : MonoBehaviour
         //Debug.Log($"최종 지속시간 : {resultStat.Duration} = (( {baseStat.Duration}(기본) + 패시브 깡 스탯) * {commonStat.Duration}(공용)  + ({upgradeStat.Duration}(업그레이드) * 추가추가피해)) * {passiveMulStat.Duration}(패시브 배율) * 패시브 최종 배율");
         //Debug.Log($"최종 틱 주기 : {resultStat.TickRate} = (( {baseStat.TickRate}(기본) + 패시브 깡 스탯) * {commonStat.TickRate}(공용)  + ({upgradeStat.TickRate}(업그레이드) * 추가추가피해)) * {passiveMulStat.TickRate}(패시브 배율) * 패시브 최종 배율");
         //Debug.Log($"최종 투사체 수 : {resultStat.ProjectileCount} = (( {baseStat.ProjectileCount}(기본) + 패시브 깡 스탯) * {commonStat.ProjectileCount}(공용)  + ({upgradeStat.ProjectileCount}(업그레이드) * 추가추가피해)) * {passiveMulStat.ProjectileCount}(패시브 배율) * 패시브 최종 배율");
+        //Debug.Log($"최종 넉백 : {resultStat.Knockback} = (( {baseStat.Knockback}(기본) + 패시브 깡 스탯) * {commonStat.Knockback}(공용)  + ({upgradeStat.Knockback}(업그레이드) * 추가추가피해)) * {passiveMulStat.Knockback}(패시브 배율) * 패시브 최종 배율");
 
         // 최종 결과 스탯 반환
         return resultStat;

@@ -1,5 +1,4 @@
-﻿using UnityEngine;
-
-public class BluetoothShowerProjectile : MonoBehaviour
+﻿
+public class BluetoothShowerProjectile : SkillProjectile<BluetoothShowerModifierData>
 {
 }
