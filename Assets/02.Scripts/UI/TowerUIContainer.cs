@@ -1,10 +1,10 @@
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.UI;
 
 public class TowerUIContainer : MonoBehaviour, UIContainer
 {
     [SerializeField] private Button stageButton;
-    [SerializeField] private IntEventChannelSO _onStartInGame;
+    [SerializeField] private FloatEventChannelSO _onStartInGame;
 
     void Start()
     {

@@ -23,11 +23,11 @@ public class PlayerBase : MonoBehaviour, IDamageable, ISkillable
     [SerializeField] private ItemPickupSystem _itemPickupSystem;        // 아이템 줍는 범위 콜라이더
 
     [Header("이벤트 채널")]
-    [SerializeField] private IntEventChannelSO _onHit;
-    [SerializeField] private IntEventChannelSO _onPickupExp;
-    [SerializeField] private IntEventChannelSO _onGainInGameExp;
+    [SerializeField] private FloatEventChannelSO _onHit;
+    [SerializeField] private FloatEventChannelSO _onPickupExp;
+    [SerializeField] private FloatEventChannelSO _onGainInGameExp;
     [SerializeField] private IntEventChannelSO _onInGameLevelUp;
-    [SerializeField] private IntEventChannelSO _onGainOutGameExp;
+    [SerializeField] private FloatEventChannelSO _onGainOutGameExp;
     [SerializeField] private IntEventChannelSO _onOutGameLevelUp;
     [SerializeField] private VoidEventChannelSO _onDead;
 
@@ -51,12 +51,12 @@ public class PlayerBase : MonoBehaviour, IDamageable, ISkillable
 
 
     // 스킬 공유 데이터 (인트 수정 필요)
-    public int AttackPower => _statCalculator.GetFinalSat(_attackPower, EquipmentBase.STAT.AttackPower);
-    public int DefensePower => _statCalculator.GetFinalSat(_defensePower, EquipmentBase.STAT.DefensePower);
-    public int MoveSpeed => _statCalculator.GetFinalSat(_moveSpeed, EquipmentBase.STAT.MoveSpeed);
-    public int CriticalChance => _statCalculator.GetFinalSat(_criticalChance, EquipmentBase.STAT.CriticalChance);
-    public int CriticalDamageMultiplier => (int)_criticalDamageMultiplier;
-    public int EvasionChance => _statCalculator.GetFinalSat(_evasionChance, EquipmentBase.STAT.EvasionChance);
+    public float AttackPower => _statCalculator.GetFinalSat(_attackPower, EquipmentBase.STAT.AttackPower);
+    public float DefensePower => _statCalculator.GetFinalSat(_defensePower, EquipmentBase.STAT.DefensePower);
+    public float MoveSpeed => _statCalculator.GetFinalSat(_moveSpeed, EquipmentBase.STAT.MoveSpeed);
+    public float CriticalChance => _statCalculator.GetFinalSat(_criticalChance, EquipmentBase.STAT.CriticalChance);
+    public float CriticalDamageMultiplier => _criticalDamageMultiplier;
+    public float EvasionChance => _statCalculator.GetFinalSat(_evasionChance, EquipmentBase.STAT.EvasionChance);
     public float ExpGainRate => _statCalculator.GetFinalSat(_expGainRate, RelicBase.STAT.ExpGainRate);
     public float PickupRange => _pickupRange;
     public Vector2 MoveDir => _stateMachine.MoveDir;
@@ -142,7 +142,7 @@ public class PlayerBase : MonoBehaviour, IDamageable, ISkillable
         if(_currentHp != hp)
         {
             _currentHp = hp;
-            _onHit.OnStartEvent((int)Hp);                                                   // 인트 수정필요
+            _onHit.OnStartEvent(Hp);
         }
 
         if (Hp <= 0)
@@ -156,19 +156,19 @@ public class PlayerBase : MonoBehaviour, IDamageable, ISkillable
 
 
     // 인게임 경험치 획득 로직
-    public void GainInGameExp(int exp)
+    public void GainInGameExp(float exp)
     {
         bool isLevelUp = _levelSystem.GainExp(PlayerLevelSystem.GameMode.InGame, exp);
-        _onGainInGameExp.OnStartEvent((int)_levelSystem.InGameCurrentExp);                  // 인트 수정필요
+        _onGainInGameExp.OnStartEvent(_levelSystem.InGameCurrentExp);
 
         if (isLevelUp)
             _onInGameLevelUp.OnStartEvent(_levelSystem.InGameLevel);
     }
     // 아웃게임 경험치 획득 로직
-    public void GainOutGameExp(int exp)
+    public void GainOutGameExp(float exp)
     {
         bool isLevelUp = _levelSystem.GainExp(PlayerLevelSystem.GameMode.OutGame, exp);
-        _onGainOutGameExp.OnStartEvent((int)_levelSystem.OutGameCurrentExp);                // 인트 수정필요
+        _onGainOutGameExp.OnStartEvent(_levelSystem.OutGameCurrentExp);
 
         if (isLevelUp)
             _onOutGameLevelUp.OnStartEvent(_levelSystem.OutGameLevel);

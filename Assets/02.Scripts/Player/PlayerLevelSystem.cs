@@ -21,7 +21,7 @@ public class PlayerLevelSystem
 
 
     // 외부 게임모드에 따른 경험치 획득 메서드
-    public bool GainExp(GameMode gameMode, int gainExp)
+    public bool GainExp(GameMode gameMode, float gainExp)
     {
         bool isLevelUp = false;
 

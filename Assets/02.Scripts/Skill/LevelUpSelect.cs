@@ -20,7 +20,7 @@ public class LevelUpSelect : MonoBehaviour
         // 패시브
         public PassiveSkillData PassiveData;
         // 회복
-        public IntEventChannelSO OnHealSelect;   // 회복 이벤트
+        public FloatEventChannelSO OnHealSelect;   // 회복 이벤트
 
         // 액티브 생성자
         public SelectOptionInfo(int mainTag, ActiveUpgradeData data)
@@ -38,7 +38,7 @@ public class LevelUpSelect : MonoBehaviour
         }
 
         // 회복 생성자
-        public SelectOptionInfo(IntEventChannelSO healEvent)
+        public SelectOptionInfo(FloatEventChannelSO healEvent)
         {
             Type = OPTION_TYPE.Heal;
             OnHealSelect = healEvent;
@@ -58,7 +58,7 @@ public class LevelUpSelect : MonoBehaviour
     public IReadOnlyList<SelectOptionInfo> CurrentOptions => _currentOptions;
 
     [Header("체력 회복 선택지 이벤트 채널")]
-    [SerializeField] IntEventChannelSO _onHealSelect;   // 회복 이벤트
+    [SerializeField] FloatEventChannelSO _onHealSelect;   // 회복 이벤트
 
     // 선택지 옵션 설정
     public void GenerateOptions(int level)

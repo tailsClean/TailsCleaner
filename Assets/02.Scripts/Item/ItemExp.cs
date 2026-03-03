@@ -4,7 +4,7 @@
 public class ItemExp : MonoBehaviour, IPickable
 {
     [SerializeField] private int _expPoint = 10;
-    [SerializeField] private IntEventChannelSO _onPickupExp;
+    [SerializeField] private FloatEventChannelSO _onPickupExp;
 
     public Transform MyTransform => transform;
 

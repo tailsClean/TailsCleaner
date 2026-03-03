@@ -2,12 +2,12 @@
 
 public interface ISkillable
 {
-    public int AttackPower { get; }
-    public int DefensePower { get; }
-    public int MoveSpeed { get; }
-    public int CriticalChance { get; }
-    public int CriticalDamageMultiplier { get; }    // 치명타 피해 계수
-    public int EvasionChance { get; }               // 회피율
+    public float AttackPower { get; }
+    public float DefensePower { get; }
+    public float MoveSpeed { get; }
+    public float CriticalChance { get; }
+    public float CriticalDamageMultiplier { get; }    // 치명타 피해 계수
+    public float EvasionChance { get; }               // 회피율
     public float PickupRange { get; }               // 경험치 획득 범위
     public float ExpGainRate { get; }        // 경헝치 획득량
 
