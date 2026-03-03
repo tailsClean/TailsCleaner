@@ -150,6 +150,15 @@ public abstract class MonsterBase : MonoBehaviour, IDamageable
         {
             Instantiate(TestItem, transform.position, Quaternion.identity);
         }
-        Destroy(gameObject);
+
+        // Destroy(gameObject) 대신 풀링 반납
+        if (TryGetComponent<PoolObject>(out var poolObj))
+        {
+            poolObj.ReturnToPool();
+        }
+        else
+        {
+            Destroy(gameObject); // 풀링 오브젝트가 아니면 파괴
+        }
     }
 }

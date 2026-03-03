@@ -109,6 +109,16 @@ public abstract class SpecialBossMonsterBase : MonsterBase
 
     protected void OnEnable()
     {
+        hasExploded = false;           // 자폭 여부 초기화
+        currentCastTimer = cast_time;  // 자폭 타이머 초기화
+        stateTimer = 0f;               // 패턴 쿨타임 초기화
+        isJumping = false;             // 점프 상태 초기화
+        isFleeingState = false;        // 도망 상태 초기화
+        isWaiting = false;
+        isWaitingFlee = false;
+        hasHitTargetInCurrentJump = false;
+
+        // --- 리스트 관리 ---
         if (!activeMonsters.Contains(this))
             activeMonsters.Add(this);
     }
@@ -476,7 +486,18 @@ public abstract class SpecialBossMonsterBase : MonsterBase
         }
         // if (!hitPlayer) Debug.Log("자폭 빗나감");
 
-        Destroy(gameObject);
+        // 풀에 들어가기 전 정지
+        rb2D.linearVelocity = Vector2.zero;
+
+        // Destroy 대신 풀링 매니저에 반납
+        if (TryGetComponent<PoolObject>(out var poolObj))
+        {
+            poolObj.ReturnToPool();
+        }
+        else
+        {
+            Destroy(gameObject); // 혹시 모를 예외 상황 대비
+        }
     }
 
     private void UpdateWarningVisuals(float progressNormalized) { }
