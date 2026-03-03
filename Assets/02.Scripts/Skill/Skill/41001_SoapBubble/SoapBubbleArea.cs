@@ -197,7 +197,7 @@ public class SoapBubbleArea : SkillArea<SoapBubbleModifierData>
         if (_modifierData.BurstOnExpire == true)
         {
             // 발동 횟수
-            int count = _runtimeFinalStat.ExtraDamageMultiplier;
+            int count = _runtimeFinalStat.ExtraMultiplier;
 
             // 추가추가피해로 여러번 발동 가능
             // _monstersInArea에 등록된 적 모두 최대 체력 피해

@@ -41,8 +41,8 @@ public class SunDryingArea : SkillArea<SunDryingModifierData>
         float bonus = _modifierData.DamagePerTickAmount;
 
         // 추가추가피해 패시브
-        if (_runtimeFinalStat.ExtraDamageMultiplier > 1)
-            bonus *= _runtimeFinalStat.ExtraDamageMultiplier;
+        if (_runtimeFinalStat.ExtraMultiplier > 1)
+            bonus *= _runtimeFinalStat.ExtraMultiplier;
 
         // 업그레이드 스탯에 더함
         _runtimeUpgradeStat.Damage += bonus;

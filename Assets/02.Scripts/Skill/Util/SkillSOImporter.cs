@@ -203,6 +203,7 @@ public class SkillSOImporter : EditorWindow
             });
         }
     }
+
     // 액티브 모디파이어 생성
     private ActiveModifier CreateActiveModifier(int upgradeId) => upgradeId switch
     {
@@ -213,14 +214,43 @@ public class SkillSOImporter : EditorWindow
         40007 => new SoapBubbleStunModifier(),            // 슬랩스틱
         40008 => new SoapBubbleBurstModifier(),           // 거품 펑!
 
+
         // 비누 던지기
         40011 => new SoapRetargetModifier(),              // 감나빗!
         40012 => new SoapPierceDamageModifier(),          // 거품내기
         40014 => new SoapPierceSpeedModifier(),           // 거품 가속
         40016 => new SoapRemovalPierceModifier(),         // 비누 덩어리
 
+
+        // 물폭탄
+        40018 => new WaterBombSplashModifier(),           // 물바다
+        40019 => new WaterBombVortexModifier(),           // 소용돌이
+        40020 => new WaterBombBulletClearModifier(),      // 폭발은 예술이다!
+
+
+        // 타올 휘두르기
+        40022 => new TowelRecycleModifier(),              // 타올 리사이클
+        40024 => new TowelParryModifier(),                // 패링
+        40025 => new TowelSyncModifier(),                 // 타올 휘날리며
+                 
+        
+        // 걸레 휘두르기                                   
+        40027 => new MopRecycleModifier(),                // 걸레 리사이클
+        40028 => new MopSlowModifier(),                   // 젖은 걸레
+        40029 => new MopStunModifier(),                   // 어질어질
+        40030 => new MopSyncModifier(),                   // 걸레 휘날리며
+
+
+        // 세탁 파도
+        40032 => new WashWaveCurseModifier(),             // 끌고오는 파도
+        40033 => new WashWaveReturnModifier(),            // 밀물 썰물
+        40034 => new WashWaveDrainModifier(),             // 탈수
+        40035 => new WashWaveHealModifier(),              // 차오르는 체력
+
+
         // 세제 캡슐
         40040 => new DetergentRapidFireModifier(),        // 1만 시간의 법칙
+
 
         // 회전 장난감
         40042 => new SpinningToyTrainModifier(),          // 기차 장난감
@@ -240,6 +270,14 @@ public class SkillSOImporter : EditorWindow
         40054 => new SunDryingShieldModifier(),           // 두꺼운 이불
         40055 => new SunDryingHealModifier(),             // 기상!
 
+
+        // 블루투스 샤워기
+        40057 => new BluetoothRapidFireModifier(),        // 수압 최대로!
+        40058 => new BluetoothHealModifier(),             // 온수샤워
+        40059 => new BluetoothSpeedBoostModifier(),       // 냉수마찰
+        40060 => new BluetoothKnockbackModifier(),        // 예열완료
+        40061 => new BluetoothDefenseModifier(),          // 방수코팅
+        40062 => new BluetoothAlwaysFireModifier(),       // 키친건!
 
 
         _ => null  // 매핑된거 없으면 깡통
@@ -294,9 +332,9 @@ public class SkillSOImporter : EditorWindow
         42003 => new FocusAttackModifier(),         // 집중공략
         42004 => new DoubleExtraDamageModifier(),   // 추가 추가 피해
         42005 => new SuperCleanModifier(),          // SuperClean
-        //42006 => new 
-        //42007 => new 
-        //42008 => new 
+        42006 => new BravadoModifier(),             // 객기
+        42007 => new CleanerVinylSuitModifier(),    // 청소용 비닐옷
+        42008 => new ClassicSecretModifier(),       // 고전비급
         42009 => new BiggerBetterModifier(),        // 더 크게! 더! 더더! 크고 아름답게!
         42010 => new GoldCrownModifier(),           // 황금왕관
         42011 => new ADCarryModifier(),             // 원딜의 정석
@@ -305,7 +343,7 @@ public class SkillSOImporter : EditorWindow
         42014 => new ImplantModifier(),             // 기초적인 임플란트입니다
         42015 => new SodaWaterModifier(),           // 탄산수
         42016 => new CatLaundryModifier(),          // 냥빨래
-        //42017 => new 
+        42017 => new NimbleBlockModifier(),         // 하지만 이렇게 간단하게 피했습니다
 
         _ => null
     };

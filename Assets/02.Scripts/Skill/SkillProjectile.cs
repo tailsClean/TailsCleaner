@@ -36,7 +36,10 @@ public class SkillProjectile<TModifierData> : SkillObjectBase
 
         // 몬스터 컴포넌트 참조 시도 후 피해
         if (col.TryGetComponent<MonsterBase>(out MonsterBase monster))
+        {
+            if (monster.hp <= 0) return;
             monster.TakeDamage(_runtimeFinalStat.Damage);
+        }
 
         // 현재 관통 추가
         _currentPierceCount++;
@@ -52,8 +55,11 @@ public class SkillProjectile<TModifierData> : SkillObjectBase
         // 패시브 관통 효과 (임플란트 등)
         foreach (var passive in _passiveModifiers)
         {
-            passive.OnPierce(_runtimePassiveMulStat);
-            mulChanged = true;
+            // 관통으로 true 반환할 때
+            if (passive.OnPierce(_runtimePassiveMulStat))
+            {
+                mulChanged = true;
+            }
         }
 
         if (mulChanged)

@@ -60,8 +60,8 @@ public class SoapThrowProjectile : SkillProjectile<SoapThrowModifierData>
         float bonus = _modifierData.DamagePerPierce;
 
         // 추가 추가 피해 있을 때 (0.5 * 2)
-        if (_runtimeFinalStat.ExtraDamageMultiplier > 1)
-            bonus *= _runtimeFinalStat.ExtraDamageMultiplier;
+        if (_runtimeFinalStat.ExtraMultiplier > 1)
+            bonus *= _runtimeFinalStat.ExtraMultiplier;
 
         // 업그레이드 피해에 추가
         _runtimeUpgradeStat.Damage += bonus;

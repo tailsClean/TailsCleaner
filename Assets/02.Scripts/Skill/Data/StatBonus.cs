@@ -1,4 +1,6 @@
-﻿public class SkillStat         // 추가 스킬 스탯
+﻿using System.Drawing;
+
+public class SkillStat         // 추가 스킬 스탯
 {
     public float Damage;            // 공격력 배율
     public float Cooldown;          // 쿨타임 감소
@@ -11,21 +13,21 @@
     public float Size;              // 크기 비율
 
     // 패시브용
-    public int ExtraDamageMultiplier = 1;    // 추가추가피해 추가 횟수
+    public int ExtraMultiplier = 1;          // 추가추가피해 추가 횟수
     public float DurationTickInterval = 0f;  // 스노우볼링 지속시간 체크 간격
 
     // 합
     public void Add(SkillStat other)
     {
-        Damage += other.Damage;
-        Cooldown += other.Cooldown;
-        Duration += other.Duration;
+        Damage          += other.Damage;
+        Cooldown        += other.Cooldown;
+        Duration        += other.Duration;
         ProjectileSpeed += other.ProjectileSpeed;
         ProjectileCount += other.ProjectileCount;
-        PierceCount += other.PierceCount;
-        TickRate += other.TickRate;
-        Knockback += other.Knockback;
-        Size += other.Size;
+        PierceCount     += other.PierceCount;
+        TickRate        += other.TickRate;
+        Knockback       += other.Knockback;
+        Size            += other.Size;
     }
 
     // 곱 (공용)
@@ -33,15 +35,15 @@
     // 만약 의도적으로 0 으로 만드는 공용 업그레이드가 있다면 수정 필요함...
     public void Multiply(SkillStat multiplier)
     {
-        if (multiplier.Damage != 0) Damage *= multiplier.Damage;
-        if (multiplier.Cooldown != 0) Cooldown *= multiplier.Cooldown;
-        if (multiplier.Duration != 0) Duration *= multiplier.Duration;
+        if (multiplier.Damage != 0)          Damage *= multiplier.Damage;
+        if (multiplier.Cooldown != 0)        Cooldown *= multiplier.Cooldown;
+        if (multiplier.Duration != 0)        Duration *= multiplier.Duration;
         if (multiplier.ProjectileSpeed != 0) ProjectileSpeed *= multiplier.ProjectileSpeed;
         if (multiplier.ProjectileCount != 0) ProjectileCount *= multiplier.ProjectileCount;
-        if (multiplier.PierceCount != 0) PierceCount *= multiplier.PierceCount;
-        if (multiplier.TickRate != 0) TickRate *= multiplier.TickRate;
-        if (multiplier.Knockback != 0) Knockback *= multiplier.Knockback;
-        if (multiplier.Size != 0) Size *= multiplier.Size;
+        if (multiplier.PierceCount != 0)     PierceCount *= multiplier.PierceCount;
+        if (multiplier.TickRate != 0)        TickRate *= multiplier.TickRate;
+        if (multiplier.Knockback != 0)       Knockback *= multiplier.Knockback;
+        if (multiplier.Size != 0)            Size *= multiplier.Size;
     }
 
     // 공용 스탯용 생성
@@ -49,33 +51,33 @@
     {
         return new SkillStat
         {
-            Damage = 1f,
-            Cooldown = 1f,
-            Duration = 1f,
+            Damage          = 1f,
+            Cooldown        = 1f,
+            Duration        = 1f,
             ProjectileSpeed = 1f,
             ProjectileCount = 1,
-            PierceCount = 1,
-            TickRate = 1f,
-            Knockback = 1f,
-            Size = 1f
+            PierceCount     = 1,
+            TickRate        = 1f,
+            Knockback       = 1f,
+            Size            = 1f,
         };
     }
 
     // new 없이 기존 객체에 덮어쓰기
-    //CalculateStat GC 방지용
+    // CalculateStat GC 방지용
     public void CopyFrom(SkillStat sc)
     {
-        Damage = sc.Damage;
-        Cooldown = sc.Cooldown;
-        Duration = sc.Duration;
-        ProjectileSpeed = sc.ProjectileSpeed;
-        ProjectileCount = sc.ProjectileCount;
-        PierceCount = sc.PierceCount;
-        TickRate = sc.TickRate;
-        Knockback = sc.Knockback;
-        Size = sc.Size;
-        ExtraDamageMultiplier = sc.ExtraDamageMultiplier;
-        DurationTickInterval = sc.DurationTickInterval;
+        Damage                = sc.Damage;
+        Cooldown              = sc.Cooldown;
+        Duration              = sc.Duration;
+        ProjectileSpeed       = sc.ProjectileSpeed;
+        ProjectileCount       = sc.ProjectileCount;
+        PierceCount           = sc.PierceCount;
+        TickRate              = sc.TickRate;
+        Knockback             = sc.Knockback;
+        Size                  = sc.Size;
+        ExtraMultiplier       = sc.ExtraMultiplier;
+        DurationTickInterval  = sc.DurationTickInterval;
     }
 
     // 복제
@@ -93,6 +95,7 @@
 
 public class PlayerStatBonus        // 추가 플레이어 스탯
 {
+    public float Damage;            // 공격력
     public int Defence;             // 방어력
     public float MoveSpeed;         // 이동 속도 
     public float CriticalChance;    // 치명타 확률
@@ -104,12 +107,53 @@ public class PlayerStatBonus        // 추가 플레이어 스탯
     // 스탯 더하기
     public void Add(PlayerStatBonus other)
     {
-        Defence += other.Defence;
-        MoveSpeed += other.MoveSpeed;
+        Damage         += other.Damage;
+        Defence        += other.Defence;
+        MoveSpeed      += other.MoveSpeed;
         CriticalChance += other.CriticalChance;
         CriticalDamage += other.CriticalDamage;
-        EvasionChance += other.EvasionChance;
-        PickupRange += other.PickupRange;
-        ExpGain += other.ExpGain;
+        EvasionChance  += other.EvasionChance;
+        PickupRange    += other.PickupRange;
+        ExpGain        += other.ExpGain;
+    }
+
+    // 스탯 빼기
+    public void Subtract(PlayerStatBonus other)
+    {
+        Damage         -= other.Damage;
+        Defence        -= other.Defence;
+        MoveSpeed      -= other.MoveSpeed;
+        CriticalChance -= other.CriticalChance;
+        CriticalDamage -= other.CriticalDamage;
+        EvasionChance  -= other.EvasionChance;
+        PickupRange    -= other.PickupRange;
+        ExpGain        -= other.ExpGain;
+    }
+
+    // 초기화
+    public void Reset()
+    {
+        Damage          = 0;
+        Defence         = 0;
+        MoveSpeed       = 0;
+        CriticalChance  = 0;
+        CriticalDamage  = 0;
+        EvasionChance   = 0;
+        PickupRange     = 0;
+        ExpGain         = 0;
+    }
+
+    // new 없이 기존 객체에 덮어쓰기
+    // CalculateStat GC 방지용
+    public void CopyFrom(PlayerStatBonus ps)
+    {
+        Damage         = ps.Damage;
+        Defence        = ps.Defence;
+        MoveSpeed      = ps.MoveSpeed;
+        CriticalChance = ps.CriticalChance;
+        CriticalDamage = ps.CriticalDamage;
+        EvasionChance  = ps.EvasionChance;
+        PickupRange    = ps.PickupRange;
+        ExpGain        = ps.ExpGain;
     }
 }

@@ -19,7 +19,7 @@ public abstract class PassiveModifier
 
     public virtual bool OnProjectileInit(SkillStat runtimeBaseStat, SkillStat runtimeFinalStat) { return false; }   // 투사체 생성 시, bool은 재계산 확인용
     public virtual void OnDamage(MonsterBase monster) { }                             // 적 피해 시
-    public virtual void OnPierce(SkillStat runTimePassiveMulStat) { }                 // 관통 시
+    public virtual bool OnPierce(SkillStat runTimePassiveMulStat) { return false; }   // 관통 시
     public virtual void OnEnterArea(MonsterBase monster) { }                          // 장판 올라갈 시 (몬스터)
     public virtual void OnEnterArea(PlayerBase player) { }                            // 장판 올라갈 시 (플레이어)
     public virtual void OnDurationTick(SkillStat runTimePassiveMulStat) { }           // 지속시간마다
@@ -36,8 +36,6 @@ public class RaccoonCrateModifier : PassiveModifier
     public float EvasionChancePerTag = 0.01f;       // 1%
     public float CriticalChancePerTag = 0.01f;      // 1%
     public float CriticalDamagePerTag = 0.05f;    // 5%
-
-    private int _lastTagCount;  // 최근 태그 수
 
     //Defence         = DefencePerTag* tagCount,
     //EvasionChance = EvasionChancePerTag * tagCount,
@@ -91,11 +89,11 @@ public class FocusAttackModifier : PassiveModifier
 // 추가 추가 피해 (추가 피해 * 2)
 public class DoubleExtraDamageModifier : PassiveModifier
 {
-    [Header("추가 횟수")] public int ExtraDamageMultiplier = 1;
+    [Header("추가 횟수")] public int ExtraMultiplier = 1;
     public override void ModifyBaseAdd(SkillStat baseStat)
     {
         // 1회 추가
-        baseStat.ExtraDamageMultiplier += ExtraDamageMultiplier;
+        baseStat.ExtraMultiplier += ExtraMultiplier;
     }
 }
 
@@ -115,6 +113,30 @@ public class SuperCleanModifier : PassiveModifier
         //monster.ApplySlow(SlowAmount, SlowDuration);
     }
 }
+
+// ID 42006 / SubTag 40106
+// 객기 (저주 수만큼 플레이어 방어력 증가)
+
+public class BravadoModifier : PassiveModifier
+{
+    [Header("저주당 추가 방어력")]
+    public int DefencePerCurse = 1;
+}
+// ID 42007 / SubTag 40107
+// 청소용 비닐옷 (체력 초과 회복 시 방어막 1회 생성)
+public class CleanerVinylSuitModifier : PassiveModifier
+{
+
+}
+
+
+// ID 42008 / SubTag 40108
+// 고전비급  (타올 <-> 걸레 기본 스탯 공유)
+public class ClassicSecretModifier : PassiveModifier
+{
+
+}
+
 
 // ID 42009 / SubTag 40109
 // 더 크게! 더! 더더! 크고 아름답게! (투사체 크기에 비례해 넉백과 데미지 계수가 증가)
@@ -194,9 +216,10 @@ public class ImplantModifier : PassiveModifier
 {
     [Header("관통 추가 피해 계수")] public float DamagePerPierce = 0.2f;
 
-    public override void OnPierce(SkillStat runTimePassiveMulSum)
+    public override bool OnPierce(SkillStat runTimePassiveMulSum)
     {
         runTimePassiveMulSum.Damage += DamagePerPierce; // 1.0 -> 1.2 -> 1.4
+        return true;
     }
 }
 
@@ -221,5 +244,15 @@ public class CatLaundryModifier : PassiveModifier
     {
         finalStat.Knockback *= KnockbackBonus;
     }
+}
+
+// ID 42017 / SubTag 40117
+// 하지만 이렇게 간단하게 피했습니다. (방어막 최대 3중첩 + 탄환 제거 시 방어막 충전)
+public class NimbleBlockModifier : PassiveModifier
+{
+    [Header("최대 방어막 중첩 수")]
+    public int MaxShieldStack = 3;
+
+    // 패시브 적용 시 플레이어 방어막 시스템에 MaxShieldStack 전달
 }
 

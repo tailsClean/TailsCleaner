@@ -48,27 +48,47 @@ public class SkillArea<TModifierData> : SkillObjectBase
     // 충돌 감지
     private void OnTriggerEnter2D(Collider2D col)
     {
-        if (col.TryGetComponent<MonsterBase>(out var monster))
-        {   
-            _monstersInArea.Add(monster);
-            OnMonsterEnter(monster);
+        if (col.CompareTag("Monster"))          // 몬스터
+        {
+            if (col.TryGetComponent<MonsterBase>(out var monster))
+            {
+                _monstersInArea.Add(monster);
+                OnMonsterEnter(monster);
+            }
         }
-        else if (col.CompareTag("Player"))
+        else if (col.CompareTag("Player"))      // 플레이어
         {
             OnPlayerEnter();
+        }
+        else if (col.CompareTag("MonsterBullet")) // 적 투사체
+        {
+            if (col.TryGetComponent<MonsterProjectile>(out var projectile))
+            {
+                OnBulletEnter(projectile);
+            }
         }
     }
 
     private void OnTriggerExit2D(Collider2D col)
     {
-        if (col.TryGetComponent<MonsterBase>(out var monster))
+        if (col.CompareTag("Monster"))          // 몬스터
         {
-            _monstersInArea.Remove(monster);
-            OnMonsterExit(monster);
+            if (col.TryGetComponent<MonsterBase>(out var monster))
+            {
+                _monstersInArea.Remove(monster);
+                OnMonsterExit(monster);
+            }
         }
-        else if (col.CompareTag("Player"))
+        else if (col.CompareTag("Player"))      // 플레이어
         {
             OnPlayerExit();
+        }
+        else if (col.CompareTag("MonsterBullet")) // 적 투사체
+        {
+            if (col.TryGetComponent<MonsterProjectile>(out var projectile))
+            {
+                OnBulletExit(projectile);
+            }
         }
     }
 
@@ -76,6 +96,8 @@ public class SkillArea<TModifierData> : SkillObjectBase
     protected virtual void OnMonsterExit(MonsterBase monster) { }
     protected virtual void OnPlayerEnter() { }
     protected virtual void OnPlayerExit() { }
+    protected virtual void OnBulletEnter(MonsterProjectile projectile) { }
+    protected virtual void OnBulletExit(MonsterProjectile projectile) { }
 
     // 틱 처리
     // 범위 내 적에게 피해

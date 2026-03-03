@@ -1,5 +1,5 @@
 ﻿using UnityEngine;
 
-public class MopSwingArea : MonoBehaviour
+public class MopSwingArea : SwingArea<SwingModifierData>
 {
 }

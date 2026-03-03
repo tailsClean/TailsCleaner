@@ -1,5 +1,5 @@
 ﻿using UnityEngine;
 
-public class TowelSwingArea : MonoBehaviour
+public class TowelSwingArea : SwingArea<SwingModifierData>
 {
 }
