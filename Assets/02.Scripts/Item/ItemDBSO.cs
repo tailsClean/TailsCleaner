@@ -48,7 +48,8 @@ public interface IDBable
     int ID { get; }
 }
 
-public class ItemDB
+// 전역 참조
+public static class ItemDB
 {
     private static ItemDBSO _itemDB;
 

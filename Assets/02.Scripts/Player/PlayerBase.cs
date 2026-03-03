@@ -31,8 +31,6 @@ public class PlayerBase : MonoBehaviour, IDamageable, ISkillable
     [SerializeField] private IntEventChannelSO _onOutGameLevelUp;
     [SerializeField] private VoidEventChannelSO _onDead;
 
-    [Header("공격 레이어")]
-    [SerializeField] private LayerMask _monsterLayer;
 
     [Header("추가가 필요한 데이터")]
     [SerializeField] private float _itemDropRate = 1;
@@ -48,7 +46,6 @@ public class PlayerBase : MonoBehaviour, IDamageable, ISkillable
 
 
     public float Hp => Mathf.Max(_currentHp, 0);
-    public Transform AttackTarget => GetTarget(AttackDir);  // 조준형 스킬 사용을 위한 타겟
     public float ItemDropRate => _statCalculator.GetFinalSat(_itemDropRate, RelicBase.STAT.ItemDropRate);
     public float GoldGainRate => _statCalculator.GetFinalSat(_goldGainRate, RelicBase.STAT.GoldGainRate);
 
@@ -180,22 +177,6 @@ public class PlayerBase : MonoBehaviour, IDamageable, ISkillable
 
     // 주위 아이템(경험치) 끌어모으는 메서드
     private void OnItemPickup(IPickable item) => _itemPickupSystem.ItemPickup(transform, item);
-
-
-
-
-    // 조준형 스킬을 위한 타겟 검사
-    private Transform GetTarget(Vector2 dir)
-    {
-        Vector2 origine = (Vector2)transform.position + dir;
-
-        var hit = Physics2D.Raycast(origine, dir, Mathf.Infinity, _monsterLayer);
-
-        if (hit.collider != null)
-            return hit.transform;
-
-        return null;
-    }
 
     //
     [ContextMenu("스텟출력")]

@@ -13,6 +13,5 @@ public interface ISkillable
 
     public Vector2 MoveDir { get; }
     public Vector2 AttackDir { get; }
-    public Transform AttackTarget {  get; }
 }
 
