@@ -24,7 +24,7 @@ public class SkillProjectile<TModifierData> : SkillObjectBase
     {
         _dir = newDir;
         // 방향 변경 후 물리 재적용
-        ApplyPhysics();
+        ApplySize();
     }
 
 

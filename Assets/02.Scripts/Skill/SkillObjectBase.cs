@@ -51,8 +51,8 @@ public class SkillObjectBase : MonoBehaviour
         // 초기화 시 전용 모디파이어, 패시브 처리
         OnInit();
 
-        // 물리 적용
-        ApplyPhysics();
+        // 크기 적용
+        ApplySize();
     }
 
     protected virtual void Update()
@@ -63,6 +63,13 @@ public class SkillObjectBase : MonoBehaviour
 
         // 스킬 지속 시간 틱 체크 (스노우볼링)
         UpdateDurationTick();
+        
+        // 이동
+        // 방향 벡터 제곱 길이가 0보다 클 때만
+        if (_dir.sqrMagnitude > 0f)
+        {
+            transform.Translate(_dir * (_runtimeFinalStat.ProjectileSpeed * Time.deltaTime), Space.World);
+        }
     }
 
     // 수명체크 따로 하는 애들 때문에 분리
@@ -99,8 +106,6 @@ public class SkillObjectBase : MonoBehaviour
         // 더티 플래그 활성화 되면
         if (_statDirty == false) return;
 
-        Debug.Log("투사체 런타임 스탯 재계산");
-
         // 버퍼에 staticBase 복사 (baseStat + passiveBaseAdds) * commonStat
         _calcBuffer.CopyFrom(_staticStat);
 
@@ -118,20 +123,15 @@ public class SkillObjectBase : MonoBehaviour
         _runtimeFinalStat.CopyFrom(_calcBuffer);
 
         // 물리 적용
-        ApplyPhysics();
+        ApplySize();
 
         // 계산 했으니 끄기
         _statDirty = false;
     }
 
-    // 물리 적용 (속도, 크기)
-    protected void ApplyPhysics()
+    // 크기 적용
+    protected void ApplySize()
     {
-        if (_rigidbody != null)
-        {
-            _rigidbody.linearVelocity = _dir * _runtimeFinalStat.ProjectileSpeed;
-        }
-
         transform.localScale = Vector3.one * _runtimeFinalStat.Size;
     }
 

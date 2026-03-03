@@ -76,11 +76,11 @@ public abstract class ActiveSkill : MonoBehaviour
         // 타입 설정
         _attackType = skillData.AttackType;
         _targetingType = skillData.TargetingType;
-        Debug.Log($"[ActiveSkill] {skillData.SkillName} 타입 설정 완료. ({_attackType}, {_targetingType})");
+        //Debug.Log($"[ActiveSkill] {skillData.SkillName} 타입 설정 완료. ({_attackType}, {_targetingType})");
 
         // 스킬의 사용 프리팹
         _skillPrefab = prefab;
-        Debug.Log($"[ActiveSkill] {skillData.SkillName} 의 프리팹 {_skillPrefab.name} 설정 완료.");
+        //Debug.Log($"[ActiveSkill] {skillData.SkillName} 의 프리팹 {_skillPrefab.name} 설정 완료.");
 
         // 레벨 1 시작
         CurrentLevel = 1;
@@ -112,7 +112,7 @@ public abstract class ActiveSkill : MonoBehaviour
             Vector2 attackDir = SkillManager.Instance.Player.AttackDir;
 
             // 공격 방향이 존재하면
-            if (attackDir != Vector2.zero)
+            if (attackDir.sqrMagnitude > 0f)
             {
                 // 코루틴이 안 돌고 있다면 켜기
                 if (_searchCoroutine == null)
@@ -150,7 +150,7 @@ public abstract class ActiveSkill : MonoBehaviour
             Vector2 attackDir = SkillManager.Instance.Player.AttackDir;
 
             // 방향 있을 때 탐색
-            if (attackDir != Vector2.zero)
+            if (attackDir.sqrMagnitude > 0f)
                 _currentTarget = SkillManager.Instance.TargetingSystem.GetTarget(attackDir, _distance, _angle);
             else
                 _currentTarget = null;
@@ -177,13 +177,13 @@ public abstract class ActiveSkill : MonoBehaviour
                 return true;
 
             case TARGETING_TYPE.NonTarget:                  // 비대상형    공격 방향 있어야 발동
-                return player.AttackDir != Vector2.zero;
+                return player.AttackDir.sqrMagnitude > 0f;
 
             case TARGETING_TYPE.Closest:                    // 조준형      공격방향, 타겟 트랜스폼 둘 다 있어야 발동
-                return player.AttackDir != Vector2.zero && _currentTarget != null;
+                return player.AttackDir.sqrMagnitude > 0f && _currentTarget != null;
 
             case TARGETING_TYPE.Directional:                // 이동방향형  이동 방향 있어야 발동
-                return player.MoveDir != Vector2.zero;
+                return player.MoveDir.sqrMagnitude > 0f;
 
             default:
                 return true;

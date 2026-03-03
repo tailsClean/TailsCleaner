@@ -56,6 +56,8 @@ public class WaterBombSkill : ActiveSkill<WaterBombArea, WaterBombModifierData>
 
         for (int i = 0; i < burstCount; i++)
         {
+            Debug.Log("물바다 발사");
+
             // 투사체 발사
             FireSplash(spawnPos);
 
@@ -98,6 +100,8 @@ public class WaterBombSkill : ActiveSkill<WaterBombArea, WaterBombModifierData>
 
         // 소용돌이 생성
         WaterBombVortexArea vortex = Instantiate(_vortexAreaPrefab, spawnPos, Quaternion.identity);
+
+        Debug.Log($"소용돌이 틱 수 : {modifierData.VortexPullCount}");
 
         // 물폭탄 finalStat.Size의 1.5배
         vortex.Init(modifierData.VortexPullDelay, modifierData.VortexPullCount, stat.Size * _modifierData.VortexSize, passives, modifierData.BulletClear );

@@ -1,5 +1,7 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 
+[Serializable]
 public abstract class PassiveModifier
 {
     // 기본 스탯에 추가
@@ -31,11 +33,14 @@ public abstract class PassiveModifier
 // 매이크 라쿤 크레이트 어겐! (보유 업그레이드 40101 태그 수만큼 방어력, 회피율, 치명타율, 치명타 피해 증가)
 public class RaccoonCrateModifier : PassiveModifier
 {
-    [Header("강화 태그 1개당 증가량")]
-    public int DefencePerTag = 2;
-    public float EvasionChancePerTag = 0.01f;       // 1%
-    public float CriticalChancePerTag = 0.01f;      // 1%
-    public float CriticalDamagePerTag = 0.05f;    // 5%
+    //[Header("방어력 증가량")]
+    //[SerializeField] int _defencePerTag = 2;
+    //[Header("회피율 증가량")]
+    //[SerializeField] float _evasionChancePerTag = 0.01f;       // 1%
+    //[Header("치명타확률 증가량")]
+    //[SerializeField] float _criticalChancePerTag = 0.01f;      // 1%
+    //[Header("치명타피해 증가량")]
+    //[SerializeField] float _criticalDamagePerTag = 0.05f;    // 5%
 
     //Defence         = DefencePerTag* tagCount,
     //EvasionChance = EvasionChancePerTag * tagCount,
@@ -48,13 +53,16 @@ public class RaccoonCrateModifier : PassiveModifier
 // 목표를 중앙에 두고 스위치 (투사체 속도 증가, 넉백 강화)
 public class CenterSwitchModifier : PassiveModifier
 {
-    [Header("추가 속도")] public float ProjectileSpeedBonus = 1f;
-    [Header("필요 넉백")] public float RequireKnockback = 1f;
-    [Header("추가 넉백")] public float KnockbackBonus = 2f;
+    [Header("추가 속도")]
+    [SerializeField] float _projectileSpeedBonus = 1f;
+    [Header("필요 넉백")]
+    [SerializeField] float _requireKnockback = 1f;
+    [Header("추가 넉백")]
+    [SerializeField] float _knockbackBonus = 2f;
 
     public override void ModifyBaseAdd(SkillStat baseStat)
     {
-        baseStat.ProjectileSpeed += ProjectileSpeedBonus;
+        baseStat.ProjectileSpeed += _projectileSpeedBonus;
 
         // 넉백 조건부 추가는 투사체 Init 에서 초기 finalStat 보고 처리
     }
@@ -62,10 +70,10 @@ public class CenterSwitchModifier : PassiveModifier
     public override bool OnProjectileInit(SkillStat runtimeBaseStat, SkillStat runtimeFinalStat)
     {
         // 투사체 생성 시 넉백이 조건 이상이면
-        if (runtimeFinalStat.Knockback >= RequireKnockback)
+        if (runtimeFinalStat.Knockback >= _requireKnockback)
         {
             // 추가 넉백을 기본 스탯에 추가
-            runtimeBaseStat.Knockback += KnockbackBonus;
+            runtimeBaseStat.Knockback += _knockbackBonus;
             return true;
         }
         return false;
@@ -76,8 +84,8 @@ public class CenterSwitchModifier : PassiveModifier
 // 집중공략 (약화(슬로우 등)된 적은 최대 체력 5% 감소)
 public class FocusAttackModifier : PassiveModifier
 {
-    [Header("최대 체력 감소율")]
-    public float MaxHpDecreaseRate = 0.05f;
+    //[Header("최대 체력 감소율")]
+    //[SerializeField] float _maxHpDecreaseRate = 0.05f;
     
     public override void OnEnterArea(MonsterBase monster)
     {
@@ -89,11 +97,12 @@ public class FocusAttackModifier : PassiveModifier
 // 추가 추가 피해 (추가 피해 * 2)
 public class DoubleExtraDamageModifier : PassiveModifier
 {
-    [Header("추가 횟수")] public int ExtraMultiplier = 1;
+    [Header("추가 횟수")]
+    [SerializeField] int _extraMultiplier = 1;
     public override void ModifyBaseAdd(SkillStat baseStat)
     {
         // 1회 추가
-        baseStat.ExtraMultiplier += ExtraMultiplier;
+        baseStat.ExtraMultiplier += _extraMultiplier;
     }
 }
 
@@ -101,10 +110,10 @@ public class DoubleExtraDamageModifier : PassiveModifier
 // SuperClean (군중제어 스킬이 적 속도를 5초간 추가로 느려지게 함)
 public class SuperCleanModifier : PassiveModifier
 {
-    [Header("추가 이동속도 감소율")]
-    public float SlowAmount = 0.2f;
-    [Header("추가 슬로우 지속시간")]
-    public float SlowDuration = 5f;
+    //[Header("추가 이동속도 감소율")]
+    //[SerializeField] float _slowAmount = 0.2f;
+    //[Header("추가 슬로우 지속시간")]
+    //[SerializeField] float _slowDuration = 5f;
 
     public override void OnStun(MonsterBase monster)
     {
@@ -119,8 +128,8 @@ public class SuperCleanModifier : PassiveModifier
 
 public class BravadoModifier : PassiveModifier
 {
-    [Header("저주당 추가 방어력")]
-    public int DefencePerCurse = 1;
+    //[Header("저주당 추가 방어력")]
+    //[SerializeField] int _defencePerCurse = 1;
 }
 // ID 42007 / SubTag 40107
 // 청소용 비닐옷 (체력 초과 회복 시 방어막 1회 생성)
@@ -151,14 +160,14 @@ public class BiggerBetterModifier : PassiveModifier
 public class GoldCrownModifier : PassiveModifier
 {
     [Header("데미지 계수")]
-    public float DamageMultiplier = 3f;
+    [SerializeField] float _damageMultiplier = 3f;
     [Header("이동속도 계수")]
-    public float SpeedMultiplier = 0.5f;
+    [SerializeField] float _speedMultiplier = 0.5f;
 
     public override void ModifyFinal(SkillStat finalStat)
     {
-        finalStat.Damage *= DamageMultiplier;
-        finalStat.ProjectileSpeed *= SpeedMultiplier;
+        finalStat.Damage *= _damageMultiplier;
+        finalStat.ProjectileSpeed *= _speedMultiplier;
     }
 }
 
@@ -175,19 +184,20 @@ public class ADCarryModifier : PassiveModifier
 public class SnowballingModifier : PassiveModifier
 {
     [Header("배율 증가 간격")]
-    public float TickInterval = 0.5f;
+    [SerializeField] float _tickInterval = 0.5f;
     [Header("틱당 배율 증가량")]
-    public float MultiplierPerTick = 0.2f;
+    [SerializeField] float _multiplierPerTick = 0.2f;
+
     public override void ModifyBaseAdd(SkillStat baseStat)
     {
-        baseStat.DurationTickInterval = TickInterval;
+        baseStat.DurationTickInterval = _tickInterval;
     }
 
     public override void OnDurationTick(SkillStat runTimePassiveMulStat)
     {
-        runTimePassiveMulStat.Damage            += MultiplierPerTick;
-        runTimePassiveMulStat.Size              += MultiplierPerTick;
-        runTimePassiveMulStat.ProjectileSpeed   += MultiplierPerTick;
+        runTimePassiveMulStat.Damage            += _multiplierPerTick;
+        runTimePassiveMulStat.Size              += _multiplierPerTick;
+        runTimePassiveMulStat.ProjectileSpeed   += _multiplierPerTick;
     }
 }
 
@@ -197,14 +207,14 @@ public class SnowballingModifier : PassiveModifier
 public class AmbiModifier : PassiveModifier
 {
     [Header("데미지 계수")]
-    public float DamageMultiplier = 0.5f;
+    [SerializeField] float _damageMultiplier = 0.5f;
     [Header("투사체 계수")]
-    public int ProjectileCountMultiplier = 2;
+    [SerializeField] int _projectileCountMultiplier = 2;
 
     public override void ModifyFinal(SkillStat finalStat)
     {
-        finalStat.Damage *= DamageMultiplier;
-        finalStat.ProjectileCount *= ProjectileCountMultiplier;
+        finalStat.Damage *= _damageMultiplier;
+        finalStat.ProjectileCount *= _projectileCountMultiplier;
     }
 }
 
@@ -214,11 +224,12 @@ public class AmbiModifier : PassiveModifier
 // 기초적인 임플란트입니다 (투사체 관통 시 추가 피해 부여)
 public class ImplantModifier : PassiveModifier
 {
-    [Header("관통 추가 피해 계수")] public float DamagePerPierce = 0.2f;
+    [Header("관통 추가 피해 계수")]
+    [SerializeField] float _damagePerPierce = 0.2f;
 
     public override bool OnPierce(SkillStat runTimePassiveMulSum)
     {
-        runTimePassiveMulSum.Damage += DamagePerPierce; // 1.0 -> 1.2 -> 1.4
+        runTimePassiveMulSum.Damage += _damagePerPierce; // 1.0 -> 1.2 -> 1.4
         return true;
     }
 }
@@ -237,12 +248,14 @@ public class SodaWaterModifier : PassiveModifier
 
 public class CatLaundryModifier : PassiveModifier
 {
-    [Header("추가 넉백 배율")] public float KnockbackBonus = 2f;
-    [Header("체력 비례 피해")] public float OffScreenDamageRatio = 0.1f;
+    [Header("추가 넉백 배율")]
+    [SerializeField] float _knockbackBonus = 2f;
+    //[Header("체력 비례 피해")]
+    //[SerializeField] float _offScreenDamageRatio = 0.1f;
 
     public override void ModifyFinal(SkillStat finalStat)
     {
-        finalStat.Knockback *= KnockbackBonus;
+        finalStat.Knockback *= _knockbackBonus;
     }
 }
 
@@ -250,8 +263,8 @@ public class CatLaundryModifier : PassiveModifier
 // 하지만 이렇게 간단하게 피했습니다. (방어막 최대 3중첩 + 탄환 제거 시 방어막 충전)
 public class NimbleBlockModifier : PassiveModifier
 {
-    [Header("최대 방어막 중첩 수")]
-    public int MaxShieldStack = 3;
+    //[Header("최대 방어막 중첩 수")]
+    //[SerializeField] int _maxShieldStack = 3;
 
     // 패시브 적용 시 플레이어 방어막 시스템에 MaxShieldStack 전달
 }

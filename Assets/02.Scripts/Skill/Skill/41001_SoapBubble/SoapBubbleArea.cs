@@ -34,7 +34,7 @@ public class SoapBubbleArea : SkillArea<SoapBubbleModifierData>
         if (_modifierData.StunOnArea == true)
             CheckStunInArea();
 
-        // 틱 주기 처리 추가 base를 통해 수명 체크 ,스노우 볼링
+        // 틱 주기 처리 추가 base를 통해 수명 체크 ,스노우 볼링, 이동
         base.Update();
     }
     
@@ -55,7 +55,7 @@ public class SoapBubbleArea : SkillArea<SoapBubbleModifierData>
         if (speed <= 0f) return;
 
         // 타겟 방향으로 이동
-        transform.position = Vector2.MoveTowards( transform.position, _trackTarget.transform.position, speed * Time.deltaTime );
+        transform.position = Vector2.MoveTowards(transform.position, _trackTarget.transform.position, speed * Time.deltaTime);
     }
 
     // 탐색 코루틴 시작
