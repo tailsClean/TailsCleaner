@@ -2,11 +2,10 @@
 using UnityEngine.UI;
 
 
-public abstract class PlayerEnhancement : MonoBehaviour, IDBable
+public abstract class PlayerEnhancement : ItemBase
 {
-    [Header("공통 기본 정보")]
+    [Header("장비/유물 기본 정보")]
     public bool Isbase;
-    [field: SerializeField] public int ID { get; private set; }
     [field: SerializeField] public int GroupID { get; private set; }                // 해당 파츠 고유ID
     [field: SerializeField] public string Name { get; private set; }
     [field: SerializeField] public string Description { get; private set; }

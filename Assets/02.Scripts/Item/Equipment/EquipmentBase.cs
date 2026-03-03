@@ -7,7 +7,6 @@ public class EquipmentBase : PlayerEnhancement
     [Header("장비 정보")]
     public bool IsEquip;
     [field: SerializeField] public PARTS EquipmentPart { get; private set; }
-    [field: SerializeField] public int MaxStack { get; private set; }        // 최대 소지 수량
 
     #region 장비 스텟
     // 임시 스텟
