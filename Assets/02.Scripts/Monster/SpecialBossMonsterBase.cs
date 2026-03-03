@@ -1,49 +1,61 @@
-﻿using UnityEngine;
+﻿using MonsterEnum;
 using System.Collections;
+using System.Collections.Generic;
 using System.Linq;
-using MonsterEnum;
+using UnityEngine;
+using static UnityEditor.ShaderGraph.Internal.KeywordDependentCollection;
 
 public abstract class SpecialBossMonsterBase : MonsterBase
 {
-    
+    protected static List<SpecialBossMonsterBase> activeMonsters = new List<SpecialBossMonsterBase>();
+
+    protected enum MonsterState { MOVE, PATTERN }
+    protected MonsterState currentState = MonsterState.MOVE;
+
+
     [Header("--- monster_table 연동 ---")]
     public float move_speed;               // 몬스터의 기본 이동 속도 
+    public float monster_power;            // 플레이어 충돌 시 적용 데미지
     public float detect_range;             //플레이어를 감지하거나 패턴을 발동하는 기준 거리
 
 
     [Header("--- pattern_table 연동 ---")]
+    public float pattern_cooldown;         // 패턴 대기 시간
     public float cast_time;                // 패턴 발동 전 대기 시간
     public float pattern_multiply;         // 패턴 중 가속 배율
     public float explosion_range;          // 자폭/광역 공격의 물리적 타격 반경
     public float pattern_damage;           // 패턴(자폭 등) 성공 시 플레이어에게 주는 데미지
+    public float zigzag_width;             // 좌우 이동 폭
+    public float patternFrequency = 5.0f;  // 지그재그 주기
 
     [Header("--- 이동 특수 패턴 설정 ---")]
     public MonsterMove moveType;           // 이 몬스터가 어떤 이동 패턴을 쓸지 결정
-    public float patternAmplitude = 5.0f;  // 지그재그 진폭
-    public float patternFrequency = 5.0f;  // 지그재그 주기
 
-    [Header("--- 점프 전용 상세 설정 (기획 외 수치) ---")]
+    [Header("--- 점프 전용 상세 설정 ---")]
     public float jump_height = 2.0f;       // 시각적 높이
-    public float jumpCooldown = 3.0f;      // 점프 패턴 간의 재사용 대기 시간
-
-    [Header("--- 시각 효과 설정 ---")]
-    public Transform visualChild;          // 점프 시 높이 표현용 자식 오브젝트
+    public Transform visualChild;
 
     // --- 내부 제어용 변수 (데이터 테이블 비포함) ---
-    protected float patternTimer = 0f;     // 지그재그요 타이머
+    protected float patternTimer = 0f;     // 지그재그용 타이머
     protected float stateTimer = 0f;       // 쿨타임 및 시전 대기 타이머
     protected bool isWaiting = false;      // 시전 대기 중(cast_time 체크용)
-    protected bool isFleeingState = false; // 도망 여부
-    protected bool isWaitingFlee = false;  // 도망 대기 여부
     protected bool isJumping = false;      // 점프 여부
+    private bool hasHitTargetInCurrentJump = false; // 중복 데미지 방지용
+    private Vector2 smoothedDir;
 
     private Vector2 jumpStartPos;          // 점프 시작 지점
     private Vector2 jumpTargetPos;         // 점프 작지 시점
     private float jumpProgress = 0f;       // 점프 진행도 (0~1)
 
+    protected bool isFleeingState = false; // 도망 여부
+    protected bool isWaitingFlee = false;  // 도망 대기 여부
+    private Vector2 currentFleeTargetPos;  // 선택된 도망 목표 지점
+
     public bool isSuicideUnit = false;     // 자폭 여부
     private bool hasExploded = false;      // 이미 터졌는지 체크 (중복 실행 방지)
     private float currentCastTimer;        // 실시간 자폭 대기 타이머
+
+    
 
     protected override void Start()
     {
@@ -55,7 +67,9 @@ public abstract class SpecialBossMonsterBase : MonsterBase
         // 자폭 유닛인 경우 타이머 초기화
         if (isSuicideUnit)
         {
-            currentCastTimer = cast_time; // 기획서 cast_time 사용
+            currentCastTimer = cast_time; // cast_time 사용
+
+            currentState = MonsterState.PATTERN;
         }
     }
 
@@ -64,10 +78,14 @@ public abstract class SpecialBossMonsterBase : MonsterBase
         if (target == null) { Debug.LogError($"{gameObject.name}: 타겟(플레이어)이 없습니다!"); return; }
         if (hasExploded) return;
 
+        if (this.hp <= 0)
+        {
+            rb2D.linearVelocity = Vector2.zero;
+            return;
+        }
+
         if (isSuicideUnit)
         {
-            //Debug.Log($"{gameObject.name}: 자폭 추적 중 - 타이머: {currentCastTimer}, 속도배율: {pattern_multiply}");
-
             if (currentCastTimer > 0)
             {
                 currentCastTimer -= Time.fixedDeltaTime;
@@ -89,25 +107,41 @@ public abstract class SpecialBossMonsterBase : MonsterBase
         }
     }
 
+    protected void OnEnable()
+    {
+        if (!activeMonsters.Contains(this))
+            activeMonsters.Add(this);
+    }
+
+    protected void OnDisable()
+    {
+        activeMonsters.Remove(this);
+    }
+
     protected override void MoveToTarget()
     {
         patternTimer += Time.fixedDeltaTime;
         stateTimer += Time.fixedDeltaTime;
 
-        // 자폭 유닛 전용 이동 (가장 우선순위 높음)
+        // 자폭 유닛 전용 이동 
         if (isSuicideUnit && !hasExploded)
         {
             float suicideSpeed = move_speed * pattern_multiply;
             Vector2 dir = ((Vector2)target.position - rb2D.position).normalized;
+            float dist = Vector2.Distance(target.position, rb2D.position);
 
-            // 이동 실행
-            rb2D.MovePosition(rb2D.position + dir * suicideSpeed * Time.fixedDeltaTime);
+            if (dist > 0.1f)
+                rb2D.linearVelocity = dir * suicideSpeed;
+            else
+                rb2D.linearVelocity = Vector2.zero;
             return;
         }
 
         // 일반 유닛 이동 로직
         float originalSpeed = move_speed;
-        if (isJumping || isFleeingState) move_speed *= pattern_multiply;
+
+        // 점프 중일 때만 속도 배율 적용 (다른 패턴은 개별 함수에서 처리)
+        if (isJumping) move_speed *= pattern_multiply;
 
         switch (moveType)
         {
@@ -121,22 +155,80 @@ public abstract class SpecialBossMonsterBase : MonsterBase
         move_speed = originalSpeed;
     }
 
-    // --- [패턴 로직들] ---
-
-
-    // 지그재그
     protected void ZigzagMove()
     {
         Vector2 myPos = rb2D.position;
-        Vector2 forwardDir = ((Vector2)target.position - myPos).normalized; // 앞쪽 방향
-        Vector2 sideDir = new Vector2(-forwardDir.y, forwardDir.x); // 옆쪽(수직) 방향
+        Vector2 targetPos = (Vector2)target.position;
+        Vector2 toTarget = targetPos - myPos;
+        float dist = toTarget.magnitude;
 
-        // 시간 흐름에 따라 좌우 오프셋 계산
-        float sideOffset = Mathf.Sin(patternTimer * patternFrequency) * patternAmplitude;
+        // 플레이어를 향한 기준선 
+        Vector2 baselineDir = (dist > 0.1f) ? toTarget.normalized : rb2D.linearVelocity.normalized;
 
-        Vector2 movement = (forwardDir * move_speed * Time.fixedDeltaTime) +
-                           (sideDir * sideOffset * Time.fixedDeltaTime);
-        rb2D.MovePosition(myPos + movement);
+        // 수직 방향
+        Vector2 sideDir = new Vector2(-baselineDir.y, baselineDir.x);
+
+        // 지그재그 계산
+        float sideOffset = Mathf.Sin(patternTimer * patternFrequency) * zigzag_width;
+
+        // 거리 기반 감쇄 (Damping)
+        
+        float damping = Mathf.Clamp01((dist - 0.2f) / 0.8f);
+
+        // 최종 이동 계산
+        Vector2 movement = (baselineDir * move_speed) + (sideDir * sideOffset * patternFrequency * damping);
+
+        // 속도 적용 
+        if (dist < 0.1f)
+        {
+            rb2D.linearVelocity = Vector2.zero;
+        }
+        else
+        {
+            rb2D.linearVelocity = movement;
+        }
+    }
+
+
+    protected virtual void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (isSuicideUnit) return;
+
+        if (collision.CompareTag("Player"))
+        {
+            IDamageable player = collision.GetComponent<IDamageable>();
+            if (player == null) return;
+
+            // 지그재그 패턴 데미지
+            if (moveType == MonsterMove.Zigzag)
+            {
+                player.TakeDamage(this.monster_power);
+                Debug.Log("지그재그 데미지 적용!");
+                return;
+            }
+
+            // 점프 도중 충돌 시 데미지
+            if (moveType == MonsterMove.Jump && isJumping && !hasHitTargetInCurrentJump)
+            {
+                player.TakeDamage(this.pattern_damage);
+                hasHitTargetInCurrentJump = true; // (중복 방지)
+                Debug.Log("점프 충돌 데미지 적용!");
+                return;
+            }
+
+            player.TakeDamage(this.monster_power);
+
+            // 어떤 상태에서 부딪혔는지 명확히 로그 찍기
+            //if (moveType == MonsterMove.Flee && isFleeingState)
+            //    Debug.Log("<color=magenta>[도망 중]</color> 충돌 데미지!");
+            //else if (moveType == MonsterMove.Flee && !isFleeingState)
+            //    Debug.Log("<color=white>[도망유닛-추격중]</color> 접촉 데미지!");
+            //else if (moveType == MonsterMove.StraightChase)
+            //    Debug.Log("<color=white>[일반추격]</color> 접촉 데미지!");
+            //else
+            //    Debug.Log($"<color=gray>[기본접촉]</color> 상태: {moveType}");
+
+        }
     }
 
     // 점프
@@ -144,53 +236,76 @@ public abstract class SpecialBossMonsterBase : MonsterBase
     {
         float distance = Vector2.Distance(target.position, rb2D.position);
 
-        // 점프 조건 체크
-        if (!isJumping && !isWaiting && stateTimer >= jumpCooldown && distance <= detect_range)
+        if (!isJumping && !isWaiting)
         {
+            // 사거리 보다 멀거나, 아직 쿨타임이 안 찼다면?
+            if (distance > detect_range || stateTimer < pattern_cooldown)
+            {
+                // 플레이어를 향해 걸어감
+                StraightChase();
+                return;
+            }
+
+            // 사거리 안쪽이고 쿨타임도 다 찼다면? -> 점프 준비
+            currentState = MonsterState.PATTERN;
             isWaiting = true;
             stateTimer = 0;
             rb2D.linearVelocity = Vector2.zero; // 점프 전 멈춤
             return;
         }
 
-        // 점프 시전 대기
         if (isWaiting)
         {
             if (stateTimer >= cast_time)
             {
                 isWaiting = false;
                 isJumping = true;
+                hasHitTargetInCurrentJump = false; // 점프 시작 시 초기화
                 jumpStartPos = rb2D.position;
-                jumpTargetPos = target.position; // 점프 시작 시점의 타겟 위치 저장
+                jumpTargetPos = target.position;
                 jumpProgress = 0f;
                 stateTimer = 0;
             }
             return;
         }
 
-        // 점프 실행 중
         if (isJumping)
         {
-            float actualSpeed = move_speed;
+            float actualSpeed = move_speed * pattern_multiply;
             float totalDistance = Vector2.Distance(jumpStartPos, jumpTargetPos);
             float duration = (totalDistance > 0) ? totalDistance / actualSpeed : 0.1f;
+
             jumpProgress += Time.fixedDeltaTime / duration;
 
-            if (jumpProgress >= 1f) // 착지
+            if (this.hp <= 0)
             {
-                rb2D.MovePosition(jumpTargetPos);
+                if (visualChild != null) visualChild.localPosition = Vector2.zero;
+                rb2D.linearVelocity = Vector2.zero;
                 isJumping = false;
+                return;
+            }
+
+            if (jumpProgress >= 1f)
+            {
+                // 착지 시점
+                rb2D.linearVelocity = Vector2.zero;
+                rb2D.position = jumpTargetPos;
+
+                isJumping = false;
+                currentState = MonsterState.MOVE;
                 stateTimer = 0;
+
                 if (visualChild != null) visualChild.localPosition = Vector2.zero;
             }
-            else // 공중 이동 중
+            else
             {
-                Vector2 nextPos = Vector2.Lerp(jumpStartPos, jumpTargetPos, jumpProgress);
-                rb2D.MovePosition(nextPos);
+                Vector2 nextTargetPos = Vector2.Lerp(jumpStartPos, jumpTargetPos, jumpProgress);
+                Vector2 moveDir = (nextTargetPos - rb2D.position);
 
-                // Sin 함수를 이용해 visualChild만 위로 띄워 포물선 표현
+                rb2D.linearVelocity = moveDir / Time.fixedDeltaTime;
+
                 if (visualChild != null)
-                {
+                {  
                     float currentHeight = Mathf.Sin(jumpProgress * Mathf.PI) * jump_height;
                     visualChild.localPosition = new Vector2(0, currentHeight);
                 }
@@ -201,82 +316,120 @@ public abstract class SpecialBossMonsterBase : MonsterBase
     // 도망
     protected void FleeMove()
     {
+        if (this.hp <= 0) { CompleteFleePattern(); return; }
+
         float distanceToPlayer = Vector2.Distance(target.position, rb2D.position);
 
-        // 도망 발동 체크
-        if (!isFleeingState && !isWaitingFlee && stateTimer >= jumpCooldown && distanceToPlayer <= detect_range)
+        // 일반 추격 중
+        if (!isFleeingState && !isWaitingFlee)
         {
-            isWaitingFlee = true;
-            stateTimer = 0;
-            rb2D.linearVelocity = Vector2.zero;
-            return;
+            if (distanceToPlayer > detect_range || stateTimer < pattern_cooldown)
+            {
+                StraightChase();
+                return;
+            }
+            else // 도망 발동 조건 만족
+            {
+                rb2D.linearVelocity = Vector2.zero; // 즉시 정지 (지나침 방지)
+                isWaitingFlee = true;
+                stateTimer = 0;
+                return;
+            }
         }
 
-        // 도망 전 대기
         if (isWaitingFlee)
         {
+            rb2D.linearVelocity = Vector2.zero; // 대기 중엔 확실히 멈춤
             if (stateTimer >= cast_time)
             {
                 isWaitingFlee = false;
                 isFleeingState = true;
                 stateTimer = 0;
+                currentFleeTargetPos = GetSmartFleePosition(); // 도망 지점 결정
             }
             return;
         }
 
-        // 도망 실행
+        // 실제 도망 중
         if (isFleeingState)
         {
-            Vector2 targetAreaPos = GetSmartFleePosition(); // 안전한 지점 계산
-            Vector2 myPos = rb2D.position;
-            Vector2 dir = (targetAreaPos - myPos).normalized;
-            rb2D.MovePosition(myPos + dir * move_speed * Time.fixedDeltaTime);
+            Vector2 dir = (currentFleeTargetPos - rb2D.position).normalized;
+            float distToTarget = Vector2.Distance(rb2D.position, currentFleeTargetPos);
 
-            // 목적지 근처에 도착하면 상태 해제
-            if (Vector2.Distance(myPos, targetAreaPos) < 0.5f)
+            // 도망 속도 적용
+            rb2D.linearVelocity = dir * (move_speed * pattern_multiply);
+
+            // 도착 체크 또는 플레이어가 도망 지점에 너무 가까워지면 패턴 종료
+            if (distToTarget < 0.5f || Vector2.Distance(target.position, currentFleeTargetPos) < 2f)
             {
-                isFleeingState = false;
-                stateTimer = 0;
+                CompleteFleePattern();
             }
         }
     }
 
-    // 몬스터 밀집 지역 계산 
+    private void CompleteFleePattern()
+    {
+        isFleeingState = false;
+        isWaitingFlee = false;
+        rb2D.linearVelocity = Vector2.zero; // 도착 시 속도 제거
+
+        // monster.state = MOVE 복귀
+        currentState = MonsterState.MOVE;
+
+        // pattern_group_composition_table.pattern_cooldown 초기화
+        stateTimer = 0;
+    }
+
     private Vector2 GetSmartFleePosition()
     {
         Camera cam = Camera.main;
         if (cam == null) return rb2D.position;
 
+        // 카메라 영역 계산 
         float height = 2f * cam.orthographicSize;
         float width = height * cam.aspect;
-        Vector2 camPos = cam.transform.position;
+        Vector2 camPos = (Vector2)cam.transform.position;
 
         Vector2[] areaCenters = new Vector2[6];
         int[] monsterCounts = new int[6];
 
-        // 6개 영역의 중심점 계산
         for (int i = 0; i < 6; i++)
         {
-            float x = (i < 3) ? camPos.x - width / 4 : camPos.x + width / 4;
-            float y = camPos.y + (height / 3) * (1 - (i % 3));
+            float x = (i < 3) ? camPos.x - (width / 4f) : camPos.x + (width / 4f);
+            float y = camPos.y + (height / 3f) * (1 - (i % 3));
             areaCenters[i] = new Vector2(x, y);
         }
 
-        // "Monster" 태그를 가진 객체들을 찾아 각 영역별 인원수 파악
-        var allMonsters = GameObject.FindGameObjectsWithTag("Monster");
-        foreach (var m in allMonsters)
+        // "Monster" 태그를 가진 모든 오브젝트 찾기
+        GameObject[] allMonsters = GameObject.FindGameObjectsWithTag("Monster");
+
+        // 디버그 
+        //Debug.Log($"[Flee] 주변에 인식된 총 몬스터(태그 기준): {allMonsters.Length}");
+
+        foreach (var mObj in allMonsters)
         {
+            // 자기 자신은 제외
+            if (mObj == this.gameObject) continue;
+
             float minDist = float.MaxValue;
-            int closestArea = 0;
-            for (int i = 0; i < 6; i++)
+            int closestArea = -1;
+
+            // 이 오브젝트가 6개 영역 중 어디와 가장 가까운지 계산
+            for (int j = 0; j < 6; j++)
             {
-                float d = Vector2.Distance(m.transform.position, areaCenters[i]);
-                if (d < minDist) { minDist = d; closestArea = i; }
+                float d = Vector2.Distance(mObj.transform.position, areaCenters[j]);
+                if (d < minDist)
+                {
+                    minDist = d;
+                    closestArea = j;
+                }
             }
-            monsterCounts[closestArea]++;
+
+            if (closestArea != -1)
+                monsterCounts[closestArea]++;
         }
 
-        // 가장 안전한(몬스터가 많고 플레이어와 먼) 영역 선택
+        // 최적 영역 선택 
         int bestAreaIndex = 0;
         int maxCount = -1;
         float maxPlayerDist = -1f;
@@ -284,21 +437,14 @@ public abstract class SpecialBossMonsterBase : MonsterBase
         for (int i = 0; i < 6; i++)
         {
             float distToPlayer = Vector2.Distance(areaCenters[i], target.position);
-            if (monsterCounts[i] > maxCount)
+            if (monsterCounts[i] > maxCount || (monsterCounts[i] == maxCount && distToPlayer > maxPlayerDist))
             {
                 maxCount = monsterCounts[i];
                 maxPlayerDist = distToPlayer;
                 bestAreaIndex = i;
             }
-            else if (monsterCounts[i] == maxCount)
-            {
-                if (distToPlayer > maxPlayerDist)
-                {
-                    maxPlayerDist = distToPlayer;
-                    bestAreaIndex = i;
-                }
-            }
         }
+
         return areaCenters[bestAreaIndex];
     }
 
@@ -308,31 +454,52 @@ public abstract class SpecialBossMonsterBase : MonsterBase
         if (hasExploded) return;
         hasExploded = true;
 
-        //Debug.Log($"{gameObject.name}: 펑! 자폭했습니다.");
+        // Debug.Log("자폭 발동!");
 
-        // 1. 범위 안의 플레이어 감지 및 데미지
         Collider2D[] hits = Physics2D.OverlapCircleAll(rb2D.position, explosion_range);
+        // bool hitPlayer = false; // 자폭 확인용 
+
         foreach (var hit in hits)
         {
+
             if (hit.CompareTag("Player"))
             {
                 IDamageable player = hit.GetComponent<IDamageable>();
-                player?.TakeDamage(this.pattern_damage);
+                if (player != null)
+                {
+                    player.TakeDamage(this.pattern_damage);
+                    // Debug.Log($"데미지 적중");
+                    // hitPlayer = true;
+                }
                 break;
             }
         }
+        // if (!hitPlayer) Debug.Log("자폭 빗나감");
 
         Destroy(gameObject);
     }
 
-    private void UpdateWarningVisuals(float progressNormalized)
-    {
-        // 자폭 예고 시각화 로직 필요 시 여기에 작성
-    }
+    private void UpdateWarningVisuals(float progressNormalized) { }
 
     public void SetAttackingState(bool attacking)
     {
         isAttacking = attacking;
         if (isAttacking && rb2D != null) rb2D.linearVelocity = Vector2.zero;
+    }
+
+    protected new void StraightChase()
+    {
+        Vector2 dir = ((Vector2)target.position - rb2D.position).normalized;
+        float distance = Vector2.Distance(target.position, rb2D.position);
+
+        if (distance > 0.1f)
+        {
+            rb2D.linearVelocity = dir * move_speed;
+        }
+        else
+        {
+            // 아주 가까우면 속도를 0으로 만들어 떨림 방지
+            rb2D.linearVelocity = Vector2.zero;
+        }
     }
 }
