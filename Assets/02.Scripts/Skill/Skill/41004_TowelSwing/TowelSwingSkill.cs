@@ -4,6 +4,7 @@ using UnityEngine;
 public class TowelSwingSkill : ActiveSkill<TowelSwingArea, SwingModifierData>, ISwingSkill
 {
     private const int OTHER_MAIN_TAG = 41005;   // 걸레 휘두르기
+    private const string CRESCENT_TAG = "41004_Crescent";
 
     public SwingModifierData SwingModifier => _modifierData;        // ISwingSkill
 
@@ -51,8 +52,12 @@ public class TowelSwingSkill : ActiveSkill<TowelSwingArea, SwingModifierData>, I
     // 메인 장판 생성
     private void SpawnMainArea(Vector2 dir)
     {
-        TowelSwingArea area = Instantiate(_skillObjectPrefab, transform.position, Quaternion.identity);
-        area.Init(this, _modifierData, dir);
+        // 타올 장판 생성
+        //TowelSwingArea area = Instantiate(_skillObjectPrefab, transform.position, Quaternion.identity);
+        TowelSwingArea area = SpawnFromPool<TowelSwingArea>(_poolTag, transform.position, Quaternion.identity);
+
+        // 초기화
+        if(area != null) area.Init(this, _modifierData, dir);
     }
 
 
@@ -66,8 +71,10 @@ public class TowelSwingSkill : ActiveSkill<TowelSwingArea, SwingModifierData>, I
         }
 
         // 초승달 장판 생성
-        CrescentSwingArea crescent = Instantiate(_crescentPrefab, transform.position, Quaternion.identity);
-        crescent.Init(this, _modifierData, dir);
+        CrescentSwingArea crescent = SpawnFromPool<CrescentSwingArea>(CRESCENT_TAG, transform.position, Quaternion.identity);
+
+        // 초기화
+        if(crescent != null) crescent.Init(this, _modifierData, dir);
     }
 
     // 모디파이어 갱신 (전용, 패시브)

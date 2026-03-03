@@ -18,6 +18,12 @@ public class WaterBombArea : SkillArea<WaterBombModifierData>
         // 형변환
         _waterBombSkill = owner as WaterBombSkill;
 
+        _isLanded = false;
+
+        // 투사체 상태 오브젝트 변경
+        _fallObject.SetActive(true);
+        _landObject.SetActive(false);
+
         // 목표 지점
         _targetPos = targetPos;
         // 시작 위치 (목표 지점에서 일정 거리 위)

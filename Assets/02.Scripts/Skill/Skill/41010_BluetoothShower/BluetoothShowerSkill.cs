@@ -305,9 +305,10 @@ public class BluetoothShowerSkill : ActiveSkill<BluetoothShowerProjectile, Bluet
         float angle = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;
 
         // 투사체 생성
-        BluetoothShowerProjectile projectile = Instantiate(_skillObjectPrefab, spawnPos, Quaternion.Euler(0f, 0f, angle));
+        //BluetoothShowerProjectile projectile = Instantiate(_skillObjectPrefab, spawnPos, Quaternion.Euler(0f, 0f, angle));
+        BluetoothShowerProjectile projectile = SpawnFromPool<BluetoothShowerProjectile>(_poolTag, spawnPos, Quaternion.Euler(0f, 0f, angle));
 
-        // 투사체 초기화
-        projectile.Init(this, _modifierData, dir);
+        // 초기화
+        if(projectile != null) projectile.Init(this, _modifierData, dir);
     }
 }

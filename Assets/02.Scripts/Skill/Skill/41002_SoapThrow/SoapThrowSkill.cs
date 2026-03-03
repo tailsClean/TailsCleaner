@@ -21,10 +21,11 @@ public class SoapThrowSkill : ActiveSkill<SoapThrowProjectile, SoapThrowModifier
         // 바라볼 각도
         float angle = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;
 
-        // 비누 생성 (풀링 필요)
-        SoapThrowProjectile soap = Instantiate(_skillObjectPrefab, transform.position, Quaternion.Euler(0, 0, angle));
+        // 비누 생성
+        //SoapThrowProjectile soap = Instantiate(_skillObjectPrefab, transform.position, Quaternion.Euler(0, 0, angle));
+        SoapThrowProjectile soap = SpawnFromPool<SoapThrowProjectile>(_poolTag, transform.position, Quaternion.Euler(0f, 0f, angle));
 
-        // 데이터 주입
-        soap.Init(this, _modifierData, dir);
+        // 초기화
+        if(soap != null) soap.Init(this, _modifierData, dir);
     }
 }

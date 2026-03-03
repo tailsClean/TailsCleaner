@@ -18,6 +18,13 @@ public class WaterBombVortexArea : MonoBehaviour
     // 범위 내 적 투사체
     private HashSet<MonsterProjectile> _bulletsInArea = new();
 
+    private PoolObject _poolObject;
+
+    private void Awake()
+    {
+        _poolObject = GetComponent<PoolObject>();
+    }
+
 
     public void Init(float pullInterval, int pullCount, float size, List<PassiveModifier> passives, bool bulletClear)
     {
@@ -56,7 +63,11 @@ public class WaterBombVortexArea : MonoBehaviour
             // 해시셋 정리
             _monstersInArea.Clear();
             _bulletsInArea.Clear();
-            Destroy(gameObject);    // 나중에 풀반환
+
+            // 풀 반환 실패 시 파괴
+            if (_poolObject != null) _poolObject.ReturnToPool();
+            else Destroy(gameObject);
+
             return;
         }
     }

@@ -27,6 +27,16 @@ public class SpinningToyProjectile : SkillProjectile<SpinningToyModifierData>
         base.Init(owner, modifierData, Vector2.zero);
     }
 
+    // 복사본 초기화
+    public override void Init(ActiveSkill owner, SpinningToyModifierData modifierData, Vector2 dir)
+    {
+        // 풀 사용 시
+        // 공전상태 남아있는 상황일 수 있으니까
+        _isOrbiting = false;
+
+        base.Init(owner, modifierData, dir);
+    }
+
     protected override void Update()
     {
         if (_isOrbiting)

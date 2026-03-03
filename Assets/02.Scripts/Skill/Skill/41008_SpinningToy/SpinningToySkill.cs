@@ -16,8 +16,6 @@ public class SpinningToySkill : ActiveSkill<SpinningToyProjectile, SpinningToyMo
         Shark,          // 상어
     }
 
-    public const float ORBIT_SPEED_MULTI = 120f;
-
     [Header("공전 설정")]
     [SerializeField] float _orbitRadius = 2.5f;         // 공전 반지름
     [SerializeField] float _startAngle = 90f;           // 시작 각도 (12시)
@@ -57,13 +55,17 @@ public class SpinningToySkill : ActiveSkill<SpinningToyProjectile, SpinningToyMo
             Vector2 spawnPos = (Vector2)transform.position + GetOrbitOffset(_startAngle);
 
             // 투사체 생성
-            SpinningToyProjectile toy = Instantiate(_skillObjectPrefab, spawnPos, Quaternion.identity);
+            //SpinningToyProjectile toy = Instantiate(_skillObjectPrefab, spawnPos, Quaternion.identity);
+            SpinningToyProjectile toy = SpawnFromPool<SpinningToyProjectile>(_poolTag, spawnPos, Quaternion.identity);
 
-            // 공전상태로 초기화
-            toy.InitOrbit(this, _modifierData, spawnList[i], _startAngle, _orbitRadius);
+            if (toy != null)
+            {
+                // 공전상태로 초기화
+                toy.InitOrbit(this, _modifierData, spawnList[i], _startAngle, _orbitRadius);
 
-            // 생성된 장난감에 추가
-            currentWaveToys.Add(toy);
+                // 생성된 장난감에 추가
+                currentWaveToys.Add(toy);
+            }
 
             // 다음 투사체 생성 시간
             float nextSpawnTargetTime = startTime + (spawnInterval * (i + 1));
@@ -147,8 +149,12 @@ public class SpinningToySkill : ActiveSkill<SpinningToyProjectile, SpinningToyMo
     // 복사본 버스트 (물놀이 끝 + 추가추가피해)
     public void SpawnBurstCopy(Vector2 spawnPos, Vector2 dir)
     {
-        SpinningToyProjectile copy = Instantiate(_skillObjectPrefab, spawnPos, Quaternion.identity);
-        copy.Init(this, _modifierData, dir);
+        // 복사본 생성
+        //SpinningToyProjectile copy = Instantiate(_skillObjectPrefab, spawnPos, Quaternion.identity);
+        SpinningToyProjectile copy = SpawnFromPool<SpinningToyProjectile>(_poolTag, spawnPos, Quaternion.identity);
+
+        // 초기화
+        if(copy != null) copy.Init(this, _modifierData, dir);
     }
 
     // 투사체 수에 따라 각 벌리기

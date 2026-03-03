@@ -14,7 +14,8 @@ public class SkillObjectBase : MonoBehaviour
 
     protected ActiveSkill _skill;                    // 액티브 스킬 (스탯 재계산용)
     protected Rigidbody2D _rigidbody;                // 속도용
-                                                     
+    protected PoolObject _poolObject;                // 풀링용
+
     protected Vector2 _dir;                          // 방향
     protected float _createTime;                     // 생성 시간
     protected float _lastDurationTickTime;           // 최근 지속시간 틱 시간
@@ -25,10 +26,16 @@ public class SkillObjectBase : MonoBehaviour
     protected virtual void Awake()
     {
         _rigidbody = GetComponent<Rigidbody2D>();
+        _poolObject = GetComponent<PoolObject>();
     }
 
     protected void Init(ActiveSkill owner, Vector2 dir)
     {
+        // 리셋
+        _expired = false;
+        _statDirty = false;
+        _lastDurationTickTime = 0f;
+
         _skill = owner;
         _dir = dir;
 
@@ -43,7 +50,7 @@ public class SkillObjectBase : MonoBehaviour
         _passiveModifiers = new List<PassiveModifier>(owner.PassiveModifiers);
 
         _createTime = Time.time;
-        _expired = false;
+        _lastDurationTickTime = Time.time;
 
         // 정적 스탯 베이크
         BakeStaticStat();
@@ -141,10 +148,13 @@ public class SkillObjectBase : MonoBehaviour
         if (_expired == true) return;
         _expired = true;
 
+        // 수명 만료 시 실행될 로직
         OnExpire();
 
-        Destroy(gameObject);
-        // 풀링 반환으로 변경
+        // 풀 오브젝트 있으면 반환
+        // 없으면 Destroy
+        if (_poolObject != null) _poolObject.ReturnToPool();
+        else Destroy(gameObject);
     }
 
 
