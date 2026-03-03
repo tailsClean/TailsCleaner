@@ -58,8 +58,9 @@ public class WaterBombVortexModifier : ActiveModifier<WaterBombSkill>
 
     public override void ApplyModifier(WaterBombSkill skill, ActiveUpgradeData upgradeData)
     {
+        int level = skill.GetUpgradeLevel(upgradeData.Id);
         skill._modifierData.Vortex = true;
-        skill._modifierData.VortexPullCount++;
+        skill._modifierData.VortexPullCount += level;
         skill._modifierData.VortexSize = _vortexSize;
         skill._modifierData.VortexPullDelay = _vortexDelay;
     }
