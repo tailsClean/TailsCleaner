@@ -699,6 +699,8 @@ MonoBehaviour:
   _stageTrans: {fileID: 0}
   _onStartInGame: {fileID: 11400000, guid: bb5af9a30899d5441ae60b98e54bf231, type: 2}
   _exitPanel: {fileID: 0}
+  _stageClearPanel: {fileID: 0}
+  _gameOverPanel: {fileID: 0}
   _stageTimer: {fileID: 0}
   _energyPanel: {fileID: 0}
 --- !u!1 &1385904951
@@ -986,7 +988,7 @@ MonoBehaviour:
   _playerTransform: {fileID: 394270937}
   _registry: {fileID: 504285889}
   _normalMonsterPrefab: {fileID: 8674726135315812162, guid: f1d7566061b437642929eb0d55f61230, type: 3}
-  _specialMonsterPrefab: {fileID: 4623907807441698298, guid: 5176187c00e994a419731b96c5933ae4, type: 3}
+  _specialMonsterPrefab: {fileID: 2261082994107232443, guid: a0245534b2c600e41a31b6d02418dda9, type: 3}
   _midBossPrefab: {fileID: 4623907807441698298, guid: 20fe727cf43d51b4e85f41072a2a42e0, type: 3}
   _bossPrefab: {fileID: 4623907807441698298, guid: 0ae18229a096ed141a0886a3033b8970, type: 3}
 --- !u!1 &1499286054
@@ -1476,7 +1478,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SoundManager
   bgmPlayer: {fileID: 2067045830}
-  audioClip: {fileID: 0}
 --- !u!4 &2067045832
 Transform:
   m_ObjectHideFlags: 0
