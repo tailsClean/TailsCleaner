@@ -3,9 +3,6 @@ using System.Collections.Generic;
 using UnityEngine;
 public class WaterBombSkill : ActiveSkill<WaterBombArea, WaterBombModifierData>
 {
-    private const string SPLASH_TAG = "41003_Splash";
-    private const string VORTEX_TAG = "41003_Vortex";
-
     [Header("낙하 설정")]
     [SerializeField] private float _fallHeight = 8f;        // 타겟 위 생성 높이 오프셋
     [SerializeField] private float _fallDuration = 1f;      // 낙하 시간
@@ -30,7 +27,7 @@ public class WaterBombSkill : ActiveSkill<WaterBombArea, WaterBombModifierData>
         Vector2 targetPos = _currentTarget.position;
 
         // 물폭탄 생성 (낙하)
-        WaterBombArea bomb = SpawnFromPool<WaterBombArea>(_poolTag, transform.position, Quaternion.identity);
+        WaterBombArea bomb = SpawnFromPool<WaterBombArea>(_skillObjectPrefab, transform.position, Quaternion.identity);
         bomb.Init(this, _modifierData, targetPos);
     }
 
@@ -83,7 +80,7 @@ public class WaterBombSkill : ActiveSkill<WaterBombArea, WaterBombModifierData>
 
             // 물바다 투사체 생성
             //WaterBombSplashProjectile projectile = Instantiate(_splashProjectilePrefab, spawnPos, Quaternion.Euler(0f, 0f, angleDeg));
-            WaterBombSplashProjectile projectile = SpawnFromPool<WaterBombSplashProjectile>(SPLASH_TAG, spawnPos, Quaternion.Euler(0f, 0f, angleDeg));
+            WaterBombSplashProjectile projectile = SpawnFromPool<WaterBombSplashProjectile>(_splashProjectilePrefab, spawnPos, Quaternion.Euler(0f, 0f, angleDeg));
 
             // 물폭탄 스탯 사용
             if(projectile != null) projectile.Init(this, _modifierData, dir);
@@ -104,7 +101,7 @@ public class WaterBombSkill : ActiveSkill<WaterBombArea, WaterBombModifierData>
 
         // 소용돌이 생성
         //WaterBombVortexArea vortex = Instantiate(_vortexAreaPrefab, spawnPos, Quaternion.identity);
-        WaterBombVortexArea vortex = SpawnFromPool<WaterBombVortexArea>(VORTEX_TAG, spawnPos, Quaternion.identity);
+        WaterBombVortexArea vortex = SpawnFromPool<WaterBombVortexArea>(_vortexAreaPrefab, spawnPos, Quaternion.identity);
 
         Debug.Log($"소용돌이 틱 수 : {modifierData.VortexPullCount}");
 

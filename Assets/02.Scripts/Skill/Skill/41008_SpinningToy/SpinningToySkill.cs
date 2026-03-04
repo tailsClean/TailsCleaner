@@ -57,7 +57,7 @@ public class SpinningToySkill : ActiveSkill<SpinningToyProjectile, SpinningToyMo
 
             // 투사체 생성
             //SpinningToyProjectile toy = Instantiate(_skillObjectPrefab, spawnPos, Quaternion.identity);
-            SpinningToyProjectile toy = SpawnFromPool<SpinningToyProjectile>(_poolTag, spawnPos, Quaternion.identity);
+            SpinningToyProjectile toy = SpawnFromPool<SpinningToyProjectile>(_skillObjectPrefab, spawnPos, Quaternion.identity);
 
             if (toy != null)
             {
@@ -152,7 +152,7 @@ public class SpinningToySkill : ActiveSkill<SpinningToyProjectile, SpinningToyMo
     {
         // 복사본 생성
         //SpinningToyProjectile copy = Instantiate(_skillObjectPrefab, spawnPos, Quaternion.identity);
-        SpinningToyProjectile copy = SpawnFromPool<SpinningToyProjectile>(_poolTag, spawnPos, Quaternion.identity);
+        SpinningToyProjectile copy = SpawnFromPool<SpinningToyProjectile>(_skillObjectPrefab, spawnPos, Quaternion.identity);
 
         // 초기화
         if(copy != null) copy.Init(this, _modifierData, dir);

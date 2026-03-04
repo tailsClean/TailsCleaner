@@ -85,7 +85,7 @@ public class WashWaveSkill : ActiveSkill<WashWaveProjectile, WashWaveModifierDat
 
         // 투사체 생성
         //WashWaveProjectile washWave = Instantiate(_skillObjectPrefab, spawnPos, Quaternion.Euler(0f, 0f, angle));
-        WashWaveProjectile washWave = SpawnFromPool<WashWaveProjectile>(_poolTag, spawnPos, Quaternion.Euler(0f, 0f, angle));
+        WashWaveProjectile washWave = SpawnFromPool<WashWaveProjectile>(_skillObjectPrefab, spawnPos, Quaternion.Euler(0f, 0f, angle));
 
         // 투사체 초기화
         if(washWave != null) washWave.Init(this, _modifierData, dir);

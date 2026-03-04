@@ -4,7 +4,6 @@ using UnityEngine;
 public class MopSwingSkill : ActiveSkill<MopSwingArea, SwingModifierData>, ISwingSkill
 {
     private const int OTHER_MAIN_TAG = 41004;   // 타올 휘두르기
-    private const string CRESCENT_TAG = "41005_Crescent";
     public SwingModifierData SwingModifier => _modifierData;            // ISwingSkill
 
     [Header("리사이클 초승달 프리팹")]
@@ -54,7 +53,7 @@ public class MopSwingSkill : ActiveSkill<MopSwingArea, SwingModifierData>, ISwin
     private void SpawnMainArea(Vector2 dir)
     {
         // 걸레 장판 생성
-        MopSwingArea area = SpawnFromPool<MopSwingArea>(_poolTag, transform.position, Quaternion.identity);
+        MopSwingArea area = SpawnFromPool<MopSwingArea>(_skillObjectPrefab, transform.position, Quaternion.identity);
 
         // 초기화
         if(area != null) area.Init(this, _modifierData, dir);
@@ -71,7 +70,7 @@ public class MopSwingSkill : ActiveSkill<MopSwingArea, SwingModifierData>, ISwin
         }
 
         // 초승달 장판 생성
-        CrescentSwingArea crescent = SpawnFromPool<CrescentSwingArea>(CRESCENT_TAG, transform.position, Quaternion.identity);
+        CrescentSwingArea crescent = SpawnFromPool<CrescentSwingArea>(_crescentPrefab, transform.position, Quaternion.identity);
 
         // 초기화
         if(crescent != null) crescent.Init(this, _modifierData, dir);
