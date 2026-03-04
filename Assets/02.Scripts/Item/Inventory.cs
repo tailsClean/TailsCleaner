@@ -60,18 +60,18 @@ public class Inventory : MonoBehaviour
 
 
     //
-    public TestItemIcon IconPrefab;
-    public List<TestItemIcon> InventorySlots;
+    public TestItemIcon InventorySlotPrefab;
+    public List<TestItemIcon> InventorySlots;                       // 아이템 슬롯UI요소
 
-    private List<int> _itemOrder = new();
-    private Dictionary<int, TestItemIcon> _slotByItemId = new();
+    private List<int> _itemOrder = new();                           // 무작위로 들고 있는 _myInventory의 값들에 순서를 부여
+    private Dictionary<int, TestItemIcon> _slotByItemId = new();    // 특정 ID가 슬롯에 배치됐는지 조회용 딕셔너리
 
     private void Start()
     {
         // 인벤토리 슬롯 생성
         for (int i = 0; i < 15; i++)
         {
-            var a = Instantiate(IconPrefab, transform);
+            var a = Instantiate(InventorySlotPrefab, transform);
             InventorySlots.Add(a);
         }
 
