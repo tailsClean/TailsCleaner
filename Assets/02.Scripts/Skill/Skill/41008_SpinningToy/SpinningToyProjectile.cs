@@ -4,7 +4,7 @@ using UnityEngine;
 public class SpinningToyProjectile : SkillProjectile<SpinningToyModifierData>
 {
     // 장난감 타입 (스프라이트 분기용)
-    public SpinningToySkill.TOY_TYPE ToyType { get; private set; }
+    private SpinningToySkill.TOY_TYPE _toyType;
 
     SpinningToySkill toySkill;
 
@@ -17,7 +17,7 @@ public class SpinningToyProjectile : SkillProjectile<SpinningToyModifierData>
     public void InitOrbit(ActiveSkill owner, SpinningToyModifierData modifierData,
         SpinningToySkill.TOY_TYPE toyType, float initialAngleDeg, float radius)
     {
-        ToyType = toyType;
+        _toyType = toyType;
         _orbitAngle = initialAngleDeg;
         _orbitRadius = radius;
         _isOrbiting = true;
@@ -127,7 +127,7 @@ public class SpinningToyProjectile : SkillProjectile<SpinningToyModifierData>
             {
                 // 복사본 발사
                 // 자신은 공전 유지
-                toySkill.SpawnBurstCopy(transform.position, dir);
+                toySkill.SpawnBurstCopy(transform.position, dir, _toyType);
 
                 // 버스트 대기 시간
                 yield return _modifierData.BurstDelay;

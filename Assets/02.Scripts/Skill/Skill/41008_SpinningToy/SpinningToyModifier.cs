@@ -40,8 +40,16 @@ public class SpinningToyMoonModifier : ActiveModifier<SpinningToySkill>
 // 40045 오리 장난감
 public class SpinningToyDuckModifier : ActiveModifier<SpinningToySkill>
 {
+    [Header("큰 오리 수")]
+    [SerializeField] private int _duck_B_Count;
+    [Header("작은 오리 수")]
+    [SerializeField] private int _duck_S_Count;
+
     public override void ApplyModifier(SpinningToySkill skill, ActiveUpgradeData upgradeData)
-        => skill._modifierData.AddedToys.Add((TOY_TYPE.Duck, upgradeData.ProjectileCount));
+    {
+        skill._modifierData.AddedToys.Add((TOY_TYPE.Duck_B, _duck_B_Count));    // 큰오리
+        skill._modifierData.AddedToys.Add((TOY_TYPE.Duck_S, _duck_S_Count));    // 작은오리
+    }
 }
 
 // 40046 해적선 장난감 - 적이 강해짐, 경험치 추가

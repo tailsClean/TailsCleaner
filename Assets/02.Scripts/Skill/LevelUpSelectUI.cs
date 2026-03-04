@@ -74,14 +74,14 @@ public class LevelUpSelectUI : MonoBehaviour
         {
             if (i < activeSkills.Count)
             {
-                // ActiveSkillData에 나중에 Sprite Icon 추가
-                // ActiveSkillIcons[i].sprite = SkillDataLoader.GetActiveSkillData(activeSkills[i].MainTag).Icon;
-                // 일단 하얗게
+                // 아이콘 설정
+                ActiveSkillIcons[i].sprite = SkillDataLoader.GetActiveSkillData(activeSkills[i].MainTag).Icon;
+                // 하얗게
                 ActiveSkillIcons[i].color = Color.white;
             }
             else
             {
-                // 빈 칸은 빈 스프라이트인데 일단 회색
+                // 빈 칸
                 ActiveSkillIcons[i].color = Color.gray;
             }
         }
@@ -92,8 +92,7 @@ public class LevelUpSelectUI : MonoBehaviour
         {
             if (i < passiveSkills.Count)
             {
-                // PassiveSkillData도 Icon 필요
-                // PassiveSkillIcons[i].sprite = passiveSkills[i].Icon;
+                PassiveSkillIcons[i].sprite = passiveSkills[i].Icon;
                 PassiveSkillIcons[i].color = Color.white;
             }
             else
@@ -122,15 +121,16 @@ public class LevelUpSelectUI : MonoBehaviour
             switch (optionData.Type)
             {
                 case LevelUpSelect.OPTION_TYPE.Active:      // 액티브
+                    ActiveSkillData activeSkill = SkillDataLoader.GetActiveSkillData(optionData.TargetMainTag);
                     name = optionData.ActiveData.Name;
                     desc = optionData.ActiveData.Desc;
-                    // icon = optionData.ActiveData.Icon;
+                    icon = activeSkill.Icon;
                     break;
 
                 case LevelUpSelect.OPTION_TYPE.Passive:     // 패시브
                     name = optionData.PassiveData.PassiveName;
                     desc = optionData.PassiveData.Desc;
-                    // icon = optionData.PassiveData.Icon;
+                    icon = optionData.PassiveData.Icon;
                     break;
 
                 case LevelUpSelect.OPTION_TYPE.Heal:        // 회복

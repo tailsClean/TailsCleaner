@@ -11,7 +11,8 @@ public class SpinningToySkill : ActiveSkill<SpinningToyProjectile, SpinningToyMo
         Train,          // 기차
         Top,            // 팽이
         Moon,           // 달
-        Duck,           // 오리 
+        Duck_B,         // 큰 오리 
+        Duck_S,         // 작은 오리 
         Pirate,         // 해적선
         Shark,          // 상어
     }
@@ -147,7 +148,7 @@ public class SpinningToySkill : ActiveSkill<SpinningToyProjectile, SpinningToyMo
 
 
     // 복사본 버스트 (물놀이 끝 + 추가추가피해)
-    public void SpawnBurstCopy(Vector2 spawnPos, Vector2 dir)
+    public void SpawnBurstCopy(Vector2 spawnPos, Vector2 dir, TOY_TYPE type)
     {
         // 복사본 생성
         //SpinningToyProjectile copy = Instantiate(_skillObjectPrefab, spawnPos, Quaternion.identity);
@@ -155,6 +156,8 @@ public class SpinningToySkill : ActiveSkill<SpinningToyProjectile, SpinningToyMo
 
         // 초기화
         if(copy != null) copy.Init(this, _modifierData, dir);
+
+        // 비주얼 별도로 적용 추가
     }
 
     // 투사체 수에 따라 각 벌리기
