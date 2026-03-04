@@ -105,12 +105,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1f184ee12cb33bc4ab96086ff175f808, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::MonsterProjectile
-  projectile_speed: 1
-  life_time: 1.5
+  pattern_damage: 10
+  projectile_speed: 5
+  life_time: 10
   is_homing: 0
-  pierce_type: 0
-  reflect_count: -1
-  arc_height: 3
+  pierce_type: 2
+  reflect_count: 1
+  arc_height: 0
 --- !u!50 &-9161001280096462721
 Rigidbody2D:
   serializedVersion: 5
