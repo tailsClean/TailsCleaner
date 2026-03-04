@@ -3,7 +3,7 @@ using DG.Tweening;
 using TMPro;
 using System;
 using UnityEngine.SceneManagement;
-public interface UIContainer { }
+public interface UIContainer {}
 
 public class UIManager : MonoBehaviour
 {
@@ -50,7 +50,7 @@ public class UIManager : MonoBehaviour
        if(prefab != null)
        {
            sceneUI = Instantiate(prefab, transform);
-           SetUpReference(sceneUI);
+           SetUpReference(sceneUI); //todo: 참조를 하고나서 저장해두는 방식으로 바꿔야할듯
        }
        return sceneUI;
     }
@@ -61,8 +61,15 @@ public class UIManager : MonoBehaviour
             if(container is StageUIContainer stageUI) // UI 참조 연경
             {
                 // StageUIContainer 참조로 들고 있기
-                this._stageUI = stageUI;
                 this._exitPanel = stageUI.ExitPanel;
+                this._stageTimer = stageUI.TimerUI.GetComponent<StageTimerTextUI>();
+                this._gameOverPanel = stageUI.GameOverPanel;
+                this._stageClearPanel = stageUI.StageClearPanel;
+            }
+            if(container is TowerUIContainer towerUI)
+            {
+                // TowerUIContainer 참조로 들고 있기
+                this._energyPanel = towerUI.EnergyPanel.GetComponent<EnergyPanel>();
             }
         }
     }
@@ -108,9 +115,33 @@ public class UIManager : MonoBehaviour
 
     #endregion
 
-    //여기에 UI패널별  활성화 기능들 추가
-    [SerializeField] private StageUIContainer _stageUI;
+    #region StageClearPanel
+    [SerializeField] private GameObject _stageClearPanel;
+    public void OpenClear()
+    {
+        _stageClearPanel.SetActive(true);
+    }
+    
+    #endregion
 
-    public void ShowUI(UIGroup.UISTATE uiState) => _stageUI.SetActiveUiGroup(uiState, true);
-    public void HideUI(UIGroup.UISTATE uiState) => _stageUI.SetActiveUiGroup(uiState, false);
+    #region GameOverPanel
+    [SerializeField] private GameObject _gameOverPanel;
+     public void OpenGameOver()
+    {
+        _gameOverPanel.SetActive(true);
+    }
+    
+    #endregion
+    
+    #region StageTimer
+    [SerializeField] private StageTimerTextUI _stageTimer;
+    public StageTimerTextUI StageTimer => _stageTimer;
+
+    #endregion
+
+    #region EnergyUI
+    [SerializeField] private EnergyPanel _energyPanel;
+    public EnergyPanel EnergyPanel => _energyPanel;
+    #endregion
+
 }

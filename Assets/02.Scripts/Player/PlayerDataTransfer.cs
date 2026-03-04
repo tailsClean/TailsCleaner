@@ -7,8 +7,12 @@ public static class PlayerDataTransfer
 {
 
     public static Dictionary<EquipmentBase.PARTS, EquipmentBase> Equipments { get; private set; }
+    public static List<RelicBase> Relics { get; private set; }
 
-    public static void SetEquipments(Dictionary<EquipmentBase.PARTS, EquipmentBase> dict) =>
-        Equipments = dict;
+    public static void SetEquipments(Dictionary<EquipmentBase.PARTS, EquipmentBase> equipments) =>
+        Equipments = equipments;
+
+    public static void SetRelics(List<RelicBase> relics) => Relics = relics;
+
 }
 

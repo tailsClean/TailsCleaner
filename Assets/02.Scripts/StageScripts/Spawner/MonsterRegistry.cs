@@ -36,14 +36,14 @@ public class MonsterRegistry : MonoBehaviour, IMonsterRegistry
 
     public void Register(GameObject _monster)
     {
-        if(_monster == null)
+        if (_monster == null)
         { return; }
 
         _aliveMonsters.Add(_monster);
 
         MonsterRegistryHook _hook = _monster.GetComponent<MonsterRegistryHook>();
 
-        if(_hook == null)
+        if (_hook == null)
         {
             _hook = _monster.AddComponent<MonsterRegistryHook>();
         }
@@ -55,7 +55,7 @@ public class MonsterRegistry : MonoBehaviour, IMonsterRegistry
 
     public void Unregister(GameObject _monster)
     {
-        if(_monster == null)
+        if (_monster == null)
         { return; }
 
         _aliveMonsters.Remove(_monster);
@@ -65,17 +65,28 @@ public class MonsterRegistry : MonoBehaviour, IMonsterRegistry
 
     public void KillAllMonsters()
     {
-        List<GameObject> _toDestroy = new List<GameObject>(_aliveMonsters);
-        for(int i = 0; i < _toDestroy.Count; i++)
+        List<GameObject> toRemove = new List<GameObject>(_aliveMonsters);
+        for (int i = 0; i < toRemove.Count; i++)
         {
-            GameObject _obj = _toDestroy[i];
-            if(_obj != null)
+            GameObject obj = toRemove[i];
+            if (obj == null) continue;
+
+            if (obj.TryGetComponent<PoolObject>(out var poolObj))
             {
-                Destroy(_obj);
+                poolObj.ReturnToPool();
+            }
+            else
+            {
+                Destroy(obj);
             }
         }
 
         _aliveMonsters.Clear();
+    }
+
+    public void ClearBossMark()
+    {
+        _bossObject = null;
     }
 }
 
@@ -90,11 +101,22 @@ public class MonsterRegistryHook : MonoBehaviour
         this._self = _self;
     }
 
-    private void OnDestroy()
+    private void OnDisable()
     {
-        if(_registry != null && _self != null)
+        // 풀링 반납(SetActive(false)) 시점에 호출됨
+        if (_registry != null && _self != null)
         {
             _registry.Unregister(_self);
         }
     }
+
+    // 나중에 파괴는 지울거임 -> 몬스터 베이스 옵젝풀링 끝나면 제거 될 부분
+    private void OnDestroy()
+    {
+        if (_registry != null && _self != null)
+        {
+            _registry.Unregister(_self);
+        }
+    }
+
 }

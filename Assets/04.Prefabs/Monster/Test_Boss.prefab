@@ -182,8 +182,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::SpecialMonster
   target: {fileID: 0}
   stoppingDistance: 0.1
-  hp: 1
-  power: 1
+  hp: 10
+  power: 2
   moveSpeed: 1
   hitBox: 1
   mass: 1
@@ -193,16 +193,17 @@ MonoBehaviour:
   scoreReward: 1000
   goldReward: 500
   move_speed: 0
+  monster_power: 0
   detect_range: 0
+  pattern_cooldown: 0
   cast_time: 0
   pattern_multiply: 0
   explosion_range: 0
   pattern_damage: 0
-  moveType: 3
-  patternAmplitude: 2
+  zigzag_width: 0
   patternFrequency: 5
+  moveType: 3
   jump_height: 2
-  jumpCooldown: 3
   visualChild: {fileID: 0}
   isSuicideUnit: 0
 --- !u!114 &5514830495199837496

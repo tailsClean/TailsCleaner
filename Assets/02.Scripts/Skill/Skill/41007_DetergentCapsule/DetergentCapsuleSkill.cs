@@ -33,7 +33,7 @@ public class DetergentCapsuleSkill : ActiveSkill<DetergentCapsuleProjectile, Det
 
         // 투사체 생성
         //DetergentCapsuleProjectile capsule = Instantiate(_skillObjectPrefab, transform.position, Quaternion.Euler(0f, 0f, angle));
-        DetergentCapsuleProjectile capsule = SpawnFromPool<DetergentCapsuleProjectile>(_poolTag, transform.position, Quaternion.Euler(0f, 0f, angle));
+        DetergentCapsuleProjectile capsule = SpawnFromPool<DetergentCapsuleProjectile>(_skillObjectPrefab, transform.position, Quaternion.Euler(0f, 0f, angle));
 
         // 초기화
         if(capsule != null) capsule.Init(this, _modifierData, dir);

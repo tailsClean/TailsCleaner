@@ -4,12 +4,18 @@ using UnityEngine.Rendering;
 public sealed class StageTableRow
 {
     public int stage_id;
+    public int tower_id;
+    public int stage_index;
+
     public int main_time;
     public int boss_time;
+
+    public int entry_energy;
+
     public int monster_group_id;
     public int special_group_id;
     public int boss_id;
-    public int stage_index;
+
     public float hp_modifier;
     public float power_modifier;
 }
@@ -32,8 +38,7 @@ public sealed class MonsterWaveRow
 
     public float hp_modifier;
     public float power_modifier;
-
-    public int weight_percent;
+    public float exp_multiply;
 }
 
 public sealed class SpecialMonsterRow

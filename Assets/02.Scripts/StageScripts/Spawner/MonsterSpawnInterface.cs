@@ -18,4 +18,5 @@ public interface IMonsterSpawnSystem
 public interface IMonsterRegistry
 {
     void KillAllMonsters();
+    void ClearBossMark();
 }

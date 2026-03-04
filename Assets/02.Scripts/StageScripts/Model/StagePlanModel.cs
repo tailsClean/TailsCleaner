@@ -9,8 +9,9 @@ public class StagePlan
     public int mainLimitSeconds;
     public int bossLimitSeconds;
 
-    public int bossId;
+    public int entryEnergy;
 
+    public int bossId;
     public int specialGroupId;
 
     public IReadOnlyList<WavePlan> wavePlans;
@@ -37,6 +38,7 @@ public class WavePlan
     
     public float waveHpModifier;
     public float wavePowerModifier;
+    public float waveExpMultiply;
 }
 
 // 웨이브 내부 몬스터 스폰 구성
@@ -45,7 +47,6 @@ public class MonsterSpawnPlan
     public int monsterId;
     public int spawnAmount;
     public float spawnIntervalSeconds; // 몬스터 간 스폰 간격
-    public int weightPercent; // 70/30 같은 몬스터 소환 비율(총합은 100으로 가정)
     
 }
 

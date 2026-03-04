@@ -44,6 +44,6 @@ public enum StageResult
 public enum StageFailReason
 {
     BossTimeout,     // 보스 타임오버
-    PlayerDead,      // (추후) 플레이어 사망
+    PlayerDead,      // 플레이어 사망
     기타
 }

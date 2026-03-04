@@ -7,8 +7,8 @@ public class PlayerUI : MonoBehaviour
     [SerializeField] private Text _lvl;
     [SerializeField] private Slider _expBar;
     [SerializeField] private PlayerBase _player;
-    [SerializeField] private IntEventChannelSO _onHit;
-    [SerializeField] private IntEventChannelSO _onGainExp;
+    [SerializeField] private FloatEventChannelSO _onHit;
+    [SerializeField] private FloatEventChannelSO _onGainExp;
     [SerializeField] private IntEventChannelSO _onLevelUp;
 
     private void OnEnable()
@@ -37,11 +37,11 @@ public class PlayerUI : MonoBehaviour
             Debug.LogError("플레이어 넣어주세요");
     }
 
-    private void UpdateHp(int hp)
+    private void UpdateHp(float hp)
     {
         _hpBar.value = hp;
     }
 
-    private void UpdateExp(int exp) => _expBar.value = exp;
+    private void UpdateExp(float exp) => _expBar.value = exp;
     private void UpdateLevel(int level) => _lvl.text = "레벨: " + level.ToString();
 }

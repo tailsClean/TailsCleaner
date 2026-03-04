@@ -15,7 +15,7 @@ public class PlayerHit
     }
 
 
-    public int OnHit(int hp, int damage)
+    public float OnHit(float hp, float damage)
     {
         if(!_isInvincible)
         {

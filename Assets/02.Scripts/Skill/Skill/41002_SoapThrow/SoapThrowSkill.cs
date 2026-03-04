@@ -23,7 +23,7 @@ public class SoapThrowSkill : ActiveSkill<SoapThrowProjectile, SoapThrowModifier
 
         // 비누 생성
         //SoapThrowProjectile soap = Instantiate(_skillObjectPrefab, transform.position, Quaternion.Euler(0, 0, angle));
-        SoapThrowProjectile soap = SpawnFromPool<SoapThrowProjectile>(_poolTag, transform.position, Quaternion.Euler(0f, 0f, angle));
+        SoapThrowProjectile soap = SpawnFromPool<SoapThrowProjectile>(_skillObjectPrefab, transform.position, Quaternion.Euler(0f, 0f, angle));
 
         // 초기화
         if(soap != null) soap.Init(this, _modifierData, dir);

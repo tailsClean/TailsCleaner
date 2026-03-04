@@ -9,7 +9,7 @@ public sealed class StageTimerTextUI : MonoBehaviour
     [SerializeField] private Text _bossTimerText;   // 00:00 (남은시간)
 
     [Header("Binding")]
-    [SerializeField] private StageController _stageController;
+    //private StageController _stageController;
 
     [Header("Options")]
     [SerializeField] private bool _showBossTimerOnlyWhenActive = true;
@@ -24,10 +24,14 @@ public sealed class StageTimerTextUI : MonoBehaviour
         if (_bossTimerText != null)
             _bossTimerText.gameObject.SetActive(!_showBossTimerOnlyWhenActive);
     }
+    private void Start()
+    {
+        //TryBind();
+    }
 
     private void OnEnable()
     {
-        TryBind();
+        //TryBind();
     }
 
     private void OnDisable()
@@ -35,18 +39,18 @@ public sealed class StageTimerTextUI : MonoBehaviour
         Unbind();
     }
 
-    private void TryBind()
-    {
-        if (_events != null) return;
+    // private void TryBind()
+    // {
+    //     if (_events != null) return;
 
-        if (_stageController == null)
-        {
-            Debug.LogWarning("[StageTimerTextUI] StageController is not assigned.");
-            return;
-        }
+    //     if (_stageController == null)
+    //     {
+    //         Debug.LogWarning("[StageTimerTextUI] StageController is not assigned.");
+    //         return;
+    //     }
 
-        Debug.LogWarning("[StageTimerTextUI] Call Bind(StageEvents) from StageController after StartStage.");
-    }
+    //     Debug.LogWarning("[StageTimerTextUI] Call Bind(StageEvents) from StageController after StartStage.");
+    // }
 
     public void Bind(StageEvents events)
     {

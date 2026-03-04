@@ -1,36 +1,21 @@
 ﻿using UnityEngine;
+using System;
 
 public class PoolObject : MonoBehaviour
 {
-    public string poolTag;
-    public float autoReleaseTime = 2f;
+    // 매니저의 반납 함수(Release)를 연결하는 액션
+    private Action<GameObject> _returnAction;
 
-    void OnDisable()
+    // 매니저가 오브젝트를 풀에서 꺼낼 때 딱 한 번 호출하여 반납 통로를 설정
+    public void Setup(Action<GameObject> returnAction)
     {
-        // 풀로 돌아갈 때(꺼질 때) 모든 예약된 Invoke를 취소
-        CancelInvoke();
+        _returnAction = returnAction;
     }
 
-    // 매니저가 소환 직후 이 함수를 직접 호출
-    public void ResetReleaseTimer(float newLifeTime = -1f)
-    {
-        if (newLifeTime > 0)
-        {
-            autoReleaseTime = newLifeTime;
-        }
-
-        CancelInvoke(nameof(ReturnToPool));
-        Invoke(nameof(ReturnToPool), autoReleaseTime);
-    }
-
-    // 오브젝트 풀 반납 처리
+    // 오브젝트 스스로 사라져야 할 때 이 함수 호출하면 됩니다
     public void ReturnToPool()
     {
-        // 매니저 존재 확인
-        if (ObjectPoolManager.Instance != null)
-        {
-            // 매니저에게 반납 요청
-            ObjectPoolManager.Instance.Release(poolTag, gameObject);
-        }
+        // 매니저에게 나를 다시 넣어달라고 요청 (Invoke 없이 즉시 실행)
+        _returnAction?.Invoke(this.gameObject);
     }
 }

@@ -11,12 +11,12 @@ public class MonsterShooter : MonoBehaviour
     public Transform playerTarget;
 
     [Header("--- 기획 데이터 연동 ---")]
-    public float pattern_cooldown = 5.0f;     // 기획 1, 11번
-    public float detect_range = 10.0f;        // 기획 2번
-    public int projectile_count = 3;          // 기획 6번
-    public float fire_interval = 0.2f;        // 기획 7번
+    public float pattern_cooldown = 5.0f;     
+    public float detect_range = 10.0f;        
+    public int projectile_count = 3;          
+    public float fire_interval = 0.2f;        
 
-    public MonsterState state = MonsterState.MOVE; // 기획 4, 10번
+    public MonsterState state = MonsterState.MOVE; 
     private float current_cooldown = 0f;
 
     void Start()
@@ -26,13 +26,13 @@ public class MonsterShooter : MonoBehaviour
 
     void Update()
     {
-        // 1번: 쿨타임 상시 검사
+        // 쿨타임 상시 검사
         if (current_cooldown > 0)
         {
             current_cooldown -= Time.deltaTime;
         }
 
-        // 1, 2번: 쿨타임이 끝났고 플레이어가 사거리 안에 있으면 패턴 시작
+        // 쿨타임이 끝났고 플레이어가 사거리 안에 있으면 패턴 시작
         if (state == MonsterState.MOVE && current_cooldown <= 0)
         {
             if (playerTarget != null && Vector2.Distance(transform.position, playerTarget.position) <= detect_range)
@@ -44,24 +44,24 @@ public class MonsterShooter : MonoBehaviour
 
     IEnumerator AttackPatternRoutine()
     {
-        // 1. 특수 몬스터 베이스를 가져옵니다.
+        // 특수 몬스터 베이스를 가져옵니다.
         SpecialBossMonsterBase specialBase = GetComponent<SpecialBossMonsterBase>();
 
-        // 2. 공격 시작 (이동 정지)
+        // 공격 시작 (이동 정지)
         if (specialBase != null)
         {
             specialBase.SetAttackingState(true);
             state = MonsterState.PATTERN; // 슈터 자신의 상태도 갱신
         }
 
-        // 3. 발사 루프
+        // 발사 루프
         for (int i = 0; i < projectile_count; i++)
         {
             Shoot();
             yield return new WaitForSeconds(fire_interval);
         }
 
-        // 4. 공격 종료 (이동 재개)
+        // 공격 종료 (이동 재개)
         if (specialBase != null)
         {
             specialBase.SetAttackingState(false);
@@ -74,8 +74,7 @@ public class MonsterShooter : MonoBehaviour
     public void Shoot()
     {
         if (projectilePrefab == null || playerTarget == null) return;
-
-        // 5, 8번: 플레이어 방향으로 투사체 생성 및 발사
+        
         Vector2 dirToPlayer = (playerTarget.position - transform.position).normalized;
         float offsetDistance = 1.0f;
         Vector3 spawnPos = transform.position + (Vector3)(dirToPlayer * offsetDistance);
@@ -85,7 +84,7 @@ public class MonsterShooter : MonoBehaviour
 
         if (projectile != null)
         {
-            projectile.Launch(playerTarget);
+            projectile.Launch(playerTarget, gameObject);
         }
     }
 }

@@ -62,5 +62,6 @@ public class BossState : IStageState
     public void Exit()
     {
         _timer.StopBoss();
+        _registry.ClearBossMark();
     }
 }

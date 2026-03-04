@@ -3,7 +3,6 @@ using UnityEngine;
 
 public class StagePlanBuilder
 {
-    private const int DEFAULT_WEIGHT = 100; // 기본값으로 사용할 가중치
     private const int NO_BOSS_ID = -1; // 보스가 없는 경우의 ID
 
     public StagePlan Build(StageTableRow _stage, List<MonsterWaveRow> _waveRows, List<SpecialMonsterRow> specialRows)
@@ -31,14 +30,12 @@ public class StagePlanBuilder
             for (int i = 0; i < _rows.Count; i++)
             {
                 MonsterWaveRow _row = _rows[i];
-                int _weight = _row.weight_percent > 0 ? _row.weight_percent : DEFAULT_WEIGHT;
 
                 _spawns.Add(new MonsterSpawnPlan
                 {
                     monsterId = _row.monster_id,
                     spawnAmount = _row.spawn_amount,
                     spawnIntervalSeconds = 0f, // 스폰 주기는 "초당 5마리" 규칙으로 스포너가 관리
-                    weightPercent = _weight
                 });
             }
 
@@ -55,7 +52,8 @@ public class StagePlanBuilder
                 midBossId = _midBoss,
                 spawns = _spawns,
                 waveHpModifier = _first.hp_modifier,
-                wavePowerModifier = _first.power_modifier
+                wavePowerModifier = _first.power_modifier,
+                waveExpMultiply = _first.exp_multiply
             });
         }
 
@@ -66,10 +64,14 @@ public class StagePlanBuilder
             stageId = _stage.stage_id,
             mainLimitSeconds = Mathf.Max(0, _stage.main_time) * 60,
             bossLimitSeconds = Mathf.Max(0, _stage.boss_time) * 60,
+
+            entryEnergy = Mathf.Max(0, _stage.entry_energy),
+
             bossId = _stage.boss_id,
             specialGroupId = _stage.special_group_id,
             specialRows = specialRows,
             wavePlans = _waves,
+
             stageHpModifier = _stage.hp_modifier,
             stagePowerModifier = _stage.power_modifier,
             towerHpModifier = 0f,
