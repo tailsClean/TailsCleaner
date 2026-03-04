@@ -100,6 +100,7 @@ public class EnergySystem : MonoBehaviour
     {
         _currentEnergy++;
         _timer = 0;
+        GameManager.Instance.UpdateEnergyCount(_currentEnergy);
     }
     
 }

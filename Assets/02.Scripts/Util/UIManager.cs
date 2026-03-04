@@ -50,7 +50,7 @@ public class UIManager : MonoBehaviour
        if(prefab != null)
        {
            sceneUI = Instantiate(prefab, transform);
-           SetUpReference(sceneUI);
+           SetUpReference(sceneUI); //todo: 참조를 하고나서 저장해두는 방식으로 바꿔야할듯
        }
        return sceneUI;
     }
@@ -63,6 +63,11 @@ public class UIManager : MonoBehaviour
                 // StageUIContainer 참조로 들고 있기
                 this._exitPanel = stageUI.ExitPanel;
                 this._stageTimer = stageUI.TimerUI.GetComponent<StageTimerTextUI>();
+            }
+            if(container is TowerUIContainer towerUI)
+            {
+                // TowerUIContainer 참조로 들고 있기
+                this._energyPanel = towerUI.EnergyPanel.GetComponent<EnergyPanel>();
             }
         }
     }
@@ -117,6 +122,9 @@ public class UIManager : MonoBehaviour
 
     #endregion
 
-    
-    
+    #region EnergyUI
+    [SerializeField] private EnergyPanel _energyPanel;
+    public EnergyPanel EnergyPanel => _energyPanel;
+    #endregion
+
 }
