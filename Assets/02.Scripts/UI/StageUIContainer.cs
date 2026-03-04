@@ -7,6 +7,8 @@ public class StageUIContainer : MonoBehaviour, UIContainer // stageUI에서 연�
     [SerializeField] private Button _settingButton;
     [SerializeField] private GameObject _exitPanel;
     public GameObject ExitPanel => _exitPanel;
+    [SerializeField] private  GameObject _timerUI;
+    public GameObject TimerUI => _timerUI;
 
 
     [SerializeField] private List<UIGroup> _uiGroupList;
@@ -21,16 +23,12 @@ public class StageUIContainer : MonoBehaviour, UIContainer // stageUI에서 연�
         }
     }
 
-
     void Start()
     {
         _settingButton.onClick.AddListener(() => {
-        Debug.Log("버튼 클릭됨!"); // 이게 뜨나요?
         UIManager.Instance.ChangeStateExitPanel();
     });
     }
-
-
 
     public void SetActiveUiGroup(UIGroup.UISTATE uiState, bool active)
     {

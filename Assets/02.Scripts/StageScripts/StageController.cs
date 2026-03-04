@@ -5,7 +5,6 @@ public class StageController : MonoBehaviour
 {
     [SerializeField] private StageResultHandler _resultHandler;
     [SerializeField] private PlayerRewardHandler _playerRewardHandler;
-
     [SerializeField] private StageTimerTextUI _timerUI;
 
     public PlayerRewardHandler RewardHandler => _playerRewardHandler;
@@ -30,6 +29,11 @@ public class StageController : MonoBehaviour
         _events = new StageEvents();
         _timer = new StageTimer(_events);
         _stateMachine = new StageStateMachine();
+    }
+
+    private void Start()
+    {
+        _timerUI = UIManager.Instance.StageTimer;
     }
 
     private void OnDestroy()
@@ -122,6 +126,9 @@ public class StageController : MonoBehaviour
         }
 
         if (_timerUI != null)
+            _timerUI.Bind(_events);
+        else
+            _timerUI = UIManager.Instance.StageTimer;
             _timerUI.Bind(_events);
 
         _stateMachine.ChangeState(new CombatState(_timer, _waveScheduler));

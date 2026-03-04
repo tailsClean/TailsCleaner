@@ -28,7 +28,7 @@ public class PlayerStateMachine
     public void MoveInput(Vector2 dir)
     {
         MoveDir = dir;
-        Debug.Log(_stateDict[State.Move]);
+        //Debug.Log(_stateDict[State.Move]);
         _stateDict[State.Move].HandleInput(new PlayerInputData(MoveDir));
         SetState(State.Move);
 
