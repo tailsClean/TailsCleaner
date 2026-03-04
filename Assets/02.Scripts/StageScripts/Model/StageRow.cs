@@ -39,8 +39,6 @@ public sealed class MonsterWaveRow
     public float hp_modifier;
     public float power_modifier;
     public float exp_multiply;
-
-    public int weight_percent;
 }
 
 public sealed class SpecialMonsterRow

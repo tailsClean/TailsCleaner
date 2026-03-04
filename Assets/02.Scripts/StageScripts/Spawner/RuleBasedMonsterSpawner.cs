@@ -132,17 +132,10 @@ public class RuleBasedMonsterSpawner : MonoBehaviour, IMonsterSpawnSystem
 
     private void SpawnOneFromWave()
     {
-        int _monsterId = PickMonsterIdByWeight(_currentWave);
+        int monsterId = PickMonsterIdBySpawnAmount(_currentWave);
+        if (monsterId <= 0) return;
 
-        int amount = 1;
-        if (_currentWave.spawns != null && _currentWave.spawns.Count > 0)
-            amount = Mathf.Max(1, _currentWave.spawns[0].spawnAmount); // 간단히 첫 row 기준
-
-        for (int i = 0; i < amount; i++)
-        {
-            if (!_registry.CanSpawnMore()) break;
-            SpawnPrefab(_normalMonsterPrefab, $"Monster_{_monsterId}", _isBoss: false);
-        }
+        SpawnPrefab(_normalMonsterPrefab, $"Monster_{monsterId}", _isBoss: false);
     }
 
     private MonsterBase SpawnPrefab(MonsterBase _prefab, string _name, bool _isBoss)
@@ -232,7 +225,7 @@ public class RuleBasedMonsterSpawner : MonoBehaviour, IMonsterSpawnSystem
         return (Vector2)_playerTransform.position + _offset;
     }
 
-    private int PickMonsterIdByWeight(WavePlan _wave)
+    private int PickMonsterIdBySpawnAmount(WavePlan _wave)
     {
         if (_wave == null || _wave.spawns == null || _wave.spawns.Count == 0)
             return 0;
@@ -240,20 +233,20 @@ public class RuleBasedMonsterSpawner : MonoBehaviour, IMonsterSpawnSystem
         int _total = 0;
         for (int i = 0; i < _wave.spawns.Count; i++)
         {
-            int _w = _wave.spawns[i].weightPercent;
-            if (_w <= 0) _w = 100;
-            _total += _w;
+            int w = Mathf.Max(0, _wave.spawns[i].spawnAmount);
+            _total += w;
         }
+
+        if (_total <= 0)
+            return _wave.spawns[0].monsterId;
 
         int _roll = Random.Range(1, _total + 1);
         int _acc = 0;
 
         for (int i = 0; i < _wave.spawns.Count; i++)
         {
-            int _w = _wave.spawns[i].weightPercent;
-            if (_w <= 0) _w = 100;
-            _acc += _w;
-
+            int w = Mathf.Max(0, _wave.spawns[i].spawnAmount);
+            _acc += w;
             if (_roll <= _acc)
                 return _wave.spawns[i].monsterId;
         }
