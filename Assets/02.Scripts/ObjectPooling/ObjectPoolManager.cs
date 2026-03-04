@@ -1,85 +1,68 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.Pool;
+using System.Collections.Generic;
 
 public class ObjectPoolManager : MonoBehaviour
 {
-    [System.Serializable]
-    public class PoolInfo
+    // 싱글톤: 어디서든 ObjectPoolManager.Instance로 접근 가능
+    public static ObjectPoolManager Instance { get; private set; }
+
+    // 프리팹의 InstanceID를 키로 사용하여 풀 관리
+    private Dictionary<int, object> _pools = new Dictionary<int, object>();
+    private Dictionary<float, WaitForSeconds> _waitDict = new Dictionary<float, WaitForSeconds>();
+
+    private void Awake() => Instance = this;
+
+    // 외부에서 미리 풀을 만들어두고 싶을 때 호출
+    public void CreatePool<T>(T prefab, int defaultSize = 10, int maxSize = 20) where T : Object
     {
-        public string tag;
-        public GameObject prefab;
-        public int defaultCapacity = 10;
-        public int maxSize = 20;
-        public float defaultSpawnDelay = 0f;
+        GetPool(prefab, defaultSize, maxSize);
     }
 
-    public static ObjectPoolManager Instance;
-
-    [SerializeField] private List<PoolInfo> poolInfos;
-    private Dictionary<string, IObjectPool<GameObject>> _poolDict = new Dictionary<string, IObjectPool<GameObject>>();
-    private Dictionary<string, PoolInfo> _infoDict = new Dictionary<string, PoolInfo>();
-
-    private void Awake()
+    // 풀이 있으면 가져오고, 없으면 새로 설정하여 반환
+    private ObjectPool<T> GetPool<T>(T prefab, int defaultSize = 10, int maxSize = 20) where T : Object
     {
-        Instance = this;
-        Init();
-    }
+        int id = prefab.GetInstanceID(); // 프리팹별 고유 번호 추출
 
-    // 인스펙터에 설정된 정보를 바탕으로 각 태그별 오브젝트 풀을 초기화
-    private void Init()
-    {
-        foreach (var info in poolInfos)
+        if (!_pools.TryGetValue(id, out var pool))
         {
-            _infoDict[info.tag] = info;
-            _poolDict[info.tag] = new ObjectPool<GameObject>(
-                () => CreatePooledItem(info),
-                OnGetFromPool,
-                OnReleaseToPool,
-                OnDestroyPoolObject,
-                true,
-                info.defaultCapacity,
-                info.maxSize
+            // 해당 프리팹을 위한 새로운 풀 생성 규칙 정의
+            var newPool = new ObjectPool<T>(
+                createFunc: () => Instantiate(prefab, transform), // 부족하면 새로 만드는 법
+                actionOnGet: (obj) => SetActive(obj, true),       // 꺼낼 때 할 일
+                actionOnRelease: (obj) => SetActive(obj, false),  // 넣을 때 할 일
+                actionOnDestroy: (obj) => {
+                    if (obj is GameObject go) Destroy(go);
+                    else if (obj is Component comp) Destroy(comp.gameObject);
+                },
+                defaultCapacity: defaultSize, // 초기 용량
+                maxSize: maxSize  // 최대 저장량
             );
+            _pools.Add(id, newPool);
+            return newPool;
         }
+        return (ObjectPool<T>)pool;
     }
 
-    // 풀에 객체가 없을 때 새로 생성하고 소속 태그를 설정하는 로직
-    private GameObject CreatePooledItem(PoolInfo info)
+    // 객체 활성화/비활성화 헬퍼 메서드
+    private void SetActive<T>(T obj, bool isActive) where T : Object
     {
-        GameObject obj = Instantiate(info.prefab, transform);
-        if (obj.TryGetComponent<PoolObject>(out var po))
-        {
-            po.poolTag = info.tag;
-        }
-        obj.SetActive(false);
-        return obj;
+        if (obj is GameObject go) go.SetActive(isActive);
+        else if (obj is Component comp) comp.gameObject.SetActive(isActive);
     }
 
-    // 풀에서 꺼낼 때 실행
-    private void OnGetFromPool(GameObject obj) => obj.SetActive(true);
-
-    // 풀에 반납할 때 실행
-    private void OnReleaseToPool(GameObject obj) => obj.SetActive(false);
-
-    // 풀이 가득 차거나 삭제될 때 실행
-    private void OnDestroyPoolObject(GameObject obj) => Destroy(obj);
-
-    // 즉시 소환
-    public GameObject Get(string tag, Vector3 position, Quaternion rotation, float customLifeTime = -1f)
+    // 오브젝트가 있으면 꺼내고 없으면 생성
+    public T Get<T>(T prefab, Vector3 pos, Quaternion rot) where T : Object
     {
-        if (!_poolDict.ContainsKey(tag)) return null;
+        var pool = GetPool(prefab);
+        var obj = pool.Get();
 
-        // 풀에서 꺼내기 (비활성화 상태)
-        GameObject obj = _poolDict[tag].Get();
+        // 위치 및 회전 설정
+        Transform targetTrans = (obj is GameObject go) ? go.transform : (obj as Component).transform;
+        targetTrans.SetPositionAndRotation(pos, rot);
 
-        // 위치/회전 세팅
-        obj.transform.position = position;
-        obj.transform.rotation = rotation;
-
-        // 물리 엔진 리셋
-        if (obj.TryGetComponent<Rigidbody2D>(out var rb))
+        // Rigidbody2D 속도 초기화 
+        if (targetTrans.TryGetComponent<Rigidbody2D>(out var rb))
         {
             rb.linearVelocity = Vector2.zero;
             rb.angularVelocity = 0f;
@@ -88,26 +71,18 @@ public class ObjectPoolManager : MonoBehaviour
         return obj;
     }
 
-    // Delay 소환을 위한 로직
-    public void GetAuto(string tag, Vector3 position, Quaternion rotation)
+    // 객체 반납 (사용이 끝난 객체를 다시 풀에 넣기)
+    public void Release<T>(T prefab, T instance) where T : Object
     {
-        if (!_infoDict.ContainsKey(tag)) return;
-        PoolInfo info = _infoDict[tag];
-
-        // 딜레이가 0보다 크면 코루틴으로 지연 소환, 아니면 즉시 소환
-        if (info.defaultSpawnDelay > 0)
-            StartCoroutine(GetDelayedCoroutine(tag, position, rotation, info.defaultSpawnDelay));
-        else
-            Get(tag, position, rotation);
+        var pool = GetPool(prefab);
+        pool.Release(instance);
     }
 
-    // 설정된 지연 시간(delay)만큼 대기 후, 풀에서 객체 꺼내오는 로직
-    private IEnumerator GetDelayedCoroutine(string tag, Vector3 pos, Quaternion rot, float delay)
+    // 'new WaitForSeconds'를 반복하지 않도록 캐싱된 객체 반환
+    public WaitForSeconds GetWait(float seconds)
     {
-        yield return new WaitForSeconds(delay);
-        Get(tag, pos, rot);
+        if (!_waitDict.TryGetValue(seconds, out var wait))
+            _waitDict[seconds] = wait = new WaitForSeconds(seconds);
+        return wait;
     }
-
-    // 오브젝트 반납
-    public void Release(string tag, GameObject obj) => _poolDict[tag].Release(obj);
 }

@@ -54,6 +54,20 @@ public abstract class MonsterBase : MonoBehaviour, IDamageable
     {
         // 초기 위치 동기화
         if (rb2D != null) rb2D.position = transform.position;
+
+        if (target == null)
+        {
+            GameObject playerObj = GameObject.FindWithTag("Player");
+            if (playerObj != null)
+            {
+                target = playerObj.transform;
+            }
+            else
+            {
+                // 여전히 못 찾았다면 씬에 Player 태그가 없는 것
+                Debug.LogWarning($"{gameObject.name}: 'Player' 태그를 가진 오브젝트를 찾을 수 없습니다.");
+            }
+        }
     }
 
     protected virtual void FixedUpdate()
@@ -148,17 +162,9 @@ public abstract class MonsterBase : MonoBehaviour, IDamageable
         // 드랍 아이템 로직
         if (TestItem != null)
         {
-            Instantiate(TestItem, transform.position, Quaternion.identity);
+            ObjectPoolManager.Instance.Get(TestItem, transform.position, Quaternion.identity);
         }
 
-        // Destroy(gameObject) 대신 풀링 반납
-        if (TryGetComponent<PoolObject>(out var poolObj))
-        {
-            poolObj.ReturnToPool();
-        }
-        else
-        {
-            Destroy(gameObject); // 풀링 오브젝트가 아니면 파괴
-        }
+        Destroy(gameObject);
     }
 }
