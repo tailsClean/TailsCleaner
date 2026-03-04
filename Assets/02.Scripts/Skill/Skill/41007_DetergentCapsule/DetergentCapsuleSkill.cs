@@ -20,11 +20,8 @@ public class DetergentCapsuleSkill : ActiveSkill<DetergentCapsuleProjectile, Det
 
     protected override void OnActive(int index, int totalCount)
     {
-        // 공격 방향
-        Vector2 dir = SkillManager.Instance.Player.AttackDir;
-
         // 세제 캡슐 생성
-        SpawnCapsule(dir);
+        SpawnCapsule(AttackDir);
     }
 
 

@@ -61,6 +61,8 @@ public abstract class ActiveSkill : MonoBehaviour
     [SerializeField] protected float _distance = 50f;           // 타겟 탐색 거리
 
 
+    protected Vector2 AttackDir => GetAttackDir();  // 공격 방향
+
 
 
     private void Awake()
@@ -185,7 +187,7 @@ public abstract class ActiveSkill : MonoBehaviour
                 return true;
 
             case TARGETING_TYPE.NonTarget:                  // 비대상형    공격 방향 있어야 발동
-                return player.AttackDir.sqrMagnitude > 0f;
+                return player.LastAttackDir.sqrMagnitude > 0f;
 
             case TARGETING_TYPE.Closest:                    // 조준형      공격방향, 타겟 트랜스폼 둘 다 있어야 발동
                 return player.AttackDir.sqrMagnitude > 0f && _currentTarget != null;
@@ -414,6 +416,30 @@ public abstract class ActiveSkill : MonoBehaviour
     {
         int flag = SubTagRegistry.GetFlag(passive.SubTag);
         return flag != 0 && (CurrentSubTag & flag) != 0;
+    }
+
+
+    private Vector2 GetAttackDir()
+    {
+        var player = SkillManager.Instance.Player;
+
+        switch (_targetingType)
+        {
+            case TARGETING_TYPE.Barrier:                    // 베리어형    항상 발동
+                return player.transform.position;
+
+            case TARGETING_TYPE.NonTarget:                  // 비대상형    공격 방향
+                return player.LastAttackDir;
+
+            case TARGETING_TYPE.Closest:                    // 조준형      공격방향
+                return player.AttackDir;
+
+            case TARGETING_TYPE.Directional:                // 이동방향형  이동 방향
+                return player.MoveDir;
+
+            default:
+                return player.transform.position;
+        }
     }
 }
 

@@ -41,9 +41,9 @@ public class SpinningToyMoonModifier : ActiveModifier<SpinningToySkill>
 public class SpinningToyDuckModifier : ActiveModifier<SpinningToySkill>
 {
     [Header("큰 오리 수")]
-    [SerializeField] private int _duck_B_Count;
+    [SerializeField] private int _duck_B_Count = 1;
     [Header("작은 오리 수")]
-    [SerializeField] private int _duck_S_Count;
+    [SerializeField] private int _duck_S_Count = 2;
 
     public override void ApplyModifier(SpinningToySkill skill, ActiveUpgradeData upgradeData)
     {
