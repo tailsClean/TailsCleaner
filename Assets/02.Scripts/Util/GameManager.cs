@@ -45,7 +45,7 @@ public class GameManager : MonoBehaviour
     public void UpdateEnergyCount(int energy)
     {
         EnergyCount = energy;
-        UIManager.Instance.EnergyPanel.UpdateEnergyText();
+        UIManager.Instance.EnergyPanel?.UpdateEnergyText();
     }
 
 }

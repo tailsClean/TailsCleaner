@@ -6,15 +6,7 @@ public class PlayerRewardHandler : MonoBehaviour
     public RewardData myReward;
 
 
-    void Update()
-    {
-        // 테스트용: 2번 키를 누르면 스테이지 승리 정산!
-        if (Input.GetKeyDown(KeyCode.Alpha2))
-        {
-            Debug.Log("<color=orange>정산을 시작합니다!</color>");
-            FinalizeReward(GameResult.Victory);
-        }
-    }
+    
 
     private void Awake()
     {

@@ -63,6 +63,8 @@ public class UIManager : MonoBehaviour
                 // StageUIContainer 참조로 들고 있기
                 this._exitPanel = stageUI.ExitPanel;
                 this._stageTimer = stageUI.TimerUI.GetComponent<StageTimerTextUI>();
+                this._gameOverPanel = stageUI.GameOverPanel;
+                this._stageClearPanel = stageUI.StageClearPanel;
             }
             if(container is TowerUIContainer towerUI)
             {
@@ -114,6 +116,21 @@ public class UIManager : MonoBehaviour
     #endregion
 
     #region StageClearPanel
+    [SerializeField] private GameObject _stageClearPanel;
+    public void OpenClear()
+    {
+        _stageClearPanel.SetActive(true);
+    }
+    
+    #endregion
+
+    #region GameOverPanel
+    [SerializeField] private GameObject _gameOverPanel;
+     public void OpenGameOver()
+    {
+        _gameOverPanel.SetActive(true);
+    }
+    
     #endregion
     
     #region StageTimer

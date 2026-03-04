@@ -34,12 +34,6 @@ public class StageResultHandler : MonoBehaviour
     {
         if (!_enableDebugHotkeys) return;
         if (_controller == null) return;
-
-        if (Input.GetKeyDown(KeyCode.F7))
-            _controller.EndStage(StageResult.Clear, StageFailReason.기타);
-
-        if (Input.GetKeyDown(KeyCode.F8))
-            _controller.EndStage(StageResult.Fail, StageFailReason.기타);
     }
 
     private void HandleStageResult(StageResult result, StageFailReason reason)
