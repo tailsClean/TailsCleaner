@@ -61,6 +61,7 @@ public class PlayerBase : MonoBehaviour, IDamageable, ISkillable
     public float PickupRange => _pickupRange;
     public Vector2 MoveDir => _stateMachine.MoveDir;
     public Vector2 AttackDir { get; private set; }
+    public Vector2 LastAttackDir { get; private set; }
 
 
     //
@@ -124,7 +125,11 @@ public class PlayerBase : MonoBehaviour, IDamageable, ISkillable
     {
         if (!ctx.performed)
             return;
+
         AttackDir = ctx.ReadValue<Vector2>().normalized;
+
+        if(AttackDir != Vector2.zero)
+            LastAttackDir = AttackDir;
     }
     // 마우스 방향으로 공격
     public void MouseAttackDir(InputAction.CallbackContext ctx)
