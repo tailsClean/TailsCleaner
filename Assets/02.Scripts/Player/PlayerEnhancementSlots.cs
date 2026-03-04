@@ -32,7 +32,7 @@ public class PlayerEnhancementSlots
     }
 
     // 장비의 스텟 증가량을 반환
-    public int GetIncreaseStat(EquipmentBase.STAT stat)
+    public float GetIncreaseStat(EquipmentBase.STAT stat)
     {
         if (_myEquipments == null)
             return 0;

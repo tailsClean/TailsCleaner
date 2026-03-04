@@ -55,7 +55,7 @@ public class EquipmentBase : PlayerEnhancement
 
 
     // 최종 스텟 증가량 제공 메서드(장비 증가량, 강화 증가량, 등급 증가량)
-    public int GetIncreaseStat(STAT stat)
+    public float GetIncreaseStat(STAT stat)
     {
         //
         float statValue = 0;
@@ -66,7 +66,7 @@ public class EquipmentBase : PlayerEnhancement
         float enhanceValue = EquipEnhance.AddValue;
         float gradeValue = EquipGrade.StatRate;
         float result = statValue * (1 + enhanceValue) * gradeValue;
-        return (int)result;
+        return result;
     }
 
 

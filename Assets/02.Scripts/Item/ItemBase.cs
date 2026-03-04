@@ -10,7 +10,9 @@ public abstract class ItemBase : MonoBehaviour
     [field: SerializeField] public int MaxStack { get; private set; } = 1;
     [field: SerializeField] public int ItemNameKey { get; private set; }
 
-
+    //
+    public Sprite GetSprite;
+    //
 
 }
 

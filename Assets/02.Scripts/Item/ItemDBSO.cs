@@ -35,7 +35,7 @@ public class ItemDBSO : ScriptableObject
     private void Init()
     {
         _itemDataDict = new Dictionary<int, ItemBase>();
-        Debug.Log("뉴할당");
+        Debug.Log("데이터베이스 new할당");
         SetItemDict(_equipments);
         SetItemDict(_Relics);
     }

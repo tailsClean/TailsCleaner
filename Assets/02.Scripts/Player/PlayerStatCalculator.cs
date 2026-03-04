@@ -14,9 +14,9 @@ public class PlayerStatCalculator
     }
 
     // 장비로 인한 증가값 계산
-    public int GetFinalSat(float initialStat, EquipmentBase.STAT increaseStat)
+    public float GetFinalSat(float initialStat, EquipmentBase.STAT increaseStat)
     {
-        return (int)initialStat + _enhanceInventory.GetIncreaseStat(increaseStat);
+        return initialStat + _enhanceInventory.GetIncreaseStat(increaseStat);
     }
 
     // 유물로 인한 증가값 계산
