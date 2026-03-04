@@ -47,7 +47,6 @@ public class MonsterSpawnPlan
     public int monsterId;
     public int spawnAmount;
     public float spawnIntervalSeconds; // 몬스터 간 스폰 간격
-    public int weightPercent; // 70/30 같은 몬스터 소환 비율(총합은 100으로 가정)
     
 }
 

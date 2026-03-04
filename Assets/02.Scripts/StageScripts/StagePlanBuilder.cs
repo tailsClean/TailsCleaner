@@ -31,14 +31,12 @@ public class StagePlanBuilder
             for (int i = 0; i < _rows.Count; i++)
             {
                 MonsterWaveRow _row = _rows[i];
-                int _weight = _row.weight_percent > 0 ? _row.weight_percent : DEFAULT_WEIGHT;
 
                 _spawns.Add(new MonsterSpawnPlan
                 {
                     monsterId = _row.monster_id,
                     spawnAmount = _row.spawn_amount,
                     spawnIntervalSeconds = 0f, // 스폰 주기는 "초당 5마리" 규칙으로 스포너가 관리
-                    weightPercent = _weight
                 });
             }
 
