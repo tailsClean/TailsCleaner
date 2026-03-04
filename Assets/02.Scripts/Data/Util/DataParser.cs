@@ -1,8 +1,8 @@
-
 using System;
 using System.Collections.Generic;
 using System.Reflection;
 using UnityEngine;
+using UnityEditor;
 
 public static class DataParser
 {
@@ -16,7 +16,8 @@ public static class DataParser
         List<T> data = new List<T>();
 
         //csv파일가져오기
-        TextAsset csv = Resources.Load<TextAsset>($"Data/{filename}");
+        TextAsset csv = Resources.Load<TextAsset>($"Data/CSV/{filename}");
+        
         if (csv == null)
         {
             //Debug.LogWarning($"csv 파일이 없습니다. Data/{filename}");
@@ -116,9 +117,9 @@ public static class DataParser
             }
             data.Add(item);
         }
-        //Debug.Log($"{filename}파싱완료 : {data.Count}개 항목");
         return data;
     }
+
 }
           
 

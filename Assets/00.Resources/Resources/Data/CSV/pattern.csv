@@ -1,0 +1,317 @@
+패턴 고유 ID (PK),"기획 소통용
+탑_타입_번호","패턴 타입
+0=이동
+1=투사체
+2=영역
+3=소환수
+4=트리거",세부 패턴 구분,지속 시간 (초 단위),예고 시간 (초 단위),기본 쿨타임 (초 단위),패턴 값,데미지 배율,패턴 발동 감지 범위 (월드 유닛 단위),이동 유지 시간 (초 단위),지그재그 폭 (월드 유닛 단위),점프 높이 (월드 유닛 단위),추적 유지 시간 (초 단위),"도망 패턴 타겟 유형
+0=플레이어 반대 방향
+1=밀집 지역
+2=지정 위치",돌진 속도,"투사체 타입
+0=직선
+1=포물선
+2=공전
+3=레이저",투사체 속도,"투사체 크기
+(월드 유닛 단위)",발사 개수,연속 발사 간격 (초 단위),투사체 유지 시간 (초 단위),"투사체 관통 타입
+0=소멸
+1=관통
+2=반사","유도 여부
+false = 유도 안 함
+true = 유도함",포물선 최고점 높이 (월드 유닛 단위),공전 반경 (월드 유닛 단위),"범위 반경
+(월드 유닛 단위)",범위 피해 간격 (초 단위),"타겟 기준
+0=플레이어 기준
+1=보스 기준
+2=랜덤 구역",폭발 반경 (월드 유닛 단위),소환 몬스터 ID,소환수 마리수,"소환 범위
+(월드 유닛 단위)","
+소환 위치 기준
+0=플레이어 기준
+1=보스 기준","디버프 타입
+0=지속피해
+1=스턴
+2=이동 속도 감소",디버프 지속 시간 (초 단위),디버프 수치,지속 피해 간격 (초 단위),"바리게이트 모양
+0=직사각형
+1=원형","바리게이트 타겟
+0=플레이어만
+1=보스만
+2=플레이어, 보스 함께
+3= 아무도 없는 위치","바리게이트
+가로 길이
+ (월드 유닛 단위)","바리게이트
+직사각형
+세로 길이
+(월드 유닛 단위)","생성 기준점
+0=플레이어 기준
+1=보스 기준
+2=고정 좌표
+ (월드 유닛 단위)","생성 기준점 대비 X 오프셋
+ (월드 유닛 단위)","생성 기준점 대비 Y 오프셋
+ (월드 유닛 단위)",접촉 데미지,"이동 차단 여부
+false = 이동 가능
+true = 이동 불가"
+pattern_id,index,pattern_type,pattern_logic_type,duration,cast_time,cooldown,pattern_value,damage_multiply,detect_range,move_time,zigzag_width,jump_height,chase_time,escape_target,rush_speed,projectile_type,projectile_speed,projectile_size,projectile_count,fire_interval,life_time,pierce_type,follow,arc_height,projectile_radius,area_radius,area_damage_interval,area_target_type,explode_range,summon_monster_id,summon_count,summon_radius,summon_position_type,debuff_type,debuff_duration,debuff_value,debuff_damage_interval,barrier_shape,barrier_target_type,barrier_size_x,barrier_size_y,anchor_type,barrier_offset_x,barrier_offset_y,barrier_damage,barrier_collision_block
+int,string,enum,string,float,float,float,float,float,float,float,float,float,float,enum,float,enum,float,float,int,float,float,enum,bool,float,float,flaot,float,enum,float,int,int,float,enum,enum,float,float,float,enum,enum,float,float,enum,float,float,float,bool
+220001,2_S_01,0,move_zigzag,null,null,null,0.8,null,null,null,0.5,null,null,null,null,null,null,null,null,null,null,null,FALSE,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,FALSE
+220002,2_S_02,0,move_zigzag,null,null,null,0.8,null,null,null,0.5,null,null,null,null,null,null,null,null,null,null,null,FALSE,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,FALSE
+220003,2_S_03,0,move_jump,null,3,null,1.5,2,2,null,null,2,null,null,null,null,null,null,null,null,null,null,FALSE,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,FALSE
+220004,2_S_04,0,move_jump,null,3,null,1.5,2,2,null,null,2,null,null,null,null,null,null,null,null,null,null,FALSE,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,FALSE
+220005,2_S_05,0,move_jump,null,3,null,1.5,2,2,null,null,2,null,null,null,null,null,null,null,null,null,null,FALSE,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,FALSE
+220006,2_S_06,0,move_escape,null,3,null,1.5,null,4,8,null,null,null,0,null,null,null,null,null,null,null,null,FALSE,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,FALSE
+220007,2_S_07,1,projectile_basic,null,null,2,null,1.2,1.5,null,null,null,null,null,null,0,1.5,0.1,1,0.2,2,0,FALSE,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,FALSE
+220008,2_S_08,1,projectile_basic,null,null,2,null,1.2,1.5,null,null,null,null,null,null,0,1.5,0.1,2,0.2,2,0,FALSE,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,FALSE
+220009,2_S_09,1,projectile_pierce,null,null,3,null,2,2,null,null,null,null,null,null,0,1.2,0.2,5,0.5,3,1,FALSE,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,FALSE
+220010,2_S_10,1,projectile_pierce,null,null,3,null,2,2,null,null,null,null,null,null,0,1.2,0.2,5,0.5,3,1,FALSE,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,FALSE
+220011,2_S_11,1,projectile_reflect,null,null,3,null,2,2,null,null,null,null,null,null,0,0.8,0.2,5,0.5,2,2,FALSE,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,FALSE
+220012,2_S_12,1,projectile_follow,null,null,5,null,2,2.5,null,null,null,null,null,null,null,0.8,0.2,1,10,5,1,TRUE,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,FALSE
+220013,2_S_13,1,projectile_follow,null,null,5,null,2,2.5,null,null,null,null,null,null,null,0.8,0.2,1,10,5,1,TRUE,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,FALSE
+220014,2_S_14,1,projectile_throw,null,null,3,null,2,2,null,null,null,null,null,null,1,0.8,0.4,2,0.8,7,1,FALSE,2,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,FALSE
+220015,2_S_15,1,explode_self,null,3,null,1.5,2,null,null,null,null,null,null,null,null,null,null,null,null,null,null,FALSE,null,null,null,null,null,0.5,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,FALSE
+220016,3_S_01,0,move_zigzag,null,null,null,0.8,null,null,null,0.5,null,null,null,null,null,null,null,null,null,null,null,FALSE,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,FALSE
+220017,3_S_02,0,move_zigzag,null,null,null,0.8,null,null,null,0.5,null,null,null,null,null,null,null,null,null,null,null,FALSE,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,FALSE
+220018,3_S_03,0,move_jump,null,3,null,1.5,2,2,null,null,2,null,null,null,null,null,null,null,null,null,null,FALSE,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,FALSE
+220019,3_S_04,0,move_jump,null,3,null,1.5,2,2,null,null,2,null,null,null,null,null,null,null,null,null,null,FALSE,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,FALSE
+220020,3_S_05,0,move_jump,null,3,null,1.5,2,2,null,null,2,null,null,null,null,null,null,null,null,null,null,FALSE,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,FALSE
+220021,3_S_06,0,move_escape,null,3,null,1.5,null,4,8,null,null,null,1,null,null,null,null,null,null,null,null,FALSE,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,FALSE
+220022,3_S_07,1,projectile_basic,null,null,2,null,1.2,1.5,null,null,null,null,null,null,0,1.5,0.1,3,0.2,2,0,FALSE,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,FALSE
+220023,3_S_08,1,projectile_basic,null,null,2,null,1.2,1.5,null,null,null,null,null,null,0,1.5,0.1,4,0.2,2,0,FALSE,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,FALSE
+220024,3_S_09,1,projectile_pierce,null,null,3,null,2,2,null,null,null,null,null,null,0,1.2,0.2,5,0.5,3,1,FALSE,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,FALSE
+220025,3_S_10,1,projectile_pierce,null,null,3,null,2,2,null,null,null,null,null,null,0,1.2,0.2,5,0.5,3,1,FALSE,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,FALSE
+220026,3_S_11,1,projectile_reflect,null,null,3,null,2,2,null,null,null,null,null,null,0,0.8,0.2,5,0.5,2,2,FALSE,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,FALSE
+220027,3_S_12,1,projectile_follow,null,null,5,null,2,2.5,null,null,null,null,null,null,null,0.8,0.2,1,10,5,1,TRUE,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,FALSE
+220028,3_S_13,1,projectile_follow,null,null,5,null,2,2.5,null,null,null,null,null,null,null,0.8,0.2,1,10,5,1,TRUE,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,FALSE
+220029,3_S_14,1,projectile_throw,null,null,3,null,2,2,null,null,null,null,null,null,1,0.8,0.4,2,0.8,7,1,FALSE,2,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,FALSE
+220030,3_S_15,1,explode_self,null,3,null,1.5,2,null,null,null,null,null,null,null,null,null,null,null,null,null,null,FALSE,null,null,null,null,null,0.5,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,FALSE
+220031,4_S_01,0,move_zigzag,null,null,null,0.8,null,null,null,0.5,null,null,null,null,null,null,null,null,null,null,null,FALSE,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,FALSE
+220032,4_S_02,0,move_zigzag,null,null,null,0.8,null,null,null,0.5,null,null,null,null,null,null,null,null,null,null,null,FALSE,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,FALSE
+220033,4_S_03,0,move_jump,null,3,null,1.5,2,2,null,null,2,null,null,null,null,null,null,null,null,null,null,FALSE,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,FALSE
+220034,4_S_04,0,move_jump,null,3,null,1.5,2,2,null,null,2,null,null,null,null,null,null,null,null,null,null,FALSE,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,FALSE
+220035,4_S_05,0,move_jump,null,3,null,1.5,2,2,null,null,2,null,null,null,null,null,null,null,null,null,null,FALSE,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,FALSE
+220036,4_S_06,0,move_escape,null,3,null,1.5,null,4,8,null,null,null,2,null,null,null,null,null,null,null,null,FALSE,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,FALSE
+220037,4_S_07,1,projectile_basic,null,null,2,null,1.2,1.5,null,null,null,null,null,null,0,1.5,0.1,5,0.2,2,0,FALSE,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,FALSE
+220038,4_S_08,1,projectile_basic,null,null,2,null,1.2,1.5,null,null,null,null,null,null,0,1.5,0.1,6,0.2,2,0,FALSE,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,FALSE
+220039,4_S_09,1,projectile_pierce,null,null,3,null,2,2,null,null,null,null,null,null,0,1.2,0.2,5,0.5,3,1,FALSE,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,FALSE
+220040,4_S_10,1,projectile_pierce,null,null,3,null,2,2,null,null,null,null,null,null,0,1.2,0.2,5,0.5,3,1,FALSE,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,FALSE
+220041,4_S_11,1,projectile_reflect,null,null,3,null,2,2,null,null,null,null,null,null,0,0.8,0.2,5,0.5,2,2,FALSE,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,FALSE
+220042,4_S_12,1,projectile_follow,null,null,5,null,2,2.5,null,null,null,null,null,null,null,0.8,0.2,1,10,5,1,TRUE,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,FALSE
+220043,4_S_13,1,projectile_follow,null,null,5,null,2,2.5,null,null,null,null,null,null,null,0.8,0.2,1,10,5,1,TRUE,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,FALSE
+220044,4_S_14,1,projectile_throw,null,null,3,null,2,2,null,null,null,null,null,null,1,0.8,0.4,2,0.8,7,1,FALSE,2,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,FALSE
+220045,4_S_15,1,explode_self,null,3,null,1.5,2,null,null,null,null,null,null,null,null,null,null,null,null,null,null,FALSE,null,null,null,null,null,0.5,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,FALSE
+220046,5_S_01,0,move_zigzag,null,null,null,0.8,null,null,null,0.5,null,null,null,null,null,null,null,null,null,null,null,FALSE,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,FALSE
+220047,5_S_02,0,move_zigzag,null,null,null,0.8,null,null,null,0.5,null,null,null,null,null,null,null,null,null,null,null,FALSE,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,FALSE
+220048,5_S_03,0,move_jump,null,3,null,1.5,2,2,null,null,2,null,null,null,null,null,null,null,null,null,null,FALSE,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,FALSE
+220049,5_S_04,0,move_jump,null,3,null,1.5,2,2,null,null,2,null,null,null,null,null,null,null,null,null,null,FALSE,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,FALSE
+220050,5_S_05,0,move_jump,null,3,null,1.5,2,2,null,null,2,null,null,null,null,null,null,null,null,null,null,FALSE,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,FALSE
+220051,5_S_06,0,move_escape,null,3,null,1.5,null,4,8,null,null,null,0,null,null,null,null,null,null,null,null,FALSE,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,FALSE
+220052,5_S_07,1,projectile_basic,null,null,2,null,1.2,1.5,null,null,null,null,null,null,0,1.5,0.1,7,0.2,2,0,FALSE,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,FALSE
+220053,5_S_08,1,projectile_basic,null,null,2,null,1.2,1.5,null,null,null,null,null,null,0,1.5,0.1,8,0.2,2,0,FALSE,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,FALSE
+220054,5_S_09,1,projectile_pierce,null,null,3,null,2,2,null,null,null,null,null,null,0,1.2,0.2,5,0.5,3,1,FALSE,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,FALSE
+220055,5_S_10,1,projectile_pierce,null,null,3,null,2,2,null,null,null,null,null,null,0,1.2,0.2,5,0.5,3,1,FALSE,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,FALSE
+220056,5_S_11,1,projectile_reflect,null,null,3,null,2,2,null,null,null,null,null,null,0,0.8,0.2,5,0.5,2,2,FALSE,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,FALSE
+220057,5_S_12,1,projectile_follow,null,null,5,null,2,2.5,null,null,null,null,null,null,null,0.8,0.2,1,10,5,1,TRUE,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,FALSE
+220058,5_S_13,1,projectile_follow,null,null,5,null,2,2.5,null,null,null,null,null,null,null,0.8,0.2,1,10,5,1,TRUE,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,FALSE
+220059,5_S_14,1,projectile_throw,null,null,3,null,2,2,null,null,null,null,null,null,1,0.8,0.4,2,0.8,7,1,FALSE,2,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,FALSE
+220060,5_S_15,1,explode_self,null,3,null,1.5,2,null,null,null,null,null,null,null,null,null,null,null,null,null,null,FALSE,null,null,null,null,null,0.5,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,FALSE
+220061,6_S_01,0,move_zigzag,null,null,null,0.8,null,null,null,0.5,null,null,null,null,null,null,null,null,null,null,null,FALSE,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,FALSE
+220062,6_S_02,0,move_zigzag,null,null,null,0.8,null,null,null,0.5,null,null,null,null,null,null,null,null,null,null,null,FALSE,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,FALSE
+220063,6_S_03,0,move_jump,null,3,null,1.5,2,2,null,null,2,null,null,null,null,null,null,null,null,null,null,FALSE,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,FALSE
+220064,6_S_04,0,move_jump,null,3,null,1.5,2,2,null,null,2,null,null,null,null,null,null,null,null,null,null,FALSE,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,FALSE
+220065,6_S_05,0,move_jump,null,3,null,1.5,2,2,null,null,2,null,null,null,null,null,null,null,null,null,null,FALSE,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,FALSE
+220066,6_S_06,0,move_escape,null,3,null,1.5,null,4,8,null,null,null,1,null,null,null,null,null,null,null,null,FALSE,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,FALSE
+220067,6_S_07,1,projectile_basic,null,null,2,null,1.2,1.5,null,null,null,null,null,null,0,1.5,0.1,9,0.2,2,0,FALSE,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,FALSE
+220068,6_S_08,1,projectile_basic,null,null,2,null,1.2,1.5,null,null,null,null,null,null,0,1.5,0.1,10,0.2,2,0,FALSE,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,FALSE
+220069,6_S_09,1,projectile_pierce,null,null,3,null,2,2,null,null,null,null,null,null,0,1.2,0.2,5,0.5,3,1,FALSE,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,FALSE
+220070,6_S_10,1,projectile_pierce,null,null,3,null,2,2,null,null,null,null,null,null,0,1.2,0.2,5,0.5,3,1,FALSE,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,FALSE
+220071,6_S_11,1,projectile_reflect,null,null,3,null,2,2,null,null,null,null,null,null,0,0.8,0.2,5,0.5,2,2,FALSE,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,FALSE
+220072,6_S_12,1,projectile_follow,null,null,5,null,2,2.5,null,null,null,null,null,null,null,0.8,0.2,1,10,5,1,TRUE,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,FALSE
+220073,6_S_13,1,projectile_follow,null,null,5,null,2,2.5,null,null,null,null,null,null,null,0.8,0.2,1,10,5,1,TRUE,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,FALSE
+220074,6_S_14,1,projectile_throw,null,null,3,null,2,2,null,null,null,null,null,null,1,0.8,0.4,2,0.8,7,1,FALSE,2,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,FALSE
+220075,6_S_15,1,explode_self,null,3,null,1.5,2,null,null,null,null,null,null,null,null,null,null,null,null,null,null,FALSE,null,null,null,null,null,0.5,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,FALSE
+220076,7_S_01,0,move_zigzag,null,null,null,0.8,null,null,null,0.5,null,null,null,null,null,null,null,null,null,null,null,FALSE,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,FALSE
+220077,7_S_02,0,move_zigzag,null,null,null,0.8,null,null,null,0.5,null,null,null,null,null,null,null,null,null,null,null,FALSE,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,FALSE
+220078,7_S_03,0,move_jump,null,3,null,1.5,2,2,null,null,2,null,null,null,null,null,null,null,null,null,null,FALSE,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,FALSE
+220079,7_S_04,0,move_jump,null,3,null,1.5,2,2,null,null,2,null,null,null,null,null,null,null,null,null,null,FALSE,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,FALSE
+220080,7_S_05,0,move_jump,null,3,null,1.5,2,2,null,null,2,null,null,null,null,null,null,null,null,null,null,FALSE,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,FALSE
+220081,7_S_06,0,move_escape,null,3,null,1.5,null,4,8,null,null,null,2,null,null,null,null,null,null,null,null,FALSE,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,FALSE
+220082,7_S_07,1,projectile_basic,null,null,2,null,1.2,1.5,null,null,null,null,null,null,0,1.5,0.1,1,0.2,2,0,FALSE,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,FALSE
+220083,7_S_08,1,projectile_basic,null,null,2,null,1.2,1.5,null,null,null,null,null,null,0,1.5,0.1,2,0.2,2,0,FALSE,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,FALSE
+220084,7_S_09,1,projectile_pierce,null,null,3,null,2,2,null,null,null,null,null,null,0,1.2,0.2,5,0.5,3,1,FALSE,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,FALSE
+220085,7_S_10,1,projectile_pierce,null,null,3,null,2,2,null,null,null,null,null,null,0,1.2,0.2,5,0.5,3,1,FALSE,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,FALSE
+220086,7_S_11,1,projectile_reflect,null,null,3,null,2,2,null,null,null,null,null,null,0,0.8,0.2,5,0.5,2,2,FALSE,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,FALSE
+220087,7_S_12,1,projectile_follow,null,null,5,null,2,2.5,null,null,null,null,null,null,null,0.8,0.2,1,10,5,1,TRUE,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,FALSE
+220088,7_S_13,1,projectile_follow,null,null,5,null,2,2.5,null,null,null,null,null,null,null,0.8,0.2,1,10,5,1,TRUE,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,FALSE
+220089,7_S_14,1,projectile_throw,null,null,3,null,2,2,null,null,null,null,null,null,1,0.8,0.4,2,0.8,7,1,FALSE,2,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,FALSE
+220090,7_S_15,1,explode_self,null,3,null,1.5,2,null,null,null,null,null,null,null,null,null,null,9,null,null,null,FALSE,null,null,null,null,null,0.5,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,FALSE
+220091,2_B_01,1,projectile_follow,null,null,5,null,2,2.5,null,null,null,null,null,null,null,0.8,0.2,1,10,5,1,TRUE,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,FALSE
+220092,2_B_02,1,projectile_follow,null,null,5,null,2,2.5,null,null,null,null,null,null,null,0.8,0.2,2,10,5,1,TRUE,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,FALSE
+220093,2_B_03,1,projectile_follow,null,null,5,null,2,2.5,null,null,null,null,null,null,null,0.8,0.2,2,10,5,1,TRUE,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,FALSE
+220094,2_B_03,2,area_danger,5,8,null,null,2,null,null,null,null,null,null,null,null,null,0.5,8,null,null,null,FALSE,null,null,3,0.2,1,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,FALSE
+220095,2_B_04,1,projectile_follow,null,null,5,null,2,2.5,null,null,null,null,null,null,null,0.8,0.2,2,10,5,1,TRUE,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,FALSE
+220096,2_B_04,2,area_danger,5,8,null,null,2,null,null,null,null,null,null,null,null,null,0.5,8,null,null,null,FALSE,null,null,3,0.2,1,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,FALSE
+220097,2_B_05,1,projectile_follow,null,null,5,null,2,2.5,null,null,null,null,null,null,null,0.8,0.2,2,10,5,1,TRUE,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,FALSE
+220098,2_B_05,2,area_danger,5,8,null,null,2,null,null,null,null,null,null,null,null,null,0.5,8,null,null,null,FALSE,null,null,3,0.2,1,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,FALSE
+220099,2_B_05,2,area_safe,5,8,null,null,2,null,null,null,null,null,null,null,null,null,null,null,null,null,null,FALSE,null,null,3,0.2,0,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,FALSE
+220100,2_B_06,1,projectile_follow,null,null,5,null,2,2.5,null,null,null,null,null,null,null,0.8,0.2,2,10,5,1,TRUE,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,FALSE
+220101,2_B_06,2,area_danger,5,8,null,null,2,null,null,null,null,null,null,null,null,null,0.5,8,null,null,null,FALSE,null,null,3,0.2,1,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,FALSE
+220102,2_B_06,2,area_safe,5,8,null,null,2,null,null,null,null,null,null,null,null,null,null,null,null,null,null,FALSE,null,null,3,0.2,0,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,FALSE
+220103,2_B_07,1,projectile_follow,null,null,5,null,2,2.5,null,null,null,null,null,null,null,0.8,0.2,2,10,5,1,TRUE,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,FALSE
+220104,2_B_07,2,area_danger,5,8,null,null,2,null,null,null,null,null,null,null,null,null,0.5,8,null,null,null,FALSE,null,null,3,0.2,1,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,FALSE
+220105,2_B_07,2,area_safe,5,8,null,null,2,null,null,null,null,null,null,null,null,null,null,null,null,null,null,FALSE,null,null,3,0.2,0,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,FALSE
+220106,2_B_08,1,projectile_follow,null,null,5,null,2,2.5,null,null,null,null,null,null,null,0.8,0.2,2,10,5,1,TRUE,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,FALSE
+220107,2_B_08,2,area_danger,5,8,null,null,2,null,null,null,null,null,null,null,null,null,0.5,8,null,null,null,FALSE,null,null,3,0.2,1,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,FALSE
+220108,2_B_08,2,area_safe,5,8,null,null,2,null,null,null,null,null,null,null,null,null,null,null,null,null,null,FALSE,null,null,3,0.2,0,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,FALSE
+220109,2_B_08,4,trigger_exp_absorb,3,3,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,FALSE,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,FALSE
+220110,2_B_09,1,projectile_follow,null,null,5,null,2,2.5,null,null,null,null,null,null,null,0.8,0.2,2,10,5,1,TRUE,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,FALSE
+220111,2_B_09,2,area_danger,5,8,null,null,2,null,null,null,null,null,null,null,null,null,0.5,8,null,null,null,FALSE,null,null,3,0.2,1,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,FALSE
+220112,2_B_09,2,area_safe,5,8,null,null,2,null,null,null,null,null,null,null,null,null,null,null,null,null,null,FALSE,null,null,3,0.2,0,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,FALSE
+220113,2_B_09,4,trigger_exp_absorb,3,3,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,FALSE,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,FALSE
+220114,2_B_10,1,projectile_follow,null,null,5,null,2,2.5,null,null,null,null,null,null,null,0.8,0.2,2,10,5,1,TRUE,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,FALSE
+220115,2_B_10,2,area_danger,5,8,null,null,2,null,null,null,null,null,null,null,null,null,0.5,8,null,null,null,FALSE,null,null,3,0.2,0,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,FALSE
+220116,2_B_10,2,area_safe,5,8,null,null,2,null,null,null,null,null,null,null,null,null,null,null,null,null,null,FALSE,null,null,3,0.2,0,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,FALSE
+220117,2_B_10,4,trigger_exp_absorb,3,3,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,FALSE,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,FALSE
+220118,3_B_01,0,move_jump,null,3,null,1.5,2,2,null,null,2,null,null,null,null,null,null,null,null,null,null,FALSE,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,FALSE
+220119,3_B_02,0,move_jump,null,3,null,1.5,2,2,null,null,2,null,null,null,null,null,null,null,null,null,null,FALSE,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,FALSE
+220120,3_B_03,0,move_jump,null,3,null,1.5,2,2,null,null,2,null,null,null,null,null,null,null,null,null,null,FALSE,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,FALSE
+220121,3_B_03,1,projectile_throw,null,null,3,null,2,2,null,null,null,null,null,null,1,0.8,0.4,2,0.8,7,1,FALSE,2,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,FALSE
+220122,3_B_04,0,move_jump,null,3,null,1.5,2,2,null,null,2,null,null,null,null,null,null,null,null,null,null,FALSE,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,FALSE
+220123,3_B_04,1,projectile_throw,null,null,3,null,2,2,null,null,null,null,null,null,1,0.8,0.4,2,0.8,7,1,FALSE,2,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,FALSE
+220124,3_B_05,1,projectile_follow,null,null,5,null,2,2.5,null,null,null,null,null,null,null,0.8,0.2,2,10,5,1,TRUE,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,FALSE
+220125,3_B_05,1,projectile_laser_dot,3,3,null,null,1.5,null,null,null,null,null,null,null,null,null,0.8,8,null,null,null,FALSE,null,null,null,null,null,null,null,null,null,null,0,5,10,0.2,null,null,null,null,null,null,null,null,FALSE
+220126,3_B_05,2,area_danger,5,8,null,null,2,null,null,null,null,null,null,null,null,null,0.5,8,null,null,null,FALSE,null,null,3,0.2,0,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,FALSE
+220127,3_B_06,1,projectile_follow,null,null,5,null,2,2.5,null,null,null,null,null,null,null,0.8,0.2,2,10,5,1,TRUE,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,FALSE
+220128,3_B_06,1,projectile_laser_dot,3,3,null,null,1.5,null,null,null,null,null,null,null,null,null,0.8,8,null,null,null,FALSE,null,null,null,null,null,null,null,null,null,null,0,5,10,0.2,null,null,null,null,null,null,null,null,FALSE
+220129,3_B_06,2,area_danger,5,8,null,null,2,null,null,null,null,null,null,null,null,null,0.5,8,null,null,null,FALSE,null,null,3,0.2,0,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,FALSE
+220130,3_B_07,1,projectile_follow,null,null,5,null,2,2.5,null,null,null,null,null,null,null,0.8,0.2,2,10,5,1,TRUE,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,FALSE
+220131,3_B_07,1,projectile_laser_dot,3,3,null,null,1.5,null,null,null,null,null,null,null,null,null,0.8,6,null,null,null,FALSE,null,null,null,null,null,null,null,null,null,null,0,5,10,0.2,null,null,null,null,null,null,null,null,FALSE
+220132,3_B_07,2,area_danger,5,8,null,null,2,null,null,null,null,null,null,null,null,null,0.5,8,null,null,null,FALSE,null,null,3,0.2,0,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,FALSE
+220133,3_B_08,1,projectile_follow,null,null,5,null,2,2.5,null,null,null,null,null,null,null,0.8,0.2,2,10,5,1,TRUE,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,FALSE
+220134,3_B_08,1,projectile_laser_dot,3,3,null,null,1.5,null,null,null,null,null,null,null,null,null,0.8,6,null,null,null,FALSE,null,null,null,null,null,null,null,null,null,null,0,5,10,0.2,null,null,null,null,null,null,null,null,FALSE
+220135,3_B_08,2,area_danger,5,8,null,null,2,null,null,null,null,null,null,null,null,null,0.5,8,null,null,null,FALSE,null,null,3,0.2,0,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,FALSE
+220136,3_B_08,4,trigger_dirty_spawn,20,3,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,FALSE,null,null,null,null,null,null,null,5,2,1,null,null,null,null,null,null,null,null,null,null,null,null,FALSE
+220137,3_B_09,1,projectile_follow,null,null,5,null,2,2.5,null,null,null,null,null,null,null,0.8,0.2,2,10,5,1,TRUE,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,FALSE
+220138,3_B_09,1,projectile_laser_dot,3,3,null,null,1.5,null,null,null,null,null,null,null,null,null,0.8,4,null,null,null,FALSE,null,null,null,null,null,null,null,null,null,null,0,5,10,0.2,null,null,null,null,null,null,null,null,FALSE
+220139,3_B_09,2,area_danger,5,8,null,null,2,null,null,null,null,null,null,null,null,null,0.5,8,null,null,null,FALSE,null,null,3,0.2,0,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,FALSE
+220140,3_B_09,4,trigger_dirty_spawn,20,3,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,FALSE,null,null,null,null,null,null,null,6,2,1,null,null,null,null,null,null,null,null,null,null,null,null,FALSE
+220141,3_B_10,1,projectile_follow,null,null,5,null,2,2.5,null,null,null,null,null,null,null,0.8,0.2,2,10,5,1,TRUE,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,FALSE
+220142,3_B_10,1,projectile_laser_dot,3,3,null,null,1.5,null,null,null,null,null,null,null,null,null,0.8,4,null,null,null,FALSE,null,null,null,null,null,null,null,null,null,null,0,5,10,0.2,null,null,null,null,null,null,null,null,FALSE
+220143,3_B_10,2,area_danger,5,8,null,null,2,null,null,null,null,null,null,null,null,null,0.5,8,null,null,null,FALSE,null,null,3,0.2,0,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,FALSE
+220144,3_B_10,4,trigger_dirty_spawn,20,3,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,FALSE,null,null,null,null,null,null,null,7,2,1,null,null,null,null,null,null,null,null,null,null,null,null,FALSE
+220145,4_B_01,1,projectile_reflect,null,null,3,null,2,2,null,null,null,null,null,null,0,0.8,0.2,5,0.5,2,2,FALSE,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,FALSE
+220146,4_B_02,1,projectile_reflect,null,null,3,null,2,2,null,null,null,null,null,null,0,0.8,0.2,5,0.5,2,2,FALSE,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,FALSE
+220147,4_B_03,0,move_blink,null,3,null,null,null,2.5,null,null,null,null,null,3,null,null,null,null,null,null,null,FALSE,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,FALSE
+220148,4_B_03,1,projectile_reflect,null,null,3,null,2,2,null,null,null,null,null,null,0,0.8,0.2,5,0.5,2,2,FALSE,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,FALSE
+220149,4_B_04,0,move_blink,null,3,null,null,null,2.5,null,null,null,null,null,3,null,null,null,null,null,null,null,FALSE,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,FALSE
+220150,4_B_04,1,projectile_reflect,null,null,3,null,2,2,null,null,null,null,null,null,0,0.8,0.2,5,0.5,2,2,FALSE,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,FALSE
+220151,4_B_05,0,move_blink,null,3,null,null,null,2.5,null,null,null,null,null,3,null,null,null,null,null,null,null,FALSE,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,FALSE
+220152,4_B_05,1,projectile_reflect,null,null,3,null,2,2,null,null,null,null,null,null,0,0.8,0.2,5,0.5,2,2,FALSE,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,FALSE
+220153,4_B_05,2,area_barrier,10,3,null,null,2,null,null,null,null,null,null,null,null,null,null,null,null,null,null,FALSE,null,null,null,null,null,null,null,null,null,null,null,null,null,null,0,3,1,1,0,1,1,1,TRUE
+220154,4_B_06,0,move_blink,null,3,null,null,null,2.5,null,null,null,null,null,3,null,null,null,null,null,null,null,FALSE,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,FALSE
+220155,4_B_06,1,projectile_reflect,null,null,3,null,2,2,null,null,null,null,null,null,0,0.8,0.2,5,0.5,2,2,FALSE,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,FALSE
+220156,4_B_06,2,area_barrier,10,3,null,null,2,null,null,null,null,null,null,null,null,null,null,null,null,null,null,FALSE,null,null,null,null,null,null,null,null,null,null,null,null,null,null,0,1,1,1,1,null,null,1,TRUE
+220157,4_B_07,0,move_blink,null,3,null,null,null,2.5,null,null,null,null,null,3,null,null,null,null,null,null,null,FALSE,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,FALSE
+220158,4_B_07,1,projectile_reflect,null,null,3,null,2,2,null,null,null,null,null,null,0,0.8,0.2,5,0.5,2,2,FALSE,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,FALSE
+220159,4_B_07,2,area_barrier,10,3,null,null,2,null,null,null,null,null,null,null,null,null,null,null,null,null,null,FALSE,null,null,null,null,null,null,null,null,null,null,null,null,null,null,0,1,1,1,1,null,null,1,TRUE
+220160,4_B_08,0,move_blink,null,3,null,null,null,2.5,null,null,null,null,null,3,null,null,null,null,null,null,null,FALSE,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,FALSE
+220161,4_B_08,1,projectile_reflect,null,null,3,null,2,2,null,null,null,null,null,null,0,0.8,0.2,5,0.5,2,2,FALSE,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,FALSE
+220162,4_B_08,1,projectile_laser_slow,3,3,null,null,1.5,null,null,null,null,null,null,null,null,null,0.8,8,null,null,null,FALSE,null,null,null,null,null,null,null,null,null,null,2,5,0.6,null,null,null,null,null,null,null,null,null,FALSE
+220163,4_B_08,2,area_barrier,10,3,null,null,2,null,null,null,null,null,null,null,null,null,null,null,null,null,null,FALSE,null,null,null,null,null,null,null,null,null,null,null,null,null,null,0,0,1,1,0,null,null,1,TRUE
+220164,4_B_09,0,move_blink,null,3,null,null,null,2.5,null,null,null,null,null,3,null,null,null,null,null,null,null,FALSE,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,FALSE
+220165,4_B_09,1,projectile_reflect,null,null,3,null,2,2,null,null,null,null,null,null,0,0.8,0.2,5,0.5,2,2,FALSE,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,FALSE
+220166,4_B_09,1,projectile_laser_slow,3,3,null,null,1.5,null,null,null,null,null,null,null,null,null,0.8,8,null,null,null,FALSE,null,null,null,null,null,null,null,null,null,null,2,5,0.6,null,null,null,null,null,null,null,null,null,FALSE
+220167,4_B_09,2,area_barrier,10,3,null,null,2,null,null,null,null,null,null,null,null,null,null,null,null,null,null,FALSE,null,null,null,null,null,null,null,null,null,null,null,null,null,null,0,0,1,1,0,null,null,1,TRUE
+220168,4_B_10,0,move_blink,null,3,null,null,null,2.5,null,null,null,null,null,3,null,null,null,null,null,null,null,FALSE,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,FALSE
+220169,4_B_10,1,projectile_reflect,null,null,3,null,2,2,null,null,null,null,null,null,0,0.8,0.2,5,0.5,2,2,FALSE,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,FALSE
+220170,4_B_10,1,projectile_laser_slow,3,3,null,null,1.5,null,null,null,null,null,null,null,null,null,0.8,6,null,null,null,FALSE,null,null,null,null,null,null,null,null,null,null,2,5,0.6,null,null,null,null,null,null,null,null,null,FALSE
+220171,4_B_10,2,area_barrier,10,3,null,null,2,null,null,null,null,null,null,null,null,null,null,null,null,null,null,FALSE,null,null,null,null,null,null,null,null,null,null,null,null,null,null,0,0,1,1,0,null,null,1,TRUE
+220172,5_B_01,1,projectile_pierce,null,null,3,null,2,2,null,null,null,null,null,null,0,1.2,0.2,5,0.5,3,1,FALSE,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,FALSE
+220173,5_B_02,1,projectile_pierce,null,null,3,null,2,2,null,null,null,null,null,null,0,1.2,0.2,5,0.5,3,1,FALSE,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,FALSE
+220174,5_B_03,1,projectile_pierce,null,null,3,null,2,2,null,null,null,null,null,null,0,1.2,0.2,5,0.5,3,1,FALSE,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,FALSE
+220175,5_B_03,2,area_danger,5,8,null,null,2,null,null,null,null,null,null,null,null,null,0.5,8,null,null,null,FALSE,null,null,3,0.2,0,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,FALSE
+220176,5_B_04,1,projectile_pierce,null,null,3,null,2,2,null,null,null,null,null,null,0,1.2,0.2,5,0.5,3,1,FALSE,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,FALSE
+220177,5_B_04,2,area_danger,5,8,null,null,2,null,null,null,null,null,null,null,null,null,0.5,8,null,null,null,FALSE,null,null,3,0.2,0,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,FALSE
+220178,5_B_05,1,projectile_pierce,null,null,3,null,2,2,null,null,null,null,null,null,0,1.2,0.2,5,0.5,3,1,FALSE,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,FALSE
+220179,5_B_05,1,projectile_turn,7,null,3,null,2,null,null,null,null,null,null,null,2,1,0.3,6,1,null,null,FALSE,null,1,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,FALSE
+220180,5_B_05,2,area_danger,5,8,null,null,2,null,null,null,null,null,null,null,null,null,0.5,8,null,null,null,FALSE,null,null,3,0.2,0,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,FALSE
+220181,5_B_06,1,projectile_pierce,null,null,3,null,2,2,null,null,null,null,null,null,0,1.2,0.2,5,0.5,3,1,FALSE,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,FALSE
+220182,5_B_06,1,projectile_turn,7,null,3,null,2,null,null,null,null,null,null,null,2,1,0.3,6,1,null,null,FALSE,null,1,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,FALSE
+220183,5_B_06,2,area_danger,5,8,null,null,2,null,null,null,null,null,null,null,null,null,0.5,8,null,null,null,FALSE,null,null,3,0.2,0,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,FALSE
+220184,5_B_07,1,projectile_pierce,null,null,3,null,2,2,null,null,null,null,null,null,0,1.2,0.2,5,0.5,3,1,FALSE,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,FALSE
+220185,5_B_07,1,projectile_turn,7,null,3,null,2,null,null,null,null,null,null,null,2,1,0.3,6,1,null,null,FALSE,null,1,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,FALSE
+220186,5_B_07,2,area_danger,5,8,null,null,2,null,null,null,null,null,null,null,null,null,0.5,8,null,null,null,FALSE,null,null,3,0.2,0,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,FALSE
+220187,5_B_08,1,projectile_pierce,null,null,3,null,2,2,null,null,null,null,null,null,0,1.2,0.2,5,0.5,3,1,FALSE,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,FALSE
+220188,5_B_08,1,projectile_turn,7,null,3,null,2,null,null,null,null,null,null,null,2,1,0.3,6,1,null,null,FALSE,null,1,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,FALSE
+220189,5_B_08,1,projectile_laser_stun,3,3,null,null,2,null,null,null,null,null,null,null,null,null,0.8,6,null,null,null,FALSE,null,null,null,null,null,null,null,null,null,null,1,5,null,null,null,null,null,null,null,null,null,null,FALSE
+220190,5_B_08,2,area_danger,5,8,null,null,2,null,null,null,null,null,null,null,null,null,0.5,8,null,null,null,FALSE,null,null,3,0.2,2,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,FALSE
+220191,5_B_09,1,projectile_pierce,null,null,3,null,2,2,null,null,null,null,null,null,0,1.2,0.2,5,0.5,3,1,FALSE,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,FALSE
+220192,5_B_09,1,projectile_turn,7,null,3,null,2,null,null,null,null,null,null,null,2,1,0.3,6,1,null,null,FALSE,null,1,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,FALSE
+220193,5_B_09,1,projectile_laser_stun,3,3,null,null,2,null,null,null,null,null,null,null,null,null,0.8,4,null,null,null,FALSE,null,null,null,null,null,null,null,null,null,null,1,5,null,null,null,null,null,null,null,null,null,null,FALSE
+220194,5_B_09,2,area_danger,5,8,null,null,2,null,null,null,null,null,null,null,null,null,0.5,8,null,null,null,FALSE,null,null,3,0.2,2,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,FALSE
+220195,5_B_10,1,projectile_pierce,null,null,3,null,2,2,null,null,null,null,null,null,0,1.2,0.2,5,0.5,3,1,FALSE,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,FALSE
+220196,5_B_10,1,projectile_turn,7,null,3,null,2,null,null,null,null,null,null,null,2,1,0.3,6,1,null,null,FALSE,null,1,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,FALSE
+220197,5_B_10,1,projectile_laser_stun,3,3,null,null,2,null,null,null,null,null,null,null,null,null,0.8,4,null,null,null,FALSE,null,null,null,null,null,null,null,null,null,null,1,5,null,null,null,null,null,null,null,null,null,null,FALSE
+220198,5_B_10,2,area_danger,5,8,null,null,2,null,null,null,null,null,null,null,null,null,0.5,8,null,null,null,FALSE,null,null,3,0.2,2,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,FALSE
+220199,6_B_01,3,summon_basic,null,null,null,null,null,1.5,null,null,null,null,null,null,null,null,null,null,null,null,null,FALSE,null,null,null,null,null,null,200001,6,3,1,null,null,null,null,null,null,null,null,null,null,null,null,FALSE
+220200,6_B_02,3,summon_basic,null,null,null,null,null,1.5,null,null,null,null,null,null,null,null,null,null,null,null,null,FALSE,null,null,null,null,null,null,200001,6,3,1,null,null,null,null,null,null,null,null,null,null,null,null,FALSE
+220201,6_B_03,1,projectile_basic,null,null,2,null,1.2,1.5,null,null,null,null,null,null,0,1.5,0.1,3,0.2,2,0,FALSE,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,FALSE
+220202,6_B_03,3,summon_basic,null,null,null,null,null,1.5,null,null,null,null,null,null,null,null,null,null,null,null,null,FALSE,null,null,null,null,null,null,200001,6,3,1,null,null,null,null,null,null,null,null,null,null,null,null,FALSE
+220203,6_B_04,1,projectile_basic,null,null,2,null,1.2,1.5,null,null,null,null,null,null,0,1.5,0.1,4,0.2,2,0,FALSE,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,FALSE
+220204,6_B_04,3,summon_basic,null,null,null,null,null,1.5,null,null,null,null,null,null,null,null,null,null,null,null,null,FALSE,null,null,null,null,null,null,200001,6,3,1,null,null,null,null,null,null,null,null,null,null,null,null,FALSE
+220205,6_B_04,3,summon_shield,20,3,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,FALSE,null,null,null,null,null,null,200007,20,3,0,null,null,null,null,null,null,null,null,null,null,null,null,FALSE
+220206,6_B_05,1,projectile_basic,null,null,2,null,1.2,1.5,null,null,null,null,null,null,0,1.5,0.1,5,0.2,2,0,FALSE,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,FALSE
+220207,6_B_05,3,summon_basic,null,null,null,null,null,1.5,null,null,null,null,null,null,null,null,null,null,null,null,null,FALSE,null,null,null,null,null,null,200001,6,3,1,null,null,null,null,null,null,null,null,null,null,null,null,FALSE
+220208,6_B_05,3,summon_shield,20,3,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,FALSE,null,null,null,null,null,null,200007,20,3,0,null,null,null,null,null,null,null,null,null,null,null,null,FALSE
+220209,6_B_05,2,area_safe,5,8,null,null,2,null,null,null,null,null,null,null,null,null,null,null,null,null,null,FALSE,null,null,3,0.2,2,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,FALSE
+220210,6_B_06,1,projectile_basic,null,null,2,null,1.2,1.5,null,null,null,null,null,null,0,1.5,0.1,6,0.2,2,0,FALSE,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,FALSE
+220211,6_B_06,3,summon_basic,null,null,null,null,null,1.5,null,null,null,null,null,null,null,null,null,null,null,null,null,FALSE,null,null,null,null,null,null,200001,6,3,0,null,null,null,null,null,null,null,null,null,null,null,null,FALSE
+220212,6_B_06,3,summon_shield,20,3,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,FALSE,null,null,null,null,null,null,200007,20,3,0,null,null,null,null,null,null,null,null,null,null,null,null,FALSE
+220213,6_B_06,2,area_safe,5,8,null,null,2,null,null,null,null,null,null,null,null,null,null,null,null,null,null,FALSE,null,null,3,0.2,2,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,FALSE
+220214,6_B_07,1,projectile_basic,null,null,2,null,1.2,1.5,null,null,null,null,null,null,0,1.5,0.1,7,0.2,2,0,FALSE,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,FALSE
+220215,6_B_07,3,summon_basic,null,null,null,null,null,1.5,null,null,null,null,null,null,null,null,null,null,null,null,null,FALSE,null,null,null,null,null,null,200001,6,3,0,null,null,null,null,null,null,null,null,null,null,null,null,FALSE
+220216,6_B_07,3,summon_shield,20,3,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,FALSE,null,null,null,null,null,null,200007,20,3,1,null,null,null,null,null,null,null,null,null,null,null,null,FALSE
+220217,6_B_07,2,area_safe,5,8,null,null,2,null,null,null,null,null,null,null,null,null,null,null,null,null,null,FALSE,null,null,3,0.2,2,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,FALSE
+220218,6_B_08,1,projectile_basic,null,null,2,null,1.2,1.5,null,null,null,null,null,null,0,1.5,0.1,8,0.2,2,0,FALSE,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,FALSE
+220219,6_B_08,3,summon_basic,null,null,null,null,null,1.5,null,null,null,null,null,null,null,null,null,null,null,null,null,FALSE,null,null,null,null,null,null,200001,6,3,0,null,null,null,null,null,null,null,null,null,null,null,null,FALSE
+220220,6_B_08,3,summon_shield,20,3,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,FALSE,null,null,null,null,null,null,200007,20,3,1,null,null,null,null,null,null,null,null,null,null,null,null,FALSE
+220221,6_B_08,2,area_safe,5,8,null,null,2,null,null,null,null,null,null,null,null,null,null,null,null,null,null,FALSE,null,null,3,0.2,2,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,FALSE
+220222,6_B_08,4,trigger_dirty_spawn,20,3,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,FALSE,null,null,null,null,null,null,null,8,2,1,null,null,null,null,null,null,null,null,null,null,null,null,FALSE
+220223,6_B_09,1,projectile_basic,null,null,2,null,1.2,1.5,null,null,null,null,null,null,0,1.5,0.1,9,0.2,2,0,FALSE,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,FALSE
+220224,6_B_09,3,summon_basic,null,null,null,null,null,1.5,null,null,null,null,null,null,null,null,null,null,null,null,null,FALSE,null,null,null,null,null,null,200001,6,3,0,null,null,null,null,null,null,null,null,null,null,null,null,FALSE
+220225,6_B_09,3,summon_shield,20,3,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,FALSE,null,null,null,null,null,null,200007,20,3,1,null,null,null,null,null,null,null,null,null,null,null,null,FALSE
+220226,6_B_09,2,area_safe,5,8,null,null,2,null,null,null,null,null,null,null,null,null,null,null,null,null,null,FALSE,null,null,3,0.2,2,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,FALSE
+220227,6_B_09,4,trigger_dirty_spawn,20,3,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,FALSE,null,null,null,null,null,null,null,9,2,1,null,null,null,null,null,null,null,null,null,null,null,null,FALSE
+220228,6_B_10,1,projectile_basic,null,null,2,null,1.2,1.5,null,null,null,null,null,null,0,1.5,0.1,10,0.2,2,0,FALSE,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,FALSE
+220229,6_B_10,3,summon_basic,null,null,null,null,null,1.5,null,null,null,null,null,null,null,null,null,null,null,null,null,FALSE,null,null,null,null,null,null,200001,6,3,0,null,null,null,null,null,null,null,null,null,null,null,null,FALSE
+220230,6_B_10,3,summon_shield,20,3,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,FALSE,null,null,null,null,null,null,200007,20,3,1,null,null,null,null,null,null,null,null,null,null,null,null,FALSE
+220231,6_B_10,2,area_safe,5,8,null,null,2,null,null,null,null,null,null,null,null,null,null,null,null,null,null,FALSE,null,null,3,0.2,2,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,FALSE
+220232,6_B_10,4,trigger_dirty_spawn,20,3,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,FALSE,null,null,null,null,null,null,null,10,2,1,null,null,null,null,null,null,null,null,null,null,null,null,FALSE
+220233,7_B_01,0,move_jump,null,3,null,1.5,2,2,null,null,2,null,null,null,null,null,null,null,null,null,null,FALSE,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,FALSE
+220234,7_B_02,0,move_jump,null,3,null,1.5,2,2,null,null,2,null,null,null,null,null,null,null,null,null,null,FALSE,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,FALSE
+220235,7_B_03,0,move_jump,null,3,null,1.5,2,2,null,null,2,null,null,null,null,null,null,null,null,null,null,FALSE,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,FALSE
+220236,7_B_03,1,projectile_throw,null,null,3,null,2,2,null,null,null,null,null,null,1,0.8,0.4,2,0.8,7,1,FALSE,2,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,FALSE
+220237,7_B_04,0,move_jump,null,3,null,1.5,2,2,null,null,2,null,null,null,null,null,null,null,null,null,null,FALSE,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,FALSE
+220238,7_B_04,1,projectile_throw,null,null,3,null,2,2,null,null,null,null,null,null,1,0.8,0.4,2,0.8,7,1,FALSE,2,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,FALSE
+220239,7_B_04,2,area_danger,5,8,null,null,2,null,null,null,null,null,null,null,null,null,0.5,8,null,null,null,FALSE,null,null,3,0.2,2,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,FALSE
+220240,7_B_05,0,move_jump,null,3,null,1.5,2,2,null,null,2,null,null,null,null,null,null,null,null,null,null,FALSE,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,FALSE
+220241,7_B_05,1,projectile_throw,null,null,3,null,2,2,null,null,null,null,null,null,1,0.8,0.4,2,0.8,7,1,FALSE,2,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,FALSE
+220242,7_B_05,2,area_danger,5,8,null,null,2,null,null,null,null,null,null,null,null,null,0.5,8,null,null,null,FALSE,null,null,3,0.2,2,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,FALSE
+220243,7_B_06,0,move_jump,null,3,null,1.5,2,2,null,null,2,null,null,null,null,null,null,null,null,null,null,FALSE,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,FALSE
+220244,7_B_06,1,projectile_throw,null,null,3,null,2,2,null,null,null,null,null,null,1,0.8,0.4,2,0.8,7,1,FALSE,2,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,FALSE
+220245,7_B_06,2,area_danger,5,8,null,null,2,null,null,null,null,null,null,null,null,null,0.5,8,null,null,null,FALSE,null,null,3,0.2,2,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,FALSE
+220246,7_B_06,2,area_barrier,10,3,null,null,2,null,null,null,null,null,null,null,null,null,null,null,null,null,null,FALSE,null,null,null,null,null,null,null,null,null,null,null,null,null,null,1,2,1,null,1,null,null,1,TRUE
+220247,7_B_07,0,move_jump,null,3,null,1.5,2,2,null,null,2,null,null,null,null,null,null,null,null,null,null,FALSE,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,FALSE
+220248,7_B_07,1,projectile_throw,null,null,3,null,2,2,null,null,null,null,null,null,1,0.8,0.4,2,0.8,7,1,FALSE,2,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,FALSE
+220249,7_B_07,2,area_danger,5,8,null,null,2,null,null,null,null,null,null,null,null,null,0.5,8,null,null,null,FALSE,null,null,3,0.2,2,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,FALSE
+220250,7_B_07,2,area_barrier,10,3,null,null,2,null,null,null,null,null,null,null,null,null,null,null,null,null,null,FALSE,null,null,null,null,null,null,null,null,null,null,null,null,null,null,1,2,1,null,1,null,null,1,TRUE
+220251,7_B_08,0,move_jump,null,3,null,1.5,2,2,null,null,2,null,null,null,null,null,null,null,null,null,null,FALSE,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,FALSE
+220252,7_B_08,1,projectile_throw,null,null,3,null,2,2,null,null,null,null,null,null,1,0.8,0.4,2,0.8,7,1,FALSE,2,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,FALSE
+220253,7_B_08,2,area_danger,5,8,null,null,2,null,null,null,null,null,null,null,null,null,0.5,8,null,null,null,FALSE,null,null,3,0.2,2,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,FALSE
+220254,7_B_08,2,area_barrier,10,3,null,null,2,null,null,null,null,null,null,null,null,null,null,null,null,null,null,FALSE,null,null,null,null,null,null,null,null,null,null,null,null,null,null,1,2,1,null,1,null,null,1,TRUE
+220255,7_B_08,4,trigger_enrage,null,5,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,FALSE,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,FALSE
+220256,7_B_09,0,move_jump,null,3,null,1.5,2,2,null,null,2,null,null,null,null,null,null,null,null,null,null,FALSE,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,FALSE
+220257,7_B_09,1,projectile_throw,null,null,3,null,2,2,null,null,null,null,null,null,1,0.8,0.4,2,0.8,7,1,FALSE,2,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,FALSE
+220258,7_B_09,2,area_danger,5,8,null,null,2,null,null,null,null,null,null,null,null,null,0.5,8,null,null,null,FALSE,null,null,3,0.2,2,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,FALSE
+220259,7_B_09,2,area_barrier,10,3,null,null,2,null,null,null,null,null,null,null,null,null,null,null,null,null,null,FALSE,null,null,null,null,null,null,null,null,null,null,null,null,null,null,1,2,1,null,1,null,null,1,TRUE
+220260,7_B_09,4,trigger_enrage,null,5,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,FALSE,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,FALSE
+220261,7_B_10,0,move_jump,null,3,null,1.5,2,2,null,null,2,null,null,null,null,null,null,null,null,null,null,FALSE,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,FALSE
+220262,7_B_10,1,projectile_throw,null,null,3,null,2,2,null,null,null,null,null,null,1,0.8,0.4,2,0.8,7,1,FALSE,2,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,FALSE
+220263,7_B_10,2,area_danger,5,8,null,null,2,null,null,null,null,null,null,null,null,null,0.5,8,null,null,null,FALSE,null,null,3,0.2,2,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,FALSE
+220264,7_B_10,2,area_barrier,10,3,null,null,2,null,null,null,null,null,null,null,null,null,null,null,null,null,null,FALSE,null,null,null,null,null,null,null,null,null,null,null,null,null,null,1,2,1,null,1,null,null,1,TRUE
+220265,7_B_10,4,trigger_enrage,null,5,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,FALSE,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,FALSE

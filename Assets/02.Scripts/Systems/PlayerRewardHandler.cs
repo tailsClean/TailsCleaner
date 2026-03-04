@@ -6,7 +6,14 @@ public class PlayerRewardHandler : MonoBehaviour
     public RewardData myReward;
 
 
+<<<<<<< Updated upstream
     
+=======
+    void Update()
+    {
+        
+    }
+>>>>>>> Stashed changes
 
     private void Awake()
     {
