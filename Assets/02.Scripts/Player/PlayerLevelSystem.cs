@@ -1,15 +1,15 @@
 ﻿using UnityEngine;
 
-
 public class PlayerLevelSystem
 {
-    public int InGameCurrentExp { get; private set; }
-    public int InGameMaxExp { get; private set; }
+    public float InGameCurrentExp { get; private set; }
+    public float InGameMaxExp { get; private set; }
     public int InGameLevel { get; private set; }
 
-    public int OutGameCurrentExp { get; private set; }
-    public int OutGameMaxExp { get; private set; }
+    public float OutGameCurrentExp { get; private set; }
+    public float OutGameMaxExp { get; private set; }
     public int OutGameLevel { get; private set; }
+
 
     public PlayerLevelSystem(PlayerBase player)
     {
@@ -19,8 +19,9 @@ public class PlayerLevelSystem
         OutGameLevel = 1;
     }
 
+
     // 외부 게임모드에 따른 경험치 획득 메서드
-    public bool GainExp(GameMode gameMode, int gainExp)
+    public bool GainExp(GameMode gameMode, float gainExp)
     {
         bool isLevelUp = false;
 
@@ -62,18 +63,6 @@ public class PlayerLevelSystem
                 OutGameLevel++;
                 break;
         }
-    }
-
-
-
-    // 주위 아이템(경험치) 끌어모으는 메서드
-    public void ItemPickup(Transform playerTr, IPickable item)
-    {
-        Vector2 itemPos = item.MyTransform.position;
-        Vector2 myPos = playerTr.position;
-
-        // 마지막 인자갑은 끌어당기는 속도
-        item.MyTransform.position = Vector2.MoveTowards(itemPos, myPos, 1f * Time.deltaTime);
     }
 
 

@@ -3,7 +3,7 @@
 public class MoveState : IPlayerState
 {
     private PlayerBase _player;
-    private int _moveSpeed;
+    private float _moveSpeed;
     private Vector2 _moveDir;
     
 
