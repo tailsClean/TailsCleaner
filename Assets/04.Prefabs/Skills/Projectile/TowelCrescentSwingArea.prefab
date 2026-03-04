@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 6327752412020813156}
   - component: {fileID: 1806253664848169780}
   - component: {fileID: 7468476787712230961}
+  - component: {fileID: -3936068271176665665}
   m_Layer: 0
   m_Name: TowelCrescentSwingArea
   m_TagString: Untagged
@@ -73,7 +74,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 02b4fb871ded5ab44bbf1d55ae6af29e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CrescentSwingArea
-  _swingDistance: 1
+  _swingDistance: 1.5
+--- !u!114 &-3936068271176665665
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1457600225023999490}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cba0c930577f8e240a095f334c21bc3e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PoolObject
+  poolTag: 
+  autoReleaseTime: 2
 --- !u!1 &6109869476398693914
 GameObject:
   m_ObjectHideFlags: 0

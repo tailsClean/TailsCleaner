@@ -12,6 +12,8 @@ public abstract class ActiveSkill : MonoBehaviour
     public int CurrentLevel { get; private set; } = 0;      // 현재 레벨
     public int CurrentSubTag { get; private set; } = 0;     // 적용 중인 서브 태그
 
+    protected string _poolTag;          // 풀 태그 (자식 스킬에서 투사체 생성 시 사용)
+
     protected GameObject _skillPrefab;  // 스킬 장판,투사체
 
     // 스킬 타입
@@ -58,6 +60,9 @@ public abstract class ActiveSkill : MonoBehaviour
     [SerializeField] protected float _angle = 15f;              // 범위 각도
     [SerializeField] protected float _distance = 50f;           // 타겟 탐색 거리
 
+
+
+
     private void Awake()
     {
         _fireDelay = new WaitForSeconds(_fireInterval);
@@ -70,17 +75,20 @@ public abstract class ActiveSkill : MonoBehaviour
         // 메인 태그
         MainTag = skillData.MainTag;
 
+        // 풀 태그 string 캐싱
+        _poolTag = MainTag.ToString();
+
         // 서브 태그
         AddSubTag(upgradeData);
 
         // 타입 설정
         _attackType = skillData.AttackType;
         _targetingType = skillData.TargetingType;
-        Debug.Log($"[ActiveSkill] {skillData.SkillName} 타입 설정 완료. ({_attackType}, {_targetingType})");
+        //Debug.Log($"[ActiveSkill] {skillData.SkillName} 타입 설정 완료. ({_attackType}, {_targetingType})");
 
         // 스킬의 사용 프리팹
         _skillPrefab = prefab;
-        Debug.Log($"[ActiveSkill] {skillData.SkillName} 의 프리팹 {_skillPrefab.name} 설정 완료.");
+        //Debug.Log($"[ActiveSkill] {skillData.SkillName} 의 프리팹 {_skillPrefab.name} 설정 완료.");
 
         // 레벨 1 시작
         CurrentLevel = 1;
@@ -112,7 +120,7 @@ public abstract class ActiveSkill : MonoBehaviour
             Vector2 attackDir = SkillManager.Instance.Player.AttackDir;
 
             // 공격 방향이 존재하면
-            if (attackDir != Vector2.zero)
+            if (attackDir.sqrMagnitude > 0f)
             {
                 // 코루틴이 안 돌고 있다면 켜기
                 if (_searchCoroutine == null)
@@ -150,7 +158,7 @@ public abstract class ActiveSkill : MonoBehaviour
             Vector2 attackDir = SkillManager.Instance.Player.AttackDir;
 
             // 방향 있을 때 탐색
-            if (attackDir != Vector2.zero)
+            if (attackDir.sqrMagnitude > 0f)
                 _currentTarget = SkillManager.Instance.TargetingSystem.GetTarget(attackDir, _distance, _angle);
             else
                 _currentTarget = null;
@@ -177,13 +185,13 @@ public abstract class ActiveSkill : MonoBehaviour
                 return true;
 
             case TARGETING_TYPE.NonTarget:                  // 비대상형    공격 방향 있어야 발동
-                return player.AttackDir != Vector2.zero;
+                return player.AttackDir.sqrMagnitude > 0f;
 
             case TARGETING_TYPE.Closest:                    // 조준형      공격방향, 타겟 트랜스폼 둘 다 있어야 발동
-                return player.AttackDir != Vector2.zero && _currentTarget != null;
+                return player.AttackDir.sqrMagnitude > 0f && _currentTarget != null;
 
             case TARGETING_TYPE.Directional:                // 이동방향형  이동 방향 있어야 발동
-                return player.MoveDir != Vector2.zero;
+                return player.MoveDir.sqrMagnitude > 0f;
 
             default:
                 return true;
@@ -417,6 +425,9 @@ public abstract class ActiveSkill<TSkillObject, TModifierData> : ActiveSkill
     protected TSkillObject _skillObjectPrefab;
     public TModifierData _modifierData = new TModifierData();
 
+    // 풀 매니저의 GameObject -> 컴포넌트로 캐시 (GetComponent 줄이기)
+    private Dictionary<GameObject, Component> _component = new();
+
     // 프리팹 캐싱
     public override void Init(ActiveSkillData skillData, ActiveUpgradeData upgradeData, GameObject prefab)
     {
@@ -447,5 +458,43 @@ public abstract class ActiveSkill<TSkillObject, TModifierData> : ActiveSkill
                   $" - 업그레이드 : {upgradeData.Name} (Active_Skill_ID : {upgradeData.Id})\n" +
                   $" - 업그레이드 Lv : {GetUpgradeLevel(upgradeData.Id)} / {upgradeData.MaxLevel}\n" +
                   $" - 스킬 전체 Lv : {CurrentLevel} / {MAX_SKILL_LEVEL}");
+    }
+
+
+    // 메인 프리팹 풀에서 꺼내기
+    protected TSkillObject SpawnFromPool(string tag, Vector3 pos, Quaternion rot)
+    {
+        return SpawnFromPool<TSkillObject>(tag, pos, rot);
+    }
+
+    // 메인, 서브 프리팹 풀에서 꺼내기
+    protected T SpawnFromPool<T>(string tag, Vector3 pos, Quaternion rot) where T : Component
+    {
+        // 풀 매니저 체크
+        if (ObjectPoolManager.Instance == null)
+        {
+            Debug.LogWarning("[ActiveSkill] ObjectPoolManager 없음");
+            return null;
+        }
+
+        // 풀 매니저에서 tag의 프리팹 가져오기
+        GameObject obj = ObjectPoolManager.Instance.Get(tag, pos, rot);
+
+        // 프리팹 null
+        if (obj == null)
+        {
+            Debug.LogWarning($"[ActiveSkill] 풀 미등록 태그: {tag}");
+            return null;
+        }
+
+        // 캐시에 있으면 바로 반환
+        if (_component.TryGetValue(obj, out Component cached) && cached is T result)
+            return result;
+
+        // 없으면 GetComponent 후 캐싱
+        T comp = obj.GetComponent<T>();
+        _component[obj] = comp;
+
+        return comp;
     }
 }

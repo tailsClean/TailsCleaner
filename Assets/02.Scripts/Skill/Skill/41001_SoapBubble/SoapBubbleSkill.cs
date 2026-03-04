@@ -6,22 +6,11 @@ public class SoapBubbleSkill : ActiveSkill<SoapBubbleArea, SoapBubbleModifierDat
 
     protected override void OnActive(int index, int totalCount)
     {
-        // 장판 플레이어 위치에 생성 (나중에 풀링)
-        SoapBubbleArea area = Instantiate(_skillObjectPrefab, transform.position, Quaternion.identity);
+        // 장판 플레이어 위치에 생성
+        //SoapBubbleArea area = Instantiate(_skillObjectPrefab, transform.position, Quaternion.identity);
+        SoapBubbleArea area = SpawnFromPool<SoapBubbleArea>(_poolTag, transform.position, Quaternion.identity);
 
-        // 일단 테스트를 위해 그냥 생성
-        area.Init(this, _modifierData);
-
-
-        // 추적 업그레이드
-        if (_modifierData.Tracking == true)
-        {
-            // 공격 방향에서 가장 가까운 적 트랜스폼 계속 추적
-            //area.Init(this, _modifierData, target.transform);
-        }
-        else
-        {
-            // 그냥 정적 생성 
-        }
+        // 초기화
+        if(area != null) area.Init(this, _modifierData);
     }
 }

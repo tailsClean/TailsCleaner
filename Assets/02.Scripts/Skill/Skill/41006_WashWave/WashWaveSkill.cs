@@ -84,10 +84,11 @@ public class WashWaveSkill : ActiveSkill<WashWaveProjectile, WashWaveModifierDat
         float angle = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;
 
         // 투사체 생성
-        WashWaveProjectile washWave = Instantiate(_skillObjectPrefab, spawnPos, Quaternion.Euler(0f, 0f, angle));
+        //WashWaveProjectile washWave = Instantiate(_skillObjectPrefab, spawnPos, Quaternion.Euler(0f, 0f, angle));
+        WashWaveProjectile washWave = SpawnFromPool<WashWaveProjectile>(_poolTag, spawnPos, Quaternion.Euler(0f, 0f, angle));
 
         // 투사체 초기화
-        washWave.Init(this, _modifierData, dir);
+        if(washWave != null) washWave.Init(this, _modifierData, dir);
     }
 
     // 차오르는 체력 처리

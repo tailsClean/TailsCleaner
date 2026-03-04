@@ -10,11 +10,11 @@ public class SunDryingSkill : ActiveSkill<SunDryingArea, SunDryingModifierData>
 
     protected override void OnActive(int index, int totalCount)
     {
-        // 생성
-        SunDryingArea area = Instantiate(_skillObjectPrefab, transform.position, Quaternion.identity);
+        // 일광건조 장판 생성
+        SunDryingArea area = SpawnFromPool<SunDryingArea>(_poolTag, transform.position, Quaternion.identity);
 
         // 초기화
-        area.Init(this, _modifierData);
+        if(area != null) area.Init(this, _modifierData);
 
         // 활성화 일광건조 수 증가
         _activeAreaCount++;

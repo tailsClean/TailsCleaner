@@ -5,7 +5,6 @@ public class WaterBombVortexArea : MonoBehaviour
 {
     private float _pullInterval;    // 당기기 주기
     private float _lastPullTime;    // 최근 당기기 시간
-    private float _duration;        // 지속 시간
     private int _remainPullCount;   // 남은 당기기 횟수
 
     private bool _bulletClear;      // 폭발은 예술이다 상태
@@ -18,6 +17,13 @@ public class WaterBombVortexArea : MonoBehaviour
 
     // 범위 내 적 투사체
     private HashSet<MonsterProjectile> _bulletsInArea = new();
+
+    private PoolObject _poolObject;
+
+    private void Awake()
+    {
+        _poolObject = GetComponent<PoolObject>();
+    }
 
 
     public void Init(float pullInterval, int pullCount, float size, List<PassiveModifier> passives, bool bulletClear)
@@ -39,6 +45,7 @@ public class WaterBombVortexArea : MonoBehaviour
         // 남은 횟수만큼 끌어당기기
         if (_remainPullCount > 0 && Time.time >= _lastPullTime + _pullInterval)
         {
+            //Debug.Log($"남은 소용돌이 틱 수 : {_remainPullCount}");
             // 끌어당기고
             ProcessPull();
             // 횟수 차감
@@ -50,12 +57,17 @@ public class WaterBombVortexArea : MonoBehaviour
         // 남은 횟수 없으면 비활성화
         if (_remainPullCount <= 0)
         {
+            //Debug.Log("소용돌이 종료");
             // 만료 상태 전환
             _expired = true;
             // 해시셋 정리
             _monstersInArea.Clear();
             _bulletsInArea.Clear();
-            Destroy(gameObject);    // 나중에 풀반환
+
+            // 풀 반환 실패 시 파괴
+            if (_poolObject != null) _poolObject.ReturnToPool();
+            else Destroy(gameObject);
+
             return;
         }
     }
