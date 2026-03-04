@@ -4,6 +4,8 @@ using static SpinningToySkill;
 
 public class SpinningToyModifierData
 {
+    public float SizeMultiplier = 0f;
+
     public bool BurstOnExpire = false;
     public WaitForSeconds BurstDelay;
 
@@ -44,9 +46,12 @@ public class SpinningToyDuckModifier : ActiveModifier<SpinningToySkill>
     [SerializeField] private int _duck_B_Count = 1;
     [Header("작은 오리 수")]
     [SerializeField] private int _duck_S_Count = 2;
+    [Header("작은 오리 크기 배율")]
+    [SerializeField] private float _sizeMultiplier = 0.5f;
 
     public override void ApplyModifier(SpinningToySkill skill, ActiveUpgradeData upgradeData)
     {
+        skill._modifierData.SizeMultiplier = _sizeMultiplier;
         skill._modifierData.AddedToys.Add((TOY_TYPE.Duck_B, _duck_B_Count));    // 큰오리
         skill._modifierData.AddedToys.Add((TOY_TYPE.Duck_S, _duck_S_Count));    // 작은오리
     }

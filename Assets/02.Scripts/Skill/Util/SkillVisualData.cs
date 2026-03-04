@@ -30,17 +30,14 @@ public class VisualAction
     [Header("페이드용 커브")]
     public AnimationCurve curve;
 
-    [Header("풀 태그")]
-    public string poolTag;
+    [Header("풀 오브젝트")]
+    public GameObject prefab;
     
     [Header("무한 반복")]
     public bool loop = false;
 
     [Header("초당 프레임(속도)")]
     public float fps = 5f;
-
-    [Header("재생 스프라이트 반대로")]
-    public bool reversePlay = false;
 }
 
 

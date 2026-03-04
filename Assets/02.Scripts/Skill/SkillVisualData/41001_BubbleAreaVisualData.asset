@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: b2bff64b6ddf4bc499f7986dc4c37b5a, type: 3}
-  m_Name: BubbleAreaVisualData
+  m_Name: 41001_BubbleAreaVisualData
   m_EditorClassIdentifier: Assembly-CSharp::SkillVisualData
   onActivate:
   - type: 5
@@ -40,14 +40,13 @@ MonoBehaviour:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-    poolTag: 
+    prefab: {fileID: 0}
     loop: 0
     fps: 10
     reversePlay: 0
-  onDuration:
   - type: 0
     sprites:
-    - {fileID: -7914525406721537764, guid: 12c767652cf249646b0bdd2eb83c271d, type: 3}
+    - {fileID: 21300000, guid: 12c767652cf249646b0bdd2eb83c271d, type: 3}
     duration: 0.2
     curve:
       serializedVersion: 2
@@ -55,14 +54,15 @@ MonoBehaviour:
       m_PreInfinity: 0
       m_PostInfinity: 0
       m_RotationOrder: 0
-    poolTag: 
+    prefab: {fileID: 0}
     loop: 0
     fps: 10
     reversePlay: 0
+  onDuration:
   - type: 0
     sprites:
-    - {fileID: 7362363444221036762, guid: 3dbf54d13f02f2f49ad23c5a92985468, type: 3}
-    - {fileID: -8423417786566784311, guid: 28eec8ceb45634e46bb49b6e0e9d56b1, type: 3}
+    - {fileID: 21300000, guid: 3dbf54d13f02f2f49ad23c5a92985468, type: 3}
+    - {fileID: 21300000, guid: 28eec8ceb45634e46bb49b6e0e9d56b1, type: 3}
     duration: -1
     curve:
       serializedVersion: 2
@@ -70,9 +70,9 @@ MonoBehaviour:
       m_PreInfinity: 0
       m_PostInfinity: 0
       m_RotationOrder: 0
-    poolTag: 
+    prefab: {fileID: 0}
     loop: 1
-    fps: 10
+    fps: 3
     reversePlay: 0
   onExpire:
   - type: 6
@@ -84,7 +84,7 @@ MonoBehaviour:
       m_PreInfinity: 0
       m_PostInfinity: 0
       m_RotationOrder: 0
-    poolTag: 
+    prefab: {fileID: 0}
     loop: 0
     fps: 0
     reversePlay: 0

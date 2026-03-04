@@ -28,9 +28,15 @@ public class SkillAnimator : MonoBehaviour
     [Header("기본 데이터")] // 런타임 중 변경 가능
     [SerializeField] private SkillVisualData _data;
 
+    
+    private enum PHASE_STATE { None, Activate, Duration, Expire }   // 상태 (발동,유지,종료)
+    private PHASE_STATE _currentPhaseState = PHASE_STATE.None;      // 현재 상태
+    private float _duration = 0f;                                   // 유지해야할 총 시간
+    private float _startTime = 0f;                                  // 활성화 시작 시간
+
     // 스프라이트, 알파값 설정
     private SpriteRenderer _renderer;
-
+    
     // Awake 로컬 스케일 저장 (발동, 만료 크기 조절용)
     private Vector3 _originalScale;
 
@@ -87,7 +93,7 @@ public class SkillAnimator : MonoBehaviour
     {
         _renderer = GetComponentInChildren<SpriteRenderer>();
 
-        // 크기 저장
+        // 원본 크기 저장
         _originalScale = transform.localScale;
     }
 
@@ -193,35 +199,30 @@ public class SkillAnimator : MonoBehaviour
             _renderer.sprite = sprite;
     }
 
-    // 발동 연출 시작
-    public void PlayActivate()
+
+    // 연출 시작
+    public void StartSequence(float duration)
     {
-        if (HasActions(_data?.onActivate) == false) return;
+        // 크기 저장
+        _originalScale = transform.localScale;
 
-        // 발동 연출 시작
-        StartPhase(_data.onActivate, 0f, isExpire: false);
-    }
+        // 유지시간 저장
+        _duration = duration;
 
-
-    // 유지 연출 시작
-    // duration = 스킬 총 유지시간
-    // onDuration 중 duration=-1인 액션이 남은 시간 채움
-
-    // 예시
-    // 타올 휘두르기
-    // duration = 0.1 -> 고정
-    // duration =  -1 -> duration - 0.1 - 0.1 = 나머지 시간
-    // duration = 0.1 -> 고정
-    // PlayDuration(3.0f) -> B의 실제 duration = 2.8초
-    public void PlayDuration(float duration)
-    {
-        if (HasActions(_data?.onDuration) == false) return;
-
-        // 채울 시간
-        float fill = FillDuration(_data.onDuration, duration);
-
-        // 채울 시간 넣어서 페이즈 시작
-        StartPhase(_data.onDuration, fill, isExpire: false);
+        if (HasActions(_data?.onActivate))
+        {
+            // 발동 연출이 있으면 먼저 실행
+            _currentPhaseState = PHASE_STATE.Activate;
+            StartPhase(_data.onActivate, 0f, isExpire: false);
+        }
+        else if (HasActions(_data?.onDuration))
+        {
+            // 발동 연출이 아예 없으면 바로 유지 연출 시작
+            _currentPhaseState = PHASE_STATE.Duration;
+            // -1인 액션 시간 나누기
+            float fill = FillDuration(_data.onDuration, _duration); 
+            StartPhase(_data.onDuration, fill, isExpire: false);
+        }
     }
 
     // 종료 연출 시작
@@ -233,6 +234,7 @@ public class SkillAnimator : MonoBehaviour
         _isExpiring   = true;
         _onExpireDone = onDone;
         _phaseRunning = false;  // 진행 중이던 페이즈 즉시 중단
+        _currentPhaseState = PHASE_STATE.Expire;
 
         // 액션 없으면 바로 콜백
         if (HasActions(_data?.onExpire) == false)
@@ -255,7 +257,7 @@ public class SkillAnimator : MonoBehaviour
         {
             // 이펙트 생성
             if (action.type == VISUALACTION_TYPE.HitEffect)
-                SpawnHitEffect(action.poolTag, enemyPos);
+                SpawnHitEffect(action.prefab, enemyPos);
         }
     }
 
@@ -263,11 +265,12 @@ public class SkillAnimator : MonoBehaviour
     // 페이즈 시작
     private void StartPhase(List<VisualAction> phase, float fillDuration, bool isExpire)
     {
-        _currentPhase  = phase;         // 페이즈
-        _actionIndex   = 0;             // 액션 배열 번호
-        _fillDuration  = fillDuration;  // 채울 시간
-        _phaseRunning  = true;          // 페이즈 구동 상태
-        _isExpirePhase = isExpire;      // 페이즈 만료 상태
+        _currentPhase = phase;        // 페이즈
+        _actionIndex = 0;             // 액션 배열 번호
+        _fillDuration = fillDuration; // 채울 시간
+        _phaseRunning = true;         // 페이즈 구동 상태
+        _isExpirePhase = isExpire;    // 페이즈 만료 상태
+        _startTime = Time.time;       // 시작 시간
 
         // 페이즈 0번 액션부터 시작
         StartAction(phase[0]);
@@ -279,7 +282,6 @@ public class SkillAnimator : MonoBehaviour
     {
         _curType     = action.type;             // 액션 타입
         _curSprites  = action.sprites;          // 재생 스프라이트 배열
-        _curReverse  = action.reversePlay;      // 역재생 여부
         _curCurve    = action.curve;            // 커브
         _curElapsed  = 0f;                      // 진행률
         _curLoop     = action.loop;             // 루프 여부
@@ -291,7 +293,7 @@ public class SkillAnimator : MonoBehaviour
         if (action.type == VISUALACTION_TYPE.AttachEffect)
         {
             // 이펙트 스폰 후 부착
-            AttachEffect(action.poolTag);
+            AttachEffect(action.prefab);
             // 다음 액션
             AdvanceAction();
             return;
@@ -322,8 +324,27 @@ public class SkillAnimator : MonoBehaviour
         // 액션 최대 수 넘어가면
         if (_actionIndex >= _currentPhase.Count)
         {
+            // 발동 연출 끝난 상태면
+            if (_currentPhaseState == PHASE_STATE.Activate)
+            {
+                if (HasActions(_data?.onDuration))
+                {
+                    // 유지 연출 시작
+                    _currentPhaseState = PHASE_STATE.Duration;
+                    // 발동으로부터 지난 시간
+                    float activateElapsed = Time.time - _startTime;
+                    // 남은 시간
+                    float remaining = Mathf.Max(0f, _duration - activateElapsed);
+                    // 남은시간만큼 유지 페이즈
+                    float fill = FillDuration(_data.onDuration, remaining);
+                    StartPhase(_data.onDuration, fill, isExpire: false);
+                    return; // 다음 페이즈로 넘어갔으니 여기서 함수 종료
+                }
+            }
+
             // 페이즈 종료
             _phaseRunning = false;
+            _currentPhaseState = PHASE_STATE.None;
 
             // 종료 페이즈면 추가 종료 로직 실행 (풀 반환)
             if (_isExpirePhase == true)
@@ -404,9 +425,8 @@ public class SkillAnimator : MonoBehaviour
                 // 비정상작동 체크
                 if (action.sprites != null && action.sprites.Length > 0 && _renderer != null && _overrideSprite == null)
                 {
-                    // 정순이면 마지막 스프라이트
-                    // 역순이면 첫번째
-                    int last = action.reversePlay ? 0 : action.sprites.Length - 1;
+                    // 마지막 스프라이트
+                    int last = action.sprites.Length - 1;
                     _renderer.sprite = action.sprites[last];
                 }
                 break;
@@ -450,25 +470,25 @@ public class SkillAnimator : MonoBehaviour
     }
 
     // 특정 위치에 적중 이펙트 생성
-    private void SpawnHitEffect(string poolTag, Vector2 pos)
+    private void SpawnHitEffect(GameObject prefab, Vector2 pos)
     {
         // null 체크
-        if (string.IsNullOrEmpty(poolTag)) return;
+        if (prefab == null) return;
         if (ObjectPoolManager.Instance == null) return;
 
         // 생성
-        ObjectPoolManager.Instance.Get(poolTag, pos, Quaternion.identity);
+        var obj = ObjectPoolManager.Instance.Get<GameObject>(prefab, pos, Quaternion.identity);
     }
 
     // 이펙트 생성 후 투사체 하위 객체로
-    private void AttachEffect(string poolTag)
+    private void AttachEffect(GameObject prefab)
     {
         // null 체크
-        if (string.IsNullOrEmpty(poolTag)) return;
+        if (prefab == null) return;
         if (ObjectPoolManager.Instance == null) return;
 
         // 생성
-        var obj = ObjectPoolManager.Instance.Get(poolTag, transform.position, Quaternion.identity);
+        var obj = ObjectPoolManager.Instance.Get<GameObject>(prefab, transform.position, Quaternion.identity);
 
         if (obj == null) return;
 
@@ -498,3 +518,4 @@ public class SkillAnimator : MonoBehaviour
     private bool HasActions(List<VisualAction> list)
         => list != null && list.Count > 0;
 }
+

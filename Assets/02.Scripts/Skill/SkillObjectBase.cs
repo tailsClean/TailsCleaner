@@ -60,12 +60,20 @@ public class SkillObjectBase : MonoBehaviour
         // 초기화 시 전용 모디파이어, 패시브 처리
         OnInit();
 
+        // 리셋
+        if (_animator != null)
+            _animator.ResetState();
+
         // 크기 적용
         ApplySize();
 
-        // 애니메이터 초기화
-        _animator.ResetState();
-        _animator.PlayActivate();
+        if (_animator != null)
+        {
+            // 초기화 후 자식에서 설정할 것
+            OnBeforeStartSequence();
+            // 발동 연출 시작
+            _animator.StartSequence(_runtimeFinalStat.Duration);
+        }
     }
 
     protected virtual void Update()
@@ -212,6 +220,11 @@ public class SkillObjectBase : MonoBehaviour
         SetDirty();
         CalculateStat();
     }
+
+    // 스킬 애니메이터 발동 연출 시작 전
+    // 자식의 설정 오버라이드
+    protected virtual void OnBeforeStartSequence() { }
+
 
     // 수명 만료 시 호출
     // 파괴될 때 추가 로직, 연출 후 파괴되게
