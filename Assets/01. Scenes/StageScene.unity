@@ -576,7 +576,7 @@ MonoBehaviour:
   _stageId: 50201
   _towerId: 0
   _useTimeOverride: 0
-  _overrideMainTimeSeconds: 60
+  _overrideMainTimeSeconds: 30
   _overrideBossTimeSeconds: 30
   _stageController: {fileID: 1499286055}
   _spawner: {fileID: 1493428061}
@@ -1023,6 +1023,7 @@ MonoBehaviour:
   _resultHandler: {fileID: 1476404925}
   _playerRewardHandler: {fileID: 1385904952}
   _timerUI: {fileID: 0}
+  _onPlayerDead: {fileID: 11400000, guid: 93b987dd3bf0ca04e97359b3aa995913, type: 2}
 --- !u!4 &1499286056
 Transform:
   m_ObjectHideFlags: 0
@@ -1047,7 +1048,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1545055642}
-  - component: {fileID: 1545055641}
   m_Layer: 0
   m_Name: StageGroup
   m_TagString: Untagged
@@ -1055,24 +1055,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &1545055641
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1545055640}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 01c9acb35d42b5646b0f85599014ce99, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::RuleBasedMonsterSpawner
-  _playerTransform: {fileID: 0}
-  _registry: {fileID: 0}
-  _normalMonsterPrefab: {fileID: 0}
-  _specialMonsterPrefab: {fileID: 0}
-  _midBossPrefab: {fileID: 0}
-  _bossPrefab: {fileID: 0}
 --- !u!4 &1545055642
 Transform:
   m_ObjectHideFlags: 0
