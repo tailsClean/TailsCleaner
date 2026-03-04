@@ -12,6 +12,9 @@ public class PassiveSkillData : ScriptableObject
     [TextArea(2, 4)]
     public string Desc;
 
+    [Header("아이콘")]
+    public Sprite Icon;
+
     [Header("패시브 모디파이어")]
     [SerializeReference] public PassiveModifier Modifier;
 }
