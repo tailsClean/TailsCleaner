@@ -23,12 +23,14 @@ public class SkillObjectBase : MonoBehaviour
 
     protected List<PassiveModifier> _passiveModifiers;    // 패시브 모디파이어
 
+    protected SkillAnimator _animator;      // 연출용 애니메이터
+
     protected virtual void Awake()
     {
         _rigidbody = GetComponent<Rigidbody2D>();
         _poolObject = GetComponent<PoolObject>();
+        _animator = GetComponent<SkillAnimator>();
     }
-
     protected void Init(ActiveSkill owner, Vector2 dir)
     {
         // 리셋
@@ -60,6 +62,10 @@ public class SkillObjectBase : MonoBehaviour
 
         // 크기 적용
         ApplySize();
+
+        // 애니메이터 초기화
+        _animator.ResetState();
+        _animator.PlayActivate();
     }
 
     protected virtual void Update()
@@ -144,15 +150,22 @@ public class SkillObjectBase : MonoBehaviour
 
     // 수명 만료
     protected void ExpireObject()
-    {        
+    {
         if (_expired == true) return;
         _expired = true;
 
         // 수명 만료 시 실행될 로직
         OnExpire();
 
-        // 풀 오브젝트 있으면 반환
-        // 없으면 Destroy
+        if (_animator != null)
+            _animator.RequestExpire(ReturnToPool);
+        else
+            ReturnToPool();
+    }
+
+    // 풀 반환
+    protected void ReturnToPool()
+    {
         if (_poolObject != null) _poolObject.ReturnToPool();
         else Destroy(gameObject);
     }
