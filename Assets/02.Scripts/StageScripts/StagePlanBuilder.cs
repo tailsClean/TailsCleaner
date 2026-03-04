@@ -55,7 +55,8 @@ public class StagePlanBuilder
                 midBossId = _midBoss,
                 spawns = _spawns,
                 waveHpModifier = _first.hp_modifier,
-                wavePowerModifier = _first.power_modifier
+                wavePowerModifier = _first.power_modifier,
+                waveExpMultiply = _first.exp_multiply
             });
         }
 
@@ -66,10 +67,14 @@ public class StagePlanBuilder
             stageId = _stage.stage_id,
             mainLimitSeconds = Mathf.Max(0, _stage.main_time) * 60,
             bossLimitSeconds = Mathf.Max(0, _stage.boss_time) * 60,
+
+            entryEnergy = Mathf.Max(0, _stage.entry_energy),
+
             bossId = _stage.boss_id,
             specialGroupId = _stage.special_group_id,
             specialRows = specialRows,
             wavePlans = _waves,
+
             stageHpModifier = _stage.hp_modifier,
             stagePowerModifier = _stage.power_modifier,
             towerHpModifier = 0f,

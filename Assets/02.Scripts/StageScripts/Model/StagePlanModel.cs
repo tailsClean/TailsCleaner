@@ -9,8 +9,9 @@ public class StagePlan
     public int mainLimitSeconds;
     public int bossLimitSeconds;
 
-    public int bossId;
+    public int entryEnergy;
 
+    public int bossId;
     public int specialGroupId;
 
     public IReadOnlyList<WavePlan> wavePlans;
@@ -37,6 +38,7 @@ public class WavePlan
     
     public float waveHpModifier;
     public float wavePowerModifier;
+    public float waveExpMultiply;
 }
 
 // 웨이브 내부 몬스터 스폰 구성
