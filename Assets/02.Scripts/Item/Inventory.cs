@@ -7,28 +7,18 @@ public class Inventory : MonoBehaviour
 {
     [SerializeField] private Dictionary<int, int> _myInventory;         // Key: 아이템ID , Value: 소지갯수
 
+    public event Action<int> OnAddItem;
     public event Action<int> OnRemoveItem;
 
     private void Awake()
     {
         _myInventory = new Dictionary<int, int>();
-
-        //
-        for(int i = 0; i < 15; i++)
-        {
-            var a = Instantiate(Icon, transform);
-            Icons.Add(a);
-        }
-        //
     }
 
     public void TestGain(int id)
     {
         GainItem(id);
-        foreach(var a in _myInventory)
-        {
-            Debug.Log("<color=green>인벤: " + a.Key + "</color>");
-        }
+
     }
     public void TestUse(int id) => UseItem(id);
 
@@ -39,7 +29,10 @@ public class Inventory : MonoBehaviour
             _myInventory[id] += amount;
 
         else
+        {
             _myInventory.Add(id, amount);
+            OnAddItem?.Invoke(id);
+        }
     }
 
     // 인벤토리의 아이템 사용
@@ -66,42 +59,82 @@ public class Inventory : MonoBehaviour
 
 
 
-
-
     //
-    public TestItemIcon Icon;
-    public List<TestItemIcon> Icons;
+    public TestItemIcon IconPrefab;
+    public List<TestItemIcon> InventorySlots;
 
-    private Dictionary<int, int> IconDict = new();
-
-    public Sprite baseSprite;
+    private List<int> _itemOrder = new();
+    private Dictionary<int, TestItemIcon> _slotByItemId = new();
 
     private void Start()
     {
-        baseSprite = Icon.baseSprite;
-        OnRemoveItem += RemoveIcon;
+        // 인벤토리 슬롯 생성
+        for (int i = 0; i < 15; i++)
+        {
+            var a = Instantiate(IconPrefab, transform);
+            InventorySlots.Add(a);
+        }
+
+        ItemIdOrderring();
+
+        OnRemoveItem += RemoveItemFromSlot;
+        OnAddItem += (id) => _itemOrder.Add(id);
     }
 
     private void Update()
     {
-        int index = 0;
-        foreach (var itemID in _myInventory)
+        UpdateInventory();
+    }
+
+    // 인벤토리 아이템에 순서 부여
+    private void ItemIdOrderring()
+    {
+        foreach (var id in _myInventory.Keys)
         {
-            IconDict.TryAdd(itemID.Key, index);
-            Icons[index++].SetIcon(itemID.Key, itemID.Value);
+            _itemOrder.Add(id);
         }
     }
 
-    public void RemoveIcon(int id)
+    // 인벤토리칸을 UI창에 업데이트 반영
+    private void UpdateInventory()
     {
-        int index = IconDict[id];
-        var icon = Icons[index];
-        icon.Init();
-        icon.transform.SetAsLastSibling();
+        for (int order = 0; order < _itemOrder.Count; order++)
+        {
+            SetOrderSlot(order);
+        }
+    }
 
-        IconDict.Remove(id);
-        Icons.Remove(icon);
-        Icons.Add(icon);
+    // 순서에 해당하는 슬롯에 아이템(ID) 배치
+    private void SetOrderSlot(int order)
+    {
+        int id = _itemOrder[order];
+        var slot = InventorySlots[order];
+
+        slot.SetIcon(id, _myInventory[id]);
+        _slotByItemId.TryAdd(id, slot);
+    }
+
+    // 제거 아이템을 아이템 순서리스트, 인벤토리 슬롯에서 지우기
+    public void RemoveItemFromSlot(int id)
+    {
+        // 슬롯을 초기화 후 맨 나중 슬롯으로 밀어버리기
+        var slot = _slotByItemId[id];
+        ReleaseSlot(slot);
+
+
+        _itemOrder.Remove(id);
+        _slotByItemId.Remove(id);
+
+    }
+
+    private void ReleaseSlot(TestItemIcon slot)
+    {
+        slot.Init();
+
+        // 슬롯 자체를 맨 뒤로 보내는 것
+        slot.transform.SetAsLastSibling();
+        InventorySlots.Remove(slot);
+        InventorySlots.Add(slot);
     }
     //
 }

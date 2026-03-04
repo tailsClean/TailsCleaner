@@ -31,6 +31,7 @@ public class TargetingSystem
         return CalculateDistance();
     }
 
+    // 
     private Collider2D[] SearchTarget() => Physics2D.OverlapCircleAll(_startPointTr.position, _searchDistance, _monsterLayer);
 
     private void CalculateAngle(Collider2D[] targetsAll, Vector2 attackDir)
@@ -46,6 +47,7 @@ public class TargetingSystem
         }
     }
 
+    // 거리 계산
     private Transform CalculateDistance()
     {
         float min = _searchDistance * _searchDistance;

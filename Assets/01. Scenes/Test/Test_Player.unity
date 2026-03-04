@@ -766,7 +766,7 @@ PrefabInstance:
       objectReference: {fileID: 2023732019}
     - target: {fileID: 3177058635757878721, guid: 1478a977e0e3bc944b81e002234b12bc, type: 3}
       propertyPath: m_AnchorMax.y
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6146585054646000202, guid: 1478a977e0e3bc944b81e002234b12bc, type: 3}
       propertyPath: m_Pivot.x
@@ -850,11 +850,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8155939429304521943, guid: 1478a977e0e3bc944b81e002234b12bc, type: 3}
       propertyPath: m_AnchorMax.y
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8743751594331358583, guid: 1478a977e0e3bc944b81e002234b12bc, type: 3}
       propertyPath: m_AnchorMax.y
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8920812818058642037, guid: 1478a977e0e3bc944b81e002234b12bc, type: 3}
       propertyPath: m_Name
@@ -862,7 +862,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 9150054861463396111, guid: 1478a977e0e3bc944b81e002234b12bc, type: 3}
       propertyPath: m_AnchorMax.y
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -890,6 +890,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
+--- !u!114 &1038477946 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 769682930024884730, guid: 32fc9fcc921b5d94089780e923ca6929, type: 3}
+  m_PrefabInstance: {fileID: 6158559504773834152}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a76dd6ab54a3ed44c9623108ccba119f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::TestItemIcon
 --- !u!1 &1077673210
 GameObject:
   m_ObjectHideFlags: 0
@@ -997,7 +1008,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1112349164
 Transform:
   m_ObjectHideFlags: 0
@@ -2245,6 +2256,14 @@ PrefabInstance:
       propertyPath: m_Name
       value: Inventory
       objectReference: {fileID: 0}
+    - target: {fileID: 4895663676985118302, guid: 32fc9fcc921b5d94089780e923ca6929, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7302808486294095195, guid: 32fc9fcc921b5d94089780e923ca6929, type: 3}
+      propertyPath: IconPrefab
+      value: 
+      objectReference: {fileID: 1038477946}
     - target: {fileID: 8010990994909491893, guid: 32fc9fcc921b5d94089780e923ca6929, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5
