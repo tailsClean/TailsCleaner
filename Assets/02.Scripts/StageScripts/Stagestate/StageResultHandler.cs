@@ -1,6 +1,5 @@
 ﻿using UnityEngine;
 
-// - 테스트용: F7=Clear, F8=Fail
 public class StageResultHandler : MonoBehaviour
 {
     [Header("Debug")]

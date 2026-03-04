@@ -3,7 +3,6 @@ using UnityEngine;
 
 public class StagePlanBuilder
 {
-    private const int DEFAULT_WEIGHT = 100; // 기본값으로 사용할 가중치
     private const int NO_BOSS_ID = -1; // 보스가 없는 경우의 ID
 
     public StagePlan Build(StageTableRow _stage, List<MonsterWaveRow> _waveRows, List<SpecialMonsterRow> specialRows)
