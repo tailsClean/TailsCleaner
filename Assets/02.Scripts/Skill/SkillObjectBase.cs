@@ -14,6 +14,7 @@ public class SkillObjectBase : MonoBehaviour
 
     protected ActiveSkill _skill;                    // 액티브 스킬 (스탯 재계산용)
     protected Rigidbody2D _rigidbody;                // 속도용
+    protected Collider2D _collider;                  // 충돌용
     protected PoolObject _poolObject;                // 풀링용
 
     protected Vector2 _dir;                          // 방향
@@ -28,6 +29,7 @@ public class SkillObjectBase : MonoBehaviour
     protected virtual void Awake()
     {
         _rigidbody = GetComponent<Rigidbody2D>();
+        _collider = GetComponentInChildren<Collider2D>();
         _poolObject = GetComponent<PoolObject>();
         _animator = GetComponent<SkillAnimator>();
     }
@@ -40,6 +42,9 @@ public class SkillObjectBase : MonoBehaviour
 
         _skill = owner;
         _dir = dir;
+
+        // 충돌 켜기
+        if (_collider != null) _collider.enabled = true;
 
         // 스킬 스탯 스냅샷
         _runtimeBaseStat.CopyFrom(owner.BaseStat);
@@ -71,13 +76,17 @@ public class SkillObjectBase : MonoBehaviour
         {
             // 초기화 후 자식에서 설정할 것
             OnBeforeStartSequence();
-            // 발동 연출 시작
+
+            // 발동 연출 자동 시작
             _animator.StartSequence(_runtimeFinalStat.Duration);
         }
     }
 
     protected virtual void Update()
     {
+        // 만료 상태면 아무것도 하지 않음
+        if (_expired == true) return;
+
         // 수명 체크
         if (_expired == false && Time.time >= _createTime + _runtimeFinalStat.Duration)
             ExpireObject();
@@ -157,10 +166,13 @@ public class SkillObjectBase : MonoBehaviour
     }
 
     // 수명 만료
-    protected void ExpireObject()
+    protected virtual void ExpireObject()
     {
         if (_expired == true) return;
         _expired = true;
+
+        // 충돌 끄기
+        if (_collider != null) _collider.enabled = false;
 
         // 수명 만료 시 실행될 로직
         OnExpire();
@@ -221,10 +233,6 @@ public class SkillObjectBase : MonoBehaviour
         CalculateStat();
     }
 
-    // 스킬 애니메이터 발동 연출 시작 전
-    // 자식의 설정 오버라이드
-    protected virtual void OnBeforeStartSequence() { }
-
 
     // 수명 만료 시 호출
     // 파괴될 때 추가 로직, 연출 후 파괴되게
@@ -232,4 +240,8 @@ public class SkillObjectBase : MonoBehaviour
 
     // 스탯 재계산 더티 플래그
     protected void SetDirty() => _statDirty = true;
+
+    // 스킬 애니메이터 발동 연출 시작 전
+    // 자식의 설정 오버라이드
+    protected virtual void OnBeforeStartSequence() { }
 }

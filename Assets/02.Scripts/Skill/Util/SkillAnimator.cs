@@ -126,23 +126,29 @@ public class SkillAnimator : MonoBehaviour
                 break;
             case VISUALACTION_TYPE.FadeIn:                  // 페이드인
                 TickFade(0f, _originalAlpha, t);
+                TickSprites(t);
                 break;
             case VISUALACTION_TYPE.FadeOut:                 // 페이드아웃
                 TickFade(_originalAlpha, 0f, t);
+                TickSprites(t);
                 break;
             case VISUALACTION_TYPE.ScaleUp:                 // 크기 확대
                 TickScale(Vector3.zero, _originalScale, t);
+                TickSprites(t);
                 break;
             case VISUALACTION_TYPE.ScaleDown:               // 크기 축소
-                TickScale(_originalScale, Vector3.zero, t);     
+                TickScale(_originalScale, Vector3.zero, t);
+                TickSprites(t);
                 break;
             case VISUALACTION_TYPE.FadeInAndScaleUp:        // 페이드인 + 확대
                 TickFade(0f, _originalAlpha, t);                       
                 TickScale(Vector3.zero, _originalScale, t);
+                TickSprites(t);
                 break;
             case VISUALACTION_TYPE.FadeOutAndScaleDown:     // 페이드아웃 + 축소
                 TickFade(_originalAlpha, 0f, t);
                 TickScale(_originalScale, Vector3.zero, t);
+                TickSprites(t);
                 break;
         }
 
@@ -426,6 +432,14 @@ public class SkillAnimator : MonoBehaviour
     // 최종 상태로 변경
     private void ApplyFinalState(VisualAction action)
     {
+        // 액션에 스프라이트 존재하면
+        if (action.sprites != null && action.sprites.Length > 0 && _renderer != null && _overrideSprite == null)
+        {
+            // 마지막 스프라이트로 변경
+            int last = action.sprites.Length - 1;
+            _renderer.sprite = action.sprites[last];
+        }
+
         switch (action.type)
         {
             case VISUALACTION_TYPE.PlaySprites:
