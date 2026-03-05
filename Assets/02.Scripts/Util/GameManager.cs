@@ -9,7 +9,7 @@ public class GameManager : MonoBehaviour
     public EnergySystem _energySystem;
 
     public static int EnergyCount;
-    public const int SPEND_ENERGY = 2;
+    public const int SPEND_ENERGY = 1;
     public int _maxEnergy;
 
     
