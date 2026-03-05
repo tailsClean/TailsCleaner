@@ -155,6 +155,8 @@ MonoBehaviour:
   _stageTrans: {fileID: 0}
   _onStartInGame: {fileID: 11400000, guid: 40053951dd69bea44a3e052e7b964b17, type: 2}
   _exitPanel: {fileID: 0}
+  _stageClearPanel: {fileID: 0}
+  _gameOverPanel: {fileID: 0}
   _stageTimer: {fileID: 0}
   _energyPanel: {fileID: 0}
 --- !u!114 &712395829
@@ -186,10 +188,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0cd44c1031e13a943bb63640046fad76, type: 3}
   m_Name: 
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.CanvasScaler
-  m_UiScaleMode: 0
-  m_ReferencePixelsPerUnit: 100
+  m_UiScaleMode: 1
+  m_ReferencePixelsPerUnit: 64
   m_ScaleFactor: 1
-  m_ReferenceResolution: {x: 800, y: 600}
+  m_ReferenceResolution: {x: 1920, y: 1080}
   m_ScreenMatchMode: 0
   m_MatchWidthOrHeight: 0
   m_PhysicalUnit: 3
@@ -504,13 +506,89 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 2149874638514470777, guid: 67fb5a67b32c760429e289c6122948d7, type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2149874638514470777, guid: 67fb5a67b32c760429e289c6122948d7, type: 3}
+      propertyPath: m_AnchorMin.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2149874638514470777, guid: 67fb5a67b32c760429e289c6122948d7, type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 204.9123
+      objectReference: {fileID: 0}
+    - target: {fileID: 2149874638514470777, guid: 67fb5a67b32c760429e289c6122948d7, type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 88.892
+      objectReference: {fileID: 0}
+    - target: {fileID: 2149874638514470777, guid: 67fb5a67b32c760429e289c6122948d7, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: -334.9
+      objectReference: {fileID: 0}
+    - target: {fileID: 2149874638514470777, guid: 67fb5a67b32c760429e289c6122948d7, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 343.05
+      objectReference: {fileID: 0}
+    - target: {fileID: 3585509183706891276, guid: 67fb5a67b32c760429e289c6122948d7, type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 3585509183706891276, guid: 67fb5a67b32c760429e289c6122948d7, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 3585509183706891276, guid: 67fb5a67b32c760429e289c6122948d7, type: 3}
+      propertyPath: m_AnchorMin.x
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 3585509183706891276, guid: 67fb5a67b32c760429e289c6122948d7, type: 3}
+      propertyPath: m_AnchorMin.y
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 3585509183706891276, guid: 67fb5a67b32c760429e289c6122948d7, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: -160.1687
+      objectReference: {fileID: 0}
+    - target: {fileID: 3585509183706891276, guid: 67fb5a67b32c760429e289c6122948d7, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: -0.0043640137
+      objectReference: {fileID: 0}
     - target: {fileID: 4430639013754153059, guid: 67fb5a67b32c760429e289c6122948d7, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
       objectReference: {fileID: 712395828}
+    - target: {fileID: 5826576513248091303, guid: 67fb5a67b32c760429e289c6122948d7, type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5826576513248091303, guid: 67fb5a67b32c760429e289c6122948d7, type: 3}
+      propertyPath: m_AnchorMin.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5826576513248091303, guid: 67fb5a67b32c760429e289c6122948d7, type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 204.9123
+      objectReference: {fileID: 0}
+    - target: {fileID: 5826576513248091303, guid: 67fb5a67b32c760429e289c6122948d7, type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 88.892
+      objectReference: {fileID: 0}
+    - target: {fileID: 5826576513248091303, guid: 67fb5a67b32c760429e289c6122948d7, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: -675
+      objectReference: {fileID: 0}
+    - target: {fileID: 5826576513248091303, guid: 67fb5a67b32c760429e289c6122948d7, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 344
+      objectReference: {fileID: 0}
     - target: {fileID: 6531991450064886475, guid: 67fb5a67b32c760429e289c6122948d7, type: 3}
       propertyPath: m_Name
       value: TowerSceneUI
+      objectReference: {fileID: 0}
+    - target: {fileID: 7221984734353447192, guid: 67fb5a67b32c760429e289c6122948d7, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: -160.16846
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
