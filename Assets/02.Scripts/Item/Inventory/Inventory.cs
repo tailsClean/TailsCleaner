@@ -7,14 +7,14 @@ using UnityEngine.UI;
 public class Inventory : MonoBehaviour
 {
     // Key: 아이템ID , Value: 소지갯수
-    private Dictionary<int, int> _EquipInventory;
+    private Dictionary<int, int> _equipInventory;
     private Dictionary<int, int> _relicInventory;
     private Dictionary<int, int> _reinforceMaterialInventory;
     private Dictionary<int, int> _spendableInventory;
 
-    private int _moneyAmount;
+    private int _moneyAmount = 15;
 
-    public int MoneyID { get; private set; } = 15;
+    //public int MoneyID { get; private set; } = 15;
     public int MoneyAmount
     {
         get
@@ -26,29 +26,50 @@ public class Inventory : MonoBehaviour
 
     }
 
-    public Dictionary<int, int> MyInventory => _EquipInventory;
+    public Dictionary<int, int> EquipInventory => _equipInventory;
+    public Dictionary<int, int> RelicInventory => _relicInventory;
+    public Dictionary<int, int> ReinforceMaterialInventory => _reinforceMaterialInventory;
     public Dictionary<int, int> SpendableInventory => _spendableInventory;
 
 
     public event Action<int> OnAddItem;
     public event Action<int> OnRemoveItem;
 
+    public void InitEvent()
+    {
+        OnAddItem = null;
+        OnRemoveItem = null;
+    }
+
 
     private void Awake()
     {
-        _EquipInventory = new Dictionary<int, int>();
+        _equipInventory = new Dictionary<int, int>();
+        _relicInventory = new Dictionary<int, int>();
+        _reinforceMaterialInventory = new Dictionary<int, int>();
         _spendableInventory = new Dictionary<int, int>();
     }
 
 
+    private Dictionary<int, int> test;
+    public void TestUIGroup(int i)
+    {
+        switch (i)
+        {
+            case 0: test = _equipInventory; break;
+            case 1: test = _relicInventory; break;
+            case 2: test = _reinforceMaterialInventory; break;
+            case 3: test = _spendableInventory; break;
+        }
+    }
 
     //
     public void TestGain(int id)
     {
-        GainItem(_EquipInventory, id);
-
+        Debug.Log(test);
+        GainItem(test, id);
     }
-    public void TestUse( int id) => UseItem(_EquipInventory, id);
+    public void TestUse( int id) => UseItem(test, id);
     //
 
 
@@ -112,8 +133,8 @@ public class Inventory : MonoBehaviour
 
     public void SetMoney()
     {
-        MoneyImage.sprite = ItemDB.GetItem<StackableItem>(MoneyID).GetSprite();
-        MoneyText.text = MoneyAmount.ToString();
+        //MoneyImage.sprite = ItemDB.GetItem<StackableItem>(MoneyAmount).GetSprite();
+        //MoneyText.text = MoneyAmount.ToString();
     }
 
     //
@@ -129,86 +150,86 @@ public class Inventory : MonoBehaviour
 
     #region UI출력 방식
     //
-    public InventorySlot InventorySlotPrefab;
-    public List<InventorySlot> InventorySlots;                       // 아이템 슬롯UI요소
+    //public InventorySlot InventorySlotPrefab;
+    //public List<InventorySlot> InventorySlots;                       // 아이템 슬롯UI요소
 
-    private List<int> _itemOrder = new();                           // 무작위로 들고 있는 _myInventory의 값들에 순서를 부여
-    private Dictionary<int, InventorySlot> _slotByItemId = new();    // 특정 ID가 슬롯에 배치됐는지 조회용 딕셔너리
+    //private List<int> _itemOrder = new();                           // 무작위로 들고 있는 _myInventory의 값들에 순서를 부여
+    //private Dictionary<int, InventorySlot> _slotByItemId = new();    // 특정 ID가 슬롯에 배치됐는지 조회용 딕셔너리
 
-    private void Start()
-    {
-        // 인벤토리 슬롯 생성
-        for (int i = 0; i < 15; i++)
-        {
-            var a = Instantiate(InventorySlotPrefab, transform);
-            InventorySlots.Add(a);
-        }
+    //private void Start()
+    //{
+    //    // 인벤토리 슬롯 생성
+    //    for (int i = 0; i < 15; i++)
+    //    {
+    //        var a = Instantiate(InventorySlotPrefab, transform);
+    //        InventorySlots.Add(a);
+    //    }
 
-        ItemIdOrderring(_EquipInventory);
+    //    ItemIdOrderring(_equipInventory);
 
-        OnRemoveItem += RemoveItemFromSlot;
-        OnAddItem += (id) => _itemOrder.Add(id);
+    //    OnRemoveItem += RemoveItemFromSlot;
+    //    OnAddItem += (id) => _itemOrder.Add(id);
 
-        //MoneyImage.sprite = 
-    }
+    //    //MoneyImage.sprite = 
+    //}
 
-    private void Update()
-    {
-        UpdateInventory(_EquipInventory);
+    //private void Update()
+    //{
+    //    UpdateInventory(_equipInventory);
 
-        SetMoney();
-    }
+    //    SetMoney();
+    //}
 
-    // 인벤토리 아이템에 순서 부여
-    private void ItemIdOrderring(Dictionary<int, int> inventory)
-    {
-        foreach (var id in inventory.Keys)
-        {
-            _itemOrder.Add(id);
-        }
-    }
+    //// 인벤토리 아이템에 순서 부여
+    //private void ItemIdOrderring(Dictionary<int, int> inventory)
+    //{
+    //    foreach (var id in inventory.Keys)
+    //    {
+    //        _itemOrder.Add(id);
+    //    }
+    //}
 
-    // 인벤토리칸을 UI창에 업데이트 반영
-    private void UpdateInventory(Dictionary<int, int> inventory)
-    {
-        for (int order = 0; order < _itemOrder.Count; order++)
-        {
-            SetOrderSlot(inventory, order);
-        }
-    }
+    //// 인벤토리칸을 UI창에 업데이트 반영
+    //private void UpdateInventory(Dictionary<int, int> inventory)
+    //{
+    //    for (int order = 0; order < _itemOrder.Count; order++)
+    //    {
+    //        SetOrderSlot(inventory, order);
+    //    }
+    //}
 
-    // 순서에 해당하는 슬롯에 아이템(ID) 배치
-    private void SetOrderSlot(Dictionary<int, int> inventory, int order)
-    {
-        int id = _itemOrder[order];
-        var slot = InventorySlots[order];
+    //// 순서에 해당하는 슬롯에 아이템(ID) 배치
+    //private void SetOrderSlot(Dictionary<int, int> inventory, int order)
+    //{
+    //    int id = _itemOrder[order];
+    //    var slot = InventorySlots[order];
 
-        slot.SetIcon(id, inventory[id]);
-        _slotByItemId.TryAdd(id, slot);
-    }
+    //    slot.SetIcon(id, inventory[id]);
+    //    _slotByItemId.TryAdd(id, slot);
+    //}
 
-    // 제거 아이템을 아이템 순서리스트, 인벤토리 슬롯에서 지우기
-    public void RemoveItemFromSlot(int id)
-    {
-        // 슬롯을 초기화 후 맨 나중 슬롯으로 밀어버리기
-        var slot = _slotByItemId[id];
-        ReleaseSlot(slot);
+    //// 제거 아이템을 아이템 순서리스트, 인벤토리 슬롯에서 지우기
+    //public void RemoveItemFromSlot(int id)
+    //{
+    //    // 슬롯을 초기화 후 맨 나중 슬롯으로 밀어버리기
+    //    var slot = _slotByItemId[id];
+    //    ReleaseSlot(slot);
 
 
-        _itemOrder.Remove(id);
-        _slotByItemId.Remove(id);
+    //    _itemOrder.Remove(id);
+    //    _slotByItemId.Remove(id);
 
-    }
+    //}
 
-    private void ReleaseSlot(InventorySlot slot)
-    {
-        slot.Init();
+    //private void ReleaseSlot(InventorySlot slot)
+    //{
+    //    slot.Init();
 
-        // 슬롯 자체를 맨 뒤로 보내는 것
-        slot.transform.SetAsLastSibling();
-        InventorySlots.Remove(slot);
-        InventorySlots.Add(slot);
-    }
+    //    // 슬롯 자체를 맨 뒤로 보내는 것
+    //    slot.transform.SetAsLastSibling();
+    //    InventorySlots.Remove(slot);
+    //    InventorySlots.Add(slot);
+    //}
     //
     #endregion
 }

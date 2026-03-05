@@ -3,11 +3,12 @@
 
 public class UIGroup : MonoBehaviour
 {
-    [field: SerializeField] public UISTATE UIState;
+    [field: SerializeField] public UI_GROUP Group;
 
 
-    public enum UISTATE
-    {
-        StageClear, StageOver
-    }
+}
+public enum UI_GROUP
+{
+    //StageClear, StageOver, 
+    Equipment, Relic, ReinforceResource, Spendable
 }
