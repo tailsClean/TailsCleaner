@@ -12,9 +12,10 @@ public class EnhanceManager : MonoBehaviour
     [SerializeField] private Text _enhanceLevelText;
 
     private bool _isEnhancable;
+    private int _money = 100;
     
     //
-    private int _money = 100;
+    public Inventory Inventory;
     //
 
     //

@@ -69,6 +69,8 @@ public class EquipmentBase : PlayerEnhancement
         return result;
     }
 
+    public override Sprite GetSprite() => SpriteImage;                      // 수정 필요
+
 
     // 장비의 스텟증가량을 저장하는 클래스
     public class EquipmentIncreaseStat

@@ -9,13 +9,19 @@ public class SpendableItem : ItemBase
     [field: SerializeField] public string Script { get; private set; }
     [field: SerializeField] public string UsingAfterIllust { get; private set; }
 
+    //
+    [SerializeField] private Sprite _sprite;
+    //
+
     public void UseItem()
     {
 
     }
 
+    public override Sprite GetSprite() => _sprite;
+
     public enum STAT_TYPE
     {
-
+        Enter, Exp, EnergyUp
     }
 }

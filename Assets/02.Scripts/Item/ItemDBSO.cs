@@ -11,6 +11,9 @@ public class ItemDBSO : ScriptableObject
     [Header("유물")]
     [SerializeField] private List<ItemBase> _Relics;
 
+    [Header("소모재화")]
+    [SerializeField] private List<ItemBase> _stackables;
+
     private Dictionary<int, ItemBase> _itemDataDict;              // 게임 아이템 요소 관리 데이터
 
 
@@ -38,6 +41,7 @@ public class ItemDBSO : ScriptableObject
         Debug.Log("데이터베이스 new할당");
         SetItemDict(_equipments);
         SetItemDict(_Relics);
+        SetItemDict(_stackables);
     }
     private void SetItemDict<T>(List<T> items) where T : ItemBase
     {

@@ -1,9 +1,8 @@
-﻿using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.UI;
 
 
-public class TestItemIcon : MonoBehaviour
+public class InventorySlot : MonoBehaviour
 {
     public Text text;
     public Image image;
@@ -29,7 +28,7 @@ public class TestItemIcon : MonoBehaviour
         var a = ItemDB.GetItem<ItemBase>(id);
         if(a != null)
         {
-            image.sprite = a.GetSprite;
+            image.sprite = a.GetSprite();
             text.text = amount.ToString();
         }
         else

@@ -18,7 +18,7 @@ public class RelicBase : PlayerEnhancement
         return (int)(statValue + enhanceValue);
     }
 
-
+    public override Sprite GetSprite() => SpriteImage;      // 수정 필요
 
     public enum STAT
     {
