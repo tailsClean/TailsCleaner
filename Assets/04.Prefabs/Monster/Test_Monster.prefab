@@ -45,6 +45,7 @@ GameObject:
   - component: {fileID: 820876706021178440}
   - component: {fileID: 8674726135315812162}
   - component: {fileID: 1044938303917476684}
+  - component: {fileID: 9040104264805589184}
   m_Layer: 6
   m_Name: Test_Monster
   m_TagString: Monster
@@ -61,7 +62,7 @@ Transform:
   m_GameObject: {fileID: 5939852413248465278}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -6.31, y: 4.31, z: 0}
+  m_LocalPosition: {x: 5.26106, y: -8.53316, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -219,8 +220,10 @@ MonoBehaviour:
   hitBox: 1
   mass: 1
   KBResist: 1
-  TestItem: {fileID: 353544400213195327, guid: 7bd74e2913a4ea44aa66ef718bc20d47, type: 3}
+  TestItem: {fileID: 7621293018972681884, guid: 7bd74e2913a4ea44aa66ef718bc20d47, type: 3}
   damageCooldown: 1
+  scoreReward: 1000
+  goldReward: 500
 --- !u!114 &1044938303917476684
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -236,4 +239,20 @@ MonoBehaviour:
   projectilePrefab: {fileID: 2559287183428765651, guid: 7b877991fe532504184f3d2ef78a026a, type: 3}
   firePoint: {fileID: 3661019278698963693}
   playerTarget: {fileID: 0}
-  fireRate: 2
+  pattern_cooldown: 5
+  detect_range: 10
+  projectile_count: 3
+  fire_interval: 0.2
+  state: 0
+--- !u!114 &9040104264805589184
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5939852413248465278}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cba0c930577f8e240a095f334c21bc3e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PoolObject
