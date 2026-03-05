@@ -80,12 +80,21 @@ public class MonsterShooter : MonoBehaviour
         float offsetDistance = 1.0f;
         Vector3 spawnPos = transform.position + (Vector3)(dirToPlayer * offsetDistance);
 
-        GameObject go = Instantiate(projectilePrefab, spawnPos, Quaternion.identity);
-        MonsterProjectile projectile = go.GetComponent<MonsterProjectile>();
+        MonsterProjectile prefabScript = projectilePrefab.GetComponent<MonsterProjectile>();
 
-        if (projectile != null)
+        if (prefabScript != null)
         {
-            projectile.Launch(playerTarget);
+            // 제네릭 Spawn<T> 호출: 자동으로 PoolKey를 심어주고 OnSpawn을 실행합니다.
+            MonsterProjectile projectile = ObjectPoolManager.Instance.Spawn(prefabScript, spawnPos, Quaternion.identity);
+
+            if (projectile != null)
+            {
+                projectile.Launch(playerTarget);
+            }
+        }
+        else
+        {
+            Debug.LogError("projectilePrefab에 MonsterProjectile 스크립트가 없습니다!");
         }
     }
 }

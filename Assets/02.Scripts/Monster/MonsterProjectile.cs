@@ -2,7 +2,7 @@
 
 public enum PierceType { DISAPPEAR, PIERCE, REFLECT }
 
-public class MonsterProjectile : MonoBehaviour
+public class MonsterProjectile : PoolObject
 {
     private Rigidbody2D rb2D;
     private Transform target;
@@ -10,6 +10,10 @@ public class MonsterProjectile : MonoBehaviour
     private Vector2 lastVelocity;
     private bool isInitialized = false;
     private float reflectTimer = 0f;
+
+    [Header("--- 프리팹 원본 참조 ---")]
+    [Tooltip("반납할 때 필요한 이 투사체의 원본 프리팹")]
+    public GameObject originPrefab;
 
     [Header("--- 기획 데이터 연동 ---")]
     [Tooltip("발사 속도")] public float projectile_speed = 10f;
@@ -29,13 +33,30 @@ public class MonsterProjectile : MonoBehaviour
             GetComponent<Collider2D>().isTrigger = true;
     }
 
+    public override void OnSpawn()
+    {
+        base.OnSpawn(); // 부모 클래스 로직 실행 (필요 시)
+
+        // 데이터 초기화 (재사용 시 이전 데이터가 남아있으면 안 됨)
+        currentBounce = 0;
+        reflectTimer = 0f;
+        isInitialized = false;
+        rb2D.linearVelocity = Vector2.zero;
+        rb2D.angularVelocity = 0f;
+
+        // 수명 후 자동 반납 예약 (CancelInvoke는 Launch에서 수행)
+    }
+
     public void Launch(Transform playerTarget)
     {
         target = playerTarget;
         isInitialized = true;
 
         // 관통/기본/반사 모두 플레이어(Trigger) 감지를 위해 isTrigger를 true로 유지
-        GetComponent<Collider2D>().isTrigger = true;
+        //GetComponent<Collider2D>().isTrigger = true;
+
+        CancelInvoke(nameof(DeactivateProjectile));
+        Invoke(nameof(DeactivateProjectile), life_time);
 
         if (arc_height > 0)
         {
@@ -48,7 +69,13 @@ public class MonsterProjectile : MonoBehaviour
             rb2D.linearVelocity = dir * projectile_speed;
         }
 
-        Destroy(gameObject, life_time);
+        //Destroy(gameObject, life_time);
+    }
+
+    private void DeactivateProjectile()
+    {
+        // 부모(PoolObject)에 정의된 ReturnToPoolAfter와 유사하게 매니저에 직접 반납
+        ObjectPoolManager.Instance.ReturnObject(this);
     }
 
     void FixedUpdate()
@@ -129,8 +156,10 @@ public class MonsterProjectile : MonoBehaviour
         // - DISAPPEAR 모드 (전체)
         // - REFLECT 모드에서 플레이어와 부딪힌 경우 (isWall이 false이므로 2번을 건너뜀)
         // - REFLECT 모드에서 반사 횟수 초과 시
-        Destroy(gameObject);
+        DeactivateProjectile();
     }
+
+    
 
     private void ApplyArcShot()
     {

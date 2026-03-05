@@ -2,7 +2,7 @@
 using MonsterEnum;
 
 [RequireComponent(typeof(Rigidbody2D), typeof(Collider2D))]
-public abstract class MonsterBase : MonoBehaviour, IDamageable
+public abstract class MonsterBase : PoolObject, IDamageable
 {
     [Header("--- 환경 설정 ---")]
     public Transform target;
@@ -24,7 +24,7 @@ public abstract class MonsterBase : MonoBehaviour, IDamageable
     private float _basePower;
 
     [Header("--- Drop Items ---")]
-    [SerializeField] private GameObject TestItem;
+    [SerializeField] private PoolObject TestItem;
 
     [Header("--- 공격 설정 ---")]
     public float damageCooldown = 1.0f; // 공격 간격
@@ -108,7 +108,10 @@ public abstract class MonsterBase : MonoBehaviour, IDamageable
     public void TakeDamage(float damage)
     {
         hp -= damage;
-        if (hp <= 0) Die();
+        if (hp <= 0)
+        {
+            Die();
+        }
     }
 
     protected virtual void OnTriggerStay2D(Collider2D other)
@@ -162,9 +165,27 @@ public abstract class MonsterBase : MonoBehaviour, IDamageable
         // 드랍 아이템 로직
         if (TestItem != null)
         {
-            ObjectPoolManager.Instance.Get(TestItem, transform.position, Quaternion.identity);
+            if (ObjectPoolManager.Instance != null)
+            {
+                // 소환된 객체를 변수에 담아 확인
+                var item = ObjectPoolManager.Instance.Spawn(TestItem, transform.position, Quaternion.identity);
+
+                if (item == null)
+                    Debug.LogError("Spawn은 호출되었으나 반환된 객체가 null입니다.");
+                else
+                    Debug.Log($"{item.name}이(가) {transform.position} 위치에 생성되었습니다.");
+            }
         }
 
-        Destroy(gameObject);
+        // 3. 반납 로직 (에러 발생 지점)
+        if (ObjectPoolManager.Instance != null)
+        {
+            ObjectPoolManager.Instance.ReturnObject(this);
+        }
+        else
+        {
+            // 매니저가 없으면 그냥 파괴
+            Destroy(gameObject);
+        }
     }
 }
