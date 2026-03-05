@@ -13,7 +13,13 @@ public class UISetter : MonoBehaviour
     private void OnValidate()
     {
         if(_mine == null)
+        {
             _mine = GetComponent<RectTransform>();
+            return;
+        }
+
+        if(Horizental == 0 ||  Virtical == 0)
+            return;
 
         _mine.sizeDelta = new Vector2(Horizental, Virtical);
 
