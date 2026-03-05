@@ -1,88 +1,80 @@
-﻿using UnityEngine;
-using UnityEngine.Pool;
+﻿using System.Collections;
 using System.Collections.Generic;
+using UnityEngine;
 
 public class ObjectPoolManager : MonoBehaviour
 {
-    // 싱글톤: 어디서든 ObjectPoolManager.Instance로 접근 가능
-    public static ObjectPoolManager Instance { get; private set; }
+    public static ObjectPoolManager Instance;
 
-    // 프리팹의 InstanceID를 키로 사용하여 풀 관리
-    private Dictionary<int, object> _pools = new Dictionary<int, object>();
-    private Dictionary<float, WaitForSeconds> _waitDict = new Dictionary<float, WaitForSeconds>();
+    // 프리팹별로 큐를 관리하는 딕셔너리
+    private Dictionary<string, Queue<PoolObject>> _poolDictionary = new Dictionary<string, Queue<PoolObject>>();
 
-    private void Awake() => Instance = this;
-
-    // 외부에서 미리 풀을 만들어두고 싶을 때 호출
-    public void CreatePool<T>(T prefab, int defaultSize = 10, int maxSize = 20) where T : Object
+    void Awake()
     {
-        GetPool(prefab, defaultSize, maxSize);
+        if (Instance == null) Instance = this;
+        else Destroy(gameObject);
     }
 
-    // 풀이 있으면 가져오고, 없으면 새로 설정하여 반환
-    private ObjectPool<T> GetPool<T>(T prefab, int defaultSize = 10, int maxSize = 20) where T : Object
+    // [즉시 소환] T는 PoolObject를 상속받은 타입이어야 함
+    public T Spawn<T>(T prefab, Vector3 position, Quaternion rotation) where T : PoolObject
     {
-        int id = prefab.GetInstanceID(); // 프리팹별 고유 번호 추출
+        string key = prefab.name;
 
-        if (!_pools.TryGetValue(id, out var pool))
+        if (!_poolDictionary.ContainsKey(key))
         {
-            // 해당 프리팹을 위한 새로운 풀 생성 규칙 정의
-            var newPool = new ObjectPool<T>(
-                createFunc: () => Instantiate(prefab, transform), // 부족하면 새로 만드는 법
-                actionOnGet: (obj) => SetActive(obj, true),       // 꺼낼 때 할 일
-                actionOnRelease: (obj) => SetActive(obj, false),  // 넣을 때 할 일
-                actionOnDestroy: (obj) => {
-                    if (obj is GameObject go) Destroy(go);
-                    else if (obj is Component comp) Destroy(comp.gameObject);
-                },
-                defaultCapacity: defaultSize, // 초기 용량
-                maxSize: maxSize  // 최대 저장량
-            );
-            _pools.Add(id, newPool);
-            return newPool;
+            _poolDictionary.Add(key, new Queue<PoolObject>());
         }
-        return (ObjectPool<T>)pool;
-    }
 
-    // 객체 활성화/비활성화 헬퍼 메서드
-    private void SetActive<T>(T obj, bool isActive) where T : Object
-    {
-        if (obj is GameObject go) go.SetActive(isActive);
-        else if (obj is Component comp) comp.gameObject.SetActive(isActive);
-    }
-
-    // 오브젝트가 있으면 꺼내고 없으면 생성
-    public T Get<T>(T prefab, Vector3 pos, Quaternion rot) where T : Object
-    {
-        var pool = GetPool(prefab);
-        var obj = pool.Get();
-
-        // 위치 및 회전 설정
-        Transform targetTrans = (obj is GameObject go) ? go.transform : (obj as Component).transform;
-        targetTrans.SetPositionAndRotation(pos, rot);
-
-        // Rigidbody2D 속도 초기화 
-        if (targetTrans.TryGetComponent<Rigidbody2D>(out var rb))
+        T obj;
+        if (_poolDictionary[key].Count > 0)
         {
-            rb.linearVelocity = Vector2.zero;
-            rb.angularVelocity = 0f;
+            obj = _poolDictionary[key].Dequeue() as T;
         }
+        else
+        {
+            obj = Instantiate(prefab, transform);
+            obj.PoolKey = key; // 키 값을 부여해 반납 위치를 기억하게 함
+        }
+
+        obj.transform.SetPositionAndRotation(position, rotation);
+        obj.gameObject.SetActive(true);
+        obj.OnSpawn();
 
         return obj;
     }
 
-    // 객체 반납 (사용이 끝난 객체를 다시 풀에 넣기)
-    public void Release<T>(T prefab, T instance) where T : Object
+    // [지연 소환 기능] 코루틴 활용
+    public void SpawnWithDelay<T>(T prefab, Vector3 position, Quaternion rotation, float delay) where T : PoolObject
     {
-        var pool = GetPool(prefab);
-        pool.Release(instance);
+        StartCoroutine(CoSpawnDelay(prefab, position, rotation, delay));
     }
 
-    // 'new WaitForSeconds'를 반복하지 않도록 캐싱된 객체 반환
-    public WaitForSeconds GetWait(float seconds)
+    private IEnumerator CoSpawnDelay<T>(T prefab, Vector3 position, Quaternion rotation, float delay) where T : PoolObject
     {
-        if (!_waitDict.TryGetValue(seconds, out var wait))
-            _waitDict[seconds] = wait = new WaitForSeconds(seconds);
-        return wait;
+        yield return new WaitForSeconds(delay);
+        Spawn(prefab, position, rotation);
+    }
+
+    // 풀로 반납
+    public void ReturnObject(PoolObject obj)
+    {
+        if (obj == null) return;
+
+        if (string.IsNullOrEmpty(obj.PoolKey))
+        {
+            Debug.LogWarning($"{obj.name} 객체에 PoolKey가 없습니다. 풀링을 통해 생성되지 않았으므로 파괴합니다.");
+            Destroy(obj.gameObject);
+            return;
+        }
+
+        if (!_poolDictionary.ContainsKey(obj.PoolKey))
+        {
+            // 만약 키는 있는데 딕셔너리에 없다면 새로 생성해줌 (예외 방지)
+            _poolDictionary.Add(obj.PoolKey, new Queue<PoolObject>());
+        }
+
+        obj.OnDespawn();
+        obj.gameObject.SetActive(false);
+        _poolDictionary[obj.PoolKey].Enqueue(obj);
     }
 }
