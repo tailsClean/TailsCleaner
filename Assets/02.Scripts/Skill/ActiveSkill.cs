@@ -414,7 +414,7 @@ public abstract class ActiveSkill : MonoBehaviour
 
 // 프리팹과 모디파이어 타입 결정
 public abstract class ActiveSkill<TSkillObject, TModifierData> : ActiveSkill
-    where TSkillObject : Component
+    where TSkillObject : PoolObject
     where TModifierData : class, new()
 {
     protected TSkillObject _skillObjectPrefab;
@@ -461,7 +461,7 @@ public abstract class ActiveSkill<TSkillObject, TModifierData> : ActiveSkill
     }
 
     // 메인, 서브 프리팹 풀에서 꺼내기
-    protected T SpawnFromPool<T>(T prefab, Vector3 pos, Quaternion rot) where T : Component
+    protected T SpawnFromPool<T>(T prefab, Vector3 pos, Quaternion rot) where T : PoolObject
     {
         // 풀 매니저 체크
         if (ObjectPoolManager.Instance == null)
@@ -476,6 +476,6 @@ public abstract class ActiveSkill<TSkillObject, TModifierData> : ActiveSkill
             return null;
         }
 
-        return ObjectPoolManager.Instance.Get<T>(prefab, pos, rot);
+        return ObjectPoolManager.Instance.Spawn<T>(prefab, pos, rot);
     }
 }

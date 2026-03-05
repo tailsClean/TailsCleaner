@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 
-public class SkillObjectBase : MonoBehaviour
+public class SkillObjectBase : PoolObject
 {
     protected SkillStat _runtimeBaseStat;            // 런타임 기본 스탯
     protected SkillStat _runtimeCommonStat;          // 런타임 공용 스탯
@@ -153,7 +153,7 @@ public class SkillObjectBase : MonoBehaviour
 
         // 풀 오브젝트 있으면 반환
         // 없으면 Destroy
-        if (_poolObject != null) _poolObject.ReturnToPool();
+        if (_poolObject != null) _poolObject.ReturnToPoolAfter(0);
         else Destroy(gameObject);
     }
 
