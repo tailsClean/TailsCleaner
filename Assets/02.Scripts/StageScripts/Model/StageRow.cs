@@ -1,5 +1,4 @@
 ﻿using UnityEngine;
-using UnityEngine.Rendering;
 
 public sealed class StageTableRow
 {
@@ -65,6 +64,32 @@ public sealed class TowerTableRow
     public float power_modifier;
     public string tower_icon_resource;
     public string bgm_resource;
+}
+
+// monster_table
+public sealed class MonsterTableRow
+{
+    public int monster_id;
+    public string index;
+    public int monster_type; // 0=일반,1=특수,2=중간보스,3=보스
+    public int pattern_group_id;
+    public float drop_chance;
+    public int drop_group_id;
+    public int resource_id;
+}
+
+// monster_type_table
+public sealed class MonsterTypeTableRow
+{
+    public int monster_type; // 0~3
+    public float type_hp_multiply;
+    public float type_power_multiply;
+    public float type_move_speed;
+    public float type_mass;
+    public float type_hit_box;
+    public float type_nb;
+    public float base_exp; 
+    public string exp_resource_id;
 }
 
 public enum SpecialSpawnType
