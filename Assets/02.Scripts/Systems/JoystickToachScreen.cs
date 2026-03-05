@@ -9,11 +9,12 @@ public class JoystickToachScreen : MonoBehaviour, IPointerDownHandler, IDragHand
     [SerializeField] private GameObject _joystick;
     [SerializeField] private GameObject _handle;
     [SerializeField] private List<Image> _joystickImage;
-    
+
+    private Vector2 _originalJoystickPos;
 
     private void Awake()
     {
-        JoystickActive(false);
+        _originalJoystickPos = _joystick.transform.position;
     }
 
     public void OnPointerDown(PointerEventData eventData)
@@ -47,9 +48,10 @@ public class JoystickToachScreen : MonoBehaviour, IPointerDownHandler, IDragHand
             ExecuteEvents.pointerUpHandler
         );
 
-        JoystickActive(false);
+        _joystick.transform.position = _originalJoystickPos;
     }
 
+    // 조이스틱을 화면에서 보이게 조절하는 메서드
     private void JoystickActive(bool active)
     {
         foreach(var joystick in _joystickImage)
