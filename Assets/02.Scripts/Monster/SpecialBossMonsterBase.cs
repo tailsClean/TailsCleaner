@@ -3,7 +3,6 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
-using static UnityEditor.ShaderGraph.Internal.KeywordDependentCollection;
 
 public abstract class SpecialBossMonsterBase : MonsterBase
 {
@@ -506,16 +505,7 @@ public abstract class SpecialBossMonsterBase : MonsterBase
         }
         // if (!hitPlayer) Debug.Log("자폭 빗나감");
 
-        if (TryGetComponent<PoolObject>(out var po))
-        {
-            // 몬스터가 터지면서 비활성화되고 풀로 들어감
-            po.ReturnToPool();
-        }
-        else
-        {
-            // 만약 풀링용 오브젝트가 아니라면 파괴
-            Destroy(gameObject);
-        }
+        ObjectPoolManager.Instance.ReturnObject(this);
     }
 
     private void UpdateWarningVisuals(float progressNormalized) { }

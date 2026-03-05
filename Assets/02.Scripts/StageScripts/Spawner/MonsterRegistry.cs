@@ -73,7 +73,7 @@ public class MonsterRegistry : MonoBehaviour, IMonsterRegistry
 
             if (obj.TryGetComponent<PoolObject>(out var poolObj))
             {
-                poolObj.ReturnToPool();
+                poolObj.ReturnToPoolAfter(0);
             }
             else
             {

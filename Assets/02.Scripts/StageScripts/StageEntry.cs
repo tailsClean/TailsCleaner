@@ -115,9 +115,6 @@ public class StageEntry : MonoBehaviour
             Debug.Log($"에너지가 부족합니다. 현재={GameManager.EnergyCount}, 필요={cost}");
             return false;
         }
-
-        GameManager.Instance.UpdateEnergyCount(GameManager.EnergyCount - cost);
-
         return true;
     }
 }

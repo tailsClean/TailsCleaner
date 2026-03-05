@@ -86,7 +86,7 @@ public class SkillAnimator : MonoBehaviour
     private Action _onExpireDone = null;
 
     // 이펙트 목록
-    private List<GameObject> _attachEffects = new();
+    private List<PoolObject> _attachEffects = new();
 
 
 
@@ -173,7 +173,7 @@ public class SkillAnimator : MonoBehaviour
             if (effect == null) continue;
 
             if (effect.TryGetComponent<PoolObject>(out var poolObject))
-                poolObject.ReturnToPool();
+                poolObject.ReturnToPoolAfter(0);
             else
                 Destroy(effect);
         }
@@ -491,25 +491,25 @@ public class SkillAnimator : MonoBehaviour
     }
 
     // 특정 위치에 적중 이펙트 생성
-    private void SpawnHitEffect(GameObject prefab, Vector2 pos)
+    private void SpawnHitEffect(PoolObject prefab, Vector2 pos)
     {
         // null 체크
         if (prefab == null) return;
         if (ObjectPoolManager.Instance == null) return;
 
         // 생성
-        var obj = ObjectPoolManager.Instance.Get<GameObject>(prefab, pos, Quaternion.identity);
+        var obj = ObjectPoolManager.Instance.Spawn<PoolObject>(prefab, pos, Quaternion.identity);
     }
 
     // 이펙트 생성 후 투사체 하위 객체로
-    private void AttachEffect(GameObject prefab)
+    private void AttachEffect(PoolObject prefab)
     {
         // null 체크
         if (prefab == null) return;
         if (ObjectPoolManager.Instance == null) return;
 
         // 생성
-        var obj = ObjectPoolManager.Instance.Get<GameObject>(prefab, transform.position, Quaternion.identity);
+        var obj = ObjectPoolManager.Instance.Spawn<PoolObject>(prefab, transform.position, Quaternion.identity);
 
         if (obj == null) return;
 

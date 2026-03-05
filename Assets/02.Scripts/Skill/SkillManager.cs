@@ -8,7 +8,7 @@ public class SkillManager : MonoBehaviour
 
     public const int MAX_ACTIVE_SLOTS = 6;              // 최대 액티브 스킬 수
     public const int MAX_PASSIVE_SLOTS = 6;             // 최대 패시브 스킬 수
-    public const int DEFAULT_ACTIVE_MAIN_TAG = 41002;   // 기본 지급 스킬 메인 태그 (세제 캡슐 41007)
+    public const int DEFAULT_ACTIVE_MAIN_TAG = 41007;   // 기본 지급 스킬 메인 태그 (세제 캡슐 41007)
     public const float DEFAULT_SEARCH_RADIUS = 20f;     // 가장 가까운 적 탐색용 범위
     public const float SEARCH_INTERVAL = 0.2f;          // 탐색 주기
 
