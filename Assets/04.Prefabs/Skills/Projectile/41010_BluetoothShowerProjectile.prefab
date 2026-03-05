@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 1864290060446121382}
   - component: {fileID: 62320452057809317}
   - component: {fileID: -8177345298033137239}
+  - component: {fileID: 7027816567595058324}
   m_Layer: 0
   m_Name: 41010_BluetoothShowerProjectile
   m_TagString: Untagged
@@ -87,8 +88,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cba0c930577f8e240a095f334c21bc3e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PoolObject
-  poolTag: 
-  autoReleaseTime: 2
+--- !u!114 &7027816567595058324
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2888618989803605063}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e0d8145ecf457624188f130f298a4a7b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::SkillAnimator
+  _data: {fileID: 11400000, guid: 8053cee1f34b4d64da7b05e5b83460ea, type: 2}
 --- !u!1 &3179484980813980551
 GameObject:
   m_ObjectHideFlags: 0

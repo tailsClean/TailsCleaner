@@ -3,17 +3,18 @@ using UnityEngine;
 
 public class SkillObjectBase : PoolObject
 {
-    protected SkillStat _runtimeBaseStat;            // 런타임 기본 스탯
-    protected SkillStat _runtimeCommonStat;          // 런타임 공용 스탯
-    protected SkillStat _runtimeUpgradeStat;         // 런타임 업그레이드 스탯
-    protected SkillStat _runtimePassiveMulStat;      // 런타임 패시브 배율 합 , 임플란트 누적
-    protected SkillStat _runtimeFinalStat;           // 최종 스탯
-    private SkillStat _calcBuffer = new SkillStat(); // 스탯 계산 버퍼 (GC 방지)
-    private SkillStat _staticStat;                   // 정적 스탯 베이스(baseStat + passiveBaseAdds) * commonStat
+    protected SkillStat _runtimeBaseStat = new();       // 런타임 기본 스탯
+    protected SkillStat _runtimeCommonStat = new();     // 런타임 공용 스탯
+    protected SkillStat _runtimeUpgradeStat = new();    // 런타임 업그레이드 스탯
+    protected SkillStat _runtimePassiveMulStat = new(); // 런타임 패시브 배율 합 , 임플란트 누적
+    protected SkillStat _runtimeFinalStat = new();      // 최종 스탯
+    private SkillStat _calcBuffer = new();              // 스탯 계산 버퍼 (GC 방지)
+    private SkillStat _staticStat = new();              // 정적 스탯 베이스(baseStat + passiveBaseAdds) * commonStat
     private bool _statDirty = false;                 // 더티 플래그 / true일 때 재계산
 
     protected ActiveSkill _skill;                    // 액티브 스킬 (스탯 재계산용)
     protected Rigidbody2D _rigidbody;                // 속도용
+    protected Collider2D _collider;                  // 충돌용
     protected PoolObject _poolObject;                // 풀링용
 
     protected Vector2 _dir;                          // 방향
@@ -23,12 +24,15 @@ public class SkillObjectBase : PoolObject
 
     protected List<PassiveModifier> _passiveModifiers;    // 패시브 모디파이어
 
+    protected SkillAnimator _animator;      // 연출용 애니메이터
+
     protected virtual void Awake()
     {
         _rigidbody = GetComponent<Rigidbody2D>();
+        _collider = GetComponentInChildren<Collider2D>();
         _poolObject = GetComponent<PoolObject>();
+        _animator = GetComponent<SkillAnimator>();
     }
-
     protected void Init(ActiveSkill owner, Vector2 dir)
     {
         // 리셋
@@ -39,12 +43,15 @@ public class SkillObjectBase : PoolObject
         _skill = owner;
         _dir = dir;
 
+        // 충돌 켜기
+        if (_collider != null) _collider.enabled = true;
+
         // 스킬 스탯 스냅샷
-        _runtimeBaseStat = owner.BaseStat.Clone();
-        _runtimeCommonStat = owner.CommonStat.Clone();
-        _runtimeUpgradeStat = owner.UpgradeStat.Clone();
-        _runtimePassiveMulStat = owner.PassiveMulStat.Clone();
-        _runtimeFinalStat = owner.FinalStat.Clone();
+        _runtimeBaseStat.CopyFrom(owner.BaseStat);
+        _runtimeCommonStat.CopyFrom(owner.CommonStat);
+        _runtimeUpgradeStat.CopyFrom(owner.UpgradeStat);
+        _runtimePassiveMulStat.CopyFrom(owner.PassiveMulStat);
+        _runtimeFinalStat.CopyFrom(owner.FinalStat);
 
         // 패시브 모디파이어 캐싱
         _passiveModifiers = new List<PassiveModifier>(owner.PassiveModifiers);
@@ -58,12 +65,28 @@ public class SkillObjectBase : PoolObject
         // 초기화 시 전용 모디파이어, 패시브 처리
         OnInit();
 
+        // 리셋
+        if (_animator != null)
+            _animator.ResetState();
+
         // 크기 적용
         ApplySize();
+
+        if (_animator != null)
+        {
+            // 초기화 후 자식에서 설정할 것
+            OnBeforeStartSequence();
+
+            // 발동 연출 자동 시작
+            _animator.StartSequence(_runtimeFinalStat.Duration);
+        }
     }
 
     protected virtual void Update()
     {
+        // 만료 상태면 아무것도 하지 않음
+        if (_expired == true) return;
+
         // 수명 체크
         if (_expired == false && Time.time >= _createTime + _runtimeFinalStat.Duration)
             ExpireObject();
@@ -143,16 +166,26 @@ public class SkillObjectBase : PoolObject
     }
 
     // 수명 만료
-    protected void ExpireObject()
-    {        
+    protected virtual void ExpireObject()
+    {
         if (_expired == true) return;
         _expired = true;
+
+        // 충돌 끄기
+        if (_collider != null) _collider.enabled = false;
 
         // 수명 만료 시 실행될 로직
         OnExpire();
 
-        // 풀 오브젝트 있으면 반환
-        // 없으면 Destroy
+        if (_animator != null)
+            _animator.RequestExpire(ReturnToPool);
+        else
+            ReturnToPool();
+    }
+
+    // 풀 반환
+    protected void ReturnToPool()
+    {
         if (_poolObject != null) _poolObject.ReturnToPoolAfter(0);
         else Destroy(gameObject);
     }
@@ -200,10 +233,15 @@ public class SkillObjectBase : PoolObject
         CalculateStat();
     }
 
+
     // 수명 만료 시 호출
     // 파괴될 때 추가 로직, 연출 후 파괴되게
     protected virtual void OnExpire() { }
 
     // 스탯 재계산 더티 플래그
     protected void SetDirty() => _statDirty = true;
+
+    // 스킬 애니메이터 발동 연출 시작 전
+    // 자식의 설정 오버라이드
+    protected virtual void OnBeforeStartSequence() { }
 }

@@ -5,12 +5,22 @@ public class WaterBombArea : SkillArea<WaterBombModifierData>
     [Header("투사체 상태 오브젝트")]
     [SerializeField] GameObject _fallObject;
     [SerializeField] GameObject _landObject;
+    
+    // 상태별 애니메이터
+    private SkillAnimator _fallAnimator;
+    [SerializeField] SkillAnimator _landAnimator;
 
     private bool _isLanded = false;             // 착지 상태
     private Vector2 _startPos;                  // 낙하 시작 위치
     private Vector2 _targetPos;                 // 목표 지점 위치
     private float _fallStartTime;               // 낙하 시작 시간
     private WaterBombSkill _waterBombSkill;
+
+    protected override void Awake()
+    {
+        base.Awake();
+        _fallAnimator = _fallObject.GetComponent<SkillAnimator>();
+    }
 
 
     public override void Init(ActiveSkill owner, WaterBombModifierData modifierData, Vector2 targetPos)
@@ -19,10 +29,17 @@ public class WaterBombArea : SkillArea<WaterBombModifierData>
         _waterBombSkill = owner as WaterBombSkill;
 
         _isLanded = false;
+        
+        // 애니메이터 리셋
+        if (_fallAnimator != null) _fallAnimator.ResetState();
+        if (_landAnimator != null) _landAnimator.ResetState();
 
         // 투사체 상태 오브젝트 변경
         _fallObject.SetActive(true);
         _landObject.SetActive(false);
+        
+        // 낙하 연출 실행
+        if (_fallAnimator != null) _fallAnimator.StartSequence(_waterBombSkill.FallDuration);
 
         // 목표 지점
         _targetPos = targetPos;
@@ -73,14 +90,21 @@ public class WaterBombArea : SkillArea<WaterBombModifierData>
     {
         _isLanded = true;
 
-        // 투사체 상태 오브젝트 변경
-        _fallObject.SetActive(false);
-        _landObject.SetActive(true);
-
         // 착지 시점부터
         // 수명, 틱 타이머 시작
         _createTime = Time.time;
         _lastTickTime = Time.time;
+
+        // 낙하 종료 연출 후 오브젝트 끄기
+        if (_fallAnimator != null) _fallAnimator.RequestExpire(() => _fallObject.SetActive(false));
+        // 애니메이터 없으면 그냥 끄기
+        else _fallObject.SetActive(false); 
+       
+        // 장판 켜기
+        _landObject.SetActive(true);
+
+        // 유지 시간동안 장판 연출 시작
+        if (_landAnimator != null) _landAnimator.StartSequence(_runtimeFinalStat.Duration);
 
         // 물바다
         // 8방향 추가 투사체 발사
@@ -107,5 +131,23 @@ public class WaterBombArea : SkillArea<WaterBombModifierData>
         // 방어막 획득
         // SkillManager.Instance.Player.AddShield(1);
         Debug.Log("[WaterBombArea] 폭발은 예술이다 - 투사체 삭제 (방어막 획득)");
+    }
+
+    // 만료 오버라이드
+    protected override void ExpireObject()
+    {
+        if (_expired == true) return;
+        _expired = true;
+
+        OnExpire();
+
+        // 장판 애니메이터 종료 연출 콜백
+        if (_landAnimator != null)
+        {
+            Debug.Log("만료");
+            _landAnimator.RequestExpire(ReturnToPool);
+        }
+        else
+            ReturnToPool();
     }
 }

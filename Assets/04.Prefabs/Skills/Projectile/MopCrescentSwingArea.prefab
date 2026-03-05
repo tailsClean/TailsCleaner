@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 1806253664848169780}
   - component: {fileID: 1439305912963191471}
   - component: {fileID: 3561771424523650257}
+  - component: {fileID: -8716959258182707414}
   m_Layer: 0
   m_Name: MopCrescentSwingArea
   m_TagString: Untagged
@@ -29,8 +30,8 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
+  m_LocalScale: {x: 3, y: 3, z: 3}
+  m_ConstrainProportionsScale: 1
   m_Children:
   - {fileID: 4180857869497320438}
   - {fileID: 3145781886677711440}
@@ -88,8 +89,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cba0c930577f8e240a095f334c21bc3e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PoolObject
-  poolTag: 
-  autoReleaseTime: 2
+--- !u!114 &-8716959258182707414
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1457600225023999490}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e0d8145ecf457624188f130f298a4a7b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::SkillAnimator
+  _data: {fileID: 11400000, guid: f8892afe853c82f4cbc45c2decef96da, type: 2}
 --- !u!1 &8734283110352690621
 GameObject:
   m_ObjectHideFlags: 0
@@ -116,8 +128,8 @@ Transform:
   m_GameObject: {fileID: 8734283110352690621}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0.8882167, w: 0.45942488}
-  m_LocalPosition: {x: 0.14, y: 0, z: 0}
-  m_LocalScale: {x: 0.06448, y: 0.096719995, z: 0.096719995}
+  m_LocalPosition: {x: 0.2728001, y: 0, z: 0}
+  m_LocalScale: {x: 0.11730459, y: 0.17595688, z: 0.17595688}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 6327752412020813156}
@@ -169,7 +181,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: 40e0ce0ff1fd511448b862dfc123711a, type: 3}
+  m_Sprite: {fileID: 21300000, guid: cbebf50b07239df4dae4944beb3bc1eb, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -206,8 +218,8 @@ Transform:
   m_GameObject: {fileID: 8933314420299616579}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.1, y: 0, z: 0}
-  m_LocalScale: {x: 0.19999999, y: 0.29999998, z: 0.29999998}
+  m_LocalPosition: {x: 0.20000005, y: 0, z: 0}
+  m_LocalScale: {x: 0.36384797, y: 0.54577196, z: 0.54577196}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 6327752412020813156}

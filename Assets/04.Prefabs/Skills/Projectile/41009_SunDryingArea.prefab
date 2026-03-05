@@ -26,8 +26,8 @@ Transform:
   m_GameObject: {fileID: 1313022781384479722}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 1.054, z: 0}
-  m_LocalScale: {x: 0.38192266, y: 0.38192266, z: 0.38192266}
+  m_LocalPosition: {x: -0, y: 1.45, z: 0}
+  m_LocalScale: {x: 0.4915416, y: 0.4915416, z: 0.4915416}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 2310188434532321344}
@@ -79,12 +79,12 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 1
-  m_Sprite: {fileID: 8059395711701106374, guid: 3e258c921eded3241a20b21cab3b5225, type: 3}
-  m_Color: {r: 1, g: 1, b: 1, a: 0.078431375}
+  m_Sprite: {fileID: 21300000, guid: 0c95ab3bdb2fafb48bdd557cd2e42517, type: 3}
+  m_Color: {r: 1, g: 1, b: 1, a: 0.15686275}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
-  m_Size: {x: 1, y: 1}
+  m_Size: {x: 4.01, y: 8.25}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
@@ -102,6 +102,7 @@ GameObject:
   - component: {fileID: 2677993934649651748}
   - component: {fileID: -581479684818145666}
   - component: {fileID: -992745417313231799}
+  - component: {fileID: -637212106888351283}
   m_Layer: 0
   m_Name: 41009_SunDryingArea
   m_TagString: Untagged
@@ -119,8 +120,8 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
+  m_LocalScale: {x: 5, y: 5, z: 5}
+  m_ConstrainProportionsScale: 1
   m_Children:
   - {fileID: 1380704359555311598}
   - {fileID: 4943770383655765968}
@@ -177,8 +178,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cba0c930577f8e240a095f334c21bc3e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PoolObject
-  poolTag: 
-  autoReleaseTime: 2
+--- !u!114 &-637212106888351283
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4550554079236758630}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e0d8145ecf457624188f130f298a4a7b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::SkillAnimator
+  _data: {fileID: 11400000, guid: ed0e32f2ae8db4e47ac108cbcb9aa386, type: 2}
 --- !u!1 &6509631569940076285
 GameObject:
   m_ObjectHideFlags: 0
@@ -205,8 +217,8 @@ Transform:
   m_GameObject: {fileID: 6509631569940076285}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: -0.07, z: 0}
-  m_LocalScale: {x: 1, y: 0.5, z: 1}
+  m_LocalPosition: {x: 0, y: 0.003399998, z: 0}
+  m_LocalScale: {x: 1.2870185, y: 0.64350927, z: 1.2870185}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 2310188434532321344}
