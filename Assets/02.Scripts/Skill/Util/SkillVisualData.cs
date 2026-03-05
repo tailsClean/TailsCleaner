@@ -31,7 +31,7 @@ public class VisualAction
     public AnimationCurve curve;
 
     [Header("풀 오브젝트")]
-    public GameObject prefab;
+    public PoolObject prefab;
     
     [Header("무한 반복")]
     public bool loop = false;
