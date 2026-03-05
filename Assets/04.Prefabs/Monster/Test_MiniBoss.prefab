@@ -14,7 +14,6 @@ GameObject:
   - component: {fileID: 5676767321155858366}
   - component: {fileID: 4623907807441698298}
   - component: {fileID: 5514830495199837496}
-  - component: {fileID: 7039035210718007216}
   m_Layer: 6
   m_Name: Test_MiniBoss
   m_TagString: Monster
@@ -31,7 +30,7 @@ Transform:
   m_GameObject: {fileID: 899191179583652646}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 9.63, y: -8.53316, z: 0}
+  m_LocalPosition: {x: -6.67, y: 3.97, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -194,17 +193,16 @@ MonoBehaviour:
   scoreReward: 1000
   goldReward: 500
   move_speed: 0
-  monster_power: 0
   detect_range: 0
-  pattern_cooldown: 0
   cast_time: 0
   pattern_multiply: 0
   explosion_range: 0
   pattern_damage: 0
-  zigzag_width: 0
-  patternFrequency: 5
   moveType: 2
+  patternAmplitude: 2
+  patternFrequency: 5
   jump_height: 2
+  jumpCooldown: 3
   visualChild: {fileID: 0}
   isSuicideUnit: 0
 --- !u!114 &5514830495199837496
@@ -227,18 +225,6 @@ MonoBehaviour:
   projectile_count: 3
   fire_interval: 0.2
   state: 0
---- !u!114 &7039035210718007216
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 899191179583652646}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: cba0c930577f8e240a095f334c21bc3e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::PoolObject
 --- !u!1 &3649750411503255337
 GameObject:
   m_ObjectHideFlags: 0

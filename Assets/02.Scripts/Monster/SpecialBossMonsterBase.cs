@@ -506,7 +506,16 @@ public abstract class SpecialBossMonsterBase : MonsterBase
         }
         // if (!hitPlayer) Debug.Log("자폭 빗나감");
 
-        ObjectPoolManager.Instance.ReturnObject(this);
+        if (TryGetComponent<PoolObject>(out var po))
+        {
+            // 몬스터가 터지면서 비활성화되고 풀로 들어감
+            po.ReturnToPool();
+        }
+        else
+        {
+            // 만약 풀링용 오브젝트가 아니라면 파괴
+            Destroy(gameObject);
+        }
     }
 
     private void UpdateWarningVisuals(float progressNormalized) { }

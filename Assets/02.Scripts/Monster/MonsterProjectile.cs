@@ -2,7 +2,7 @@
 
 public enum PierceType { DISAPPEAR, PIERCE, REFLECT }
 
-public class MonsterProjectile : PoolObject
+public class MonsterProjectile : MonoBehaviour
 {
     private Rigidbody2D rb2D;
     private Transform target;
@@ -11,10 +11,6 @@ public class MonsterProjectile : PoolObject
     private bool isInitialized = false;
     private float reflectTimer = 0f;
     private GameObject ownerMonster;
-
-    [Header("--- 프리팹 원본 참조 ---")]
-    [Tooltip("반납할 때 필요한 이 투사체의 원본 프리팹")]
-    public GameObject originPrefab;
 
     [Header("--- 기획 데이터 연동 ---")]
     [Tooltip("투사체 데미지")] public float pattern_damage = 10f;
@@ -35,31 +31,14 @@ public class MonsterProjectile : PoolObject
             GetComponent<Collider2D>().isTrigger = true;
     }
 
-    public override void OnSpawn()
-    {
-        base.OnSpawn(); // 부모 클래스 로직 실행 (필요 시)
-
-        // 데이터 초기화 (재사용 시 이전 데이터가 남아있으면 안 됨)
-        currentBounce = 0;
-        reflectTimer = 0f;
-        isInitialized = false;
-        rb2D.linearVelocity = Vector2.zero;
-        rb2D.angularVelocity = 0f;
-
-        // 수명 후 자동 반납 예약 (CancelInvoke는 Launch에서 수행)
-    }
-
-    public void Launch(Transform playerTarget)
+    public void Launch(Transform playerTarget, GameObject owner)
     {
         target = playerTarget;
         ownerMonster = owner;
         isInitialized = true;
 
         // 관통/기본/반사 모두 플레이어(Trigger) 감지를 위해 isTrigger를 true로 유지
-        //GetComponent<Collider2D>().isTrigger = true;
-
-        CancelInvoke(nameof(DeactivateProjectile));
-        Invoke(nameof(DeactivateProjectile), life_time);
+        GetComponent<Collider2D>().isTrigger = true;
 
         if (arc_height > 0)
         {
@@ -72,13 +51,7 @@ public class MonsterProjectile : PoolObject
             rb2D.linearVelocity = dir * projectile_speed;
         }
 
-        //Destroy(gameObject, life_time);
-    }
-
-    private void DeactivateProjectile()
-    {
-        // 부모(PoolObject)에 정의된 ReturnToPoolAfter와 유사하게 매니저에 직접 반납
-        ObjectPoolManager.Instance.ReturnObject(this);
+        Destroy(gameObject, life_time);
     }
 
     void Update()
@@ -173,12 +146,18 @@ public class MonsterProjectile : PoolObject
         }
     }
 
-        //   파괴 조건 (여기에 도달하면 무조건 삭제)
-        // - DISAPPEAR 모드 (전체)
-        // - REFLECT 모드에서 플레이어와 부딪힌 경우 (isWall이 false이므로 2번을 건너뜀)
-        // - REFLECT 모드에서 반사 횟수 초과 시
-    DeactivateProjectile();
-    
+    // 반사 계산 함수
+    private void HandleReflection(Collider2D wall)
+    {
+        Vector2 closestPoint = wall.ClosestPoint(transform.position);
+        Vector2 normal = ((Vector2)transform.position - closestPoint).normalized;
+        Vector2 reflectDir = Vector2.Reflect(lastVelocity.normalized, normal);
+
+        rb2D.linearVelocity = reflectDir * projectile_speed;
+        reflectTimer = 0.15f;
+        currentBounce++;
+    }
+
     private void ApplyArcShot()
     {
         rb2D.gravityScale = 2.0f;
