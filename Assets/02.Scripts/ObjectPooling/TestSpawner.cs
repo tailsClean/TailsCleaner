@@ -1,34 +1,49 @@
 ﻿using UnityEngine;
+using System.Collections;
 
 public class TestSpawner : MonoBehaviour
 {
     [Header("Pool Settings")]
-    [SerializeField] private string poolTag = "Bullet";
+    [SerializeField] private PoolObject prefab;
+    [SerializeField] private int defaultSize = 20;
 
     [Header("Spawn Settings")]
     [SerializeField] private bool autoSpawn = false;
     [SerializeField] private float spawnInterval = 0.5f;
-    [SerializeField] private float bulletSpeed = 10f;
 
-    private float _timer;
+    private float spawnDelay = 1f;
+
+    void Start()
+    {
+        // ObjectPoolManager.Instance.CreatePool(prefab, defaultSize);
+    }
 
     void Update()
     {
-        if (Input.GetMouseButtonDown(0)) { Spawn(); }
-
-        if (autoSpawn)
+        // 즉시 스폰 (마우스 좌클릭)
+        if (Input.GetMouseButtonDown(0))
         {
-            _timer += Time.deltaTime;
-            if (_timer >= spawnInterval)
-            {
-                Spawn();
-                _timer = 0f;
-            }
+            Spawn();
+        }
+
+        // 딜레이 스폰 (스페이스바)
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            StartCoroutine(SpawnWithDelay());
         }
     }
 
     private void Spawn()
     {
-        ObjectPoolManager.Instance.GetAuto(poolTag, transform.position, transform.rotation);
+        if (prefab == null) return;
+
+        ObjectPoolManager.Instance.Spawn(prefab, transform.position, Quaternion.identity);
+    }
+
+    // 지정한 spawnDelay 시간만큼 대기한 뒤 Spawn()을 실행
+    private IEnumerator SpawnWithDelay()
+    {
+        yield return new WaitForSeconds(spawnDelay);
+        Spawn();
     }
 }

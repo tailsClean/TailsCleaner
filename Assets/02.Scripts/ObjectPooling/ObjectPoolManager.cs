@@ -1,113 +1,80 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Pool;
 
 public class ObjectPoolManager : MonoBehaviour
 {
-    [System.Serializable]
-    public class PoolInfo
-    {
-        public string tag;
-        public GameObject prefab;
-        public int defaultCapacity = 10;
-        public int maxSize = 20;
-        public float defaultSpawnDelay = 0f;
-    }
-
     public static ObjectPoolManager Instance;
 
-    [SerializeField] private List<PoolInfo> poolInfos;
-    private Dictionary<string, IObjectPool<GameObject>> _poolDict = new Dictionary<string, IObjectPool<GameObject>>();
-    private Dictionary<string, PoolInfo> _infoDict = new Dictionary<string, PoolInfo>();
+    // 프리팹별로 큐를 관리하는 딕셔너리
+    private Dictionary<string, Queue<PoolObject>> _poolDictionary = new Dictionary<string, Queue<PoolObject>>();
 
-    private void Awake()
+    void Awake()
     {
-        Instance = this;
-        Init();
+        if (Instance == null) Instance = this;
+        else Destroy(gameObject);
     }
 
-    // 인스펙터에 설정된 정보를 바탕으로 각 태그별 오브젝트 풀을 초기화
-    private void Init()
+    // [즉시 소환] T는 PoolObject를 상속받은 타입이어야 함
+    public T Spawn<T>(T prefab, Vector3 position, Quaternion rotation) where T : PoolObject
     {
-        foreach (var info in poolInfos)
+        string key = prefab.name;
+
+        if (!_poolDictionary.ContainsKey(key))
         {
-            _infoDict[info.tag] = info;
-            _poolDict[info.tag] = new ObjectPool<GameObject>(
-                () => CreatePooledItem(info),
-                OnGetFromPool,
-                OnReleaseToPool,
-                OnDestroyPoolObject,
-                true,
-                info.defaultCapacity,
-                info.maxSize
-            );
-        }
-    }
-
-    // 풀에 객체가 없을 때 새로 생성하고 소속 태그를 설정하는 로직
-    private GameObject CreatePooledItem(PoolInfo info)
-    {
-        GameObject obj = Instantiate(info.prefab, transform);
-        if (obj.TryGetComponent<PoolObject>(out var po))
-        {
-            po.poolTag = info.tag;
-        }
-        obj.SetActive(false);
-        return obj;
-    }
-
-    // 풀에서 꺼낼 때 실행
-    private void OnGetFromPool(GameObject obj) => obj.SetActive(true);
-
-    // 풀에 반납할 때 실행
-    private void OnReleaseToPool(GameObject obj) => obj.SetActive(false);
-
-    // 풀이 가득 차거나 삭제될 때 실행
-    private void OnDestroyPoolObject(GameObject obj) => Destroy(obj);
-
-    // 즉시 소환
-    public GameObject Get(string tag, Vector3 position, Quaternion rotation, float customLifeTime = -1f)
-    {
-        if (!_poolDict.ContainsKey(tag)) return null;
-
-        // 풀에서 꺼내기 (비활성화 상태)
-        GameObject obj = _poolDict[tag].Get();
-
-        // 위치/회전 세팅
-        obj.transform.position = position;
-        obj.transform.rotation = rotation;
-
-        // 물리 엔진 리셋
-        if (obj.TryGetComponent<Rigidbody2D>(out var rb))
-        {
-            rb.linearVelocity = Vector2.zero;
-            rb.angularVelocity = 0f;
+            _poolDictionary.Add(key, new Queue<PoolObject>());
         }
 
-        return obj;
-    }
-
-    // Delay 소환을 위한 로직
-    public void GetAuto(string tag, Vector3 position, Quaternion rotation)
-    {
-        if (!_infoDict.ContainsKey(tag)) return;
-        PoolInfo info = _infoDict[tag];
-
-        // 딜레이가 0보다 크면 코루틴으로 지연 소환, 아니면 즉시 소환
-        if (info.defaultSpawnDelay > 0)
-            StartCoroutine(GetDelayedCoroutine(tag, position, rotation, info.defaultSpawnDelay));
+        T obj;
+        if (_poolDictionary[key].Count > 0)
+        {
+            obj = _poolDictionary[key].Dequeue() as T;
+        }
         else
-            Get(tag, position, rotation);
+        {
+            obj = Instantiate(prefab, transform);
+            obj.PoolKey = key; // 키 값을 부여해 반납 위치를 기억하게 함
+        }
+
+        obj.transform.SetPositionAndRotation(position, rotation);
+        obj.gameObject.SetActive(true);
+        obj.OnSpawn();
+
+        return obj;
     }
 
-    // 설정된 지연 시간(delay)만큼 대기 후, 풀에서 객체 꺼내오는 로직
-    private IEnumerator GetDelayedCoroutine(string tag, Vector3 pos, Quaternion rot, float delay)
+    // [지연 소환 기능] 코루틴 활용
+    public void SpawnWithDelay<T>(T prefab, Vector3 position, Quaternion rotation, float delay) where T : PoolObject
+    {
+        StartCoroutine(CoSpawnDelay(prefab, position, rotation, delay));
+    }
+
+    private IEnumerator CoSpawnDelay<T>(T prefab, Vector3 position, Quaternion rotation, float delay) where T : PoolObject
     {
         yield return new WaitForSeconds(delay);
-        Get(tag, pos, rot);
+        Spawn(prefab, position, rotation);
     }
 
-    // 오브젝트 반납
-    public void Release(string tag, GameObject obj) => _poolDict[tag].Release(obj);
+    // 풀로 반납
+    public void ReturnObject(PoolObject obj)
+    {
+        if (obj == null) return;
+
+        if (string.IsNullOrEmpty(obj.PoolKey))
+        {
+            Debug.LogWarning($"{obj.name} 객체에 PoolKey가 없습니다. 풀링을 통해 생성되지 않았으므로 파괴합니다.");
+            Destroy(obj.gameObject);
+            return;
+        }
+
+        if (!_poolDictionary.ContainsKey(obj.PoolKey))
+        {
+            // 만약 키는 있는데 딕셔너리에 없다면 새로 생성해줌 (예외 방지)
+            _poolDictionary.Add(obj.PoolKey, new Queue<PoolObject>());
+        }
+
+        obj.OnDespawn();
+        obj.gameObject.SetActive(false);
+        _poolDictionary[obj.PoolKey].Enqueue(obj);
+    }
 }

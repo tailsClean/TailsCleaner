@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 
-public class WaterBombVortexArea : MonoBehaviour
+public class WaterBombVortexArea : PoolObject
 {
     private float _pullInterval;    // 당기기 주기
     private float _lastPullTime;    // 최근 당기기 시간
@@ -65,7 +65,7 @@ public class WaterBombVortexArea : MonoBehaviour
             _bulletsInArea.Clear();
 
             // 풀 반환 실패 시 파괴
-            if (_poolObject != null) _poolObject.ReturnToPool();
+            if (_poolObject != null) _poolObject.ReturnToPoolAfter(0);
             else Destroy(gameObject);
 
             return;

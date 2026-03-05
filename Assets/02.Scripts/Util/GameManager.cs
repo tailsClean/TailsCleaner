@@ -28,6 +28,7 @@ public class GameManager : MonoBehaviour
         DontDestroyOnLoad(gameObject);
         _maxEnergy = _energySystem.MaxEnergy;
         EnergyCount = _maxEnergy;
+        
     }
 
     public void EnterStage()
@@ -35,10 +36,6 @@ public class GameManager : MonoBehaviour
         if(_energySystem.IsStartInGame)
         {
             UIManager.Instance.GoToStage();
-        }
-        else
-        {
-            Debug.Log($"에너지가 부족합니다. 현재 에너지: {_energySystem.CurrentEnergy}");
         }
     }
 

@@ -7,6 +7,9 @@ public class WashWaveSkill : ActiveSkill<WashWaveProjectile, WashWaveModifierDat
     [SerializeField] private float _spawnOffsetDistance = 15f;  // 플레이어에서 스폰 중심까지 거리
     [SerializeField] private float _spawnRadius = 5f;           // 스폰 랜덤 반경
 
+    [Header("파도 스프라이트")]
+    [SerializeField] Sprite[] _sprites;
+
     private Coroutine _drainCoroutine = null;        // 탈수 코루틴
     private WaitForSeconds _drainDelay;              // 탈수딜레이
     private WaitForSeconds _returnDelay;             // 밀물 썰물 딜레이
@@ -40,10 +43,6 @@ public class WashWaveSkill : ActiveSkill<WashWaveProjectile, WashWaveModifierDat
         for (int i = 0; i < returnCount; i++)
         {
             yield return _returnDelay;
-
-            // 공격 방향 없으면 스킵
-            attackDir = SkillManager.Instance.Player.AttackDir;
-            if (attackDir == Vector2.zero) continue;
 
             // 공격 방향에서 생성 -> 공격 반대 방향으로
             StartCoroutine(FireWave(-attackDir));
@@ -85,7 +84,7 @@ public class WashWaveSkill : ActiveSkill<WashWaveProjectile, WashWaveModifierDat
 
         // 투사체 생성
         //WashWaveProjectile washWave = Instantiate(_skillObjectPrefab, spawnPos, Quaternion.Euler(0f, 0f, angle));
-        WashWaveProjectile washWave = SpawnFromPool<WashWaveProjectile>(_poolTag, spawnPos, Quaternion.Euler(0f, 0f, angle));
+        WashWaveProjectile washWave = SpawnFromPool<WashWaveProjectile>(_skillObjectPrefab, spawnPos, Quaternion.Euler(0f, 0f, angle));
 
         // 투사체 초기화
         if(washWave != null) washWave.Init(this, _modifierData, dir);
@@ -150,5 +149,12 @@ public class WashWaveSkill : ActiveSkill<WashWaveProjectile, WashWaveModifierDat
 
             yield return _drainDelay;
         }
+    }
+
+    // 랜덤 스프라이트 반환
+    public Sprite GetRandomSprite()
+    {
+        if (_sprites == null || _sprites.Length == 0) return null;
+        return _sprites[Random.Range(0, _sprites.Length)];
     }
 }

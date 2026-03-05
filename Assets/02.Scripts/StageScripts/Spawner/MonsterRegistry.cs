@@ -71,11 +71,9 @@ public class MonsterRegistry : MonoBehaviour, IMonsterRegistry
             GameObject obj = toRemove[i];
             if (obj == null) continue;
 
-            // ✅ 풀링 반납 가능한 오브젝트면 반납
-            PoolObject poolObj = obj.GetComponent<PoolObject>();
-            if (poolObj != null && ObjectPoolManager.Instance != null)
+            if (obj.TryGetComponent<PoolObject>(out var poolObj))
             {
-                ObjectPoolManager.Instance.Release(poolObj.poolTag, obj);
+                poolObj.ReturnToPoolAfter(0);
             }
             else
             {

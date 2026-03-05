@@ -23,8 +23,6 @@ public class SkillProjectile<TModifierData> : SkillObjectBase
     protected void SetDirection(Vector2 newDir)
     {
         _dir = newDir;
-        // 방향 변경 후 물리 재적용
-        ApplySize();
     }
 
 

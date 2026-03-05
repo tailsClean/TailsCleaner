@@ -51,6 +51,8 @@ public class EnergySystem : MonoBehaviour
         if(_timer >= _increaseEnergyTime)
         {
             _currentEnergy++;
+            GameManager.Instance.UpdateEnergyCount(_currentEnergy);
+
             _timer = 0;
         }
 
@@ -75,8 +77,12 @@ public class EnergySystem : MonoBehaviour
     // }
 
 
-    public void IncreaseEnergy(int count) => _currentEnergy += count;
-
+    public void IncreaseEnergy(int count) 
+    {
+        _currentEnergy += count;
+        GameManager.Instance.UpdateEnergyCount(_currentEnergy);
+    }
+    
     // 에너지 감소(사용) 메서드
     public void SpendEnergy()
     {
@@ -87,6 +93,7 @@ public class EnergySystem : MonoBehaviour
         }    
         _currentEnergy -= GameManager.SPEND_ENERGY;
         GameManager.Instance.UpdateEnergyCount(_currentEnergy);
+
     }
 
     [ContextMenu("에너지 초기화")]
@@ -100,7 +107,6 @@ public class EnergySystem : MonoBehaviour
     {
         _currentEnergy++;
         _timer = 0;
-        GameManager.Instance.UpdateEnergyCount(_currentEnergy);
     }
     
 }

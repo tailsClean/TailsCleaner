@@ -67,7 +67,7 @@ public class SkillManager : MonoBehaviour
 
         //ApplyActiveOption(41004, SkillDataLoader.GetActiveUpgradeData(40022));  // 타올 리사이클 
         //ApplyActiveOption(41004, SkillDataLoader.GetActiveUpgradeData(40025));  // 타올 휘두르며
-
+        
         //ApplyActiveOption(41005, SkillDataLoader.GetActiveUpgradeData(40026));  // 걸레 휘두르기
         //ApplyActiveOption(41005, SkillDataLoader.GetActiveUpgradeData(40027));  // 걸레 리사이클
         //ApplyActiveOption(41005, SkillDataLoader.GetActiveUpgradeData(40030));  // 걸레 휘두르며
@@ -90,6 +90,9 @@ public class SkillManager : MonoBehaviour
         //ApplyActiveOption(41010, SkillDataLoader.GetActiveUpgradeData(40061));  // 방수코팅
         //ApplyActiveOption(41010, SkillDataLoader.GetActiveUpgradeData(40062));  // 키친건!
 
+        //ApplyActiveOption(41005, SkillDataLoader.GetActiveUpgradeData(40066));  // 지속 시간
+        //ApplyActiveOption(41005, SkillDataLoader.GetActiveUpgradeData(40066));  // 지속 시간
+        //ApplyActiveOption(41005, SkillDataLoader.GetActiveUpgradeData(40066));  // 지속 시간
         //ApplyActiveOption(41010, SkillDataLoader.GetActiveUpgradeData(40067));  // 연사 (투사체 수)
     }
 

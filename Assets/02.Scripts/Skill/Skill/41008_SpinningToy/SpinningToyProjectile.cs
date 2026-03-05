@@ -15,10 +15,10 @@ public class SpinningToyProjectile : SkillProjectile<SpinningToyModifierData>
     
     // 공전모드로 초기화
     public void InitOrbit(ActiveSkill owner, SpinningToyModifierData modifierData,
-        SpinningToySkill.TOY_TYPE toyType, float initialAngleDeg, float radius)
+        SpinningToySkill.TOY_TYPE toyType, float angleDeg, float radius)
     {
         _toyType = toyType;
-        _orbitAngle = initialAngleDeg;
+        _orbitAngle = angleDeg;
         _orbitRadius = radius;
         _isOrbiting = true;
 
@@ -27,14 +27,37 @@ public class SpinningToyProjectile : SkillProjectile<SpinningToyModifierData>
         base.Init(owner, modifierData, Vector2.zero);
     }
 
-    // 복사본 초기화
-    public override void Init(ActiveSkill owner, SpinningToyModifierData modifierData, Vector2 dir)
+    // 물놀이 끝 복사본 초기화
+    public void InitBurst(ActiveSkill owner, SpinningToyModifierData modifierData, Vector2 dir, SpinningToySkill.TOY_TYPE toyType)
     {
+        // 복사본도 타입 있어야 스프라이트 설정 가능
+        _toyType = toyType;
+
         // 풀 사용 시
         // 공전상태 남아있는 상황일 수 있으니까
         _isOrbiting = false;
 
         base.Init(owner, modifierData, dir);
+    }
+
+    protected override bool OnCustomInit()
+    {
+        // 작은 오리일 경우
+        if (_toyType == SpinningToySkill.TOY_TYPE.Duck_S)
+        {
+            // 기본 크기 줄임
+            _runtimeBaseStat.Size *= _modifierData.SizeMultiplier;
+            return true;
+        }
+
+        return false;
+    }
+
+    protected override void OnBeforeStartSequence()
+    {
+        // 장난감 타입에 맞는 스프라이트 설정
+        if (_animator != null && toySkill != null)
+            _animator.OverrideMainSprite(toySkill.GetTypeSprite(_toyType));
     }
 
     protected override void Update()
