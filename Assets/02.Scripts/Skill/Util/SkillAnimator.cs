@@ -37,8 +37,9 @@ public class SkillAnimator : MonoBehaviour
     // 스프라이트, 알파값 설정
     private SpriteRenderer _renderer;
     
-    // Awake 로컬 스케일 저장 (발동, 만료 크기 조절용)
+    // 로컬 스케일, 알파값 저장
     private Vector3 _originalScale;
+    private float _originalAlpha = 1f;
 
     // 유지 연출 재생 속도 배율
     private float _durationSpeedMul = 1f;
@@ -92,6 +93,12 @@ public class SkillAnimator : MonoBehaviour
     private void Awake()
     {
         _renderer = GetComponentInChildren<SpriteRenderer>();
+        
+        if (_renderer != null)
+        {
+            // 원본 알파값 저장
+            _originalAlpha = _renderer.color.a;
+        }
 
         // 원본 크기 저장
         _originalScale = transform.localScale;
@@ -118,10 +125,10 @@ public class SkillAnimator : MonoBehaviour
                 TickSprites(t);
                 break;
             case VISUALACTION_TYPE.FadeIn:                  // 페이드인
-                TickFade(0f, 1f, t);
+                TickFade(0f, _originalAlpha, t);
                 break;
             case VISUALACTION_TYPE.FadeOut:                 // 페이드아웃
-                TickFade(1f, 0f, t);
+                TickFade(_originalAlpha, 0f, t);
                 break;
             case VISUALACTION_TYPE.ScaleUp:                 // 크기 확대
                 TickScale(Vector3.zero, _originalScale, t);
@@ -130,11 +137,11 @@ public class SkillAnimator : MonoBehaviour
                 TickScale(_originalScale, Vector3.zero, t);     
                 break;
             case VISUALACTION_TYPE.FadeInAndScaleUp:        // 페이드인 + 확대
-                TickFade(0f, 1f, t);                       
+                TickFade(0f, _originalAlpha, t);                       
                 TickScale(Vector3.zero, _originalScale, t);
                 break;
             case VISUALACTION_TYPE.FadeOutAndScaleDown:     // 페이드아웃 + 축소
-                TickFade(1f, 0f, t);
+                TickFade(_originalAlpha, 0f, t);
                 TickScale(_originalScale, Vector3.zero, t);
                 break;
         }
@@ -172,7 +179,7 @@ public class SkillAnimator : MonoBehaviour
         {
             // 색, 알파값 복원
             var c = _renderer.color;
-            _renderer.color = new Color(c.r, c.g, c.b, 1f);
+            _renderer.color = new Color(c.r, c.g, c.b, _originalAlpha);
         }
 
         // 스케일 복원
@@ -431,12 +438,12 @@ public class SkillAnimator : MonoBehaviour
                 }
                 break;
 
-            case VISUALACTION_TYPE.FadeIn:    SetAlpha(1f);               break;
+            case VISUALACTION_TYPE.FadeIn:    SetAlpha(_originalAlpha);               break;
             case VISUALACTION_TYPE.FadeOut:   SetAlpha(0f);               break;
             case VISUALACTION_TYPE.ScaleUp:   transform.localScale = _originalScale; break;
             case VISUALACTION_TYPE.ScaleDown: transform.localScale = Vector3.zero;   break;
             case VISUALACTION_TYPE.FadeInAndScaleUp:
-                SetAlpha(1f);
+                SetAlpha(_originalAlpha);
                 transform.localScale = _originalScale;
                 break;
             case VISUALACTION_TYPE.FadeOutAndScaleDown:

@@ -3,13 +3,13 @@ using UnityEngine;
 
 public class SkillObjectBase : MonoBehaviour
 {
-    protected SkillStat _runtimeBaseStat;            // 런타임 기본 스탯
-    protected SkillStat _runtimeCommonStat;          // 런타임 공용 스탯
-    protected SkillStat _runtimeUpgradeStat;         // 런타임 업그레이드 스탯
-    protected SkillStat _runtimePassiveMulStat;      // 런타임 패시브 배율 합 , 임플란트 누적
-    protected SkillStat _runtimeFinalStat;           // 최종 스탯
-    private SkillStat _calcBuffer = new SkillStat(); // 스탯 계산 버퍼 (GC 방지)
-    private SkillStat _staticStat;                   // 정적 스탯 베이스(baseStat + passiveBaseAdds) * commonStat
+    protected SkillStat _runtimeBaseStat = new();       // 런타임 기본 스탯
+    protected SkillStat _runtimeCommonStat = new();     // 런타임 공용 스탯
+    protected SkillStat _runtimeUpgradeStat = new();    // 런타임 업그레이드 스탯
+    protected SkillStat _runtimePassiveMulStat = new(); // 런타임 패시브 배율 합 , 임플란트 누적
+    protected SkillStat _runtimeFinalStat = new();      // 최종 스탯
+    private SkillStat _calcBuffer = new();              // 스탯 계산 버퍼 (GC 방지)
+    private SkillStat _staticStat = new();              // 정적 스탯 베이스(baseStat + passiveBaseAdds) * commonStat
     private bool _statDirty = false;                 // 더티 플래그 / true일 때 재계산
 
     protected ActiveSkill _skill;                    // 액티브 스킬 (스탯 재계산용)
@@ -42,11 +42,11 @@ public class SkillObjectBase : MonoBehaviour
         _dir = dir;
 
         // 스킬 스탯 스냅샷
-        _runtimeBaseStat = owner.BaseStat.Clone();
-        _runtimeCommonStat = owner.CommonStat.Clone();
-        _runtimeUpgradeStat = owner.UpgradeStat.Clone();
-        _runtimePassiveMulStat = owner.PassiveMulStat.Clone();
-        _runtimeFinalStat = owner.FinalStat.Clone();
+        _runtimeBaseStat.CopyFrom(owner.BaseStat);
+        _runtimeCommonStat.CopyFrom(owner.CommonStat);
+        _runtimeUpgradeStat.CopyFrom(owner.UpgradeStat);
+        _runtimePassiveMulStat.CopyFrom(owner.PassiveMulStat);
+        _runtimeFinalStat.CopyFrom(owner.FinalStat);
 
         // 패시브 모디파이어 캐싱
         _passiveModifiers = new List<PassiveModifier>(owner.PassiveModifiers);
