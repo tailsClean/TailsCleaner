@@ -60,16 +60,8 @@ public abstract class SpecialBossMonsterBase : MonsterBase
     {
         base.Start();
 
-        // 스폰 시 기본 속도 설정
-        if (move_speed == 0) move_speed = base.moveSpeed;
-
-        // 자폭 유닛인 경우 타이머 초기화
-        if (isSuicideUnit)
-        {
-            currentCastTimer = cast_time; // cast_time 사용
-
-            currentState = MonsterState.PATTERN;
-        }
+        if (move_speed == 0f)
+            move_speed = base.moveSpeed;
     }
 
     protected override void FixedUpdate()
@@ -107,20 +99,34 @@ public abstract class SpecialBossMonsterBase : MonsterBase
     }
 
     // 오브젝트 풀링을 위한 초기화
-    protected void OnEnable()
+    public override void OnSpawn()
     {
+        base.OnSpawn();
+
         if (!activeMonsters.Contains(this))
             activeMonsters.Add(this);
 
-        hasExploded = false;           // 자폭 여부 리셋
-        isJumping = false;             // 점프 상태 리셋
-        isWaiting = false;             // 대기 상태 리셋
-        isFleeingState = false;        // 도망 상태 리셋
-        isWaitingFlee = false;         // 도망 대기 리셋
-        patternTimer = 0f;             // 지그재그 타이머 리셋
-        stateTimer = 0f;               // 패턴 쿨타임 리셋
+        hasExploded = false;
+        isJumping = false;
+        isWaiting = false;
+        isFleeingState = false;
+        isWaitingFlee = false;
+        hasHitTargetInCurrentJump = false;
 
-        // 자폭 유닛 전용 초기화
+        patternTimer = 0f;
+        stateTimer = 0f;
+        jumpProgress = 0f;
+        currentCastTimer = 0f;
+
+        if (rb2D != null)
+        {
+            rb2D.linearVelocity = Vector2.zero;
+            rb2D.angularVelocity = 0f;
+        }
+
+        if (move_speed == 0f)
+            move_speed = base.moveSpeed;
+
         if (isSuicideUnit)
         {
             currentCastTimer = cast_time;
@@ -131,20 +137,46 @@ public abstract class SpecialBossMonsterBase : MonsterBase
             currentState = MonsterState.MOVE;
         }
 
-        // 시각적 높이 리셋 
-        if (visualChild != null) visualChild.localPosition = Vector2.zero;
+        if (visualChild != null)
+            visualChild.localPosition = Vector2.zero;
 
-        // 타겟(플레이어) 재설정 
         if (target == null)
         {
             GameObject playerObj = GameObject.FindWithTag("Player");
-            if (playerObj != null) target = playerObj.transform;
+            if (playerObj != null)
+                target = playerObj.transform;
         }
     }
 
-    protected void OnDisable()
+    public override void OnDespawn()
     {
+        base.OnDespawn();
+
         activeMonsters.Remove(this);
+
+        hasExploded = false;
+        isJumping = false;
+        isWaiting = false;
+        isFleeingState = false;
+        isWaitingFlee = false;
+        hasHitTargetInCurrentJump = false;
+
+        patternTimer = 0f;
+        stateTimer = 0f;
+        jumpProgress = 0f;
+        currentCastTimer = 0f;
+
+        if (rb2D != null)
+        {
+            rb2D.linearVelocity = Vector2.zero;
+            rb2D.angularVelocity = 0f;
+        }
+
+        StopAllCoroutines();
+        CancelInvoke();
+
+        if (visualChild != null)
+            visualChild.localPosition = Vector2.zero;
     }
 
     protected override void MoveToTarget()
