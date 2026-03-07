@@ -5,7 +5,7 @@ public class EquipmentGradeData
 {
     public int ID { get; private set; }
     public int GroupID { get; private set; }
-    public GRADE Grade { get; private set; }
+    public EQUIP_GRADE Grade { get; private set; }
     public bool IsMaxGrade { get; private set; }
     public int CostID { get; private set; }
     public int CostCount { get; private set; }
@@ -29,11 +29,5 @@ public class EquipmentGradeData
         Grade++;
     }
 
-    public enum GRADE
-    {
-        Grimy,     // 꼬질
-        Fresh,     // 향긋
-        Shiny,     // 반짝
-        Pristine   // 깔끔
-    }
+
 }

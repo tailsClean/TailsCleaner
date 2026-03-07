@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
-using static EquipmentBase;
 
 
 /// <summary>
@@ -8,13 +7,13 @@ using static EquipmentBase;
 /// </summary>
 public class PlayerEnhancementSlots
 {
-    private Dictionary<EquipmentBase.PARTS, EquipmentBase> _myEquipments;
+    private Dictionary<EQUIP_PARTS, EquipmentBase> _myEquipments;
     private List<RelicBase> _myRelics;
 
     private Dictionary<RelicBase.STAT, int> _relicncreaseValue;
 
     public PlayerEnhancementSlots(
-        Dictionary<EquipmentBase.PARTS, EquipmentBase> equipments, 
+        Dictionary<EQUIP_PARTS, EquipmentBase> equipments, 
         List<RelicBase> relics
         )
     {
@@ -42,19 +41,19 @@ public class PlayerEnhancementSlots
         {
 
             case EquipmentBase.STAT.AttackPower:
-                equipment = _myEquipments[PARTS.Weapon];
+                equipment = _myEquipments[EQUIP_PARTS.Weapon];
                 break;
 
             case EquipmentBase.STAT.CriticalChance:
-                equipment = _myEquipments[PARTS.Hat];
+                equipment = _myEquipments[EQUIP_PARTS.Hat];
                 break;
 
             case EquipmentBase.STAT.MaxHp or EquipmentBase.STAT.DefensePower:
-                equipment = _myEquipments[PARTS.Cloak];
+                equipment = _myEquipments[EQUIP_PARTS.Cloak];
                 break;
 
             case EquipmentBase.STAT.MoveSpeed or EquipmentBase.STAT.EvasionChance:
-                equipment = _myEquipments[PARTS.Shoes];
+                equipment = _myEquipments[EQUIP_PARTS.Shoes];
                 break;
 
             default:

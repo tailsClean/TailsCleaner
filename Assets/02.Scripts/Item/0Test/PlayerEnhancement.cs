@@ -44,20 +44,13 @@ public abstract class PlayerEnhancement : ItemBase
     protected virtual void Awake()
     {
         EquipEnhance = new EnhanceData(this);
-
-
-
-        //
-        _button = GetComponent<Button>();
-        _button.onClick.AddListener(() => EquipEnhancement(this));
-        //
     }
 
 
     // 장비(유물) 착용 메서드
     public virtual void EquipEnhancement(PlayerEnhancement enhancement) => 
         _onEquipEnhancement.OnStartEvent(enhancement);
-    public void Remove() => Destroy(gameObject);
+    //public void Remove() => Destroy(gameObject);
 
 
 

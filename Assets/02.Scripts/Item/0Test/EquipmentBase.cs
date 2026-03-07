@@ -2,6 +2,8 @@
 using UnityEngine;
 using static EquipmentGradeData;
 
+
+[CreateAssetMenu(fileName = "ItemData", menuName = "ItemData/Equipment")]
 public class EquipmentBase : PlayerEnhancement
 {
     [Header("장비 정보")]
@@ -28,7 +30,7 @@ public class EquipmentBase : PlayerEnhancement
     public bool IsGrade;
     [field: SerializeField] public int GradeID { get; private set; }
     [field: SerializeField] public int GradeGroupID { get; private set; }
-    [field: SerializeField] public GRADE Grade { get; private set; }
+    [field: SerializeField] public EQUIP_GRADE Grade { get; private set; }
     [field: SerializeField] public bool IsGradeMaxGrade { get; private set; }
     [field: SerializeField] public int GradeCostID { get; private set; }
     [field: SerializeField] public int GradeCostCount { get; private set; }

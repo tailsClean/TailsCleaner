@@ -7,7 +7,7 @@ public class PlayerEnhancementUI : MonoBehaviour
     [SerializeField] private GameObject _playerObj;
 
     private PlayerEnhancementSelector _player;
-    private Dictionary<EquipmentBase.PARTS, EquipmentBase> _equipments;
+    private Dictionary<EQUIP_PARTS, EquipmentBase> _equipments;
     public Image _weaponImage;
     public Image _hatImage;
     public Image _cloakImage;
@@ -39,14 +39,14 @@ public class PlayerEnhancementUI : MonoBehaviour
         _equipments = _player.MyEquipment;
 
         foreach (var equip in _equipments)
-            UpdateImage(equip.Key);
+            UpdateImage((EquipmentBase.PARTS)equip.Key);
     }
 
 
     // UI갱신 메서드
     private void UpdateImage(EquipmentBase.PARTS equipmentType)
     {
-        var equipment = _player.MyEquipment[equipmentType];
+        var equipment = _player.MyEquipment[(EQUIP_PARTS) equipmentType];
 
         switch (equipmentType)
         {

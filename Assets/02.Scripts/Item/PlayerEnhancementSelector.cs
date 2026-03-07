@@ -7,7 +7,7 @@ public class PlayerEnhancementSelector : MonoBehaviour
     [SerializeField] private EnhancementEventChannelSO _onEquipEnhancement;
 
     [field: SerializeField]
-    public Dictionary<EquipmentBase.PARTS, EquipmentBase> MyEquipment { get; private set; } = new();
+    public Dictionary<EQUIP_PARTS, EquipmentBase> MyEquipment { get; private set; } = new();
     
     [field: SerializeField]
     public List<RelicBase> MyRelic { get; private set; } = new(3);
@@ -41,8 +41,8 @@ public class PlayerEnhancementSelector : MonoBehaviour
         switch(enhancement)
         {
             case EquipmentBase equipment:
-                if (!MyEquipment.TryAdd(equipment.EquipmentPart, equipment))
-                        MyEquipment[equipment.EquipmentPart] = equipment;
+                if (!MyEquipment.TryAdd((EQUIP_PARTS)equipment.EquipmentPart, equipment))
+                        MyEquipment[(EQUIP_PARTS)equipment.EquipmentPart] = equipment;
                 OnSetEquipment?.Invoke(equipment.EquipmentPart);
                 break;
 

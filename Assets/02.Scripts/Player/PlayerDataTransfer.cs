@@ -6,10 +6,10 @@
 public static class PlayerDataTransfer
 {
 
-    public static Dictionary<EquipmentBase.PARTS, EquipmentBase> Equipments { get; private set; }
+    public static Dictionary<EQUIP_PARTS, EquipmentBase> Equipments { get; private set; }
     public static List<RelicBase> Relics { get; private set; }
 
-    public static void SetEquipments(Dictionary<EquipmentBase.PARTS, EquipmentBase> equipments) =>
+    public static void SetEquipments(Dictionary<EQUIP_PARTS, EquipmentBase> equipments) =>
         Equipments = equipments;
 
     public static void SetRelics(List<RelicBase> relics) => Relics = relics;

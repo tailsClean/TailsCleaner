@@ -122,8 +122,8 @@ public class UpgradeManager : MonoBehaviour
     {
         foreach(var equip in _materialEquipments)
         {
-            if(equip != null)
-                equip.Remove();
+            //if(equip != null)
+                //equip.Remove();
         }
     }
 }
