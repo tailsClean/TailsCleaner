@@ -17,7 +17,7 @@ public class InventoryUI : MonoBehaviour
     private void Awake()
     {
         Init();
-        _defaultButton?.Select();
+        //_defaultButton?.Select();
     }
 
     private void Start()
@@ -71,7 +71,7 @@ public class InventoryUI : MonoBehaviour
                 break;
 
             case UI_GROUP.ReinforceResource:
-                SetInventory(UI_GROUP.ReinforceResource, _inventory.ReinforceMaterialInventory);
+                SetInventory(UI_GROUP.ReinforceResource, _inventory.ReinforceResourceInventory);
                 break;
 
             case UI_GROUP.Spendable:

@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.UI;
 
 
 public abstract class ItemBase : MonoBehaviour
@@ -15,6 +16,22 @@ public abstract class ItemBase : MonoBehaviour
     public abstract Sprite GetSprite();
     //
 
+
+    #region 에디터 설정
+#if UNITY_EDITOR
+    private void OnValidate()
+    {
+        var image = GetComponent<Image>();
+        if (image == null)
+        {
+            Debug.LogWarning($"{gameObject.name}에 Image컴포넌트가 없음");
+            return;
+        }
+        if (GetSprite() != null)
+            image.sprite = GetSprite();
+    }
+#endif
+    #endregion
 }
 
 public enum ITEM_TYPE

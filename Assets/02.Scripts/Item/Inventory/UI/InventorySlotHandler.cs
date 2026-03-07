@@ -1,37 +1,39 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 
 public class InventorySlotHandler : UIGroup
 {
     [SerializeField] private List<InventorySlot> _slots;
+    [SerializeField] private Button _handlerButton;
 
     private Dictionary<int, int> _inventory;
-
     private List<int> _itemOrder = new();                           // 무작위로 들고 있는 _inventory의 값들에 순서를 부여
     private Dictionary<int, InventorySlot> _slotByItemId = new();   // 특정 ID가 슬롯에 배치됐는지 조회용 딕셔너리
+    private Image _buttonImg;
+    private Color _baseColor;
+
+
+
 
     private void Awake()
     {
         _itemOrder = new List<int>();
         _slotByItemId = new Dictionary<int, InventorySlot>();
+        _buttonImg = _handlerButton.GetComponent<Image>();
+        _baseColor = _buttonImg.color;
     }
 
-
-    private void Start()
+    private void OnEnable()
     {
-        // 인벤토리 슬롯 생성
-        //for (int i = 0; i < 15; i++)
-        //{
-        //    var a = Instantiate(InventorySlotPrefab, transform);
-        //    InventorySlots.Add(a);
-        //}
-
-
-        //MoneyImage.sprite = 
+        _buttonImg.color = _handlerButton.colors.disabledColor;
     }
 
+    private void OnDisable()
+    {
+        _buttonImg.color = _baseColor;
+    }
 
 
 

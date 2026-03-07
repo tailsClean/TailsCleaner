@@ -35,7 +35,7 @@ public abstract class PlayerEnhancement : ItemBase
     [field: SerializeField] public int EnhanceBluePrintID { get; private set; }
 
     // 강화 관련 정보와 메서드 저장 공간
-    protected EnhanceData EquipEnhance { get; private set; }
+    public EnhanceData EquipEnhance { get; private set; }
 
 
     public void OnEnhance() => EnhanceLevel++;
@@ -67,19 +67,5 @@ public abstract class PlayerEnhancement : ItemBase
 
 
 
-    #region 에디터 설정
-#if UNITY_EDITOR
-    private void OnValidate()
-    {
-        var image = GetComponent<Image>();
-        if (image == null)
-        {
-            Debug.LogWarning($"{gameObject.name}에 Image컴포넌트가 없음");
-            return;
-        }
-        if (SpriteImage != null)
-            image.sprite = SpriteImage;
-    }
-#endif
-    #endregion
+
 }
