@@ -1,7 +1,6 @@
 ﻿using UnityEngine;
 
 
-[CreateAssetMenu(fileName = "ItemData", menuName = "ItemData/SpendableItem")]
 public class SpendableItem : ItemBase
 {
     [field: SerializeField] public STAT_TYPE Type {  get; private set; }

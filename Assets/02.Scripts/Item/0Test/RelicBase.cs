@@ -1,7 +1,6 @@
 ﻿using UnityEngine;
 
 
-[CreateAssetMenu(fileName = "ItemData", menuName = "ItemData/Relic")]
 public class RelicBase : PlayerEnhancement
 {
     [Header("유물 정보")]

@@ -1,8 +1,7 @@
 ﻿using UnityEngine;
-using UnityEngine.UI;
 
 
-public abstract class ItemBase : ScriptableObject
+public abstract class ItemBase
 {
     [Header("아이템 기본 정보")]
     public bool IsItem;

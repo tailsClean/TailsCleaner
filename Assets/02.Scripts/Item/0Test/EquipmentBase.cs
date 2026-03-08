@@ -3,7 +3,6 @@ using UnityEngine;
 using static EquipmentGradeData;
 
 
-[CreateAssetMenu(fileName = "ItemData", menuName = "ItemData/Equipment")]
 public class EquipmentBase : PlayerEnhancement
 {
     [Header("장비 정보")]
