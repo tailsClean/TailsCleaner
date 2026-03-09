@@ -12,7 +12,7 @@ public class PlayerEnhancementSelector : MonoBehaviour
     [field: SerializeField]
     public List<RelicBase> MyRelic { get; private set; } = new(3);
 
-    public event Action<EquipmentBase.PARTS> OnSetEquipment;
+    public event Action<EQUIP_PARTS> OnSetEquipment;
     public event Action OnSetRelic;
 
     private void OnEnable()
@@ -36,13 +36,13 @@ public class PlayerEnhancementSelector : MonoBehaviour
     //
 
     // 장비를 교체하는 메서드
-    public void SetEnhancement(PlayerEnhancement enhancement)
+    public void SetEnhancement(EnhanceableItem enhancement)
     {
         switch(enhancement)
         {
             case EquipmentBase equipment:
-                if (!MyEquipment.TryAdd((EQUIP_PARTS)equipment.EquipmentPart, equipment))
-                        MyEquipment[(EQUIP_PARTS)equipment.EquipmentPart] = equipment;
+                if (!MyEquipment.TryAdd(equipment.EquipmentPart, equipment))
+                        MyEquipment[equipment.EquipmentPart] = equipment;
                 OnSetEquipment?.Invoke(equipment.EquipmentPart);
                 break;
 

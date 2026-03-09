@@ -9,7 +9,7 @@ public class EnhanceManager : MonoBehaviour
     [SerializeField] private GameObject _inventory;
 
     private IEnhanceResourceProvider _resourceProvider;
-    private PlayerEnhancement _enhanceItem;
+    private EnhanceableItem _enhanceItem;
     private StackableItem _reinforceResource;
     private StackableItem _gold;
     private bool _isEnhancable;
@@ -50,12 +50,12 @@ public class EnhanceManager : MonoBehaviour
 
         if (_enhanceItem != null)
         {
-            _enhanceItemImage.sprite = _enhanceItem.SpriteImage;
-            _reinforceResourceImage.sprite = _reinforceResource.GetSprite();
-            _goldImage.sprite = _gold.GetSprite();
-            _costBluePrintText.text = _enhanceItem.EnhanceCostBluePrint.ToString();
-            _costGoldText.text = _enhanceItem.EnhanceCostGold.ToString();
-            _enhanceLevelText.text = "+" + _enhanceItem.EnhanceLevel.ToString();
+            //_enhanceItemImage.sprite = _enhanceItem.SpriteImage;
+            //_reinforceResourceImage.sprite = _reinforceResource.GetSprite();
+            //_goldImage.sprite = _gold.GetSprite();
+            //_costBluePrintText.text = _enhanceItem.EnhanceCostBluePrint.ToString();
+            //_costGoldText.text = _enhanceItem.EnhanceCostGold.ToString();
+            //_enhanceLevelText.text = "+" + _enhanceItem.EnhanceLevel.ToString();
         }
         else
         {
@@ -74,18 +74,18 @@ public class EnhanceManager : MonoBehaviour
     //
     public void SetEnhancement()
     {
-        _enhanceItem = ItemDB.GetItem<PlayerEnhancement>(_itmeID);
-        _reinforceResource = ItemDB.GetItem<StackableItem>(_enhanceItem.EnhanceBluePrintID);
-        _gold = ItemDB.GetItem<StackableItem>(_currency.MoneyID);
+        //_enhanceItem = ItemDB.GetItem<PlayerEnhancement>(_itmeID);
+        //_reinforceResource = ItemDB.GetItem<StackableItem>(_enhanceItem.EnhanceBluePrintID);
+        //_gold = ItemDB.GetItem<StackableItem>(_currency.MoneyID);
     }
     //
 
 
     public void SetEnhancement(int itemID)
     {
-        _enhanceItem = ItemDB.GetItem<PlayerEnhancement>(itemID);
-        _reinforceResource = ItemDB.GetItem<StackableItem>(_enhanceItem.EnhanceBluePrintID);
-        _gold = ItemDB.GetItem<StackableItem>(_currency.MoneyID);
+        //_enhanceItem = ItemDB.GetItem<PlayerEnhancement>(itemID);
+        //_reinforceResource = ItemDB.GetItem<StackableItem>(_enhanceItem.EnhanceBluePrintID);
+        //_gold = ItemDB.GetItem<StackableItem>(_currency.MoneyID);
     }
 
 
@@ -98,12 +98,12 @@ public class EnhanceManager : MonoBehaviour
 
         if (_isEnhancable)
         {
-            _enhanceItem.OnEnhance();
+            //_enhanceItem.OnEnhance();
 
-            _currency.UseGold(_enhanceItem.EnhanceCostGold);
-            var inventory = _resourceProvider.ReinforceResourceInventory;
-            _resourceProvider.UseItem(inventory, _reinforceResource.ID, _enhanceItem.EnhanceCostBluePrint);
-            Debug.Log("강화성공!");
+            //_currency.UseGold(_enhanceItem.EnhanceCostGold);
+            //var inventory = _resourceProvider.ReinforceResourceInventory;
+            //_resourceProvider.UseItem(inventory, _reinforceResource.ID, _enhanceItem.EnhanceCostBluePrint);
+            //Debug.Log("강화성공!");
         }
     }
 
@@ -111,50 +111,50 @@ public class EnhanceManager : MonoBehaviour
     // 최대 강화수치인지 확인
     private void CheckMaxLevel()
     {
-        if (!_isEnhancable)
-            return;
+        //if (!_isEnhancable)
+        //    return;
 
-        _isEnhancable = !_enhanceItem.IsEnhanceMaxLevel;
+        //_isEnhancable = !_enhanceItem.IsEnhanceMaxLevel;
 
-        if (!_isEnhancable)
-            Debug.Log("강화수치가 최대입니다.");
+        //if (!_isEnhancable)
+        //    Debug.Log("강화수치가 최대입니다.");
     }
 
 
     // 골드 재화와 코스트 비교
     private void CheckGoldCost()
     {
-        if(!_isEnhancable)
-            return;
+        //if(!_isEnhancable)
+        //    return;
 
-        int cost = _enhanceItem.EnhanceCostGold;
+        //int cost = _enhanceItem.EnhanceCostGold;
 
-        if(cost < 0)
-        { Debug.LogError("골드 코스트가 음수입니다!"); return; }
+        //if(cost < 0)
+        //{ Debug.LogError("골드 코스트가 음수입니다!"); return; }
 
-        _isEnhancable = _currency.TryUseGold(cost);
+        //_isEnhancable = _currency.TryUseGold(cost);
 
-        if(!_isEnhancable)
-            Debug.Log("골드가 부족합니다.");
+        //if(!_isEnhancable)
+        //    Debug.Log("골드가 부족합니다.");
     }
 
 
     // 재료 재화와 코스트 비교
     private void CheckResourceCost()
     {
-        if(!_isEnhancable)
-            return;
+        //if(!_isEnhancable)
+        //    return;
 
-        int cost = _enhanceItem.EnhanceCostBluePrint;
+        //int cost = _enhanceItem.EnhanceCostBluePrint;
 
-        if(cost < 0)
-        { Debug.LogError("재료 코스트가 음수입니다!"); return; }
+        //if(cost < 0)
+        //{ Debug.LogError("재료 코스트가 음수입니다!"); return; }
 
-        var inventory = _resourceProvider.ReinforceResourceInventory;
-        _isEnhancable = _resourceProvider.TryUseItem(inventory, _reinforceResource.ID, cost);
+        //var inventory = _resourceProvider.ReinforceResourceInventory;
+        //_isEnhancable = _resourceProvider.TryUseItem(inventory, _reinforceResource.ID, cost);
 
-        if (!_isEnhancable)
-            Debug.Log("강화 재료가 부족합니다.");
+        //if (!_isEnhancable)
+        //    Debug.Log("강화 재료가 부족합니다.");
     }
 }
 

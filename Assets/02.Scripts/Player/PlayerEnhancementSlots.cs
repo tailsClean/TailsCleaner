@@ -10,7 +10,7 @@ public class PlayerEnhancementSlots
     private Dictionary<EQUIP_PARTS, EquipmentBase> _myEquipments;
     private List<RelicBase> _myRelics;
 
-    private Dictionary<RelicBase.STAT, int> _relicncreaseValue;
+    private Dictionary<RELIC_STAT, int> _relicncreaseValue;
 
     public PlayerEnhancementSlots(
         Dictionary<EQUIP_PARTS, EquipmentBase> equipments, 
@@ -31,7 +31,7 @@ public class PlayerEnhancementSlots
     }
 
     // 장비의 스텟 증가량을 반환
-    public float GetIncreaseStat(EquipmentBase.STAT stat)
+    public float GetIncreaseStat(EQUIP_STAT stat)
     {
         if (_myEquipments == null)
             return 0;
@@ -40,19 +40,19 @@ public class PlayerEnhancementSlots
         switch (stat)
         {
 
-            case EquipmentBase.STAT.AttackPower:
+            case EQUIP_STAT.AttackPower:
                 equipment = _myEquipments[EQUIP_PARTS.Weapon];
                 break;
 
-            case EquipmentBase.STAT.CriticalChance:
+            case EQUIP_STAT.CriticalChance:
                 equipment = _myEquipments[EQUIP_PARTS.Hat];
                 break;
 
-            case EquipmentBase.STAT.MaxHp or EquipmentBase.STAT.DefensePower:
+            case EQUIP_STAT.MaxHp or EQUIP_STAT.DefensePower:
                 equipment = _myEquipments[EQUIP_PARTS.Cloak];
                 break;
 
-            case EquipmentBase.STAT.MoveSpeed or EquipmentBase.STAT.EvasionChance:
+            case EQUIP_STAT.MoveSpeed or EQUIP_STAT.EvasionChance:
                 equipment = _myEquipments[EQUIP_PARTS.Shoes];
                 break;
 
@@ -64,19 +64,19 @@ public class PlayerEnhancementSlots
     }
 
     // 유물리스트의 스텟 증가량을 반환
-    public int GetIncreaseStat(RelicBase.STAT stat) => _relicncreaseValue[stat];
+    public int GetIncreaseStat(RELIC_STAT stat) => _relicncreaseValue[stat];
 
     // 클래스 생성시, 유물의 스텟 증가량을 미리 합산
     private void SetRelicncreaseValue()
     {
-        _relicncreaseValue.Add(RelicBase.STAT.GoldGainRate, 0);
-        _relicncreaseValue.Add(RelicBase.STAT.ItemDropRate, 0);
-        _relicncreaseValue.Add(RelicBase.STAT.ExpGainRate, 0);
+        _relicncreaseValue.Add(RELIC_STAT.GoldGainRate, 0);
+        _relicncreaseValue.Add(RELIC_STAT.ItemDropRate, 0);
+        _relicncreaseValue.Add(RELIC_STAT.ExpGainRate, 0);
 
         foreach(var relic in _myRelics)
         {
-            RelicBase.STAT stat = relic.StatUp;
-            _relicncreaseValue[stat] += relic.GetIncreaseStat();
+            RELIC_STAT stat = relic.Data.StatType;
+            _relicncreaseValue[stat] += relic.GetIncreaseStat(stat);
         }
     }
 }

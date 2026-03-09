@@ -6,19 +6,22 @@ using UnityEngine;
 public class ItemDBSO : ScriptableObject
 {
     [Header("장비")]
-    [SerializeField] private List<ItemBase> _equipments;
+    [SerializeField] private List<EquipmentSO> _equipments;
 
     [Header("유물")]
-    [SerializeField] private List<ItemBase> _Relics;
+    [SerializeField] private List<RelicSO> _Relics;
 
     [Header("소모재화")]
-    [SerializeField] private List<ItemBase> _stackables;
+    [SerializeField] private List<ConsumeItemSO> _consumeItems;
 
-    private Dictionary<int, ItemBase> _itemDataDict;              // 게임 아이템 요소 관리 데이터
+    [Header("재화/강화재료")]
+    [SerializeField] private List<StackableItemSO> _stackableItems;
+
+    private Dictionary<int, ItemBaseSO> _itemDataDict;              // 게임 아이템 요소 관리 데이터
 
 
     // DB에서 특정 ID의 아이템 반환
-    public T GetValue<T>(int id) where T : ItemBase
+    public T GetValue<T>(int id) where T : ItemBaseSO
     {
         if (_itemDataDict == null)
             Init();
@@ -37,17 +40,17 @@ public class ItemDBSO : ScriptableObject
     // 초기화
     private void Init()
     {
-        _itemDataDict = new Dictionary<int, ItemBase>();
+        _itemDataDict = new Dictionary<int, ItemBaseSO>();
         Debug.Log("데이터베이스 new할당");
         SetItemDict(_equipments);
         SetItemDict(_Relics);
-        SetItemDict(_stackables);
+        SetItemDict(_consumeItems);
     }
-    private void SetItemDict<T>(List<T> items) where T : ItemBase
+    private void SetItemDict<T>(List<T> items) where T : ItemBaseSO
     {
         foreach(var item in items)
         {
-            _itemDataDict.Add(item.ID, item);
+            _itemDataDict.Add(item.UniqueID, item);
         }
     }
 }
@@ -58,7 +61,7 @@ public static class ItemDB
 {
     private static ItemDBSO _itemDB;
 
-    public static T GetItem<T>(int id) where T : ItemBase
+    public static T GetItemSO<T>(int id) where T : ItemBaseSO
     {
         if(_itemDB == null)
         {
@@ -67,5 +70,13 @@ public static class ItemDB
         }
 
         return _itemDB.GetValue<T>(id);
+    }
+
+    public static T CreateItem<T>(int id) where T: ItemBase, new()
+    {
+        var item = new T();
+        item.Init(id);
+
+        return item;
     }
 }

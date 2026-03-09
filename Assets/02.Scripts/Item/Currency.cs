@@ -2,7 +2,9 @@
 using UnityEngine;
 using UnityEngine.UI;
 
-
+/// <summary>
+/// 추가 수정 필요
+/// </summary>
 public class Currency : MonoBehaviour
 {
     [SerializeField] private int _goldAmount = 1000;
@@ -62,7 +64,7 @@ public class Currency : MonoBehaviour
 
     public void SetMoney()
     {
-        MoneyImage.sprite = ItemDB.GetItem<StackableItem>(MoneyID).GetSprite();
+        //MoneyImage.sprite = ItemDB.GetItem<StackableItem>(MoneyID).GetSprite();
         MoneyText.text = GoldAmount.ToString();
     }
 

@@ -2,7 +2,9 @@
 using UnityEngine;
 using UnityEngine.UI;
 
-
+/// <summary>
+/// 수정 필요
+/// </summary>
 public class InventorySlot : MonoBehaviour
 {
     [SerializeField] private TextMeshProUGUI _amountText;
@@ -19,18 +21,18 @@ public class InventorySlot : MonoBehaviour
     // 슬롯에 아이템(ID)과 갯수를 표시
     public void SetSlot(int id, int amount)
     {
-        var a = ItemDB.GetItem<ItemBase>(id);
-        if(a != null)
-        {
-            image.sprite = a.GetSprite();
-            _amountText.text = amount.ToString();
-        }
-        else
-        {
-            Debug.Log("값을 찾을 수 없다.");
-            image.sprite = baseSprite;
-            _amountText.text = string.Empty;
-        }
+        //var a = ItemDB.GetItem<ItemBase>(id);
+        //if(a != null)
+        //{
+        //    image.sprite = a.GetSprite();
+        //    _amountText.text = amount.ToString();
+        //}
+        //else
+        //{
+        //    Debug.Log("값을 찾을 수 없다.");
+        //    image.sprite = baseSprite;
+        //    _amountText.text = string.Empty;
+        //}
 
     }
 

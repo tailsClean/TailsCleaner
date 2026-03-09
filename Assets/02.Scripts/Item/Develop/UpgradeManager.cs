@@ -2,7 +2,9 @@
 using UnityEngine;
 using UnityEngine.UI;
 
-
+/// <summary>
+/// 추가 수정 필요
+/// </summary>
 public class UpgradeManager : MonoBehaviour
 {
     [SerializeField] private EquipmentBase _upgradeEquipment;
@@ -34,19 +36,19 @@ public class UpgradeManager : MonoBehaviour
             _upgradeImage.sprite = _baseSprite;
             return;
         }
-        _upgradeImage.sprite = _upgradeEquipment.SpriteImage;
-        _upgradeGradeText.text = "등급: " + _upgradeEquipment.Grade.ToString();
-        _upgradePartsText.text = "부위: " + _upgradeEquipment.EquipmentPart.ToString();
-        _materialCostCountText.text = "필요갯수: " + _upgradeEquipment.GradeCostCount.ToString();
+        //_upgradeImage.sprite = _upgradeEquipment.SpriteImage;
+        //_upgradeGradeText.text = "등급: " + _upgradeEquipment.Grade.ToString();
+        //_upgradePartsText.text = "부위: " + _upgradeEquipment.EquipmentPart.ToString();
+        //_materialCostCountText.text = "필요갯수: " + _upgradeEquipment.GradeCostCount.ToString();
 
         for (int i = 0; i < _materialImage.Count; i++)
         {
-            if (_materialEquipments != null && i < _materialEquipments.Count && _materialEquipments[i] != null)
-                _materialImage[i].sprite = _materialEquipments[i].SpriteImage;
-            else
-            {
-                _materialImage[i].sprite = _baseSprite;
-            }
+            //if (_materialEquipments != null && i < _materialEquipments.Count && _materialEquipments[i] != null)
+            //    _materialImage[i].sprite = _materialEquipments[i].SpriteImage;
+            //else
+            //{
+            //    _materialImage[i].sprite = _baseSprite;
+            //}
         }
     }
 
@@ -72,9 +74,9 @@ public class UpgradeManager : MonoBehaviour
         if (!_isUpgradable)
             return;
 
-        _isUpgradable = !_upgradeEquipment.IsGradeMaxGrade;
-        if (!_isUpgradable)
-            Debug.Log("최대 등급의 장비입니다.");
+        //_isUpgradable = !_upgradeEquipment.IsGradeMaxGrade;
+        //if (!_isUpgradable)
+        //    Debug.Log("최대 등급의 장비입니다.");
     }
 
     // 재료의 등급 확인
@@ -113,10 +115,10 @@ public class UpgradeManager : MonoBehaviour
     // 필요 재료 갯수 확인
     private void CheckMaterialCount()
     {
-        _isUpgradable = _upgradeEquipment.GradeCostCount >= _materialEquipments.Count;
+        //_isUpgradable = _upgradeEquipment.GradeCostCount >= _materialEquipments.Count;
 
-        if (!_isUpgradable)
-            Debug.Log("재료장비의 개수가 부족합니다.");
+        //if (!_isUpgradable)
+        //    Debug.Log("재료장비의 개수가 부족합니다.");
     }
     private void ResetMaterials()
     {
