@@ -37,8 +37,9 @@ public class SkillAnimator : MonoBehaviour
     // 스프라이트, 알파값 설정
     private SpriteRenderer _renderer;
     
-    // 로컬 스케일, 알파값 저장
+    // 원본 로컬 스케일, 스프라이트, 알파값 저장
     private Vector3 _originalScale;
+    private Sprite _originalSprite;     
     private float _originalAlpha = 1f;
 
     // 유지 연출 재생 속도 배율
@@ -96,7 +97,8 @@ public class SkillAnimator : MonoBehaviour
         
         if (_renderer != null)
         {
-            // 원본 알파값 저장
+            // 원본 스프라이트 렌더러 저장
+            _originalSprite = _renderer.sprite;
             _originalAlpha = _renderer.color.a;
         }
 
@@ -119,6 +121,16 @@ public class SkillAnimator : MonoBehaviour
 
         // 액션 타입별 로직
         // 진행률에 따라 갱신
+        UpdateVisuals(t);
+
+        // 액션 완료 체크 후 다음 액션으로
+        if (_curElapsed >= _curDuration)
+            AdvanceAction();
+    }
+
+    // 상태별 비주얼 갱신
+    private void UpdateVisuals(float t)
+    {
         switch (_curType)
         {
             case VISUALACTION_TYPE.PlaySprites:             // 스프라이트 재생
@@ -141,7 +153,7 @@ public class SkillAnimator : MonoBehaviour
                 TickSprites(t);
                 break;
             case VISUALACTION_TYPE.FadeInAndScaleUp:        // 페이드인 + 확대
-                TickFade(0f, _originalAlpha, t);                       
+                TickFade(0f, _originalAlpha, t);
                 TickScale(Vector3.zero, _originalScale, t);
                 TickSprites(t);
                 break;
@@ -151,10 +163,6 @@ public class SkillAnimator : MonoBehaviour
                 TickSprites(t);
                 break;
         }
-
-        // 액션 완료 체크 후 다음 액션으로
-        if (_curElapsed >= _curDuration)
-            AdvanceAction();
     }
 
     // 풀에서 꺼낼 때 초기화
@@ -183,9 +191,10 @@ public class SkillAnimator : MonoBehaviour
 
         if (_renderer != null)
         {
-            // 색, 알파값 복원
+            // 스프라이트 복원
             var c = _renderer.color;
             _renderer.color = new Color(c.r, c.g, c.b, _originalAlpha);
+            _renderer.sprite = _originalSprite;
         }
 
         // 스케일 복원
@@ -289,8 +298,8 @@ public class SkillAnimator : MonoBehaviour
         StartAction(phase[0]);
     }
 
-    //
-    // 액션 시작함
+
+    // 액션 시작
     private void StartAction(VisualAction action)
     {
         _curType     = action.type;             // 액션 타입
@@ -318,6 +327,9 @@ public class SkillAnimator : MonoBehaviour
             AdvanceAction();
             return;
         }
+
+        // 다음 프레임까지 기다리지 않고 진행률 0 으로 갱신
+        UpdateVisuals(0f);
 
         // duration이 0 이하이면 즉시 최종 상태 적용
         if (_curDuration <= 0f)

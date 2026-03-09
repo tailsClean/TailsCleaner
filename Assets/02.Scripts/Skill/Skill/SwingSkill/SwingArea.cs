@@ -19,17 +19,18 @@ public abstract class SwingArea<TModifierData> : SkillArea<TModifierData> where 
         transform.rotation = Quaternion.Euler(0f, 0f, angle);
 
         // 위치 - 플레이어 위치에 방향 옵셋만큼
-        transform.position = GetPlayerPos() + _dirOffset;
+        // 최적화
+        //transform.position = GetPlayerPos() + _dirOffset;
+        //_rigidbody.MovePosition(GetPlayerPos() + _dirOffset);
+        _rigidbody.position = GetPlayerPos() + _dirOffset;
 
         base.Init(owner, modifierData, dir);
     }
 
-    protected override void Update()
+    protected override void FixedUpdate()
     {
         // 플레이어 위치 따라가기
-        transform.position = GetPlayerPos() + _dirOffset;
-
-        base.Update();
+        _rigidbody.MovePosition(GetPlayerPos() + _dirOffset);
     }
 
     // 장판 범위 진입
@@ -70,8 +71,4 @@ public abstract class SwingArea<TModifierData> : SkillArea<TModifierData> where 
         // 하지만 이렇게 간단하게 피했습니다.
         // 탄환 제거 시 방어막 충전
     }
-
-    // 플레이어 위치
-    private Vector2 GetPlayerPos()
-        => (Vector2)SkillManager.Instance.Player.transform.position;
 }

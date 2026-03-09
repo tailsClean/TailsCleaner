@@ -2,6 +2,15 @@
 
 public class SoapThrowProjectile : SkillProjectile<SoapThrowModifierData>
 {
+    SoapThrowSkill _soapThrowSkill;
+
+    public override void Init(ActiveSkill owner, SoapThrowModifierData modifierData, Vector2 dir)
+    {
+        _soapThrowSkill = owner as SoapThrowSkill;
+
+        base.Init(owner, modifierData, dir);
+    }
+
     protected override bool OnCustomInit()
     {
         // 비누 덩어리 관통 제거
@@ -21,6 +30,17 @@ public class SoapThrowProjectile : SkillProjectile<SoapThrowModifierData>
         // 관통 제거 안했으면 재계산 필요 X
         return false;
     }
+
+    // 연출 시작 직전 설정
+    protected override void OnBeforeStartSequence()
+    {
+        if (_modifierData.RemovePierce == true && _animator != null)
+        {
+            // 강철 비누 스프라이트로 변경
+            //_animator.OverrideMainSprite(_soapThrowSkill.MetalSprite);
+        }
+    }
+
 
     // 관통 시
     protected override bool OnPierce()

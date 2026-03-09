@@ -62,16 +62,29 @@ public class SpinningToyProjectile : SkillProjectile<SpinningToyModifierData>
 
     protected override void Update()
     {
+        // 공전모드일 때는 체크 따로 안함
         if (_isOrbiting)
-        {
-            UpdateOrbit();
-
-            // 수명 체크는 LifetimeCoroutine 담당
             return;
-        }
 
         // 비행 모드 그냥 base에서 수명 체크 + 스노우볼링 틱 모두
         base.Update();
+    }
+
+    protected override void FixedUpdate()
+    {
+        if (_expired) return;
+
+        // 공전 모드
+        if (_isOrbiting)
+        {
+            // 공전 갱신
+            UpdateOrbit();
+        }
+        // 비행 모드
+        else
+        {
+            base.FixedUpdate();
+        }
     }
 
 
@@ -136,7 +149,8 @@ public class SpinningToyProjectile : SkillProjectile<SpinningToyModifierData>
             bool isLastBurst = (burst == burstCount - 1);
 
             // 방향 (바깥쪽)
-            Vector2 dir = ((Vector2)transform.position - (Vector2)SkillManager.Instance.Player.transform.position).normalized;
+            //Vector2 dir = (transform.position - SkillManager.Instance.Player.transform.position).normalized;
+            Vector2 dir = (transform.position - SkillManager.Instance.Player.transform.position).normalized;
             if (dir == Vector2.zero) dir = Vector2.right;   // 제로 방지
 
             // 마지막 버스트
@@ -164,13 +178,19 @@ public class SpinningToyProjectile : SkillProjectile<SpinningToyModifierData>
         // 각도 갱신
         // 선속도(ProjectileSpeed)를 반지름으로 나누면 라디안 각속도가 나옴
         // 그걸 일반 각도(Deg)로 변환
-        _orbitAngle += (_runtimeFinalStat.ProjectileSpeed / _orbitRadius) * Mathf.Rad2Deg * Time.deltaTime;
+        _orbitAngle += (_runtimeFinalStat.ProjectileSpeed / _orbitRadius) * Mathf.Rad2Deg * Time.fixedDeltaTime;
 
         // 플레이어 기준 위치 계산
-        Vector2 playerPos = (Vector2)SkillManager.Instance.Player.transform.position;
+        //Vector2 playerPos = SkillManager.Instance.Player.transform.position;
+        Vector2 playerPos = GetPlayerPos();
 
         float rad = _orbitAngle * Mathf.Deg2Rad;
 
-        transform.position = playerPos + new Vector2(Mathf.Cos(rad), Mathf.Sin(rad)) * _orbitRadius;
+        // 다음 위치
+        //transform.position = playerPos + new Vector2(Mathf.Cos(rad), Mathf.Sin(rad)) * _orbitRadius;
+        Vector2 nextPos = playerPos + new Vector2(Mathf.Cos(rad), Mathf.Sin(rad)) * _orbitRadius;
+
+        // 이동
+        _rigidbody.MovePosition(nextPos);
     }
 }
