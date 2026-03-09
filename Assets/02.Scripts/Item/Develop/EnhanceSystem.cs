@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -6,13 +7,14 @@ using UnityEngine.UI;
 public class EnhanceSystem : MonoBehaviour
 {
     [SerializeField] private Currency _currency;                // 필요 금화를 읽어올 재화 가방
-    [SerializeField] private GameObject _inventory;
+    [SerializeField] private Inventory _inventory;
 
     private PlayerLoadout _playerLoadout;
 
-    private IEnhanceResourceProvider _resourceProvider;
     private IEnhancement _enhanceItem;
-    private StackableItem _reinforceResource;
+    private Sprite _enhanceItemSprite;
+    private int _bluePrintID;
+    private int _bluePrintCost;
     private StackableItem _gold;
     private bool _isEnhancable;
 
@@ -23,27 +25,31 @@ public class EnhanceSystem : MonoBehaviour
 
     //
     [Header("UI관련")]
-    public int _itmeID;
-    public int _bluePrintID;
     [SerializeField] private Image _enhanceItemImage;
+    [SerializeField] private TextMeshProUGUI _enhanceLevelText;
     [SerializeField] private Image _reinforceResourceImage;
-    [SerializeField] private Image _goldImage;
-    [SerializeField] private TextMeshProUGUI _goldText;
     [SerializeField] private TextMeshProUGUI _costBluePrintText;
     [SerializeField] private TextMeshProUGUI _costGoldText;
-    [SerializeField] private TextMeshProUGUI _enhanceLevelText;
+    [SerializeField] private Image _goldImage;
+    [SerializeField] private TextMeshProUGUI _goldText;
 
-    public InventorySlot slot;
+    public List<InventorySlot> _loadoutSlots;
+    public List<InventorySlot> _resourceSlots;
     //
 
 
     private void Start()
     {
         _playerLoadout = ItemManager.Instance.Loadout;
-        if (!_inventory.TryGetComponent<IEnhanceResourceProvider>(out var resourceProvider))
-        { Debug.LogError("강화재료 제공 인터페이스가 null입니다."); return; }
-
-        _resourceProvider = resourceProvider;
+        
+        //
+        int i = 0;
+        foreach(var equipment in _playerLoadout.MyEquipments.Values)
+        {
+            var slot = _loadoutSlots[i++];
+            slot.SetSlot(equipment.Data.UniqueID, 1, () => SetEquipment(equipment.Data.EquipmentPart));
+        }
+        //
     }
 
     //
@@ -53,12 +59,14 @@ public class EnhanceSystem : MonoBehaviour
 
         if (_enhanceItem != null)
         {
-            //_enhanceItemImage.sprite = _enhanceItem.SpriteImage;
-            //_reinforceResourceImage.sprite = _reinforceResource.GetSprite();
-            //_goldImage.sprite = _gold.GetSprite();
-            //_costBluePrintText.text = _enhanceItem.EnhanceCostBluePrint.ToString();
-            //_costGoldText.text = _enhanceItem.EnhanceCostGold.ToString();
-            //_enhanceLevelText.text = "+" + _enhanceItem.EnhanceLevel.ToString();
+            var gold = ItemDB.GetItemSO<StackableItemSO>(9);
+
+            _enhanceItemImage.sprite = _enhanceItemSprite;
+            _reinforceResourceImage.sprite = _inventory.GetItem(_bluePrintID).ImageSprite;
+            _goldImage.sprite = gold.ImageSprite;
+            _costBluePrintText.text = _enhanceItem.EnhanceData.CostBluePrint.ToString();
+            _costGoldText.text = _enhanceItem.EnhanceData.CostGold.ToString();
+            _enhanceLevelText.text = "+" + _enhanceItem.EnhanceLevel.ToString();
         }
         else
         {
@@ -66,18 +74,42 @@ public class EnhanceSystem : MonoBehaviour
             _costGoldText.text = "";
             _enhanceLevelText.text = "";
         }
-
-        if(_resourceProvider != null)
-        {
-            slot.SetSlot(_bluePrintID, _resourceProvider.ReinforceResourceInventory[_bluePrintID]);
-        }
+        ResourceImage(0, ItemID.WeaponReinforceResource);
+        ResourceImage(1, ItemID.HatReinforceResource);
+        ResourceImage(2, ItemID.CloakReinforceResource);
+        ResourceImage(3, ItemID.ShoseReinforceResource);
     }
+
+
+    //public void RemoveSlots(List<InventorySlot> slots)
+    //{
+    //    foreach(var slot in slots)
+    //    {
+    //        Destroy(slot.gameObject);
+    //    }
+    //}
+    private void ResourceImage(int index, int id)
+    {
+        var dict = _inventory.ReinforceResourceInventory;
+        if(dict.TryGetValue(id, out var amount))
+        {
+            _resourceSlots[index].SetSlot(id, amount);
+            return;
+        }
+        _resourceSlots[index].SetSlot(id, 0);
+    }
+
     //
 
-    public void SetEquipment(EQUIP_PARTS part) => _enhanceItem = _playerLoadout.MyEquipments[part];
-
-
-    public void SetRelic(RelicBase relic) => _enhanceItem = relic;
+    // 강화할 아이템 세팅
+    public void SetEquipment(EQUIP_PARTS part)
+    {
+        EquipmentBase equipment = _playerLoadout.MyEquipments[part];
+        _enhanceItem = equipment;
+        _enhanceItemSprite = equipment.Data.ImageSprite;
+        _bluePrintID = equipment.EnhanceData.BluePrintID;
+        _bluePrintCost = equipment.EnhanceData.CostBluePrint;
+    }
 
 
     public void OnEnhance()
@@ -89,12 +121,11 @@ public class EnhanceSystem : MonoBehaviour
 
         if (_isEnhancable)
         {
-            //_enhanceItem.OnEnhance();
+            _enhanceItem.OnEnhance();
 
-            //_currency.UseGold(_enhanceItem.EnhanceCostGold);
-            //var inventory = _resourceProvider.ReinforceResourceInventory;
-            //_resourceProvider.UseItem(inventory, _reinforceResource.ID, _enhanceItem.EnhanceCostBluePrint);
-            //Debug.Log("강화성공!");
+            _currency.UseGold(_enhanceItem.EnhanceData.CostGold);
+            _inventory.UseItem(ITEM_TYPE.Reinforcement, _bluePrintID, _bluePrintCost);
+            Debug.Log("강화성공!");
         }
     }
 
@@ -136,23 +167,12 @@ public class EnhanceSystem : MonoBehaviour
         if (!_isEnhancable)
             return;
 
-        int cost = _enhanceItem.EnhanceData.CostBluePrint;
-
-        if (cost < 0)
+        if (_bluePrintCost < 0)
         { Debug.LogError("재료 코스트가 음수입니다!"); return; }
 
-        var inventory = _resourceProvider.ReinforceResourceInventory;
-        _isEnhancable = _resourceProvider.TryUseItem(inventory, _reinforceResource.Data.ID, cost);
+        _isEnhancable = _inventory.TryUseItem(ITEM_TYPE.Reinforcement, _bluePrintID, _bluePrintCost);
 
         if (!_isEnhancable)
             Debug.Log("강화 재료가 부족합니다.");
     }
-}
-
-public interface IEnhanceResourceProvider
-{
-    public Dictionary<int, int> ReinforceResourceInventory { get; }
-
-    public void UseItem(Dictionary<int, int> inventory, int id, int amount = 1);
-    public bool TryUseItem(Dictionary<int, int> inventory, int id, int amount = 1);
 }

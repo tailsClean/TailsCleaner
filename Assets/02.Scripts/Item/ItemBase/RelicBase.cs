@@ -20,4 +20,6 @@ public class RelicBase : ItemBase, IEnhancement
         float enhanceValue = EnhanceData.AddValue;
         return (int)(statValue + enhanceValue);
     }
+
+    public void OnEnhance() => EnhanceLevel++;
 }

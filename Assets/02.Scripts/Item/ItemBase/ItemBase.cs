@@ -12,4 +12,6 @@ public interface IEnhancement
 {
     public int EnhanceLevel { get; }
     public EnhanceData EnhanceData { get; }
+
+    public void OnEnhance();
 }

@@ -80,13 +80,15 @@ public class EquipmentSO : ItemBaseSO
         _enhances = new Dictionary<int, EnhanceData> { { 0, new EnhanceData() } };
         foreach(var enhanceData in _enhanceDataList)
         {
-            _enhances.Add(enhanceData.Level, enhanceData);
+            if (!_enhances.TryAdd(enhanceData.Level, enhanceData))
+                Debug.LogError($"{name}의 강화레벨이 중복됐습니다.");
         }
 
         _grades = new Dictionary<EQUIP_GRADE, GradeData>();
         foreach(var gradeData in _gradeDataList)
         {
-            _grades.Add(gradeData.Grade, gradeData);
+            if (!_grades.TryAdd(gradeData.Grade, gradeData))
+                Debug.LogError($"{name}의 등급이 중복됐습니다.");
         }
     }
 

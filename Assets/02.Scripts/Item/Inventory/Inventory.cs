@@ -4,23 +4,41 @@ using UnityEngine;
 using UnityEngine.UI;
 
 
-public class Inventory : MonoBehaviour, IEnhanceResourceProvider
+public class Inventory : MonoBehaviour
 {
     // Key: 아이템ID , Value: 소지갯수
     private Dictionary<int, int> _equipInventory;
     private Dictionary<int, int> _relicInventory;
     private Dictionary<int, int> _reinforceResourceInventory;
-    private Dictionary<int, int> _spendableInventory;
+    private Dictionary<int, int> _consumeInventory;
 
 
     public Dictionary<int, int> EquipInventory => _equipInventory;
     public Dictionary<int, int> RelicInventory => _relicInventory;
     public Dictionary<int, int> ReinforceResourceInventory => _reinforceResourceInventory;
-    public Dictionary<int, int> SpendableInventory => _spendableInventory;
+    public Dictionary<int, int> ConsumeInventory => _consumeInventory;
 
 
     public event Action<int> OnAddItem;
     public event Action<int> OnRemoveItem;
+
+
+
+    private void Awake()
+    {
+        _equipInventory = new Dictionary<int, int>();
+        _relicInventory = new Dictionary<int, int>();
+        _reinforceResourceInventory = new Dictionary<int, int>();
+        _consumeInventory = new Dictionary<int, int>();
+    }
+
+
+
+
+
+    // 인벤토리 아이템 관리용 정보 반환
+    public ItemBaseSO GetItem(int id) => ItemDB.GetItemSO<ItemBaseSO>(id);
+
 
     public void InitEvent()
     {
@@ -29,46 +47,29 @@ public class Inventory : MonoBehaviour, IEnhanceResourceProvider
     }
 
 
-    private void Awake()
+    #region 아이템 획득시, 인벤토리 저장
+    public void GainItem(ITEM_TYPE itemType, int id, int amount = 1)
     {
-        _equipInventory = new Dictionary<int, int>();
-        _relicInventory = new Dictionary<int, int>();
-        _reinforceResourceInventory = new Dictionary<int, int>();
-        _spendableInventory = new Dictionary<int, int>();
-    }
-
-
-
-
-
-
-
-
-    //
-    private Dictionary<int, int> test;
-    public void TestUIGroup(int i)
-    {
-        switch (i)
+        switch (itemType)
         {
-            case 0: test = _equipInventory; break;
-            case 1: test = _relicInventory; break;
-            case 2: test = _reinforceResourceInventory; break;
-            case 3: test = _spendableInventory; break;
+            case ITEM_TYPE.Equipment:
+                GainItem(_equipInventory, id, amount);
+                break;
+
+            case ITEM_TYPE.Relic:
+                GainItem(_relicInventory, id, amount);
+                break;
+
+            case ITEM_TYPE.Reinforcement:
+                GainItem(_reinforceResourceInventory, id, amount);
+                break;
+
+            case ITEM_TYPE.Consume:
+                GainItem(_consumeInventory, id, amount);
+                break;
         }
     }
-
-    public void TestGain(int id)
-    {
-        Debug.Log(test);
-        GainItem(test, id);
-    }
-    public void TestUse( int id) => TryUseItem(test, id);
-    //
-
-
-
-    // 아이템 획득시, 인벤토리 저장
-    public void GainItem(Dictionary<int, int> inventory, int id, int amount = 1)
+    private void GainItem(Dictionary<int, int> inventory, int id, int amount = 1)
     {
         if (inventory.TryGetValue(id, out var item))
             inventory[id] += amount;
@@ -79,9 +80,32 @@ public class Inventory : MonoBehaviour, IEnhanceResourceProvider
             OnAddItem?.Invoke(id);
         }
     }
+    #endregion
 
-    // 인벤토리의 아이템 사용
-    public void UseItem(Dictionary<int, int> inventory, int id, int amount = 1)
+
+    #region 인벤토리의 아이템 사용
+    public void UseItem(ITEM_TYPE itemType, int id, int amount = 1)
+    {
+        switch (itemType)
+        {
+            case ITEM_TYPE.Equipment:
+                UseItem(_equipInventory, id, amount);
+                break;
+
+            case ITEM_TYPE.Relic:
+                UseItem(_relicInventory, id, amount);
+                break;
+
+            case ITEM_TYPE.Reinforcement:
+                UseItem(_reinforceResourceInventory, id, amount);
+                break;
+
+            case ITEM_TYPE.Consume:
+                UseItem(_consumeInventory, id, amount);
+                break;
+        }
+    }
+    private void UseItem(Dictionary<int, int> inventory, int id, int amount = 1)
     {
         if (!inventory.TryGetValue(id, out var itemCount) || itemCount <= 0)
         { Debug.Log($"<color=red>ID: {id}의 아이템을 가지고 있지 않습니다.</color>"); return; }
@@ -98,11 +122,31 @@ public class Inventory : MonoBehaviour, IEnhanceResourceProvider
         else
             Debug.Log($"ID: {id}의 아이템의 소지갯수가 부족합니다.");
     }
+    #endregion
 
 
-    // 아이템 사용가능 여부
-    public bool TryUseItem(Dictionary<int, int> inventory, int id, int amount = 1)
+    #region 아이템 사용가능 여부
+    public bool TryUseItem(ITEM_TYPE itemType, int id, int amount = 1)
     {
+        switch(itemType)
+        {
+            case ITEM_TYPE.Equipment:
+                return TryUseItem(_equipInventory, id, amount);
+                
+            case ITEM_TYPE.Relic: 
+                return TryUseItem(_relicInventory, id, amount);
+            
+            case ITEM_TYPE.Reinforcement: 
+                return TryUseItem(_reinforceResourceInventory, id, amount);
+            
+            case ITEM_TYPE.Consume: 
+                return TryUseItem(_consumeInventory, id, amount);
+        }
+        return false;
+    }
+    private bool TryUseItem(Dictionary<int, int> inventory, int id, int amount = 1)
+    {
+        Debug.Log(inventory);
         if(!inventory.TryGetValue(id, out var itemCount) || itemCount <= 0)
         {
             Debug.Log($"<color=red>ID: {id}의 아이템을 가지고 있지 않습니다.</color>");
@@ -117,5 +161,5 @@ public class Inventory : MonoBehaviour, IEnhanceResourceProvider
 
         return true;
     }
-
+    #endregion
 }

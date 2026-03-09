@@ -11,7 +11,7 @@ public class ItemDBSO : ScriptableObject
     [Header("유물")]
     [SerializeField] private List<RelicSO> _Relics;
 
-    [Header("소모재화")]
+    [Header("소모품")]
     [SerializeField] private List<ConsumeItemSO> _consumeItems;
 
     [Header("재화/강화재료")]
@@ -45,12 +45,14 @@ public class ItemDBSO : ScriptableObject
         SetItemDict(_equipments);
         SetItemDict(_Relics);
         SetItemDict(_consumeItems);
+        SetItemDict(_stackableItems);
     }
     private void SetItemDict<T>(List<T> items) where T : ItemBaseSO
     {
         foreach(var item in items)
         {
-            _itemDataDict.Add(item.UniqueID, item);
+            if (!_itemDataDict.TryAdd(item.UniqueID, item))
+                Debug.LogError($"<color=red>{item.name}의 ID가 중복입력됐습니다.");
         }
     }
 }

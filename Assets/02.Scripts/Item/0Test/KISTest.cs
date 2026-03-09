@@ -2,38 +2,21 @@
 using UnityEngine;
 
 #if UNITY_EDITOR
-public class KISTest : MonoBehaviour, IEnhanceResourceProvider
+public class KISTest : MonoBehaviour
 {
-    public Dictionary<int, int> ReinforceResourceInventory { get; private set; }
-
+    public Inventory inventory;
     public int Id;
     public int Amount;
 
-    private void Awake()
-    {
-        ReinforceResourceInventory = new Dictionary<int, int>();
 
-        ReinforceResourceInventory.Add(Id, Amount);
-    }
 
-    [ContextMenu("재충전")]
+    [ContextMenu("재료 재충전")]
     private void Set()
     {
-        ReinforceResourceInventory[Id] = Amount;
-    }
-
-    public bool TryUseItem(Dictionary<int, int> inventory, int id, int amount = 1)
-    {
-        if (ReinforceResourceInventory[Id] <  amount)
-            return false;
-
-
-        return true;
-    }
-
-    public void UseItem(Dictionary<int, int> inventory, int id, int amount = 1)
-    {
-        ReinforceResourceInventory[Id] -= amount;
+        inventory.GainItem(ITEM_TYPE.Reinforcement, ItemID.WeaponReinforceResource, Amount);
+        inventory.GainItem(ITEM_TYPE.Reinforcement, ItemID.HatReinforceResource   , Amount);
+        inventory.GainItem(ITEM_TYPE.Reinforcement, ItemID.CloakReinforceResource , Amount);
+        inventory.GainItem(ITEM_TYPE.Reinforcement, ItemID.ShoseReinforceResource , Amount);
     }
 }
 #endif

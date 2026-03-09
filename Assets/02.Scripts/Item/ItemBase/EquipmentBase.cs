@@ -12,7 +12,7 @@ public class EquipmentBase : ItemBase, IEnhancement
 
     // 강화 데이터
     public int EnhanceLevel { get; private set; }
-    public EnhanceData EnhanceData => Data.GetEnhanceData(EnhanceLevel);
+    public EnhanceData EnhanceData => Data.GetEnhanceData(EnhanceLevel + 1);
 
     // 등급 데이터
     public EQUIP_GRADE Grade { get; private set; }
