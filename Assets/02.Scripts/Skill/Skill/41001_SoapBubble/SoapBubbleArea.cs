@@ -4,31 +4,43 @@ using UnityEngine;
 
 public class SoapBubbleArea : SkillArea<SoapBubbleModifierData>
 {
+    [Header("거품 펑 오브젝트")]
+    [SerializeField] SkillAnimator _burstAnimator;
+
     // 적 체류 시작 시간
     private readonly Dictionary<MonsterBase, float> _monsterEnterTimes = new();
 
 
     private MonsterBase _trackTarget = null;    // 현재 추적 대상
-    private Coroutine _searchCoroutine = null;  // 탐색 코루틴
+    private float _searchTimer = 0f;            // 탐색 타이머
+
+    protected override void Awake()
+    {
+        base.Awake();
+    }
 
     public override void Init(ActiveSkill owner, SoapBubbleModifierData modifierData, Vector2 dir = default)
     {
         _monsterEnterTimes.Clear();
         _trackTarget = null;
-        _searchCoroutine = null;
+
+        if (_burstAnimator != null)
+        {
+            _burstAnimator.gameObject.SetActive(false);
+            _burstAnimator.ResetState();
+        }
+
+        // 시작하면 바로 탐색하게 시간 꽉채우기
+        _searchTimer = SkillManager.SEARCH_INTERVAL;
 
         base.Init(owner, modifierData, dir);
-
-        // 생성 즉시 탐색 한 번
-        if (_modifierData.Tracking)
-            StartSearch();
     }
 
     protected override void Update()
     {
-        // 가장 가까운 적 추적
+        // 추적 유효성 검사 및 탐색
         if (_modifierData.Tracking == true)
-            TrackClosestEnemy();
+            CheckAndSearchTarget();
 
         // 스턴 체류 체크
         if (_modifierData.StunOnArea == true)
@@ -37,54 +49,52 @@ public class SoapBubbleArea : SkillArea<SoapBubbleModifierData>
         // 틱 주기 처리 추가 base를 통해 수명 체크 ,스노우 볼링, 이동
         base.Update();
     }
-    
-    // 가장 가까운 적 추적
-    private void TrackClosestEnemy()
+    protected override void FixedUpdate()
     {
-        // 타겟 유효 확인
-        if (_trackTarget == null)
+        if (_expired) return;
+
+        // 가장 가까운 적 추적
+        if (_modifierData.Tracking == true)
+            MoveToTarget();
+    }
+
+    // 추적 유효성 검사 및 탐색
+    private void CheckAndSearchTarget()
+    {
+        // 타겟이 없거나, 비활성화됐거나, 죽었으면 다시 탐색
+        if (_trackTarget == null || _trackTarget.gameObject.activeInHierarchy == false || _trackTarget.hp <= 0)
         {
-            // 탐색 코루틴 없으면 시작
-            if (_searchCoroutine == null)
-                StartSearch();
-            return;
+            _trackTarget = null;
+
+            // 탐색 타이머 증가
+            _searchTimer += Time.deltaTime;
+
+            // 탐색 간격마다
+            if (_searchTimer >= SkillManager.SEARCH_INTERVAL)
+            {
+                // 타이머 초기화
+                _searchTimer = 0f;
+
+                // 버퍼 배열에서 가장 가까운 몬스터
+                _trackTarget = SkillManager.Instance.FindClosestMonster(_rigidbody.position);
+            }
         }
+    }
+
+    // 이동
+    private void MoveToTarget()
+    {
+        // 타겟 있을 때 까지 이동 스킵
+        if (_trackTarget == null) return;
 
         // 이동 속도
         float speed = _runtimeFinalStat.ProjectileSpeed;
         if (speed <= 0f) return;
 
-        // 타겟 방향으로 이동
-        transform.position = Vector2.MoveTowards(transform.position, _trackTarget.transform.position, speed * Time.deltaTime);
-    }
-
-    // 탐색 코루틴 시작
-    private void StartSearch()
-    {
-        // 이미 실행중이면 무시
-        if (_searchCoroutine != null) return;
-
-        _searchCoroutine = StartCoroutine(SearchTargetCoroutine());
-    }
-
-    // 적 탐색 코루틴
-    private IEnumerator SearchTargetCoroutine()
-    {
-        while (true)
-        {
-            _trackTarget = SkillManager.Instance.FindClosestMonster(transform);
-
-            if (_trackTarget != null)
-            {
-                // 찾으면 비우고 종료
-                // Update에서 추적 시작
-                _searchCoroutine = null;
-                yield break;
-            }
-
-            // 탐색 대기 시간
-            yield return SkillManager.Instance.SearchInterval;
-        }
+        // 타겟 방향으로 물리 이동
+        //transform.position = Vector2.MoveTowards(transform.position, _trackTarget.transform.position, speed * Time.deltaTime);
+        Vector2 nextPos = Vector2.MoveTowards(_rigidbody.position, _trackTarget.transform.position, speed * Time.fixedDeltaTime);
+        _rigidbody.MovePosition(nextPos);
     }
 
 
@@ -190,6 +200,46 @@ public class SoapBubbleArea : SkillArea<SoapBubbleModifierData>
             passive.OnStun(monster);
     }
 
+
+    protected override void ExpireObject()
+    {
+        if (_expired == true) return;
+        _expired = true;
+
+        // 만료 로직
+        OnExpire();
+
+        // 콜라이더 끄기
+        if (_collider != null) _collider.enabled = false;
+
+        // 거품 펑 모디파이어
+        if (_modifierData.BurstOnExpire == true && _burstAnimator != null)
+        {
+            // 오브젝트 켜기
+            _burstAnimator.gameObject.SetActive(true);
+
+            // 발동 연출 시작
+            _burstAnimator.StartSequence(0f);
+
+            // 펑 종료 연출 후 콜백
+            _burstAnimator.RequestExpire(() =>
+            {
+                // 펑 오브젝트 끄기
+                _burstAnimator.gameObject.SetActive(false);
+
+                // 펑 끝나고 종료 연출
+                ExpireSequence();
+            });
+        }
+        else
+        {
+            // 거품 펑 모디파이어 없거나 애니메이터 없으면
+            // 바로 종료 연출
+            ExpireSequence();
+        }
+    }
+
+
     // 소멸 시
     protected override void OnExpire()
     {
@@ -214,7 +264,7 @@ public class SoapBubbleArea : SkillArea<SoapBubbleModifierData>
     private void BurstDamage()
     {
         // 와중에 null된거 삭제
-        _monstersInArea.RemoveWhere(m => m == null);
+        _monstersInArea.RemoveWhere(m => m == null || m.gameObject.activeInHierarchy == false);
 
         foreach (var monster in _monstersInArea)
         {

@@ -55,7 +55,8 @@ public class WashWaveSkill : ActiveSkill<WashWaveProjectile, WashWaveModifierDat
     private IEnumerator FireWave(Vector2 fireDir)
     {
         // 플레이어 위치
-        Vector2 playerPos = (Vector2)SkillManager.Instance.Player.transform.position;
+        //Vector2 playerPos = SkillManager.Instance.Player.transform.position;
+        Vector2 playerPos = SkillManager.Instance.CurrentPlayerPos;
 
         // 스폰 중심 - 플레이어 기준 발사 반대 방향으로 오프셋
         Vector2 spawnCenter = playerPos + (-fireDir.normalized * _spawnOffsetDistance);

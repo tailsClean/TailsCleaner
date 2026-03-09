@@ -77,8 +77,8 @@ public class WaterBombVortexArea : PoolObject
     private void ProcessPull()
     {
         // null 지우기
-        _monstersInArea.RemoveWhere(monster => monster == null);
-        _bulletsInArea.RemoveWhere(bullet => bullet == null);
+        _monstersInArea.RemoveWhere(monster => monster == null || monster.gameObject.activeInHierarchy == false);
+        _bulletsInArea.RemoveWhere(bullet => bullet == null || bullet.gameObject.activeInHierarchy == false);
 
         foreach (var monster in _monstersInArea)
         {
