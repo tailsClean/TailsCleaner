@@ -32,6 +32,7 @@ public class EquipmentSO : ItemBaseSO
     public string Description => _script;
     public string IconClickEffect => _iconClickEffect;
     public string IconClickSound => _iconClickSound;
+    public EnhancementEventChannelSO OnEquipEnhancement => _onEquipEnhancement;
 
     private Dictionary<int, EnhanceData> _enhances;
 
@@ -56,7 +57,7 @@ public class EquipmentSO : ItemBaseSO
             Init();
 
         if(!_enhances.TryGetValue(enhanceLevel, out var enhanceData))
-            Debug.LogError($"{_name}는 강화 <color=yellow>{enhanceLevel}레벨</color>은 없습니다.");
+            Debug.LogError($"{_name}는 강화 <color=yellow>{enhanceLevel}레벨</color>이 없습니다.");
 
         return enhanceData;
     }
@@ -76,16 +77,16 @@ public class EquipmentSO : ItemBaseSO
 
     private void Init()
     {
-        _grades = new Dictionary<EQUIP_GRADE, GradeData>();
-        foreach(var gradeData in _gradeDataList)
-        {
-            _grades.Add(gradeData.Grade, gradeData);
-        }
-
         _enhances = new Dictionary<int, EnhanceData> { { 0, new EnhanceData() } };
         foreach(var enhanceData in _enhanceDataList)
         {
             _enhances.Add(enhanceData.Level, enhanceData);
+        }
+
+        _grades = new Dictionary<EQUIP_GRADE, GradeData>();
+        foreach(var gradeData in _gradeDataList)
+        {
+            _grades.Add(gradeData.Grade, gradeData);
         }
     }
 
@@ -113,6 +114,15 @@ public class EquipmentSO : ItemBaseSO
         [field: SerializeField] public float StatRate { get; private set; }
         [field: SerializeField] public int Price { get; private set; }
     }
+
+#if UNITY_EDITOR
+    private void OnValidate()
+    {
+        if(_uniqueID != _iD)
+            Debug.LogWarning($"{name}의 고유ID와 장비ID가 다릅니다.");
+    }
+
+#endif
 }
 
 public enum EQUIP_PARTS

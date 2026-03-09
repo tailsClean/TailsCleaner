@@ -40,7 +40,7 @@ public class PlayerBase : MonoBehaviour, IDamageable, ISkillable
     private float _currentHp;
     private PlayerHit _hitSystem;
     private PlayerLevelSystem _levelSystem;
-    private PlayerEnhancementSlots _myEnhancement;
+    private PlayerLoadout _myEnhancement;
     private PlayerStatCalculator _statCalculator;
     private PlayerStateMachine _stateMachine;
 
@@ -81,10 +81,7 @@ public class PlayerBase : MonoBehaviour, IDamageable, ISkillable
         _currentHp = _maxhp;
         _hitSystem = new PlayerHit(this);
         _levelSystem = new PlayerLevelSystem(this);
-        _myEnhancement = new PlayerEnhancementSlots(
-            PlayerDataTransfer.Equipments, 
-            PlayerDataTransfer.Relics
-            );
+        _myEnhancement = ItemManager.Instance.Loadout;
         _statCalculator = new PlayerStatCalculator(_myEnhancement);
 
         _stateMachine = new PlayerStateMachine(this);

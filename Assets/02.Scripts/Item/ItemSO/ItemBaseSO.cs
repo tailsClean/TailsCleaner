@@ -10,12 +10,12 @@ public abstract class ItemBaseSO : ScriptableObject
 
 
     [Header("아이템 관리용 정보")]
-    [SerializeField] private int _uniqueID;
-    [SerializeField] private ITEM_TYPE _itemType;
-    [SerializeField] private int _maxStack = 1;
-    [SerializeField] private int _itemNameKey;
-    [SerializeField] private string _imageSprite;
-    [SerializeField] private int _maxQuantity;
+    [SerializeField] protected int _uniqueID;
+    [SerializeField] protected ITEM_TYPE _itemType;
+    [SerializeField] protected int _maxStack = 1;
+    [SerializeField] protected int _itemNameKey;
+    [SerializeField] protected string _imageSprite;
+    [SerializeField] protected int _maxQuantity;
 
 
     public int UniqueID => _uniqueID;

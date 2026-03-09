@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 
 
-public class RelicBase : EnhanceableItem
+public class RelicBase : ItemBase, IEnhancement
 {
     public RelicSO Data { get; private set; }
 

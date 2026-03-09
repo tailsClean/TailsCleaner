@@ -28,15 +28,15 @@ public class PlayerEnhancementSelector : MonoBehaviour
     //
     private void Update()
     {
-        PlayerDataTransfer.SetEquipments(MyEquipment);
-        PlayerDataTransfer.SetRelics(MyRelic);
+        //PlayerDataTransfer.SetEquipments(MyEquipment);
+        //PlayerDataTransfer.SetRelics(MyRelic);
         CompactRelicSlot();
         OnSetRelic?.Invoke();
     }
     //
 
     // 장비를 교체하는 메서드
-    public void SetEnhancement(EnhanceableItem enhancement)
+    public void SetEnhancement(IEnhancement enhancement)
     {
         switch(enhancement)
         {

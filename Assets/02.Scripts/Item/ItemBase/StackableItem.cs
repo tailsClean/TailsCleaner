@@ -3,7 +3,7 @@
 
 public class StackableItem : ItemBase
 {
-    private StackableItemSO Data;
+    public StackableItemSO Data { get; private set; }
 
     public override void Init(int id) => Data = ItemDB.GetItemSO<StackableItemSO>(id);
 }

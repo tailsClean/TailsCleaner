@@ -2,7 +2,7 @@
 using UnityEngine;
 
 
-public class EquipmentBase : EnhanceableItem
+public class EquipmentBase : ItemBase, IEnhancement
 {
     public EquipmentSO Data { get; private set; }
     public override void Init(int id) => Data = ItemDB.GetItemSO<EquipmentSO>(id);

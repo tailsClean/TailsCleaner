@@ -19,7 +19,7 @@ public class RelicSO : ItemBaseSO
     [SerializeField] private string _iconClickSound;
 
     [Header("유물 강화")]
-    [SerializeField] protected EnhancementEventChannelSO _onEquipEnhancement;
+    [SerializeField] private EnhancementEventChannelSO _onEquipEnhancement;
     [SerializeField] private List<EnhanceData> _enhanceDataList;
 
     [Header("유물 계열")]
@@ -35,7 +35,7 @@ public class RelicSO : ItemBaseSO
     public string Description => _script;
     public string IconClickEffect => _iconClickEffect;
     public string IconClickSound => _iconClickSound;
-    public List<EnhanceData> EnhanceDatas => _enhanceDataList;
+    public EnhancementEventChannelSO OnEquipEnhancement => _onEquipEnhancement;
     public List<Division> DivisionDatas => _divisionDataList;
 
     private Dictionary<int, EnhanceData> _enhances;
@@ -52,7 +52,7 @@ public class RelicSO : ItemBaseSO
             Init();
 
         if (!_enhances.TryGetValue(enhanceLevel, out var enhanceData))
-            Debug.LogError($"{_name}는 강화 <color=yellow>{enhanceLevel}레벨</color>은 없습니다.");
+            Debug.LogError($"{_name}는 강화 <color=yellow>{enhanceLevel}레벨</color>이 없습니다.");
 
         return enhanceData;
     }
@@ -77,6 +77,15 @@ public class RelicSO : ItemBaseSO
         [field: SerializeField] public string Name { get; private set; }
         [field: SerializeField] public string Script { get; private set; }
     }
+
+#if UNITY_EDITOR
+    private void OnValidate()
+    {
+        if (_uniqueID != _iD)
+            Debug.LogWarning($"{name}의 고유ID와 유물ID가 다릅니다.");
+    }
+
+#endif
 }
 
 
