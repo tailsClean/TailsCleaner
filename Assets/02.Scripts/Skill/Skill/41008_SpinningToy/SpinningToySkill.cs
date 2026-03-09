@@ -24,6 +24,9 @@ public class SpinningToySkill : ActiveSkill<SpinningToyProjectile, SpinningToyMo
     [Header("스프라이트")]
     [SerializeField] Sprite[] _sprites; // TOY_TYPE 순서대로
 
+    // 스폰 리스트 버퍼
+    private List<TOY_TYPE> _spawnListBuffer = new();
+
     protected override void OnActive(int index, int totalCount) { }
 
 
@@ -85,11 +88,9 @@ public class SpinningToySkill : ActiveSkill<SpinningToyProjectile, SpinningToyMo
             float nextSpawnTargetTime = startTime + (spawnInterval * (i + 1));
 
             // 대기 시간 (프레임 밀린 시간만큼 덜 대기)
-            float waitTime = nextSpawnTargetTime - Time.time;
-
-            if (waitTime > 0)
+            while (Time.time < nextSpawnTargetTime)
             {
-                yield return new WaitForSeconds(waitTime);
+                yield return null;
             }
         }
 
@@ -118,6 +119,9 @@ public class SpinningToySkill : ActiveSkill<SpinningToyProjectile, SpinningToyMo
     // 양손잡이로 투사체 두배되었을 때 비율 알아내서 나누는 과정
     private List<TOY_TYPE> BuildSpawnList()
     {
+        // 스폰할 투사체 리스트 청소
+        _spawnListBuffer.Clear();
+
         // 기본 투사체 수
         int basePart = _baseStat.ProjectileCount * _commonStat.ProjectileCount;
 
@@ -136,27 +140,24 @@ public class SpinningToySkill : ActiveSkill<SpinningToyProjectile, SpinningToyMo
             ? (float)_finalStat.ProjectileCount / totalPart
             : 1f;
 
-        // 스폰할 투사체 리스트
-        var list = new List<TOY_TYPE>();
-
         // 기본 장난감을 뻥튀기 배율만큼 넣기
         int finalBaseCount = Mathf.RoundToInt(basePart * finalProjectileMul);
         for (int i = 0; i < finalBaseCount; i++)
-            list.Add(TOY_TYPE.Default);
+            _spawnListBuffer.Add(TOY_TYPE.Default);
 
         // 특수 장난감들도 각각 배율만큼 넣기
         foreach (var (type, count) in _modifierData.AddedToys)
         {
             int typeCount = Mathf.RoundToInt(count * finalProjectileMul);
             for (int i = 0; i < typeCount; i++)
-                list.Add(type);
+                _spawnListBuffer.Add(type);
         }
 
         // 혹시나 0개 들어간 특수 장난감은 디폴트로 넣음
-        if (list.Count == 0)
-            list.Add(TOY_TYPE.Default);
+        if (_spawnListBuffer.Count == 0)
+            _spawnListBuffer.Add(TOY_TYPE.Default);
 
-        return list;
+        return _spawnListBuffer;
     }
 
 

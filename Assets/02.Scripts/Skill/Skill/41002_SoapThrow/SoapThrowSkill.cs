@@ -2,6 +2,10 @@
 
 public class SoapThrowSkill : ActiveSkill<SoapThrowProjectile, SoapThrowModifierData>
 {
+    [Header("강철 스프라이트")]
+    [SerializeField] Sprite _metalSprite;
+    public Sprite MetalSprite => _metalSprite;
+
     // 스킬 발동
     protected override void OnActive(int index, int totalCount)
     {
