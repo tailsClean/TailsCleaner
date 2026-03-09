@@ -14,7 +14,8 @@ GameObject:
   - component: {fileID: 5676767321155858366}
   - component: {fileID: 4623907807441698298}
   - component: {fileID: 5514830495199837496}
-  m_Layer: 6
+  - component: {fileID: 6612712607612896099}
+  m_Layer: 7
   m_Name: Test_Boss
   m_TagString: Monster
   m_Icon: {fileID: 0}
@@ -30,7 +31,7 @@ Transform:
   m_GameObject: {fileID: 899191179583652646}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -6.67, y: 3.97, z: 0}
+  m_LocalPosition: {x: 5.26106, y: -8.53316, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -81,8 +82,8 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
+  m_SortingLayerID: -985789361
+  m_SortingLayer: 4
   m_SortingOrder: 0
   m_Sprite: {fileID: 7482667652216324306, guid: 75f5f34dc1b5347e0b8351032682f224, type: 3}
   m_Color: {r: 0.95686275, g: 0, b: 0.74488807, a: 1}
@@ -182,27 +183,28 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::SpecialMonster
   target: {fileID: 0}
   stoppingDistance: 0.1
-  hp: 1
-  power: 1
+  hp: 10
+  power: 2
   moveSpeed: 1
   hitBox: 1
   mass: 1
   KBResist: 1
-  TestItem: {fileID: 353544400213195327, guid: 7bd74e2913a4ea44aa66ef718bc20d47, type: 3}
+  TestItem: {fileID: 7621293018972681884, guid: 7bd74e2913a4ea44aa66ef718bc20d47, type: 3}
   damageCooldown: 1
   scoreReward: 1000
   goldReward: 500
   move_speed: 0
+  monster_power: 0
   detect_range: 0
+  pattern_cooldown: 0
   cast_time: 0
   pattern_multiply: 0
   explosion_range: 0
   pattern_damage: 0
-  moveType: 3
-  patternAmplitude: 2
+  zigzag_width: 0
   patternFrequency: 5
+  moveType: 3
   jump_height: 2
-  jumpCooldown: 3
   visualChild: {fileID: 0}
   isSuicideUnit: 0
 --- !u!114 &5514830495199837496
@@ -225,6 +227,18 @@ MonoBehaviour:
   projectile_count: 3
   fire_interval: 0.2
   state: 0
+--- !u!114 &6612712607612896099
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 899191179583652646}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cba0c930577f8e240a095f334c21bc3e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PoolObject
 --- !u!1 &3649750411503255337
 GameObject:
   m_ObjectHideFlags: 0
@@ -234,7 +248,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8364492714931052297}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: FirePoint
   m_TagString: Untagged
   m_Icon: {fileID: 0}

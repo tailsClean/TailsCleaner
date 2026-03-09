@@ -11,6 +11,9 @@ public class ActiveSkillData : ScriptableObject
     public ATTACK_TYPE AttackType;
     public TARGETING_TYPE TargetingType;
 
+    [Header("아이콘")]
+    public Sprite Icon;
+
     [Header("스킬 프리팹")]
     public ActiveSkill SkillPrefab;
 

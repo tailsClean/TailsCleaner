@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
 [RequireComponent(typeof(LevelUpSelect))]
@@ -8,9 +9,10 @@ public class SkillManager : MonoBehaviour
 
     public const int MAX_ACTIVE_SLOTS = 6;              // 최대 액티브 스킬 수
     public const int MAX_PASSIVE_SLOTS = 6;             // 최대 패시브 스킬 수
-    public const int DEFAULT_ACTIVE_MAIN_TAG = 41007;   // 기본 지급 스킬 메인 태그 (세제 캡슐 41007)
-    public const float DEFAULT_SEARCH_RADIUS = 20f;     // 가장 가까운 적 탐색용 범위
+    public const int DEFAULT_ACTIVE_MAIN_TAG = 41003;   // 기본 지급 스킬 메인 태그 (세제 캡슐 41007)
+    public const float DEFAULT_SEARCH_RADIUS = 100f;    // 가장 가까운 적 탐색용 범위
     public const float SEARCH_INTERVAL = 0.2f;          // 탐색 주기
+    public const int MONSTER_BUFFER_COUNT = 150;        // 몬스터 콜라이더 버퍼 크기
 
     public WaitForSeconds SearchInterval { get; } = new WaitForSeconds(SEARCH_INTERVAL);
 
@@ -25,8 +27,18 @@ public class SkillManager : MonoBehaviour
 
 
     public PlayerBase Player { get; private set; }                  // 플레이어
+    public Rigidbody2D PlayerRigidbody { get; private set; }        // 플레이어 리지드바디
+    public Vector2 CurrentPlayerPos => PlayerRigidbody.position;    // 플레이어 위치
     public TargetingSystem TargetingSystem { get; private set; }    // 타겟 시스템
     public LayerMask MonsterLayer => _monsterLayer;
+    
+    
+    // 몬스터 콜라이더 버퍼
+    private Collider2D[] _monsterBuffer = new Collider2D[MONSTER_BUFFER_COUNT];
+    // 버퍼의 실 몬스터 수
+    private int _monsterHitCount = 0;
+    // 콜라이더 필터
+    private ContactFilter2D _monsterFilter = new();
 
 
     [Header("적 레이어")]
@@ -37,7 +49,13 @@ public class SkillManager : MonoBehaviour
     {
         Instance = this;
         Player = GetComponent<PlayerBase>();
+        PlayerRigidbody = Player.GetComponent<Rigidbody2D>();
         TargetingSystem = new TargetingSystem(Player.transform, _monsterLayer);
+
+        // 필터 설정
+        _monsterFilter.useLayerMask = true;         // 레이어마스크 설정
+        _monsterFilter.layerMask = _monsterLayer;   // 설정 레이어
+        _monsterFilter.useTriggers = true;          // 트리거 콜라이더 사용
     }
 
     private void Start()
@@ -51,35 +69,41 @@ public class SkillManager : MonoBehaviour
 
 
         // 테스트용 업그레이드 
-        //ApplyPassiveOption(SkillDataLoader.PassiveSkillMap[42004]); // 추가추가피해
+        ApplyPassiveOption(SkillDataLoader.PassiveSkillMap[42004]); // 추가추가피해
         //ApplyPassiveOption(SkillDataLoader.PassiveSkillMap[42008]); // 고전비급
         //ApplyPassiveOption(SkillDataLoader.PassiveSkillMap[42012]); // 스노우볼링
-        //ApplyPassiveOption(SkillDataLoader.PassiveSkillMap[42013]); // 양손잡이
+        ApplyPassiveOption(SkillDataLoader.PassiveSkillMap[42013]); // 양손잡이
         //ApplyPassiveOption(SkillDataLoader.PassiveSkillMap[42016]); // 냥빨래
-
+        
+        ApplyActiveOption(41001, SkillDataLoader.GetActiveUpgradeData(40001));  // 비누 거품
+        ApplyActiveOption(41001, SkillDataLoader.GetActiveUpgradeData(40002));  // 자동 추적 비누 지우개
         //ApplyActiveOption(41001, SkillDataLoader.GetActiveUpgradeData(40005));  // 흐르는 거품
 
+        ApplyActiveOption(41002, SkillDataLoader.GetActiveUpgradeData(40009));  // 비누 던지기
         //ApplyActiveOption(41002, SkillDataLoader.GetActiveUpgradeData(40011));  // 감나빗!
         //ApplyActiveOption(41002, SkillDataLoader.GetActiveUpgradeData(40016));  // 비누덩어리
 
-        //ApplyActiveOption(41003, SkillDataLoader.GetActiveUpgradeData(40018));  // 물바다
+        ApplyActiveOption(41003, SkillDataLoader.GetActiveUpgradeData(40018));  // 물바다
         //ApplyActiveOption(41003, SkillDataLoader.GetActiveUpgradeData(40019));  // 소용돌이
 
-        //ApplyActiveOption(41004, SkillDataLoader.GetActiveUpgradeData(40022));  // 타올 리사이클 
+        ApplyActiveOption(41004, SkillDataLoader.GetActiveUpgradeData(40021));  // 타올 휘두르기
+        ApplyActiveOption(41004, SkillDataLoader.GetActiveUpgradeData(40022));  // 타올 리사이클 
         //ApplyActiveOption(41004, SkillDataLoader.GetActiveUpgradeData(40025));  // 타올 휘두르며
-
+        
         //ApplyActiveOption(41005, SkillDataLoader.GetActiveUpgradeData(40026));  // 걸레 휘두르기
         //ApplyActiveOption(41005, SkillDataLoader.GetActiveUpgradeData(40027));  // 걸레 리사이클
         //ApplyActiveOption(41005, SkillDataLoader.GetActiveUpgradeData(40030));  // 걸레 휘두르며
 
-        //ApplyActiveOption(41006, SkillDataLoader.GetActiveUpgradeData(40033));  // 밀물 썰물
+        ApplyActiveOption(41006, SkillDataLoader.GetActiveUpgradeData(40031));  // 세탁 파도
+        ApplyActiveOption(41006, SkillDataLoader.GetActiveUpgradeData(40033));  // 밀물 썰물
 
         //ApplyActiveOption(41007, SkillDataLoader.GetActiveUpgradeData(40037));  // 상큼하게 터져볼래?
         //ApplyActiveOption(41007, SkillDataLoader.GetActiveUpgradeData(40040));  // 1만 시간의 법칙
 
-        //ApplyActiveOption(41008, SkillDataLoader.GetActiveUpgradeData(40045));  // 오리 장난감
-        //ApplyActiveOption(41008, SkillDataLoader.GetActiveUpgradeData(40046));  // 해적선 장난감
-        //ApplyActiveOption(41008, SkillDataLoader.GetActiveUpgradeData(40048));  // 물놀이 끝
+        ApplyActiveOption(41008, SkillDataLoader.GetActiveUpgradeData(40041));  // 회전 장난감
+        ApplyActiveOption(41008, SkillDataLoader.GetActiveUpgradeData(40045));  // 오리 장난감
+        ApplyActiveOption(41008, SkillDataLoader.GetActiveUpgradeData(40046));  // 해적선 장난감
+        ApplyActiveOption(41008, SkillDataLoader.GetActiveUpgradeData(40048));  // 물놀이 끝
 
         //ApplyActiveOption(41009, SkillDataLoader.GetActiveUpgradeData(40050));  // 따스한 태양
 
@@ -90,7 +114,22 @@ public class SkillManager : MonoBehaviour
         //ApplyActiveOption(41010, SkillDataLoader.GetActiveUpgradeData(40061));  // 방수코팅
         //ApplyActiveOption(41010, SkillDataLoader.GetActiveUpgradeData(40062));  // 키친건!
 
-        //ApplyActiveOption(41010, SkillDataLoader.GetActiveUpgradeData(40067));  // 연사 (투사체 수)
+        //ApplyActiveOption(41005, SkillDataLoader.GetActiveUpgradeData(40066));  // 지속 시간
+        ApplyActiveOption(41001, SkillDataLoader.GetActiveUpgradeData(40067));  // 연사
+        ApplyActiveOption(41002, SkillDataLoader.GetActiveUpgradeData(40067));  // 연사
+        ApplyActiveOption(41003, SkillDataLoader.GetActiveUpgradeData(40067));  // 연사
+        ApplyActiveOption(41004, SkillDataLoader.GetActiveUpgradeData(40067));  // 연사
+        ApplyActiveOption(41008, SkillDataLoader.GetActiveUpgradeData(40067));  // 연사
+        ApplyActiveOption(41001, SkillDataLoader.GetActiveUpgradeData(40067));  // 연사
+        ApplyActiveOption(41002, SkillDataLoader.GetActiveUpgradeData(40067));  // 연사
+        ApplyActiveOption(41003, SkillDataLoader.GetActiveUpgradeData(40067));  // 연사
+        ApplyActiveOption(41004, SkillDataLoader.GetActiveUpgradeData(40067));  // 연사
+        ApplyActiveOption(41008, SkillDataLoader.GetActiveUpgradeData(40067));  // 연사
+
+
+
+        // 근접 몬스터 콜라이더 배열 탐색
+        StartCoroutine(MonsterSearchCoroutine());
     }
 
 
@@ -230,29 +269,51 @@ public class SkillManager : MonoBehaviour
     #endregion
 
 
-
-    // 공용 적 탐색
-    public MonsterBase FindClosestMonster(Transform origin, float radius = DEFAULT_SEARCH_RADIUS)
+    // 몬스터 탐색
+    private IEnumerator MonsterSearchCoroutine()
     {
-        // 범위 내 몬스터 레이어 수집
-        Collider2D[] hits = Physics2D.OverlapCircleAll(origin.position, radius, _monsterLayer);
-
-        MonsterBase closest = null;
-        float minSqrDist = float.MaxValue;
-
-        foreach (var hit in hits)
+        while (true)
         {
-            // 몬스터 베이스 없으면 패스
-            if (hit.TryGetComponent<MonsterBase>(out var monster) == false) continue;
+            // 플레이어 중심화면 덮고도 남을 정도로 넓게 탐색
+            // OverlapCircleNonAlloc가 유니티 6 오면서 OverlapCircle에서 필터 사용하게 변경됨
+            _monsterHitCount = Physics2D.OverlapCircle(CurrentPlayerPos, DEFAULT_SEARCH_RADIUS, _monsterFilter, _monsterBuffer);
 
-            // sqrMagnitude 사용으로 sqrt 회피
-            float sqrDist = ((Vector2)origin.position - (Vector2)hit.transform.position).sqrMagnitude;
+            yield return SearchInterval;
+        }
+    }
 
-            // 최소 거리 갱신
-            if (sqrDist < minSqrDist)
+    // 특정 위치 기준 가장 가까운 몬스터 탐색
+    public MonsterBase FindClosestMonster(Vector2 origin, float radius = DEFAULT_SEARCH_RADIUS)
+    {
+        // 반환할 몬스터
+        MonsterBase closest = null;
+
+        // 탐색 반경 내
+        float minSqrDist = radius * radius;
+
+        // 버퍼 수 만큼 탐색
+        for (int i = 0; i < _monsterHitCount; i++)
+        {
+            Collider2D collider = _monsterBuffer[i];
+
+            // 유효성 체크 (죽었거나 꺼진 거 무시)
+            if (collider == null || collider.gameObject.activeInHierarchy == false) continue;
+
+            // 몬스터 컴포넌트 참조 시도
+            if (collider.TryGetComponent<MonsterBase>(out var monster))
             {
-                minSqrDist = sqrDist;
-                closest = monster;
+                // 체력이 0 이하면 스킵
+                if (monster.hp <= 0) continue;
+
+                // 거리 (몬스터에 Rigidbody 붙어있다는 가정하에 attachedRigidbody 사용)
+                float sqrDist = (origin - collider.attachedRigidbody.position).sqrMagnitude;
+
+                // 최소 거리, 몬스터 갱신
+                if (sqrDist < minSqrDist)
+                {
+                    minSqrDist = sqrDist;
+                    closest = monster;
+                }
             }
         }
 

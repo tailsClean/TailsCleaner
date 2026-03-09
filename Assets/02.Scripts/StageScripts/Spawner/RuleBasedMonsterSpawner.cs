@@ -49,6 +49,15 @@ public class RuleBasedMonsterSpawner : MonoBehaviour, IMonsterSpawnSystem
     private Vector2 _squadCenter; //스쿼드 중심 위치
     private int _circleIndex; //원형 스폰 슬롯 인덱스
 
+    //경험치 Multiply 캐시
+    private bool _expCacheReady;
+    private Dictionary<int, int> _monsterIdToType;
+    private Dictionary<int, float> _typeToBaseExp;
+
+    private const string MONSTER_TABLE_FILE = "monster_table";
+    private const string MONSTER_TYPE_TABLE_FILE = "monster_type_table";
+
+
     public void SetSpawningEnabled(bool _isenabled)
     {
         _isSpawningEnabled = _isenabled;
@@ -110,7 +119,7 @@ public class RuleBasedMonsterSpawner : MonoBehaviour, IMonsterSpawnSystem
     {
         if (_bossPrefab == null) return;
 
-        MonsterBase boss = SpawnPrefab(_bossPrefab, $"Boss_{_bossId}", _isBoss: true);
+        MonsterBase boss = SpawnPrefab(_bossPrefab, $"Boss_{_bossId}", _isBoss: true, _bossId);
         LastSpawnedBoss = boss != null ? boss.gameObject : null;
     }
 
@@ -126,26 +135,63 @@ public class RuleBasedMonsterSpawner : MonoBehaviour, IMonsterSpawnSystem
             return;
         }
 
-        MonsterBase mid = SpawnPrefab(_midBossPrefab, $"MidBoss_{_midBossId}", _isBoss: true);
+        MonsterBase mid = SpawnPrefab(_midBossPrefab, $"MidBoss_{_midBossId}", _isBoss: true, _midBossId);
         LastSpawnedMidBoss = mid != null ? mid.gameObject : null;
     }
 
     private void SpawnOneFromWave()
     {
-        int _monsterId = PickMonsterIdByWeight(_currentWave);
+        int monsterId = PickMonsterIdBySpawnAmount(_currentWave);
+        if (monsterId <= 0) return;
 
-        int amount = 1;
-        if (_currentWave.spawns != null && _currentWave.spawns.Count > 0)
-            amount = Mathf.Max(1, _currentWave.spawns[0].spawnAmount); // 간단히 첫 row 기준
-
-        for (int i = 0; i < amount; i++)
-        {
-            if (!_registry.CanSpawnMore()) break;
-            SpawnPrefab(_normalMonsterPrefab, $"Monster_{_monsterId}", _isBoss: false);
-        }
+        SpawnPrefab(_normalMonsterPrefab, $"Monster_{monsterId}", _isBoss: false, monsterId);
     }
 
-    private MonsterBase SpawnPrefab(MonsterBase _prefab, string _name, bool _isBoss)
+    private void EnsureExpCache()
+    {
+        if (_expCacheReady) return;
+
+        var monsterRows = DataParser.Parse<MonsterTableRow>(MONSTER_TABLE_FILE);
+        var typeRows = DataParser.Parse<MonsterTypeTableRow>(MONSTER_TYPE_TABLE_FILE);
+
+        if (monsterRows == null || typeRows == null)
+        {
+            Debug.LogError($"[ExpCache] Parse failed. monsterRowsNull={monsterRows == null}, typeRowsNull={typeRows == null}");
+            return; // ✅ 여기서 잠그면 안됨
+        }
+
+        _monsterIdToType = new Dictionary<int, int>(monsterRows.Count);
+        _typeToBaseExp = new Dictionary<int, float>(typeRows.Count);
+
+        for (int i = 0; i < monsterRows.Count; i++)
+            _monsterIdToType[monsterRows[i].monster_id] = monsterRows[i].monster_type;
+
+        for (int i = 0; i < typeRows.Count; i++)
+            _typeToBaseExp[typeRows[i].monster_type] = typeRows[i].base_exp;
+
+        _expCacheReady = true;
+        Debug.Log($"[ExpCache] Ready. monsterMap={_monsterIdToType.Count}, typeMap={_typeToBaseExp.Count}");
+    }
+
+    private int CalcExp(int monsterId)
+    {
+        EnsureExpCache();
+
+        int type = 0;
+        if (_monsterIdToType != null && _monsterIdToType.TryGetValue(monsterId, out var t))
+            type = t;
+
+        float baseExp = 0f;
+        if (_typeToBaseExp != null && _typeToBaseExp.TryGetValue(type, out var b))
+            baseExp = b;
+
+        float mul = _currentWave != null ? _currentWave.waveExpMultiply : 0f;
+        mul = Mathf.Max(0f, mul);
+
+        return Mathf.RoundToInt(baseExp * (1f + mul));
+    }
+
+    private MonsterBase SpawnPrefab(MonsterBase _prefab, string _name, bool _isBoss, int _monsterId)
     {
         Vector2 _pos2D = GetSpawnPositionByPattern(_isBoss);
         Vector3 _spawnPos = new Vector3(_pos2D.x, _pos2D.y, 0f);
@@ -167,6 +213,9 @@ public class RuleBasedMonsterSpawner : MonoBehaviour, IMonsterSpawnSystem
         powerScale = Mathf.Max(0.1f, powerScale);
 
         _monster.ApplyScaling(hpScale, powerScale);
+
+        int exp = CalcExp(_monsterId);
+        // _monster.SetExpReward(exp);
 
         _registry.Register(_monster.gameObject);
         return _monster;
@@ -232,7 +281,7 @@ public class RuleBasedMonsterSpawner : MonoBehaviour, IMonsterSpawnSystem
         return (Vector2)_playerTransform.position + _offset;
     }
 
-    private int PickMonsterIdByWeight(WavePlan _wave)
+    private int PickMonsterIdBySpawnAmount(WavePlan _wave)
     {
         if (_wave == null || _wave.spawns == null || _wave.spawns.Count == 0)
             return 0;
@@ -240,20 +289,20 @@ public class RuleBasedMonsterSpawner : MonoBehaviour, IMonsterSpawnSystem
         int _total = 0;
         for (int i = 0; i < _wave.spawns.Count; i++)
         {
-            int _w = _wave.spawns[i].weightPercent;
-            if (_w <= 0) _w = 100;
-            _total += _w;
+            int w = Mathf.Max(0, _wave.spawns[i].spawnAmount);
+            _total += w;
         }
+
+        if (_total <= 0)
+            return _wave.spawns[0].monsterId;
 
         int _roll = Random.Range(1, _total + 1);
         int _acc = 0;
 
         for (int i = 0; i < _wave.spawns.Count; i++)
         {
-            int _w = _wave.spawns[i].weightPercent;
-            if (_w <= 0) _w = 100;
-            _acc += _w;
-
+            int w = Mathf.Max(0, _wave.spawns[i].spawnAmount);
+            _acc += w;
             if (_roll <= _acc)
                 return _wave.spawns[i].monsterId;
         }
@@ -297,7 +346,7 @@ public class RuleBasedMonsterSpawner : MonoBehaviour, IMonsterSpawnSystem
                 if (_onceSpawnedSpecialIds.Contains(row.special_id)) continue;
                 _onceSpawnedSpecialIds.Add(row.special_id);
 
-                SpawnPrefab(_specialMonsterPrefab, $"Special_{row.monster_id}", _isBoss: false);
+                SpawnPrefab(_specialMonsterPrefab, $"Special_{row.monster_id}", _isBoss: false, row.monster_id);
                 continue;
             }
 
@@ -315,14 +364,14 @@ public class RuleBasedMonsterSpawner : MonoBehaviour, IMonsterSpawnSystem
                 if (!hasLast)
                 {
                     _lastPeriodicSpawnSecondBySpecialId[row.special_id] = _currentMainSeconds;
-                    SpawnPrefab(_specialMonsterPrefab, $"Special_{row.monster_id}", _isBoss: false);
+                    SpawnPrefab(_specialMonsterPrefab, $"Special_{row.monster_id}", _isBoss: false, row.monster_id);
                     continue;
                 }
 
                 if (_currentMainSeconds - lastSec >= interval)
                 {
                     _lastPeriodicSpawnSecondBySpecialId[row.special_id] = _currentMainSeconds;
-                    SpawnPrefab(_specialMonsterPrefab, $"Special_{row.monster_id}", _isBoss: false);
+                    SpawnPrefab(_specialMonsterPrefab, $"Special_{row.monster_id}", _isBoss: false, row.monster_id);
                 }
             }
         }

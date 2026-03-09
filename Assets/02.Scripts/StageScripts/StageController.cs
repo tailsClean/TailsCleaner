@@ -7,6 +7,8 @@ public class StageController : MonoBehaviour
     [SerializeField] private PlayerRewardHandler _playerRewardHandler;
     [SerializeField] private StageTimerTextUI _timerUI;
 
+    [SerializeField] private VoidEventChannelSO _onPlayerDead;
+
     public PlayerRewardHandler RewardHandler => _playerRewardHandler;
 
     private StageEvents _events;
@@ -56,6 +58,10 @@ public class StageController : MonoBehaviour
         {
             _events.OnMainSecondTick -= rb.SetMainSeconds;
         }
+
+        if (_onPlayerDead != null)
+            _onPlayerDead.RemoveListener(HandlePlayerDead);
+
     }
 
     private void Update()
@@ -124,7 +130,11 @@ public class StageController : MonoBehaviour
             // Handler는 UI/입력만 하도록 바뀔 예정이라 controller도 넘기는게 좋음
             _resultHandler.Bind(_events, this);
         }
-
+        if (_onPlayerDead != null)
+        {
+            _onPlayerDead.RemoveListener(HandlePlayerDead);
+            _onPlayerDead.AddListener(HandlePlayerDead);
+        }
         if (_timerUI != null)
             _timerUI.Bind(_events);
         else
@@ -181,6 +191,12 @@ public class StageController : MonoBehaviour
     {
         if (_ended) return;
         EndStage(StageResult.Fail, reason);
+    }
+
+    private void HandlePlayerDead()
+    {
+        if (_ended) return;
+        _events.RaiseStageFailed(StageFailReason.PlayerDead);
     }
 
     public void EndStage(StageResult result, StageFailReason reason)

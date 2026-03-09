@@ -20,11 +20,8 @@ public class DetergentCapsuleSkill : ActiveSkill<DetergentCapsuleProjectile, Det
 
     protected override void OnActive(int index, int totalCount)
     {
-        // 공격 방향
-        Vector2 dir = SkillManager.Instance.Player.AttackDir;
-
         // 세제 캡슐 생성
-        SpawnCapsule(dir);
+        SpawnCapsule(AttackDir);
     }
 
 
@@ -36,7 +33,7 @@ public class DetergentCapsuleSkill : ActiveSkill<DetergentCapsuleProjectile, Det
 
         // 투사체 생성
         //DetergentCapsuleProjectile capsule = Instantiate(_skillObjectPrefab, transform.position, Quaternion.Euler(0f, 0f, angle));
-        DetergentCapsuleProjectile capsule = SpawnFromPool<DetergentCapsuleProjectile>(_poolTag, transform.position, Quaternion.Euler(0f, 0f, angle));
+        DetergentCapsuleProjectile capsule = SpawnFromPool<DetergentCapsuleProjectile>(_skillObjectPrefab, transform.position, Quaternion.Euler(0f, 0f, angle));
 
         // 초기화
         if(capsule != null) capsule.Init(this, _modifierData, dir);

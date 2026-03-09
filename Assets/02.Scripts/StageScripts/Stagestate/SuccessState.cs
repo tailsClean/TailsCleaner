@@ -12,6 +12,7 @@ public class SuccessState : IStageState
     public void Enter()
     {
         Debug.Log("[Stage] Enter SuccessState -> FinalizeReward(Victory)");
+        UIManager.Instance.OpenClear();
         _controller?.RewardHandler?.FinalizeReward(GameResult.Victory);
     }
 

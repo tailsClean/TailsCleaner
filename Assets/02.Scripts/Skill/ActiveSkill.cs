@@ -12,8 +12,6 @@ public abstract class ActiveSkill : MonoBehaviour
     public int CurrentLevel { get; private set; } = 0;      // 현재 레벨
     public int CurrentSubTag { get; private set; } = 0;     // 적용 중인 서브 태그
 
-    protected string _poolTag;          // 풀 태그 (자식 스킬에서 투사체 생성 시 사용)
-
     protected GameObject _skillPrefab;  // 스킬 장판,투사체
 
     // 스킬 타입
@@ -61,6 +59,8 @@ public abstract class ActiveSkill : MonoBehaviour
     [SerializeField] protected float _distance = 50f;           // 타겟 탐색 거리
 
 
+    protected Vector2 AttackDir => GetAttackDir();  // 공격 방향
+
 
 
     private void Awake()
@@ -74,9 +74,6 @@ public abstract class ActiveSkill : MonoBehaviour
     {   
         // 메인 태그
         MainTag = skillData.MainTag;
-
-        // 풀 태그 string 캐싱
-        _poolTag = MainTag.ToString();
 
         // 서브 태그
         AddSubTag(upgradeData);
@@ -185,7 +182,7 @@ public abstract class ActiveSkill : MonoBehaviour
                 return true;
 
             case TARGETING_TYPE.NonTarget:                  // 비대상형    공격 방향 있어야 발동
-                return player.AttackDir.sqrMagnitude > 0f;
+                return player.LastAttackDir.sqrMagnitude > 0f;
 
             case TARGETING_TYPE.Closest:                    // 조준형      공격방향, 타겟 트랜스폼 둘 다 있어야 발동
                 return player.AttackDir.sqrMagnitude > 0f && _currentTarget != null;
@@ -415,18 +412,40 @@ public abstract class ActiveSkill : MonoBehaviour
         int flag = SubTagRegistry.GetFlag(passive.SubTag);
         return flag != 0 && (CurrentSubTag & flag) != 0;
     }
+
+
+    private Vector2 GetAttackDir()
+    {
+        var player = SkillManager.Instance.Player;
+
+        switch (_targetingType)
+        {
+            case TARGETING_TYPE.Barrier:                    // 베리어형    항상 발동
+                return player.transform.position;
+
+            case TARGETING_TYPE.NonTarget:                  // 비대상형    공격 방향
+                return player.LastAttackDir;
+
+            case TARGETING_TYPE.Closest:                    // 조준형      공격방향
+                return player.AttackDir;
+
+            case TARGETING_TYPE.Directional:                // 이동방향형  이동 방향
+                return player.MoveDir;
+
+            default:
+                return player.transform.position;
+        }
+    }
 }
 
 // 프리팹과 모디파이어 타입 결정
 public abstract class ActiveSkill<TSkillObject, TModifierData> : ActiveSkill
-    where TSkillObject : Component
+    where TSkillObject : PoolObject
     where TModifierData : class, new()
 {
     protected TSkillObject _skillObjectPrefab;
     public TModifierData _modifierData = new TModifierData();
 
-    // 풀 매니저의 GameObject -> 컴포넌트로 캐시 (GetComponent 줄이기)
-    private Dictionary<GameObject, Component> _component = new();
 
     // 프리팹 캐싱
     public override void Init(ActiveSkillData skillData, ActiveUpgradeData upgradeData, GameObject prefab)
@@ -462,13 +481,13 @@ public abstract class ActiveSkill<TSkillObject, TModifierData> : ActiveSkill
 
 
     // 메인 프리팹 풀에서 꺼내기
-    protected TSkillObject SpawnFromPool(string tag, Vector3 pos, Quaternion rot)
+    protected TSkillObject SpawnFromPool(Vector3 pos, Quaternion rot)
     {
-        return SpawnFromPool<TSkillObject>(tag, pos, rot);
+        return SpawnFromPool<TSkillObject>(_skillObjectPrefab, pos, rot);
     }
 
     // 메인, 서브 프리팹 풀에서 꺼내기
-    protected T SpawnFromPool<T>(string tag, Vector3 pos, Quaternion rot) where T : Component
+    protected T SpawnFromPool<T>(T prefab, Vector3 pos, Quaternion rot) where T : PoolObject
     {
         // 풀 매니저 체크
         if (ObjectPoolManager.Instance == null)
@@ -477,24 +496,12 @@ public abstract class ActiveSkill<TSkillObject, TModifierData> : ActiveSkill
             return null;
         }
 
-        // 풀 매니저에서 tag의 프리팹 가져오기
-        GameObject obj = ObjectPoolManager.Instance.Get(tag, pos, rot);
-
-        // 프리팹 null
-        if (obj == null)
+        if (prefab == null)
         {
-            Debug.LogWarning($"[ActiveSkill] 풀 미등록 태그: {tag}");
+            Debug.LogWarning("[ActiveSkill] 풀에 요청한 프리팹이 null입니다.");
             return null;
         }
 
-        // 캐시에 있으면 바로 반환
-        if (_component.TryGetValue(obj, out Component cached) && cached is T result)
-            return result;
-
-        // 없으면 GetComponent 후 캐싱
-        T comp = obj.GetComponent<T>();
-        _component[obj] = comp;
-
-        return comp;
+        return ObjectPoolManager.Instance.Spawn<T>(prefab, pos, rot);
     }
 }

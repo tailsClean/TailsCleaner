@@ -6,7 +6,7 @@ public class StageEntry : MonoBehaviour
 {
     [SerializeField] private int _stageId = 50201;
 
-    [SerializeField] private int _towerId = 0; // 0이면 자동 추론
+    [SerializeField] private int _towerId = 0;
 
     [SerializeField] private bool _useTimeOverride;
     [SerializeField] private int _overrideMainTimeSeconds = 60; 
@@ -115,9 +115,6 @@ public class StageEntry : MonoBehaviour
             Debug.Log($"에너지가 부족합니다. 현재={GameManager.EnergyCount}, 필요={cost}");
             return false;
         }
-
-        GameManager.Instance.UpdateEnergyCount(GameManager.EnergyCount - cost);
-
         return true;
     }
 }

@@ -3,7 +3,6 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
-using static UnityEditor.ShaderGraph.Internal.KeywordDependentCollection;
 
 public abstract class SpecialBossMonsterBase : MonsterBase
 {
@@ -107,10 +106,40 @@ public abstract class SpecialBossMonsterBase : MonsterBase
         }
     }
 
+    // 오브젝트 풀링을 위한 초기화
     protected void OnEnable()
     {
         if (!activeMonsters.Contains(this))
             activeMonsters.Add(this);
+
+        hasExploded = false;           // 자폭 여부 리셋
+        isJumping = false;             // 점프 상태 리셋
+        isWaiting = false;             // 대기 상태 리셋
+        isFleeingState = false;        // 도망 상태 리셋
+        isWaitingFlee = false;         // 도망 대기 리셋
+        patternTimer = 0f;             // 지그재그 타이머 리셋
+        stateTimer = 0f;               // 패턴 쿨타임 리셋
+
+        // 자폭 유닛 전용 초기화
+        if (isSuicideUnit)
+        {
+            currentCastTimer = cast_time;
+            currentState = MonsterState.PATTERN;
+        }
+        else
+        {
+            currentState = MonsterState.MOVE;
+        }
+
+        // 시각적 높이 리셋 
+        if (visualChild != null) visualChild.localPosition = Vector2.zero;
+
+        // 타겟(플레이어) 재설정 
+        if (target == null)
+        {
+            GameObject playerObj = GameObject.FindWithTag("Player");
+            if (playerObj != null) target = playerObj.transform;
+        }
     }
 
     protected void OnDisable()
@@ -476,7 +505,7 @@ public abstract class SpecialBossMonsterBase : MonsterBase
         }
         // if (!hitPlayer) Debug.Log("자폭 빗나감");
 
-        Destroy(gameObject);
+        ObjectPoolManager.Instance.ReturnObject(this);
     }
 
     private void UpdateWarningVisuals(float progressNormalized) { }

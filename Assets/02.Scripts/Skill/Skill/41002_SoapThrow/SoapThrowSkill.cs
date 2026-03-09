@@ -2,6 +2,10 @@
 
 public class SoapThrowSkill : ActiveSkill<SoapThrowProjectile, SoapThrowModifierData>
 {
+    [Header("강철 스프라이트")]
+    [SerializeField] Sprite _metalSprite;
+    public Sprite MetalSprite => _metalSprite;
+
     // 스킬 발동
     protected override void OnActive(int index, int totalCount)
     {
@@ -23,7 +27,7 @@ public class SoapThrowSkill : ActiveSkill<SoapThrowProjectile, SoapThrowModifier
 
         // 비누 생성
         //SoapThrowProjectile soap = Instantiate(_skillObjectPrefab, transform.position, Quaternion.Euler(0, 0, angle));
-        SoapThrowProjectile soap = SpawnFromPool<SoapThrowProjectile>(_poolTag, transform.position, Quaternion.Euler(0f, 0f, angle));
+        SoapThrowProjectile soap = SpawnFromPool<SoapThrowProjectile>(_skillObjectPrefab, transform.position, Quaternion.Euler(0f, 0f, angle));
 
         // 초기화
         if(soap != null) soap.Init(this, _modifierData, dir);

@@ -14,6 +14,7 @@ public class FailState : IStageState
     public void Enter()
     {
         Debug.Log($"[Stage] Enter FailState reason={Reason} -> FinalizeReward(Defeat)");
+        UIManager.Instance.OpenGameOver();
         _controller?.RewardHandler?.FinalizeReward(GameResult.Defeat);
     }
 
