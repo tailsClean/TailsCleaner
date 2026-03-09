@@ -1,9 +1,16 @@
 ﻿using UnityEngine;
+using System; // [Flags] 속성 사용을 위해 필수
 
-public enum PierceType { DISAPPEAR, PIERCE, REFLECT }
-
-public class MonsterProjectile : PoolObject
+public class BossMonsterProjectile : PoolObject
 {
+    [Flags]
+    public enum PierceType
+    {
+        NONE = 0,           // 아무것도 체크 안 함 (기본 소멸)
+        PIERCE = 1 << 0,    // 1 (관통)
+        REFLECT = 1 << 1    // 2 (반사)
+    }
+
     private Rigidbody2D rb2D;
     private Transform target;
     private int currentBounce = 0;
@@ -12,14 +19,17 @@ public class MonsterProjectile : PoolObject
     private float reflectTimer = 0f;
 
     [Header("--- 프리팹 원본 참조 ---")]
-    [Tooltip("반납할 때 필요한 이 투사체의 원본 프리팹")]
+    [Tooltip("반납 시 필요한 이 투사체의 원본 프리팹")]
     public GameObject originPrefab;
 
     [Header("--- 기획 데이터 연동 ---")]
     [Tooltip("발사 속도")] public float projectile_speed = 10f;
     [Tooltip("탄환 수명 (초)")] public float life_time = 5f;
     [Tooltip("유도탄 여부")] public bool is_homing;
-    [Tooltip("충돌 모드: 파괴, 관통, 벽 반사")] public PierceType pierce_type;
+
+    [Tooltip("충돌 모드: 체크박스 다중 선택 (모두 해제 시 부딪히면 삭제)")]
+    public PierceType pierce_flags = PierceType.NONE;
+
     [Tooltip("벽 반사 최대 횟수")] public int reflect_count = 3;
     [Tooltip("0보다 크면 포물선 발사 (높이)")] public float arc_height = 0f;
 
@@ -27,33 +37,27 @@ public class MonsterProjectile : PoolObject
     {
         rb2D = GetComponent<Rigidbody2D>();
 
-        // 플레이어가 Trigger이므로 투사체도 감지를 위해 IsTrigger를 기본적으로 켜줌
-        // (Launch에서 pierce_type에 따라 다시 설정)
+        // 충돌 감지를 위해 IsTrigger 설정
         if (GetComponent<Collider2D>() != null)
             GetComponent<Collider2D>().isTrigger = true;
     }
 
     public override void OnSpawn()
     {
-        base.OnSpawn(); // 부모 클래스 로직 실행 (필요 시)
+        base.OnSpawn();
 
-        // 데이터 초기화 (재사용 시 이전 데이터가 남아있으면 안 됨)
+        // 오브젝트 풀링 재사용을 위한 데이터 초기화
         currentBounce = 0;
         reflectTimer = 0f;
         isInitialized = false;
         rb2D.linearVelocity = Vector2.zero;
         rb2D.angularVelocity = 0f;
-
-        // 수명 후 자동 반납 예약 (CancelInvoke는 Launch에서 수행)
     }
 
     public void Launch(Transform playerTarget)
     {
         target = playerTarget;
         isInitialized = true;
-
-        // 관통/기본/반사 모두 플레이어(Trigger) 감지를 위해 isTrigger를 true로 유지
-        //GetComponent<Collider2D>().isTrigger = true;
 
         CancelInvoke(nameof(DeactivateProjectile));
         Invoke(nameof(DeactivateProjectile), life_time);
@@ -72,7 +76,6 @@ public class MonsterProjectile : PoolObject
 
     private void DeactivateProjectile()
     {
-        // 부모(PoolObject)에 정의된 ReturnToPoolAfter와 유사하게 매니저에 직접 반납
         ObjectPoolManager.Instance.ReturnObject(this);
     }
 
@@ -80,6 +83,7 @@ public class MonsterProjectile : PoolObject
     {
         if (!isInitialized) return;
 
+        // 반사 직후 잠시 로직 정지 (벽 끼임 방지)
         if (reflectTimer > 0)
         {
             reflectTimer -= Time.fixedDeltaTime;
@@ -113,7 +117,6 @@ public class MonsterProjectile : PoolObject
         }
     }
 
-    // 이 메서드에서 모든 충돌을 처리
     private void OnTriggerEnter2D(Collider2D other)
     {
         bool isPlayer = other.CompareTag("Player");
@@ -121,23 +124,20 @@ public class MonsterProjectile : PoolObject
 
         if (!isPlayer && !isWall) return;
 
-        // --- 상단 투척(Arc) 특수 처리 ---
-        // 곡사탄은 플레이어와 충돌해도 삭제하지 않고 통과시킴
-        if (arc_height > 0 && isPlayer)
+        // 곡사탄 플레이어 통과 처리
+        if (arc_height > 0 && isPlayer) return;
+
+        // 1. 관통(PIERCE) 여부 확인
+        if (pierce_flags.HasFlag(PierceType.PIERCE))
         {
-          
-            return;
+            return; // 관통 설정 시 모든 충돌 무시
         }
 
-        // 관통 모드(PIERCE): 무시하고 통과
-        if (pierce_type == PierceType.PIERCE) return;
-
-        // 반사 모드(REFLECT) + 벽 충돌: 반사 처리
-        if (pierce_type == PierceType.REFLECT && isWall)
+        // 2. 반사(REFLECT) 여부 및 벽 충돌 확인
+        if (pierce_flags.HasFlag(PierceType.REFLECT) && isWall)
         {
             if (currentBounce < reflect_count)
             {
-                // 트리거 충돌 시 벽의 법선을 구하기 위한 계산
                 Vector2 closestPoint = other.ClosestPoint(transform.position);
                 Vector2 normal = ((Vector2)transform.position - closestPoint).normalized;
 
@@ -146,14 +146,11 @@ public class MonsterProjectile : PoolObject
 
                 reflectTimer = 0.15f;
                 currentBounce++;
-                return; // 반사 성공 시 삭제 안 함
+                return;
             }
         }
 
-        //   파괴 조건 (여기에 도달하면 무조건 삭제)
-        // - DISAPPEAR 모드 (전체)
-        // - REFLECT 모드에서 플레이어와 부딪힌 경우 (isWall이 false이므로 2번을 건너뜀)
-        // - REFLECT 모드에서 반사 횟수 초과 시
+        // 3. 위 조건에 해당하지 않으면 소멸 (NONE 포함)
         DeactivateProjectile();
     }
 

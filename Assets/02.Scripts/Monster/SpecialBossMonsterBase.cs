@@ -11,6 +11,9 @@ public abstract class SpecialBossMonsterBase : MonsterBase
     protected enum MonsterState { MOVE, PATTERN }
     protected MonsterState currentState = MonsterState.MOVE;
 
+    [Header("--- 데이터 테이블 연동  ---")]
+    public int pattern_group_id; 
+
 
     [Header("--- monster_table 연동 ---")]
     public float move_speed;               // 몬스터의 기본 이동 속도 
