@@ -31,7 +31,7 @@ public class BluetoothShowerSkill : ActiveSkill<BluetoothShowerProjectile, Bluet
     protected override void Update()
     {
         // 이동방향
-        Vector2 moveDir = SkillManager.Instance.Player.MoveDir;
+        Vector2 moveDir = AttackDir;
 
         // 이동방향 갱신
         if (moveDir != Vector2.zero)

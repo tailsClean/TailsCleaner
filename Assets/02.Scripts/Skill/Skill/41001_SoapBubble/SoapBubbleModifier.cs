@@ -2,26 +2,40 @@
 
 public class SoapBubbleModifierData
 {
+    // 추적
     public bool Tracking = false;
-    public bool PlayerDefenseBoost = false;
-    public bool SlowOnArea = false;
-    public bool StunOnArea = false;
-    public bool BurstOnExpire = false;
+    public float TrackingInterval = 0f;         // 탐색 간격
 
-    public int PlayerDefenseBonus = 0;          // 플레이어 방어력
-    public float SlowAmount = 0f;               // 적 슬로우 효과
+    // 플레이어 방어력
+    public bool PlayerDefenseBoost = false;
+    public int PlayerDefenseBonus = 0;
+
+    // 적 슬로우 효과
+    public bool SlowOnArea = false;
+    public float SlowAmount = 0f;               
+
+    // 적 기절 효과
+    public bool StunOnArea = false;
     public float StunRequiredTime = 0f;         // 기절 발동 체류 시간
     public float StunDuration = 0f;             // 기절 지속 시간
-    public float BurstDamage = 0f;              // 소멸 시 최대 체력 피해
+
+    // 소멸 피해
+    public bool BurstOnExpire = false;
+    public float BurstDamage = 0f;              // 최대 체력 비율
+
 }
 
 
 // 40002 자동 추척 비누 지우개     /      장판 적 추적
 public class SoapBubbleTrackingModifier : ActiveModifier<SoapBubbleSkill>
 {
+    [Header("추적 탐색 간격")]
+    public float TrackingInterval = 0.2f;
+
     public override void ApplyModifier(SoapBubbleSkill skill, ActiveUpgradeData upgradeData)
     {
         skill._modifierData.Tracking = true;
+        skill._modifierData.TrackingInterval = TrackingInterval;
     }
 }
 

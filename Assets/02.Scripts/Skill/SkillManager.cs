@@ -11,7 +11,7 @@ public class SkillManager : MonoBehaviour
     public const int MAX_PASSIVE_SLOTS = 6;             // 최대 패시브 스킬 수
     public const int DEFAULT_ACTIVE_MAIN_TAG = 41003;   // 기본 지급 스킬 메인 태그 (세제 캡슐 41007)
     public const float DEFAULT_SEARCH_RADIUS = 100f;    // 가장 가까운 적 탐색용 범위
-    public const float SEARCH_INTERVAL = 0.2f;          // 탐색 주기
+    public const float SEARCH_INTERVAL = 0.1f;          // 탐색 주기
     public const int MONSTER_BUFFER_COUNT = 150;        // 몬스터 콜라이더 버퍼 크기
 
     public WaitForSeconds SearchInterval { get; } = new WaitForSeconds(SEARCH_INTERVAL);
@@ -29,7 +29,7 @@ public class SkillManager : MonoBehaviour
     public PlayerBase Player { get; private set; }                  // 플레이어
     public Rigidbody2D PlayerRigidbody { get; private set; }        // 플레이어 리지드바디
     public Vector2 CurrentPlayerPos => PlayerRigidbody.position;    // 플레이어 위치
-    public TargetingSystem TargetingSystem { get; private set; }    // 타겟 시스템
+    public TargetingSystem TargetingSystem { get; private set; }    // 타겟 시스템 (사용 안 할 예정)
     public LayerMask MonsterLayer => _monsterLayer;
     
     
@@ -63,6 +63,9 @@ public class SkillManager : MonoBehaviour
         // 스킬 데이터 불러오기
         SkillDataLoader.Init();
 
+        // 근접 몬스터 콜라이더 배열 탐색
+        StartCoroutine(MonsterSearchCoroutine());
+
         // 기본 스킬 추가
         // 기획서 상에서는 못봤는데 기본 공격이 없으면 공격 못하니까 일단 추가
         AddDefaultSkill();
@@ -80,7 +83,7 @@ public class SkillManager : MonoBehaviour
         //ApplyActiveOption(41001, SkillDataLoader.GetActiveUpgradeData(40005));  // 흐르는 거품
 
         ApplyActiveOption(41002, SkillDataLoader.GetActiveUpgradeData(40009));  // 비누 던지기
-        //ApplyActiveOption(41002, SkillDataLoader.GetActiveUpgradeData(40011));  // 감나빗!
+        ApplyActiveOption(41002, SkillDataLoader.GetActiveUpgradeData(40011));  // 감나빗!
         //ApplyActiveOption(41002, SkillDataLoader.GetActiveUpgradeData(40016));  // 비누덩어리
 
         ApplyActiveOption(41003, SkillDataLoader.GetActiveUpgradeData(40018));  // 물바다
@@ -125,11 +128,6 @@ public class SkillManager : MonoBehaviour
         ApplyActiveOption(41003, SkillDataLoader.GetActiveUpgradeData(40067));  // 연사
         ApplyActiveOption(41004, SkillDataLoader.GetActiveUpgradeData(40067));  // 연사
         ApplyActiveOption(41008, SkillDataLoader.GetActiveUpgradeData(40067));  // 연사
-
-
-
-        // 근접 몬스터 콜라이더 배열 탐색
-        StartCoroutine(MonsterSearchCoroutine());
     }
 
 
@@ -283,7 +281,7 @@ public class SkillManager : MonoBehaviour
     }
 
     // 특정 위치 기준 가장 가까운 몬스터 탐색
-    public MonsterBase FindClosestMonster(Vector2 origin, float radius = DEFAULT_SEARCH_RADIUS)
+    public MonsterBase FindClosestMonster(Vector2 origin, float radius = DEFAULT_SEARCH_RADIUS, MonsterBase ignoreTarget = null)
     {
         // 반환할 몬스터
         MonsterBase closest = null;
@@ -304,6 +302,8 @@ public class SkillManager : MonoBehaviour
             {
                 // 체력이 0 이하면 스킵
                 if (monster.hp <= 0) continue;
+                // 무시할 타겟 있고, 현재 체크 대상이면 스킵
+                if (ignoreTarget != null && monster == ignoreTarget) continue;
 
                 // 거리 (몬스터에 Rigidbody 붙어있다는 가정하에 attachedRigidbody 사용)
                 float sqrDist = (origin - collider.attachedRigidbody.position).sqrMagnitude;

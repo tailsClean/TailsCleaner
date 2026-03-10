@@ -13,7 +13,7 @@ public class SoapThrowSkill : ActiveSkill<SoapThrowProjectile, SoapThrowModifier
         if (_currentTarget == null) return;
 
         // 방향
-        Vector2 dir = (_currentTarget.position - transform.position).normalized;
+        Vector2 dir = (CurrentTarget.Position - SkillManager.Instance.CurrentPlayerPos).normalized;
 
         // 발사
         SpawnSoap(dir);

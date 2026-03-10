@@ -34,7 +34,7 @@ public class ActiveSkillData : ScriptableObject
     public enum TARGETING_TYPE // 조준 방식
     {
         None = 0,
-        NonTarget = 4201,   // 비대상형   (공격 방향)
+        Activate = 4201,   // 비대상형   (공격 방향)
         Closest = 4202,     // 조준형     (공격 방향 가장 가까운 적)
         Barrier = 4203,     // 배리어형   (플레이어 기준)
         Directional = 4204, // 이동방향형 (이동 방향)

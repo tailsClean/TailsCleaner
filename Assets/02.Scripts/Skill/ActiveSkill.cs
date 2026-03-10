@@ -24,7 +24,7 @@ public abstract class ActiveSkill : MonoBehaviour
     public SkillStat UpgradeStat => _upgradeStat;
     public SkillStat PassiveMulStat => _passiveMulStat;
     public SkillStat FinalStat => _finalStat;
-    public Transform CurrentTarget => _currentTarget;
+    public MonsterBase CurrentTarget => _currentTarget;
 
 
     protected SkillStat _baseStat = new();                              // 기본 스탯
@@ -48,17 +48,18 @@ public abstract class ActiveSkill : MonoBehaviour
     protected float _lastActiveTime = 0f; // 최근 스킬 실행 시간
     protected WaitForSeconds _fireDelay;    // 순차 발사 딜레이
 
-    protected Transform _currentTarget = null;      // 타겟
+    protected MonsterBase _currentTarget = null;    // 타겟
     protected Coroutine _searchCoroutine = null;    // 탐색 코루틴
 
 
     [Header("스킬 실행 간격")]
     [SerializeField] protected float _fireInterval = 0.1f;      // 여러 투사체 발사 시 텀
-    [Header("조준형 설정")]
-    [SerializeField] protected float _angle = 15f;              // 범위 각도
+    [Header("발동 범위 설정")]
     [SerializeField] protected float _distance = 50f;           // 타겟 탐색 거리
 
 
+
+    protected Vector2 PlayerPos => SkillManager.Instance.CurrentPlayerPos;  // 현재 위치
     protected Vector2 AttackDir => GetAttackDir();  // 공격 방향
 
 
@@ -81,11 +82,9 @@ public abstract class ActiveSkill : MonoBehaviour
         // 타입 설정
         _attackType = skillData.AttackType;
         _targetingType = skillData.TargetingType;
-        //Debug.Log($"[ActiveSkill] {skillData.SkillName} 타입 설정 완료. ({_attackType}, {_targetingType})");
 
         // 스킬의 사용 프리팹
         _skillPrefab = prefab;
-        //Debug.Log($"[ActiveSkill] {skillData.SkillName} 의 프리팹 {_skillPrefab.name} 설정 완료.");
 
         // 레벨 1 시작
         CurrentLevel = 1;
@@ -98,9 +97,6 @@ public abstract class ActiveSkill : MonoBehaviour
 
     protected virtual void Update()
     {
-        // 조준형 타겟팅
-        Targeting();
-
         // 쿨타임이 됐고 발동 조건도 맞으면 발동
         if (IsCooldownReady() && CanFire())
         {
@@ -108,64 +104,7 @@ public abstract class ActiveSkill : MonoBehaviour
             _lastActiveTime = Time.time;
         }
     }
-    private void Targeting()
-    {
-        // 조준형일 때만 작동
-        if (_targetingType == TARGETING_TYPE.Closest)
-        {
-            // 공격 방향
-            Vector2 attackDir = SkillManager.Instance.Player.AttackDir;
 
-            // 공격 방향이 존재하면
-            if (attackDir.sqrMagnitude > 0f)
-            {
-                // 코루틴이 안 돌고 있다면 켜기
-                if (_searchCoroutine == null)
-                    _searchCoroutine = StartCoroutine(SearchTargetCoroutine());
-            }
-            else
-            {
-                // 공격 방향 없으면
-                // 코루틴 끄고 타겟 비우기
-                StopSearch();
-            }
-        }
-    }
-
-    // 탐색 중지
-    private void StopSearch()
-    {
-        // 코루틴 돌고있으면 중지
-        if (_searchCoroutine != null)
-        {
-            StopCoroutine(_searchCoroutine);
-            _searchCoroutine = null;
-        }
-
-        // 타겟 비우기
-        _currentTarget = null;
-    }
-
-    // 타겟 탐색 코루틴
-    private IEnumerator SearchTargetCoroutine()
-    {
-        while (true)
-        {
-            // 공격 방향
-            Vector2 attackDir = SkillManager.Instance.Player.AttackDir;
-
-            // 방향 있을 때 탐색
-            if (attackDir.sqrMagnitude > 0f)
-                _currentTarget = SkillManager.Instance.TargetingSystem.GetTarget(attackDir, _distance, _angle);
-            else
-                _currentTarget = null;
-
-            // 탐색 0.2초 대기
-            yield return SkillManager.Instance.SearchInterval;
-        }
-    }
-
-    // 쿨타임 체크
     private bool IsCooldownReady()
     {
         float cooldown = Mathf.Max(MIN_SKILL_COOLDOWN, _finalStat.Cooldown);
@@ -178,14 +117,12 @@ public abstract class ActiveSkill : MonoBehaviour
 
         switch (_targetingType)
         {
-            case TARGETING_TYPE.Barrier:                    // 베리어형     항상 발동
+            case TARGETING_TYPE.Barrier:                    // 베리어형    항상 발동
                 return true;
 
-            case TARGETING_TYPE.NonTarget:                  // 비대상형    공격 방향 있어야 발동
-                return player.LastAttackDir.sqrMagnitude > 0f;
-
-            case TARGETING_TYPE.Closest:                    // 조준형      공격방향, 타겟 트랜스폼 둘 다 있어야 발동
-                return player.AttackDir.sqrMagnitude > 0f && _currentTarget != null;
+            case TARGETING_TYPE.Activate:                   // 발동형      범위 내 가장 가까운 적
+            case TARGETING_TYPE.Closest:                    // 조준형    
+                return TryUpdateTarget();
 
             case TARGETING_TYPE.Directional:                // 이동방향형  이동 방향 있어야 발동
                 return player.MoveDir.sqrMagnitude > 0f;
@@ -199,6 +136,22 @@ public abstract class ActiveSkill : MonoBehaviour
     protected virtual bool CanActive()
     {
         return IsCooldownReady() && CanFire();
+    }
+
+    // 타겟 갱신 시도
+    protected bool TryUpdateTarget()
+    {
+        // 범위 내 가장 가까운 적 탐색
+        MonsterBase target = SkillManager.Instance.FindClosestMonster(SkillManager.Instance.CurrentPlayerPos, _distance);
+
+        if (target != null)
+        {
+            _currentTarget = target;
+            return true;
+        }
+
+        _currentTarget = null;
+        return false;
     }
 
     // 스킬 발동 로직
@@ -215,6 +168,9 @@ public abstract class ActiveSkill : MonoBehaviour
 
         for (int i = 0; i < count; i++)
         {
+            // 발사 불가 상태면 즉시 종료 (범위 내 적이 아예 없는 경우)
+            if (CheckAndRetarget() == false) break;
+
             // 실제 발사 로직은 자식에서
             OnActive(i, count);
 
@@ -226,6 +182,35 @@ public abstract class ActiveSkill : MonoBehaviour
     // 자식 개별 
     protected abstract void OnActive(int index, int totalCount);
 
+
+    // 발동형, 조준형
+    // 발동 시 타겟 유효성 검사 후
+    // 새 타겟 필요 시 갱신
+    protected virtual bool CheckAndRetarget()
+    {
+        switch (_targetingType)
+        {
+            case TARGETING_TYPE.Activate:
+            case TARGETING_TYPE.Closest:
+
+                // 기존 타겟 살아있으면 바로 리턴
+                if (IsValidTarget()) return true;
+
+                // 타겟이 사라지면 새 타겟 갱신 (찾으면 true, 아예 없으면 false)
+                return TryUpdateTarget();
+
+            default:
+                // 베리어형, 이동방향형은 일단 걍 true
+                return true;
+        }
+    }
+    // 타겟이 유효한지 체크
+    protected bool IsValidTarget()
+    {
+        return _currentTarget != null &&
+               _currentTarget.gameObject.activeInHierarchy &&
+               _currentTarget.hp > 0;
+    }
 
 
     // 스킬 업그레이드
@@ -421,19 +406,22 @@ public abstract class ActiveSkill : MonoBehaviour
         switch (_targetingType)
         {
             case TARGETING_TYPE.Barrier:                    // 베리어형    항상 발동
-                return player.transform.position;
+                return SkillManager.Instance.CurrentPlayerPos;
 
-            case TARGETING_TYPE.NonTarget:                  // 비대상형    공격 방향
-                return player.LastAttackDir;
+            case TARGETING_TYPE.Activate:                   // 발동형      타겟 있을 때만
+            case TARGETING_TYPE.Closest:                    // 조준형     
 
-            case TARGETING_TYPE.Closest:                    // 조준형      공격방향
-                return player.AttackDir;
+                if (_currentTarget != null)
+                    return (_currentTarget.Position - SkillManager.Instance.CurrentPlayerPos).normalized;
+
+                // 혹시나 발사하는데 타겟 없으면 아래로
+                return Vector2.down;
 
             case TARGETING_TYPE.Directional:                // 이동방향형  이동 방향
                 return player.MoveDir;
 
             default:
-                return player.transform.position;
+                return SkillManager.Instance.CurrentPlayerPos;
         }
     }
 }

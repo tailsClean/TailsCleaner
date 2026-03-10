@@ -20,7 +20,7 @@ public class WashWaveSkill : ActiveSkill<WashWaveProjectile, WashWaveModifierDat
     protected override IEnumerator ActiveCoroutine()
     {
         // 공격 방향
-        Vector2 attackDir = SkillManager.Instance.Player.AttackDir;
+        Vector2 attackDir = AttackDir;
         if (attackDir == Vector2.zero) yield break;
 
         // 차오르는 체력
@@ -55,7 +55,6 @@ public class WashWaveSkill : ActiveSkill<WashWaveProjectile, WashWaveModifierDat
     private IEnumerator FireWave(Vector2 fireDir)
     {
         // 플레이어 위치
-        //Vector2 playerPos = SkillManager.Instance.Player.transform.position;
         Vector2 playerPos = SkillManager.Instance.CurrentPlayerPos;
 
         // 스폰 중심 - 플레이어 기준 발사 반대 방향으로 오프셋
@@ -84,7 +83,6 @@ public class WashWaveSkill : ActiveSkill<WashWaveProjectile, WashWaveModifierDat
         float angle = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;
 
         // 투사체 생성
-        //WashWaveProjectile washWave = Instantiate(_skillObjectPrefab, spawnPos, Quaternion.Euler(0f, 0f, angle));
         WashWaveProjectile washWave = SpawnFromPool<WashWaveProjectile>(_skillObjectPrefab, spawnPos, Quaternion.Euler(0f, 0f, angle));
 
         // 투사체 초기화

@@ -70,7 +70,7 @@ public class SoapBubbleArea : SkillArea<SoapBubbleModifierData>
             _searchTimer += Time.deltaTime;
 
             // 탐색 간격마다
-            if (_searchTimer >= SkillManager.SEARCH_INTERVAL)
+            if (_searchTimer >= _modifierData.TrackingInterval)
             {
                 // 타이머 초기화
                 _searchTimer = 0f;

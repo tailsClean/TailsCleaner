@@ -16,12 +16,10 @@ public class TowelSwingSkill : ActiveSkill<TowelSwingArea, SwingModifierData>, I
 
     protected override IEnumerator ActiveCoroutine()
     {
-        Vector2 attackDir = SkillManager.Instance.Player.AttackDir;
+        if (AttackDir == Vector2.zero) yield break;
 
-        if (attackDir == Vector2.zero) yield break;
-
-        Vector2 mainDir = attackDir.normalized; // 앞
-        Vector2 oppDir = -mainDir;              // 뒤
+        Vector2 mainDir = AttackDir;        // 앞
+        Vector2 oppDir = -mainDir;          // 뒤
 
         // 리사이클 체크
         bool hasOwn = _modifierData.HasOwnRecycle;
