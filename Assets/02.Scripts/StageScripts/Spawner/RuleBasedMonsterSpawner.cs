@@ -196,7 +196,12 @@ public class RuleBasedMonsterSpawner : MonoBehaviour, IMonsterSpawnSystem
         Vector2 _pos2D = GetSpawnPositionByPattern(_isBoss);
         Vector3 _spawnPos = new Vector3(_pos2D.x, _pos2D.y, 0f);
 
-        MonsterBase _monster = Instantiate(_prefab, _spawnPos, Quaternion.identity);
+        MonsterBase _monster;
+        if (ObjectPoolManager.Instance != null)
+            _monster = ObjectPoolManager.Instance.Spawn(_prefab, _spawnPos, Quaternion.identity);
+        else
+            _monster = Instantiate(_prefab, _spawnPos, Quaternion.identity);
+
         _monster.name = _name;
         _monster.target = _playerTransform;
 
@@ -215,7 +220,7 @@ public class RuleBasedMonsterSpawner : MonoBehaviour, IMonsterSpawnSystem
         _monster.ApplyScaling(hpScale, powerScale);
 
         int exp = CalcExp(_monsterId);
-        // _monster.SetExpReward(exp);
+        _monster.SetExpReward(exp);
 
         _registry.Register(_monster.gameObject);
         return _monster;
