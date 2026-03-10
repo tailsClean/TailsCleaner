@@ -6,22 +6,31 @@ public class PoolObject : MonoBehaviour
     public string PoolKey { get; set; }
 
     // 오브젝트가 활성화될 때 실행될 가상 함수 (재정의 가능)
-    public virtual void OnSpawn() { }
+    public virtual void OnSpawn()
+    {
+        CancelInvoke();
+        gameObject.SetActive(true);
+    }
 
     // 풀로 돌아갈 때 실행될 가상 함수
     public virtual void OnDespawn()
     {
+        CancelInvoke();
         gameObject.SetActive(false);
     }
 
     // 일정 시간 후 자동 반납 기능
     public void ReturnToPoolAfter(float delay)
     {
+        CancelInvoke();
         Invoke(nameof(Deactivate), delay);
     }
 
     private void Deactivate()
     {
-        ObjectPoolManager.Instance.ReturnObject(this);
+        if (ObjectPoolManager.Instance != null)
+            ObjectPoolManager.Instance.ReturnObject(this);
+        else
+            gameObject.SetActive(false);
     }
 }
