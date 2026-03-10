@@ -52,7 +52,7 @@ public class ItemDBSO : ScriptableObject
         foreach(var item in items)
         {
             if (!_itemDataDict.TryAdd(item.UniqueID, item))
-                Debug.LogError($"<color=red>{item.name}의 ID가 중복입력됐습니다.");
+                Debug.LogError($"<color=red>{item.name}의 ID가 중복입력됐습니다.</color>");
         }
     }
 }
@@ -63,7 +63,7 @@ public static class ItemDB
 {
     private static ItemDBSO _itemDB;
 
-    public static T GetItemSO<T>(int id) where T : ItemBaseSO
+    public static T GetItemData<T>(int id) where T : ItemBaseSO
     {
         if(_itemDB == null)
         {

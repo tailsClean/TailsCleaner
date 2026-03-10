@@ -3,9 +3,12 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-
+// 케이스별 판단 메서드 만들어서 코드 좀 줄이자
 public class Inventory : MonoBehaviour
 {
+    [Header("이벤트 채널")]
+    [SerializeField] private VoidEventChannelSO _onChangeInventory;
+
     // Key: 아이템ID , Value: 소지갯수
     private Dictionary<int, int> _equipInventory;
     private Dictionary<int, int> _relicInventory;
@@ -36,8 +39,29 @@ public class Inventory : MonoBehaviour
 
 
 
-    // 인벤토리 아이템 관리용 정보 반환
-    public ItemBaseSO GetItem(int id) => ItemDB.GetItemSO<ItemBaseSO>(id);
+    // 인벤토리 소지 아이템 정보 반환
+    public ItemStack GetItemInfo(int id)
+    {
+        var item = ItemDB.GetItemData<ItemBaseSO>(id);
+
+        switch(item.ItemType)
+        {
+            case ITEM_TYPE.Equipment:
+                return new ItemStack(item, _equipInventory[id]);
+
+            case ITEM_TYPE.Relic:
+                return new ItemStack(item, _relicInventory[id]);
+
+            case ITEM_TYPE.Reinforcement:
+                return new ItemStack(item, _reinforceResourceInventory[id]);
+
+            case ITEM_TYPE.Consume:
+                return new ItemStack(item, _consumeInventory[id]);
+
+            default:
+                return new ItemStack();
+        }
+    }
 
 
     public void InitEvent()
@@ -68,6 +92,7 @@ public class Inventory : MonoBehaviour
                 GainItem(_consumeInventory, id, amount);
                 break;
         }
+        _onChangeInventory.OnStartEvent();
     }
     private void GainItem(Dictionary<int, int> inventory, int id, int amount = 1)
     {
@@ -104,6 +129,7 @@ public class Inventory : MonoBehaviour
                 UseItem(_consumeInventory, id, amount);
                 break;
         }
+        _onChangeInventory.OnStartEvent();
     }
     private void UseItem(Dictionary<int, int> inventory, int id, int amount = 1)
     {
@@ -162,4 +188,6 @@ public class Inventory : MonoBehaviour
         return true;
     }
     #endregion
+
+    
 }

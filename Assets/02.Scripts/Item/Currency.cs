@@ -7,8 +7,10 @@ using UnityEngine.UI;
 /// </summary>
 public class Currency : MonoBehaviour
 {
+    [Header("이벤트 채널")]
+    [SerializeField] private VoidEventChannelSO _onChangeGold;
+
     [SerializeField] private int _goldAmount = 1000;
-    public int MoneyID { get; private set; } = 15;
 
     public int GoldAmount
     {
@@ -18,11 +20,16 @@ public class Currency : MonoBehaviour
                 Debug.LogError("현재 Money가 음수입니다.");
             return Mathf.Max(_goldAmount, 0);
         }
-
     }
 
+    public ItemStack GetGold() => new ItemStack(ItemID.Gold, _goldAmount);
 
-    public void GainGold(int amount) => _goldAmount += amount;
+    public void GainGold(int amount)
+    {
+        _goldAmount += amount;
+        _onChangeGold.OnStartEvent();
+    }
+
     public void UseGold(int amount)
     {
         if (amount < 0)
@@ -33,8 +40,8 @@ public class Currency : MonoBehaviour
             Debug.LogWarning("사용금액이 현재 금액을 초과합니다.");
             return;
         }
-
         _goldAmount -= amount;
+        _onChangeGold.OnStartEvent();
     }
     public bool TryUseGold(int amount)
     {
@@ -49,25 +56,4 @@ public class Currency : MonoBehaviour
 
         return true;
     }
-
-
-
-
-    #region Money UI
-    //
-    public Image MoneyImage;
-    private void Update()
-    {
-        SetMoney();
-    }
-    public TextMeshProUGUI MoneyText;
-
-    public void SetMoney()
-    {
-        //MoneyImage.sprite = ItemDB.GetItem<StackableItem>(MoneyID).GetSprite();
-        MoneyText.text = GoldAmount.ToString();
-    }
-
-    //
-    #endregion
 }

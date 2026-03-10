@@ -7,7 +7,7 @@ using UnityEngine.UI;
 /// 수정 필요
 /// </summary>
 [RequireComponent(typeof(Button))]
-public class InventorySlot : MonoBehaviour
+public class UISlot : MonoBehaviour
 {
     [SerializeField] private TextMeshProUGUI _amountText;
 
@@ -24,14 +24,14 @@ public class InventorySlot : MonoBehaviour
         _baseSprite = _image.sprite;
     }
 
-    // 슬롯에 아이템(ID)과 갯수를 표시
-    public void SetSlot(int id, int amount)
+    // 슬롯에 아이템(ID)과 벨류(갯수, 강화수치등)를 표시
+    public void SetSlot(int id, int? value = null)
     {
-        var a = ItemDB.GetItemSO<ItemBaseSO>(id);
+        var a = ItemDB.GetItemData<ItemBaseSO>(id);
         if (a != null)
         {
             _image.sprite = a.ImageSprite;
-            _amountText.text = amount.ToString();
+            _amountText.text = value.ToString();
         }
         else
         {
@@ -39,20 +39,19 @@ public class InventorySlot : MonoBehaviour
             _image.sprite = _baseSprite;
             _amountText.text = string.Empty;
         }
+
+        if (value == null)
+            _amountText.text = string.Empty;
+
     }
 
-    public void SetSlot(int id, int amount, Action action)
-    {
-        SetSlot(id, amount);
-        AddListner(action);
-    }
+    public void AddListner(Action action) => _button.onClick.AddListener(action.Invoke);
 
-    private void AddListner(Action action) => _button.onClick.AddListener(action.Invoke);
 
     public void Init()
     {
         _image.sprite = _baseSprite;
-        _amountText.text = "갯수";
+        _amountText.text = string.Empty;
         _button.onClick = null;
     }
 }

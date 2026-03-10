@@ -5,12 +5,12 @@ using UnityEngine.UI;
 
 public class InventorySlotHandler : UIGroup
 {
-    [SerializeField] private List<InventorySlot> _slots;
+    [SerializeField] private List<UISlot> _slots;
     [SerializeField] private Button _handlerButton;
 
     private Dictionary<int, int> _inventory;
     private List<int> _itemOrder = new();                           // 무작위로 들고 있는 _inventory의 값들에 순서를 부여
-    private Dictionary<int, InventorySlot> _slotByItemId = new();   // 특정 ID가 슬롯에 배치됐는지 조회용 딕셔너리
+    private Dictionary<int, UISlot> _slotByItemId = new();   // 특정 ID가 슬롯에 배치됐는지 조회용 딕셔너리
     private Image _buttonImg;
     private Color _baseColor;
 
@@ -20,7 +20,7 @@ public class InventorySlotHandler : UIGroup
     private void Awake()
     {
         _itemOrder = new List<int>();
-        _slotByItemId = new Dictionary<int, InventorySlot>();
+        _slotByItemId = new Dictionary<int, UISlot>();
         _buttonImg = _handlerButton.GetComponent<Image>();
         _baseColor = _buttonImg.color;
     }
@@ -69,7 +69,7 @@ public class InventorySlotHandler : UIGroup
 
     }
     // 슬롯 자체를 초기화 후, 맨 뒤로 보내기
-    private void ReleaseSlot(InventorySlot slot)
+    private void ReleaseSlot(UISlot slot)
     {
         slot.Init();
 
