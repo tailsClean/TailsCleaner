@@ -56,16 +56,16 @@ public class BossMonster : MonsterBase
             return;
         }
 
-        // 1. 자폭 로직 (독립)
+        // 자폭 로직 
         if (isSuicideUnit) HandleSuicideLogic();
 
-        // 2. 점프 로직 우선 체크 (점프 준비 중이거나 점프 중이면 이동 로직을 완전히 건너뜀)
+        // 점프 로직 우선 체크 (점프 준비 중이거나 점프 중이면 이동 로직을 완전히 건너뜀)
         if (useJump && !isSuicideUnit)
         {
             HandleJumpLogic();
         }
 
-        // 3. 이동 로직 (점프 관련 상태가 아닐 때만 실행)
+        // 이동 로직 (점프 관련 상태가 아닐 때만 실행)
         if (!isJumping && !isWaitingJump)
         {
             MoveProcess();

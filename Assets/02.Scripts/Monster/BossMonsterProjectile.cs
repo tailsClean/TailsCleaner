@@ -1,14 +1,14 @@
 ﻿using UnityEngine;
-using System; // [Flags] 속성 사용을 위해 필수
+using System;
 
 public class BossMonsterProjectile : PoolObject
 {
     [Flags]
     public enum PierceType
     {
-        NONE = 0,           // 아무것도 체크 안 함 (기본 소멸)
-        PIERCE = 1 << 0,    // 1 (관통)
-        REFLECT = 1 << 1    // 2 (반사)
+        DISAPPEAR = 0,      // 기본 모드: 충돌 시 즉시 소멸
+        PIERCE = 1 << 0,    // 관통 모드: 충돌 무시하고 통과
+        REFLECT = 1 << 1    // 반사 모드: 벽에 부딪히면 튕김
     }
 
     private Rigidbody2D rb2D;
@@ -17,18 +17,19 @@ public class BossMonsterProjectile : PoolObject
     private Vector2 lastVelocity;
     private bool isInitialized = false;
     private float reflectTimer = 0f;
+    private bool isHomingActive = false; // 포물선 비행 중 유도 활성화 여부
 
     [Header("--- 프리팹 원본 참조 ---")]
-    [Tooltip("반납 시 필요한 이 투사체의 원본 프리팹")]
     public GameObject originPrefab;
 
     [Header("--- 기획 데이터 연동 ---")]
-    [Tooltip("발사 속도")] public float projectile_speed = 10f;
+    [Tooltip("발사 속도 (직선 발사 시 사용)")] public float projectile_speed = 10f;
     [Tooltip("탄환 수명 (초)")] public float life_time = 5f;
     [Tooltip("유도탄 여부")] public bool is_homing;
+    [Tooltip("유도 회전 강도 (높을수록 급격히 꺾임)")] public float homing_steer_strength = 5f;
 
-    [Tooltip("충돌 모드: 체크박스 다중 선택 (모두 해제 시 부딪히면 삭제)")]
-    public PierceType pierce_flags = PierceType.NONE;
+    [Tooltip("충돌 모드")]
+    public PierceType pierce_flags = PierceType.DISAPPEAR;
 
     [Tooltip("벽 반사 최대 횟수")] public int reflect_count = 3;
     [Tooltip("0보다 크면 포물선 발사 (높이)")] public float arc_height = 0f;
@@ -36,26 +37,30 @@ public class BossMonsterProjectile : PoolObject
     void Awake()
     {
         rb2D = GetComponent<Rigidbody2D>();
-
-        // 충돌 감지를 위해 IsTrigger 설정
+        // 트리거 체크 (물리 충돌 대신 겹침 감지)
         if (GetComponent<Collider2D>() != null)
             GetComponent<Collider2D>().isTrigger = true;
+
+        // 연속 충돌 검사 모드로 설정 (빠른 탄환 통과 방지)
+        rb2D.collisionDetectionMode = CollisionDetectionMode2D.Continuous;
     }
 
     public override void OnSpawn()
     {
         base.OnSpawn();
-
-        // 오브젝트 풀링 재사용을 위한 데이터 초기화
         currentBounce = 0;
         reflectTimer = 0f;
         isInitialized = false;
+        isHomingActive = false;
         rb2D.linearVelocity = Vector2.zero;
         rb2D.angularVelocity = 0f;
+        rb2D.gravityScale = 0f;
     }
 
     public void Launch(Transform playerTarget)
     {
+        if (playerTarget == null) return;
+
         target = playerTarget;
         isInitialized = true;
 
@@ -71,6 +76,7 @@ public class BossMonsterProjectile : PoolObject
             rb2D.gravityScale = 0;
             Vector2 dir = (target.position - transform.position).normalized;
             rb2D.linearVelocity = dir * projectile_speed;
+            isHomingActive = true;
         }
     }
 
@@ -83,7 +89,7 @@ public class BossMonsterProjectile : PoolObject
     {
         if (!isInitialized) return;
 
-        // 반사 직후 잠시 로직 정지 (벽 끼임 방지)
+        // 반사 직후 짧은 시간 동안은 로직 정지 (끼임 방지)
         if (reflectTimer > 0)
         {
             reflectTimer -= Time.fixedDeltaTime;
@@ -91,21 +97,39 @@ public class BossMonsterProjectile : PoolObject
             return;
         }
 
-        if (is_homing && target != null && arc_height <= 0)
+        if (is_homing && target != null)
         {
-            Vector2 direction = ((Vector2)target.position - rb2D.position).normalized;
-            float rotateAmount = Vector3.Cross(direction, transform.right).z;
+            HandleHomingLogic();
+        }
 
-            rb2D.angularVelocity = -rotateAmount * 250f;
-            rb2D.linearVelocity = transform.right * projectile_speed;
-        }
-        else
-        {
-            UpdateRotation();
-        }
+        UpdateRotation();
 
         if (rb2D.linearVelocity.sqrMagnitude > 0.1f)
             lastVelocity = rb2D.linearVelocity;
+    }
+
+    private void HandleHomingLogic()
+    {
+        // 포물선 모드일 경우: 하강하기 시작할 때부터 유도 활성화
+        if (arc_height > 0 && !isHomingActive)
+        {
+            if (rb2D.linearVelocity.y < 0)
+            {
+                isHomingActive = true;
+                rb2D.gravityScale = 0; // 유도 시작 시 중력 영향 제거
+            }
+        }
+
+        if (isHomingActive)
+        {
+            // [조향(Steering) 방식 유도]
+            Vector2 desiredDirection = ((Vector2)target.position - rb2D.position).normalized;
+
+            // 현재 속도 방향에서 타겟 방향으로 조금씩 회전 (Slerp와 유사한 효과)
+            Vector2 newDirection = Vector2.Lerp(rb2D.linearVelocity.normalized, desiredDirection, Time.fixedDeltaTime * homing_steer_strength);
+
+            rb2D.linearVelocity = newDirection.normalized * projectile_speed;
+        }
     }
 
     private void UpdateRotation()
@@ -113,7 +137,7 @@ public class BossMonsterProjectile : PoolObject
         if (rb2D.linearVelocity.sqrMagnitude > 0.1f)
         {
             float angle = Mathf.Atan2(rb2D.linearVelocity.y, rb2D.linearVelocity.x) * Mathf.Rad2Deg;
-            transform.rotation = Quaternion.Euler(0, 0, angle);
+            rb2D.MoveRotation(angle);
         }
     }
 
@@ -124,24 +148,21 @@ public class BossMonsterProjectile : PoolObject
 
         if (!isPlayer && !isWall) return;
 
-        // 곡사탄 플레이어 통과 처리
-        if (arc_height > 0 && isPlayer) return;
-
-        // 1. 관통(PIERCE) 여부 확인
-        if (pierce_flags.HasFlag(PierceType.PIERCE))
-        {
-            return; // 관통 설정 시 모든 충돌 무시
-        }
-
-        // 2. 반사(REFLECT) 여부 및 벽 충돌 확인
-        if (pierce_flags.HasFlag(PierceType.REFLECT) && isWall)
+        // 벽 반사 로직
+        if (isWall && pierce_flags.HasFlag(PierceType.REFLECT))
         {
             if (currentBounce < reflect_count)
             {
                 Vector2 closestPoint = other.ClosestPoint(transform.position);
                 Vector2 normal = ((Vector2)transform.position - closestPoint).normalized;
 
+                if (normal.sqrMagnitude < 0.01f)
+                    normal = -lastVelocity.normalized;
+
                 Vector2 reflectDir = Vector2.Reflect(lastVelocity.normalized, normal);
+
+                // 반사 시 유도 일시 중지 (선택 사항)
+                isHomingActive = false;
                 rb2D.linearVelocity = reflectDir * projectile_speed;
 
                 reflectTimer = 0.15f;
@@ -150,18 +171,31 @@ public class BossMonsterProjectile : PoolObject
             }
         }
 
-        // 3. 위 조건에 해당하지 않으면 소멸 (NONE 포함)
+        // 관통 로직
+        if (pierce_flags.HasFlag(PierceType.PIERCE) && isPlayer)
+        {
+            // 플레이어 데미지 처리 로직을 여기에 추가 (예: other.GetComponent<Player>().TakeDamage())
+            return;
+        }
+
+        // 아무 플래그도 없거나 조건 미충족 시 소멸
         DeactivateProjectile();
     }
 
     private void ApplyArcShot()
     {
         rb2D.gravityScale = 2.0f;
-        Vector3 diff = target.position - transform.position;
-        float g = Physics2D.gravity.y * rb2D.gravityScale;
 
-        float vy = Mathf.Sqrt(-2 * g * arc_height);
-        float time = 2 * vy / -g;
+        Vector3 diff = target.position - transform.position;
+        float g = Mathf.Abs(Physics2D.gravity.y * rb2D.gravityScale);
+
+        // 최고 도달 높이에 따른 수직 속도 계산
+        float vy = Mathf.Sqrt(2 * g * arc_height);
+
+        // 체공 시간 계산
+        float time = 2 * vy / g;
+
+        // 시간에 따른 수평 속도 계산
         float vx = diff.x / time;
 
         rb2D.linearVelocity = new Vector2(vx, vy);
