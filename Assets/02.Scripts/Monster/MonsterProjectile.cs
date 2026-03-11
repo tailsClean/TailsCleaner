@@ -10,6 +10,7 @@ public class MonsterProjectile : PoolObject
     private Vector2 lastVelocity;
     private bool isInitialized = false;
     private float reflectTimer = 0f;
+    private float finalDamage;
 
     [Header("--- 프리팹 원본 참조 ---")]
     [Tooltip("반납할 때 필요한 이 투사체의 원본 프리팹")]
@@ -47,8 +48,9 @@ public class MonsterProjectile : PoolObject
         // 수명 후 자동 반납 예약 (CancelInvoke는 Launch에서 수행)
     }
 
-    public void Launch(Transform playerTarget)
+    public void Launch(Transform playerTarget, float damage)
     {
+        this.finalDamage = damage;
         target = playerTarget;
         isInitialized = true;
 
@@ -120,6 +122,17 @@ public class MonsterProjectile : PoolObject
         bool isWall = other.CompareTag("Wall");
 
         if (!isPlayer && !isWall) return;
+
+        if (isPlayer)
+        {
+            // 플레이어에게 데미지 전달 
+            if (other.TryGetComponent(out PlayerBase player))
+            {
+                player.TakeDamage(finalDamage);
+            }
+
+            if (arc_height > 0) return; // 곡사탄이면 통과
+        }
 
         // --- 상단 투척(Arc) 특수 처리 ---
         // 곡사탄은 플레이어와 충돌해도 삭제하지 않고 통과시킴

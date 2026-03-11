@@ -874,12 +874,24 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 7621293018972681884, guid: 7bd74e2913a4ea44aa66ef718bc20d47, type: 3}
     - target: {fileID: 2261082994107232443, guid: a0245534b2c600e41a31b6d02418dda9, type: 3}
+      propertyPath: moveType
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2261082994107232443, guid: a0245534b2c600e41a31b6d02418dda9, type: 3}
       propertyPath: m_Enabled
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2261082994107232443, guid: a0245534b2c600e41a31b6d02418dda9, type: 3}
       propertyPath: isSuicideUnit
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2261082994107232443, guid: a0245534b2c600e41a31b6d02418dda9, type: 3}
+      propertyPath: pattern_damage
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2261082994107232443, guid: a0245534b2c600e41a31b6d02418dda9, type: 3}
+      propertyPath: type_power_multiply
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 3096486886849442316, guid: a0245534b2c600e41a31b6d02418dda9, type: 3}
       propertyPath: m_Enabled
@@ -939,7 +951,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3897748407859779734, guid: a0245534b2c600e41a31b6d02418dda9, type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -958,6 +970,30 @@ PrefabInstance:
       propertyPath: target
       value: 
       objectReference: {fileID: 1292016556}
+    - target: {fileID: 2741787303902298619, guid: acc2cb04c052a1c4b84292ad2d3ab5d2, type: 3}
+      propertyPath: useFlee
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2741787303902298619, guid: acc2cb04c052a1c4b84292ad2d3ab5d2, type: 3}
+      propertyPath: useJump
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2741787303902298619, guid: acc2cb04c052a1c4b84292ad2d3ab5d2, type: 3}
+      propertyPath: cast_time
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 2741787303902298619, guid: acc2cb04c052a1c4b84292ad2d3ab5d2, type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2741787303902298619, guid: acc2cb04c052a1c4b84292ad2d3ab5d2, type: 3}
+      propertyPath: isSuicideUnit
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2826055706734947764, guid: acc2cb04c052a1c4b84292ad2d3ab5d2, type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 2826055706734947764, guid: acc2cb04c052a1c4b84292ad2d3ab5d2, type: 3}
       propertyPath: playerTarget
       value: 
@@ -1012,7 +1048,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6242823153721604330, guid: acc2cb04c052a1c4b84292ad2d3ab5d2, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

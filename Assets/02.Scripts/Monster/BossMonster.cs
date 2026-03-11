@@ -10,8 +10,8 @@ public class BossMonster : MonsterBase
     [Header("--- 패턴 중첩 활성화 제어 ---")]
     public bool useZigzag;
     public bool useJump;
-    public bool isSuicideUnit;
     public bool useFlee;
+    public bool isSuicideUnit;
 
     [Header("--- 기획 데이터 연동 ---")]
     public float move_speed;
@@ -26,6 +26,8 @@ public class BossMonster : MonsterBase
     public float patternFrequency = 5.0f;
     public float jump_height = 3.0f;
     public Transform visualChild;
+
+
     public float fleeDistance = 4.0f;
 
     // 내부 제어 변수
@@ -224,9 +226,20 @@ public class BossMonster : MonsterBase
     {
         if (hasExploded) return;
         hasExploded = true;
+
+        float finalDamage = this.power;
+
         Collider2D[] hits = Physics2D.OverlapCircleAll(rb2D.position, explosion_range);
         foreach (var hit in hits)
-            if (hit.CompareTag("Player")) hit.GetComponent<IDamageable>()?.TakeDamage(pattern_damage);
+        {
+            if (hit.CompareTag("Player"))
+            {
+                // 계산된 finalDamage를 전달
+                hit.GetComponent<IDamageable>()?.TakeDamage(finalDamage);
+            }
+        }
+
+        // 후처리 (풀링 또는 파괴)
         if (ObjectPoolManager.Instance != null) ObjectPoolManager.Instance.ReturnObject(this);
         else Destroy(gameObject);
     }

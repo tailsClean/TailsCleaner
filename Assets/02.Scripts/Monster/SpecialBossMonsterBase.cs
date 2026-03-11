@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using UnityEngine;
 
 public abstract class SpecialBossMonsterBase : MonsterBase
@@ -17,7 +18,8 @@ public abstract class SpecialBossMonsterBase : MonsterBase
 
     [Header("--- monster_table 연동 ---")]
     public float move_speed;               // 몬스터의 기본 이동 속도 
-    public float monster_power;            // 플레이어 충돌 시 적용 데미지
+    //public float monster_power;            // 플레이어 충돌 시 적용 데미지
+    public float type_power_multiply;
     public float detect_range;             //플레이어를 감지하거나 패턴을 발동하는 기준 거리
 
 
@@ -26,7 +28,7 @@ public abstract class SpecialBossMonsterBase : MonsterBase
     public float cast_time;                // 패턴 발동 전 대기 시간
     public float pattern_multiply;         // 패턴 중 가속 배율
     public float explosion_range;          // 자폭/광역 공격의 물리적 타격 반경
-    public float pattern_damage;           // 패턴(자폭 등) 성공 시 플레이어에게 주는 데미지
+    public float damage_multiply;           // 패턴(자폭 등) 성공 시 플레이어에게 주는 데미지
     public float zigzag_width;             // 좌우 이동 폭
     public float patternFrequency = 5.0f;  // 지그재그 주기
 
@@ -266,7 +268,7 @@ public abstract class SpecialBossMonsterBase : MonsterBase
             // 지그재그 패턴 데미지
             if (moveType == MonsterMove.Zigzag)
             {
-                player.TakeDamage(this.monster_power);
+                player.TakeDamage(this.power);
                 Debug.Log("지그재그 데미지 적용!");
                 return;
             }
@@ -274,13 +276,14 @@ public abstract class SpecialBossMonsterBase : MonsterBase
             // 점프 도중 충돌 시 데미지
             if (moveType == MonsterMove.Jump && isJumping && !hasHitTargetInCurrentJump)
             {
-                player.TakeDamage(this.pattern_damage);
+                float finalJumpDamage = this.power * this.type_power_multiply * this.damage_multiply;
+                player.TakeDamage(finalJumpDamage);
                 hasHitTargetInCurrentJump = true; // (중복 방지)
                 Debug.Log("점프 충돌 데미지 적용!");
                 return;
             }
 
-            player.TakeDamage(this.monster_power);
+            player.TakeDamage(this.power);
 
             // 어떤 상태에서 부딪혔는지 명확히 로그 찍기
             //if (moveType == MonsterMove.Flee && isFleeingState)
@@ -519,6 +522,7 @@ public abstract class SpecialBossMonsterBase : MonsterBase
         hasExploded = true;
 
         // Debug.Log("자폭 발동!");
+        float finalDamage = this.power * this.type_power_multiply * this.damage_multiply;
 
         Collider2D[] hits = Physics2D.OverlapCircleAll(rb2D.position, explosion_range);
         // bool hitPlayer = false; // 자폭 확인용 
@@ -531,7 +535,7 @@ public abstract class SpecialBossMonsterBase : MonsterBase
                 IDamageable player = hit.GetComponent<IDamageable>();
                 if (player != null)
                 {
-                    player.TakeDamage(this.pattern_damage);
+                    player.TakeDamage(finalDamage);
                     // Debug.Log($"데미지 적중");
                     // hitPlayer = true;
                 }

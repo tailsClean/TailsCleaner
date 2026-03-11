@@ -18,6 +18,7 @@ public class BossMonsterProjectile : PoolObject
     private bool isInitialized = false;
     private float reflectTimer = 0f;
     private bool isHomingActive = false; // 포물선 비행 중 유도 활성화 여부
+    private float finalDamage; // 계산된 데미지 저장
 
     [Header("--- 프리팹 원본 참조 ---")]
     public GameObject originPrefab;
@@ -37,7 +38,7 @@ public class BossMonsterProjectile : PoolObject
     void Awake()
     {
         rb2D = GetComponent<Rigidbody2D>();
-        // 트리거 체크 (물리 충돌 대신 겹침 감지)
+        // 트리거 체크 
         if (GetComponent<Collider2D>() != null)
             GetComponent<Collider2D>().isTrigger = true;
 
@@ -57,10 +58,11 @@ public class BossMonsterProjectile : PoolObject
         rb2D.gravityScale = 0f;
     }
 
-    public void Launch(Transform playerTarget)
+    public void Launch(Transform playerTarget, float monsterPower, float typeMultiply, float patternMultiply)
     {
         if (playerTarget == null) return;
 
+        this.finalDamage = monsterPower * typeMultiply * patternMultiply; // 데미지 설정
         target = playerTarget;
         isInitialized = true;
 
@@ -148,6 +150,14 @@ public class BossMonsterProjectile : PoolObject
 
         if (!isPlayer && !isWall) return;
 
+        if (isPlayer)
+        {
+            Debug.Log($"플레이어 피격! 적용 데미지: {finalDamage}");
+
+            // 관통 로직이 있으면 리턴하여 소멸 방지
+            if (pierce_flags.HasFlag(PierceType.PIERCE)) return;
+        }
+
         // 벽 반사 로직
         if (isWall && pierce_flags.HasFlag(PierceType.REFLECT))
         {
@@ -161,8 +171,7 @@ public class BossMonsterProjectile : PoolObject
 
                 Vector2 reflectDir = Vector2.Reflect(lastVelocity.normalized, normal);
 
-                // 반사 시 유도 일시 중지 (선택 사항)
-                isHomingActive = false;
+                
                 rb2D.linearVelocity = reflectDir * projectile_speed;
 
                 reflectTimer = 0.15f;

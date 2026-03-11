@@ -85,8 +85,13 @@ public class BossMonsterShooter : MonoBehaviour
 
         if (projectile != null)
         {
-            // 보스 투사체의 Launch 호출
-            projectile.Launch(playerTarget);
+
+            float monsterPower = specialBase.power;
+            float typeMultiply = 1.0f;
+            float patternMultiply = 1.2f;
+
+           
+            projectile.Launch(playerTarget, monsterPower, typeMultiply, patternMultiply);
         }
     }
 }
