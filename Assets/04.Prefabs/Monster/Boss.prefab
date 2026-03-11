@@ -104,6 +104,7 @@ GameObject:
   - component: {fileID: 2741787303902298619}
   - component: {fileID: 6267815479541013433}
   - component: {fileID: 2826055706734947764}
+  - component: {fileID: 4676421205203308254}
   m_Layer: 0
   m_Name: Boss
   m_TagString: Untagged
@@ -120,7 +121,7 @@ Transform:
   m_GameObject: {fileID: 6242823153721604330}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -7.74, y: 2.12432, z: 0}
+  m_LocalPosition: {x: -5.83, y: 2.12432, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -207,7 +208,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6242823153721604330}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: cdb7c5469b9f63146960c752de09ae7d, type: 3}
   m_Name: 
@@ -225,14 +226,14 @@ MonoBehaviour:
   scoreReward: 1000
   goldReward: 500
   useZigzag: 0
-  useJump: 1
+  useJump: 0
+  useFlee: 0
   isSuicideUnit: 0
-  useFlee: 1
   move_speed: 3
   monster_power: 0
   detect_range: 5
   pattern_cooldown: 3
-  cast_time: 0.5
+  cast_time: 10
   pattern_multiply: 2.5
   explosion_range: 0
   pattern_damage: 0
@@ -241,6 +242,14 @@ MonoBehaviour:
   jump_height: 3
   visualChild: {fileID: 6844339646822135683}
   fleeDistance: 3
+  useBarricade: 1
+  barricadeSpawner: {fileID: 4676421205203308254}
+  barricadeInterval: 5
+  spawnLoc: 0
+  barShape: 0
+  barSize: {x: 10, y: 2}
+  barDuration: 10
+  barInteraction: 2
 --- !u!114 &6267815479541013433
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -260,7 +269,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6242823153721604330}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 6dc392cff5dac294b8760a8ae2502725, type: 3}
   m_Name: 
@@ -268,8 +277,23 @@ MonoBehaviour:
   projectilePrefab: {fileID: 6245087012642157629, guid: 7d1b42409db132349ae950164cee84eb, type: 3}
   firePoint: {fileID: 5290430677349328470}
   playerTarget: {fileID: 0}
-  pattern_cooldown: 30
+  pattern_cooldown: 6
   detect_range: 15
   projectile_count: 5
   fire_interval: 0.15
   state: 0
+--- !u!114 &4676421205203308254
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6242823153721604330}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 69f67a59712802844be664ca423c4c41, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::BarricadeSpawner
+  barricadePrefab: {fileID: 8461779969420871315, guid: 324193de02afd244086bf02906f5df83, type: 3}
+  warningPrefab: {fileID: 6383617728571696591, guid: 5f468878613da5548bda63fe56d158e8, type: 3}
+  warningDuration: 2

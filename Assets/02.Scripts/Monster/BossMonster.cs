@@ -26,9 +26,21 @@ public class BossMonster : MonsterBase
     public float patternFrequency = 5.0f;
     public float jump_height = 3.0f;
     public Transform visualChild;
-
-
     public float fleeDistance = 4.0f;
+
+    [Header("--- 바리케이드 패턴 설정 ---")]
+    public bool useBarricade; // 패턴 사용 여부
+    public BarricadeSpawner barricadeSpawner; // BarricadeSpawner 컴포넌트 연결
+    public float barricadeInterval = 7.0f; // 소환 주기
+
+    // 바리케이드 세부 설정 (인스펙터에서 조절)
+    public BarricadeSpawner.SpawnLocation spawnLoc = BarricadeSpawner.SpawnLocation.Player;
+    public BarricadeSpawner.BarricadeShape barShape = BarricadeSpawner.BarricadeShape.Rectangle;
+    public Vector2 barSize = new Vector2(3f, 1f);
+    public float barDuration = 5.0f;
+    public BarricadeSpawner.InteractionType barInteraction = BarricadeSpawner.InteractionType.BlockedWithDamage;
+    private float barricadeTimer = 0f;
+
 
     // 내부 제어 변수
     private float zigzagTimer = 0f;
@@ -48,6 +60,12 @@ public class BossMonster : MonsterBase
         if (move_speed == 0) move_speed = base.moveSpeed;
         suicideCastTimer = cast_time;
         jumpCooldownTimer = pattern_cooldown;
+
+        // 바리게이드 관련
+        if (barricadeSpawner == null)
+            barricadeSpawner = GetComponent<BarricadeSpawner>();
+
+        barricadeTimer = barricadeInterval; // 처음 시작 시 쿨타임 부여
     }
 
     protected override void FixedUpdate()
@@ -71,6 +89,78 @@ public class BossMonster : MonsterBase
         if (!isJumping && !isWaitingJump)
         {
             MoveProcess();
+        }
+
+        // 바리게이드 타이머 관리
+        if (useBarricade && !hasExploded)
+        {
+            HandleBarricadeLogic();
+        }
+    }
+
+    private void HandleBarricadeLogic()
+    {
+        barricadeTimer -= Time.fixedDeltaTime;
+
+        if (barricadeTimer <= 0f)
+        {
+            if (barricadeSpawner != null)
+            {
+                // 스포너의 소환 함수 호출
+                barricadeSpawner.SpawnBarricade(
+                    GetSpawnPosition(spawnLoc), // 소환 위치 계산 함수 필요
+                    barShape,
+                    barSize,
+                    barDuration,
+                    barInteraction,
+                    this.power
+                );
+            }
+            else
+            {
+                Debug.LogError("BarricadeSpawner가 BossMonster에 연결되지 않았습니다!");
+            }
+
+            barricadeTimer = barricadeInterval; // 쿨타임 초기화
+        }
+    }
+
+    private Vector2 GetSpawnPosition(BarricadeSpawner.SpawnLocation loc)
+    {
+        if (target == null) return rb2D.position;
+
+        switch (loc)
+        {
+            case BarricadeSpawner.SpawnLocation.Player:
+                return target.position;
+
+            case BarricadeSpawner.SpawnLocation.Boss:
+                return rb2D.position;
+
+            case BarricadeSpawner.SpawnLocation.Both:
+                return (rb2D.position + (Vector2)target.position) / 2f;
+
+            case BarricadeSpawner.SpawnLocation.None:
+                // --- 카메라 범위 내 랜덤 위치 계산 ---
+                Camera cam = Camera.main;
+                if (cam == null) return rb2D.position;
+
+                // 카메라의 높이와 너비 절반 값 계산
+                float height = cam.orthographicSize;
+                float width = height * cam.aspect;
+
+                // 카메라의 현재 중심 위치
+                Vector2 camPos = cam.transform.position;
+
+                // 화면 테두리
+                float padding = 0.9f;
+                float randomX = Random.Range(-width * padding, width * padding);
+                float randomY = Random.Range(-height * padding, height * padding);
+
+                return new Vector2(camPos.x + randomX, camPos.y + randomY);
+
+            default:
+                return rb2D.position;
         }
     }
 
