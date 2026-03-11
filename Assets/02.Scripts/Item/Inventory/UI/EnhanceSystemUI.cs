@@ -62,12 +62,21 @@ public abstract class EnhanceSystemUI : MonoBehaviour
         ItemBaseSO resourceItem = ItemDB.GetItemData<ItemBaseSO>(equipment.EnhanceData.BluePrintID);
         ItemStack goldStack = _currency.GetGold();
 
-        _enhanceEquipment.SetSlot(equipment.ItemID, equipment.EnhanceLevel);
+        if(equipment.EnhanceData.IsMaxLevel)
+        {
+            _enhanceEquipment.SetSlot(equipment.ItemID, "Max");
+            _resourceCostText.text = "Max";
+            _costGoldText.text = "Max";
+        }
+        else
+        {
+            _enhanceEquipment.SetSlot(equipment.ItemID, equipment.EnhanceLevel);
+            _resourceCostText.text = equipment.EnhanceData.CostBluePrint.ToString();
+            _costGoldText.text = equipment.EnhanceData.CostGold.ToString();
+        }
 
         _resourceCostImage.sprite = resourceItem.ImageSprite;
-        _resourceCostText.text = equipment.EnhanceData.CostBluePrint.ToString();
         _costGoldImage.sprite = goldStack.ItemData.ImageSprite;
-        _costGoldText.text = equipment.EnhanceData.CostGold.ToString();
     }
 
     // 현재 골드량 갱신

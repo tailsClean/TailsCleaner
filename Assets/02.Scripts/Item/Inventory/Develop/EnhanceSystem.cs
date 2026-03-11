@@ -32,9 +32,6 @@ public class EnhanceSystem : MonoBehaviour
     {
         EquipmentBase equipment = _playerLoadout.MyEquipments[part];
 
-        if (equipment.EnhanceData.IsMaxLevel)
-            return;
-
         OnEnhance -= _settingItem != null ? _settingItem.OnEnhance : null;
         OnEnhance -= SetRelicInventory;
         _settingItem = equipment;
