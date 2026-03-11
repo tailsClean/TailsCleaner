@@ -54,7 +54,11 @@ public class RelicEnhanceUI : EnhanceSystemUI
     {
         ItemStack resourceStack = _inventory.GetItemInfo(ItemID.RelicReinforceResource);
         _resourceImage.sprite = resourceStack.ItemData.ImageSprite;
-        _resourceText.text = resourceStack.Amount.ToString();
+
+        if(resourceStack.Amount == null)
+            _resourceText.text = 0.ToString();
+        else 
+            _resourceText.text = resourceStack.Amount.ToString();
     }
 
     public override void UpdateCurrentGold()

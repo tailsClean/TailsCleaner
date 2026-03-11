@@ -82,7 +82,7 @@ public class Inventory : MonoBehaviour
                 return new ItemStack(item, _relicInventory[id]);
 
             case ITEM_TYPE.Reinforcement:
-                return new ItemStack(item, _reinforceResourceInventory[id]);
+                return new ItemStack(item, GetAmount(_reinforceResourceInventory, id));
 
             case ITEM_TYPE.Consume:
                 return new ItemStack(item, _consumeInventory[id]);
@@ -90,6 +90,12 @@ public class Inventory : MonoBehaviour
             default:
                 return default;
         }
+    }
+    private int? GetAmount(Dictionary<int, int> inventory, int id)
+    {
+        if(inventory.TryGetValue(id, out var value))
+            return value;
+        return null;
     }
 
 
