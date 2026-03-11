@@ -16,15 +16,15 @@ public class StageUIContainer : MonoBehaviour, UIContainer // stageUI에서 연�
 
 
     [SerializeField] private List<UIGroup> _uiGroupList;
-    public Dictionary<UIGroup.UISTATE, UIGroup> _uiDict;
+    public Dictionary<UI_GROUP, UIGroup> _uiDict;
 
 
     private void Awake()
     {
-        _uiDict = new Dictionary<UIGroup.UISTATE, UIGroup>();
+        _uiDict = new Dictionary<UI_GROUP, UIGroup>();
         foreach (var uiGroup in _uiGroupList)
         {
-            _uiDict.Add(uiGroup.UIState, uiGroup);
+            _uiDict.Add(uiGroup.Group, uiGroup);
         }
     }
 
@@ -36,7 +36,7 @@ public class StageUIContainer : MonoBehaviour, UIContainer // stageUI에서 연�
         
     }
 
-    public void SetActiveUiGroup(UIGroup.UISTATE uiState, bool active)
+    public void SetActiveUiGroup(UI_GROUP uiState, bool active)
     {
         if (_uiDict.TryGetValue(uiState, out var uIGroup))
             uIGroup.gameObject.SetActive(active);
