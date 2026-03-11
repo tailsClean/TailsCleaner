@@ -8,16 +8,18 @@ public class EnhanceSystem : MonoBehaviour
 
 
     private PlayerLoadout _playerLoadout;                       // 장착 장비 확인을 위함
-    private EquipmentBase _enhanceItem;
+    private IEnhancement _settingItem;
+    private EnhancingInfo _enhanceInfo;
     private int _bluePrintID;
     private int _bluePrintCost;
     private bool _isEnhancable;                                 // 강화 가능 여부 판단
+    //private Action _onVoidEnhace;                               // 나중에 리펙토링 해볼 수 있음
 
     public Inventory UsingInventory => _inventory;
     public Currency UsingCurrency => _currency;
 
-    public event Action<EquipmentBase> OnSetEquipment;
-    public event Action<EquipmentBase> OnEnhace;
+    public event Action<EnhancingInfo> OnSetEquipment;
+    public event Action<EnhancingInfo> OnEnhance;
 
     private void Start()
     {
@@ -25,18 +27,48 @@ public class EnhanceSystem : MonoBehaviour
     }
 
 
-    // 강화할 아이템 세팅
+    // 강화할 장비 세팅
     public void SetEquipment(EQUIP_PARTS part)
     {
         EquipmentBase equipment = _playerLoadout.MyEquipments[part];
-        _enhanceItem = equipment;
+
+        if (equipment.EnhanceData.IsMaxLevel)
+            return;
+
+        OnEnhance -= _settingItem != null ? _settingItem.OnEnhance : null;
+        OnEnhance -= SetRelicInventory;
+        _settingItem = equipment;
+
+        _enhanceInfo = new EnhancingInfo(equipment.Data.UniqueID, equipment.EnhanceLevel);
+
         _bluePrintID = equipment.EnhanceData.BluePrintID;
         _bluePrintCost = equipment.EnhanceData.CostBluePrint;
-        OnSetEquipment?.Invoke(equipment);
+
+        OnEnhance += _settingItem.OnEnhance;
+        OnSetEquipment?.Invoke(_enhanceInfo);
     }
 
+    // 강화할 유물 세팅
+    public void SetRelic(int id, int enhanceLevel)
+    {
+        RelicStatus itemStack = _inventory.GetRelicInfo(id, enhanceLevel);
+        _enhanceInfo = new EnhancingInfo(id, enhanceLevel, itemStack.InstanceID);
+        OnEnhance -= _settingItem != null ? _settingItem.OnEnhance : null;
+        
 
-    public void OnEnhance()
+        _bluePrintID = _enhanceInfo.EnhanceData.BluePrintID;
+        _bluePrintCost = _enhanceInfo.EnhanceData.CostBluePrint;
+        OnEnhance -= SetRelicInventory;
+        OnEnhance += SetRelicInventory;
+        OnSetEquipment?.Invoke(_enhanceInfo);
+    }
+
+    private void SetRelicInventory(EnhancingInfo result)
+    {
+        _inventory.SetRelic(new RelicStatus(result.InstanceID, result.ItemID, result.EnhanceLevel));
+    }
+
+    public void OnStartEnhance()
     {
         _isEnhancable = true;
         CheckMaxLevel();
@@ -45,11 +77,11 @@ public class EnhanceSystem : MonoBehaviour
 
         if (_isEnhancable)
         {
-            _enhanceItem.OnEnhance();
-
-            _currency.UseGold(_enhanceItem.EnhanceData.CostGold);
+            _currency.UseGold(_enhanceInfo.EnhanceData.CostGold);
             _inventory.UseItem(ITEM_TYPE.Reinforcement, _bluePrintID, _bluePrintCost);
-            OnEnhace?.Invoke(_enhanceItem);
+
+            _enhanceInfo.EnhanceLevel = _enhanceInfo.EnhanceLevel + 1;
+            OnEnhance?.Invoke(_enhanceInfo);
             Debug.Log("강화성공!");
         }
     }
@@ -61,7 +93,7 @@ public class EnhanceSystem : MonoBehaviour
         if (!_isEnhancable)
             return;
 
-        _isEnhancable = !_enhanceItem.EnhanceData.IsMaxLevel;
+        _isEnhancable = !_enhanceInfo.EnhanceData.IsMaxLevel;
 
         if (!_isEnhancable)
             Debug.Log("강화수치가 최대입니다.");
@@ -74,7 +106,7 @@ public class EnhanceSystem : MonoBehaviour
         if (!_isEnhancable)
             return;
 
-        int cost = _enhanceItem.EnhanceData.CostGold;
+        int cost = _enhanceInfo.EnhanceData.CostGold;
 
         if (cost < 0)
         { Debug.LogError("골드 코스트가 음수입니다!"); return; }
@@ -99,5 +131,36 @@ public class EnhanceSystem : MonoBehaviour
 
         if (!_isEnhancable)
             Debug.Log("강화 재료가 부족합니다.");
+    }
+}
+
+public class EnhancingInfo
+{
+    public int InstanceID;
+    public int ItemID;
+    public int EnhanceLevel;
+    public ITEM_TYPE ItemType;
+    public ItemEnhanceData EnhanceData
+    {
+        get
+        {
+            switch(ItemType)
+            {
+                case ITEM_TYPE.Equipment:
+                    return ItemDB.GetItemData<EquipmentSO>(ItemID).GetEnhanceData(EnhanceLevel + 1);
+
+                case ITEM_TYPE.Relic:
+                    return ItemDB.GetItemData<RelicSO>(ItemID).GetEnhanceData(EnhanceLevel + 1);
+            }
+            return null;
+        }
+    }
+
+    public EnhancingInfo(int itemID, int enhanceLevel, int instanceID = 0)
+    {
+        InstanceID = instanceID;
+        ItemID = itemID;
+        EnhanceLevel = enhanceLevel;
+        ItemType = ItemDB.GetItemData<ItemBaseSO>(itemID).ItemType;
     }
 }

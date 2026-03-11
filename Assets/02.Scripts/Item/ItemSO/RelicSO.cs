@@ -20,7 +20,7 @@ public class RelicSO : ItemBaseSO
 
     [Header("유물 강화")]
     [SerializeField] private EnhancementEventChannelSO _onEquipEnhancement;
-    [SerializeField] private List<EnhanceData> _enhanceDataList;
+    [SerializeField] private List<ItemEnhanceData> _enhanceDataList;
 
     [Header("유물 계열")]
     [SerializeField] private List<Division> _divisionDataList;
@@ -38,7 +38,7 @@ public class RelicSO : ItemBaseSO
     public EnhancementEventChannelSO OnEquipEnhancement => _onEquipEnhancement;
     public List<Division> DivisionDatas => _divisionDataList;
 
-    private Dictionary<int, EnhanceData> _enhances;
+    private Dictionary<int, ItemEnhanceData> _enhances;
 
 
     // 특정 스탯 증가량을 찾아서 반환
@@ -46,7 +46,7 @@ public class RelicSO : ItemBaseSO
 
 
     // 해당 강화레벨 데이터를 반환
-    public EnhanceData GetEnhanceData(int enhanceLevel)
+    public ItemEnhanceData GetEnhanceData(int enhanceLevel)
     {
         if (_enhances == null)
             Init();
@@ -59,7 +59,7 @@ public class RelicSO : ItemBaseSO
 
     private void Init()
     {
-        _enhances = new Dictionary<int, EnhanceData> { { 0, new EnhanceData() } };
+        _enhances = new Dictionary<int, ItemEnhanceData> { { 0, new ItemEnhanceData() } };
         foreach (var enhanceData in _enhanceDataList)
         {
             _enhances.Add(enhanceData.Level, enhanceData);

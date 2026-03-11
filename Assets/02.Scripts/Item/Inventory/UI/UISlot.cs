@@ -2,6 +2,7 @@
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using static UnityEngine.UI.Button;
 
 /// <summary>
 /// 수정 필요
@@ -45,13 +46,13 @@ public class UISlot : MonoBehaviour
 
     }
 
-    public void AddListner(Action action) => _button.onClick.AddListener(action.Invoke);
+    public void AddListener(Action action) =>_button.onClick.AddListener(() => action());
 
 
     public void Init()
     {
         _image.sprite = _baseSprite;
         _amountText.text = string.Empty;
-        _button.onClick = null;
+        _button.onClick.RemoveAllListeners();
     }
 }

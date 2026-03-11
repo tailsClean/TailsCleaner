@@ -1,6 +1,4 @@
-﻿using TMPro;
-using UnityEngine;
-using UnityEngine.UI;
+﻿using UnityEngine;
 
 /// <summary>
 /// 추가 수정 필요

@@ -12,12 +12,17 @@ public class Inventory : MonoBehaviour
     // Key: 아이템ID , Value: 소지갯수
     private Dictionary<int, int> _equipInventory;
     private Dictionary<int, int> _relicInventory;
+    private List<RelicStatus> _relicStatus;
+
     private Dictionary<int, int> _reinforceResourceInventory;
     private Dictionary<int, int> _consumeInventory;
 
 
     public Dictionary<int, int> EquipInventory => _equipInventory;
     public Dictionary<int, int> RelicInventory => _relicInventory;
+
+    public List<RelicStatus> RelicStatus => _relicStatus;
+
     public Dictionary<int, int> ReinforceResourceInventory => _reinforceResourceInventory;
     public Dictionary<int, int> ConsumeInventory => _consumeInventory;
 
@@ -31,20 +36,44 @@ public class Inventory : MonoBehaviour
     {
         _equipInventory = new Dictionary<int, int>();
         _relicInventory = new Dictionary<int, int>();
+        _relicStatus = new List<RelicStatus>();
         _reinforceResourceInventory = new Dictionary<int, int>();
         _consumeInventory = new Dictionary<int, int>();
     }
 
 
-
-
+    // 새로운 유믈 조회 교체
+    public void SetRelic(RelicStatus newRelic)
+    {
+        for (int i = 0; i < _relicStatus.Count; i++)
+        {
+            if (_relicStatus[i].InstanceID == newRelic.InstanceID)
+            {
+                _relicStatus[i] = newRelic;
+                _onChangeInventory.OnStartEvent();
+                return;
+            }
+        }
+        _relicStatus.Add(newRelic);
+        _onChangeInventory.OnStartEvent();
+    }
+    // 인벤토리 소지한 유물 정보 반환
+    public RelicStatus GetRelicInfo(int id, int enhanceLevel)
+    {
+        foreach (var relic in _relicStatus)
+        {
+            if (relic.UniqueID == id && relic.EnhanceLevel == enhanceLevel)
+                return new RelicStatus(relic.InstanceID, id, enhanceLevel);
+        }
+        return default;
+    }
 
     // 인벤토리 소지 아이템 정보 반환
     public ItemStack GetItemInfo(int id)
     {
         var item = ItemDB.GetItemData<ItemBaseSO>(id);
 
-        switch(item.ItemType)
+        switch (item.ItemType)
         {
             case ITEM_TYPE.Equipment:
                 return new ItemStack(item, _equipInventory[id]);
@@ -59,7 +88,7 @@ public class Inventory : MonoBehaviour
                 return new ItemStack(item, _consumeInventory[id]);
 
             default:
-                return new ItemStack();
+                return default;
         }
     }
 
@@ -154,32 +183,31 @@ public class Inventory : MonoBehaviour
     #region 아이템 사용가능 여부
     public bool TryUseItem(ITEM_TYPE itemType, int id, int amount = 1)
     {
-        switch(itemType)
+        switch (itemType)
         {
             case ITEM_TYPE.Equipment:
                 return TryUseItem(_equipInventory, id, amount);
-                
-            case ITEM_TYPE.Relic: 
+
+            case ITEM_TYPE.Relic:
                 return TryUseItem(_relicInventory, id, amount);
-            
-            case ITEM_TYPE.Reinforcement: 
+
+            case ITEM_TYPE.Reinforcement:
                 return TryUseItem(_reinforceResourceInventory, id, amount);
-            
-            case ITEM_TYPE.Consume: 
+
+            case ITEM_TYPE.Consume:
                 return TryUseItem(_consumeInventory, id, amount);
         }
         return false;
     }
     private bool TryUseItem(Dictionary<int, int> inventory, int id, int amount = 1)
     {
-        Debug.Log(inventory);
-        if(!inventory.TryGetValue(id, out var itemCount) || itemCount <= 0)
+        if (!inventory.TryGetValue(id, out var itemCount) || itemCount <= 0)
         {
             Debug.Log($"<color=red>ID: {id}의 아이템을 가지고 있지 않습니다.</color>");
             return false;
         }
 
-        if(itemCount < amount)
+        if (itemCount < amount)
         {
             Debug.Log($"ID: {id}의 아이템의 소지갯수가 부족합니다.");
             return false;
@@ -189,5 +217,34 @@ public class Inventory : MonoBehaviour
     }
     #endregion
 
-    
+}
+
+// 유물 상태 구조체
+public struct RelicStatus
+{
+    public int InstanceID;
+    public int UniqueID;
+    public int EnhanceLevel;
+
+    public RelicStatus(int instanceID, int id, int enhanceLevel)
+    {
+        InstanceID = instanceID;
+        UniqueID = id;
+        EnhanceLevel = enhanceLevel;
+    }
+
+    public override bool Equals(object obj)
+    {
+        if (obj is RelicStatus other)
+        {
+            return UniqueID == other.UniqueID &&
+                   EnhanceLevel == other.EnhanceLevel;
+        }
+        return false;
+    }
+
+    public override int GetHashCode()
+    {
+        return HashCode.Combine(UniqueID, EnhanceLevel);
+    }
 }

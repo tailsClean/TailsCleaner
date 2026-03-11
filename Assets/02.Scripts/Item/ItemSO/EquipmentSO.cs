@@ -21,7 +21,7 @@ public class EquipmentSO : ItemBaseSO
     [SerializeField] private List<IncreaseStat> _increaseStatList;
 
     [Header("장비 강화")]
-    [SerializeField] private List<EnhanceData> _enhanceDataList;
+    [SerializeField] private List<ItemEnhanceData> _enhanceDataList;
 
     [Header("장비 등급")]
     [SerializeField] private List<GradeData> _gradeDataList;
@@ -34,7 +34,7 @@ public class EquipmentSO : ItemBaseSO
     public string IconClickSound => _iconClickSound;
     public EnhancementEventChannelSO OnEquipEnhancement => _onEquipEnhancement;
 
-    private Dictionary<int, EnhanceData> _enhances;
+    private Dictionary<int, ItemEnhanceData> _enhances;
 
     private Dictionary<EQUIP_GRADE, GradeData> _grades;
 
@@ -51,7 +51,7 @@ public class EquipmentSO : ItemBaseSO
     }
 
     // 해당 강화레벨 데이터를 반환
-    public EnhanceData GetEnhanceData(int enhanceLevel)
+    public ItemEnhanceData GetEnhanceData(int enhanceLevel)
     {
         if (_enhances == null)
             Init();
@@ -77,7 +77,7 @@ public class EquipmentSO : ItemBaseSO
 
     private void Init()
     {
-        _enhances = new Dictionary<int, EnhanceData> { { 0, new EnhanceData() } };
+        _enhances = new Dictionary<int, ItemEnhanceData> { { 0, new ItemEnhanceData() } };
         foreach(var enhanceData in _enhanceDataList)
         {
             if (!_enhances.TryAdd(enhanceData.Level, enhanceData))

@@ -10,7 +10,9 @@ public class RelicBase : ItemBase, IEnhancement
 
     // 강화 데이터
     public int EnhanceLevel { get; private set; }
-    public EnhanceData EnhanceData => Data.GetEnhanceData(EnhanceLevel);
+    public ItemBaseSO ItemData => Data;
+    public ItemEnhanceData EnhanceData => Data.GetEnhanceData(EnhanceLevel);
+
 
 
     // 최종 스텟 증가량 제공 메서드(유물 증가량, 강화 증가량)
@@ -21,5 +23,5 @@ public class RelicBase : ItemBase, IEnhancement
         return (int)(statValue + enhanceValue);
     }
 
-    public void OnEnhance() => EnhanceLevel++;
+    public void OnEnhance(EnhancingInfo result) => EnhanceLevel++;
 }
