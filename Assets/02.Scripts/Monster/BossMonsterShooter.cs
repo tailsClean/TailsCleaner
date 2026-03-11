@@ -17,11 +17,11 @@ public class BossMonsterShooter : MonoBehaviour
     [Header("--- 상태 관리 ---")]
     public MonsterState state = MonsterState.MOVE;
     private float current_cooldown = 0f;
-    private SpecialBossMonsterBase specialBase;
+    
 
     void Awake()
     {
-        specialBase = GetComponent<SpecialBossMonsterBase>();
+       
     }
 
     void Start()
@@ -53,7 +53,7 @@ public class BossMonsterShooter : MonoBehaviour
     {
         // 공격 시작 (이동 정지 로직 연동)
         state = MonsterState.PATTERN;
-        if (specialBase != null) specialBase.SetAttackingState(true);
+        
 
         // Debug.Log("보스 패턴 시작!");
 
@@ -65,7 +65,7 @@ public class BossMonsterShooter : MonoBehaviour
         }
 
         // 3. 패턴 종료 및 쿨타임 설정
-        if (specialBase != null) specialBase.SetAttackingState(false);
+        
         state = MonsterState.MOVE;
         current_cooldown = pattern_cooldown;
     }
@@ -86,7 +86,7 @@ public class BossMonsterShooter : MonoBehaviour
         if (projectile != null)
         {
 
-            float monsterPower = specialBase.power;
+            float monsterPower = 1.0f;
             float typeMultiply = 1.0f;
             float patternMultiply = 1.2f;
 
