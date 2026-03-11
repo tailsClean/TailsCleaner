@@ -33,7 +33,6 @@ public class EquipmentEnhanceUI : EnhanceSystemUI
         _playerLoadout = ItemManager.Instance.Loadout;
         base.Start();
         UpdateLoadout();
-        UpdateResourceUI();
     }
 
 

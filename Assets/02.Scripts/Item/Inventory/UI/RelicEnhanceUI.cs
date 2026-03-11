@@ -14,6 +14,9 @@ public class RelicEnhanceUI : EnhanceSystemUI
 
     protected override void OnEnable()
     {
+        if (_inventory != null)
+            UpdateRelicSlots();
+
         base.OnEnable();
         _onChangeInventory.AddListener(UpdateRelicSlots);
     }
@@ -22,6 +25,12 @@ public class RelicEnhanceUI : EnhanceSystemUI
     {
         base.OnDisable();
         _onChangeInventory.RemoveListener(UpdateRelicSlots);
+    }
+
+    protected override void Start()
+    {
+        base.Start();
+        UpdateRelicSlots();
     }
 
     private void UpdateRelicSlots()

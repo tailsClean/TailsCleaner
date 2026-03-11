@@ -53,6 +53,7 @@ public abstract class EnhanceSystemUI : MonoBehaviour
         _inventory = _enhanceSystem.UsingInventory;
         _currency = _enhanceSystem.UsingCurrency;
         UpdateCurrentGold();
+        UpdateResourceUI();
     }
 
     // 강화할 장비UI 갱신
