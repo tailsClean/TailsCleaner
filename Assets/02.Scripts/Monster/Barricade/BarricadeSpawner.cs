@@ -15,6 +15,40 @@ public class BarricadeSpawner : MonoBehaviour
     [Header("Settings")]
     public float warningDuration = 1.5f; // 예고 시간이 지난 후 벽 생성
 
+    [Header("Random Spawn Settings (None)")]
+    [Tooltip("무작위 생성 시 보스로부터의 최소 거리")]
+    public float minRandomRadius = 5f;
+    [Tooltip("무작위 생성 시 보스로부터의 최대 거리")]
+    public float maxRandomRadius = 10f;
+
+    public Vector2 GetSpawnPosition(SpawnLocation location, Transform player, Transform boss)
+    {
+        if (player == null || boss == null) return Vector2.zero;
+
+        switch (location)
+        {
+            case SpawnLocation.Player:
+                // 플레이어 중심
+                return player.position;
+
+            case SpawnLocation.Boss:
+                // 보스 중심
+                return boss.position;
+
+            case SpawnLocation.Both:
+                // 플레이어와 보스의 중간 지점
+                return Vector2.Lerp(player.position, boss.position, 0.5f);
+
+            case SpawnLocation.None:
+                // 무작위: 보스 기준 인스펙터에서 설정한 반경 내
+                Vector2 randomDir = Random.insideUnitCircle.normalized;
+                float randomDist = Random.Range(minRandomRadius, maxRandomRadius);
+                return (Vector2)boss.position + (randomDir * randomDist);
+
+            default:
+                return boss.position;
+        }
+    }
 
     public void SpawnBarricade(Vector2 pos, BarricadeShape shape, Vector2 size, float duration, InteractionType interaction, float bossPower)
     {
@@ -32,7 +66,6 @@ public class BarricadeSpawner : MonoBehaviour
             var warningScript = warning.GetComponent<BarricadeObject>();
             if (warningScript != null)
             {
-              
                 warningScript.Setup(warningDuration, interaction, shape, size, bossPower);
             }
             else
@@ -58,10 +91,6 @@ public class BarricadeSpawner : MonoBehaviour
             }
         }
     }
-
-    /// <summary>
-    /// 모양에 따라 자식 오브젝트들의 크기와 위치를 조절하는 함수
-    /// </summary>
     private void Set2DScale(Transform target, BarricadeShape shape, Vector2 size)
     {
         target.localScale = Vector3.one;

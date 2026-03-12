@@ -245,10 +245,10 @@ MonoBehaviour:
   useBarricade: 1
   barricadeSpawner: {fileID: 4676421205203308254}
   barricadeInterval: 5
-  spawnLoc: 0
+  spawnLoc: 3
   barShape: 0
   barSize: {x: 10, y: 2}
-  barDuration: 10
+  barDuration: 3
   barInteraction: 2
 --- !u!114 &6267815479541013433
 MonoBehaviour:
@@ -296,4 +296,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::BarricadeSpawner
   barricadePrefab: {fileID: 8461779969420871315, guid: 324193de02afd244086bf02906f5df83, type: 3}
   warningPrefab: {fileID: 6383617728571696591, guid: 5f468878613da5548bda63fe56d158e8, type: 3}
-  warningDuration: 2
+  warningDuration: 1.5
+  minRandomRadius: 5
+  maxRandomRadius: 10
