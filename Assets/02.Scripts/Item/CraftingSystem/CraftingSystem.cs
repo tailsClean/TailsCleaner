@@ -5,7 +5,7 @@ using static EquipmentSO;
 
 public partial class CraftingSystem : MonoBehaviour
 {
-    [SerializeField] private Inventory _inventory;
+    [SerializeField] private ItemInventory _inventory;
 
 
     private PlayerLoadout _loadout;                     // 장착 장비 확인을 위함
@@ -13,7 +13,7 @@ public partial class CraftingSystem : MonoBehaviour
     private CraftingInfo[] _resourceCraftSlots;
 
 
-    public Inventory UsingInventory => _inventory;
+    public ItemInventory UsingInventory => _inventory;
     public CraftingInfo MainEquip => _mainCraftSlot;
     public CraftingInfo[] ResourceEquips => _resourceCraftSlots;
 
@@ -103,10 +103,7 @@ public partial class CraftingSystem : MonoBehaviour
             _loadout.MyEquipments[parts].OnUpgrade();
         }
         else
-        {
-            var equipStatus = new EquipStatus(_mainCraftSlot.InstanceID, _mainCraftSlot.ItemID, _mainCraftSlot.Grad);
-            _inventory.SetEquipment(equipStatus);
-        }
+            _inventory.ReleaseItem(_mainCraftSlot.InventoryKey);
 
 
         ReleaseResource();
@@ -149,8 +146,7 @@ public partial class CraftingSystem : MonoBehaviour
     {
         foreach(var slot in _resourceCraftSlots)
         {
-            var equipStatus = new EquipStatus(slot.InstanceID, slot.ItemID, slot.Grad);
-            _inventory.RemoveEquipment(equipStatus);
+            _inventory.RemoveEquipment(slot.InventoryKey);
         }
 
         _resourceCraftSlots = null;
@@ -162,31 +158,34 @@ public partial class CraftingSystem : MonoBehaviour
 
 public class CraftingInfo
 {
-    public EQUIP_GRADE Grad;
+    public ItemInstance InventoryKey;
     public readonly int InstanceID;
     public readonly int ItemID;
+    public EQUIP_GRADE Grad;
     public readonly EQUIP_PARTS Parts;
     public readonly bool IsLoadout;
     public int CostID => GradeData.CostID;
     public EquipGradeData GradeData => ItemDB.GetItemData<EquipmentSO>(ItemID).GetGradeData(Grad);
 
-    public CraftingInfo(int itemID, EQUIP_GRADE grad, int instanceID = 0)
+    /// <summary>
+    /// 인벤토리에서 꺼낸 아이템을 사용할 때
+    /// </summary>
+    /// <param name="itemID"></param>
+    /// <param name="grade"></param>
+    /// <param name="inventoryKey"></param>
+    public CraftingInfo(ItemInstance inventoryKey)
     {
-        InstanceID = instanceID;
-        ItemID = itemID;
-        Grad = grad;
-    }
-
-    public CraftingInfo(EquipStatus inventoryEuipment)
-    {
-        InstanceID = inventoryEuipment.InstanceID;
-        ItemID = inventoryEuipment.UniqueID;
-        Grad = inventoryEuipment.Grade;
-        Parts = inventoryEuipment.Parts;
+        InventoryKey = inventoryKey;
+        ItemID = inventoryKey.ID;
+        Grad = inventoryKey.Grade;
         IsLoadout = false;
     }
 
-    public CraftingInfo(EquipmentBase equipment )
+    /// <summary>
+    /// 착용 장비에서 꺼낸 아이템을 사용할 때
+    /// </summary>
+    /// <param name="equipment"></param>
+    public CraftingInfo(EquipmentBase equipment)
     {
         ItemID = equipment.Data.UniqueID;
         Grad = equipment.Grade;

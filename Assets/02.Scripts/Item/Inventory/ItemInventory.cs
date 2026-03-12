@@ -4,17 +4,18 @@ using UnityEngine;
 using UnityEngine.UI;
 
 // 케이스별 판단 메서드 만들어서 코드 좀 줄이자
-public class Inventory : MonoBehaviour
+public class ItemInventory : MonoBehaviour
 {
     [Header("이벤트 채널")]
     [SerializeField] private VoidEventChannelSO _onChangeInventory;
 
+    private Dictionary<ItemInstance, int> _inventory;
+
+    public Dictionary<ItemInstance, int> Inventory => _inventory;
+
     // Key: 아이템ID , Value: 소지갯수
     private Dictionary<int, int> _equipInventory;
-    private List<EquipStatus> _equipStatus;
     private Dictionary<int, int> _relicInventory;
-    private List<RelicStatus> _relicStatus;
-    private int _instanceID;
 
     private Dictionary<int, int> _reinforceResourceInventory;
     private Dictionary<int, int> _consumeInventory;
@@ -24,8 +25,6 @@ public class Inventory : MonoBehaviour
     public Dictionary<int, int> RelicInventory => _relicInventory;
 
 
-    public List<EquipStatus> EquipStates => _equipStatus;
-    public List<RelicStatus> RelicStatus => _relicStatus;
 
     public Dictionary<int, int> ReinforceResourceInventory => _reinforceResourceInventory;
     public Dictionary<int, int> ConsumeInventory => _consumeInventory;
@@ -38,116 +37,98 @@ public class Inventory : MonoBehaviour
 
     private void Awake()
     {
+        _inventory = new Dictionary<ItemInstance, int>();
         _equipInventory = new Dictionary<int, int>();
         _relicInventory = new Dictionary<int, int>();
-        _relicStatus = new List<RelicStatus>();
         _reinforceResourceInventory = new Dictionary<int, int>();
         _consumeInventory = new Dictionary<int, int>();
-        _equipStatus = new();
     }
 
 
-    // 굳이 합성용을 뽑을 필요는 없을 듯
-    public CraftingInfo GetCrafting(int id, EQUIP_GRADE grade)
+    // 추가 수정 필요
+    public void RemoveEquipment(ItemInstance item)
     {
-        foreach (var item in _equipStatus)
+        foreach (var invenItem in _inventory)
         {
-            if(item.UniqueID == id && item.Grade == grade)
-                return new CraftingInfo(item);
-        }
-
-        Debug.Log(id + "아이템 못 찾음");
-        return null;
-    }
-
-    public void GainEquipment(int id, EQUIP_GRADE grade)
-    {
-        _equipStatus.Add(new EquipStatus(++_instanceID, id, grade));
-    }
-
-    public void SetEquipment(EquipStatus newEquip)
-    {
-        for(int i = 0; i < _equipStatus.Count; i++)
-        {
-            if (_equipStatus[i].InstanceID == newEquip.InstanceID)
+            if (HasItem(invenItem.Key, item))
             {
-                _equipStatus[i] = newEquip;
+                _inventory.Remove(invenItem.Key);
                 _onChangeInventory.OnStartEvent();
                 return;
             }
         }
-        //GainEquipment(newEquip.UniqueID, newEquip.Grade);
-        _onChangeInventory.OnStartEvent();
+        Debug.Log("아이템 제거 실패");
     }
 
-    public void RemoveEquipment(EquipStatus equipment)
+
+    /// <summary>
+    /// 꺼냈던 아이템을 다시 인벤토리에 넣는 메서드
+    /// </summary>
+    /// <param name="item"></param>
+    public void ReleaseItem(ItemInstance item)
     {
-        for(int i = 0; i < _equipStatus.Count; i++)
+        foreach(var invenItem in _inventory)
         {
-            if (_equipStatus[i].InstanceID == equipment.InstanceID)
+            if (HasItem(invenItem.Key, item))
             {
-                _equipStatus.RemoveAt(i);
+                if (item.Amount == ItemInstance.NoneStackAmount)
+                    _inventory[item] = item.Amount;
+                else
+                    _inventory[item] += item.Amount;
+
                 _onChangeInventory.OnStartEvent();
                 return;
             }
         }
+        _inventory.Add(item, item.Amount);
         _onChangeInventory.OnStartEvent();
     }
 
-    // 새로운 유믈 조회 교체
-    public void SetRelic(RelicStatus newRelic)
+    private bool HasItem(ItemInstance invenItem, ItemInstance item)
     {
-        for (int i = 0; i < _relicStatus.Count; i++)
-        {
-            if (_relicStatus[i].InstanceID == newRelic.InstanceID)
-            {
-                _relicStatus[i] = newRelic;
-                _onChangeInventory.OnStartEvent();
-                return;
-            }
-        }
-        _relicStatus.Add(newRelic);
-        _onChangeInventory.OnStartEvent();
-    }
-    // 인벤토리 소지한 유물 정보 반환
-    public RelicStatus GetRelicInfo(int id, int enhanceLevel)
-    {
-        foreach (var relic in _relicStatus)
-        {
-            if (relic.UniqueID == id && relic.EnhanceLevel == enhanceLevel)
-                return new RelicStatus(relic.InstanceID, id, enhanceLevel);
-        }
-        return default;
+        return invenItem.ID == item.ID &&
+               invenItem.EnhanceLevel == item.EnhanceLevel &&
+               invenItem.Grade == item.Grade;
     }
 
-    // 인벤토리 소지 아이템 정보 반환
-    public ItemStack GetItemInfo(int id)
+    /// <summary>
+    /// 일반 스택형 아이템 반환
+    /// </summary>
+    /// <param name="id"></param>
+    /// <returns></returns>
+    public ItemInstance GetItem(int id)
     {
-        var item = ItemDB.GetItemData<ItemBaseSO>(id);
-
-        switch (item.ItemType)
-        {
-            case ITEM_TYPE.Equipment:
-                return new ItemStack(item, _equipInventory[id]);
-
-            case ITEM_TYPE.Relic:
-                return new ItemStack(item, _relicInventory[id]);
-
-            case ITEM_TYPE.Reinforcement:
-                return new ItemStack(item, GetAmount(_reinforceResourceInventory, id));
-
-            case ITEM_TYPE.Consume:
-                return new ItemStack(item, _consumeInventory[id]);
-
-            default:
-                return default;
-        }
+        var item = SearchItem(id, ItemInstance.NoneEnhanceLevel, EQUIP_GRADE.None);
+        item.SetAmount(_inventory[item]);
+        return item;
     }
-    private int? GetAmount(Dictionary<int, int> inventory, int id)
+
+    /// <summary>
+    /// 유물 아이템 반환
+    /// </summary>
+    /// <param name="id"></param>
+    /// <param name="enhanceLevel"></param>
+    /// <returns></returns>
+    public ItemInstance GetItem(int id, int enhanceLevel)
     {
-        if(inventory.TryGetValue(id, out var value))
-            return value;
-        return null;
+        var item = SearchItem(id,enhanceLevel, EQUIP_GRADE.None);
+        item.SetAmount(ItemInstance.NoneStackAmount);
+        return item;
+    }
+
+    private ItemInstance SearchItem(int id, int enhanceLevel, EQUIP_GRADE grade)
+    {
+        foreach (var item in _inventory)
+        {
+            bool isItem = item.Key.ID == id &&
+                          item.Key.EnhanceLevel == enhanceLevel &&
+                          item.Key.Grade == grade;
+            if (isItem)
+                return item.Key;
+        }
+
+        Debug.Log($"{id}에 해당하는 아이템이 인벤토리에 없습니다.");
+        return ItemInstance.None;
     }
 
 
@@ -274,66 +255,4 @@ public class Inventory : MonoBehaviour
         return true;
     }
     #endregion
-
-}
-
-// 유물 상태 구조체
-public struct RelicStatus
-{
-    public int InstanceID;
-    public int UniqueID;
-    public int EnhanceLevel;
-
-    public RelicStatus(int instanceID, int id, int enhanceLevel)
-    {
-        InstanceID = instanceID;
-        UniqueID = id;
-        EnhanceLevel = enhanceLevel;
-    }
-
-    public override bool Equals(object obj)
-    {
-        if (obj is RelicStatus other)
-        {
-            return UniqueID == other.UniqueID &&
-                   EnhanceLevel == other.EnhanceLevel;
-        }
-        return false;
-    }
-
-    public override int GetHashCode()
-    {
-        return HashCode.Combine(UniqueID, EnhanceLevel);
-    }
-}
-
-public struct EquipStatus
-{
-    public int InstanceID;
-    public int UniqueID;
-    public EQUIP_GRADE Grade;
-    public EQUIP_PARTS Parts;
-
-    public EquipStatus(int instanceID, int id, EQUIP_GRADE grade)
-    {
-        InstanceID = instanceID;
-        UniqueID = id;
-        Grade = grade;
-        Parts = ItemDB.GetItemData<EquipmentSO>(id).EquipmentPart;
-    }
-
-    public override bool Equals(object obj)
-    {
-        if (obj is EquipStatus other)
-        {
-            return UniqueID == other.UniqueID &&
-                   Grade == other.Grade;
-        }
-        return false;
-    }
-
-    public override int GetHashCode()
-    {
-        return HashCode.Combine(UniqueID, Grade);
-    }
 }

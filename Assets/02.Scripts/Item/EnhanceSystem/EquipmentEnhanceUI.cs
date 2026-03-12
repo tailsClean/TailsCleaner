@@ -82,8 +82,9 @@ public class EquipmentEnhanceUI : EnhanceSystemUI
     // 현재 골드량 갱신
     public override void UpdateCurrentGold()
     {
-        ItemStack goldStack = _currency.GetGold();
-        _currentGoldImage.sprite = goldStack.ItemData.ImageSprite;
-        _currentGoldText.text = goldStack.Amount.ToString();
+        ItemInstance gold = _currency.GetGold();
+        var goldData = ItemDB.GetItemData<ItemBaseSO>(gold.ID);
+        _currentGoldImage.sprite = goldData.ImageSprite;
+        _currentGoldText.text = gold.Amount.ToString();
     }
 }
