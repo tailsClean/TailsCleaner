@@ -11,8 +11,10 @@ public class Inventory : MonoBehaviour
 
     // Key: 아이템ID , Value: 소지갯수
     private Dictionary<int, int> _equipInventory;
+    private List<EquipState> _equipStatus;
     private Dictionary<int, int> _relicInventory;
     private List<RelicStatus> _relicStatus;
+    private int _instanceID;
 
     private Dictionary<int, int> _reinforceResourceInventory;
     private Dictionary<int, int> _consumeInventory;
@@ -39,8 +41,55 @@ public class Inventory : MonoBehaviour
         _relicStatus = new List<RelicStatus>();
         _reinforceResourceInventory = new Dictionary<int, int>();
         _consumeInventory = new Dictionary<int, int>();
+        _equipStatus = new();
     }
 
+
+    public CraftingInfo GetCrafting(int id, EQUIP_GRADE grade)
+    {
+        foreach (var item in _equipStatus)
+        {
+            if(item.UniqueID == id && item.Grade == grade)
+                return new CraftingInfo(item);
+        }
+
+        Debug.Log(id + "아이템 못 찾음");
+        return null;
+    }
+
+    public void GainEquipment(int id, EQUIP_GRADE grade)
+    {
+        _equipStatus.Add(new EquipState(++_instanceID, id, grade));
+    }
+
+    public void SetEquipment(EquipState newEquip)
+    {
+        for(int i = 0; i < _equipStatus.Count; i++)
+        {
+            if (_equipStatus[i].InstanceID == newEquip.InstanceID)
+            {
+                _equipStatus[i] = newEquip;
+                _onChangeInventory.OnStartEvent();
+                return;
+            }
+        }
+        //GainEquipment(newEquip.UniqueID, newEquip.Grade);
+        _onChangeInventory.OnStartEvent();
+    }
+
+    public void RemoveEquipment(EquipState equipment)
+    {
+        for(int i = 0; i < _equipStatus.Count; i++)
+        {
+            if (_equipStatus[i].InstanceID == equipment.InstanceID)
+            {
+                _equipStatus.RemoveAt(i);
+                _onChangeInventory.OnStartEvent();
+                return;
+            }
+        }
+        _onChangeInventory.OnStartEvent();
+    }
 
     // 새로운 유믈 조회 교체
     public void SetRelic(RelicStatus newRelic)
@@ -252,5 +301,36 @@ public struct RelicStatus
     public override int GetHashCode()
     {
         return HashCode.Combine(UniqueID, EnhanceLevel);
+    }
+}
+
+public struct EquipState
+{
+    public int InstanceID;
+    public int UniqueID;
+    public EQUIP_GRADE Grade;
+    public EQUIP_PARTS Parts;
+
+    public EquipState(int instanceID, int id, EQUIP_GRADE grade)
+    {
+        InstanceID = instanceID;
+        UniqueID = id;
+        Grade = grade;
+        Parts = ItemDB.GetItemData<EquipmentSO>(id).EquipmentPart;
+    }
+
+    public override bool Equals(object obj)
+    {
+        if (obj is EquipState other)
+        {
+            return UniqueID == other.UniqueID &&
+                   Grade == other.Grade;
+        }
+        return false;
+    }
+
+    public override int GetHashCode()
+    {
+        return HashCode.Combine(UniqueID, Grade);
     }
 }

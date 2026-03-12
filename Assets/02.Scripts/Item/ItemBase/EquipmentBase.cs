@@ -17,7 +17,7 @@ public class EquipmentBase : ItemBase, IEnhancement
 
     // 등급 데이터
     public EQUIP_GRADE Grade { get; private set; }
-    public EquipmentSO.GradeData GradeData => Data.GetGradeData(Grade);
+    public EquipmentSO.EquipGradeData GradeData => Data.GetGradeData(Grade);
 
 
 

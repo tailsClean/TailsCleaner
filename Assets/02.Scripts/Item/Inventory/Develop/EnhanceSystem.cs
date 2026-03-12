@@ -13,7 +13,6 @@ public class EnhanceSystem : MonoBehaviour
     private int _bluePrintID;
     private int _bluePrintCost;
     private bool _isEnhancable;                                 // 강화 가능 여부 판단
-    //private Action _onVoidEnhace;                               // 나중에 리펙토링 해볼 수 있음
 
     public Inventory UsingInventory => _inventory;
     public Currency UsingCurrency => _currency;

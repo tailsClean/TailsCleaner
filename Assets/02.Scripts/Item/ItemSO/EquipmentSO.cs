@@ -24,7 +24,7 @@ public class EquipmentSO : ItemBaseSO
     [SerializeField] private List<ItemEnhanceData> _enhanceDataList;
 
     [Header("장비 등급")]
-    [SerializeField] private List<GradeData> _gradeDataList;
+    [SerializeField] private List<EquipGradeData> _gradeDataList;
 
 
     public EQUIP_PARTS EquipmentPart => _equipmentPart;
@@ -36,7 +36,7 @@ public class EquipmentSO : ItemBaseSO
 
     private Dictionary<int, ItemEnhanceData> _enhances;
 
-    private Dictionary<EQUIP_GRADE, GradeData> _grades;
+    private Dictionary<EQUIP_GRADE, EquipGradeData> _grades;
 
 
     // 특정 스탯 증가량을 찾아서 반환
@@ -63,7 +63,7 @@ public class EquipmentSO : ItemBaseSO
     }
 
     // 해당 등급 데이터를 반환
-    public GradeData GetGradeData(EQUIP_GRADE grade)
+    public EquipGradeData GetGradeData(EQUIP_GRADE grade)
     {
         if (_grades == null)
             Init();
@@ -84,7 +84,7 @@ public class EquipmentSO : ItemBaseSO
                 Debug.LogError($"{name}의 강화레벨이 중복됐습니다.");
         }
 
-        _grades = new Dictionary<EQUIP_GRADE, GradeData>();
+        _grades = new Dictionary<EQUIP_GRADE, EquipGradeData>();
         foreach(var gradeData in _gradeDataList)
         {
             if (!_grades.TryAdd(gradeData.Grade, gradeData))
@@ -105,7 +105,7 @@ public class EquipmentSO : ItemBaseSO
 
     // 등급 데이터 클래스
     [Serializable]
-    public class GradeData
+    public class EquipGradeData
     {
         [field: SerializeField] public int ID { get; private set; }
         [field: SerializeField] public int GroupID { get; private set; }
