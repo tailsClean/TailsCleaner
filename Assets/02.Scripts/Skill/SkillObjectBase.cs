@@ -11,6 +11,7 @@ public class SkillObjectBase : PoolObject
     private SkillStat _calcBuffer = new();              // 스탯 계산 버퍼 (GC 방지)
     private SkillStat _staticStat = new();              // 정적 스탯 베이스(baseStat + passiveBaseAdds) * commonStat
     private bool _statDirty = false;                 // 더티 플래그 / true일 때 재계산
+    private bool _postFinal = false;                 // 추가 스탯 계산용
 
     protected ActiveSkill _skill;                    // 액티브 스킬 (스탯 재계산용)
     protected Rigidbody2D _rigidbody;                // 속도용
@@ -38,6 +39,7 @@ public class SkillObjectBase : PoolObject
         // 리셋
         _expired = false;
         _statDirty = false;
+        _postFinal = false;
         _lastDurationTickTime = 0f;
 
         _skill = owner;
@@ -64,6 +66,13 @@ public class SkillObjectBase : PoolObject
         
         // 초기화 시 전용 모디파이어, 패시브 처리
         OnInit();
+
+        // 계산 안돌아서 false 인경우 추가 스탯 계산은 실행
+        if (_postFinal == false)
+        {
+            foreach (var passive in _passiveModifiers)
+                passive.ModifyPostFinal(_runtimeFinalStat);
+        }
 
         // 리셋
         if (_animator != null)
@@ -155,13 +164,20 @@ public class SkillObjectBase : PoolObject
 
         // 패시브 최종 곱 (냥빨래, 황금왕관 등)
         foreach (var passive in _passiveModifiers)
-            passive.ModifyFinal(_calcBuffer);
+            passive.ModifyFinalMultiply(_calcBuffer);
 
         // 결과를 _runtimeFinalStat에 덮어쓰기 (new X)
         _runtimeFinalStat.CopyFrom(_calcBuffer);
 
+        // 결과에 추가 스탯 적용 (크기당 피해 증가 등)
+        foreach (var passive in _passiveModifiers)
+            passive.ModifyPostFinal(_runtimeFinalStat);
+
         // 물리 적용
         ApplySize();
+
+        // 추가 스탯 계산 완료 표시
+        _postFinal = true;
 
         // 계산 했으니 끄기
         _statDirty = false;

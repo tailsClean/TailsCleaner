@@ -24,7 +24,7 @@ public class WaterBombSkill : ActiveSkill<WaterBombArea, WaterBombModifierData>
         if (_currentTarget == null) return;
 
         // 타겟 조준
-        Vector2 targetPos = _currentTarget.position;
+        Vector2 targetPos = CurrentTarget.Position;
 
         // 물폭탄 생성 (낙하)
         WaterBombArea bomb = SpawnFromPool<WaterBombArea>(_skillObjectPrefab, transform.position, Quaternion.identity);
@@ -56,8 +56,6 @@ public class WaterBombSkill : ActiveSkill<WaterBombArea, WaterBombModifierData>
 
         for (int i = 0; i < burstCount; i++)
         {
-            Debug.Log("물바다 발사");
-
             // 투사체 발사
             FireSplash(spawnPos);
 

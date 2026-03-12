@@ -128,18 +128,17 @@ public class WaterBombArea : SkillArea<WaterBombModifierData>
 
 
     // 장판에 적 투사체 진입 시
-    protected override void OnBulletEnter(MonsterProjectile projectile)
+    protected override void OnBulletEnter(PoolObject projectile)
     {
         // 폭발은 예술이다
         if (_modifierData.BulletClear == false) return;
 
-        // 투사체 삭제
-        // 풀 반환으로 교체
-        Destroy(projectile.gameObject);
+        // 풀 반환
+        if (_poolObject != null) projectile.ReturnToPoolAfter(0);
 
-        // 방어막 획득
-        // SkillManager.Instance.Player.AddShield(1);
-        Debug.Log("[WaterBombArea] 폭발은 예술이다 - 투사체 삭제 (방어막 획득)");
+        // 하지만 이렇게 간단하게 피했습니다.
+        // 탄환 제거 시 방어막 충전 (패시브 있으면)
+        SkillManager.Instance.SkillStatHandler.OnBulletCleared();
     }
 
     // 만료 오버라이드

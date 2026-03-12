@@ -16,7 +16,13 @@ public abstract class PassiveModifier
     // 최종 곱산용
     // 최종 스탯에 최종 곱산
     // ex) 양손잡이, 냥빨래, 황금왕관
-    public virtual void ModifyFinal(SkillStat finalStat) { }
+    public virtual void ModifyFinalMultiply(SkillStat finalStat) { }
+
+
+    // 최종 스탯에서 스탯 당 추가 스탯 적용
+    public virtual void ModifyPostFinal(SkillStat finalStat) { }
+
+
 
 
     public virtual bool OnProjectileInit(SkillStat runtimeBaseStat, SkillStat runtimeFinalStat) { return false; }   // 투사체 생성 시, bool은 재계산 확인용
@@ -26,6 +32,28 @@ public abstract class PassiveModifier
     public virtual void OnEnterArea(PlayerBase player) { }                            // 장판 올라갈 시 (플레이어)
     public virtual void OnDurationTick(SkillStat runTimePassiveMulStat) { }           // 지속시간마다
     public virtual void OnStun(MonsterBase monster) { }                               // 군중제어
+
+
+    // 영구 보너스 계산
+    public virtual void ModifyPlayerPermanent(PlayerStatFlat flat, PlayerStatMul multi, SkillManager skillManager, int subTag) { }
+
+
+    // 특정 서브태그를 가진 스킬 수
+    protected static int CountSkillsWithSubTag(SkillManager skillManager, int subTag)
+    {
+        // 서브태그 플래그 변환
+        int flag = SubTagRegistry.GetFlag(subTag);
+
+        if (flag == 0) return 0;
+
+        int count = 0;
+
+        // 카운팅
+        foreach (var skill in skillManager.MyActiveSkills)
+            if ((skill.CurrentSubTag & flag) != 0) count++;
+
+        return count;
+    }
 }
 
 
@@ -33,19 +61,27 @@ public abstract class PassiveModifier
 // 매이크 라쿤 크레이트 어겐! (보유 업그레이드 40101 태그 수만큼 방어력, 회피율, 치명타율, 치명타 피해 증가)
 public class RaccoonCrateModifier : PassiveModifier
 {
-    //[Header("방어력 증가량")]
-    //[SerializeField] int _defencePerTag = 2;
-    //[Header("회피율 증가량")]
-    //[SerializeField] float _evasionChancePerTag = 0.01f;       // 1%
-    //[Header("치명타확률 증가량")]
-    //[SerializeField] float _criticalChancePerTag = 0.01f;      // 1%
-    //[Header("치명타피해 증가량")]
-    //[SerializeField] float _criticalDamagePerTag = 0.05f;    // 5%
+    [Header("방어력 증가량")]
+    [SerializeField] float _defencePerTag = 1f;
+    [Header("회피율 증가량")]
+    [SerializeField] float _evasionChancePerTag = 1f;
+    [Header("치명타확률 증가량")]
+    [SerializeField] float _criticalChancePerTag = 1f;
+    [Header("치명타피해 증가량")]
+    [SerializeField] float _criticalDamageMultiPerTag = 0.01f;    // 1%
 
-    //Defence         = DefencePerTag* tagCount,
-    //EvasionChance = EvasionChancePerTag * tagCount,
-    //CriticalChance = CriticalChancePerTag * tagCount,
-    //CriticalDamage = CriticalDamagePerTag * tagCount,
+    public override void ModifyPlayerPermanent(PlayerStatFlat flat, PlayerStatMul multi, SkillManager skillManager, int subTag)
+    {
+        int count = CountSkillsWithSubTag(skillManager, subTag);
+
+        // 고정 수치
+        flat.DefensePower   += _defencePerTag        * count;
+        flat.EvasionChance  += _evasionChancePerTag  * count;
+        flat.CriticalChance += _criticalChancePerTag * count;
+
+        // 배율 수치
+        multi.CriticalDamageMultiplier *= 1f + _criticalDamageMultiPerTag * count;
+    }
 }
 
 
@@ -128,8 +164,17 @@ public class SuperCleanModifier : PassiveModifier
 
 public class BravadoModifier : PassiveModifier
 {
-    //[Header("저주당 추가 방어력")]
-    //[SerializeField] int _defencePerCurse = 1;
+    [Header("저주당 추가 방어력")]
+    [SerializeField] float _defencePerTag = 1f;
+
+    public override void ModifyPlayerPermanent(PlayerStatFlat flat, PlayerStatMul multi, SkillManager skillManager, int subTag)
+    {
+        int count = CountSkillsWithSubTag(skillManager, subTag);
+
+        // 고정 수치
+        flat.DefensePower += _defencePerTag * count;
+    }
+
 }
 // ID 42007 / SubTag 40107
 // 청소용 비닐옷 (체력 초과 회복 시 방어막 1회 생성)
@@ -151,7 +196,21 @@ public class ClassicSecretModifier : PassiveModifier
 // 더 크게! 더! 더더! 크고 아름답게! (투사체 크기에 비례해 넉백과 데미지 계수가 증가)
 public class BiggerBetterModifier : PassiveModifier
 {
+    [Header("크기 1당 데미지 증가 배율")]
+    [SerializeField] float _damagePerSize = 0.2f;
+    [Header("크기 1당 넉백 증가 배율")]
+    [SerializeField] float _knockbackPerSize = 0.2f;
 
+    public override void ModifyPostFinal(SkillStat finalStat)
+    {
+        // 사이즈 체크
+        float excess = Mathf.Floor(finalStat.Size - 1f);
+
+        if (excess <= 0f) return;
+
+        finalStat.Damage *= 1f + _damagePerSize * excess;
+        finalStat.Knockback *= 1f + _knockbackPerSize * excess;
+    }
 }
 
 
@@ -159,15 +218,19 @@ public class BiggerBetterModifier : PassiveModifier
 // 크고 아름다운 황금 왕관!(물에 뜹니다.)  (데미지 계수가 3배, 플레이어의 이동 속도 절반)
 public class GoldCrownModifier : PassiveModifier
 {
-    [Header("데미지 계수")]
+    [Header("투사체 데미지 계수")]
     [SerializeField] float _damageMultiplier = 3f;
-    [Header("이동속도 계수")]
+    [Header("플레이어 이동속도 계수")]
     [SerializeField] float _speedMultiplier = 0.5f;
 
-    public override void ModifyFinal(SkillStat finalStat)
+    public override void ModifyFinalMultiply(SkillStat finalStat)
     {
         finalStat.Damage *= _damageMultiplier;
-        finalStat.ProjectileSpeed *= _speedMultiplier;
+    }
+
+    public override void ModifyPlayerPermanent( PlayerStatFlat flat, PlayerStatMul multi, SkillManager skillManager, int subTag)
+    {
+        multi.MoveSpeed *= _speedMultiplier;
     }
 }
 
@@ -175,7 +238,20 @@ public class GoldCrownModifier : PassiveModifier
 // 원딜의 정석 (공격 시전 속도에 비례해 치명타 확률 증가)
 public class ADCarryModifier : PassiveModifier
 {
+    [Header("쿨타임 1초당 치명타확률")]
+    [SerializeField] float _criticalPerCooldown = 0.01f;   // 1%
 
+    public override void ModifyPlayerPermanent(PlayerStatFlat flat, PlayerStatMul multi, SkillManager skillManager, int subTag)
+    {
+        float total = 0f;
+
+        // 보유 스킬 별 쿨타임 합산
+        foreach (var skill in skillManager.MyActiveSkills)
+            total += skill.FinalStat.Cooldown;
+
+        // 합산한 쿨타임 치명타확률
+        flat.CriticalChance += total * _criticalPerCooldown;
+    }
 }
 
 
@@ -211,7 +287,7 @@ public class AmbiModifier : PassiveModifier
     [Header("투사체 계수")]
     [SerializeField] int _projectileCountMultiplier = 2;
 
-    public override void ModifyFinal(SkillStat finalStat)
+    public override void ModifyFinalMultiply(SkillStat finalStat)
     {
         finalStat.Damage *= _damageMultiplier;
         finalStat.ProjectileCount *= _projectileCountMultiplier;
@@ -238,7 +314,13 @@ public class ImplantModifier : PassiveModifier
 // 탄산수 (데미지 틱이 피해를 입힐 때 마다 적의 최대 체력비례 피해)
 public class SodaWaterModifier : PassiveModifier
 {
+    [Header("최대 체력 비례 피해율")]
+    [SerializeField] float _maxHpDamageRate = 0.01f;
 
+    public override void OnDamage(MonsterBase monster)
+    {
+        // monster.TakeDamage(monster.MaxHp * _maxHpDamageRate);
+    }
 }
 
 
@@ -253,7 +335,7 @@ public class CatLaundryModifier : PassiveModifier
     //[Header("체력 비례 피해")]
     //[SerializeField] float _offScreenDamageRatio = 0.1f;
 
-    public override void ModifyFinal(SkillStat finalStat)
+    public override void ModifyFinalMultiply(SkillStat finalStat)
     {
         finalStat.Knockback *= _knockbackBonus;
     }
@@ -263,9 +345,11 @@ public class CatLaundryModifier : PassiveModifier
 // 하지만 이렇게 간단하게 피했습니다. (방어막 최대 3중첩 + 탄환 제거 시 방어막 충전)
 public class NimbleBlockModifier : PassiveModifier
 {
-    //[Header("최대 방어막 중첩 수")]
-    //[SerializeField] int _maxShieldStack = 3;
+    [Header("최대 방어막 중첩 수")]
+    [SerializeField] int _maxShieldStack = 3;
 
-    // 패시브 적용 시 플레이어 방어막 시스템에 MaxShieldStack 전달
+    public int MaxShieldStack => _maxShieldStack;
+
+    // SkillPlayerStatHandler에 전달
 }
 

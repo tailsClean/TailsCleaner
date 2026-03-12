@@ -20,6 +20,9 @@ public class DetergentCapsuleSkill : ActiveSkill<DetergentCapsuleProjectile, Det
 
     protected override void OnActive(int index, int totalCount)
     {
+        // 방지
+        if (AttackDir == Vector2.zero) return;
+
         // 세제 캡슐 생성
         SpawnCapsule(AttackDir);
     }
