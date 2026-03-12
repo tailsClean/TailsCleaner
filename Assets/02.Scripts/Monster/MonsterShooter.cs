@@ -74,7 +74,22 @@ public class MonsterShooter : MonoBehaviour
     public void Shoot()
     {
         if (projectilePrefab == null || playerTarget == null) return;
-        
+
+        SpecialBossMonsterBase monsterBase = GetComponent<SpecialBossMonsterBase>();
+
+        float finalDamage = 0f;
+
+        if (monsterBase != null)
+        {
+            finalDamage = monsterBase.power* monsterBase.type_power_multiply* monsterBase.damage_multiply;
+
+            //Debug.Log($"<color=cyan>[총알 발사]</color> 몬스터: {gameObject.name} | " +
+            //      $"공식: {monsterBase.power}(기본) * {monsterBase.type_power_multiply}(타입) * {monsterBase.pattern_damage}(패턴) " +
+            //      $"= <color=yellow>최종 데미지: {finalDamage}</color>");
+        }
+
+
+        // 발사 위치 설정
         Vector2 dirToPlayer = (playerTarget.position - transform.position).normalized;
         float offsetDistance = 1.0f;
         Vector3 spawnPos = transform.position + (Vector3)(dirToPlayer * offsetDistance);
@@ -83,12 +98,12 @@ public class MonsterShooter : MonoBehaviour
 
         if (prefabScript != null)
         {
-            // 제네릭 Spawn<T> 호출: 자동으로 PoolKey를 심어주고 OnSpawn을 실행합니다.
+            // 제네릭 Spawn<T> 호출: 자동으로 PoolKey를 심어주고 OnSpawn을 실행
             MonsterProjectile projectile = ObjectPoolManager.Instance.Spawn(prefabScript, spawnPos, Quaternion.identity);
 
             if (projectile != null)
             {
-                projectile.Launch(playerTarget);
+                projectile.Launch(playerTarget, finalDamage);
             }
         }
         else
