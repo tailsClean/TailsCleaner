@@ -40,24 +40,24 @@ public class PlayerBase : MonoBehaviour, IDamageable, ISkillable
     private float _currentHp;
     private PlayerHit _hitSystem;
     private PlayerLevelSystem _levelSystem;
-    private PlayerEnhancementSlots _myEnhancement;
+    private PlayerLoadout _myEnhancement;
     private PlayerStatCalculator _statCalculator;
     private PlayerStateMachine _stateMachine;
 
 
     public float Hp => Mathf.Max(_currentHp, 0);
-    public float ItemDropRate => _statCalculator.GetFinalSat(_itemDropRate, RelicBase.STAT.ItemDropRate);
-    public float GoldGainRate => _statCalculator.GetFinalSat(_goldGainRate, RelicBase.STAT.GoldGainRate);
+    public float ItemDropRate => _statCalculator.GetFinalSat(_itemDropRate, RELIC_STAT.ItemDropRate);
+    public float GoldGainRate => _statCalculator.GetFinalSat(_goldGainRate, RELIC_STAT.GoldGainRate);
 
 
     // 스킬 공유 데이터 (인트 수정 필요)
-    public float AttackPower => _statCalculator.GetFinalSat(_attackPower, EquipmentBase.STAT.AttackPower);
-    public float DefensePower => _statCalculator.GetFinalSat(_defensePower, EquipmentBase.STAT.DefensePower);
-    public float MoveSpeed => _statCalculator.GetFinalSat(_moveSpeed, EquipmentBase.STAT.MoveSpeed);
-    public float CriticalChance => _statCalculator.GetFinalSat(_criticalChance, EquipmentBase.STAT.CriticalChance);
+    public float AttackPower => _statCalculator.GetFinalSat(_attackPower, EQUIP_STAT.AttackPower);
+    public float DefensePower => _statCalculator.GetFinalSat(_defensePower, EQUIP_STAT.DefensePower);
+    public float MoveSpeed => _statCalculator.GetFinalSat(_moveSpeed, EQUIP_STAT.MoveSpeed);
+    public float CriticalChance => _statCalculator.GetFinalSat(_criticalChance, EQUIP_STAT.CriticalChance);
     public float CriticalDamageMultiplier => _criticalDamageMultiplier;
-    public float EvasionChance => _statCalculator.GetFinalSat(_evasionChance, EquipmentBase.STAT.EvasionChance);
-    public float ExpGainRate => _statCalculator.GetFinalSat(_expGainRate, RelicBase.STAT.ExpGainRate);
+    public float EvasionChance => _statCalculator.GetFinalSat(_evasionChance, EQUIP_STAT.EvasionChance);
+    public float ExpGainRate => _statCalculator.GetFinalSat(_expGainRate, RELIC_STAT.ExpGainRate);
     public float PickupRange => _pickupRange;
     public Vector2 MoveDir => _stateMachine.MoveDir;
     public Vector2 AttackDir { get; private set; }
@@ -81,10 +81,7 @@ public class PlayerBase : MonoBehaviour, IDamageable, ISkillable
         _currentHp = _maxhp;
         _hitSystem = new PlayerHit(this);
         _levelSystem = new PlayerLevelSystem(this);
-        _myEnhancement = new PlayerEnhancementSlots(
-            PlayerDataTransfer.Equipments, 
-            PlayerDataTransfer.Relics
-            );
+        _myEnhancement = ItemManager.Instance.Loadout;
         _statCalculator = new PlayerStatCalculator(_myEnhancement);
 
         _stateMachine = new PlayerStateMachine(this);
@@ -138,7 +135,9 @@ public class PlayerBase : MonoBehaviour, IDamageable, ISkillable
         Vector2 mousePos = Camera.main.ScreenToWorldPoint(ctx.ReadValue<Vector2>());
         AttackDir = (mousePos - (Vector2)transform.position).normalized;
     }
-    
+
+
+    public void OnHeal(float heal) => _currentHp += heal;
 
     // 피격시, 발동되는 메서드
     public void TakeDamage(float damage)

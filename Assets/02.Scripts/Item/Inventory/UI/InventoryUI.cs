@@ -75,7 +75,7 @@ public class InventoryUI : MonoBehaviour
                 break;
 
             case UI_GROUP.Spendable:
-                SetInventory(UI_GROUP.Spendable, _inventory.SpendableInventory);
+                SetInventory(UI_GROUP.Spendable, _inventory.ConsumeInventory);
                 break;
         }
     }

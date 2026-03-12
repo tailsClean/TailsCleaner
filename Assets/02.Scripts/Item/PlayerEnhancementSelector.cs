@@ -7,12 +7,12 @@ public class PlayerEnhancementSelector : MonoBehaviour
     [SerializeField] private EnhancementEventChannelSO _onEquipEnhancement;
 
     [field: SerializeField]
-    public Dictionary<EquipmentBase.PARTS, EquipmentBase> MyEquipment { get; private set; } = new();
+    public Dictionary<EQUIP_PARTS, EquipmentBase> MyEquipment { get; private set; } = new();
     
     [field: SerializeField]
     public List<RelicBase> MyRelic { get; private set; } = new(3);
 
-    public event Action<EquipmentBase.PARTS> OnSetEquipment;
+    public event Action<EQUIP_PARTS> OnSetEquipment;
     public event Action OnSetRelic;
 
     private void OnEnable()
@@ -28,15 +28,15 @@ public class PlayerEnhancementSelector : MonoBehaviour
     //
     private void Update()
     {
-        PlayerDataTransfer.SetEquipments(MyEquipment);
-        PlayerDataTransfer.SetRelics(MyRelic);
+        //PlayerDataTransfer.SetEquipments(MyEquipment);
+        //PlayerDataTransfer.SetRelics(MyRelic);
         CompactRelicSlot();
         OnSetRelic?.Invoke();
     }
     //
 
     // 장비를 교체하는 메서드
-    public void SetEnhancement(PlayerEnhancement enhancement)
+    public void SetEnhancement(IEnhancement enhancement)
     {
         switch(enhancement)
         {

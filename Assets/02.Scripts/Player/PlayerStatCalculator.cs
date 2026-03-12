@@ -6,21 +6,21 @@ using UnityEngine;
 /// </summary>
 public class PlayerStatCalculator
 {
-    private PlayerEnhancementSlots _enhanceInventory;
+    private PlayerLoadout _enhanceInventory;
 
-    public PlayerStatCalculator(PlayerEnhancementSlots enhanceInventory)
+    public PlayerStatCalculator(PlayerLoadout enhanceInventory)
     {
         _enhanceInventory = enhanceInventory;
     }
 
     // 장비로 인한 증가값 계산
-    public float GetFinalSat(float initialStat, EquipmentBase.STAT increaseStat)
+    public float GetFinalSat(float initialStat, EQUIP_STAT increaseStat)
     {
         return initialStat + _enhanceInventory.GetIncreaseStat(increaseStat);
     }
 
     // 유물로 인한 증가값 계산
-    public float GetFinalSat(float initialStat, RelicBase.STAT increaseStat)
+    public float GetFinalSat(float initialStat, RELIC_STAT increaseStat)
     {
         float increaseRate = 1 + _enhanceInventory.GetIncreaseStat(increaseStat);
         return initialStat * increaseRate;
