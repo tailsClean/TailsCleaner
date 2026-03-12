@@ -113,11 +113,12 @@ public class WaterBombVortexArea : PoolObject
                 // 폭발은 예술이다
                 if(_bulletClear == true)
                 {
-                    // 풀반환으로 교체
-                    Destroy(projectile.gameObject);
+                    // 반환
+                    if (projectile is PoolObject)
+                        projectile.ReturnToPoolAfter(0);
 
                     // 플레이어 방어막 획득
-                    // SkillManager.Instance.Player.AddShield(1);
+                    SkillManager.Instance.SkillStatHandler.TryAddShield(1);
                     Debug.Log("[WaterBombVortex] 폭발은 예술이다 - 투사체 삭제");
                     // 해시셋 추가는 스킵
                     return;
