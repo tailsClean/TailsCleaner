@@ -7,7 +7,7 @@ public class SkillStatHandler : MonoBehaviour
 {
     // 플레이어 참조
     private PlayerBase _player;
-    private PlayerStatCalculator _statCalculator;
+    private ISkillStat _playerSkillStat;
 
     // 영구 (패시브, 장난감)
     private PlayerStatFlat _permanentFlat = new();
@@ -21,10 +21,6 @@ public class SkillStatHandler : MonoBehaviour
     private PlayerStatFlat _totalFlat = new();
     private PlayerStatMul _totalMulti = new();
 
-    // 방어막
-    private int _currentShield = 0;
-    private int _maxShield = 1;   // NimbleBlockModifier 획득 시 3
-
     // 적 강화 (저주?)
     // public EnemyBuffData EnemyBuff { get; } = new();
 
@@ -32,7 +28,7 @@ public class SkillStatHandler : MonoBehaviour
     private void Awake()
     {
         _player = GetComponent<PlayerBase>();
-        //_statCalculator = _player.StatCalculator;
+        _playerSkillStat = _player.GetComponent<ISkillStat>();
     }
 
 
@@ -115,7 +111,7 @@ public class SkillStatHandler : MonoBehaviour
         float overflow = (_player.Hp + amount) - maxHp;     // 초과 회복
 
         // 회복
-        // _player.Heal(amount);
+        //_player.Heal(amount);
 
         // 초과 회복에 비닐옷 있으면 방어막
         if (overflow > 0f && HasPassive<CleanerVinylSuitModifier>())
@@ -130,26 +126,13 @@ public class SkillStatHandler : MonoBehaviour
     // 최대 방어막 설정
     public void SetMaxShield(int max)
     {
-        // 최대 방어막 갱신
-        _maxShield = max;
-        // 현재 방어막이 최대 방어막 초과하지 않게 제한
-        _currentShield = Mathf.Clamp(_currentShield, 0, _maxShield);
-        // 플레이어에게 적용
-        //_player.SetShield(_currentShield, _maxShield);
+        _playerSkillStat.SetMaxShield(max);
     }
 
     // 방어막 추가
     public void TryAddShield(int count)
     {
-        // 현재 방어막
-        int prev = _currentShield;
-
-        // 최대 방어막 초과하지 않게
-        _currentShield = Mathf.Min(_currentShield + count, _maxShield);
-
-        // 방어막이 달라지면 갱신
-        //if (_currentShield != prev)
-        //    _player.SetShield(_currentShield, _maxShield);
+        _playerSkillStat.AddShield(count);
     }
 
     // 탄환 제거 시 호출
@@ -159,17 +142,6 @@ public class SkillStatHandler : MonoBehaviour
         if (HasPassive<NimbleBlockModifier>())
             TryAddShield(1);
     }
-
-    // 피해 받을 시 방어막 감소
-    // true 반환 시 피해 무효화
-    public bool ConsumeShield()
-    {
-        if (_currentShield <= 0) return false;
-        _currentShield--;
-        //_player.SetShield(_currentShield, _maxShield);
-        return true;
-    }
-
 
     // 지속 + 런타임 합산해서 StatCalculator 주입
     // 버퍼 재사용
@@ -188,21 +160,7 @@ public class SkillStatHandler : MonoBehaviour
         foreach (var multi in _runtimeMuls.Values) _totalMulti.Multiply(multi);
 
         // 스킬 스탯 주입
-        // _statCalculator.SetSkillStat(_totalFlat, _totalMulti);
-
-        // PlayerStatCalculator 내부에 아래처럼 만들어두고 사용하면 될듯?
-        //
-        // private PlayerStatFlat _skillFlat = new();
-        // private PlayerStatMul _skillMulti = new();
-        //
-        // public void SetSkillStat(PlayerStatFlat flat, PlayerStatMul multi)
-        // {
-        //     _skillFlat.CopyFrom(flat);
-        //     _skillMul.CopyFrom(multi);
-        // }
-        //
-        // _skillFlat 는 고정 수치 기본 0f
-        // _skillMulti는 배율 수치 기본 1f
+        _playerSkillStat.SetSkillStat(_totalFlat, _totalMulti);
     }
 
 
