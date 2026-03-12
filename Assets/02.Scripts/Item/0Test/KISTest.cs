@@ -49,13 +49,6 @@ public class KISTest : MonoBehaviour
         craftingSystem.SetCraftSlot(inventory.GetCrafting(3000, EQUIP_GRADE.Fresh));
     }
 
-    [ContextMenu("합성 장비 삭제")]
-    public void Remove()
-    {
-        //craftingSystem.RemoveEquipment(2000);
-        //craftingSystem.RemoveEquipment(3000);
-    }
-
     [ContextMenu("장비 재세팅")]
     public void ReSetSlot()
     {

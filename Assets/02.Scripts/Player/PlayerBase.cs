@@ -135,7 +135,9 @@ public class PlayerBase : MonoBehaviour, IDamageable, ISkillable
         Vector2 mousePos = Camera.main.ScreenToWorldPoint(ctx.ReadValue<Vector2>());
         AttackDir = (mousePos - (Vector2)transform.position).normalized;
     }
-    
+
+
+    public void OnHeal(float heal) => _currentHp += heal;
 
     // 피격시, 발동되는 메서드
     public void TakeDamage(float damage)
