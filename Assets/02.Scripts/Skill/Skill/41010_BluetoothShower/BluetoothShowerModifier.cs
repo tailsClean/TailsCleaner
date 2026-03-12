@@ -24,7 +24,7 @@ public class BluetoothShowerModifierData
 
     // 방수코팅
     public bool DefenseOnActive = false;
-    public int DefenseBonus = 0;
+    public float DefenseBonus = 0f;
 
     // 키친건!
     public bool AlwaysFire = false;
@@ -105,7 +105,7 @@ public class BluetoothKnockbackModifier : ActiveModifier<BluetoothShowerSkill>
 public class BluetoothDefenseModifier : ActiveModifier<BluetoothShowerSkill>
 {
     [Header("방어력 증가량")]
-    public int DefenseBonus = 1;
+    public float DefenseBonus = 1f;
 
     public override void ApplyModifier(BluetoothShowerSkill skill, ActiveUpgradeData upgradeData)
     {

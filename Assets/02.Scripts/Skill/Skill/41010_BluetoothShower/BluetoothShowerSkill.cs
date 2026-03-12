@@ -3,6 +3,10 @@ using UnityEngine;
 
 public class BluetoothShowerSkill : ActiveSkill<BluetoothShowerProjectile, BluetoothShowerModifierData>
 {
+    // 버프 키
+    private const string BUFF_KEY_WATERPROOF = "WaterProof";    // 방수코팅
+    private const string BUFF_KEY_COLDWATER = "ColdWater";      // 냉수마찰
+
     [Header("투사체 간격")]
     [SerializeField] private float _projectileSpacing = 0.5f;
 
@@ -21,7 +25,13 @@ public class BluetoothShowerSkill : ActiveSkill<BluetoothShowerProjectile, Bluet
 
     // 예열 완료 데이터
     private bool _lastKnockbackActive = false;
+    // 냉수마찰 데이터
+    private bool _lastColdWaterActive = false;
 
+    private readonly PlayerStatFlat _waterproofFlat = new();    // 방수코팅
+    private readonly PlayerStatFlat _coldWaterFlat = new();       // 냉수마찰
+    private float _lastDefenseBonus;
+    private float _lastSpeedBoostAmount;
 
 
     protected override void OnActive(int index, int totalCount) { } // 안씀
@@ -47,15 +57,7 @@ public class BluetoothShowerSkill : ActiveSkill<BluetoothShowerProjectile, Bluet
             // 시전 시작 시 castStartTime 갱신
             _castStartTime = Time.time;
 
-            // 방수코팅 (Todo)
-            if (_modifierData.DefenseOnActive == true)
-            {
-                //Debug.Log($"[BluetoothShower] 방수코팅 ON - 방어력 + {_modifierData.DefenseBonus}");
-            }
-
-            // 온수샤워 코루틴 시작
-            if (_modifierData.HealAfterDelay  == true && _healCoroutine == null)
-                _healCoroutine = StartCoroutine(HealCoroutine());
+            OnCastStart();
         }
         // 시전 종료
         else if (isActive == false && wasActive == true)
@@ -63,31 +65,13 @@ public class BluetoothShowerSkill : ActiveSkill<BluetoothShowerProjectile, Bluet
             // 비활성화
             _castStartTime = -1f;
 
-            // 방수코팅 해제
-            if (_modifierData.DefenseOnActive)
-            {
-                //Debug.Log("[BluetoothShower] 방수코팅 OFF");
-            }
-
-            // 온수샤워 코루틴 종료
-            StopHealCoroutine();
+            OnCastEnd();
         }
 
-        // 수압 최대로
-        // 매 프레임 upgradeStat 동기화
-        if (_modifierData.RapidFire)
-            UpdateRapidFire();
-
-        // 냉수마찰 매 프레임 처리
-        if (_modifierData.SpeedBoostOnStart)
-        {
-            bool speedOn = IsDuration(_modifierData.SpeedBoostDuration);
-            // player.SetSpeedBoost(speedOn ? _modifierData.SpeedBoostAmount : 0f);
-        }
-
-        // 예열완료 매 프레임 갱신
-        if (_modifierData.KnockbackAfterDelay)
-            UpdateKnockback();
+        // 매 프레임 갱신
+        if (_modifierData.RapidFire) UpdateRapidFire();             // 수압 최대로
+        if (_modifierData.SpeedBoostOnStart) UpdateColdWater();     // 냉수마찰
+        if (_modifierData.KnockbackAfterDelay) UpdateKnockback();   // 예열완료
 
         base.Update();
     }
@@ -102,6 +86,54 @@ public class BluetoothShowerSkill : ActiveSkill<BluetoothShowerProjectile, Bluet
         if (_modifierData.AlwaysFire == true) return true;
         return base.CanFire();
     }
+
+    // 시전 시작 시
+    private void OnCastStart()
+    {
+        // 방수코팅
+        if (_modifierData.DefenseOnActive == true)
+        {
+            // 값 변했으면
+            if (_modifierData.DefenseBonus != _lastDefenseBonus)
+            {
+                // 초기화 후 할당
+                _waterproofFlat.Reset();
+                _waterproofFlat.DefensePower = _modifierData.DefenseBonus;
+                _lastDefenseBonus = _modifierData.DefenseBonus;
+            }
+            // 런타임 고정 스탯에 추가
+            SkillStatHandler.AddRuntimeFlat(BUFF_KEY_WATERPROOF, _waterproofFlat);
+            Debug.Log($"[BluetoothShower] 방수코팅 ON - 방어력 + {_modifierData.DefenseBonus}");
+        }
+
+        // 온수샤워 코루틴 시작
+        if (_modifierData.HealAfterDelay == true && _healCoroutine == null)
+            _healCoroutine = StartCoroutine(HealCoroutine());
+    }
+
+    // 시전 종료 시
+    private void OnCastEnd()
+    {
+        // 방수코팅 해제
+        if (_modifierData.DefenseOnActive)
+        {
+            SkillStatHandler.RemoveRuntime(BUFF_KEY_WATERPROOF);
+            Debug.Log($"[BluetoothShower] 방수코팅 OFF - 방어력 - {_modifierData.DefenseBonus}");
+        }
+        // 냉수마찰 해제
+        if (_modifierData.SpeedBoostOnStart)
+        {
+            SkillStatHandler.RemoveRuntime(BUFF_KEY_COLDWATER);
+            Debug.Log($"[BluetoothShower] 냉수마찰 OFF - 이동속도 - {_modifierData.SpeedBoostAmount}");
+        }
+
+        // 온수샤워 코루틴 종료
+        StopHealCoroutine();
+    }
+
+
+
+
 
 
     // 수압 최대로 체크
@@ -162,8 +194,9 @@ public class BluetoothShowerSkill : ActiveSkill<BluetoothShowerProjectile, Bluet
         // 켜진동안 계속
         while (true)
         {
-            // player.Heal(player.MaxHp * _modifierData.HealRatio);
-            //Debug.Log($"[BluetoothShower] 온수샤워 - 체력 {_modifierData.HealRatio * 100f}% 회복");
+            // 최대 체력 비율 회복
+            SkillStatHandler.HealByRatio(_modifierData.HealRatio);
+            Debug.Log($"[BluetoothShower] 온수샤워 - 체력 {_modifierData.HealRatio * 100f}% 회복");
 
             // 회복 텀 대기
             yield return _healInterval;
@@ -176,6 +209,38 @@ public class BluetoothShowerSkill : ActiveSkill<BluetoothShowerProjectile, Bluet
         if (_healCoroutine == null) return;
         StopCoroutine(_healCoroutine);
         _healCoroutine = null;
+    }
+
+    // 냉수마찰 체크
+    private void UpdateColdWater()
+    {
+        // 활성화 상태 (시전 시작 시간으로 부터 SpeedBoostDuration 초 안지났는지 체크)
+        bool isActive = IsDuration(_modifierData.SpeedBoostDuration);
+
+        if (isActive == _lastColdWaterActive) return;
+
+        // 상태 갱신
+        _lastColdWaterActive = isActive;
+
+        // 활성화
+        if (isActive)
+        {
+            // 이동속도 갱신
+            if (_modifierData.SpeedBoostAmount != _lastSpeedBoostAmount)
+            {
+                _coldWaterFlat.Reset();
+                _coldWaterFlat.MoveSpeed = _modifierData.SpeedBoostAmount;
+                _lastSpeedBoostAmount = _modifierData.SpeedBoostAmount;
+            }
+            // 런타임 고정 수치 추가
+            SkillStatHandler.AddRuntimeFlat(BUFF_KEY_COLDWATER, _coldWaterFlat);
+        }
+        // 비활성화
+        else
+        {
+            // 런타임 고정 수치 제거
+            SkillStatHandler.RemoveRuntime(BUFF_KEY_COLDWATER);
+        }
     }
 
 
@@ -246,25 +311,12 @@ public class BluetoothShowerSkill : ActiveSkill<BluetoothShowerProjectile, Bluet
             _healInterval = new WaitForSeconds(_modifierData.HealInterval);
         }
 
-        // 키친 건
-        if (_modifierData.AlwaysFire)
+        // 키친 건 습득 후 비활성화 상태면
+        if (_modifierData.AlwaysFire && _castStartTime < 0f)
         {
-            // 비활성화 상태면
-            if (_castStartTime < 0f)
-            {
-                // 시간 갱신하고
-                _castStartTime = Time.time;
-
-                // 방수코팅 켜기
-                if (_modifierData.DefenseOnActive)
-                {
-                    //Debug.Log($"[BluetoothShower] 방수코팅 ON (키친건)");
-                }
-
-                // 온수샤워 켜기
-                if (_modifierData.HealAfterDelay && _healCoroutine == null)
-                    _healCoroutine = StartCoroutine(HealCoroutine());
-            }
+            // 시전 시작
+            _castStartTime = Time.time;
+            OnCastStart();
         }
     }
 

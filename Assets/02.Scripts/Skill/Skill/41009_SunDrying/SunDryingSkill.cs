@@ -1,11 +1,18 @@
 ﻿using UnityEngine;
 
 public class SunDryingSkill : ActiveSkill<SunDryingArea, SunDryingModifierData>
-{ 
+{
+    private const string BUFF_KEY_BLANKEY = "BlanketWrap";
+
+
     // 현재 활성화된 일광건조 수 (0 이면 꺼진 상태)
     private int _activeAreaCount = 0;
 
     public bool IsAreaActive => _activeAreaCount > 0;
+
+    // 이불 두르기 스탯
+    private readonly PlayerStatFlat _blanketFlat = new();
+    private int _lastDefenseBonus;
 
 
     protected override void OnActive(int index, int totalCount)
@@ -45,6 +52,7 @@ public class SunDryingSkill : ActiveSkill<SunDryingArea, SunDryingModifierData>
         // 시전 시 체력 5% 회복
         if (_modifierData.HealOnActivate)
         {
+            SkillStatHandler.HealByRatio(_modifierData.HealRatio);
             Debug.Log("[SunDrying] 기상! - 체력 회복");
         }
 
@@ -59,6 +67,7 @@ public class SunDryingSkill : ActiveSkill<SunDryingArea, SunDryingModifierData>
         // 켜지면 방어력 버프 해제
         if (_modifierData.DefenseOnInactive)
         {
+            SkillStatHandler.RemoveRuntime(BUFF_KEY_BLANKEY);
             Debug.Log("[SunDrying] 이불 두르기 - 방어력 버프 해제");
         }
 
@@ -77,6 +86,7 @@ public class SunDryingSkill : ActiveSkill<SunDryingArea, SunDryingModifierData>
         // 꺼질 때 방어막 생성
         if (_modifierData.ShieldOnDeactivate)
         {
+            SkillStatHandler.TryAddShield(1);
             Debug.Log("[SunDrying] 두꺼운 이불 - 방어막 생성");
         }
 
@@ -84,6 +94,15 @@ public class SunDryingSkill : ActiveSkill<SunDryingArea, SunDryingModifierData>
         // 꺼진 동안 방어력 증가
         if (_modifierData.DefenseOnInactive)
         {
+            // DefenseBonus 값 바뀐 경우에만
+            if (_modifierData.DefenseBonus != _lastDefenseBonus)
+            {
+                // 리셋 후 할당, 저장
+                _blanketFlat.Reset();
+                _blanketFlat.DefensePower = _modifierData.DefenseBonus;
+                _lastDefenseBonus = _modifierData.DefenseBonus;
+            }
+            SkillStatHandler.AddRuntimeFlat(BUFF_KEY_BLANKEY, _blanketFlat);
             Debug.Log("[SunDrying] 이불 두르기 - 방어력 증가");
         }
 
