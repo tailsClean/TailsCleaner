@@ -9,8 +9,8 @@ using UnityEngine.UI;
 public class CraftingSystemUI : MonoBehaviour
 {
     private CraftingSystem _craftingSystem;
+    private PlayerLoadout _loadout;
     private Inventory _inventory;
-    private Currency _currency;
 
 
     [Header("선택 합성 장비")]
@@ -18,7 +18,7 @@ public class CraftingSystemUI : MonoBehaviour
     [SerializeField] private List<UISlot> _resourceCostSlots;
 
     [Header("장비 선택리스트")]
-    //[SerializeField] private List<UISlot> _loadoutSlots;
+    [SerializeField] private List<UISlot> _loadoutSlots;
     [SerializeField] private List<UISlot> _resourceEquipSlots;
 
 
@@ -31,7 +31,7 @@ public class CraftingSystemUI : MonoBehaviour
     private void Start()
     {
         _inventory = _craftingSystem.UsingInventory;
-        _currency = _craftingSystem.UsingCurrency;
+        _loadout = ItemManager.Instance.Loadout;
     }
 
     private void Update()
@@ -39,6 +39,7 @@ public class CraftingSystemUI : MonoBehaviour
         SetMainEquipUI();
         SetResourceEquipsUI();
 
+        SetLoadoutUI();
         SetInventoryEquipUI();
     }
 
@@ -92,6 +93,22 @@ public class CraftingSystemUI : MonoBehaviour
 
         return _craftingSystem.ResourceEquips == null;
     }
+    #endregion
+
+    #region 착용 장비창
+
+    private void SetLoadoutUI()
+    {
+        int i = 0;
+        foreach(var equip in _loadout.MyEquipments.Values)
+        {
+            var craftingInfo = new CraftingInfo(equip);
+            _loadoutSlots[i].Init();
+            _loadoutSlots[i].SetSlot(craftingInfo.ItemID, craftingInfo.Grad.ToString());
+            _loadoutSlots[i++].AddListener(() => _craftingSystem.SetCraftSlot(craftingInfo));
+        }
+    }
+
     #endregion
 
     #region 재료 장비창

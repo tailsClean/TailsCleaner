@@ -6,7 +6,6 @@ using static EquipmentSO;
 public partial class CraftingSystem : MonoBehaviour
 {
     [SerializeField] private Inventory _inventory;
-    [SerializeField] private Currency _currency;        // 필요 금화를 읽어올 재화 가방
 
 
     private PlayerLoadout _loadout;                     // 장착 장비 확인을 위함
@@ -14,10 +13,7 @@ public partial class CraftingSystem : MonoBehaviour
     private CraftingInfo[] _resourceCraftSlots;
 
 
-
-    public PlayerLoadout Loadout => _loadout;
     public Inventory UsingInventory => _inventory;
-    public Currency UsingCurrency => _currency;
     public CraftingInfo MainEquip => _mainCraftSlot;
     public CraftingInfo[] ResourceEquips => _resourceCraftSlots;
 
@@ -40,6 +36,9 @@ public partial class CraftingSystem : MonoBehaviour
             return;
         }
 
+        if(equipment.IsLoadout)
+        { Debug.Log("<color=yellow>착용장비는 재료로 사용할 수 없습니다.</color>"); return; }
+
         SetResourceCraftSlots(equipment);
     }
 
@@ -59,7 +58,7 @@ public partial class CraftingSystem : MonoBehaviour
     private void SetResourceCraftSlots(CraftingInfo resourceEquip)
     {
         if (_mainCraftSlot == null || _resourceCraftSlots == null)
-        { Debug.LogWarning("강화 장비부터 세팅하세요."); return; }
+        { Debug.LogWarning("합성 장비부터 세팅하세요."); return; }
 
         if(!CheckGrade(resourceEquip))
         { Debug.Log("<color=yellow>재료 장비의 등급이 적합하지 않습니다.</color>");  return; }
