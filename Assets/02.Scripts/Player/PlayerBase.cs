@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.InputSystem;
 
-public class PlayerBase : MonoBehaviour, IDamageable, ISkillable
+public class PlayerBase : MonoBehaviour, IDamageable, ISkillable, ISkillStat
 {
     [SerializeField] public float _maxhp = 15;
     [SerializeField] public float _attackPower = 10;
@@ -37,20 +37,22 @@ public class PlayerBase : MonoBehaviour, IDamageable, ISkillable
     [SerializeField] private float _goldGainRate = 1;
     
 
-    private float _currentHp;
-    private PlayerHit _hitSystem;
+    private PlayerHpSystem _hpSystem;
     private PlayerLevelSystem _levelSystem;
     private PlayerLoadout _myEnhancement;
     private PlayerStatCalculator _statCalculator;
     private PlayerStateMachine _stateMachine;
 
 
-    public float Hp => Mathf.Max(_currentHp, 0);
+    public float Hp => _hpSystem.CurrentHp;
     public float ItemDropRate => _statCalculator.GetFinalSat(_itemDropRate, RELIC_STAT.ItemDropRate);
     public float GoldGainRate => _statCalculator.GetFinalSat(_goldGainRate, RELIC_STAT.GoldGainRate);
 
 
     // 스킬 공유 데이터 (인트 수정 필요)
+    public float MaxHp => _hpSystem.MaxHp;
+    public int MaxShield => _hpSystem.MaxSield;
+    public int CurrentShield => _hpSystem.CurrentSield;
     public float AttackPower => _statCalculator.GetFinalSat(_attackPower, EQUIP_STAT.AttackPower);
     public float DefensePower => _statCalculator.GetFinalSat(_defensePower, EQUIP_STAT.DefensePower);
     public float MoveSpeed => _statCalculator.GetFinalSat(_moveSpeed, EQUIP_STAT.MoveSpeed);
@@ -78,8 +80,7 @@ public class PlayerBase : MonoBehaviour, IDamageable, ISkillable
             TestLevelStat = GetComponent<LevelupTestStat>();
         //
 
-        _currentHp = _maxhp;
-        _hitSystem = new PlayerHit(this);
+        _hpSystem = new PlayerHpSystem(this);
         _levelSystem = new PlayerLevelSystem(this);
         _myEnhancement = ItemManager.Instance.Loadout;
         _statCalculator = new PlayerStatCalculator(_myEnhancement);
@@ -137,20 +138,14 @@ public class PlayerBase : MonoBehaviour, IDamageable, ISkillable
     }
 
 
-    public void OnHeal(float heal) => _currentHp += heal;
-
+    public void Heal(float amount) => _hpSystem.OnHeal(amount);
     // 피격시, 발동되는 메서드
     public void TakeDamage(float damage)
     {
-        float hp = _hitSystem.OnHit(_currentHp, damage);
+        _hpSystem.OnHit(damage);
+        _onHit.OnStartEvent(Hp);
 
-        if(_currentHp != hp)
-        {
-            _currentHp = hp;
-            _onHit.OnStartEvent(Hp);
-        }
-
-        if (Hp <= 0)
+        if (_hpSystem.IsDead)
             OnDead();
     }
     private void OnDead()
@@ -158,6 +153,18 @@ public class PlayerBase : MonoBehaviour, IDamageable, ISkillable
         _onDead.OnStartEvent();
         Destroy(gameObject);
     }
+
+    // 최대 실드량 갱신
+    public void SetMaxShield(int maxShield) => _hpSystem.SetMaxShield(maxShield);
+    // 현재 실드량 추가
+    public void AddShield(int count)
+    {
+        if(count < 0)
+        { Debug.LogWarning("실드 추가량이 음수입니다."); return; }
+
+        _hpSystem.AddShield(count);
+    }
+
 
 
     // 인게임 경험치 획득 로직
@@ -182,6 +189,13 @@ public class PlayerBase : MonoBehaviour, IDamageable, ISkillable
 
     // 주위 아이템(경험치) 끌어모으는 메서드
     private void OnItemPickup(IPickable item) => _itemPickupSystem.ItemPickup(transform, item);
+
+
+    // 스킬 스탯값 세팅
+    public void SetSkillStat(PlayerStatFlat flat, PlayerStatMul multi) =>
+        _statCalculator.SetSkillStat(flat, multi);
+
+
 
     //
     [ContextMenu("스텟출력")]

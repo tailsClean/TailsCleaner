@@ -21,12 +21,6 @@ public interface ISkillStat
     /// </summary>
     public void SetMaxShield(int maxShield);
 
-    /// <summary>
-    /// 방어막 감소.
-    /// 피격 시 호출.
-    /// 방어막 없을 시 체력 감소.
-    /// </summary>
-    public void ConsumeShield();
 
     /// <summary>
     /// 스킬 스탯 갱신.
