@@ -42,15 +42,26 @@ public class SpinningToyProjectile : SkillProjectile<SpinningToyModifierData>
 
     protected override bool OnCustomInit()
     {
+        // 재계산 여부
+        bool recalcul = false;
+
+        // 팽이 장난감이고 추가 넉백 있으면
+        if (_toyType == SpinningToySkill.TOY_TYPE.Top && _modifierData.TopKnockback > 0f)
+        {
+            // 업그레이드 스탯에 넉백 추가
+            _runtimeUpgradeStat.Knockback += _modifierData.TopKnockback;
+            recalcul = true;
+        }
+
         // 작은 오리일 경우
         if (_toyType == SpinningToySkill.TOY_TYPE.Duck_S)
         {
             // 기본 크기 줄임
             _runtimeBaseStat.Size *= _modifierData.SizeMultiplier;
-            return true;
+            recalcul = true;
         }
 
-        return false;
+        return recalcul;
     }
 
     protected override void OnBeforeStartSequence()

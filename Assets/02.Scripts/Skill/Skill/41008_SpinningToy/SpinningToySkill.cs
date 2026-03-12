@@ -193,4 +193,20 @@ public class SpinningToySkill : ActiveSkill<SpinningToyProjectile, SpinningToyMo
 
         return null;
     }
+
+
+    // 플레이어 스탯 적용
+    public override void ModifyPlayerBonus(PlayerStatFlat flat, PlayerStatMul multi)
+    {
+        foreach (var (type, count) in _modifierData.AddedToys)
+        {
+            switch (type)
+            {
+                case TOY_TYPE.Train:  flat.MoveSpeed   += _modifierData.TrainSpeed;     break;
+                case TOY_TYPE.Moon:   flat.MaxHp       += _modifierData.MoonMaxHp;      break;
+                case TOY_TYPE.Shark:  flat.AttackPower += _modifierData.SharkDamage;    break;
+                case TOY_TYPE.Pirate: flat.ExpGainRate += _modifierData.PirateExpGain;  break;
+            }
+        }
+    }
 }
