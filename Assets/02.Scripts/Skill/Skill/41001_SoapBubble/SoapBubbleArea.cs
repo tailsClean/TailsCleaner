@@ -1,9 +1,10 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 
 public class SoapBubbleArea : SkillArea<SoapBubbleModifierData>
 {
+    private const string BUFF_KEY_BUBBLEBUBBLE = "BubbleBubble";    // 버블버블
+
     [Header("거품 펑 오브젝트")]
     [SerializeField] SkillAnimator _burstAnimator;
 
@@ -11,6 +12,7 @@ public class SoapBubbleArea : SkillArea<SoapBubbleModifierData>
     private readonly Dictionary<MonsterBase, float> _monsterEnterTimes = new();
 
 
+    private SoapBubbleSkill _soapBubbleSkill;   // 스킬
     private MonsterBase _trackTarget = null;    // 현재 추적 대상
     private float _searchTimer = 0f;            // 탐색 타이머
 
@@ -21,6 +23,8 @@ public class SoapBubbleArea : SkillArea<SoapBubbleModifierData>
 
     public override void Init(ActiveSkill owner, SoapBubbleModifierData modifierData, Vector2 dir = default)
     {
+        _soapBubbleSkill = owner as SoapBubbleSkill;
+
         _monsterEnterTimes.Clear();
         _trackTarget = null;
 
@@ -156,15 +160,18 @@ public class SoapBubbleArea : SkillArea<SoapBubbleModifierData>
         }
     }
 
-
+    // 버블버블 방어력 적용
     private void ApplyPlayerDefense()
     {
-        Debug.Log($"[SoapBubble] 버블버블 방어력 버프: + {_modifierData.PlayerDefenseBonus}");
+        SkillManager.Instance.SkillStatHandler.AddRuntimeFlat(BUFF_KEY_BUBBLEBUBBLE, _soapBubbleSkill.BubbleBonus);
+        Debug.Log($"[SoapBubble] 버블버블 적용. 방어력 + {_modifierData.PlayerDefenseBonus}");
     }
 
+    // 버블버블 방어력 제거
     private void RemovePlayerDefense()
     {
-        Debug.Log($"[SoapBubble] 버블버블 방어력 버프 해제");
+        SkillManager.Instance.SkillStatHandler.RemoveRuntime(BUFF_KEY_BUBBLEBUBBLE);
+        Debug.Log($"[SoapBubble] 버블버블 해제. 방어력 - {_modifierData.PlayerDefenseBonus}");
     }
 
 

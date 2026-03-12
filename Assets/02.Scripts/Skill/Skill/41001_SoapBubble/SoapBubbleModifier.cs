@@ -8,7 +8,7 @@ public class SoapBubbleModifierData
 
     // 플레이어 방어력
     public bool PlayerDefenseBoost = false;
-    public int PlayerDefenseBonus = 0;
+    public float PlayerDefenseBonus = 0f;
 
     // 적 슬로우 효과
     public bool SlowOnArea = false;
@@ -43,12 +43,12 @@ public class SoapBubbleTrackingModifier : ActiveModifier<SoapBubbleSkill>
 public class SoapBubblePlayerDefenseModifier : ActiveModifier<SoapBubbleSkill>
 {
     [Header("방어력 증가량")]
-    public int IncreasePlayerDefence = 5;
+    public float IncreasePlayerDefence = 1f;
 
     public override void ApplyModifier(SoapBubbleSkill skill, ActiveUpgradeData upgradeData)
     {
         skill._modifierData.PlayerDefenseBoost = true;
-        skill._modifierData.PlayerDefenseBonus += IncreasePlayerDefence;
+        skill._modifierData.PlayerDefenseBonus = IncreasePlayerDefence;
     }
 }
 
@@ -62,7 +62,7 @@ public class SoapBubbleSlowModifier : ActiveModifier<SoapBubbleSkill>
     public override void ApplyModifier(SoapBubbleSkill skill, ActiveUpgradeData upgradeData)
     {
         skill._modifierData.SlowOnArea = true;
-        skill._modifierData.SlowAmount += SlowAmount;
+        skill._modifierData.SlowAmount = SlowAmount;
     }
 }
 
@@ -77,8 +77,8 @@ public class SoapBubbleStunModifier : ActiveModifier<SoapBubbleSkill>
     public override void ApplyModifier(SoapBubbleSkill skill, ActiveUpgradeData upgradeData)
     {
         skill._modifierData.StunOnArea = true;
-        skill._modifierData.StunRequiredTime += StunRequiredTime;
-        skill._modifierData.StunDuration += StunDuration;
+        skill._modifierData.StunRequiredTime = StunRequiredTime;
+        skill._modifierData.StunDuration = StunDuration;
     }
 }
 
@@ -91,6 +91,6 @@ public class SoapBubbleBurstModifier : ActiveModifier<SoapBubbleSkill>
     public override void ApplyModifier(SoapBubbleSkill skill, ActiveUpgradeData upgradeData)
     {
         skill._modifierData.BurstOnExpire = true;
-        skill._modifierData.BurstDamage += BurstDamage;
+        skill._modifierData.BurstDamage = BurstDamage;
     }
 }
