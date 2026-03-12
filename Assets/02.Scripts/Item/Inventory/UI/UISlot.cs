@@ -2,12 +2,10 @@
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
-using static UnityEngine.UI.Button;
 
 /// <summary>
 /// 수정 필요
 /// </summary>
-[RequireComponent(typeof(Button))]
 public class UISlot : MonoBehaviour
 {
     [SerializeField] private TextMeshProUGUI _amountText;
@@ -62,13 +60,20 @@ public class UISlot : MonoBehaviour
         }
     }
 
-    public void AddListener(Action action) =>_button.onClick.AddListener(() => action());
+    public void AddListener(Action action)
+    {
+        if (_button == null)
+        { Debug.LogWarning("UI슬롯에 버튼이 없어서 이벤트 등록X", this); return; }
 
+        _button.onClick.AddListener(() => action());
+    }
 
     public void Init()
     {
         _image.sprite = _baseSprite;
         _amountText.text = string.Empty;
-        _button.onClick.RemoveAllListeners();
+
+        if(_button != null)
+            _button.onClick.RemoveAllListeners();
     }
 }

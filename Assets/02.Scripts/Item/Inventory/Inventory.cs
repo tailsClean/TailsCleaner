@@ -11,7 +11,7 @@ public class Inventory : MonoBehaviour
 
     // Key: 아이템ID , Value: 소지갯수
     private Dictionary<int, int> _equipInventory;
-    private List<EquipState> _equipStatus;
+    private List<EquipStatus> _equipStatus;
     private Dictionary<int, int> _relicInventory;
     private List<RelicStatus> _relicStatus;
     private int _instanceID;
@@ -23,6 +23,8 @@ public class Inventory : MonoBehaviour
     public Dictionary<int, int> EquipInventory => _equipInventory;
     public Dictionary<int, int> RelicInventory => _relicInventory;
 
+
+    public List<EquipStatus> EquipStates => _equipStatus;
     public List<RelicStatus> RelicStatus => _relicStatus;
 
     public Dictionary<int, int> ReinforceResourceInventory => _reinforceResourceInventory;
@@ -45,6 +47,7 @@ public class Inventory : MonoBehaviour
     }
 
 
+    // 굳이 합성용을 뽑을 필요는 없을 듯
     public CraftingInfo GetCrafting(int id, EQUIP_GRADE grade)
     {
         foreach (var item in _equipStatus)
@@ -59,10 +62,10 @@ public class Inventory : MonoBehaviour
 
     public void GainEquipment(int id, EQUIP_GRADE grade)
     {
-        _equipStatus.Add(new EquipState(++_instanceID, id, grade));
+        _equipStatus.Add(new EquipStatus(++_instanceID, id, grade));
     }
 
-    public void SetEquipment(EquipState newEquip)
+    public void SetEquipment(EquipStatus newEquip)
     {
         for(int i = 0; i < _equipStatus.Count; i++)
         {
@@ -77,7 +80,7 @@ public class Inventory : MonoBehaviour
         _onChangeInventory.OnStartEvent();
     }
 
-    public void RemoveEquipment(EquipState equipment)
+    public void RemoveEquipment(EquipStatus equipment)
     {
         for(int i = 0; i < _equipStatus.Count; i++)
         {
@@ -304,14 +307,14 @@ public struct RelicStatus
     }
 }
 
-public struct EquipState
+public struct EquipStatus
 {
     public int InstanceID;
     public int UniqueID;
     public EQUIP_GRADE Grade;
     public EQUIP_PARTS Parts;
 
-    public EquipState(int instanceID, int id, EQUIP_GRADE grade)
+    public EquipStatus(int instanceID, int id, EQUIP_GRADE grade)
     {
         InstanceID = instanceID;
         UniqueID = id;
@@ -321,7 +324,7 @@ public struct EquipState
 
     public override bool Equals(object obj)
     {
-        if (obj is EquipState other)
+        if (obj is EquipStatus other)
         {
             return UniqueID == other.UniqueID &&
                    Grade == other.Grade;

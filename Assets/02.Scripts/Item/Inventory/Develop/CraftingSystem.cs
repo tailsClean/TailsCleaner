@@ -85,12 +85,15 @@ public partial class CraftingSystem : MonoBehaviour
     private bool CheckParts(CraftingInfo resourceEquip) => _mainCraftSlot.Parts == resourceEquip.Parts;
 
 
+    // 합성 시작
     public void OnStartCrafting()
     {
-        if (CheckMaxGrade())
+        // 최대 등급 확인
+        if (_mainCraftSlot.GradeData.IsMaxGrade)
         { Debug.Log("최대 등급의 장비입니다."); return; }
 
-        if(CheckCostCount())
+        // 필요 재료 갯수 확인
+        if (Array.Exists(_resourceCraftSlots, x => x == null))
         { Debug.Log("재료장비의 개수가 부족합니다."); return;}
 
 
@@ -102,7 +105,7 @@ public partial class CraftingSystem : MonoBehaviour
         }
         else
         {
-            var equipStatus = new EquipState(_mainCraftSlot.InstanceID, _mainCraftSlot.ItemID, _mainCraftSlot.Grad);
+            var equipStatus = new EquipStatus(_mainCraftSlot.InstanceID, _mainCraftSlot.ItemID, _mainCraftSlot.Grad);
             _inventory.SetEquipment(equipStatus);
         }
 
@@ -112,18 +115,42 @@ public partial class CraftingSystem : MonoBehaviour
         Debug.Log("등급 업그레이드 성공!");
     }
 
-    // 최대 등급 확인
-    private bool CheckMaxGrade() => _mainCraftSlot.GradeData.IsMaxGrade;
+    
+    // 합성 리스트에서 특정 장비 제거
+    public void RemoveMainEquip(CraftingInfo equip)
+    {
+        if(_mainCraftSlot != null && _mainCraftSlot.InstanceID == equip.InstanceID)
+        {
+            _mainCraftSlot = null;
+            _resourceCraftSlots = null;
+        }
+    }
 
-    // 필요 재료 갯수 확인
-    private bool CheckCostCount() => Array.Exists(_resourceCraftSlots, x => x == null);
+    public void RemoveResourceEquip(CraftingInfo equip)
+    {
+        if (_resourceCraftSlots == null)
+            return;
+
+        for (int i = _resourceCraftSlots.Length; i > 0; i--)
+        {
+            var slot = _resourceCraftSlots[i - 1];
+            if (slot != null && slot.InstanceID == equip.InstanceID)
+            {
+                _resourceCraftSlots[i - 1] = null;
+                return;
+            }
+        }
+
+        Debug.Log("지우려는 아이템이 합성 리스트에 없습니다.");
+    }
+
 
 
     private void ReleaseResource()
     {
         foreach(var slot in _resourceCraftSlots)
         {
-            var equipStatus = new EquipState(slot.InstanceID, slot.ItemID, slot.Grad);
+            var equipStatus = new EquipStatus(slot.InstanceID, slot.ItemID, slot.Grad);
             _inventory.RemoveEquipment(equipStatus);
         }
 
@@ -151,7 +178,7 @@ public class CraftingInfo
         Grad = grad;
     }
 
-    public CraftingInfo(EquipState inventoryEuipment)
+    public CraftingInfo(EquipStatus inventoryEuipment)
     {
         InstanceID = inventoryEuipment.InstanceID;
         ItemID = inventoryEuipment.UniqueID;
