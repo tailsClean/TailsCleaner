@@ -58,7 +58,7 @@ public abstract class ActiveSkill : MonoBehaviour
     [SerializeField] protected float _distance = 50f;           // 타겟 탐색 거리
 
 
-    protected SkillStatHandler SkillStatHandler => SkillManager.Instance.SkillPlayerStat;  // 플레이어 스킬 스탯
+    protected SkillStatHandler SkillStatHandler => SkillManager.Instance.SkillStatHandler;  // 플레이어 스킬 스탯
     protected Vector2 PlayerPos => SkillManager.Instance.CurrentPlayerPos;  // 현재 위치
     protected Vector2 AttackDir => GetAttackDir();  // 공격 방향
 

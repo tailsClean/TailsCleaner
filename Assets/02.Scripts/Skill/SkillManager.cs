@@ -31,7 +31,7 @@ public class SkillManager : MonoBehaviour
     public Rigidbody2D PlayerRigidbody { get; private set; }        // 플레이어 리지드바디
     public Vector2 CurrentPlayerPos => PlayerRigidbody.position;    // 플레이어 위치
     public TargetingSystem TargetingSystem { get; private set; }    // 타겟 시스템 (사용 안 할 예정)
-    public SkillStatHandler SkillPlayerStat { get; private set; }
+    public SkillStatHandler SkillStatHandler { get; private set; }
     public LayerMask MonsterLayer => _monsterLayer;
     
     
@@ -52,7 +52,7 @@ public class SkillManager : MonoBehaviour
         Instance = this;
         Player = GetComponent<PlayerBase>();
         PlayerRigidbody = GetComponent<Rigidbody2D>();
-        SkillPlayerStat = GetComponent<SkillStatHandler>();
+        SkillStatHandler = GetComponent<SkillStatHandler>();
         TargetingSystem = new TargetingSystem(Player.transform, _monsterLayer);
 
         // 필터 설정
@@ -231,7 +231,7 @@ public class SkillManager : MonoBehaviour
             skill.RecheckModifiers();
 
         // 영구 플레이어 보너스 재계산
-        SkillPlayerStat.RecheckPermanent();
+        SkillStatHandler.RecheckPermanent();
     }
 
     // 패시브 선택지 적용
