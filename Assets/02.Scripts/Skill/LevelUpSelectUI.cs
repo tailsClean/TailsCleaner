@@ -48,19 +48,47 @@ public class LevelUpSelectUI : MonoBehaviour
     // 레벨 업 시 호출
     public void LevelUp(int level)
     {
-        gameObject.SetActive(true);
-
-        // 상단 보유 스킬 아이콘 갱신
-        UpdateSkillIcons(); 
-
         // 새로운 선택지 생성
         _levelUpSelect.GenerateOptions(level);
 
-        // 생성된 선택지 데이터 버튼들에 채워넣기
+        // 선택지 전부 회복인지 체크
+        if (IsAllHealOptions() == true)
+        {
+            // 다 회복이면 그냥 회복 바로
+            _levelUpSelect.SelectOption(0);
+            return;
+        }
+
+        // UI On
+        gameObject.SetActive(true);
+
+        // 상단 보유 스킬 아이콘 갱신
+        UpdateSkillIcons();
+
+        // 선택지 버튼 갱신
         UpdateOptionButtons();
 
         // 게임 일시정지
         Time.timeScale = 0f;
+    }
+    
+    
+    // 모든 선택지 체력 회복인지 체크
+    private bool IsAllHealOptions()
+    {
+        // 선택지가 아예 없으면 false
+        if (_levelUpSelect.CurrentOptions.Count == 0) return false;
+
+        // 선택지 순회
+        foreach (var option in _levelUpSelect.CurrentOptions)
+        {
+            // 하나라도 회복이 아니면 즉시 false
+            if (option.Type != LevelUpSelect.OPTION_TYPE.Heal)
+                return false;
+        }
+
+        // 전부 회복임
+        return true;
     }
 
 

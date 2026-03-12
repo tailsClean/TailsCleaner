@@ -43,7 +43,7 @@ public class SkillProjectile<TModifierData> : SkillObjectBase
         _currentPierceCount++;
 
         // 자식 전용 관통 로직
-        bool destroy = OnPierce();
+        bool destroy = OnPierce(monster);
 
         // 내부에서 파괴되면 뒤는 무시
         if (destroy) return;
@@ -74,7 +74,7 @@ public class SkillProjectile<TModifierData> : SkillObjectBase
     // 관통 시
     // 내부에서 직접 파괴 시 ExpireObject() 호출 후 true 반환
     // ex) 비누 덩어리 - 관통 삭제 시 충돌 즉시 파괴
-    protected virtual bool OnPierce()
+    protected virtual bool OnPierce(MonsterBase hitMonster)
     {
         return false;
     }

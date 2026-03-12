@@ -63,7 +63,7 @@ public class SkillArea<TModifierData> : SkillObjectBase
         }
         else if (col.CompareTag("MonsterBullet")) // 적 투사체
         {
-            if (col.TryGetComponent<MonsterProjectile>(out var projectile))
+            if (col.TryGetComponent<PoolObject>(out var projectile))
             {
                 OnBulletEnter(projectile);
             }
@@ -97,7 +97,7 @@ public class SkillArea<TModifierData> : SkillObjectBase
     protected virtual void OnMonsterExit(MonsterBase monster) { }
     protected virtual void OnPlayerEnter() { }
     protected virtual void OnPlayerExit() { }
-    protected virtual void OnBulletEnter(MonsterProjectile projectile) { }
+    protected virtual void OnBulletEnter(PoolObject projectile) { }
     protected virtual void OnBulletExit(MonsterProjectile projectile) { }
 
     // 틱 처리
