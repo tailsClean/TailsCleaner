@@ -14,6 +14,7 @@ public class SkillManager : MonoBehaviour
     public const float SEARCH_INTERVAL = 0.1f;          // 탐색 주기
     public const int MONSTER_BUFFER_COUNT = 150;        // 몬스터 콜라이더 버퍼 크기
 
+    // 탐색 간격
     public WaitForSeconds SearchInterval { get; } = new WaitForSeconds(SEARCH_INTERVAL);
 
     // 플레이어 보유 스킬 리스트
@@ -30,6 +31,7 @@ public class SkillManager : MonoBehaviour
     public Rigidbody2D PlayerRigidbody { get; private set; }        // 플레이어 리지드바디
     public Vector2 CurrentPlayerPos => PlayerRigidbody.position;    // 플레이어 위치
     public TargetingSystem TargetingSystem { get; private set; }    // 타겟 시스템 (사용 안 할 예정)
+    public SkillStatHandler SkillPlayerStat { get; private set; }
     public LayerMask MonsterLayer => _monsterLayer;
     
     
@@ -49,7 +51,8 @@ public class SkillManager : MonoBehaviour
     {
         Instance = this;
         Player = GetComponent<PlayerBase>();
-        PlayerRigidbody = Player.GetComponent<Rigidbody2D>();
+        PlayerRigidbody = GetComponent<Rigidbody2D>();
+        SkillPlayerStat = GetComponent<SkillStatHandler>();
         TargetingSystem = new TargetingSystem(Player.transform, _monsterLayer);
 
         // 필터 설정
@@ -226,6 +229,9 @@ public class SkillManager : MonoBehaviour
     {
         foreach (var skill in MyActiveSkills)
             skill.RecheckModifiers();
+
+        // 영구 플레이어 보너스 재계산
+        SkillPlayerStat.RecheckPermanent();
     }
 
     // 패시브 선택지 적용

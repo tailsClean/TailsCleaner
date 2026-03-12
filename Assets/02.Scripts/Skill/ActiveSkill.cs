@@ -58,7 +58,7 @@ public abstract class ActiveSkill : MonoBehaviour
     [SerializeField] protected float _distance = 50f;           // 타겟 탐색 거리
 
 
-
+    protected SkillStatHandler SkillStatHandler => SkillManager.Instance.SkillPlayerStat;  // 플레이어 스킬 스탯
     protected Vector2 PlayerPos => SkillManager.Instance.CurrentPlayerPos;  // 현재 위치
     protected Vector2 AttackDir => GetAttackDir();  // 공격 방향
 
@@ -325,7 +325,7 @@ public abstract class ActiveSkill : MonoBehaviour
             if (IsPassiveMatch(passive) == false) continue;
 
             // 아니면 스탯에 곱
-            passive.Modifier.ModifyFinal(resultStat);
+            passive.Modifier.ModifyFinalMultiply(resultStat);
         }
 
         // 최종 스탯 = ((baseStat + 패시브 깡 스탯) * 공용 스탯 + (업그레이드 스탯 * 추가추가피해 패시브)) * 패시브 스탯 배율 합 * 최종 배율 (황금왕관, 양손잡이, 냥빨래)
@@ -398,7 +398,6 @@ public abstract class ActiveSkill : MonoBehaviour
         return flag != 0 && (CurrentSubTag & flag) != 0;
     }
 
-
     private Vector2 GetAttackDir()
     {
         var player = SkillManager.Instance.Player;
@@ -424,6 +423,10 @@ public abstract class ActiveSkill : MonoBehaviour
                 return SkillManager.Instance.CurrentPlayerPos;
         }
     }
+
+
+    // 스킬 업그레이드로 플레이어 스탯 영구 증가 (세탁파도, 회전장난감)
+    public virtual void ModifyPlayerBonus(PlayerStatFlat flat, PlayerStatMul mul) { }
 }
 
 // 프리팹과 모디파이어 타입 결정

@@ -9,14 +9,11 @@ public class SoapThrowSkill : ActiveSkill<SoapThrowProjectile, SoapThrowModifier
     // 스킬 발동
     protected override void OnActive(int index, int totalCount)
     {
-        // 혹시나 비어있으면 스킵
-        if (_currentTarget == null) return;
-
-        // 방향
-        Vector2 dir = (CurrentTarget.Position - SkillManager.Instance.CurrentPlayerPos).normalized;
+        // 방지
+        if (AttackDir == Vector2.zero) return;
 
         // 발사
-        SpawnSoap(dir);
+        SpawnSoap(AttackDir);
     }
 
     // 비누 투사체 생성
