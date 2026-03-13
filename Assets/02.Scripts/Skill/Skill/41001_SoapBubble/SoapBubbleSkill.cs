@@ -2,6 +2,11 @@
 
 public class SoapBubbleSkill : ActiveSkill<SoapBubbleArea, SoapBubbleModifierData>
 {
+    public PlayerStatFlat BubbleBonus { get; } = new();
+
+
+
+
     // 스킬 발동
 
     protected override void OnActive(int index, int totalCount)
@@ -12,5 +17,17 @@ public class SoapBubbleSkill : ActiveSkill<SoapBubbleArea, SoapBubbleModifierDat
 
         // 초기화
         if(area != null) area.Init(this, _modifierData);
+    }
+
+    public override void RecheckModifiers()
+    {
+        base.RecheckModifiers();
+
+        // 버블버블 수치 갱신
+        if (_modifierData.PlayerDefenseBoost)
+        {
+            BubbleBonus.Reset();
+            BubbleBonus.DefensePower = _modifierData.PlayerDefenseBonus;
+        }
     }
 }

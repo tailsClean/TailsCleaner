@@ -34,8 +34,12 @@ public abstract class MonsterBase : PoolObject, IDamageable
     [SerializeField] protected int scoreReward = 1000; // 잡았을 때 줄 점수
     [SerializeField] protected int goldReward = 500;   // 잡았을 때 줄 골드
 
+    private int _expReward;
+
     protected Rigidbody2D rb2D;
     protected bool isAttacking = false; // 패턴 중 이동 정지용
+
+    public Vector2 Position => rb2D.position; // 외부 참조용 포지션
 
     protected virtual void Awake()
     {
@@ -67,6 +71,50 @@ public abstract class MonsterBase : PoolObject, IDamageable
                 // 여전히 못 찾았다면 씬에 Player 태그가 없는 것
                 Debug.LogWarning($"{gameObject.name}: 'Player' 태그를 가진 오브젝트를 찾을 수 없습니다.");
             }
+        }
+    }
+
+    public override void OnSpawn()
+    {
+        base.OnSpawn();
+
+        // ✅ 풀 재사용 시 상태 초기화
+        CacheBaseStats();
+        hp = _baseHp;
+        power = _basePower; // 필요하다면 기본값 복구 후 ApplyScaling이 다시 덮어씀
+
+        isAttacking = false;
+        lastAttackTime = 0f;
+
+        if (rb2D == null)
+            rb2D = GetComponent<Rigidbody2D>();
+
+        if (rb2D != null)
+        {
+            rb2D.linearVelocity = Vector2.zero;
+            rb2D.angularVelocity = 0f;
+        }
+
+        // target 재확인
+        if (target == null)
+        {
+            GameObject playerObj = GameObject.FindWithTag("Player");
+            if (playerObj != null)
+                target = playerObj.transform;
+        }
+    }
+
+    public override void OnDespawn()
+    {
+        base.OnDespawn();
+
+        isAttacking = false;
+        lastAttackTime = 0f;
+
+        if (rb2D != null)
+        {
+            rb2D.linearVelocity = Vector2.zero;
+            rb2D.angularVelocity = 0f;
         }
     }
 
@@ -137,6 +185,11 @@ public abstract class MonsterBase : PoolObject, IDamageable
         }
     }
 
+    public void SetExpReward(int exp)
+    {
+        _expReward = exp;
+    }
+
     private void CacheBaseStats()
     {
         if (_baseCached) return;
@@ -163,17 +216,18 @@ public abstract class MonsterBase : PoolObject, IDamageable
         }
 
         // 드랍 아이템 로직
-        if (TestItem != null)
+        if (TestItem != null && ObjectPoolManager.Instance != null)
         {
-            if (ObjectPoolManager.Instance != null)
-            {
-                // 소환된 객체를 변수에 담아 확인
-                var item = ObjectPoolManager.Instance.Spawn(TestItem, transform.position, Quaternion.identity);
+            var itemObj = ObjectPoolManager.Instance.Spawn(TestItem, transform.position, Quaternion.identity);
 
-                if (item == null)
-                    Debug.LogError("Spawn은 호출되었으나 반환된 객체가 null입니다.");
-                else
-                    Debug.Log($"{item.name}이(가) {transform.position} 위치에 생성되었습니다.");
+            // Spawn이 반환하는 타입이 PoolObject라고 가정
+            if (itemObj != null && itemObj.TryGetComponent<InGameExpItem>(out var expItem))
+            {
+                expItem.SetExp(_expReward);
+            }
+            else
+            {
+                Debug.LogWarning("[EXP] Drop spawned but InGameExpItem missing.");
             }
         }
 

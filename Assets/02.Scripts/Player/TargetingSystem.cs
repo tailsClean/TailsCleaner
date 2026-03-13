@@ -14,16 +14,15 @@ public class TargetingSystem
     public TargetingSystem(Transform startPoinTr, LayerMask monsterLayer)
     {
         _startPointTr = startPoinTr;
-        _searchAngle *= Mathf.Deg2Rad;
         _targets = new Queue<Transform>();
         _monsterLayer = monsterLayer;
     }
 
-
+    // 외부에서 타겟을 반환 요청하는 메서드
     public Transform GetTarget(Vector2 attackDir, float distance, float angle)
     {
         _searchDistance = distance;
-        _searchAngle = angle;
+        _searchAngle = angle * Mathf.Deg2Rad;
 
         var targetsAll = SearchTarget();
         CalculateAngle(targetsAll, attackDir);
@@ -31,8 +30,10 @@ public class TargetingSystem
         return CalculateDistance();
     }
 
+    // 원형 범위 타겟 탐색
     private Collider2D[] SearchTarget() => Physics2D.OverlapCircleAll(_startPointTr.position, _searchDistance, _monsterLayer);
 
+    // 특정 시야각내부의 타겟 선별
     private void CalculateAngle(Collider2D[] targetsAll, Vector2 attackDir)
     {
         foreach (var target in targetsAll)
@@ -46,6 +47,7 @@ public class TargetingSystem
         }
     }
 
+    // 가장 가까운 타겟으로 선별
     private Transform CalculateDistance()
     {
         float min = _searchDistance * _searchDistance;

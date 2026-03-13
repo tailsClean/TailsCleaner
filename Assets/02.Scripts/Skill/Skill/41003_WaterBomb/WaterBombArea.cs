@@ -48,7 +48,7 @@ public class WaterBombArea : SkillArea<WaterBombModifierData>
         // 위치 갱신
         transform.position = _startPos;
         // 낙하 시작 시간
-        _fallStartTime = Time.time;
+        _fallStartTime = Time.fixedTime;
 
         base.Init(owner, modifierData, Vector2.zero);
     }
@@ -57,30 +57,39 @@ public class WaterBombArea : SkillArea<WaterBombModifierData>
     protected override void Update()
     {
         // 낙하 중
-        // 수명, 틱, 스노우볼링 전부 차단
-        if (_isLanded == false)
-        {
-            Fall();
-            return;
-        }
+        // 체크 차단
+        if (_isLanded == false) return;
 
         // 착지 후
+        // 수명, 틱, 스노우볼링
         base.Update();
     }
-    
-    
+    protected override void FixedUpdate()
+    {
+        if (_expired) return;
+
+        if (_isLanded == false)
+            Fall();
+
+        else
+            base.FixedUpdate();
+    }
+
     // 수직 낙하
     private void Fall()
     {
         // 시간 기반 Lerp
-        float t = (Time.time - _fallStartTime) / _waterBombSkill.FallDuration;
+        float t = (Time.fixedTime - _fallStartTime) / _waterBombSkill.FallDuration;
 
-        transform.position = Vector2.Lerp(_startPos, _targetPos, t);
+        // 위치 갱신 (최적화)
+        //transform.position = Vector2.Lerp(_startPos, _targetPos, t);
+        Vector2 nextPos = Vector2.Lerp(_startPos, _targetPos, t);
+        _rigidbody.MovePosition(nextPos);
 
         // 낙하 완료
         if (t >= 1f)
         {
-            transform.position = _targetPos;
+            _rigidbody.position = _targetPos;
             OnLand();
         }
     }
@@ -119,18 +128,17 @@ public class WaterBombArea : SkillArea<WaterBombModifierData>
 
 
     // 장판에 적 투사체 진입 시
-    protected override void OnBulletEnter(MonsterProjectile projectile)
+    protected override void OnBulletEnter(PoolObject projectile)
     {
         // 폭발은 예술이다
         if (_modifierData.BulletClear == false) return;
 
-        // 투사체 삭제
-        // 풀 반환으로 교체
-        Destroy(projectile.gameObject);
+        // 풀 반환
+        if (_poolObject != null) projectile.ReturnToPoolAfter(0);
 
-        // 방어막 획득
-        // SkillManager.Instance.Player.AddShield(1);
-        Debug.Log("[WaterBombArea] 폭발은 예술이다 - 투사체 삭제 (방어막 획득)");
+        // 하지만 이렇게 간단하게 피했습니다.
+        // 탄환 제거 시 방어막 충전 (패시브 있으면)
+        SkillManager.Instance.SkillStatHandler.OnBulletCleared();
     }
 
     // 만료 오버라이드
@@ -144,7 +152,6 @@ public class WaterBombArea : SkillArea<WaterBombModifierData>
         // 장판 애니메이터 종료 연출 콜백
         if (_landAnimator != null)
         {
-            Debug.Log("만료");
             _landAnimator.RequestExpire(ReturnToPool);
         }
         else

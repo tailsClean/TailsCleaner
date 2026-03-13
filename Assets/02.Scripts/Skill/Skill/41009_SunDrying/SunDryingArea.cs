@@ -12,24 +12,23 @@ public class SunDryingArea : SkillArea<SunDryingModifierData>
         base.Init(owner, modifierData, dir);
     }
 
-    protected override void Update()
+    protected override void FixedUpdate()
     {
         // 플레이어 위치 따라다님
-        transform.position = SkillManager.Instance.Player.transform.position;
+        //transform.position = SkillManager.Instance.Player.transform.position;
+        //_rigidbody.MovePosition(SkillManager.Instance.Player.transform.position);
+        _rigidbody.MovePosition(GetPlayerPos());
+    }
 
-        // 틱 처리, 수명 체크, 스노우볼링(UpdateDurationTick)
-        base.Update();
+    // 틱마다
+    protected override void OnTick()
+    {
+        base.OnTick();
 
         // 따스한 태양
-        // 틱 주기마다 업그레이드 스탯 증가
-        // 틱 데미지 이후 증가됨
-        if (_modifierData.DamagePerTick
-            && _runtimeFinalStat.TickRate > 0f
-            && Time.time >= _lastTickTime + _runtimeFinalStat.TickRate)
-        {
+        // 틱마다 업그레이드 스탯 증가
+        if (_modifierData.DamagePerTick)
             ApplyDamagePerTick();
-        }
-
     }
 
     // 따스한 태양

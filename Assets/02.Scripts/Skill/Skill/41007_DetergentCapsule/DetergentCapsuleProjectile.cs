@@ -2,6 +2,9 @@
 
 public class DetergentCapsuleProjectile : SkillProjectile<DetergentCapsuleModifierData>
 {
+    [Header("회전 객체")]
+    [SerializeField] Transform _rotObject;
+
     [Header("속도 대비 회전 배율")]
     [SerializeField] private float _spinMultiplier = 30f;
 
@@ -14,6 +17,6 @@ public class DetergentCapsuleProjectile : SkillProjectile<DetergentCapsuleModifi
         float spinAmount = _runtimeFinalStat.ProjectileSpeed * _spinMultiplier * Time.deltaTime;
 
         // 시계 방향 회전 (마이너스)
-        transform.Rotate(0f, 0f, -spinAmount);
+        _rotObject.Rotate(0f, 0f, -spinAmount);
     }
 }

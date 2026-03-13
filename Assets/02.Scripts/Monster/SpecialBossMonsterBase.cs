@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using UnityEngine;
 
 public abstract class SpecialBossMonsterBase : MonsterBase
@@ -11,10 +12,14 @@ public abstract class SpecialBossMonsterBase : MonsterBase
     protected enum MonsterState { MOVE, PATTERN }
     protected MonsterState currentState = MonsterState.MOVE;
 
+    [Header("--- 데이터 테이블 연동  ---")]
+    public int pattern_group_id; 
+
 
     [Header("--- monster_table 연동 ---")]
     public float move_speed;               // 몬스터의 기본 이동 속도 
-    public float monster_power;            // 플레이어 충돌 시 적용 데미지
+    //public float monster_power;            // 플레이어 충돌 시 적용 데미지
+    public float type_power_multiply;
     public float detect_range;             //플레이어를 감지하거나 패턴을 발동하는 기준 거리
 
 
@@ -23,7 +28,7 @@ public abstract class SpecialBossMonsterBase : MonsterBase
     public float cast_time;                // 패턴 발동 전 대기 시간
     public float pattern_multiply;         // 패턴 중 가속 배율
     public float explosion_range;          // 자폭/광역 공격의 물리적 타격 반경
-    public float pattern_damage;           // 패턴(자폭 등) 성공 시 플레이어에게 주는 데미지
+    public float damage_multiply;           // 패턴(자폭 등) 성공 시 플레이어에게 주는 데미지
     public float zigzag_width;             // 좌우 이동 폭
     public float patternFrequency = 5.0f;  // 지그재그 주기
 
@@ -60,16 +65,8 @@ public abstract class SpecialBossMonsterBase : MonsterBase
     {
         base.Start();
 
-        // 스폰 시 기본 속도 설정
-        if (move_speed == 0) move_speed = base.moveSpeed;
-
-        // 자폭 유닛인 경우 타이머 초기화
-        if (isSuicideUnit)
-        {
-            currentCastTimer = cast_time; // cast_time 사용
-
-            currentState = MonsterState.PATTERN;
-        }
+        if (move_speed == 0f)
+            move_speed = base.moveSpeed;
     }
 
     protected override void FixedUpdate()
@@ -107,20 +104,34 @@ public abstract class SpecialBossMonsterBase : MonsterBase
     }
 
     // 오브젝트 풀링을 위한 초기화
-    protected void OnEnable()
+    public override void OnSpawn()
     {
+        base.OnSpawn();
+
         if (!activeMonsters.Contains(this))
             activeMonsters.Add(this);
 
-        hasExploded = false;           // 자폭 여부 리셋
-        isJumping = false;             // 점프 상태 리셋
-        isWaiting = false;             // 대기 상태 리셋
-        isFleeingState = false;        // 도망 상태 리셋
-        isWaitingFlee = false;         // 도망 대기 리셋
-        patternTimer = 0f;             // 지그재그 타이머 리셋
-        stateTimer = 0f;               // 패턴 쿨타임 리셋
+        hasExploded = false;
+        isJumping = false;
+        isWaiting = false;
+        isFleeingState = false;
+        isWaitingFlee = false;
+        hasHitTargetInCurrentJump = false;
 
-        // 자폭 유닛 전용 초기화
+        patternTimer = 0f;
+        stateTimer = 0f;
+        jumpProgress = 0f;
+        currentCastTimer = 0f;
+
+        if (rb2D != null)
+        {
+            rb2D.linearVelocity = Vector2.zero;
+            rb2D.angularVelocity = 0f;
+        }
+
+        if (move_speed == 0f)
+            move_speed = base.moveSpeed;
+
         if (isSuicideUnit)
         {
             currentCastTimer = cast_time;
@@ -131,20 +142,46 @@ public abstract class SpecialBossMonsterBase : MonsterBase
             currentState = MonsterState.MOVE;
         }
 
-        // 시각적 높이 리셋 
-        if (visualChild != null) visualChild.localPosition = Vector2.zero;
+        if (visualChild != null)
+            visualChild.localPosition = Vector2.zero;
 
-        // 타겟(플레이어) 재설정 
         if (target == null)
         {
             GameObject playerObj = GameObject.FindWithTag("Player");
-            if (playerObj != null) target = playerObj.transform;
+            if (playerObj != null)
+                target = playerObj.transform;
         }
     }
 
-    protected void OnDisable()
+    public override void OnDespawn()
     {
+        base.OnDespawn();
+
         activeMonsters.Remove(this);
+
+        hasExploded = false;
+        isJumping = false;
+        isWaiting = false;
+        isFleeingState = false;
+        isWaitingFlee = false;
+        hasHitTargetInCurrentJump = false;
+
+        patternTimer = 0f;
+        stateTimer = 0f;
+        jumpProgress = 0f;
+        currentCastTimer = 0f;
+
+        if (rb2D != null)
+        {
+            rb2D.linearVelocity = Vector2.zero;
+            rb2D.angularVelocity = 0f;
+        }
+
+        StopAllCoroutines();
+        CancelInvoke();
+
+        if (visualChild != null)
+            visualChild.localPosition = Vector2.zero;
     }
 
     protected override void MoveToTarget()
@@ -231,7 +268,7 @@ public abstract class SpecialBossMonsterBase : MonsterBase
             // 지그재그 패턴 데미지
             if (moveType == MonsterMove.Zigzag)
             {
-                player.TakeDamage(this.monster_power);
+                player.TakeDamage(this.power);
                 Debug.Log("지그재그 데미지 적용!");
                 return;
             }
@@ -239,13 +276,14 @@ public abstract class SpecialBossMonsterBase : MonsterBase
             // 점프 도중 충돌 시 데미지
             if (moveType == MonsterMove.Jump && isJumping && !hasHitTargetInCurrentJump)
             {
-                player.TakeDamage(this.pattern_damage);
+                float finalJumpDamage = this.power * this.type_power_multiply * this.damage_multiply;
+                player.TakeDamage(finalJumpDamage);
                 hasHitTargetInCurrentJump = true; // (중복 방지)
                 Debug.Log("점프 충돌 데미지 적용!");
                 return;
             }
 
-            player.TakeDamage(this.monster_power);
+            player.TakeDamage(this.power);
 
             // 어떤 상태에서 부딪혔는지 명확히 로그 찍기
             //if (moveType == MonsterMove.Flee && isFleeingState)
@@ -484,6 +522,7 @@ public abstract class SpecialBossMonsterBase : MonsterBase
         hasExploded = true;
 
         // Debug.Log("자폭 발동!");
+        float finalDamage = this.power * this.type_power_multiply * this.damage_multiply;
 
         Collider2D[] hits = Physics2D.OverlapCircleAll(rb2D.position, explosion_range);
         // bool hitPlayer = false; // 자폭 확인용 
@@ -496,7 +535,7 @@ public abstract class SpecialBossMonsterBase : MonsterBase
                 IDamageable player = hit.GetComponent<IDamageable>();
                 if (player != null)
                 {
-                    player.TakeDamage(this.pattern_damage);
+                    player.TakeDamage(finalDamage);
                     // Debug.Log($"데미지 적중");
                     // hitPlayer = true;
                 }

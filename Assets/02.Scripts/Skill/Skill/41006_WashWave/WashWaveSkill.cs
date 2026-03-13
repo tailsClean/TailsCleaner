@@ -20,7 +20,7 @@ public class WashWaveSkill : ActiveSkill<WashWaveProjectile, WashWaveModifierDat
     protected override IEnumerator ActiveCoroutine()
     {
         // 공격 방향
-        Vector2 attackDir = SkillManager.Instance.Player.AttackDir;
+        Vector2 attackDir = AttackDir;
         if (attackDir == Vector2.zero) yield break;
 
         // 차오르는 체력
@@ -55,7 +55,7 @@ public class WashWaveSkill : ActiveSkill<WashWaveProjectile, WashWaveModifierDat
     private IEnumerator FireWave(Vector2 fireDir)
     {
         // 플레이어 위치
-        Vector2 playerPos = (Vector2)SkillManager.Instance.Player.transform.position;
+        Vector2 playerPos = SkillManager.Instance.CurrentPlayerPos;
 
         // 스폰 중심 - 플레이어 기준 발사 반대 방향으로 오프셋
         Vector2 spawnCenter = playerPos + (-fireDir.normalized * _spawnOffsetDistance);
@@ -83,7 +83,6 @@ public class WashWaveSkill : ActiveSkill<WashWaveProjectile, WashWaveModifierDat
         float angle = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;
 
         // 투사체 생성
-        //WashWaveProjectile washWave = Instantiate(_skillObjectPrefab, spawnPos, Quaternion.Euler(0f, 0f, angle));
         WashWaveProjectile washWave = SpawnFromPool<WashWaveProjectile>(_skillObjectPrefab, spawnPos, Quaternion.Euler(0f, 0f, angle));
 
         // 투사체 초기화
@@ -94,11 +93,8 @@ public class WashWaveSkill : ActiveSkill<WashWaveProjectile, WashWaveModifierDat
     private void OnHealOnCast()
     {
         // 플레이어 최대 체력의 HealRatio만큼 회복
-        // float healAmount = SkillManager.Instance.Player.MaxHp * _modifierData.HealRatio;
-        // SkillManager.Instance.Player.Heal(healAmount);
-
-        // 청소용 비닐옷 (초과 회복 시 방어막)
-        // 회복 로직에서 초과분 발생 시 Player에서 처리
+        // 청소용 비닐옷도 내부에서 처리 (초과 회복 시 방어막)
+        SkillStatHandler.HealByRatio(_modifierData.HealRatio);
 
         Debug.Log($"[WashWave] 차오르는 체력 - 체력 {_modifierData.HealRatio * 100f}% 회복");
     }
@@ -139,7 +135,7 @@ public class WashWaveSkill : ActiveSkill<WashWaveProjectile, WashWaveModifierDat
         while (true)
         {
             // 플레이어 체력 감소
-            // SkillManager.Instance.Player.TakeDamage(_modifierData.DrainAmount);
+            SkillStatHandler.TakeDamageByRatio(_modifierData.DrainAmount);
 
             // 모든 적 체력 감소
             // foreach (var monster in MonsterManager.Instance.ActiveMonsters)
@@ -157,4 +153,9 @@ public class WashWaveSkill : ActiveSkill<WashWaveProjectile, WashWaveModifierDat
         if (_sprites == null || _sprites.Length == 0) return null;
         return _sprites[Random.Range(0, _sprites.Length)];
     }
+    
+    
+    // 세탁파도 업그레이드에 누적된 경험치 증가량 전달
+    public override void ModifyPlayerBonus(PlayerStatFlat flat, PlayerStatMul mul)
+        => flat.ExpGainRate += _modifierData.ExpGainBonus;
 }

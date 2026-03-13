@@ -37,6 +37,7 @@ public class SkillArea<TModifierData> : SkillObjectBase
         if (Time.time >= _lastTickTime + _runtimeFinalStat.TickRate)
         {
             // 틱 처리
+            OnTick();
             ProcessTick();
             _lastTickTime = Time.time;
         }
@@ -62,7 +63,7 @@ public class SkillArea<TModifierData> : SkillObjectBase
         }
         else if (col.CompareTag("MonsterBullet")) // 적 투사체
         {
-            if (col.TryGetComponent<MonsterProjectile>(out var projectile))
+            if (col.TryGetComponent<PoolObject>(out var projectile))
             {
                 OnBulletEnter(projectile);
             }
@@ -96,7 +97,7 @@ public class SkillArea<TModifierData> : SkillObjectBase
     protected virtual void OnMonsterExit(MonsterBase monster) { }
     protected virtual void OnPlayerEnter() { }
     protected virtual void OnPlayerExit() { }
-    protected virtual void OnBulletEnter(MonsterProjectile projectile) { }
+    protected virtual void OnBulletEnter(PoolObject projectile) { }
     protected virtual void OnBulletExit(MonsterProjectile projectile) { }
 
     // 틱 처리
@@ -105,7 +106,7 @@ public class SkillArea<TModifierData> : SkillObjectBase
     private void ProcessTick()
     {
         // 범위 내 적이 null인 경우 삭제
-        _monstersInArea.RemoveWhere(m => m == null);
+        _monstersInArea.RemoveWhere(m => m == null || m.gameObject.activeInHierarchy == false);
 
         // 버퍼 초기화
         _tickBuffer.Clear();
@@ -136,10 +137,13 @@ public class SkillArea<TModifierData> : SkillObjectBase
         }
     }
 
-    // 틱마다 적에게 호출
+    // 틱마다 장판의 적에게 호출
     // 비누 거품의 빨래당함의 서브태그 - 집중공략 
     // 약화된 적이라면 틱마다 최대 체력 감소
     protected virtual void OnTick(MonsterBase monster) { }
+
+    // 그냥 틱마다 호출
+    protected virtual void OnTick() { }
 
     // 소멸 시 범위 내 적 정리
     protected override void OnExpire()

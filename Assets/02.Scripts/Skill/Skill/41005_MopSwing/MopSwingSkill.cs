@@ -18,11 +18,10 @@ public class MopSwingSkill : ActiveSkill<MopSwingArea, SwingModifierData>, ISwin
 
     protected override IEnumerator ActiveCoroutine()
     {
-        Vector2 attackDir = SkillManager.Instance.Player.AttackDir;
-        if (attackDir == Vector2.zero) yield break;
+        if (AttackDir == Vector2.zero) yield break;
 
-        Vector2 mainDir = -attackDir.normalized; // 뒤
-        Vector2 oppDir = -mainDir;               // 앞
+        Vector2 mainDir = -AttackDir;     // 뒤
+        Vector2 oppDir = -mainDir;        // 앞
 
         // 리사이클 체크
         bool hasOwn = _modifierData.HasOwnRecycle;

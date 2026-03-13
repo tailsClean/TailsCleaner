@@ -2,6 +2,15 @@
 
 public class SoapThrowProjectile : SkillProjectile<SoapThrowModifierData>
 {
+    SoapThrowSkill _soapThrowSkill;
+
+    public override void Init(ActiveSkill owner, SoapThrowModifierData modifierData, Vector2 dir)
+    {
+        _soapThrowSkill = owner as SoapThrowSkill;
+
+        base.Init(owner, modifierData, dir);
+    }
+
     protected override bool OnCustomInit()
     {
         // 비누 덩어리 관통 제거
@@ -22,8 +31,19 @@ public class SoapThrowProjectile : SkillProjectile<SoapThrowModifierData>
         return false;
     }
 
+    // 연출 시작 직전 설정
+    protected override void OnBeforeStartSequence()
+    {
+        if (_modifierData.RemovePierce == true && _animator != null)
+        {
+            // 강철 비누 스프라이트로 변경
+            //_animator.OverrideMainSprite(_soapThrowSkill.MetalSprite);
+        }
+    }
+
+
     // 관통 시
-    protected override bool OnPierce()
+    protected override bool OnPierce(MonsterBase hitMonster)
     {
         // 비누 덩어리
         // 관통없이 즉시 파괴
@@ -44,7 +64,7 @@ public class SoapThrowProjectile : SkillProjectile<SoapThrowModifierData>
         // 감나빗!
         // 관통 후 재추적
         if (_modifierData.Retracking == true)
-            RetargetEnemy();
+            RetargetEnemy(hitMonster);
 
         return false;
     }
@@ -77,18 +97,18 @@ public class SoapThrowProjectile : SkillProjectile<SoapThrowModifierData>
         _runtimeUpgradeStat.ProjectileSpeed += _modifierData.SpeedPerPierce;
     }
 
-    // 관통 후 새로운 적 재추적
-    private void RetargetEnemy()
+    // 관통 후 가장 가까운 적 재추적
+    private void RetargetEnemy(MonsterBase hitMonster)
     {
-        // 현재 공격 방향에 찍혀있는 타겟
-        Transform target = _skill.CurrentTarget;
+        // 관통한 적 제외 가장 가까운 타겟
+        MonsterBase target = SkillManager.Instance.FindClosestMonster(_rigidbody.position, SkillManager.DEFAULT_SEARCH_RADIUS, hitMonster);
 
         // 타겟이 없거나 죽었다면 그냥 직진
         if (target == null) return;
 
         // 타겟 있다면
         // 관통한 현재 위치에서 타겟 방향으로 꺾기
-        Vector2 newDir = (target.position - transform.position).normalized;
+        Vector2 newDir = (target.Position - _rigidbody.position).normalized;
         SetDirection(newDir);
 
         // 회전도 방향에 맞게 갱신

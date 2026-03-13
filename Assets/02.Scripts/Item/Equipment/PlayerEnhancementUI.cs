@@ -2,12 +2,15 @@
 using UnityEngine;
 using UnityEngine.UI;
 
+/// <summary>
+/// 여기 추가 수정 필요
+/// </summary>
 public class PlayerEnhancementUI : MonoBehaviour
 {
     [SerializeField] private GameObject _playerObj;
 
     private PlayerEnhancementSelector _player;
-    private Dictionary<EquipmentBase.PARTS, EquipmentBase> _equipments;
+    private Dictionary<EQUIP_PARTS, EquipmentBase> _equipments;
     public Image _weaponImage;
     public Image _hatImage;
     public Image _cloakImage;
@@ -44,24 +47,24 @@ public class PlayerEnhancementUI : MonoBehaviour
 
 
     // UI갱신 메서드
-    private void UpdateImage(EquipmentBase.PARTS equipmentType)
+    private void UpdateImage(EQUIP_PARTS equipmentType)
     {
         var equipment = _player.MyEquipment[equipmentType];
 
         switch (equipmentType)
         {
-            case EquipmentBase.PARTS.Weapon:
-                _weaponImage.sprite = equipment.SpriteImage;
-                break;
-            case EquipmentBase.PARTS.Hat:
-                _hatImage.sprite = equipment.SpriteImage;
-                break;
-            case EquipmentBase.PARTS.Shoes:
-                _shoseImage.sprite = equipment.SpriteImage;
-                break;
-            case EquipmentBase.PARTS.Cloak:
-                _cloakImage.sprite = equipment.SpriteImage;
-                break;
+            //case EQUIP_PARTS.Weapon:
+            //    _weaponImage.sprite = equipment.SpriteImage;
+            //    break;
+            //case EQUIP_PARTS.Hat:
+            //    _hatImage.sprite = equipment.SpriteImage;
+            //    break;
+            //case EQUIP_PARTS.Shoes:
+            //    _shoseImage.sprite = equipment.SpriteImage;
+            //    break;
+            //case EQUIP_PARTS.Cloak:
+            //    _cloakImage.sprite = equipment.SpriteImage;
+            //    break;
         }
     }
 
@@ -76,7 +79,7 @@ public class PlayerEnhancementUI : MonoBehaviour
                 continue;
             }
 
-            _relicSlot[i].sprite = relics[i].SpriteImage;
+            //_relicSlot[i].sprite = relics[i].SpriteImage;
         }
     }
 }
