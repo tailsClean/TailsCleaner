@@ -60,24 +60,24 @@ public class InventoryUI : MonoBehaviour
     // 슬롯핸들러에 특정 인벤토리(장비, 유물, 강화재료, 소모품)를 주입
     public void InitSlotHandler(InventorySlotHandler slotHandler)
     {
-        switch(slotHandler.Group)
-        {
-            case UI_GROUP.Equipment:
-                SetInventory(UI_GROUP.Equipment, _inventory.EquipInventory);
-                break;
+        //switch(slotHandler.Group)
+        //{
+        //    case UI_GROUP.Equipment:
+        //        SetInventory(UI_GROUP.Equipment, _inventory.EquipInventory);
+        //        break;
 
-            case UI_GROUP.Relic:
-                SetInventory(UI_GROUP.Relic, _inventory.RelicInventory);
-                break;
+        //    case UI_GROUP.Relic:
+        //        SetInventory(UI_GROUP.Relic, _inventory.RelicInventory);
+        //        break;
 
-            case UI_GROUP.ReinforceResource:
-                SetInventory(UI_GROUP.ReinforceResource, _inventory.ReinforceResourceInventory);
-                break;
+        //    case UI_GROUP.ReinforceResource:
+        //        SetInventory(UI_GROUP.ReinforceResource, _inventory.ReinforceResourceInventory);
+        //        break;
 
-            case UI_GROUP.Spendable:
-                SetInventory(UI_GROUP.Spendable, _inventory.ConsumeInventory);
-                break;
-        }
+        //    case UI_GROUP.Spendable:
+        //        SetInventory(UI_GROUP.Spendable, _inventory.ConsumeInventory);
+        //        break;
+        //}
     }
     // 해당 그룹에 인벤토리 주입
     private void SetInventory(UI_GROUP group, Dictionary<int, int> inventory) => _uiGroupDict[group].Init(inventory);

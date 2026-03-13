@@ -16,6 +16,10 @@ public struct ItemInstance
     public const int NoneEnhanceLevel = -1;
 
     public const int NoneStackAmount = -1;
+
+    /// <summary>
+    /// 아이템의 존재여부 확인용 존재할 수 없는 인벤토리 인스턴스
+    /// </summary>
     public static ItemInstance None => new ItemInstance(-1, -1, EQUIP_GRADE.None);
 
     /// <summary>

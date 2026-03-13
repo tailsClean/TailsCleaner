@@ -1,34 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
 
-// 케이스별 판단 메서드 만들어서 코드 좀 줄이자
+
 public class ItemInventory : MonoBehaviour
 {
     [Header("이벤트 채널")]
     [SerializeField] private VoidEventChannelSO _onChangeInventory;
 
+    // Key: 아이템 , Value: 소지갯수
     private Dictionary<ItemInstance, int> _inventory;
 
     public Dictionary<ItemInstance, int> Inventory => _inventory;
-
-    // Key: 아이템ID , Value: 소지갯수
-    private Dictionary<int, int> _equipInventory;
-    private Dictionary<int, int> _relicInventory;
-
-    private Dictionary<int, int> _reinforceResourceInventory;
-    private Dictionary<int, int> _consumeInventory;
-
-
-    public Dictionary<int, int> EquipInventory => _equipInventory;
-    public Dictionary<int, int> RelicInventory => _relicInventory;
-
-
-
-    public Dictionary<int, int> ReinforceResourceInventory => _reinforceResourceInventory;
-    public Dictionary<int, int> ConsumeInventory => _consumeInventory;
-
 
     public event Action<int> OnAddItem;
     public event Action<int> OnRemoveItem;
@@ -38,84 +21,173 @@ public class ItemInventory : MonoBehaviour
     private void Awake()
     {
         _inventory = new Dictionary<ItemInstance, int>();
-        _equipInventory = new Dictionary<int, int>();
-        _relicInventory = new Dictionary<int, int>();
-        _reinforceResourceInventory = new Dictionary<int, int>();
-        _consumeInventory = new Dictionary<int, int>();
     }
 
 
-    // 추가 수정 필요
-    public void RemoveEquipment(ItemInstance item)
+
+    public void InitEvent()
     {
-        foreach (var invenItem in _inventory)
-        {
-            if (HasItem(invenItem.Key, item))
-            {
-                _inventory.Remove(invenItem.Key);
-                _onChangeInventory.OnStartEvent();
-                return;
-            }
-        }
-        Debug.Log("아이템 제거 실패");
+        OnAddItem = null;
+        OnRemoveItem = null;
     }
 
 
-    /// <summary>
-    /// 꺼냈던 아이템을 다시 인벤토리에 넣는 메서드
-    /// </summary>
-    /// <param name="item"></param>
-    public void ReleaseItem(ItemInstance item)
-    {
-        foreach(var invenItem in _inventory)
-        {
-            if (HasItem(invenItem.Key, item))
-            {
-                if (item.Amount == ItemInstance.NoneStackAmount)
-                    _inventory[item] = item.Amount;
-                else
-                    _inventory[item] += item.Amount;
+    #region 장비 아이템
 
-                _onChangeInventory.OnStartEvent();
-                return;
-            }
-        }
-        _inventory.Add(item, item.Amount);
+
+    // 장비 아이템 읽기
+    public bool TryGetEquipment(int id, int enhanceLevel, EQUIP_GRADE grade, out ItemInstance item) => TryGetItem(id, enhanceLevel, grade, out item);
+    public ItemInstance GetEquipment(int id, int enhanceLevel, EQUIP_GRADE grade) => GetItem(id, enhanceLevel, grade);
+
+
+    // 장비 아이템 획득
+    public void GainEquipment(int id, int enhanceLevel, EQUIP_GRADE grade, int amount = 1) =>
+        GainItem(id, enhanceLevel, grade, amount);
+
+
+    /// 장비 아이템 제거
+    public void RemoveEquipment(int id, int enhanceLevel, EQUIP_GRADE grade, int amount = 1) =>
+        UseItem(id, enhanceLevel, grade, amount);
+
+
+    public void RemoveEquipment(ItemInstance item, int amount = 1) =>
+        UseItem(item.ID, item.EnhanceLevel, item.Grade, amount);
+
+
+
+    #endregion
+
+
+    #region 유물 아이템
+
+
+    /// 유물 아이템 읽기
+    public bool TryGetRelic(int id, int enhanceLevel, out ItemInstance item) => 
+        TryGetItem(id, enhanceLevel, EQUIP_GRADE.None, out item);
+    public ItemInstance GetRelic(int id, int enhanceLevel) => GetItem(id, enhanceLevel, EQUIP_GRADE.None);
+
+
+    // 유물 아이템 획득
+    public void GainRelic(int id, int enhanceLevel)
+    {
+        var item = SearchItem(id, enhanceLevel, EQUIP_GRADE.None);
+
+        // 아이템을 소지하고 있었을 때
+        if (HasItem(item))
+            Debug.LogWarning($"{id} 유물은 더이상 획득할 수 없습니다.");
+
+        // 아이템을 소지하지 않았을 때
+        else
+            _inventory.Add(new ItemInstance(id, enhanceLevel, EQUIP_GRADE.None), ItemInstance.NoneStackAmount);
+
         _onChangeInventory.OnStartEvent();
     }
 
-    private bool HasItem(ItemInstance invenItem, ItemInstance item)
+
+    // 유물 아이템 사용
+    public void RemoveRelic(int id, int enhanceLevel)
     {
-        return invenItem.ID == item.ID &&
-               invenItem.EnhanceLevel == item.EnhanceLevel &&
-               invenItem.Grade == item.Grade;
+        var item = SearchItem(id, enhanceLevel, EQUIP_GRADE.None);
+        if (!HasItem(item))
+        { Debug.Log($"사용하려는 {id} 아이템을 소지하지 않았습니다."); return; }
+
+        _inventory.Remove(item);
+        _onChangeInventory.OnStartEvent();
     }
 
-    /// <summary>
-    /// 일반 스택형 아이템 반환
-    /// </summary>
-    /// <param name="id"></param>
-    /// <returns></returns>
-    public ItemInstance GetItem(int id)
+
+    #endregion
+
+
+    #region 스택형 아이템(소모품, 강화 재료)
+
+
+    // 스택형 아이템 읽기
+    public bool TryGetStackItem(int id, out ItemInstance item) => TryGetItem(id, ItemInstance.NoneEnhanceLevel, EQUIP_GRADE.None, out item);
+    public ItemInstance GetStackItem(int id) => GetItem(id, ItemInstance.NoneEnhanceLevel, EQUIP_GRADE.None);
+
+
+    // 스택형 아이템 획득
+    public void GainStackItem(int id, int amount = 1) =>
+        GainItem(id, ItemInstance.NoneEnhanceLevel, EQUIP_GRADE.None, amount);
+
+
+    // 스택형 아이템 사용
+    public void UseStakItem(int id, int amount) =>
+        UseItem(id, ItemInstance.NoneEnhanceLevel, EQUIP_GRADE.None, amount);
+
+
+    #endregion
+
+
+
+    #region 인벤토리 내부전용 메서드
+
+
+    private bool TryGetItem(int id, int enhanceLevel, EQUIP_GRADE grad, out ItemInstance item)
     {
-        var item = SearchItem(id, ItemInstance.NoneEnhanceLevel, EQUIP_GRADE.None);
-        item.SetAmount(_inventory[item]);
+        item = SearchItem(id, enhanceLevel, grad);
+        if(HasItem(item))
+        {
+            item.SetAmount(_inventory[item]);
+            return true;
+        }
+
+        Debug.LogWarning($"{id} 아이템은 인벤토리에 없습니다.");
+        return false;
+    }
+
+    // 인벤토리 내부전용 아이템 확인 메서드
+    private ItemInstance GetItem(int id, int enhanceLevel, EQUIP_GRADE grad)
+    {
+        var item = SearchItem(id, enhanceLevel, grad);
+        if (HasItem(item))
+        {
+            item.SetAmount(_inventory[item]);
+            return item;
+        }
+
+        Debug.LogError($"{id} 아이템은 인벤토리에 없습니다.");
         return item;
     }
 
-    /// <summary>
-    /// 유물 아이템 반환
-    /// </summary>
-    /// <param name="id"></param>
-    /// <param name="enhanceLevel"></param>
-    /// <returns></returns>
-    public ItemInstance GetItem(int id, int enhanceLevel)
+
+    // 인벤토리 내부전용 아이템 획득 메서드
+    private void GainItem(int id, int enhanceLevel, EQUIP_GRADE grad, int amount)
     {
-        var item = SearchItem(id,enhanceLevel, EQUIP_GRADE.None);
-        item.SetAmount(ItemInstance.NoneStackAmount);
-        return item;
+        var item = SearchItem(id, enhanceLevel, grad);
+
+        if (HasItem(item))
+            _inventory[item] += amount;
+
+        else
+            _inventory.Add(new ItemInstance(id, enhanceLevel, grad), amount);
+
+        _onChangeInventory.OnStartEvent();
     }
 
+    // 인벤토리 내부전용 아이템 사용 메서드
+    private void UseItem(int id, int enhanceLevel, EQUIP_GRADE grade, int amount)
+    {
+        if (amount < 0)
+        { Debug.LogError("사용하려는 값이 음수입니다."); return; }
+
+        var item = SearchItem(id, enhanceLevel, grade);
+        if (!HasItem(item))
+        { Debug.Log($"사용하려는 {id} 아이템을 소지하지 않았습니다."); return; }
+
+        if (_inventory[item] < amount)
+        { Debug.Log($"사용량이 {id} 아이템 소지갯수를 초과합니다."); return; }
+
+        _inventory[item] -= amount;
+
+        if(_inventory[item] == 0)
+            _inventory.Remove(item);
+        _onChangeInventory.OnStartEvent();
+    }
+
+
+    // 인벤토리 내부전용 아이템 찾기 메서드
     private ItemInstance SearchItem(int id, int enhanceLevel, EQUIP_GRADE grade)
     {
         foreach (var item in _inventory)
@@ -127,132 +199,17 @@ public class ItemInventory : MonoBehaviour
                 return item.Key;
         }
 
-        Debug.Log($"{id}에 해당하는 아이템이 인벤토리에 없습니다.");
         return ItemInstance.None;
     }
 
-
-    public void InitEvent()
+    // 인벤토리 내부전용 아이템 사용 메서드
+    private bool HasItem(ItemInstance invenItem)
     {
-        OnAddItem = null;
-        OnRemoveItem = null;
+        return !(invenItem.ID == ItemInstance.None.ID &&
+       invenItem.EnhanceLevel == ItemInstance.None.EnhanceLevel &&
+       invenItem.Grade == ItemInstance.None.Grade);
     }
 
 
-    #region 아이템 획득시, 인벤토리 저장
-    public void GainItem(ITEM_TYPE itemType, int id, int amount = 1)
-    {
-        switch (itemType)
-        {
-            case ITEM_TYPE.Equipment:
-                GainItem(_equipInventory, id, amount);
-                break;
-
-            case ITEM_TYPE.Relic:
-                GainItem(_relicInventory, id, amount);
-                break;
-
-            case ITEM_TYPE.Reinforcement:
-                GainItem(_reinforceResourceInventory, id, amount);
-                break;
-
-            case ITEM_TYPE.Consume:
-                GainItem(_consumeInventory, id, amount);
-                break;
-        }
-        _onChangeInventory.OnStartEvent();
-    }
-    private void GainItem(Dictionary<int, int> inventory, int id, int amount = 1)
-    {
-        if (inventory.TryGetValue(id, out var item))
-            inventory[id] += amount;
-
-        else
-        {
-            inventory.Add(id, amount);
-            OnAddItem?.Invoke(id);
-        }
-    }
-    #endregion
-
-
-    #region 인벤토리의 아이템 사용
-    public void UseItem(ITEM_TYPE itemType, int id, int amount = 1)
-    {
-        switch (itemType)
-        {
-            case ITEM_TYPE.Equipment:
-                UseItem(_equipInventory, id, amount);
-                break;
-
-            case ITEM_TYPE.Relic:
-                UseItem(_relicInventory, id, amount);
-                break;
-
-            case ITEM_TYPE.Reinforcement:
-                UseItem(_reinforceResourceInventory, id, amount);
-                break;
-
-            case ITEM_TYPE.Consume:
-                UseItem(_consumeInventory, id, amount);
-                break;
-        }
-        _onChangeInventory.OnStartEvent();
-    }
-    private void UseItem(Dictionary<int, int> inventory, int id, int amount = 1)
-    {
-        if (!inventory.TryGetValue(id, out var itemCount) || itemCount <= 0)
-        { Debug.Log($"<color=red>ID: {id}의 아이템을 가지고 있지 않습니다.</color>"); return; }
-
-        if (itemCount > amount)
-            inventory[id] -= amount;
-
-        else if (itemCount == amount)
-        {
-            inventory.Remove(id);
-            OnRemoveItem?.Invoke(id);
-        }
-
-        else
-            Debug.Log($"ID: {id}의 아이템의 소지갯수가 부족합니다.");
-    }
-    #endregion
-
-
-    #region 아이템 사용가능 여부
-    public bool TryUseItem(ITEM_TYPE itemType, int id, int amount = 1)
-    {
-        switch (itemType)
-        {
-            case ITEM_TYPE.Equipment:
-                return TryUseItem(_equipInventory, id, amount);
-
-            case ITEM_TYPE.Relic:
-                return TryUseItem(_relicInventory, id, amount);
-
-            case ITEM_TYPE.Reinforcement:
-                return TryUseItem(_reinforceResourceInventory, id, amount);
-
-            case ITEM_TYPE.Consume:
-                return TryUseItem(_consumeInventory, id, amount);
-        }
-        return false;
-    }
-    private bool TryUseItem(Dictionary<int, int> inventory, int id, int amount = 1)
-    {
-        if (!inventory.TryGetValue(id, out var itemCount) || itemCount <= 0)
-        {
-            Debug.Log($"<color=red>ID: {id}의 아이템을 가지고 있지 않습니다.</color>");
-            return false;
-        }
-
-        if (itemCount < amount)
-        {
-            Debug.Log($"ID: {id}의 아이템의 소지갯수가 부족합니다.");
-            return false;
-        }
-
-        return true;
-    }
     #endregion
 }

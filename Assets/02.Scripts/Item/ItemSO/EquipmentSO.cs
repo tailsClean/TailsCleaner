@@ -28,7 +28,7 @@ public class EquipmentSO : ItemBaseSO
 
 
     public EQUIP_PARTS EquipmentPart => _equipmentPart;
-    public string Name => _name;
+    public override string Name => _name;
     public string Description => _script;
     public string IconClickEffect => _iconClickEffect;
     public string IconClickSound => _iconClickSound;

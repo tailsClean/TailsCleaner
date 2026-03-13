@@ -69,12 +69,12 @@ public class EquipmentEnhanceUI : EnhanceSystemUI
     // 강화 재료 아이콘 갱신
     private void UpdateResourceIcon(int index, int id)
     {
-        var dict = _inventory.ReinforceResourceInventory;
-        if(dict.TryGetValue(id, out var amount))
+        if(_inventory.TryGetStackItem(id, out var item))
         {
-            _resourceSlots[index].SetSlot(id, amount);
+            _resourceSlots[index].SetSlot(id, item.Amount);
             return;
         }
+
         _resourceSlots[index].SetSlot(id, 0);
     }
 

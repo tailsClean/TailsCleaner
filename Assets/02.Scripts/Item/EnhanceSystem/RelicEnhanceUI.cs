@@ -39,6 +39,10 @@ public class RelicEnhanceUI : EnhanceSystemUI
         int i = 0;
         foreach(var relic in relicInventory.Keys)
         {
+            ITEM_TYPE type = ItemDB.GetItemData<ItemBaseSO>(relic.ID).ItemType;
+            if (type != ITEM_TYPE.Relic)
+                continue;
+
             var slot = _relicSlots[i++];
             slot.Init();
             slot.SetSlot(relic.ID);
@@ -52,7 +56,15 @@ public class RelicEnhanceUI : EnhanceSystemUI
 
     public override void UpdateResourceUI()
     {
-        ItemInstance item = _inventory.GetItem(ItemID.RelicReinforceResource);
+        _resourceImage.sprite = ItemDB.GetItemData(ItemID.RelicReinforceResource).ImageSprite;
+
+        if (!_inventory.TryGetStackItem(ItemID.RelicReinforceResource, out var item))
+        {
+            _resourceText.text = "0";
+            return;
+        }
+
+        
         var itemData = ItemDB.GetItemData<ItemBaseSO>(item.ID);
         _resourceImage.sprite = itemData.ImageSprite;
 
