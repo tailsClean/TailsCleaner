@@ -135,7 +135,7 @@ public class SkillArea<TModifierData> : SkillObjectBase
             }
 
             // 데미지 처리 
-            monster.TakeDamage(_runtimeFinalStat.Damage);
+            monster.TakeDamage(GetFinalDamage());
 
             // 전용 모디파이어 로직
             OnTick(monster);

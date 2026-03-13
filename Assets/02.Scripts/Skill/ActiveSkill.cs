@@ -107,8 +107,11 @@ public abstract class ActiveSkill : MonoBehaviour
 
     private bool IsCooldownReady()
     {
-        float cooldown = Mathf.Max(MIN_SKILL_COOLDOWN, _finalStat.Cooldown);
-        return Time.time >= _lastActiveTime + cooldown;
+        // 플레이어 공격속도에 최종 계수 곱하는 걸로 변경해야 함
+        //float cooldown = SkillManager.Instance.Player.Cooldown * _finalStat.Cooldown;
+        
+        float actualCooldown = Mathf.Max(MIN_SKILL_COOLDOWN, _finalStat.Cooldown);
+        return Time.time >= _lastActiveTime + actualCooldown;
     }
 
     protected virtual bool CanFire()

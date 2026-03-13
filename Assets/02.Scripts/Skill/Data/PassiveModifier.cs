@@ -237,7 +237,7 @@ public class GoldCrownModifier : PassiveModifier
 public class ADCarryModifier : PassiveModifier
 {
     [Header("쿨타임 1초당 치명타확률")]
-    [SerializeField] float _criticalPerCooldown = 0.01f;   // 1%
+    [SerializeField] float _criticalPerCooldown = 1f;
 
     public override void ModifyPlayerPermanent(PlayerStatFlat flat, PlayerStatMul multi, SkillManager skillManager, int subTag)
     {
@@ -249,6 +249,10 @@ public class ADCarryModifier : PassiveModifier
 
         // 합산한 쿨타임 치명타확률
         flat.CriticalChance += total * _criticalPerCooldown;
+
+        // 이부분 나중에 변경되어야함. 쿨타임이 계수로 바뀐다고 하는데
+        // 플레이어 쿨타임 1당 증가라는데 플레이어 쿨타임은 100% 시작에서 빠지는 형태임
+        // 아직 정확한 답변 받지 못함
     }
 }
 
