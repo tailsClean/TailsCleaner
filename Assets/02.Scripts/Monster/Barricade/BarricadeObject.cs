@@ -43,7 +43,6 @@ public class BarricadeObject : MonoBehaviour
                 col.isTrigger = false; // 딱딱한 벽 (Blocked, Solid 둘 다)
             }
 
-            // 이 로그를 찍어서 콘솔에 false가 뜨는지 보세요!
             // Debug.Log($"{col.gameObject.name}의 트리거 상태: {col.isTrigger}");
         }
 

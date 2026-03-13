@@ -107,7 +107,7 @@ GameObject:
   - component: {fileID: 4676421205203308254}
   m_Layer: 0
   m_Name: Boss
-  m_TagString: Untagged
+  m_TagString: Monster
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -242,14 +242,14 @@ MonoBehaviour:
   jump_height: 3
   visualChild: {fileID: 6844339646822135683}
   fleeDistance: 3
-  useBarricade: 1
+  useBarricade: 0
   barricadeSpawner: {fileID: 4676421205203308254}
   barricadeInterval: 5
-  spawnLoc: 3
-  barShape: 0
-  barSize: {x: 10, y: 2}
+  spawnLoc: 2
+  barShape: 1
+  barSize: {x: 12, y: 7}
   barDuration: 3
-  barInteraction: 2
+  barInteraction: 0
 --- !u!114 &6267815479541013433
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -289,7 +289,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6242823153721604330}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 69f67a59712802844be664ca423c4c41, type: 3}
   m_Name: 
