@@ -1,17 +1,18 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
 
 public class PlayerUI : MonoBehaviour
 {
     [SerializeField] private Slider _hpBar;
-    [SerializeField] private Text _lvl;
+    [SerializeField] private TextMeshProUGUI _lvl;
     [SerializeField] private Slider _expBar;
     [SerializeField] private PlayerBase _player;
     [SerializeField] private FloatEventChannelSO _onHit;
     [SerializeField] private FloatEventChannelSO _onGainExp;
     [SerializeField] private IntEventChannelSO _onLevelUp;
 
-    private void OnEnable()
+    private void OnEnable() 
     {
         _onHit.AddListener(UpdateHp);
         _onGainExp.AddListener(UpdateExp);
@@ -43,5 +44,5 @@ public class PlayerUI : MonoBehaviour
     }
 
     private void UpdateExp(float exp) => _expBar.value = exp;
-    private void UpdateLevel(int level) => _lvl.text = "레벨: " + level.ToString();
+    private void UpdateLevel(int level) => _lvl.text = level.ToString();
 }
