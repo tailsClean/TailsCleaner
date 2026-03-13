@@ -68,19 +68,17 @@ public class RaccoonCrateModifier : PassiveModifier
     [Header("치명타확률 증가량")]
     [SerializeField] float _criticalChancePerTag = 1f;
     [Header("치명타피해 증가량")]
-    [SerializeField] float _criticalDamageMultiPerTag = 0.01f;    // 1%
+    [SerializeField] float _criticalDamageMultiPerTag = 1f;
 
     public override void ModifyPlayerPermanent(PlayerStatFlat flat, PlayerStatMul multi, SkillManager skillManager, int subTag)
     {
         int count = CountSkillsWithSubTag(skillManager, subTag);
 
         // 고정 수치
-        flat.DefensePower   += _defencePerTag        * count;
-        flat.EvasionChance  += _evasionChancePerTag  * count;
-        flat.CriticalChance += _criticalChancePerTag * count;
-
-        // 배율 수치
-        multi.CriticalDamageMultiplier *= 1f + _criticalDamageMultiPerTag * count;
+        flat.DefensePower             += _defencePerTag             * count;
+        flat.EvasionChance            += _evasionChancePerTag       * count;
+        flat.CriticalChance           += _criticalChancePerTag      * count;
+        flat.CriticalDamageMultiplier += _criticalDamageMultiPerTag * count;
     }
 }
 
@@ -208,7 +206,7 @@ public class BiggerBetterModifier : PassiveModifier
 
         if (excess <= 0f) return;
 
-        finalStat.Damage *= 1f + _damagePerSize * excess;
+        finalStat.Damage    *= 1f + _damagePerSize    * excess;
         finalStat.Knockback *= 1f + _knockbackPerSize * excess;
     }
 }

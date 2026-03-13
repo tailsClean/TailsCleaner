@@ -102,7 +102,7 @@ public class BluetoothShowerSkill : ActiveSkill<BluetoothShowerProjectile, Bluet
                 _lastDefenseBonus = _modifierData.DefenseBonus;
             }
             // 런타임 고정 스탯에 추가
-            SkillStatHandler.AddRuntimeFlat(BUFF_KEY_WATERPROOF, _waterproofFlat);
+            SkillStatHandler.AddRuntimeStat(BUFF_KEY_WATERPROOF, _waterproofFlat);
             Debug.Log($"[BluetoothShower] 방수코팅 ON - 방어력 + {_modifierData.DefenseBonus}");
         }
 
@@ -233,7 +233,7 @@ public class BluetoothShowerSkill : ActiveSkill<BluetoothShowerProjectile, Bluet
                 _lastSpeedBoostAmount = _modifierData.SpeedBoostAmount;
             }
             // 런타임 고정 수치 추가
-            SkillStatHandler.AddRuntimeFlat(BUFF_KEY_COLDWATER, _coldWaterFlat);
+            SkillStatHandler.AddRuntimeStat(BUFF_KEY_COLDWATER, _coldWaterFlat);
         }
         // 비활성화
         else

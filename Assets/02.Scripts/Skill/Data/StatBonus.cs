@@ -156,43 +156,44 @@ public class PlayerStatFlat        // 추가 플레이어 스탯
 
 public class PlayerStatMul      // 플레이어 스탯 곱산용
 {
-    public float MaxHp                      = 1f;
-    public float AttackPower                = 1f;
-    public float DefensePower               = 1f;
-    public float MoveSpeed                  = 1f;
-    public float CriticalChance             = 1f;
-    public float CriticalDamageMultiplier   = 1f;
-    public float EvasionChance              = 1f;
-    public float PickupRange                = 1f;
-    public float ExpGainRate                = 1f;
-    public float MoveSpeedMultiplier        = 1f;  
+    public float MaxHp                      = 0f;
+    public float AttackPower                = 0f;
+    public float DefensePower               = 0f;
+    public float MoveSpeed                  = 0f;
+    public float CriticalChance             = 0f;
+    public float CriticalDamageMultiplier   = 0f;
+    public float EvasionChance              = 0f;
+    public float PickupRange                = 0f;
+    public float ExpGainRate                = 0f;
+    public float MoveSpeedMultiplier        = 0f;  
 
-    public void Multiply(PlayerStatMul other)
+    // 단리 
+    public void AddMultiplier(PlayerStatMul other)
     {
-        MaxHp                    *= other.MaxHp;
-        AttackPower              *= other.AttackPower;
-        DefensePower             *= other.DefensePower;
-        MoveSpeed                *= other.MoveSpeed;
-        CriticalChance           *= other.CriticalChance;
-        CriticalDamageMultiplier *= other.CriticalDamageMultiplier;
-        EvasionChance            *= other.EvasionChance;
-        PickupRange              *= other.PickupRange;
-        ExpGainRate              *= other.ExpGainRate;
-        MoveSpeedMultiplier      *= other.MoveSpeedMultiplier;
-}
+        MaxHp                    += other.MaxHp;
+        AttackPower              += other.AttackPower;
+        DefensePower             += other.DefensePower;
+        MoveSpeed                += other.MoveSpeed;
+        CriticalChance           += other.CriticalChance;
+        CriticalDamageMultiplier += other.CriticalDamageMultiplier;
+        EvasionChance            += other.EvasionChance;
+        PickupRange              += other.PickupRange;
+        ExpGainRate              += other.ExpGainRate;
+        MoveSpeedMultiplier      += other.MoveSpeedMultiplier;
+    }
 
     public void Reset()
     {
-        MaxHp                    = 1f;
-        AttackPower              = 1f;
-        DefensePower             = 1f;
-        MoveSpeed                = 1f;
-        CriticalChance           = 1f;
-        CriticalDamageMultiplier = 1f;
-        EvasionChance            = 1f;
-        PickupRange              = 1f;
-        ExpGainRate              = 1f;
-        MoveSpeedMultiplier      = 1f;
+        MaxHp                    = 0f;
+        AttackPower              = 0f;
+        DefensePower             = 0f;
+        MoveSpeed                = 0f;
+        CriticalChance           = 0f;
+        CriticalDamageMultiplier = 0f;
+        EvasionChance            = 0f;
+        PickupRange              = 0f;
+        ExpGainRate              = 0f;
+        MoveSpeedMultiplier      = 0f;
     }
 
     public void CopyFrom(PlayerStatMul other)

@@ -20,6 +20,10 @@ public class SkillStatHandler : MonoBehaviour
     // 총합
     private PlayerStatFlat _totalFlat = new();
     private PlayerStatMul _totalMulti = new();
+    
+    // 런타임 버프 중첩 수 (효과 중첩 아님 장판같은거 여러 개 밟았을 때 체크용)
+
+    private Dictionary<string, int> _runtimeCounts = new();
 
     // 적 강화 (저주?)
     // public EnemyBuffData EnemyBuff { get; } = new();
@@ -75,28 +79,46 @@ public class SkillStatHandler : MonoBehaviour
         Apply();
     }
 
+    // 런타임 고정, 계수 스탯 적용
+    public void AddRuntimeStat(string key, PlayerStatFlat flat = null, PlayerStatMul multi = null)
+    {
+        // 카운트 없으면 생성
+        if (_runtimeCounts.ContainsKey(key) == false)
+            _runtimeCounts[key] = 0;
 
-    // 런타임 스탯 추가
-    public void AddRuntimeFlat(string key, PlayerStatFlat flat)     // 고정
-    {
-        _runtimeFlats[key] = flat;
-        Apply();
-    }
-    public void AddRunTimeMulti(string key, PlayerStatMul multi)    // 배율
-    {
-        _runtimeMuls[key] = multi;
+        // 카운트 추가
+        _runtimeCounts[key]++;
+
+        // 들어온 스탯만 덮어쓰기
+        if (flat != null)
+            _runtimeFlats[key] = flat;
+
+        if (multi != null)
+            _runtimeMuls[key] = multi;
+
+        // 스탯 재계산 후 적용
         Apply();
     }
 
     // 런타임 스탯 제거 (flat랑 multi 같은 key 로 관리)
     public void RemoveRuntime(string key)
     {
-        // 플랫 삭제 시도 후 결과
-        bool changed = _runtimeFlats.Remove(key);
-        // 멀티 삭제 시도 후 결과 합침
-        changed |= _runtimeMuls.Remove(key);
-        // 둘 중 하나라도 참이면 적용
-        if (changed) Apply();
+        // 카운트 없으면 돌아갓
+        if (_runtimeCounts.ContainsKey(key) == false) return;
+
+        // 카운트 감소
+        _runtimeCounts[key]--;
+
+        // 카운트 싹 사라지면 스탯 제거
+        if (_runtimeCounts[key] <= 0)
+        {
+            _runtimeCounts.Remove(key);
+            _runtimeFlats.Remove(key);
+            _runtimeMuls.Remove(key);
+        }
+
+        // 플레이어에 적용
+        Apply();
     }
 
 
@@ -153,11 +175,11 @@ public class SkillStatHandler : MonoBehaviour
 
         // 총합에 영구 스탯 추가
         _totalFlat.Add(_permanentFlat);
-        _totalMulti.Multiply(_permanentMul);
+        _totalMulti.AddMultiplier(_permanentMul);
 
         // 총합에 런타임 스탯 추가
         foreach (var flat in _runtimeFlats.Values) _totalFlat.Add(flat);
-        foreach (var multi in _runtimeMuls.Values) _totalMulti.Multiply(multi);
+        foreach (var multi in _runtimeMuls.Values) _totalMulti.AddMultiplier(multi);
 
         // 스킬 스탯 주입
         _playerSkillStat.SetSkillStat(_totalFlat, _totalMulti);
