@@ -61,6 +61,7 @@ public class PlayerBase : MonoBehaviour, IDamageable, ISkillable, ISkillStat
     public float EvasionChance => _statCalculator.GetFinalSat(_evasionChance, EQUIP_STAT.EvasionChance);
     public float ExpGainRate => _statCalculator.GetFinalSat(_expGainRate, RELIC_STAT.ExpGainRate);
     public float PickupRange => _pickupRange;
+    public float AttackSpeed => 100f;
     public Vector2 MoveDir => _stateMachine.MoveDir;
     public Vector2 AttackDir { get; private set; }
     public Vector2 LastAttackDir { get; private set; }
