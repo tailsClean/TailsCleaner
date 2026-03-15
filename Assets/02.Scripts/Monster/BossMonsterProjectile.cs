@@ -58,11 +58,11 @@ public class BossMonsterProjectile : PoolObject
         rb2D.gravityScale = 0f;
     }
 
-    public void Launch(Transform playerTarget, float monsterPower, float typeMultiply, float patternMultiply)
+    public void Launch(Transform playerTarget, float calculatedDamage)
     {
         if (playerTarget == null) return;
 
-        this.finalDamage = monsterPower * typeMultiply * patternMultiply; // 데미지 설정
+        this.finalDamage = calculatedDamage;
         target = playerTarget;
         isInitialized = true;
 

@@ -64,6 +64,7 @@ public class BossMonster : MonsterBase
     private float blinkCooldownTimer = 0f;
     private float barricadeTimer = 0f;
     private float orbitCooldownTimer = 0f;
+    public float damage;
 
     private bool isJumping = false;
     private bool isWaitingJump = false;
@@ -220,7 +221,10 @@ public class BossMonster : MonsterBase
 
             // 데미지 전달 로직 
             var proj = orbit.GetComponent<OrbitProjectile>();
-            if (proj != null) proj.damage = monster_power * orbitDamageMultiplier;
+            if (proj != null)
+            {
+                proj.SetDamage(monster_power * orbitDamageMultiplier);
+            }
 
             activeOrbits.Add(orbit);
 
