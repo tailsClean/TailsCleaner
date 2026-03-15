@@ -78,7 +78,7 @@ public abstract class MonsterBase : PoolObject, IDamageable
     {
         base.OnSpawn();
 
-        // ✅ 풀 재사용 시 상태 초기화
+        //  풀 재사용 시 상태 초기화
         CacheBaseStats();
         hp = _baseHp;
         power = _basePower; // 필요하다면 기본값 복구 후 ApplyScaling이 다시 덮어씀
@@ -231,7 +231,7 @@ public abstract class MonsterBase : PoolObject, IDamageable
             }
         }
 
-        // 3. 반납 로직 (에러 발생 지점)
+        // 반납 로직 
         if (ObjectPoolManager.Instance != null)
         {
             ObjectPoolManager.Instance.ReturnObject(this);

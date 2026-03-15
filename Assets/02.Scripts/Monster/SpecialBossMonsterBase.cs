@@ -237,12 +237,15 @@ public abstract class SpecialBossMonsterBase : MonsterBase
         // 지그재그 계산
         float sideOffset = Mathf.Sin(patternTimer * patternFrequency) * zigzag_width;
 
-        // 거리 기반 감쇄 (Damping)
+        // 거리 기반 감쇄 
         
         float damping = Mathf.Clamp01((dist - 0.2f) / 0.8f);
 
+        // 속도
+        float zigzagSpeed = move_speed* pattern_multiply;
+
         // 최종 이동 계산
-        Vector2 movement = (baselineDir * move_speed) + (sideDir * sideOffset * patternFrequency * damping);
+        Vector2 movement = (baselineDir * zigzagSpeed)+ (sideDir * sideOffset * patternFrequency * damping);
 
         // 속도 적용 
         if (dist < 0.1f)
