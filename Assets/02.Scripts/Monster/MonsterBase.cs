@@ -9,7 +9,7 @@ public abstract class MonsterBase : PoolObject, IDamageable
     public float stoppingDistance = 0.1f;
 
     [Header("--- 몬스터 정체성 ---")]
-    public abstract MonsterType monsterType { get; }
+    public abstract MonsterEnum.MONSTERTYPE monsterType { get; }
 
     [Header("--- 기준 스탯 ---")]
     public float hp = 1.0f;

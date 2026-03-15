@@ -3,7 +3,7 @@ using MonsterEnum;
 
 public class SpecialMonster : SpecialBossMonsterBase
 {
-    public override MonsterType monsterType => MonsterType.Special;
+    public override MONSTERTYPE monsterType => MONSTERTYPE.Special;
 
     protected override void Start()
     {
