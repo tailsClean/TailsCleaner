@@ -33,6 +33,14 @@ public class StageController : MonoBehaviour
 
     private void Awake()
     {
+        if (Instance != null && Instance != this)
+        {
+            Destroy(gameObject);
+            return;
+        }
+
+        Instance = this;
+
         _events = new StageEvents();
         _timer = new StageTimer(_events);
         _stateMachine = new StageStateMachine();
@@ -45,6 +53,9 @@ public class StageController : MonoBehaviour
 
     private void OnDestroy()
     {
+        if (Instance == this)
+            Instance = null;
+
         if (_events != null)
         {
             _events.OnMainTimerReachedLimit -= HandleMainTimerReachedLimit;
