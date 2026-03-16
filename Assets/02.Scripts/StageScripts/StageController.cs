@@ -3,6 +3,8 @@ using UnityEngine;
 
 public class StageController : MonoBehaviour
 {
+    public static StageController Instance { get; private set; }
+
     [SerializeField] private StageResultHandler _resultHandler;
     [SerializeField] private PlayerRewardHandler _playerRewardHandler;
     [SerializeField] private StageTimerTextUI _timerUI;
@@ -10,6 +12,9 @@ public class StageController : MonoBehaviour
     [SerializeField] private VoidEventChannelSO _onPlayerDead;
 
     public PlayerRewardHandler RewardHandler => _playerRewardHandler;
+    public StagePlan CurrentPlan => _plan;
+    public StageEvents Events => _events;
+    public StageTimer Timer => _timer;
 
     private StageEvents _events;
     private StageTimer _timer;
@@ -28,6 +33,14 @@ public class StageController : MonoBehaviour
 
     private void Awake()
     {
+        if (Instance != null && Instance != this)
+        {
+            Destroy(gameObject);
+            return;
+        }
+
+        Instance = this;
+
         _events = new StageEvents();
         _timer = new StageTimer(_events);
         _stateMachine = new StageStateMachine();
@@ -40,6 +53,9 @@ public class StageController : MonoBehaviour
 
     private void OnDestroy()
     {
+        if (Instance == this)
+            Instance = null;
+
         if (_events != null)
         {
             _events.OnMainTimerReachedLimit -= HandleMainTimerReachedLimit;

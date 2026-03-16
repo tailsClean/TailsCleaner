@@ -53,6 +53,8 @@ public abstract class SpecialBossMonsterBase : MonsterBase
     private bool hasExploded = false;      // 이미 터졌는지 체크
     private float currentCastTimer;        // 실시간 자폭 대기 타이머
 
+    private BossTriggerPatternRunner _triggerRunner;
+
     protected override void Start()
     {
         base.Start();
@@ -135,6 +137,7 @@ public abstract class SpecialBossMonsterBase : MonsterBase
             if (playerObj != null)
                 target = playerObj.transform;
         }
+
     }
 
     public override void OnDespawn()
@@ -165,6 +168,11 @@ public abstract class SpecialBossMonsterBase : MonsterBase
 
         if (visualChild != null)
             visualChild.localPosition = Vector2.zero;
+
+        if (_triggerRunner != null)
+        {
+            _triggerRunner.Unbind();
+        }
     }
 
     protected override void MoveToTarget()

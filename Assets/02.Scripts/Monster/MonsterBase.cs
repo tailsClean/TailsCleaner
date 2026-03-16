@@ -57,6 +57,13 @@ public abstract class MonsterBase : PoolObject, IDamageable, IMonsterStatus, IPu
 
     public Vector2 Position => rb2D.position;
 
+    public int MonsterId { get; private set; } = -1;
+
+    public void SetMonsterId(int id)
+    {
+        MonsterId = id;
+    }
+
     protected virtual void Awake()
     {
         rb2D = GetComponent<Rigidbody2D>();

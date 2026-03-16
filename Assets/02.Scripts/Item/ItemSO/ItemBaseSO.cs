@@ -18,6 +18,7 @@ public abstract class ItemBaseSO : ScriptableObject
     [SerializeField] protected int _maxQuantity;
 
 
+    public abstract string Name { get; }
     public int UniqueID => _uniqueID;
     public ITEM_TYPE ItemType => _itemType;
     public int MaxStack => _maxStack;
