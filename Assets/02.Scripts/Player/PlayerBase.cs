@@ -3,23 +3,9 @@ using UnityEngine.InputSystem;
 
 public class PlayerBase : MonoBehaviour, IDamageable, ISkillable, ISkillStat
 {
-    [SerializeField] public float _maxhp = 15;
-    [SerializeField] public float _attackPower = 10;
-    [SerializeField] public float _defensePower = 1;
-    [SerializeField] public float _evasionChance = 10;                    // 회피율
-    [SerializeField] public float _criticalChance = 10;
-    [SerializeField] public float _criticalDamageMultiplier = 2;          // 치명타 피해 배율
-    [SerializeField] public float _criticalResistance = 10;               // 치명 저항
-    [SerializeField] public float _moveSpeed = 5;
-    [SerializeField] public float _healthRegen = 10;                      // Hp 회복량
-    [SerializeField] public float _outGameMaxExp = 50;
-    [SerializeField] public int _outGameLevel = 1;
+    [field: SerializeField] public PlayerDataSO Data { get; private set; }
 
-    [Header("인게임 정보")]
-    [SerializeField] public int _inGameLevel = 1;
-    [SerializeField] public float _inGameMaxExp = 50;
-    [SerializeField] public float _expGainRate = 10;                    // 경험치 획득량
-    [SerializeField] public float _pickupRange = 1;                     // 아이템 줍는 범위
+    [Header("아이템 픽업 기능을 위한 콜라이더")]
     [SerializeField] private ItemPickupSystem _itemPickupSystem;        // 아이템 줍는 범위 콜라이더
 
     [Header("이벤트 채널")]
@@ -31,12 +17,7 @@ public class PlayerBase : MonoBehaviour, IDamageable, ISkillable, ISkillStat
     [SerializeField] private IntEventChannelSO _onOutGameLevelUp;
     [SerializeField] private VoidEventChannelSO _onDead;
 
-
-    [Header("추가가 필요한 데이터")]
-    [SerializeField] private float _itemDropRate = 1;
-    [SerializeField] private float _goldGainRate = 1;
-    
-
+    // 플레이어 기능별 계산 클래스
     private PlayerHpSystem _hpSystem;
     private PlayerLevelSystem _levelSystem;
     private PlayerLoadout _myEnhancement;
@@ -45,45 +26,33 @@ public class PlayerBase : MonoBehaviour, IDamageable, ISkillable, ISkillStat
 
 
     public float Hp => _hpSystem.CurrentHp;
-    public float ItemDropRate => _statCalculator.GetFinalSat(_itemDropRate, RELIC_STAT.ItemDropRate);
-    public float GoldGainRate => _statCalculator.GetFinalSat(_goldGainRate, RELIC_STAT.GoldGainRate);
+    public float InGameMaxExp => _levelSystem.InGameMaxExp;
+    public float ItemDropRate => _statCalculator.GetFinalSat(Data.ItemDropRate, PLAYER_STAT.ItemDropRate);
+    public float GoldGainRate => _statCalculator.GetFinalSat(Data.GoldGainRate, PLAYER_STAT.GoldGainRate);
 
 
-    // 스킬 공유 데이터 (인트 수정 필요)
-    public float MaxHp => _hpSystem.MaxHp;
+    public float MaxHp =>  _statCalculator.GetFinalSat(_hpSystem.MaxHp, PLAYER_STAT.MaxHp);
     public int MaxShield => _hpSystem.MaxSield;
     public int CurrentShield => _hpSystem.CurrentSield;
-    public float AttackPower => _statCalculator.GetFinalSat(_attackPower, EQUIP_STAT.AttackPower);
-    public float DefensePower => _statCalculator.GetFinalSat(_defensePower, EQUIP_STAT.DefensePower);
-    public float MoveSpeed => _statCalculator.GetFinalSat(_moveSpeed, EQUIP_STAT.MoveSpeed);
-    public float CriticalChance => _statCalculator.GetFinalSat(_criticalChance, EQUIP_STAT.CriticalChance);
-    public float CriticalDamageMultiplier => _criticalDamageMultiplier;
-    public float EvasionChance => _statCalculator.GetFinalSat(_evasionChance, EQUIP_STAT.EvasionChance);
-    public float ExpGainRate => _statCalculator.GetFinalSat(_expGainRate, RELIC_STAT.ExpGainRate);
-    public float PickupRange => _pickupRange;
+    public float AttackPower => _statCalculator.GetFinalSat(Data.AttackPower, PLAYER_STAT.AttackPower);
+    public float DefensePower => _statCalculator.GetFinalSat(Data.DefensePower, PLAYER_STAT.DefensePower);
+    public float MoveSpeed => _statCalculator.GetFinalSat(Data.MoveSpeed, PLAYER_STAT.MoveSpeed);
+    public float CriticalChance => _statCalculator.GetFinalSat(Data.CriticalChance, PLAYER_STAT.CriticalChance);
+    public float CriticalDamageMultiplier => Data.CriticalDamageMultiplier;
+    public float EvasionChance => _statCalculator.GetFinalSat(Data.EvasionChance, PLAYER_STAT.EvasionChance);
+    public float ExpGainRate => _statCalculator.GetFinalSat(Data.ExpGainRate, PLAYER_STAT.ExpGainRate);
+    public float PickupRange => Data.PickupRange;
     public Vector2 MoveDir => _stateMachine.MoveDir;
     public Vector2 AttackDir { get; private set; }
     public Vector2 LastAttackDir { get; private set; }
 
 
-    //
-    // 아웃 게임 레벨업시, 증가하는 스탯을 위해 붙여둠
-    public LevelupTestStat TestLevelStat;
-    //
-
-
-
     private void Awake()
     {
-        //
-        if(TestLevelStat == null)
-            TestLevelStat = GetComponent<LevelupTestStat>();
-        //
-
         _hpSystem = new PlayerHpSystem(this);
         _levelSystem = new PlayerLevelSystem(this);
         _myEnhancement = ItemManager.Instance.Loadout;
-        _statCalculator = new PlayerStatCalculator(_myEnhancement);
+        _statCalculator = new PlayerStatCalculator(_myEnhancement, _levelSystem);
 
         _stateMachine = new PlayerStateMachine(this);
     }
@@ -102,7 +71,7 @@ public class PlayerBase : MonoBehaviour, IDamageable, ISkillable, ISkillStat
 
     private void Start()
     {
-        _itemPickupSystem.SetColliderRange(_pickupRange);
+        _itemPickupSystem.SetColliderRange(Data.PickupRange);
         AttackDir = new Vector2(0, -1);
     }
 
@@ -195,22 +164,12 @@ public class PlayerBase : MonoBehaviour, IDamageable, ISkillable, ISkillStat
     public void SetSkillStat(PlayerStatFlat flat, PlayerStatMul multi) =>
         _statCalculator.SetSkillStat(flat, multi);
 
-
-
-    //
-    [ContextMenu("스텟출력")]
-    public void TestStat()
+    [ContextMenu("스탯출력")]
+    public void Stat()
     {
         float a = 0;
         a = AttackPower;
         a = DefensePower;
-        a = MoveSpeed;
-        a = CriticalChance;
-        a = EvasionChance;
-        a = CriticalDamageMultiplier;
-        a = ExpGainRate;
-        a = ItemDropRate;
         a = GoldGainRate;
     }
-    //
 }

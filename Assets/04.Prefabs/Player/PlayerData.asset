@@ -1,0 +1,47 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9652ea5fbd0cc0a49988526368291cd2, type: 3}
+  m_Name: PlayerData
+  m_EditorClassIdentifier: Assembly-CSharp::PlayerDataSO
+  _id: 0
+  _maxhp: 15
+  _attackPower: 10
+  _defensePower: 1
+  _evasionChance: 10
+  _criticalChance: 10
+  _criticalDamageMultiplier: 2
+  _criticalResistance: 10
+  _healthRegen: 10
+  _pickupRange: 1
+  _moveSpeed: 5
+  _attackSpeed: 5
+  _outGameMaxExp: 50
+  _itemDropRate: 1
+  _goldGainRate: 1
+  _expGainRate: 10
+  _outGameLevelData:
+  - <Level>k__BackingField: 1
+    <StatGrowth>k__BackingField: 10
+    <MaxExp>k__BackingField: 0
+  - <Level>k__BackingField: 2
+    <StatGrowth>k__BackingField: 30
+    <MaxExp>k__BackingField: 0
+  - <Level>k__BackingField: 3
+    <StatGrowth>k__BackingField: 40
+    <MaxExp>k__BackingField: 0
+  _inGameLevelData:
+  - <Level>k__BackingField: 1
+    <MaxExp>k__BackingField: 20
+  - <Level>k__BackingField: 2
+    <MaxExp>k__BackingField: 80
+  - <Level>k__BackingField: 3
+    <MaxExp>k__BackingField: 0

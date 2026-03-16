@@ -1,20 +1,27 @@
 ﻿using UnityEngine;
 
-public class PlayerLevelSystem
+public class PlayerLevelSystem : ILevelStat
 {
-    public float InGameCurrentExp { get; private set; }
-    public float InGameMaxExp { get; private set; }
-    public int InGameLevel { get; private set; }
+    private PlayerDataSO _playerData;
 
-    public float OutGameCurrentExp { get; private set; }
-    public float OutGameMaxExp { get; private set; }
+    // 인게임 레벨 데이터
+    public int InGameLevel { get; private set; }
+    public float InGameCurrentExp { get; private set; }
+    public float InGameMaxExp => _playerData.GetInLevelData(InGameLevel).MaxExp;
+
+    // 아웃게임 레벨 데이터
     public int OutGameLevel { get; private set; }
+    public float OutGameCurrentExp { get; private set; }
+    public float OutGameMaxExp => _playerData.GetOutLevelData(OutGameLevel).MaxExp;
+
+
+    // 레벨에 따른 스탯 증가 배율
+    public float StatGrowth => _playerData.GetOutLevelData(OutGameLevel).StatGrowth;
 
 
     public PlayerLevelSystem(PlayerBase player)
     {
-        InGameMaxExp = player._inGameMaxExp;
-        OutGameMaxExp = player._outGameMaxExp;
+        _playerData = player.Data;
         InGameLevel = 1;
         OutGameLevel = 1;
     }
@@ -29,7 +36,7 @@ public class PlayerLevelSystem
         {
             case GameMode.InGame:
                 InGameCurrentExp += gainExp;
-                isLevelUp = InGameCurrentExp > InGameMaxExp ? true : false;
+                isLevelUp = InGameCurrentExp >= InGameMaxExp ? true : false;
 
                 if(isLevelUp)
                     LevelUp(gameMode);
@@ -68,4 +75,9 @@ public class PlayerLevelSystem
 
 
     public enum GameMode { InGame,  OutGame }
+}
+
+public interface ILevelStat
+{
+    public float StatGrowth { get; }
 }
