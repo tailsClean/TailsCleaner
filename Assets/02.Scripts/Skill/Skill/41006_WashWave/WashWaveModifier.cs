@@ -26,9 +26,9 @@ public class WashWaveModifierData
 public class WashWaveCurseModifier : ActiveModifier<WashWaveSkill>
 {
     [Header("적 강화 수치")]
-    public float EnemyStrengthBonus = 0.1f;
+    public float EnemyStrengthBonus = 1f;
     [Header("경험치 증가량")]
-    public float ExpGainBonus = 0.05f;
+    public float ExpGainBonus = 5f;
 
     public override void ApplyModifier(WashWaveSkill skill, ActiveUpgradeData upgradeData)
     {
@@ -50,9 +50,9 @@ public class WashWaveReturnModifier : ActiveModifier<WashWaveSkill>
     [Header("왕복 딜레이")]
     public float ReturnDelay = 2f;
     [Header("적 강화 수치")]
-    public float EnemyStrengthBonus = 0.1f;
+    public float EnemyStrengthBonus = 1f;
     [Header("경험치 증가량")]
-    public float ExpGainBonus = 0.05f;
+    public float ExpGainBonus = 5f;
 
     public override void ApplyModifier(WashWaveSkill skill, ActiveUpgradeData upgradeData)
     {
@@ -79,9 +79,9 @@ public class WashWaveDrainModifier : ActiveModifier<WashWaveSkill>
     [Header("체력 감소량")]
     public float DrainAmount = 0.01f;
     [Header("적 강화 수치")]
-    public float EnemyStrengthBonus = 0.1f;
+    public float EnemyStrengthBonus = 1f;
     [Header("경험치 증가량")]
-    public float ExpGainBonus = 0.05f;
+    public float ExpGainBonus = 5f;
 
     public override void ApplyModifier(WashWaveSkill skill, ActiveUpgradeData upgradeData)
     {
@@ -106,9 +106,9 @@ public class WashWaveHealModifier : ActiveModifier<WashWaveSkill>
     [Header("체력 회복 비율")]
     public float HealRatio = 0.1f;
     [Header("적 강화 수치")]
-    public float EnemyStrengthBonus = 0.1f;
+    public float EnemyStrengthBonus = 1f;
     [Header("경험치 증가량")]
-    public float ExpGainBonus = 0.05f;
+    public float ExpGainBonus = 5f;
 
     public override void ApplyModifier(WashWaveSkill skill, ActiveUpgradeData upgradeData)
     {

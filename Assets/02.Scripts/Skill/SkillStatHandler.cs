@@ -73,6 +73,11 @@ public class SkillStatHandler : MonoBehaviour
             OnMonsterStrengthChanged?.Invoke(TotalMonsterStrengthBonus);
         }
 
+        //if (MonsterManager.Instance != null)
+        //{
+        //    MonsterManager.Instance.SetEnemyStrengthBonus(TotalMonsterStrengthBonus);
+        //}
+
         // 방어막 최대치 갱신 (NimbleBlockModifier)
         int newMax = 1;
         foreach (var passive in skillManager.MyPassiveSkills)
@@ -136,10 +141,12 @@ public class SkillStatHandler : MonoBehaviour
     // 초과 회복 시 청소용 비닐옷 방어막 충전 처리
     public void HealByRatio(float ratio)
     {
-        //float maxHp = _player.MaxHp;
-        float maxHp = 100f;                                 // 최대 체력
-        float amount = maxHp * ratio;                       // 회복 비율
-        float overflow = (_player.Hp + amount) - maxHp;     // 초과 회복
+        float maxHp = _player.MaxHp;                        // 최대 체력
+        float currentHp = _player.Hp;                       // 현재 체력
+        float amount = maxHp * ratio;                       // 회복량
+        float overflow = (currentHp + amount) - maxHp;      // 초과 회복
+
+        Debug.Log($"[SkillStatHandler] 최대 체력 비율 회복 - 최대 체력 : {maxHp} / 현재 체력 : {currentHp} / 회복량 : {amount} / 초과회복 : {overflow > 0f}");
 
         // 회복
         _player.Heal(amount);
@@ -191,6 +198,17 @@ public class SkillStatHandler : MonoBehaviour
         // 총합에 런타임 스탯 추가
         foreach (var flat in _runtimeFlats.Values) _totalFlat.Add(flat);
         foreach (var multi in _runtimeMuls.Values) _totalMulti.AddMultiplier(multi);
+
+        //Debug.Log($"플레이어 스탯 추가 최대체력    : {_totalFlat.MaxHp}");
+        //Debug.Log($"플레이어 스탯 추가 공격력      : {_totalFlat.AttackPower}");
+        //Debug.Log($"플레이어 스탯 추가 방어력      : {_totalFlat.DefensePower}");
+        //Debug.Log($"플레이어 스탯 추가 이동속도    : {_totalFlat.MoveSpeed}");
+        //Debug.Log($"플레이어 스탯 추가 경험치 획득 : {_totalFlat.ExpGainRate} %");
+        //Debug.Log($"플레이어 스탯 추가 회피율      : {_totalFlat.EvasionChance}");
+        //Debug.Log($"플레이어 스탯 추가 치명타율    : {_totalFlat.CriticalChance} %");
+        //Debug.Log($"플레이어 스탯 추가 치명타계수  : {_totalFlat.CriticalDamageMultiplier} %");
+
+        //Debug.Log($"플레이어 스탯 이동속도 계수  : {_totalMulti.MoveSpeed * 100f}");
 
         // 스킬 스탯 주입
         _playerSkillStat.SetSkillStat(_totalFlat, _totalMulti);

@@ -75,16 +75,24 @@ public class SkillManager : MonoBehaviour
 
 
         // 테스트용 업그레이드 
+        //ApplyPassiveOption(SkillDataLoader.PassiveSkillMap[42001]); // 라쿤
         //ApplyPassiveOption(SkillDataLoader.PassiveSkillMap[42004]); // 추가추가피해
+        //ApplyPassiveOption(SkillDataLoader.PassiveSkillMap[42006]); // 객기
         //ApplyPassiveOption(SkillDataLoader.PassiveSkillMap[42007]); // 청소용 비닐옷
         //ApplyPassiveOption(SkillDataLoader.PassiveSkillMap[42008]); // 고전비급
+        //ApplyPassiveOption(SkillDataLoader.PassiveSkillMap[42010]); // 황금왕관
         //ApplyPassiveOption(SkillDataLoader.PassiveSkillMap[42012]); // 스노우볼링
         //ApplyPassiveOption(SkillDataLoader.PassiveSkillMap[42013]); // 양손잡이
         //ApplyPassiveOption(SkillDataLoader.PassiveSkillMap[42016]); // 냥빨래
+        //ApplyPassiveOption(SkillDataLoader.PassiveSkillMap[42017]); // 쉽게 피함
 
         //ApplyActiveOption(41001, SkillDataLoader.GetActiveUpgradeData(40001));  // 비누 거품
         //ApplyActiveOption(41001, SkillDataLoader.GetActiveUpgradeData(40002));  // 자동 추적 비누 지우개
+        //ApplyActiveOption(41001, SkillDataLoader.GetActiveUpgradeData(40003));  // 버블버블
+        //ApplyActiveOption(41001, SkillDataLoader.GetActiveUpgradeData(40004));  // 빨래당함
         //ApplyActiveOption(41001, SkillDataLoader.GetActiveUpgradeData(40005));  // 흐르는 거품
+        //ApplyActiveOption(41001, SkillDataLoader.GetActiveUpgradeData(40006));  // 세제온더락
+        //ApplyActiveOption(41001, SkillDataLoader.GetActiveUpgradeData(40007));  // 슬랩스틱
 
         //ApplyActiveOption(41002, SkillDataLoader.GetActiveUpgradeData(40009));  // 비누 던지기
         //ApplyActiveOption(41002, SkillDataLoader.GetActiveUpgradeData(40011));  // 감나빗!
@@ -103,20 +111,30 @@ public class SkillManager : MonoBehaviour
 
         //ApplyActiveOption(41006, SkillDataLoader.GetActiveUpgradeData(40031));  // 세탁 파도
         //ApplyActiveOption(41006, SkillDataLoader.GetActiveUpgradeData(40033));  // 밀물 썰물
+        //ApplyActiveOption(41006, SkillDataLoader.GetActiveUpgradeData(40034));  // 탈수
+        //ApplyActiveOption(41006, SkillDataLoader.GetActiveUpgradeData(40035));  // 차오르는 체력
 
         //ApplyActiveOption(41007, SkillDataLoader.GetActiveUpgradeData(40037));  // 상큼하게 터져볼래?
         //ApplyActiveOption(41007, SkillDataLoader.GetActiveUpgradeData(40040));  // 1만 시간의 법칙
 
         //ApplyActiveOption(41008, SkillDataLoader.GetActiveUpgradeData(40041));  // 회전 장난감
+        //ApplyActiveOption(41008, SkillDataLoader.GetActiveUpgradeData(40042));  // 기차 장난감
+        //ApplyActiveOption(41008, SkillDataLoader.GetActiveUpgradeData(40043));  // 팽이 장난감
+        //ApplyActiveOption(41008, SkillDataLoader.GetActiveUpgradeData(40044));  // 달 장난감
         //ApplyActiveOption(41008, SkillDataLoader.GetActiveUpgradeData(40045));  // 오리 장난감
         //ApplyActiveOption(41008, SkillDataLoader.GetActiveUpgradeData(40046));  // 해적선 장난감
+        //ApplyActiveOption(41008, SkillDataLoader.GetActiveUpgradeData(40047));  // 상어 장난감
         //ApplyActiveOption(41008, SkillDataLoader.GetActiveUpgradeData(40048));  // 물놀이 끝
 
+        //ApplyActiveOption(41009, SkillDataLoader.GetActiveUpgradeData(40049));  // 일광건조
         //ApplyActiveOption(41009, SkillDataLoader.GetActiveUpgradeData(40050));  // 따스한 태양
+        //ApplyActiveOption(41009, SkillDataLoader.GetActiveUpgradeData(40053));  // 이불 두르기
+        //ApplyActiveOption(41009, SkillDataLoader.GetActiveUpgradeData(40054));  // 두꺼운 이불
         //ApplyActiveOption(41009, SkillDataLoader.GetActiveUpgradeData(40055));  // 기상!
 
+        //ApplyActiveOption(41010, SkillDataLoader.GetActiveUpgradeData(40056));  // 블루투스 샤워기
         //ApplyActiveOption(41010, SkillDataLoader.GetActiveUpgradeData(40057));  // 수압 최대로!
-        //ApplyActiveOption(41010, SkillDataLoader.GetActiveUpgradeData(40058));  // 온수샤워
+        //pplyActiveOption(41010, SkillDataLoader.GetActiveUpgradeData(40058));  // 온수샤워
         //ApplyActiveOption(41010, SkillDataLoader.GetActiveUpgradeData(40059));  // 냉수마찰
         //ApplyActiveOption(41010, SkillDataLoader.GetActiveUpgradeData(40060));  // 예열완료
         //ApplyActiveOption(41010, SkillDataLoader.GetActiveUpgradeData(40061));  // 방수코팅

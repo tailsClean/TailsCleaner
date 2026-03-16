@@ -143,7 +143,7 @@ public class WashWaveSkill : ActiveSkill<WashWaveProjectile, WashWaveModifierDat
             // foreach (var monster in MonsterManager.Instance.ActiveMonsters)
             //     monster.TakeDamage(_modifierData.DrainAmount);
 
-            Debug.Log($"[WashWave] 탈수 - 플레이어/모든 적 체력 {_modifierData.DrainAmount * 100f} 감소");
+            Debug.Log($"[WashWave] 탈수 - 플레이어/모든 적 체력 {_modifierData.DrainAmount * 100f}% 감소");
 
             yield return _drainDelay;
         }

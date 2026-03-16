@@ -73,7 +73,7 @@ public class BluetoothSpeedBoostModifier : ActiveModifier<BluetoothShowerSkill>
     [Header("유지 시간")]
     public float SpeedBoostDuration = 2f;
     [Header("이동속도 증가율")]
-    public float SpeedBoostAmount = 0.1f;
+    public float SpeedBoostAmount = 1f;
 
     public override void ApplyModifier(BluetoothShowerSkill skill, ActiveUpgradeData upgradeData)
     {

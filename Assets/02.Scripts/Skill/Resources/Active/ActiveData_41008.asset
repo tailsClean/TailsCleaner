@@ -80,14 +80,15 @@ MonoBehaviour:
     - rid: 3004722853898879162
       type: {class: SpinningToyTrainModifier, ns: , asm: Assembly-CSharp}
       data:
-        _playerSpeed: 0
+        _playerSpeed: 1
     - rid: 3004722853898879163
       type: {class: SpinningToyTopModifier, ns: , asm: Assembly-CSharp}
-      data: 
+      data:
+        _knockBack: 1
     - rid: 3004722853898879164
       type: {class: SpinningToyMoonModifier, ns: , asm: Assembly-CSharp}
       data:
-        _playerHp: 0
+        _playerMaxHp: 1
     - rid: 3004722853898879165
       type: {class: SpinningToyDuckModifier, ns: , asm: Assembly-CSharp}
       data:
@@ -96,11 +97,13 @@ MonoBehaviour:
         _sizeMultiplier: 0.5
     - rid: 3004722853898879166
       type: {class: SpinningToyPirateModifier, ns: , asm: Assembly-CSharp}
-      data: 
+      data:
+        _monsterStr: 1
+        _playerExpGain: 5
     - rid: 3004722853898879167
       type: {class: SpinningToySharkModifier, ns: , asm: Assembly-CSharp}
       data:
-        _playerDamage: 0
+        _playerDamage: 1
     - rid: 3004722853898879168
       type: {class: SpinningToyBurstModifier, ns: , asm: Assembly-CSharp}
       data:
