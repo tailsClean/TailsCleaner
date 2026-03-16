@@ -5,7 +5,7 @@ using static EquipmentSO;
 
 public partial class CraftingSystem : MonoBehaviour
 {
-    [SerializeField] private Inventory _inventory;
+    [SerializeField] private ItemInventory _inventory;
 
 
     private PlayerLoadout _loadout;                     // 장착 장비 확인을 위함
@@ -13,7 +13,7 @@ public partial class CraftingSystem : MonoBehaviour
     private CraftingInfo[] _resourceCraftSlots;
 
 
-    public Inventory UsingInventory => _inventory;
+    public ItemInventory UsingInventory => _inventory;
     public CraftingInfo MainEquip => _mainCraftSlot;
     public CraftingInfo[] ResourceEquips => _resourceCraftSlots;
 
@@ -42,7 +42,7 @@ public partial class CraftingSystem : MonoBehaviour
         SetResourceCraftSlots(equipment);
     }
 
-    // 강화 장비칸에 장비 세팅
+    // 업그레이드 장비칸에 장비 세팅
     private void SetMainCraftSlot(CraftingInfo mainEquip)
     {
         if(mainEquip == null)
@@ -96,6 +96,8 @@ public partial class CraftingSystem : MonoBehaviour
         { Debug.Log("재료장비의 개수가 부족합니다."); return;}
 
 
+        
+
         _mainCraftSlot.Grad++;
         if(_mainCraftSlot.IsLoadout)
         {
@@ -104,27 +106,41 @@ public partial class CraftingSystem : MonoBehaviour
         }
         else
         {
-            var equipStatus = new EquipStatus(_mainCraftSlot.InstanceID, _mainCraftSlot.ItemID, _mainCraftSlot.Grad);
-            _inventory.SetEquipment(equipStatus);
+            EquipRemoveAndCreate();
         }
-
 
         ReleaseResource();
         OnCrafting?.Invoke(_mainCraftSlot);
         Debug.Log("등급 업그레이드 성공!");
     }
+    // 합성된 장비 삭제 및 업그레이드 장비 추가
+    private void EquipRemoveAndCreate()
+    {
+        var originalEquip = _mainCraftSlot.InventoryKey;
+        _inventory.RemoveEquipment(originalEquip.ID, originalEquip.EnhanceLevel, originalEquip.Grade);
+        _inventory.GainEquipment(originalEquip.ID, originalEquip.EnhanceLevel, originalEquip.Grade + 1);
+
+        foreach(var slot in _resourceCraftSlots)
+        {
+            ItemInstance resource = slot.InventoryKey;
+            _inventory.RemoveEquipment(resource.ID, resource.EnhanceLevel, resource.Grade);
+            _inventory.GainEquipment(resource.ID, resource.EnhanceLevel, resource.Grade);
+        }
+    }
+
 
     
-    // 합성 리스트에서 특정 장비 제거
+    // 합성 메인 슬롯에서 장비 제거
     public void RemoveMainEquip(CraftingInfo equip)
     {
-        if(_mainCraftSlot != null && _mainCraftSlot.InstanceID == equip.InstanceID)
+        if(_mainCraftSlot != null &&  _mainCraftSlot.IsEquals(equip.InventoryKey))
         {
             _mainCraftSlot = null;
             _resourceCraftSlots = null;
         }
     }
 
+    // 합성 재료 슬롯에서 특정 장비 제거
     public void RemoveResourceEquip(CraftingInfo equip)
     {
         if (_resourceCraftSlots == null)
@@ -133,7 +149,7 @@ public partial class CraftingSystem : MonoBehaviour
         for (int i = _resourceCraftSlots.Length; i > 0; i--)
         {
             var slot = _resourceCraftSlots[i - 1];
-            if (slot != null && slot.InstanceID == equip.InstanceID)
+            if (slot != null && slot.IsEquals(equip.InventoryKey))
             {
                 _resourceCraftSlots[i - 1] = null;
                 return;
@@ -143,17 +159,16 @@ public partial class CraftingSystem : MonoBehaviour
         Debug.Log("지우려는 아이템이 합성 리스트에 없습니다.");
     }
 
-
+    
 
     private void ReleaseResource()
     {
         foreach(var slot in _resourceCraftSlots)
         {
-            var equipStatus = new EquipStatus(slot.InstanceID, slot.ItemID, slot.Grad);
-            _inventory.RemoveEquipment(equipStatus);
+            _inventory.RemoveEquipment(slot.InventoryKey);
         }
 
-        _resourceCraftSlots = null;
+        _resourceCraftSlots = new CraftingInfo[_mainCraftSlot.GradeData.CostCount];
     }
 
 
@@ -162,35 +177,41 @@ public partial class CraftingSystem : MonoBehaviour
 
 public class CraftingInfo
 {
-    public EQUIP_GRADE Grad;
-    public readonly int InstanceID;
+    public ItemInstance InventoryKey;
     public readonly int ItemID;
-    public readonly EQUIP_PARTS Parts;
-    public readonly bool IsLoadout;
-    public int CostID => GradeData.CostID;
+    public EQUIP_GRADE Grad;
+
+    public EQUIP_PARTS Parts => ItemDB.GetItemData<EquipmentSO>(ItemID).EquipmentPart;
     public EquipGradeData GradeData => ItemDB.GetItemData<EquipmentSO>(ItemID).GetGradeData(Grad);
+    public readonly bool IsLoadout;
 
-    public CraftingInfo(int itemID, EQUIP_GRADE grad, int instanceID = 0)
+    /// <summary>
+    /// 인벤토리에서 꺼낸 아이템을 사용할 때
+    /// </summary>
+    /// <param name="inventoryKey"></param>
+    public CraftingInfo(ItemInstance inventoryKey)
     {
-        InstanceID = instanceID;
-        ItemID = itemID;
-        Grad = grad;
-    }
-
-    public CraftingInfo(EquipStatus inventoryEuipment)
-    {
-        InstanceID = inventoryEuipment.InstanceID;
-        ItemID = inventoryEuipment.UniqueID;
-        Grad = inventoryEuipment.Grade;
-        Parts = inventoryEuipment.Parts;
+        InventoryKey = inventoryKey;
+        ItemID = inventoryKey.ID;
+        Grad = inventoryKey.Grade;
         IsLoadout = false;
     }
 
-    public CraftingInfo(EquipmentBase equipment )
+    /// <summary>
+    /// 착용 장비에서 꺼낸 아이템을 사용할 때
+    /// </summary>
+    /// <param name="equipment"></param>
+    public CraftingInfo(EquipmentBase equipment)
     {
         ItemID = equipment.Data.UniqueID;
         Grad = equipment.Grade;
-        Parts = equipment.EquipmentPart;
         IsLoadout = true;
+    }
+
+    public bool IsEquals(ItemInstance item)
+    {
+        return InventoryKey.ID == item.ID &&
+       InventoryKey.EnhanceLevel == item.EnhanceLevel &&
+       InventoryKey.Grade == item.Grade;
     }
 }

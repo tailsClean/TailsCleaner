@@ -30,7 +30,7 @@ public class PlayerHpSystem
     public PlayerHpSystem(PlayerBase player)
     {
         _player = player;
-        _maxHp = player._maxhp;
+        _maxHp = player.Data.Maxhp;
         _playerSprite = player.GetComponent<SpriteRenderer>();
     }
 

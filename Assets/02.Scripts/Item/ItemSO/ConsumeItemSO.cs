@@ -12,12 +12,16 @@ public class ConsumeItemSO : ItemBaseSO
     [SerializeField] private string _script;
     [SerializeField] private string _usingAfterIllust;
 
+    [SerializeField] private string _name;
+
 
     public CONSUME_STAT Type => _type;
     public int OptValue => _optValue;
     public string OptDescription => _optDescription;
     public string Script => _script;
     public string UsingAfterIllust => _usingAfterIllust;
+
+    public override string Name => _name;
 }
 
 public enum CONSUME_STAT

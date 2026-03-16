@@ -3,7 +3,7 @@ using UnityEngine;
 using UnityEngine.UI;
 
 [RequireComponent(typeof(EnhanceSystem))]
-public abstract class EnhanceSystemUI : MonoBehaviour
+public abstract class EnhanceSystemUI : UIGroup
 {
     [Header("이벤트 채널")]
     [SerializeField] protected VoidEventChannelSO _onChangeInventory;
@@ -18,7 +18,7 @@ public abstract class EnhanceSystemUI : MonoBehaviour
 
     protected EnhanceSystem _enhanceSystem;
 
-    protected Inventory _inventory;
+    protected ItemInventory _inventory;
     protected Currency _currency;                         // 필요 금화를 읽어올 재화 가방
 
 
@@ -48,8 +48,9 @@ public abstract class EnhanceSystemUI : MonoBehaviour
     }
 
 
-    protected virtual void Start()
+    protected override void Start()
     {
+        base.Start();
         _inventory = _enhanceSystem.UsingInventory;
         _currency = _enhanceSystem.UsingCurrency;
         UpdateCurrentGold();
@@ -60,9 +61,10 @@ public abstract class EnhanceSystemUI : MonoBehaviour
     protected void UpdateEnhanceEquipmentUI(EnhancingInfo equipment)
     {
         ItemBaseSO resourceItem = ItemDB.GetItemData<ItemBaseSO>(equipment.EnhanceData.BluePrintID);
-        ItemStack goldStack = _currency.GetGold();
+        ItemInstance gold = _currency.GetGold();
+        var goldData = ItemDB.GetItemData<ItemBaseSO>(gold.ID);
 
-        if(equipment.EnhanceData.IsMaxLevel)
+        if (equipment.EnhanceData.IsMaxLevel)
         {
             _enhanceEquipment.SetSlot(equipment.ItemID, "Max");
             _resourceCostText.text = "Max";
@@ -76,7 +78,7 @@ public abstract class EnhanceSystemUI : MonoBehaviour
         }
 
         _resourceCostImage.sprite = resourceItem.ImageSprite;
-        _costGoldImage.sprite = goldStack.ItemData.ImageSprite;
+        _costGoldImage.sprite = goldData.ImageSprite;
     }
 
     // 현재 골드량 갱신

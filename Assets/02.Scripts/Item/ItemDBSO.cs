@@ -63,6 +63,9 @@ public static class ItemDB
 {
     private static ItemDBSO _itemDB;
 
+
+    public static ItemBaseSO GetItemData(int id) => GetItemData<ItemBaseSO>(id);
+
     public static T GetItemData<T>(int id) where T : ItemBaseSO
     {
         if(_itemDB == null)

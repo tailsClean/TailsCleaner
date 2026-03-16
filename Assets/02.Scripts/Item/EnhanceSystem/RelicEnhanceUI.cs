@@ -35,14 +35,18 @@ public class RelicEnhanceUI : EnhanceSystemUI
 
     private void UpdateRelicSlots()
     {
-        var relicInventory = _inventory.RelicStatus;
+        var relicInventory = _inventory.Inventory;
         int i = 0;
-        foreach(var relic in relicInventory)
+        foreach(var relic in relicInventory.Keys)
         {
+            ITEM_TYPE type = ItemDB.GetItemData<ItemBaseSO>(relic.ID).ItemType;
+            if (type != ITEM_TYPE.Relic)
+                continue;
+
             var slot = _relicSlots[i++];
             slot.Init();
-            slot.SetSlot(relic.UniqueID);
-            slot.AddListener(() => _enhanceSystem.SetRelic(relic.UniqueID, relic.EnhanceLevel));
+            slot.SetSlot(relic.ID);
+            slot.AddListener(() => _enhanceSystem.SetRelic(relic.ID, relic.EnhanceLevel));
         }
         for (; i < _relicSlots.Count; i++)
         {
@@ -52,19 +56,29 @@ public class RelicEnhanceUI : EnhanceSystemUI
 
     public override void UpdateResourceUI()
     {
-        ItemStack resourceStack = _inventory.GetItemInfo(ItemID.RelicReinforceResource);
-        _resourceImage.sprite = resourceStack.ItemData.ImageSprite;
+        _resourceImage.sprite = ItemDB.GetItemData(ItemID.RelicReinforceResource).ImageSprite;
 
-        if(resourceStack.Amount == null)
-            _resourceText.text = 0.ToString();
+        if (!_inventory.TryGetStackItem(ItemID.RelicReinforceResource, out var item))
+        {
+            _resourceText.text = "0";
+            return;
+        }
+
+        
+        var itemData = ItemDB.GetItemData<ItemBaseSO>(item.ID);
+        _resourceImage.sprite = itemData.ImageSprite;
+
+        if(item.Amount == ItemInstance.NoneStackAmount)
+            _resourceText.text = item.Grade.ToString();
         else 
-            _resourceText.text = resourceStack.Amount.ToString();
+            _resourceText.text = item.Amount.ToString();
     }
 
     public override void UpdateCurrentGold()
     {
-        ItemStack goldStack = _currency.GetGold();
-        _currentGoldImage.sprite = goldStack.ItemData.ImageSprite;
-        _currentGoldText.text = goldStack.Amount.ToString();
+        ItemInstance gold = _currency.GetGold();
+        var goldData = ItemDB.GetItemData<ItemBaseSO>(gold.ID);
+        _currentGoldImage.sprite = goldData.ImageSprite;
+        _currentGoldText.text = gold.Amount.ToString();
     }
 }

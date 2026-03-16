@@ -6,11 +6,11 @@ using UnityEngine.UI;
 
 
 [RequireComponent(typeof(CraftingSystem))]
-public class CraftingSystemUI : MonoBehaviour
+public class CraftingSystemUI : UIGroup
 {
     private CraftingSystem _craftingSystem;
     private PlayerLoadout _loadout;
-    private Inventory _inventory;
+    private ItemInventory _inventory;
 
 
     [Header("선택 합성 장비")]
@@ -28,8 +28,9 @@ public class CraftingSystemUI : MonoBehaviour
         _craftingSystem = GetComponent<CraftingSystem>();
     }
 
-    private void Start()
+    protected override void Start()
     {
+        base.Start();
         _inventory = _craftingSystem.UsingInventory;
         _loadout = ItemManager.Instance.Loadout;
     }
@@ -116,11 +117,15 @@ public class CraftingSystemUI : MonoBehaviour
     private void SetInventoryEquipUI()
     {
         int i = 0;
-        foreach(var equip in _inventory.EquipStates)
+        foreach(var item in _inventory.Inventory.Keys)
         {
+            var type = ItemDB.GetItemData<ItemBaseSO>(item.ID).ItemType;
+            if (type != ITEM_TYPE.Equipment)
+                continue;
+
             _resourceEquipSlots[i].Init();
-            _resourceEquipSlots[i].SetSlot(equip.UniqueID, equip.Grade.ToString());
-            var craftInfo = new CraftingInfo(equip);
+            _resourceEquipSlots[i].SetSlot(item.ID, item.Grade.ToString());
+            var craftInfo = new CraftingInfo(item);
             _resourceEquipSlots[i++].AddListener(() => _craftingSystem.SetCraftSlot(craftInfo));
         }
         for(; i < _resourceEquipSlots.Count; i++)

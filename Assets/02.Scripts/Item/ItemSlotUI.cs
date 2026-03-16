@@ -6,11 +6,14 @@ using UnityEngine.UI;
 /// <summary>
 /// 수정 필요
 /// </summary>
-public class UISlot : MonoBehaviour
+public class ItemSlotUI : MonoBehaviour
 {
     [SerializeField] private TextMeshProUGUI _amountText;
 
-    public ItemBase Item { get; private set; }
+    [Header("이벤트 채널")]
+    [SerializeField] private ItemInstanceEventChannelSO _onItemPopup;
+
+    private ItemInstance _itemData;
 
     private Image _image;
     private Button _button;
@@ -24,33 +27,19 @@ public class UISlot : MonoBehaviour
     }
 
     // 슬롯에 아이템(ID)과 벨류(갯수, 강화수치등)를 표시
-    public void SetSlot(int id, int? value = null)
+    public void SetSlot(ItemInstance item)
     {
-        var a = ItemDB.GetItemData<ItemBaseSO>(id);
-        if (a != null)
-        {
-            _image.sprite = a.ImageSprite;
-            _amountText.text = value.ToString();
-        }
-        else
-        {
-            Debug.Log("값을 찾을 수 없다.");
-            _image.sprite = _baseSprite;
-            _amountText.text = string.Empty;
-        }
-
-        if (value == null)
-            _amountText.text = string.Empty;
+        _itemData = item;
+        ShowSlot(item);
     }
 
-    // 슬롯에 아이템(ID)과 벨류(갯수, 강화수치등)를 표시
-    public void SetSlot(int id, string value)
+    public void ShowSlot(ItemInstance item)
     {
-        var a = ItemDB.GetItemData<ItemBaseSO>(id);
+        var a = ItemDB.GetItemData<ItemBaseSO>(item.ID);
         if (a != null)
         {
             _image.sprite = a.ImageSprite;
-            _amountText.text = value;
+            _amountText.text = item.Amount.ToString();
         }
         else
         {
@@ -59,6 +48,7 @@ public class UISlot : MonoBehaviour
             _amountText.text = string.Empty;
         }
     }
+
 
     public void AddListener(Action action)
     {

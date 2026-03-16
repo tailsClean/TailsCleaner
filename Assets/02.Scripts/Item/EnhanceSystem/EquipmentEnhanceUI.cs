@@ -69,12 +69,12 @@ public class EquipmentEnhanceUI : EnhanceSystemUI
     // 강화 재료 아이콘 갱신
     private void UpdateResourceIcon(int index, int id)
     {
-        var dict = _inventory.ReinforceResourceInventory;
-        if(dict.TryGetValue(id, out var amount))
+        if(_inventory.TryGetStackItem(id, out var item))
         {
-            _resourceSlots[index].SetSlot(id, amount);
+            _resourceSlots[index].SetSlot(id, item.Amount);
             return;
         }
+
         _resourceSlots[index].SetSlot(id, 0);
     }
 
@@ -82,8 +82,9 @@ public class EquipmentEnhanceUI : EnhanceSystemUI
     // 현재 골드량 갱신
     public override void UpdateCurrentGold()
     {
-        ItemStack goldStack = _currency.GetGold();
-        _currentGoldImage.sprite = goldStack.ItemData.ImageSprite;
-        _currentGoldText.text = goldStack.Amount.ToString();
+        ItemInstance gold = _currency.GetGold();
+        var goldData = ItemDB.GetItemData<ItemBaseSO>(gold.ID);
+        _currentGoldImage.sprite = goldData.ImageSprite;
+        _currentGoldText.text = gold.Amount.ToString();
     }
 }

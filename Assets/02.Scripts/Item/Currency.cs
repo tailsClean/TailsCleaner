@@ -20,7 +20,12 @@ public class Currency : MonoBehaviour
         }
     }
 
-    public ItemStack GetGold() => new ItemStack(ItemID.Gold, _goldAmount);
+    public ItemInstance GetGold()
+    {
+        var gold = new ItemInstance(ItemID.Gold);
+        gold.SetAmount(GoldAmount);
+        return gold;
+    }
 
     public void GainGold(int amount)
     {

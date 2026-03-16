@@ -31,7 +31,7 @@ public class RelicSO : ItemBaseSO
     public RELIC_STAT StatType => _statType;
     public int GroupID => _groupID;
     public RELIC_DIVISION DivisionType => _divisionType;
-    public string Name => _name;
+    public override string Name => _name;
     public string Description => _script;
     public string IconClickEffect => _iconClickEffect;
     public string IconClickSound => _iconClickSound;

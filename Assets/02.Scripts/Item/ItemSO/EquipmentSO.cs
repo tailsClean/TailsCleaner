@@ -28,7 +28,7 @@ public class EquipmentSO : ItemBaseSO
 
 
     public EQUIP_PARTS EquipmentPart => _equipmentPart;
-    public string Name => _name;
+    public override string Name => _name;
     public string Description => _script;
     public string IconClickEffect => _iconClickEffect;
     public string IconClickSound => _iconClickSound;
@@ -139,8 +139,9 @@ public enum EQUIP_STAT
 
 public enum EQUIP_GRADE
 {
-    Grimy,     // 꼬질
-    Fresh,     // 향긋
-    Shiny,     // 반짝
-    Pristine   // 깔끔
+    Grimy,      // 꼬질
+    Fresh,      // 향긋
+    Shiny,      // 반짝
+    Pristine,   // 깔끔
+    None        // 아무 등급 없음 
 }
