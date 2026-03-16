@@ -204,7 +204,7 @@ public class SoapBubbleArea : SkillArea<SoapBubbleModifierData>
 
         // 스턴 패시브 추가 효과 (SuperClean)
         foreach (var passive in _passiveModifiers)
-            passive.OnStun(monster);
+            passive.OnCC(monster);
     }
 
 

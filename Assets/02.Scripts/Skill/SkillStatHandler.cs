@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 
@@ -25,8 +26,9 @@ public class SkillStatHandler : MonoBehaviour
 
     private Dictionary<string, int> _runtimeCounts = new();
 
-    // 적 강화 (저주?)
-    // public EnemyBuffData EnemyBuff { get; } = new();
+    // 적 강화 수치 
+    public float TotalMonsterStrengthBonus { get; private set; }
+    public event Action<float> OnMonsterStrengthChanged;            // 수치 변경 이벤트
 
 
     private void Awake()
@@ -43,7 +45,6 @@ public class SkillStatHandler : MonoBehaviour
         // 초기화
         _permanentFlat.Reset();
         _permanentMul.Reset();
-        //EnemyBuff.Reset();
 
         var skillManager = SkillManager.Instance;
 
@@ -55,11 +56,22 @@ public class SkillStatHandler : MonoBehaviour
         foreach (var passive in skillManager.MyPassiveSkills)
             passive.Modifier?.ModifyPlayerPermanent(_permanentFlat, _permanentMul, skillManager, passive.SubTag);
 
-        //// 적 강화 수치 수집
-        //foreach (var skill in skillManager.MyActiveSkills)
-        //    if (skill is 적강화인터페이스 src)
-        //        EnemyBuff.Add(src.EnemyStrengthBonus);
+        // 적 강화 수치
+        float prevStrength = TotalMonsterStrengthBonus;
+        TotalMonsterStrengthBonus = 0f;
 
+        // IEnemyStrengthBonus 스킬의 적 강화 수치 수집
+        foreach (var skill in SkillManager.Instance.MyActiveSkills)
+        {
+            if (skill is IMonsterStrengthBonus bonus)
+                TotalMonsterStrengthBonus += bonus.MonsterStrengthBonus;
+        }
+
+        // 수치 달라졌으면 소환된 몬스터들 스탯 갱신
+        if (Mathf.Abs(prevStrength - TotalMonsterStrengthBonus) > 0.001f)
+        {
+            OnMonsterStrengthChanged?.Invoke(TotalMonsterStrengthBonus);
+        }
 
         // 방어막 최대치 갱신 (NimbleBlockModifier)
         int newMax = 1;
@@ -90,11 +102,8 @@ public class SkillStatHandler : MonoBehaviour
         _runtimeCounts[key]++;
 
         // 들어온 스탯만 덮어쓰기
-        if (flat != null)
-            _runtimeFlats[key] = flat;
-
-        if (multi != null)
-            _runtimeMuls[key] = multi;
+        if (flat != null) _runtimeFlats[key] = flat;
+        if (multi != null) _runtimeMuls[key] = multi;
 
         // 스탯 재계산 후 적용
         Apply();
@@ -133,16 +142,18 @@ public class SkillStatHandler : MonoBehaviour
         float overflow = (_player.Hp + amount) - maxHp;     // 초과 회복
 
         // 회복
-        //_player.Heal(amount);
+        _player.Heal(amount);
 
         // 초과 회복에 비닐옷 있으면 방어막
-        if (overflow > 0f && HasPassive<CleanerVinylSuitModifier>())
+        if (overflow > 0f && SkillManager.Instance.HasPassive<CleanerVinylSuitModifier>(out var modifier))
             TryAddShield(1);
     }
 
     // 최대 체력 비율 피해 (탈수 등)
     public void TakeDamageByRatio(float ratio)
-        => _player.TakeDamage(/*_player.MaxHp*/ 100f * ratio);
+    {
+        _player.TakeDamage(_player.MaxHp * ratio);
+    }
 
 
     // 최대 방어막 설정
@@ -161,7 +172,7 @@ public class SkillStatHandler : MonoBehaviour
     public void OnBulletCleared()
     {
         // 패시브 있으면 방어막 추가 시도
-        if (HasPassive<NimbleBlockModifier>())
+        if (SkillManager.Instance.HasPassive<NimbleBlockModifier>(out var modifier))
             TryAddShield(1);
     }
 
@@ -183,17 +194,5 @@ public class SkillStatHandler : MonoBehaviour
 
         // 스킬 스탯 주입
         _playerSkillStat.SetSkillStat(_totalFlat, _totalMulti);
-    }
-
-
-    // 보유 패시브 중 해당 패시브 있는지
-    private bool HasPassive<T>() where T : PassiveModifier
-    {
-        foreach (var passive in SkillManager.Instance.MyPassiveSkills)
-        {
-            if (passive.Modifier is T) return true;
-        }
-
-        return false;
     }
 }

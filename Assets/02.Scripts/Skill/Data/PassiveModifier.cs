@@ -31,7 +31,7 @@ public abstract class PassiveModifier
     public virtual void OnEnterArea(MonsterBase monster) { }                          // 장판 올라갈 시 (몬스터)
     public virtual void OnEnterArea(PlayerBase player) { }                            // 장판 올라갈 시 (플레이어)
     public virtual void OnDurationTick(SkillStat runTimePassiveMulStat) { }           // 지속시간마다
-    public virtual void OnStun(MonsterBase monster) { }                               // 군중제어
+    public virtual void OnCC(MonsterBase monster) { }                                 // 군중제어
 
 
     // 영구 보너스 계산
@@ -118,12 +118,20 @@ public class CenterSwitchModifier : PassiveModifier
 // 집중공략 (약화(슬로우 등)된 적은 최대 체력 5% 감소)
 public class FocusAttackModifier : PassiveModifier
 {
-    //[Header("최대 체력 감소율")]
-    //[SerializeField] float _maxHpDecreaseRate = 0.05f;
+    [Header("최대 체력 감소율")]
+    [SerializeField] float _maxHpReduceRate = 0.05f;
     
-    public override void OnEnterArea(MonsterBase monster)
+    public override void OnDamage(MonsterBase monster)
     {
-        //monster.DecreaseMaxHp(MaxHpDecreaseRate);
+        if (monster is IMonsterStatus status)
+        {
+            // 약화 상태 체크
+            if (status.IsWeakened)
+            {
+                // 약화 상태면 최대 체력 감소 시도
+                status.TryReduceMaxHp(_maxHpReduceRate);
+            }
+        }
     }
 }
 
@@ -144,16 +152,23 @@ public class DoubleExtraDamageModifier : PassiveModifier
 // SuperClean (군중제어 스킬이 적 속도를 5초간 추가로 느려지게 함)
 public class SuperCleanModifier : PassiveModifier
 {
-    //[Header("추가 이동속도 감소율")]
-    //[SerializeField] float _slowAmount = 0.2f;
-    //[Header("추가 슬로우 지속시간")]
-    //[SerializeField] float _slowDuration = 5f;
+    // 디버프 키
+    public const string DEBUFF_KEY = "SuperClean";
+    [Header("이동속도 감소율")]
+    [SerializeField] float _slowAmount = 0.2f;
+    [Header("슬로우 지속시간")]
+    [SerializeField] float _slowDuration = 5f;
 
-    public override void OnStun(MonsterBase monster)
+    public override void OnCC(MonsterBase monster)
     {
         // 군중제어 서브태그의 효과 발동 시
         // 적 속도 추가로 느려지게 적용
-        //monster.ApplySlow(SlowAmount, SlowDuration);
+        if (monster is IMonsterStatus status)
+        {
+            // SuperClean 슬로우 적용
+            status.ApplySlow(DEBUFF_KEY, _slowAmount, _slowDuration);
+
+        }
     }
 }
 
@@ -321,7 +336,7 @@ public class SodaWaterModifier : PassiveModifier
 
     public override void OnDamage(MonsterBase monster)
     {
-        // monster.TakeDamage(monster.MaxHp * _maxHpDamageRate);
+        //monster.TakeDamage(monster.MaxHp * _maxHpDamageRate);
     }
 }
 
@@ -334,8 +349,9 @@ public class CatLaundryModifier : PassiveModifier
 {
     [Header("추가 넉백 배율")]
     [SerializeField] float _knockbackBonus = 2f;
-    //[Header("체력 비례 피해")]
-    //[SerializeField] float _offScreenDamageRatio = 0.1f;
+    [Header("체력 비례 피해")]
+    [SerializeField] float _offScreenDamageRatio = 0.1f;
+    public float OffScreenDamageRatio => _offScreenDamageRatio;
 
     public override void ModifyFinalMultiply(SkillStat finalStat)
     {
