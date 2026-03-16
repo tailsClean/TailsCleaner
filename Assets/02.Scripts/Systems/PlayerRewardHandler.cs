@@ -5,8 +5,10 @@ public class PlayerRewardHandler : MonoBehaviour
     [Header("보상 데이터 (인스펙터 확인용)")]
     public RewardData myReward;
 
-
-    
+    void Update()
+    {
+        
+    }
 
     private void Awake()
     {

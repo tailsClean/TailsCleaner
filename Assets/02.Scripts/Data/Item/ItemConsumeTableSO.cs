@@ -1,0 +1,11 @@
+﻿using System.Collections.Generic;
+using UnityEngine;
+
+[CreateAssetMenu(fileName = "ItemConsumeTableSO", menuName = "Data/ItemConsumeTableSO")]
+public class ItemConsumeTableSO : ScriptableObject
+{
+    public List<ItemConsumeTable> dataList = new List<ItemConsumeTable>();
+
+    public ItemConsumeTable GetById(int id)
+        => dataList.Find(x => x.item_id == id);
+}

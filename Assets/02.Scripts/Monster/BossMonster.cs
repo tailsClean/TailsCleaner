@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class BossMonster : MonsterBase
 {
-    public override MonsterEnum.MonsterType monsterType => MonsterEnum.MonsterType.Boss;
+    public override MonsterEnum.MONSTERTYPE monsterType => MonsterEnum.MONSTERTYPE.Boss;
 
     [Header("--- 패턴 중첩 활성화 제어 ---")]
     public bool useZigzag;

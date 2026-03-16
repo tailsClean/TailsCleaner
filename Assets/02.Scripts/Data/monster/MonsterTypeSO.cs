@@ -1,0 +1,12 @@
+
+using System.Collections.Generic;
+using UnityEngine;
+
+[CreateAssetMenu(fileName = "MonsterTypeSO", menuName = "Data/MonsterTypeSO")]
+public class MonsterTypeSO : ScriptableObject
+{
+    public List<MonsterType> dataList = new List<MonsterType>();
+
+    public MonsterType GetById(int id)
+        => dataList.Find(x => x.drop_resource_id == id);
+}

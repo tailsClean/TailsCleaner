@@ -1,0 +1,1215 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e1696f72a9c2cee44824fab759c62ea2, type: 3}
+  m_Name: RankTableSO
+  m_EditorClassIdentifier: Assembly-CSharp::RankTableSO
+  dataList:
+  - rank_id: 520101
+    rank_table_id: 201
+    grade: 0
+    min_score: 1000
+    reward_multiplier: 1.2
+  - rank_id: 520102
+    rank_table_id: 201
+    grade: 1
+    min_score: 700
+    reward_multiplier: 1.1
+  - rank_id: 520103
+    rank_table_id: 201
+    grade: 2
+    min_score: 1
+    reward_multiplier: 1
+  - rank_id: 520104
+    rank_table_id: 201
+    grade: 3
+    min_score: 0
+    reward_multiplier: 0
+  - rank_id: 520201
+    rank_table_id: 202
+    grade: 0
+    min_score: 1000
+    reward_multiplier: 1.2
+  - rank_id: 520202
+    rank_table_id: 202
+    grade: 1
+    min_score: 700
+    reward_multiplier: 1.1
+  - rank_id: 520203
+    rank_table_id: 202
+    grade: 2
+    min_score: 1
+    reward_multiplier: 1
+  - rank_id: 520204
+    rank_table_id: 202
+    grade: 3
+    min_score: 0
+    reward_multiplier: 0
+  - rank_id: 520301
+    rank_table_id: 203
+    grade: 0
+    min_score: 1000
+    reward_multiplier: 1.2
+  - rank_id: 520302
+    rank_table_id: 203
+    grade: 1
+    min_score: 700
+    reward_multiplier: 1.1
+  - rank_id: 520303
+    rank_table_id: 203
+    grade: 2
+    min_score: 1
+    reward_multiplier: 1
+  - rank_id: 520304
+    rank_table_id: 203
+    grade: 3
+    min_score: 0
+    reward_multiplier: 0
+  - rank_id: 520401
+    rank_table_id: 204
+    grade: 0
+    min_score: 1000
+    reward_multiplier: 1.2
+  - rank_id: 520402
+    rank_table_id: 204
+    grade: 1
+    min_score: 700
+    reward_multiplier: 1.1
+  - rank_id: 520403
+    rank_table_id: 204
+    grade: 2
+    min_score: 1
+    reward_multiplier: 1
+  - rank_id: 520404
+    rank_table_id: 204
+    grade: 3
+    min_score: 0
+    reward_multiplier: 0
+  - rank_id: 520501
+    rank_table_id: 205
+    grade: 0
+    min_score: 1000
+    reward_multiplier: 1.2
+  - rank_id: 520502
+    rank_table_id: 205
+    grade: 1
+    min_score: 700
+    reward_multiplier: 1.1
+  - rank_id: 520503
+    rank_table_id: 205
+    grade: 2
+    min_score: 1
+    reward_multiplier: 1
+  - rank_id: 520504
+    rank_table_id: 205
+    grade: 3
+    min_score: 0
+    reward_multiplier: 0
+  - rank_id: 520601
+    rank_table_id: 206
+    grade: 0
+    min_score: 1000
+    reward_multiplier: 1.2
+  - rank_id: 520602
+    rank_table_id: 206
+    grade: 1
+    min_score: 700
+    reward_multiplier: 1.1
+  - rank_id: 520603
+    rank_table_id: 206
+    grade: 2
+    min_score: 1
+    reward_multiplier: 1
+  - rank_id: 520604
+    rank_table_id: 206
+    grade: 3
+    min_score: 0
+    reward_multiplier: 0
+  - rank_id: 520701
+    rank_table_id: 207
+    grade: 0
+    min_score: 1000
+    reward_multiplier: 1.2
+  - rank_id: 520702
+    rank_table_id: 207
+    grade: 1
+    min_score: 700
+    reward_multiplier: 1.1
+  - rank_id: 520703
+    rank_table_id: 207
+    grade: 2
+    min_score: 1
+    reward_multiplier: 1
+  - rank_id: 520704
+    rank_table_id: 207
+    grade: 3
+    min_score: 0
+    reward_multiplier: 0
+  - rank_id: 520801
+    rank_table_id: 208
+    grade: 0
+    min_score: 1000
+    reward_multiplier: 1.2
+  - rank_id: 520802
+    rank_table_id: 208
+    grade: 1
+    min_score: 700
+    reward_multiplier: 1.1
+  - rank_id: 520803
+    rank_table_id: 208
+    grade: 2
+    min_score: 1
+    reward_multiplier: 1
+  - rank_id: 520804
+    rank_table_id: 208
+    grade: 3
+    min_score: 0
+    reward_multiplier: 0
+  - rank_id: 520901
+    rank_table_id: 209
+    grade: 0
+    min_score: 1000
+    reward_multiplier: 1.2
+  - rank_id: 520902
+    rank_table_id: 209
+    grade: 1
+    min_score: 700
+    reward_multiplier: 1.1
+  - rank_id: 520903
+    rank_table_id: 209
+    grade: 2
+    min_score: 1
+    reward_multiplier: 1
+  - rank_id: 520904
+    rank_table_id: 209
+    grade: 3
+    min_score: 0
+    reward_multiplier: 0
+  - rank_id: 521001
+    rank_table_id: 210
+    grade: 0
+    min_score: 1000
+    reward_multiplier: 1.2
+  - rank_id: 521002
+    rank_table_id: 210
+    grade: 1
+    min_score: 700
+    reward_multiplier: 1.1
+  - rank_id: 521003
+    rank_table_id: 210
+    grade: 2
+    min_score: 1
+    reward_multiplier: 1
+  - rank_id: 521004
+    rank_table_id: 210
+    grade: 3
+    min_score: 0
+    reward_multiplier: 0
+  - rank_id: 530101
+    rank_table_id: 301
+    grade: 0
+    min_score: 1000
+    reward_multiplier: 1.2
+  - rank_id: 530102
+    rank_table_id: 301
+    grade: 1
+    min_score: 700
+    reward_multiplier: 1.1
+  - rank_id: 530103
+    rank_table_id: 301
+    grade: 2
+    min_score: 1
+    reward_multiplier: 1
+  - rank_id: 530104
+    rank_table_id: 301
+    grade: 3
+    min_score: 0
+    reward_multiplier: 0
+  - rank_id: 530201
+    rank_table_id: 302
+    grade: 0
+    min_score: 1000
+    reward_multiplier: 1.2
+  - rank_id: 530202
+    rank_table_id: 302
+    grade: 1
+    min_score: 700
+    reward_multiplier: 1.1
+  - rank_id: 530203
+    rank_table_id: 302
+    grade: 2
+    min_score: 1
+    reward_multiplier: 1
+  - rank_id: 530204
+    rank_table_id: 302
+    grade: 3
+    min_score: 0
+    reward_multiplier: 0
+  - rank_id: 530301
+    rank_table_id: 303
+    grade: 0
+    min_score: 1000
+    reward_multiplier: 1.2
+  - rank_id: 530302
+    rank_table_id: 303
+    grade: 1
+    min_score: 700
+    reward_multiplier: 1.1
+  - rank_id: 530303
+    rank_table_id: 303
+    grade: 2
+    min_score: 1
+    reward_multiplier: 1
+  - rank_id: 530304
+    rank_table_id: 303
+    grade: 3
+    min_score: 0
+    reward_multiplier: 0
+  - rank_id: 530401
+    rank_table_id: 304
+    grade: 0
+    min_score: 1000
+    reward_multiplier: 1.2
+  - rank_id: 530402
+    rank_table_id: 304
+    grade: 1
+    min_score: 700
+    reward_multiplier: 1.1
+  - rank_id: 530403
+    rank_table_id: 304
+    grade: 2
+    min_score: 1
+    reward_multiplier: 1
+  - rank_id: 530404
+    rank_table_id: 304
+    grade: 3
+    min_score: 0
+    reward_multiplier: 0
+  - rank_id: 530501
+    rank_table_id: 305
+    grade: 0
+    min_score: 1000
+    reward_multiplier: 1.2
+  - rank_id: 530502
+    rank_table_id: 305
+    grade: 1
+    min_score: 700
+    reward_multiplier: 1.1
+  - rank_id: 530503
+    rank_table_id: 305
+    grade: 2
+    min_score: 1
+    reward_multiplier: 1
+  - rank_id: 530504
+    rank_table_id: 305
+    grade: 3
+    min_score: 0
+    reward_multiplier: 0
+  - rank_id: 530601
+    rank_table_id: 306
+    grade: 0
+    min_score: 1000
+    reward_multiplier: 1.2
+  - rank_id: 530602
+    rank_table_id: 306
+    grade: 1
+    min_score: 700
+    reward_multiplier: 1.1
+  - rank_id: 530603
+    rank_table_id: 306
+    grade: 2
+    min_score: 1
+    reward_multiplier: 1
+  - rank_id: 530604
+    rank_table_id: 306
+    grade: 3
+    min_score: 0
+    reward_multiplier: 0
+  - rank_id: 530701
+    rank_table_id: 307
+    grade: 0
+    min_score: 1000
+    reward_multiplier: 1.2
+  - rank_id: 530702
+    rank_table_id: 307
+    grade: 1
+    min_score: 700
+    reward_multiplier: 1.1
+  - rank_id: 530703
+    rank_table_id: 307
+    grade: 2
+    min_score: 1
+    reward_multiplier: 1
+  - rank_id: 530704
+    rank_table_id: 307
+    grade: 3
+    min_score: 0
+    reward_multiplier: 0
+  - rank_id: 530801
+    rank_table_id: 308
+    grade: 0
+    min_score: 1000
+    reward_multiplier: 1.2
+  - rank_id: 530802
+    rank_table_id: 308
+    grade: 1
+    min_score: 700
+    reward_multiplier: 1.1
+  - rank_id: 530803
+    rank_table_id: 308
+    grade: 2
+    min_score: 1
+    reward_multiplier: 1
+  - rank_id: 530804
+    rank_table_id: 308
+    grade: 3
+    min_score: 0
+    reward_multiplier: 0
+  - rank_id: 530901
+    rank_table_id: 309
+    grade: 0
+    min_score: 1000
+    reward_multiplier: 1.2
+  - rank_id: 530902
+    rank_table_id: 309
+    grade: 1
+    min_score: 700
+    reward_multiplier: 1.1
+  - rank_id: 530903
+    rank_table_id: 309
+    grade: 2
+    min_score: 1
+    reward_multiplier: 1
+  - rank_id: 530904
+    rank_table_id: 309
+    grade: 3
+    min_score: 0
+    reward_multiplier: 0
+  - rank_id: 531001
+    rank_table_id: 310
+    grade: 0
+    min_score: 1000
+    reward_multiplier: 1.2
+  - rank_id: 531002
+    rank_table_id: 310
+    grade: 1
+    min_score: 700
+    reward_multiplier: 1.1
+  - rank_id: 531003
+    rank_table_id: 310
+    grade: 2
+    min_score: 1
+    reward_multiplier: 1
+  - rank_id: 531004
+    rank_table_id: 310
+    grade: 3
+    min_score: 0
+    reward_multiplier: 0
+  - rank_id: 540101
+    rank_table_id: 401
+    grade: 0
+    min_score: 1000
+    reward_multiplier: 1.2
+  - rank_id: 540102
+    rank_table_id: 401
+    grade: 1
+    min_score: 700
+    reward_multiplier: 1.1
+  - rank_id: 540103
+    rank_table_id: 401
+    grade: 2
+    min_score: 1
+    reward_multiplier: 1
+  - rank_id: 540104
+    rank_table_id: 401
+    grade: 3
+    min_score: 0
+    reward_multiplier: 0
+  - rank_id: 540201
+    rank_table_id: 402
+    grade: 0
+    min_score: 1000
+    reward_multiplier: 1.2
+  - rank_id: 540202
+    rank_table_id: 402
+    grade: 1
+    min_score: 700
+    reward_multiplier: 1.1
+  - rank_id: 540203
+    rank_table_id: 402
+    grade: 2
+    min_score: 1
+    reward_multiplier: 1
+  - rank_id: 540204
+    rank_table_id: 402
+    grade: 3
+    min_score: 0
+    reward_multiplier: 0
+  - rank_id: 540301
+    rank_table_id: 403
+    grade: 0
+    min_score: 1000
+    reward_multiplier: 1.2
+  - rank_id: 540302
+    rank_table_id: 403
+    grade: 1
+    min_score: 700
+    reward_multiplier: 1.1
+  - rank_id: 540303
+    rank_table_id: 403
+    grade: 2
+    min_score: 1
+    reward_multiplier: 1
+  - rank_id: 540304
+    rank_table_id: 403
+    grade: 3
+    min_score: 0
+    reward_multiplier: 0
+  - rank_id: 540401
+    rank_table_id: 404
+    grade: 0
+    min_score: 1000
+    reward_multiplier: 1.2
+  - rank_id: 540402
+    rank_table_id: 404
+    grade: 1
+    min_score: 700
+    reward_multiplier: 1.1
+  - rank_id: 540403
+    rank_table_id: 404
+    grade: 2
+    min_score: 1
+    reward_multiplier: 1
+  - rank_id: 540404
+    rank_table_id: 404
+    grade: 3
+    min_score: 0
+    reward_multiplier: 0
+  - rank_id: 540501
+    rank_table_id: 405
+    grade: 0
+    min_score: 1000
+    reward_multiplier: 1.2
+  - rank_id: 540502
+    rank_table_id: 405
+    grade: 1
+    min_score: 700
+    reward_multiplier: 1.1
+  - rank_id: 540503
+    rank_table_id: 405
+    grade: 2
+    min_score: 1
+    reward_multiplier: 1
+  - rank_id: 540504
+    rank_table_id: 405
+    grade: 3
+    min_score: 0
+    reward_multiplier: 0
+  - rank_id: 540601
+    rank_table_id: 406
+    grade: 0
+    min_score: 1000
+    reward_multiplier: 1.2
+  - rank_id: 540602
+    rank_table_id: 406
+    grade: 1
+    min_score: 700
+    reward_multiplier: 1.1
+  - rank_id: 540603
+    rank_table_id: 406
+    grade: 2
+    min_score: 1
+    reward_multiplier: 1
+  - rank_id: 540604
+    rank_table_id: 406
+    grade: 3
+    min_score: 0
+    reward_multiplier: 0
+  - rank_id: 540701
+    rank_table_id: 407
+    grade: 0
+    min_score: 1000
+    reward_multiplier: 1.2
+  - rank_id: 540702
+    rank_table_id: 407
+    grade: 1
+    min_score: 700
+    reward_multiplier: 1.1
+  - rank_id: 540703
+    rank_table_id: 407
+    grade: 2
+    min_score: 1
+    reward_multiplier: 1
+  - rank_id: 540704
+    rank_table_id: 407
+    grade: 3
+    min_score: 0
+    reward_multiplier: 0
+  - rank_id: 540801
+    rank_table_id: 408
+    grade: 0
+    min_score: 1000
+    reward_multiplier: 1.2
+  - rank_id: 540802
+    rank_table_id: 408
+    grade: 1
+    min_score: 700
+    reward_multiplier: 1.1
+  - rank_id: 540803
+    rank_table_id: 408
+    grade: 2
+    min_score: 1
+    reward_multiplier: 1
+  - rank_id: 540804
+    rank_table_id: 408
+    grade: 3
+    min_score: 0
+    reward_multiplier: 0
+  - rank_id: 540901
+    rank_table_id: 409
+    grade: 0
+    min_score: 1000
+    reward_multiplier: 1.2
+  - rank_id: 540902
+    rank_table_id: 409
+    grade: 1
+    min_score: 700
+    reward_multiplier: 1.1
+  - rank_id: 540903
+    rank_table_id: 409
+    grade: 2
+    min_score: 1
+    reward_multiplier: 1
+  - rank_id: 540904
+    rank_table_id: 409
+    grade: 3
+    min_score: 0
+    reward_multiplier: 0
+  - rank_id: 541001
+    rank_table_id: 410
+    grade: 0
+    min_score: 1000
+    reward_multiplier: 1.2
+  - rank_id: 541002
+    rank_table_id: 410
+    grade: 1
+    min_score: 700
+    reward_multiplier: 1.1
+  - rank_id: 541003
+    rank_table_id: 410
+    grade: 2
+    min_score: 1
+    reward_multiplier: 1
+  - rank_id: 541004
+    rank_table_id: 410
+    grade: 3
+    min_score: 0
+    reward_multiplier: 0
+  - rank_id: 550101
+    rank_table_id: 501
+    grade: 0
+    min_score: 1000
+    reward_multiplier: 1.2
+  - rank_id: 550102
+    rank_table_id: 501
+    grade: 1
+    min_score: 700
+    reward_multiplier: 1.1
+  - rank_id: 550103
+    rank_table_id: 501
+    grade: 2
+    min_score: 1
+    reward_multiplier: 1
+  - rank_id: 550104
+    rank_table_id: 501
+    grade: 3
+    min_score: 0
+    reward_multiplier: 0
+  - rank_id: 550201
+    rank_table_id: 502
+    grade: 0
+    min_score: 1000
+    reward_multiplier: 1.2
+  - rank_id: 550202
+    rank_table_id: 502
+    grade: 1
+    min_score: 700
+    reward_multiplier: 1.1
+  - rank_id: 550203
+    rank_table_id: 502
+    grade: 2
+    min_score: 1
+    reward_multiplier: 1
+  - rank_id: 550204
+    rank_table_id: 502
+    grade: 3
+    min_score: 0
+    reward_multiplier: 0
+  - rank_id: 550301
+    rank_table_id: 503
+    grade: 0
+    min_score: 1000
+    reward_multiplier: 1.2
+  - rank_id: 550302
+    rank_table_id: 503
+    grade: 1
+    min_score: 700
+    reward_multiplier: 1.1
+  - rank_id: 550303
+    rank_table_id: 503
+    grade: 2
+    min_score: 1
+    reward_multiplier: 1
+  - rank_id: 550304
+    rank_table_id: 503
+    grade: 3
+    min_score: 0
+    reward_multiplier: 0
+  - rank_id: 550401
+    rank_table_id: 504
+    grade: 0
+    min_score: 1000
+    reward_multiplier: 1.2
+  - rank_id: 550402
+    rank_table_id: 504
+    grade: 1
+    min_score: 700
+    reward_multiplier: 1.1
+  - rank_id: 550403
+    rank_table_id: 504
+    grade: 2
+    min_score: 1
+    reward_multiplier: 1
+  - rank_id: 550404
+    rank_table_id: 504
+    grade: 3
+    min_score: 0
+    reward_multiplier: 0
+  - rank_id: 550501
+    rank_table_id: 505
+    grade: 0
+    min_score: 1000
+    reward_multiplier: 1.2
+  - rank_id: 550502
+    rank_table_id: 505
+    grade: 1
+    min_score: 700
+    reward_multiplier: 1.1
+  - rank_id: 550503
+    rank_table_id: 505
+    grade: 2
+    min_score: 1
+    reward_multiplier: 1
+  - rank_id: 550504
+    rank_table_id: 505
+    grade: 3
+    min_score: 0
+    reward_multiplier: 0
+  - rank_id: 550601
+    rank_table_id: 506
+    grade: 0
+    min_score: 1000
+    reward_multiplier: 1.2
+  - rank_id: 550602
+    rank_table_id: 506
+    grade: 1
+    min_score: 700
+    reward_multiplier: 1.1
+  - rank_id: 550603
+    rank_table_id: 506
+    grade: 2
+    min_score: 1
+    reward_multiplier: 1
+  - rank_id: 550604
+    rank_table_id: 506
+    grade: 3
+    min_score: 0
+    reward_multiplier: 0
+  - rank_id: 550701
+    rank_table_id: 507
+    grade: 0
+    min_score: 1000
+    reward_multiplier: 1.2
+  - rank_id: 550702
+    rank_table_id: 507
+    grade: 1
+    min_score: 700
+    reward_multiplier: 1.1
+  - rank_id: 550703
+    rank_table_id: 507
+    grade: 2
+    min_score: 1
+    reward_multiplier: 1
+  - rank_id: 550704
+    rank_table_id: 507
+    grade: 3
+    min_score: 0
+    reward_multiplier: 0
+  - rank_id: 550801
+    rank_table_id: 508
+    grade: 0
+    min_score: 1000
+    reward_multiplier: 1.2
+  - rank_id: 550802
+    rank_table_id: 508
+    grade: 1
+    min_score: 700
+    reward_multiplier: 1.1
+  - rank_id: 550803
+    rank_table_id: 508
+    grade: 2
+    min_score: 1
+    reward_multiplier: 1
+  - rank_id: 550804
+    rank_table_id: 508
+    grade: 3
+    min_score: 0
+    reward_multiplier: 0
+  - rank_id: 550901
+    rank_table_id: 509
+    grade: 0
+    min_score: 1000
+    reward_multiplier: 1.2
+  - rank_id: 550902
+    rank_table_id: 509
+    grade: 1
+    min_score: 700
+    reward_multiplier: 1.1
+  - rank_id: 550903
+    rank_table_id: 509
+    grade: 2
+    min_score: 1
+    reward_multiplier: 1
+  - rank_id: 550904
+    rank_table_id: 509
+    grade: 3
+    min_score: 0
+    reward_multiplier: 0
+  - rank_id: 551001
+    rank_table_id: 510
+    grade: 0
+    min_score: 1000
+    reward_multiplier: 1.2
+  - rank_id: 551002
+    rank_table_id: 510
+    grade: 1
+    min_score: 700
+    reward_multiplier: 1.1
+  - rank_id: 551003
+    rank_table_id: 510
+    grade: 2
+    min_score: 1
+    reward_multiplier: 1
+  - rank_id: 551004
+    rank_table_id: 510
+    grade: 3
+    min_score: 0
+    reward_multiplier: 0
+  - rank_id: 560101
+    rank_table_id: 601
+    grade: 0
+    min_score: 1000
+    reward_multiplier: 1.2
+  - rank_id: 560102
+    rank_table_id: 601
+    grade: 1
+    min_score: 700
+    reward_multiplier: 1.1
+  - rank_id: 560103
+    rank_table_id: 601
+    grade: 2
+    min_score: 1
+    reward_multiplier: 1
+  - rank_id: 560104
+    rank_table_id: 601
+    grade: 3
+    min_score: 0
+    reward_multiplier: 0
+  - rank_id: 560201
+    rank_table_id: 602
+    grade: 0
+    min_score: 1000
+    reward_multiplier: 1.2
+  - rank_id: 560202
+    rank_table_id: 602
+    grade: 1
+    min_score: 700
+    reward_multiplier: 1.1
+  - rank_id: 560203
+    rank_table_id: 602
+    grade: 2
+    min_score: 1
+    reward_multiplier: 1
+  - rank_id: 560204
+    rank_table_id: 602
+    grade: 3
+    min_score: 0
+    reward_multiplier: 0
+  - rank_id: 560301
+    rank_table_id: 603
+    grade: 0
+    min_score: 1000
+    reward_multiplier: 1.2
+  - rank_id: 560302
+    rank_table_id: 603
+    grade: 1
+    min_score: 700
+    reward_multiplier: 1.1
+  - rank_id: 560303
+    rank_table_id: 603
+    grade: 2
+    min_score: 1
+    reward_multiplier: 1
+  - rank_id: 560304
+    rank_table_id: 603
+    grade: 3
+    min_score: 0
+    reward_multiplier: 0
+  - rank_id: 560401
+    rank_table_id: 604
+    grade: 0
+    min_score: 1000
+    reward_multiplier: 1.2
+  - rank_id: 560402
+    rank_table_id: 604
+    grade: 1
+    min_score: 700
+    reward_multiplier: 1.1
+  - rank_id: 560403
+    rank_table_id: 604
+    grade: 2
+    min_score: 1
+    reward_multiplier: 1
+  - rank_id: 560404
+    rank_table_id: 604
+    grade: 3
+    min_score: 0
+    reward_multiplier: 0
+  - rank_id: 560501
+    rank_table_id: 605
+    grade: 0
+    min_score: 1000
+    reward_multiplier: 1.2
+  - rank_id: 560502
+    rank_table_id: 605
+    grade: 1
+    min_score: 700
+    reward_multiplier: 1.1
+  - rank_id: 560503
+    rank_table_id: 605
+    grade: 2
+    min_score: 1
+    reward_multiplier: 1
+  - rank_id: 560504
+    rank_table_id: 605
+    grade: 3
+    min_score: 0
+    reward_multiplier: 0
+  - rank_id: 560601
+    rank_table_id: 606
+    grade: 0
+    min_score: 1000
+    reward_multiplier: 1.2
+  - rank_id: 560602
+    rank_table_id: 606
+    grade: 1
+    min_score: 700
+    reward_multiplier: 1.1
+  - rank_id: 560603
+    rank_table_id: 606
+    grade: 2
+    min_score: 1
+    reward_multiplier: 1
+  - rank_id: 560604
+    rank_table_id: 606
+    grade: 3
+    min_score: 0
+    reward_multiplier: 0
+  - rank_id: 560701
+    rank_table_id: 607
+    grade: 0
+    min_score: 1000
+    reward_multiplier: 1.2
+  - rank_id: 560702
+    rank_table_id: 607
+    grade: 1
+    min_score: 700
+    reward_multiplier: 1.1
+  - rank_id: 560703
+    rank_table_id: 607
+    grade: 2
+    min_score: 1
+    reward_multiplier: 1
+  - rank_id: 560704
+    rank_table_id: 607
+    grade: 3
+    min_score: 0
+    reward_multiplier: 0
+  - rank_id: 560801
+    rank_table_id: 608
+    grade: 0
+    min_score: 1000
+    reward_multiplier: 1.2
+  - rank_id: 560802
+    rank_table_id: 608
+    grade: 1
+    min_score: 700
+    reward_multiplier: 1.1
+  - rank_id: 560803
+    rank_table_id: 608
+    grade: 2
+    min_score: 1
+    reward_multiplier: 1
+  - rank_id: 560804
+    rank_table_id: 608
+    grade: 3
+    min_score: 0
+    reward_multiplier: 0
+  - rank_id: 560901
+    rank_table_id: 609
+    grade: 0
+    min_score: 1000
+    reward_multiplier: 1.2
+  - rank_id: 560902
+    rank_table_id: 609
+    grade: 1
+    min_score: 700
+    reward_multiplier: 1.1
+  - rank_id: 560903
+    rank_table_id: 609
+    grade: 2
+    min_score: 1
+    reward_multiplier: 1
+  - rank_id: 560904
+    rank_table_id: 609
+    grade: 3
+    min_score: 0
+    reward_multiplier: 0
+  - rank_id: 561001
+    rank_table_id: 610
+    grade: 0
+    min_score: 1000
+    reward_multiplier: 1.2
+  - rank_id: 561002
+    rank_table_id: 610
+    grade: 1
+    min_score: 700
+    reward_multiplier: 1.1
+  - rank_id: 561003
+    rank_table_id: 610
+    grade: 2
+    min_score: 1
+    reward_multiplier: 1
+  - rank_id: 561004
+    rank_table_id: 610
+    grade: 3
+    min_score: 0
+    reward_multiplier: 0
+  - rank_id: 570101
+    rank_table_id: 701
+    grade: 0
+    min_score: 1000
+    reward_multiplier: 1.2
+  - rank_id: 570102
+    rank_table_id: 701
+    grade: 1
+    min_score: 700
+    reward_multiplier: 1.1
+  - rank_id: 570103
+    rank_table_id: 701
+    grade: 2
+    min_score: 1
+    reward_multiplier: 1
+  - rank_id: 570104
+    rank_table_id: 701
+    grade: 3
+    min_score: 0
+    reward_multiplier: 0
+  - rank_id: 570201
+    rank_table_id: 702
+    grade: 0
+    min_score: 1000
+    reward_multiplier: 1.2
+  - rank_id: 570202
+    rank_table_id: 702
+    grade: 1
+    min_score: 700
+    reward_multiplier: 1.1
+  - rank_id: 570203
+    rank_table_id: 702
+    grade: 2
+    min_score: 1
+    reward_multiplier: 1
+  - rank_id: 570204
+    rank_table_id: 702
+    grade: 3
+    min_score: 0
+    reward_multiplier: 0
+  - rank_id: 570301
+    rank_table_id: 703
+    grade: 0
+    min_score: 1000
+    reward_multiplier: 1.2
+  - rank_id: 570302
+    rank_table_id: 703
+    grade: 1
+    min_score: 700
+    reward_multiplier: 1.1
+  - rank_id: 570303
+    rank_table_id: 703
+    grade: 2
+    min_score: 1
+    reward_multiplier: 1
+  - rank_id: 570304
+    rank_table_id: 703
+    grade: 3
+    min_score: 0
+    reward_multiplier: 0
+  - rank_id: 570401
+    rank_table_id: 704
+    grade: 0
+    min_score: 1000
+    reward_multiplier: 1.2
+  - rank_id: 570402
+    rank_table_id: 704
+    grade: 1
+    min_score: 700
+    reward_multiplier: 1.1
+  - rank_id: 570403
+    rank_table_id: 704
+    grade: 2
+    min_score: 1
+    reward_multiplier: 1
+  - rank_id: 570404
+    rank_table_id: 704
+    grade: 3
+    min_score: 0
+    reward_multiplier: 0
+  - rank_id: 570501
+    rank_table_id: 705
+    grade: 0
+    min_score: 1000
+    reward_multiplier: 1.2
+  - rank_id: 570502
+    rank_table_id: 705
+    grade: 1
+    min_score: 700
+    reward_multiplier: 1.1
+  - rank_id: 570503
+    rank_table_id: 705
+    grade: 2
+    min_score: 1
+    reward_multiplier: 1
+  - rank_id: 570504
+    rank_table_id: 705
+    grade: 3
+    min_score: 0
+    reward_multiplier: 0
+  - rank_id: 570601
+    rank_table_id: 706
+    grade: 0
+    min_score: 1000
+    reward_multiplier: 1.2
+  - rank_id: 570602
+    rank_table_id: 706
+    grade: 1
+    min_score: 700
+    reward_multiplier: 1.1
+  - rank_id: 570603
+    rank_table_id: 706
+    grade: 2
+    min_score: 1
+    reward_multiplier: 1
+  - rank_id: 570604
+    rank_table_id: 706
+    grade: 3
+    min_score: 0
+    reward_multiplier: 0
+  - rank_id: 570701
+    rank_table_id: 707
+    grade: 0
+    min_score: 1000
+    reward_multiplier: 1.2
+  - rank_id: 570702
+    rank_table_id: 707
+    grade: 1
+    min_score: 700
+    reward_multiplier: 1.1
+  - rank_id: 570703
+    rank_table_id: 707
+    grade: 2
+    min_score: 1
+    reward_multiplier: 1
+  - rank_id: 570704
+    rank_table_id: 707
+    grade: 3
+    min_score: 0
+    reward_multiplier: 0
+  - rank_id: 570801
+    rank_table_id: 708
+    grade: 0
+    min_score: 1000
+    reward_multiplier: 1.2
+  - rank_id: 570802
+    rank_table_id: 708
+    grade: 1
+    min_score: 700
+    reward_multiplier: 1.1
+  - rank_id: 570803
+    rank_table_id: 708
+    grade: 2
+    min_score: 1
+    reward_multiplier: 1
+  - rank_id: 570804
+    rank_table_id: 708
+    grade: 3
+    min_score: 0
+    reward_multiplier: 0
+  - rank_id: 570901
+    rank_table_id: 709
+    grade: 0
+    min_score: 1000
+    reward_multiplier: 1.2
+  - rank_id: 570902
+    rank_table_id: 709
+    grade: 1
+    min_score: 700
+    reward_multiplier: 1.1
+  - rank_id: 570903
+    rank_table_id: 709
+    grade: 2
+    min_score: 1
+    reward_multiplier: 1
+  - rank_id: 570904
+    rank_table_id: 709
+    grade: 3
+    min_score: 0
+    reward_multiplier: 0
+  - rank_id: 571001
+    rank_table_id: 710
+    grade: 0
+    min_score: 1000
+    reward_multiplier: 1.2
+  - rank_id: 571002
+    rank_table_id: 710
+    grade: 1
+    min_score: 700
+    reward_multiplier: 1.1
+  - rank_id: 571003
+    rank_table_id: 710
+    grade: 2
+    min_score: 1
+    reward_multiplier: 1
+  - rank_id: 571004
+    rank_table_id: 710
+    grade: 3
+    min_score: 0
+    reward_multiplier: 0
