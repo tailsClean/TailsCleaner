@@ -23,30 +23,22 @@ public class SunDryingSkill : ActiveSkill<SunDryingArea, SunDryingModifierData>
         // 초기화
         if(area != null) area.Init(this, _modifierData);
 
+        // 시전 시 효과
+        OnCastEffect();
+
+        // 완전 비활성에서 활성상태로 변경 시
+        if (_activeAreaCount == 0)
+        {
+            OnStateChangedToActive();
+        }
+
         // 활성화 일광건조 수 증가
         _activeAreaCount++;
-
-        // 활성화 모디파이어 실행
-        OnActivate();
     }
-    
-    
-    // SunDryingArea.OnExpire에서 호출
-    // 일광건조 만료 시
-    public void OnAreaExpired()
-    {
-        // 활성화 일광건조 감소
-        _activeAreaCount--;
 
-        // 마지막 일광건조가 꺼지면
-        // 비활성화 모디파이어 실행
-        if (_activeAreaCount == 0)
-            OnDeactivate();
-    }
-    
-    
-    // 켜질 때
-    private void OnActivate()
+
+    // 시전 시 효과
+    private void OnCastEffect()
     {
         // 기상!
         // 시전 시 체력 5% 회복
@@ -62,9 +54,12 @@ public class SunDryingSkill : ActiveSkill<SunDryingArea, SunDryingModifierData>
         {
             Debug.Log("[SunDrying] 이불 털기 - 넉백");
         }
+    }
 
+    // 시전 상태로 변환 효과
+    private void OnStateChangedToActive()
+    {
         // 이불 두르기
-        // 켜지면 방어력 버프 해제
         if (_modifierData.DefenseOnInactive)
         {
             SkillStatHandler.RemoveRuntime(BUFF_KEY_BLANKEY);
@@ -72,15 +67,16 @@ public class SunDryingSkill : ActiveSkill<SunDryingArea, SunDryingModifierData>
         }
 
         // 으슬으슬
-        // 맵 전체 적 슬로우 적용, 스폰되는 적도 포함
         if (_modifierData.SlowOnArea)
         {
-            Debug.Log("[SunDrying] 으슬으슬 - 전체 적 슬로우 적용");
+            Debug.Log("[SunDrying] 으슬으슬 - 전체 적 슬로우 적용 시작");
         }
     }
 
-    // 꺼질 때
-    private void OnDeactivate()
+
+    // SunDryingArea.OnExpire에서 호출
+    // 일광건조 만료 시
+    public void OnAreaExpired()
     {
         // 두꺼운 이불
         // 꺼질 때 방어막 생성
@@ -90,6 +86,18 @@ public class SunDryingSkill : ActiveSkill<SunDryingArea, SunDryingModifierData>
             Debug.Log("[SunDrying] 두꺼운 이불 - 방어막 생성");
         }
 
+        // 활성화 일광건조 감소
+        _activeAreaCount--;
+
+        // 마지막 일광건조가 꺼지면
+        // 비활성화 모디파이어 실행
+        if (_activeAreaCount == 0)
+            OnDeactivate();
+    }
+
+    // 비활성 상태로 변경 효과
+    private void OnDeactivate()
+    {
         // 이불 두르기
         // 꺼진 동안 방어력 증가
         if (_modifierData.DefenseOnInactive)
@@ -102,7 +110,7 @@ public class SunDryingSkill : ActiveSkill<SunDryingArea, SunDryingModifierData>
                 _blanketFlat.DefensePower = _modifierData.DefenseBonus;
                 _lastDefenseBonus = _modifierData.DefenseBonus;
             }
-            SkillStatHandler.AddRuntimeFlat(BUFF_KEY_BLANKEY, _blanketFlat);
+            SkillStatHandler.AddRuntimeStat(BUFF_KEY_BLANKEY, _blanketFlat);
             Debug.Log("[SunDrying] 이불 두르기 - 방어력 증가");
         }
 

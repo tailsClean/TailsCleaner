@@ -110,7 +110,7 @@ public class LevelUpSelectUI : MonoBehaviour
             else
             {
                 // 빈 칸
-                ActiveSkillIcons[i].color = Color.gray;
+                ActiveSkillIcons[i].color = Color.clear;
             }
         }
 
@@ -125,7 +125,7 @@ public class LevelUpSelectUI : MonoBehaviour
             }
             else
             {
-                PassiveSkillIcons[i].color = Color.gray;
+                PassiveSkillIcons[i].color = Color.clear;
             }
         }
     }

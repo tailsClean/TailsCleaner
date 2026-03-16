@@ -280,4 +280,24 @@ public class SkillObjectBase : PoolObject
     // 플레이어 위치
     protected Vector2 GetPlayerPos()
         => SkillManager.Instance.CurrentPlayerPos;
+
+    // 진짜 피해줄 때 최종 데미지
+    protected float GetFinalDamage()
+    {
+        // 플레이어
+        PlayerBase player = SkillManager.Instance.Player;
+
+        // 플레이어 최종 데미지 * 스킬 데미지 계수
+        float damage = player.AttackPower * _runtimeFinalStat.Damage;
+
+        // 치명타 확률
+        float critChance = player.CriticalChance / 100;
+
+        // 0.0 ~ 1.0 보다 치명타 확률이 크면
+        // 치명타 피해 계수 적용
+        if (Random.value < critChance)
+            damage *= player.CriticalDamageMultiplier;
+
+        return damage;
+    }
 }
