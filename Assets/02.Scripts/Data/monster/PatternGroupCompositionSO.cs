@@ -1,0 +1,12 @@
+﻿
+using System.Collections.Generic;
+using UnityEngine;
+
+[CreateAssetMenu(fileName = "PatternGroupCompositionSO", menuName = "Data/PatternGroupCompositionSO")]
+public class PatternGroupCompositionSO : ScriptableObject
+{
+    public List<PatternGroupComposition> dataList = new List<PatternGroupComposition>();
+
+    public PatternGroupComposition GetById(int id)
+        => dataList.Find(x => x.pattern_group_id == id);
+}

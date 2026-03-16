@@ -125,9 +125,12 @@ GameObject:
   - component: {fileID: 6972170408732417574}
   - component: {fileID: 1857852035658448591}
   - component: {fileID: 492828993154934014}
+  - component: {fileID: 8141774427177487964}
+  - component: {fileID: 7885350804614567511}
+  - component: {fileID: 6748436144544715757}
   m_Layer: 6
   m_Name: Player
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -193,7 +196,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: -2034245299
-  m_SortingLayer: 3
+  m_SortingLayer: 0
   m_SortingOrder: 0
   m_Sprite: {fileID: -1972158166779602148, guid: aa9fce1f43ef93c459b930ba088375f4, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -453,3 +456,43 @@ CapsuleCollider2D:
   m_Offset: {x: 0.05787134, y: 0.026041985}
   m_Size: {x: 1.15, y: 1.0695796}
   m_Direction: 0
+--- !u!114 &8141774427177487964
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8060241405893911967}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b02b8afd51bbe8749819f876e1b88cc1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::SkillManager
+  _monsterLayer:
+    serializedVersion: 2
+    m_Bits: 64
+--- !u!114 &7885350804614567511
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8060241405893911967}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f05535cfd6a2c37448a511e453216851, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::UpgradeSelect
+  _onHealSelect: {fileID: 11400000, guid: b8e7bd45a54139346bb1cc0f3c11fbf4, type: 2}
+--- !u!114 &6748436144544715757
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8060241405893911967}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 67b9962fa6fd36746bbabed359551e87, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::SkillStatHandler

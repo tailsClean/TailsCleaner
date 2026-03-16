@@ -1,0 +1,12 @@
+﻿
+using System.Collections.Generic;
+using UnityEngine;
+
+[CreateAssetMenu(fileName = "DropResourceSO", menuName = "Data/DropResourceSO")]
+public class DropResourceSO : ScriptableObject
+{
+    public List<DropResource> dataList = new List<DropResource>();
+
+    public DropResource GetById(int id)
+        => dataList.Find(x => x.drop_resource_id == id);
+}

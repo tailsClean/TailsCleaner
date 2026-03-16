@@ -1,0 +1,11 @@
+﻿using System.Collections.Generic;
+using UnityEngine;
+
+[CreateAssetMenu(fileName = "EquipMatterSO", menuName = "Data/EquipMatterSO")]
+public class EquipMatterSO : ScriptableObject
+{
+    public List<EquipMatter> dataList = new List<EquipMatter>();
+
+    public EquipMatter GetById(int id)
+        => dataList.Find(x => x.id == id);
+}

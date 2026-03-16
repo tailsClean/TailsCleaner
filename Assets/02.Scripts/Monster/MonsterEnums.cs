@@ -2,7 +2,7 @@
 
 namespace MonsterEnum
 {
-    public enum MonsterMove
+    public enum MONSTERMOVE
     {
         StraightChase,      // 직선 추격
         Zigzag,             // 지그재그
@@ -10,7 +10,7 @@ namespace MonsterEnum
         Flee                // 도망
     }
 
-    public enum MonsterType
+    public enum MONSTERTYPE
     {
         Normal,             // 일반
         Special,            // 특수
@@ -18,7 +18,7 @@ namespace MonsterEnum
         Boss                // 보스
     }
 
-    public enum OverlapRule
+    public enum OVERLAPRULE
     {
         Allow,              // 중첩
         Queue,              // 대기
@@ -26,16 +26,13 @@ namespace MonsterEnum
         Ignore              // 무시
     }
 
-    public enum PatternType
+    public enum PATTERNTYPE
     {
         Projectile,         // 투사체
         AreaDenial,         // 공간제한
         CrowdControl        // 이동방해
     }
 
-    public enum DebuffType
-    {
-
-    }
 }
+
 

@@ -54,8 +54,8 @@ public class RuleBasedMonsterSpawner : MonoBehaviour, IMonsterSpawnSystem
     private Dictionary<int, int> _monsterIdToType;
     private Dictionary<int, float> _typeToBaseExp;
 
-    private const string MONSTER_TABLE_FILE = "monster_table";
-    private const string MONSTER_TYPE_TABLE_FILE = "monster_type_table";
+    private const string MONSTER_TABLE_FILE = "monster";
+    private const string MONSTER_TYPE_TABLE_FILE = "monster_type";
 
 
     public void SetSpawningEnabled(bool _isenabled)

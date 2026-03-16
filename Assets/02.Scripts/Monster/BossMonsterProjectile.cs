@@ -58,11 +58,11 @@ public class BossMonsterProjectile : PoolObject
         rb2D.gravityScale = 0f;
     }
 
-    public void Launch(Transform playerTarget, float monsterPower, float typeMultiply, float patternMultiply)
+    public void Launch(Transform playerTarget, float calculatedDamage)
     {
         if (playerTarget == null) return;
 
-        this.finalDamage = monsterPower * typeMultiply * patternMultiply; // 데미지 설정
+        this.finalDamage = calculatedDamage;
         target = playerTarget;
         isInitialized = true;
 
@@ -124,10 +124,10 @@ public class BossMonsterProjectile : PoolObject
 
         if (isHomingActive)
         {
-            // [조향(Steering) 방식 유도]
+            // 유도
             Vector2 desiredDirection = ((Vector2)target.position - rb2D.position).normalized;
 
-            // 현재 속도 방향에서 타겟 방향으로 조금씩 회전 (Slerp와 유사한 효과)
+            // 현재 속도 방향에서 타겟 방향으로 조금씩 회전 
             Vector2 newDirection = Vector2.Lerp(rb2D.linearVelocity.normalized, desiredDirection, Time.fixedDeltaTime * homing_steer_strength);
 
             rb2D.linearVelocity = newDirection.normalized * projectile_speed;
@@ -183,7 +183,7 @@ public class BossMonsterProjectile : PoolObject
         // 관통 로직
         if (pierce_flags.HasFlag(PierceType.PIERCE) && isPlayer)
         {
-            // 플레이어 데미지 처리 로직을 여기에 추가 (예: other.GetComponent<Player>().TakeDamage())
+            // 플레이어 데미지 처리 로직을 여기에 추가 
             return;
         }
 

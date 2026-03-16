@@ -1,0 +1,11 @@
+﻿using System.Collections.Generic;
+using UnityEngine;
+
+[CreateAssetMenu(fileName = "RelicEnhanceSO", menuName = "Data/RelicEnhanceSO")]
+public class RelicEnhanceSO : ScriptableObject
+{
+    public List<RelicEnhance> dataList = new List<RelicEnhance>();
+
+    public RelicEnhance GetById(int id)
+        => dataList.Find(x => x.id == id);
+}
