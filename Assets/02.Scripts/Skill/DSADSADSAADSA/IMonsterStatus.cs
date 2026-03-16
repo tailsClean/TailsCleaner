@@ -68,5 +68,5 @@ public interface IMonsterStatus
     /// <summary>
     /// 최대 체력 감소 시도. 1회 한정.
     /// </summary>
-    void TryReduceMaxHp(float ratio);
+    public void TryReduceMaxHp(float ratio);
 }
