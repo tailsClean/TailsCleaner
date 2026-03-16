@@ -2,20 +2,13 @@
 using System;
 
 // TODO: 'ItemTypeType' 멤버 이름을 실제 값으로 수정하세요.
-public enum ItemTypeType
-{
-    Value0 = 0,
-    Value1 = 1,
-    Value2 = 2,
-    Value3 = 3,
-    Value4 = 4,
-}
+
 
 [Serializable]
 public class ItemInventoryTable
 {
     public int inven_id;
-    public ItemTypeType item_type;
+    public ITEM_TYPE item_type;
     public int item_id;
     public int quantity;
     public int remain_time;
