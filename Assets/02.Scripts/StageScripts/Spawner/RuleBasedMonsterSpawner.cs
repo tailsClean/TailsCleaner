@@ -204,17 +204,18 @@ public class RuleBasedMonsterSpawner : MonoBehaviour, IMonsterSpawnSystem
             _monster = Instantiate(_prefab, _spawnPos, Quaternion.identity);
 
         _monster.name = _name;
+
+        // 1. monsterId 먼저 주입
+        _monster.SetMonsterId(_monsterId);
+
         _monster.target = _playerTransform;
 
-        // wave modifier (현재 웨이브 기반)
         float waveHp = _currentWave != null ? _currentWave.waveHpModifier : 0f;
         float wavePower = _currentWave != null ? _currentWave.wavePowerModifier : 0f;
 
-        // 기획서 방식: 1 + tower + stage + wave
         float hpScale = 1f + _towerHpMod + _stageHpMod + waveHp;
         float powerScale = 1f + _towerPowerMod + _stagePowerMod + wavePower;
 
-        // 안전 클램프(음수 방지)
         hpScale = Mathf.Max(0.1f, hpScale);
         powerScale = Mathf.Max(0.1f, powerScale);
 
@@ -222,6 +223,16 @@ public class RuleBasedMonsterSpawner : MonoBehaviour, IMonsterSpawnSystem
 
         int exp = CalcExp(_monsterId);
         _monster.SetExpReward(exp);
+
+        // 2. 보스/특수 보스 계열이면 여기서 bind
+        if (_monster is SpecialBossMonsterBase specialBossMonster)
+        {
+            BossTriggerPatternRunner runner = specialBossMonster.GetComponent<BossTriggerPatternRunner>();
+            if (runner != null)
+            {
+                runner.Bind(specialBossMonster);
+            }
+        }
 
         _registry.Register(_monster.gameObject);
         return _monster;

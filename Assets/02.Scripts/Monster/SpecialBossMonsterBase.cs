@@ -152,11 +152,6 @@ public abstract class SpecialBossMonsterBase : MonsterBase
                 target = playerObj.transform;
         }
 
-        _triggerRunner = GetComponent<BossTriggerPatternRunner>();
-        if (_triggerRunner != null)
-        {
-            _triggerRunner.Bind(this);
-        }
     }
 
     public override void OnDespawn()

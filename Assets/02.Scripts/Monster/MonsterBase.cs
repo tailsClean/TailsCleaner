@@ -39,6 +39,13 @@ public abstract class MonsterBase : PoolObject, IDamageable
     protected Rigidbody2D rb2D;
     protected bool isAttacking = false; // 패턴 중 이동 정지용
 
+    public int MonsterId { get; private set; } = -1;
+
+    public void SetMonsterId(int id)
+    {
+        MonsterId = id;
+    }
+
     protected virtual void Awake()
     {
         rb2D = GetComponent<Rigidbody2D>();

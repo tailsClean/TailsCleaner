@@ -4,35 +4,35 @@ using UnityEngine;
 
 public class BossTriggerPatternRunner : MonoBehaviour
 {
-    private const string BOSS_TRIGGER_PATTERN_TABLE_FILE = "boss_trigger_pattern";
+    private const string MONSTER_TABLE_FILE = "monster_table";
+    private const string PATTERN_GROUP_TABLE_FILE = "pattern_group_table";
+    private const string PATTERN_GROUP_COMPOSITION_TABLE_FILE = "pattern_group_composition_table";
+    private const string PATTERN_TABLE_FILE = "pattern_table";
 
-    [Header("Shared")]
-    [SerializeField] private float _warningDuration = 2f;
+    [Header("공통 기본값")]
+    [SerializeField] private float _defaultWarningDuration = 2f;
+    [SerializeField] private float _defaultExpAbsorbDelay = 5f;
+    [SerializeField] private float _defaultExpAbsorbDuration = 3f;
+    [SerializeField] private float _defaultDirtySpawnDuration = 5f;
+    [SerializeField] private float _defaultDirtyAbsorbDuration = 2f;
 
-    [Header("Exp Absorb")]
-    [SerializeField] private float _expAbsorbDelay = 5f;
-    [SerializeField] private float _expAbsorbDuration = 3f;
-
-    [Header("Dirty Spawn")]
+    [Header("더러움 소환용 프리팹")]
     [SerializeField] private PoolObject _bossDirtyItemPrefab;
-    [SerializeField] private float _spawnRadiusFromBoss = 3f;
-    [SerializeField] private float _spawnRadiusFromPlayer = 3f;
-    [SerializeField] private float _dirtySpawnFirstDelay = 10f;
-    [SerializeField] private float _dirtySpawnDuration = 5f;
-    [SerializeField] private float _dirtyAbsorbDuration = 2f;
-    [SerializeField] private int _dirtySpawnCount = 5;
 
     private SpecialBossMonsterBase _boss;
     private StageController _stageController;
     private StageTimer _timer;
 
-    private BossTriggerPatternRow _row;
+    private PatternGroupTableRow _patternGroupRow;
+    private List<PatternGroupCompositionTableRow> _compositionRows = new List<PatternGroupCompositionTableRow>();
+    private List<PatternTableRow> _triggerRows = new List<PatternTableRow>();
 
     private bool _bound;
     private bool _patternRunning;
 
-    private bool _expTriggered;
-    private int _enrageCurrentStep;
+    private readonly HashSet<int> _triggeredOncePatternIds = new HashSet<int>();
+    private readonly Dictionary<int, int> _enrageCurrentStepByPatternId = new Dictionary<int, int>();
+    private readonly Dictionary<int, int> _lastTriggerElapsedByPatternId = new Dictionary<int, int>();
 
     private Coroutine _runningRoutine;
 
@@ -43,30 +43,27 @@ public class BossTriggerPatternRunner : MonoBehaviour
         _boss = boss;
         _stageController = StageController.Instance;
 
-        if (_boss == null)
-        {
-            Debug.LogWarning("[BossTriggerPatternRunner] 보스 없음");
-            return;
-        }
-
         if (_stageController == null)
+            _stageController = FindFirstObjectByType<StageController>();
+
+        if (_boss == null || _stageController == null)
         {
-            Debug.LogWarning("[BossTriggerPatternRunner] 스테이지 컨트롤러 없음");
+            Debug.LogWarning("[BossTriggerPatternRunner] bind 실패");
             return;
         }
 
         _timer = _stageController.Timer;
         if (_timer == null || _stageController.Events == null)
         {
-            Debug.LogWarning("[BossTriggerPatternRunner] 타이머 혹은 이벤트 없음");
+            Debug.LogWarning("[BossTriggerPatternRunner] timer/events 없음");
             return;
         }
 
-        LoadRow();
+        LoadTriggerRows();
 
-        if (_row == null)
+        if (_triggerRows.Count == 0)
         {
-            Debug.LogWarning($"[BossTriggerPatternRunner] Row값을 찾을 수 없음. monsterId={GetMonsterId()}");
+            Debug.LogWarning($"[BossTriggerPatternRunner] trigger row 없음 / monsterId={GetMonsterId()}");
             return;
         }
 
@@ -74,22 +71,24 @@ public class BossTriggerPatternRunner : MonoBehaviour
 
         _stageController.Events.OnBossSecondTick += HandleBossSecondTick;
         _bound = true;
+
+        Debug.Log($"[BossTriggerPatternRunner] Bind 성공 / triggerCount={_triggerRows.Count}");
     }
 
     public void Unbind()
     {
         if (_bound && _stageController != null && _stageController.Events != null)
-        {
             _stageController.Events.OnBossSecondTick -= HandleBossSecondTick;
-        }
 
         if (_runningRoutine != null && _stageController != null)
-        {
             _stageController.StopCoroutine(_runningRoutine);
-        }
 
         _runningRoutine = null;
         _bound = false;
+
+        _patternGroupRow = null;
+        _compositionRows.Clear();
+        _triggerRows.Clear();
     }
 
     private void OnDestroy()
@@ -100,226 +99,292 @@ public class BossTriggerPatternRunner : MonoBehaviour
     private void ResetState()
     {
         _patternRunning = false;
-        _expTriggered = false;
-        _enrageCurrentStep = 0;
+        _triggeredOncePatternIds.Clear();
+        _enrageCurrentStepByPatternId.Clear();
+        _lastTriggerElapsedByPatternId.Clear();
+
+        for (int i = 0; i < _triggerRows.Count; i++)
+        {
+            int patternId = _triggerRows[i].pattern_id;
+            _enrageCurrentStepByPatternId[patternId] = 0;
+            _lastTriggerElapsedByPatternId[patternId] = -9999;
+        }
     }
 
-    private void LoadRow()
+    private void LoadTriggerRows()
     {
+        _triggerRows.Clear();
+        _compositionRows.Clear();
+        _patternGroupRow = null;
+
         int monsterId = GetMonsterId();
         if (monsterId <= 0)
         {
-            Debug.LogWarning($"[BossTriggerPatternRunner] 몬스터 좌표 0 미만 : {monsterId}");
-            _row = null;
+            Debug.LogWarning($"[BossTriggerPatternRunner] invalid monsterId={monsterId}");
             return;
         }
 
-        List<BossTriggerPatternRow> rows = DataParser.Parse<BossTriggerPatternRow>(BOSS_TRIGGER_PATTERN_TABLE_FILE);
-        if (rows == null || rows.Count == 0)
+        List<MonsterTableRow> monsterRows = DataParser.Parse<MonsterTableRow>(MONSTER_TABLE_FILE);
+        List<PatternGroupTableRow> patternGroupRows = DataParser.Parse<PatternGroupTableRow>(PATTERN_GROUP_TABLE_FILE);
+        List<PatternGroupCompositionTableRow> compositionRows =
+            DataParser.Parse<PatternGroupCompositionTableRow>(PATTERN_GROUP_COMPOSITION_TABLE_FILE);
+        List<PatternTableRow> patternRows = DataParser.Parse<PatternTableRow>(PATTERN_TABLE_FILE);
+
+        if (monsterRows == null || patternGroupRows == null || compositionRows == null || patternRows == null)
         {
-            Debug.LogWarning($"[BossTriggerPatternRunner] csv 로드 안됨 : {BOSS_TRIGGER_PATTERN_TABLE_FILE}");
-            _row = null;
+            Debug.LogWarning("[BossTriggerPatternRunner] CSV 로드 실패");
             return;
         }
 
-        _row = null;
-
-        for (int i = 0; i < rows.Count; i++)
+        MonsterTableRow monsterRow = null;
+        for (int i = 0; i < monsterRows.Count; i++)
         {
-            if (rows[i].monster_id == monsterId)
+            if (monsterRows[i].monster_id == monsterId)
             {
-                _row = rows[i];
+                monsterRow = monsterRows[i];
                 break;
             }
         }
+
+        if (monsterRow == null)
+        {
+            Debug.LogWarning($"[BossTriggerPatternRunner] monsterRow 없음 / monsterId={monsterId}");
+            return;
+        }
+
+        int patternGroupId = monsterRow.pattern_group_id;
+
+        for (int i = 0; i < patternGroupRows.Count; i++)
+        {
+            if (patternGroupRows[i].pattern_group_id == patternGroupId)
+            {
+                _patternGroupRow = patternGroupRows[i];
+                break;
+            }
+        }
+
+        if (_patternGroupRow == null)
+        {
+            Debug.LogWarning($"[BossTriggerPatternRunner] pattern_group 없음 / groupId={patternGroupId}");
+            return;
+        }
+
+        for (int i = 0; i < compositionRows.Count; i++)
+        {
+            if (compositionRows[i].pattern_group_id == patternGroupId)
+            {
+                _compositionRows.Add(compositionRows[i]);
+            }
+        }
+
+        if (_compositionRows.Count == 0)
+        {
+            Debug.LogWarning($"[BossTriggerPatternRunner] composition 없음 / groupId={patternGroupId}");
+            return;
+        }
+
+        _compositionRows.Sort((a, b) => a.priority.CompareTo(b.priority));
+
+        for (int i = 0; i < _compositionRows.Count; i++)
+        {
+            int patternId = _compositionRows[i].pattern_id;
+
+            for (int j = 0; j < patternRows.Count; j++)
+            {
+                if (patternRows[j].pattern_id == patternId)
+                {
+                    if (IsTriggerPattern(patternRows[j].pattern_logic_type))
+                    {
+                        _triggerRows.Add(patternRows[j]);
+                    }
+                    break;
+                }
+            }
+        }
+    }
+
+    private bool IsTriggerPattern(string logicType)
+    {
+        logicType = logicType.Trim();
+
+        return logicType == "trigger_exp_absorb"
+            || logicType == "trigger_dirty_spawn"
+            || logicType == "trigger_enrage";
     }
 
     private int GetMonsterId()
     {
         if (_boss == null) return -1;
-
-        string objName = _boss.gameObject.name;
-        if (string.IsNullOrEmpty(objName))
-            return -1;
-
-        int underscoreIndex = objName.LastIndexOf('_');
-        if (underscoreIndex < 0 || underscoreIndex >= objName.Length - 1)
-            return -1;
-
-        string idText = objName.Substring(underscoreIndex + 1);
-
-        if (int.TryParse(idText, out int monsterId))
-            return monsterId;
-
-        return -1;
+        return _boss.MonsterId;
     }
 
     private void HandleBossSecondTick(int secondsLeft)
     {
-        if (_row == null) return;
         if (_timer == null) return;
-        if (_patternRunning) return;
         if (_boss == null) return;
         if (_boss.hp <= 0f) return;
+        if (_patternRunning) return;
 
         int elapsed = _timer.GetBossLimitSeconds() - secondsLeft;
 
-        switch (_row.pattern_logic_type)
+        for (int i = 0; i < _triggerRows.Count; i++)
         {
-            case "trigger_exp_absorb":
-                TryTriggerExpAbsorb(elapsed);
-                break;
+            PatternTableRow row = _triggerRows[i];
+            PatternGroupCompositionTableRow comp = FindComposition(row.pattern_id);
 
-            case "trigger_dirty_spawn":
-                TryTriggerDirtySpawn(elapsed);
-                break;
+            switch (row.pattern_logic_type)
+            {
+                case "trigger_exp_absorb":
+                    TryTriggerExpAbsorb(row, comp, elapsed);
+                    break;
 
-            case "trigger_enrage":
-                TryTriggerEnrage(elapsed);
+                case "trigger_dirty_spawn":
+                    TryTriggerDirtySpawn(row, comp, elapsed);
+                    break;
+
+                case "trigger_enrage":
+                    TryTriggerEnrage(row, comp, elapsed);
+                    break;
+            }
+
+            if (_patternRunning)
                 break;
         }
     }
 
-    // 경험치 방치 패턴
-    private void TryTriggerExpAbsorb(int elapsed)
+    private PatternGroupCompositionTableRow FindComposition(int patternId)
     {
-        if (_expTriggered) return;
-        if (elapsed < Mathf.RoundToInt(_expAbsorbDelay)) return;
-
-        _expTriggered = true;
-        _runningRoutine = _stageController.StartCoroutine(CoExpAbsorb());
+        for (int i = 0; i < _compositionRows.Count; i++)
+        {
+            if (_compositionRows[i].pattern_id == patternId)
+                return _compositionRows[i];
+        }
+        return null;
     }
 
-
-    // 더러움 소환 패턴
-    // 반복 여부는 지금 기획/CSV 기준 불명확해서 1회 실행으로 둔다.
-    private void TryTriggerDirtySpawn(int elapsed)
+    private void TryTriggerExpAbsorb(PatternTableRow row, PatternGroupCompositionTableRow comp, int elapsed)
     {
-        if (_expTriggered) { } // no-op, 가독성용
+        if (_triggeredOncePatternIds.Contains(row.pattern_id)) return;
 
-        if (elapsed < Mathf.RoundToInt(_dirtySpawnFirstDelay)) return;
+        int triggerTime = row.cast_time > 0f ? Mathf.RoundToInt(row.cast_time) : Mathf.RoundToInt(_defaultExpAbsorbDelay);
+        if (elapsed < triggerTime) return;
 
-        // 현재 CSV에는 dirty spawn 반복 주기 컬럼이 없어서 1회 실행 처리
-        if (_runningRoutine != null || _patternRunning) return;
-
-        // 보스 소환 더러움 패턴도 한 번만 실행
-        // 필요 시 CSV 컬럼 추가 후 반복형으로 확장 가능
-        _runningRoutine = _stageController.StartCoroutine(CoDirtySpawnOnce());
+        _triggeredOncePatternIds.Add(row.pattern_id);
+        _runningRoutine = _stageController.StartCoroutine(CoExpAbsorb(row));
     }
 
-
-    // 광폭화는 CSV의 enrage_time을 간격으로 사용한다.
-    // enrage_time=60, max_step=2 -> 60초/120초에 발동
-    private void TryTriggerEnrage(int elapsed)
+    private void TryTriggerDirtySpawn(PatternTableRow row, PatternGroupCompositionTableRow comp, int elapsed)
     {
-        if (_row.enrage_max_step <= 0) return;
-        if (_enrageCurrentStep >= _row.enrage_max_step) return;
+        if (_triggeredOncePatternIds.Contains(row.pattern_id)) return;
 
-        int interval = Mathf.RoundToInt(_row.enrage_time);
+        int triggerTime = row.cast_time > 0f ? Mathf.RoundToInt(row.cast_time) : 10;
+        if (elapsed < triggerTime) return;
+
+        _triggeredOncePatternIds.Add(row.pattern_id);
+        _runningRoutine = _stageController.StartCoroutine(CoDirtySpawn(row));
+    }
+
+    private void TryTriggerEnrage(PatternTableRow row, PatternGroupCompositionTableRow comp, int elapsed)
+    {
+        if (row.enrage_max_step <= 0) return;
+
+        int currentStep = _enrageCurrentStepByPatternId[row.pattern_id];
+        if (currentStep >= row.enrage_max_step) return;
+
+        int interval = Mathf.RoundToInt(row.enrage_time);
         if (interval <= 0) return;
 
-        int nextTriggerTime = interval * (_enrageCurrentStep + 1);
+        int nextTriggerTime = interval * (currentStep + 1);
         if (elapsed < nextTriggerTime) return;
 
-        _runningRoutine = _stageController.StartCoroutine(CoEnrage());
+        _runningRoutine = _stageController.StartCoroutine(CoEnrage(row));
     }
 
-    // 경험치 방치:
-    // 예고 -> 필드의 미청소 더러움 흡수 -> 개수 비례 hp 회복 -> 종료
-    private IEnumerator CoExpAbsorb()
+    private IEnumerator CoExpAbsorb(PatternTableRow row)
     {
         _patternRunning = true;
         _boss.SetAttackingState(true);
 
+        float warning = row.cast_time > 0f ? row.cast_time : _defaultWarningDuration;
+
         // TODO: 경험치 방치 예고 연출
-        yield return new WaitForSeconds(_warningDuration);
+        yield return new WaitForSeconds(warning);
 
         List<InGameExpItem> targets = InGameExpItem.GetAllUncleaned();
+        float absorbDuration = row.duration > 0f ? row.duration : _defaultExpAbsorbDuration;
 
         for (int i = 0; i < targets.Count; i++)
         {
             if (targets[i] != null)
-            {
-                _stageController.StartCoroutine(
-                    targets[i].MoveToBossAndAbsorb(_boss.transform, _expAbsorbDuration));
-            }
+                _stageController.StartCoroutine(targets[i].MoveToBossAndAbsorb(_boss.transform, absorbDuration));
         }
 
-        yield return new WaitForSeconds(_expAbsorbDuration);
+        yield return new WaitForSeconds(absorbDuration);
 
-        float hpGain = targets.Count * _row.dirty_to_hp_value;
-        _boss.hp += hpGain;
+        _boss.hp += targets.Count * row.dirty_to_hp_value;
 
-        // TODO: 경험치 방치 공격 이펙트
+        // TODO: 경험치 방치 이펙트
 
         _boss.SetAttackingState(false);
         _patternRunning = false;
         _runningRoutine = null;
     }
 
-    // 더러움 소환:
-    // 예고 -> 더러움 생성 -> 유지 -> 남은 더러움 흡수 -> 개수 비례 hp 회복 -> 종료
-    private IEnumerator CoDirtySpawnOnce()
+    private IEnumerator CoDirtySpawn(PatternTableRow row)
     {
         _patternRunning = true;
         _boss.SetAttackingState(true);
 
+        float warning = row.cast_time > 0f ? row.cast_time : _defaultWarningDuration;
+
         // TODO: 더러움 소환 예고 연출
-        yield return new WaitForSeconds(_warningDuration);
+        yield return new WaitForSeconds(warning);
 
-        SpawnDirtyItems();
+        SpawnDirtyItems(row);
 
-        yield return new WaitForSeconds(_dirtySpawnDuration);
+        float dirtyDuration = row.duration > 0f ? row.duration : _defaultDirtySpawnDuration;
+        yield return new WaitForSeconds(dirtyDuration);
 
         List<InGameExpItem> targets = InGameExpItem.GetBossSpawnedUncleaned();
 
         for (int i = 0; i < targets.Count; i++)
         {
             if (targets[i] != null)
-            {
-                _stageController.StartCoroutine(
-                    targets[i].MoveToBossAndAbsorb(_boss.transform, _dirtyAbsorbDuration));
-            }
+                _stageController.StartCoroutine(targets[i].MoveToBossAndAbsorb(_boss.transform, _defaultDirtyAbsorbDuration));
         }
 
-        yield return new WaitForSeconds(_dirtyAbsorbDuration);
+        yield return new WaitForSeconds(_defaultDirtyAbsorbDuration);
 
-        float hpGain = targets.Count * _row.dirty_to_hp_value;
-        _boss.hp += hpGain;
+        _boss.hp += targets.Count * row.dirty_to_hp_value;
 
-        // TODO: 더러움 소환 공격 이펙트
+        // TODO: 더러움 소환 이펙트
 
         _boss.SetAttackingState(false);
         _patternRunning = false;
         _runningRoutine = null;
     }
 
-    // 광폭화:
-    // 예고 -> 단계 증가 -> CSV 배율만큼 hp/power 증가 -> 종료
-    private IEnumerator CoEnrage()
+    private IEnumerator CoEnrage(PatternTableRow row)
     {
         _patternRunning = true;
         _boss.SetAttackingState(true);
 
         // TODO: 광폭화 예고 연출
-        yield return new WaitForSeconds(_warningDuration);
+        yield return new WaitForSeconds(_defaultWarningDuration);
 
-        _enrageCurrentStep++;
+        _enrageCurrentStepByPatternId[row.pattern_id]++;
 
-        _boss.hp *= Mathf.Max(1f, _row.enrage_hp_rate);
-        _boss.power *= Mathf.Max(1f, _row.enrage_atk_rate);
+        _boss.hp *= Mathf.Max(1f, row.enrage_hp_rate);
+        _boss.power *= Mathf.Max(1f, row.enrage_atk_rate);
 
-        // TODO: 광폭화 공격 이펙트
+        // TODO: 광폭화 이펙트
 
         _boss.SetAttackingState(false);
         _patternRunning = false;
         _runningRoutine = null;
     }
 
-    // 보스 또는 플레이어 주변에 겹치지 않게 더러움을 생성한다.
-    // 현재 생성 개수와 반경은 CSV 컬럼이 없어서 Inspector 값 사용.
-    // item_id 현재 존재하지 않아서 이후로 미룸
-    private void SpawnDirtyItems()
+    private void SpawnDirtyItems(PatternTableRow row)
     {
         if (_bossDirtyItemPrefab == null || ObjectPoolManager.Instance == null)
             return;
@@ -327,15 +392,17 @@ public class BossTriggerPatternRunner : MonoBehaviour
         Transform player = _boss.target;
         List<Vector3> usedPositions = new List<Vector3>();
 
-        for (int i = 0; i < _dirtySpawnCount; i++)
+        int spawnCount = row.summon_count > 0 ? row.summon_count : 5;
+        float radius = row.summon_radius > 0f ? row.summon_radius : 3f;
+
+        for (int i = 0; i < spawnCount; i++)
         {
-            bool spawnNearBoss = (i % 2 == 0);
+            bool spawnNearBoss = row.summon_position_type == 1 || (row.summon_position_type != 0 && i % 2 == 0);
 
             Vector3 center = spawnNearBoss
                 ? _boss.transform.position
                 : (player != null ? player.position : _boss.transform.position);
 
-            float radius = spawnNearBoss ? _spawnRadiusFromBoss : _spawnRadiusFromPlayer;
             Vector3 spawnPos = FindNonOverlappingPosition(center, radius, usedPositions);
 
             PoolObject spawned = ObjectPoolManager.Instance.Spawn(_bossDirtyItemPrefab, spawnPos, Quaternion.identity);
@@ -353,7 +420,6 @@ public class BossTriggerPatternRunner : MonoBehaviour
         // item_id 기준으로 실제 아이템 리소스를 선택하도록 변경
     }
 
-    // 이미 선택된 위치들과 일정 거리 이상 떨어진 좌표를 탐색한다.
     private Vector3 FindNonOverlappingPosition(Vector3 center, float radius, List<Vector3> usedPositions)
     {
         const int maxTry = 20;
