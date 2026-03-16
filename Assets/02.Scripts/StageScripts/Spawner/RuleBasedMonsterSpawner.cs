@@ -6,6 +6,7 @@ public class RuleBasedMonsterSpawner : MonoBehaviour, IMonsterSpawnSystem
     private const float MIN_SPAWN_DISTANCE = 10f; //플레이어로부터 최소한의 스폰 거리
     private const float MAX_SPAWN_DISTANCE = 20f; //플레이어로부터 최대한의 스폰 거리
 
+
     private const int SPAWN_PER_SECOND = 5; //초당 스폰할 몬스터 수
     private const float SQUAD_RADIUS = 3f; //스쿼드 내 몬스터들이 모이는 반경
     private const int CIRCLE_SLOTS = 12; //원형 스폰 시 슬롯 수
