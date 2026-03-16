@@ -3,7 +3,7 @@ using System.Collections;
 
 public class BarricadeSpawner : MonoBehaviour
 {
-    // --- BossMonster에서 참조하는 모든 Enum 정의 (에러 해결 핵심) ---
+    // --- BossMonster에서 참조하는 모든 Enum 정의 ---
     public enum BarricadeShape { Circle, Rectangle }
     public enum InteractionType { SolidWall, PassableWithDamage, BlockedWithDamage }
     public enum SpawnLocation { Player, Boss, Both, None }

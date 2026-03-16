@@ -54,7 +54,7 @@ public abstract class SwingArea<TModifierData> : SkillArea<TModifierData> where 
 
             // SuperClean (기절 시 추가 슬로우 5초)
             foreach (var passive in _passiveModifiers)
-                passive.OnStun(monster);
+                passive.OnCC(monster);
         }
     }
 

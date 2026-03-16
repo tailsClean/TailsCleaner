@@ -1,0 +1,9 @@
+﻿
+using System;
+
+[Serializable]
+public class CharIngameTable
+{
+    public int char_ingame_level;
+    public int char_ingame_exp;
+}

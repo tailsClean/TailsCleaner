@@ -1,0 +1,12 @@
+﻿
+using System.Collections.Generic;
+using UnityEngine;
+
+[CreateAssetMenu(fileName = "CharLevelTableSO", menuName = "Data/CharLevelTableSO")]
+public class CharLevelTableSO : ScriptableObject
+{
+    public List<CharLevelTable> dataList = new List<CharLevelTable>();
+
+    public CharLevelTable GetById(int id)
+        => dataList.Find(x => x.char_level == id);
+}

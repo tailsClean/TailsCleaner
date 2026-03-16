@@ -2,7 +2,7 @@
 using MonsterEnum;
 public class NormalMonster : MonsterBase
 {
-    public override MonsterType monsterType => MonsterType.Normal;
+    public override MONSTERTYPE monsterType => MONSTERTYPE.Normal;
     protected override void Awake()
     {
         // MonsterBase의 Awake 실행

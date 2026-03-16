@@ -1,0 +1,13 @@
+﻿
+using System;
+
+[Serializable]
+public class Customer
+{
+    public int customer_group;
+    public int monster_id;
+    public string is_rescued;
+    public float customer_probability;
+    public int customer_duration;
+    public float customer_goldinterest;
+}

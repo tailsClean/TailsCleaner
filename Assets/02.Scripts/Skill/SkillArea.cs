@@ -14,6 +14,9 @@ public class SkillArea<TModifierData> : SkillObjectBase
 
     // 최근 틱 피해 시간
     protected float _lastTickTime;
+    
+    // 장판 위 플레이어 상태
+    protected bool _isPlayerInArea = false;
 
     // 장판형은 초기화 시 방향이 대체로 없음
     // 근데 속도가 추가되면서 유도될 수 있음
@@ -59,6 +62,7 @@ public class SkillArea<TModifierData> : SkillObjectBase
         }
         else if (col.CompareTag("Player"))      // 플레이어
         {
+            _isPlayerInArea = true;
             OnPlayerEnter();
         }
         else if (col.CompareTag("MonsterBullet")) // 적 투사체
@@ -82,6 +86,7 @@ public class SkillArea<TModifierData> : SkillObjectBase
         }
         else if (col.CompareTag("Player"))      // 플레이어
         {
+            _isPlayerInArea = false;
             OnPlayerExit();
         }
         else if (col.CompareTag("MonsterBullet")) // 적 투사체
@@ -130,7 +135,7 @@ public class SkillArea<TModifierData> : SkillObjectBase
             }
 
             // 데미지 처리 
-            monster.TakeDamage(_runtimeFinalStat.Damage);
+            monster.TakeDamage(GetFinalDamage());
 
             // 전용 모디파이어 로직
             OnTick(monster);
@@ -148,6 +153,24 @@ public class SkillArea<TModifierData> : SkillObjectBase
     // 소멸 시 범위 내 적 정리
     protected override void OnExpire()
     {
+        // 플레이어가 장판 위에 있으면 
+        if (_isPlayerInArea == true)
+        {
+            // 나가기 처리 (버프 빼기)
+            OnPlayerExit();
+            _isPlayerInArea = false;
+        }
+
+        // 몬스터들도 마찬가지
+        foreach (var monster in _monstersInArea)
+        {
+            if (monster != null && monster.gameObject.activeInHierarchy)
+            {
+                OnMonsterExit(monster);
+            }
+        }
+
+        // 청소 싹
         _monstersInArea.Clear();
     }
 }

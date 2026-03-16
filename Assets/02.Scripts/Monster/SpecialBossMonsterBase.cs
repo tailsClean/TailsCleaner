@@ -33,7 +33,7 @@ public abstract class SpecialBossMonsterBase : MonsterBase
     public float patternFrequency = 5.0f;  // 지그재그 주기
 
     [Header("--- 이동 특수 패턴 설정 ---")]
-    public MonsterMove moveType;           // 이 몬스터가 어떤 이동 패턴을 쓸지 결정
+    public MONSTERMOVE moveType;           // 이 몬스터가 어떤 이동 패턴을 쓸지 결정
 
     [Header("--- 점프 전용 상세 설정 ---")]
     public float jump_height = 2.0f;       // 시각적 높이
@@ -211,10 +211,10 @@ public abstract class SpecialBossMonsterBase : MonsterBase
 
         switch (moveType)
         {
-            case MonsterMove.StraightChase: StraightChase(); break;
-            case MonsterMove.Zigzag: ZigzagMove(); break;
-            case MonsterMove.Jump: JumpMove(); break;
-            case MonsterMove.Flee: FleeMove(); break;
+            case MONSTERMOVE.StraightChase: StraightChase(); break;
+            case MONSTERMOVE.Zigzag: ZigzagMove(); break;
+            case MONSTERMOVE.Jump: JumpMove(); break;
+            case MONSTERMOVE.Flee: FleeMove(); break;
             default: StraightChase(); break;
         }
 
@@ -266,7 +266,7 @@ public abstract class SpecialBossMonsterBase : MonsterBase
             if (player == null) return;
 
             // 지그재그 패턴 데미지
-            if (moveType == MonsterMove.Zigzag)
+            if (moveType == MONSTERMOVE.Zigzag)
             {
                 player.TakeDamage(this.power);
                 Debug.Log("지그재그 데미지 적용!");
@@ -274,7 +274,7 @@ public abstract class SpecialBossMonsterBase : MonsterBase
             }
 
             // 점프 도중 충돌 시 데미지
-            if (moveType == MonsterMove.Jump && isJumping && !hasHitTargetInCurrentJump)
+            if (moveType == MONSTERMOVE.Jump && isJumping && !hasHitTargetInCurrentJump)
             {
                 float finalJumpDamage = this.power * this.type_power_multiply * this.damage_multiply;
                 player.TakeDamage(finalJumpDamage);

@@ -163,7 +163,7 @@ public class SoapBubbleArea : SkillArea<SoapBubbleModifierData>
     // 버블버블 방어력 적용
     private void ApplyPlayerDefense()
     {
-        SkillManager.Instance.SkillStatHandler.AddRuntimeFlat(BUFF_KEY_BUBBLEBUBBLE, _soapBubbleSkill.BubbleBonus);
+        SkillManager.Instance.SkillStatHandler.AddRuntimeStat(BUFF_KEY_BUBBLEBUBBLE, _soapBubbleSkill.BubbleBonus);
         Debug.Log($"[SoapBubble] 버블버블 적용. 방어력 + {_modifierData.PlayerDefenseBonus}");
     }
 
@@ -204,7 +204,7 @@ public class SoapBubbleArea : SkillArea<SoapBubbleModifierData>
 
         // 스턴 패시브 추가 효과 (SuperClean)
         foreach (var passive in _passiveModifiers)
-            passive.OnStun(monster);
+            passive.OnCC(monster);
     }
 
 

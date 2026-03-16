@@ -1,0 +1,12 @@
+﻿
+using System.Collections.Generic;
+using UnityEngine;
+
+[CreateAssetMenu(fileName = "ThemeOptionSO", menuName = "Data/ThemeOptionSO")]
+public class ThemeOptionSO : ScriptableObject
+{
+    public List<ThemeOption> dataList = new List<ThemeOption>();
+
+    public ThemeOption GetById(int id)
+        => dataList.Find(x => x.id == id);
+}

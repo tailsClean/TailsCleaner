@@ -1,0 +1,12 @@
+﻿
+using System.Collections.Generic;
+using UnityEngine;
+
+[CreateAssetMenu(fileName = "BathhouseSO", menuName = "Data/BathhouseSO")]
+public class BathhouseSO : ScriptableObject
+{
+    public List<Bathhouse> dataList = new List<Bathhouse>();
+
+    public Bathhouse GetById(int id)
+        => dataList.Find(x => x.bathhouse_gradeid == id);
+}
