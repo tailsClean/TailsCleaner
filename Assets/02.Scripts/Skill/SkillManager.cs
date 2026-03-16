@@ -9,7 +9,7 @@ public class SkillManager : MonoBehaviour
 
     public const int MAX_ACTIVE_SLOTS = 6;              // 최대 액티브 스킬 수
     public const int MAX_PASSIVE_SLOTS = 6;             // 최대 패시브 스킬 수
-    public const int DEFAULT_ACTIVE_MAIN_TAG = 41009;   // 기본 지급 스킬 메인 태그 (세제 캡슐 41007)
+    public const int DEFAULT_ACTIVE_MAIN_TAG = 41007;   // 기본 지급 스킬 메인 태그 (세제 캡슐 41007)
     public const float DEFAULT_SEARCH_RADIUS = 100f;    // 가장 가까운 적 탐색용 범위
     public const float SEARCH_INTERVAL = 0.1f;          // 탐색 주기
     public const int MONSTER_BUFFER_COUNT = 150;        // 몬스터 콜라이더 버퍼 크기
@@ -134,7 +134,7 @@ public class SkillManager : MonoBehaviour
 
         //ApplyActiveOption(41010, SkillDataLoader.GetActiveUpgradeData(40056));  // 블루투스 샤워기
         //ApplyActiveOption(41010, SkillDataLoader.GetActiveUpgradeData(40057));  // 수압 최대로!
-        //pplyActiveOption(41010, SkillDataLoader.GetActiveUpgradeData(40058));  // 온수샤워
+        //ApplyActiveOption(41010, SkillDataLoader.GetActiveUpgradeData(40058));  // 온수샤워
         //ApplyActiveOption(41010, SkillDataLoader.GetActiveUpgradeData(40059));  // 냉수마찰
         //ApplyActiveOption(41010, SkillDataLoader.GetActiveUpgradeData(40060));  // 예열완료
         //ApplyActiveOption(41010, SkillDataLoader.GetActiveUpgradeData(40061));  // 방수코팅
