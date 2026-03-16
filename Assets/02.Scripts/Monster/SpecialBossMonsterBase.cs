@@ -29,7 +29,7 @@ public abstract class SpecialBossMonsterBase : MonsterBase
     public float type_power_multiply = 1.0f;
 
     [Header("--- 이동 특수 패턴 설정 ---")]
-    public MonsterMove moveType;           // 이 몬스터가 어떤 이동 패턴을 쓸지 결정
+    public MONSTERMOVE moveType;           // 이 몬스터가 어떤 이동 패턴을 쓸지 결정
 
     [Header("--- 점프 전용 상세 설정 ---")]
     public float jump_height = 2.0f;       // 시각적 높이
@@ -188,10 +188,10 @@ public abstract class SpecialBossMonsterBase : MonsterBase
 
         switch (moveType)
         {
-            case MonsterMove.StraightChase: StraightChase(); break;
-            case MonsterMove.Zigzag: ZigzagMove(); break;
-            case MonsterMove.Jump: JumpMove(); break;
-            case MonsterMove.Flee: FleeMove(); break;
+            case MONSTERMOVE.StraightChase: StraightChase(); break;
+            case MONSTERMOVE.Zigzag: ZigzagMove(); break;
+            case MONSTERMOVE.Jump: JumpMove(); break;
+            case MONSTERMOVE.Flee: FleeMove(); break;
             default: StraightChase(); break;
         }
     }
@@ -227,13 +227,13 @@ public abstract class SpecialBossMonsterBase : MonsterBase
             IDamageable player = collision.GetComponent<IDamageable>();
             if (player == null) return;
 
-            if (moveType == MonsterMove.Zigzag)
+            if (moveType == MONSTERMOVE.Zigzag)
             {
                 player.TakeDamage(this.power);
                 return;
             }
 
-            if (moveType == MonsterMove.Jump && isJumping && !hasHitTargetInCurrentJump)
+            if (moveType == MONSTERMOVE.Jump && isJumping && !hasHitTargetInCurrentJump)
             {
                 float finalJumpDamage = this.power * this.damage_multiply;
                 player.TakeDamage(finalJumpDamage);
