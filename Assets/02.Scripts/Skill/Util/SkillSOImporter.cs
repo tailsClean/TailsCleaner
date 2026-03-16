@@ -9,16 +9,17 @@ using static ActiveSkillData;
 // CSV -> ScriptableObject 
 public class SkillSOImporter : EditorWindow
 {
-    private string _activeSkillCsvPath = "Assets/02.Scripts/Skill/CSV/active_skill.csv";          // 액티브 베이스
-    private string _activeUpgradeCsvPath = "Assets/02.Scripts/Skill/CSV/active_upgrade.csv";      // 액티브 업그레이드
-    private string _activeStatusCsvPath = "Assets/02.Scripts/Skill/CSV/active_status.csv";        // 업그레이드 스탯
-    private string _passiveSkillCsvPath = "Assets/02.Scripts/Skill/CSV/passive_skill.csv";        // 패시브
+    private string _activeSkillCsvPath = "Assets/00.Resources/Resources/Data/CSV/Skill/active_skill.csv";          // 액티브 베이스
+    private string _activeUpgradeCsvPath = "Assets/00.Resources/Resources/Data/CSV/Skill/active_upgrade.csv";      // 액티브 업그레이드
+    private string _activeStatusCsvPath = "Assets/00.Resources/Resources/Data/CSV/Skill/active_status.csv";        // 업그레이드 스탯
+    private string _passiveSkillCsvPath = "Assets/00.Resources/Resources/Data/CSV/Skill/passive_skill.csv";        // 패시브
+    private string _stringCsvPath = "Assets/00.Resources/Resources/Data/CSV/String/string.csv";                    // 스트링 테이블
 
     // 저장 경로
-    private string _activeSavePath = "Assets/02.Scripts/Skill/Resources/Active";                     // 액티브
-    private string _passiveSavePath = "Assets/02.Scripts/Skill/Resources/Passive";                   // 패시브  
-    private string _upgradeSavePath = "Assets/02.Scripts/Skill/Resources/UpgradeStat";               // 업그레이드 
-    private string _commonUpgradeSavePath = "Assets/02.Scripts/Skill/Resources/UpgradeStat/Common";  // 공용 업그레이드
+    private string _activeSavePath = "Assets/00.Resources/Resources/Data/ScriptableObjects/Skill/Resources/Active";                     // 액티브
+    private string _passiveSavePath = "Assets/00.Resources/Resources/Data/ScriptableObjects/Skill/Resources/Passive";                   // 패시브  
+    private string _upgradeSavePath = "Assets/00.Resources/Resources/Data/ScriptableObjects/Skill/Resources/UpgradeStat";               // 업그레이드 
+    private string _commonUpgradeSavePath = "Assets/00.Resources/Resources/Data/ScriptableObjects/Skill/Resources/UpgradeStat/Common";  // 공용 업그레이드
 
     // 스킬 프리팹 경로
     private string _skillPrefabPath = "Assets/04.Prefabs/Skills/Skill";
@@ -34,6 +35,7 @@ public class SkillSOImporter : EditorWindow
         _activeUpgradeCsvPath = EditorGUILayout.TextField("active_upgrade", _activeUpgradeCsvPath);
         _activeStatusCsvPath = EditorGUILayout.TextField("active_status", _activeStatusCsvPath);
         _passiveSkillCsvPath = EditorGUILayout.TextField("passive_skill", _passiveSkillCsvPath);
+        _stringCsvPath = EditorGUILayout.TextField("string", _stringCsvPath);
 
         EditorGUILayout.Space(6);
         GUILayout.Label("SO 저장 경로", EditorStyles.boldLabel);
@@ -67,6 +69,7 @@ public class SkillSOImporter : EditorWindow
         // csv 읽기
         var skills = ReadActiveSkills();
         var upgrades = ReadActiveUpgrades();
+        var stringMap = ReadString();
 
         // mainTag -> 업그레이드 리스트
         var upgradeMap = new Dictionary<int, List<UpgradeRow>>();
@@ -90,7 +93,8 @@ public class SkillSOImporter : EditorWindow
 
             // 기본 데이터 설정
             so.MainTag = skill.MainTag;
-            so.SkillName = skill.Name;
+            so.NameStringId = skill.NameStringId;
+            so.SkillName = GetKorean(stringMap, skill.NameStringId);
             so.AttackType = skill.AttackType;
             so.TargetingType = skill.TargetingType;
 
@@ -117,7 +121,7 @@ public class SkillSOImporter : EditorWindow
 
             // 스킬 전용 업그레이드 모디파이어 설정 추가
             if (upgradeMap.TryGetValue(skill.MainTag, out var myUpgrades))
-                AddUpgradeModifiers(so, myUpgrades, existingModifiers);
+                AddUpgradeModifiers(so, myUpgrades, existingModifiers, stringMap);
 
             // 경로에 SO 저장, 생성
             SaveOrCreate(so, path);
@@ -186,7 +190,7 @@ public class SkillSOImporter : EditorWindow
 
     // 전용 업그레이드 설정 추가
     private void AddUpgradeModifiers(ActiveSkillData so, List<UpgradeRow> upgrades,
-        Dictionary<int, ActiveModifier> existingModifiers)
+        Dictionary<int, ActiveModifier> existingModifiers, Dictionary<string, string> stringMap)
     {
         // 업그레이드마다
         foreach (var upgrade in upgrades)
@@ -196,7 +200,8 @@ public class SkillSOImporter : EditorWindow
             {
                 UpgradeId = upgrade.Id,                                                  // active_skill_id
                 Name = upgrade.Name,                                                     // active_upgrade_name
-                Desc = upgrade.Desc,                                                     // effect
+                DescStringId = upgrade.DescStringId,                                                     // effect
+                Desc = GetKorean(stringMap, upgrade.DescStringId),                                                     // effect
 
                 Modifier = existingModifiers.TryGetValue(upgrade.Id, out var modifier)   // 모디파이어
                 ? modifier : CreateActiveModifier(upgrade.Id),                           // 기존 설정 있으면 기존 사용, 없으면 생성                
@@ -292,6 +297,9 @@ public class SkillSOImporter : EditorWindow
         // 폴더 보장 (상위 없으면 생성)
         EnsureFolder(_passiveSavePath);
 
+        // 스트링 CSV
+        var stringMap = ReadString();
+
         // 패시브 CSV 읽고 순회
         foreach (var passive in ReadPassiveSkills())
         {
@@ -304,9 +312,11 @@ public class SkillSOImporter : EditorWindow
 
             // 데이터
             so.PassiveId = passive.Id;
-            so.PassiveName = passive.Name;
+            so.NameStringId = passive.NameStringId;
+            so.PassiveName = GetKorean(stringMap, so.NameStringId);
             so.SubTag = passive.SubTag;
-            so.Desc = passive.Desc;
+            so.DescStringId = passive.DescStringId;
+            so.Desc = GetKorean(stringMap, so.DescStringId);
 
 
             // 처음 생성 때만 기본
@@ -355,8 +365,9 @@ public class SkillSOImporter : EditorWindow
         // 폴더 보장 (없으면 생성)
         EnsureFolder(_commonUpgradeSavePath);
 
-        var upgrades = ReadActiveUpgrades();                           // 기본 정보
-        var statusMap = ReadActiveStatus();                            // ID → 스탯 행
+        var upgrades = ReadActiveUpgrades();     // 기본 정보
+        var statusMap = ReadActiveStatus();      // ID → 스탯 행
+        var stringMap = ReadString();            // 스트링
 
         // 업그레이드 순회
         foreach (var upgrade in upgrades)
@@ -377,7 +388,8 @@ public class SkillSOImporter : EditorWindow
             // 기본 정보 (active_upgrade.csv)
             so.Id = upgrade.Id;
             so.Name = upgrade.Name;
-            so.Desc = upgrade.Desc;
+            so.DescStringId = upgrade.DescStringId;
+            so.Desc = GetKorean(stringMap, so.DescStringId);
             so.Tier = upgrade.Tier;
             so.MaxLevel = upgrade.MaxLev;
             so.MainTag = upgrade.MainTag;
@@ -420,7 +432,7 @@ public class SkillSOImporter : EditorWindow
         var lines = File.ReadAllLines(_activeSkillCsvPath);
 
         // 항목 순회 (액티브 스킬 순회)
-        for (int i = 2; i < lines.Length; i++)   // 0,1 (헤더,타입) 제외
+        for (int i = 3; i < lines.Length; i++)   // 0,1 (헤더,타입) 제외
         {
             // 분해
             var items = Split(lines[i]);
@@ -428,7 +440,7 @@ public class SkillSOImporter : EditorWindow
             // 목록에 추가
             result.Add(new ActiveSkillRow
             {
-                Name = items[0],                                        // active_name
+                NameStringId = items[0].Trim(),                         // active_name (string id)
                 MainTag = int.Parse(items[1]),                          // main_tag
                 AttackType = (ATTACK_TYPE)int.Parse(items[2]),          // attack_type
                 TargetingType = (TARGETING_TYPE)int.Parse(items[3])     // targeting_type
@@ -448,7 +460,7 @@ public class SkillSOImporter : EditorWindow
         var lines = File.ReadAllLines(_activeUpgradeCsvPath);
 
         // 항목 순회 (업그레이드 순회)
-        for (int i = 2; i < lines.Length; i++)  // 0,1 (헤더,타입) 제외
+        for (int i = 3; i < lines.Length; i++)  // 0,1 (헤더,타입) 제외
         {
             // 분해
             var items = Split(lines[i]);
@@ -463,7 +475,7 @@ public class SkillSOImporter : EditorWindow
                 MainTag = int.Parse(items[4]),                          // main_tag
                 SubTag1 = ParseIntSafe(items, 5),                       // sub_tag_1
                 SubTag2 = ParseIntSafe(items, 6),                       // sub_tag _2
-                Desc = items.Length > 8 ? items[8].Trim() : ""          // effect
+                DescStringId = items[7].Trim(),                         // effect (string id)
             });
         }
         return result;
@@ -510,7 +522,7 @@ public class SkillSOImporter : EditorWindow
         var lines = File.ReadAllLines(_passiveSkillCsvPath);
 
         // 항목 순회 (패시브 순회)
-        for (int i = 2; i < lines.Length; i++)  // 0,1 (헤더,타입) 제외
+        for (int i = 3; i < lines.Length; i++)  // 0,1 (헤더,타입) 제외
         {
             // 분해
             var items = Split(lines[i]);
@@ -518,13 +530,40 @@ public class SkillSOImporter : EditorWindow
             // 목록에 추가
             result.Add(new PassiveRow
             {
-                Id = int.Parse(items[0]),                              // passive_skill_id
-                Name = items[1].Trim(),                                // passive_name
-                SubTag = int.Parse(items[2]),                          // sub_tag
-                Desc = items[3].Trim()                                 // effect
+                Id = int.Parse(items[0]),               // passive_skill_id
+                NameStringId = items[1].Trim(),         // passive_name      (string id)
+                SubTag = int.Parse(items[2]),           // sub_tag
+                DescStringId = items[3].Trim(),         // effect            (string id)
             });
         }
         return result;
+    }
+
+    // 스트링 CSV 읽기
+    private Dictionary<string, string> ReadString()
+    {
+        // 스트링 정보 목록
+        var result = new Dictionary<string, string>();
+        // 항목들
+        var lines = File.ReadAllLines(_stringCsvPath);
+
+        // 항목 순회
+        for (int i = 3; i < lines.Length; i++)
+        {
+            // 분해
+            var items = Split(lines[i]);
+
+            string id = items[0].Trim();  // id
+            result[id] = items[3].Trim(); // kr
+        }
+        return result;
+    }
+
+    // 스트링에서 kr 조회 (없으면 id 문자열 반환)
+    private string GetKorean(Dictionary<string, string> stringMap, string stringId)
+    {
+        if (string.IsNullOrEmpty(stringId)) return string.Empty;
+        return stringMap.TryGetValue(stringId, out var text) ? text : $"{stringId}";
     }
     #endregion
 
@@ -613,9 +652,9 @@ public class SkillSOImporter : EditorWindow
 
 
     // 행 정보
-    private struct ActiveSkillRow { public string Name; public int MainTag; public ATTACK_TYPE AttackType; public TARGETING_TYPE TargetingType; }
-    private struct UpgradeRow { public int Id, Tier, MaxLev, MainTag, SubTag1, SubTag2; public string Name, Desc; }
-    private struct PassiveRow { public int Id, SubTag; public string Name, Desc; }
+    private struct ActiveSkillRow { public string NameStringId; public int MainTag; public ATTACK_TYPE AttackType; public TARGETING_TYPE TargetingType; }
+    private struct UpgradeRow { public int Id, Tier, MaxLev, MainTag, SubTag1, SubTag2; public string Name, DescStringId; }
+    private struct PassiveRow { public int Id, SubTag; public string NameStringId, DescStringId; }
     private struct StatusRow
     {
         public int Id, Projectiles, Piercing;

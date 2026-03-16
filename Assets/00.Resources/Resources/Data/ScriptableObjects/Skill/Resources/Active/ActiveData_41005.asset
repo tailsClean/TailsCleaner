@@ -1,0 +1,82 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 518aadcd99d59244b926a53624b75d00, type: 3}
+  m_Name: ActiveData_41005
+  m_EditorClassIdentifier: Assembly-CSharp::ActiveSkillData
+  MainTag: 41005
+  SkillName: "\uAC78\uB808 \uD718\uB450\uB974\uAE30"
+  NameStringId: 44005
+  AttackType: 4101
+  TargetingType: 4201
+  Icon: {fileID: 0}
+  SkillPrefab: {fileID: 8461031900340490176, guid: 4f19f17511f86874da6a0f7755395610, type: 3}
+  SkillProjectilePrefab: {fileID: 1457600225023999490, guid: 02fd30252728c5443aa63a4886aaec65, type: 3}
+  UpgradeModifierDatas:
+  - Name: "\uAC78\uB808 \uD718\uB450\uB974\uAE30"
+    UpgradeId: 40026
+    Desc: "\uC77C\uC815 \uC2DC\uAC04\uB9C8\uB2E4 \uD50C\uB808\uC774\uC5B4 \uACF5\uACA9
+      \uBC29\uD5A5 \uBC18\uB300\uBC29\uD5A5\uC73C\uB85C \uAC78\uB808\uB97C \uD718\uB458\uB7EC
+      \uBAAC\uC2A4\uD130\uC5D0\uAC8C \uD53C\uD574\uB97C \uC8FC\uACE0 \uB109\uBC31\uC2DC\uD0B5\uB2C8\uB2E4."
+    DescStringId: 44036
+    Modifier:
+      rid: -2
+  - Name: "\uAC78\uB808 \uB9AC\uC0AC\uC774\uD074"
+    UpgradeId: 40027
+    Desc: "\uC5C5\uADF8\uB808\uC774\uB4DC\uC5D0 \uD0C0\uC62C \uB9AC\uC0AC\uC774\uD074\uC774
+      \uC788\uC744 \uACBD\uC6B0, \uAC78\uB808\uB97C \uD718\uB450\uB97C \uB54C \uC55E\uC73C\uB85C\uB3C4
+      \uC790\uADF8\uB9C8\uD558\uAC8C \uD718\uB450\uB985\uB2C8\uB2E4."
+    DescStringId: 44037
+    Modifier:
+      rid: 5077774860369264757
+  - Name: "\uC816\uC740 \uAC78\uB808"
+    UpgradeId: 40028
+    Desc: "\uC801\uC911\uD55C \uC801\uC758 \uC774\uB3D9 \uC18D\uB3C4\uAC00 \uAC10\uC18C\uD569\uB2C8\uB2E4."
+    DescStringId: 44038
+    Modifier:
+      rid: 5077774860369264758
+  - Name: "\uC5B4\uC9C8\uC5B4\uC9C8"
+    UpgradeId: 40029
+    Desc: "\uC801\uC911\uD55C \uC77C\uBC18 \uBAAC\uC2A4\uD130\uAC00 0.5\uCD08\uAC04
+      \uAE30\uC808\uD569\uB2C8\uB2E4."
+    DescStringId: 44039
+    Modifier:
+      rid: 5077774860369264759
+  - Name: "\uAC78\uB808 \uD718\uB450\uB974\uBA70"
+    UpgradeId: 40030
+    Desc: "\uAC78\uB808 \uD718\uB450\uB974\uAE30\uC758 \uC5C5\uADF8\uB808\uC774\uB4DC\uB97C
+      \uD0C0\uC62C \uD718\uB450\uB974\uAE30\uC758 \uC5C5\uADF8\uB808\uC774\uB4DC\uB85C\uB3C4
+      \uCDE8\uAE09\uD569\uB2C8\uB2E4."
+    DescStringId: 44040
+    Modifier:
+      rid: 5077774860369264760
+  references:
+    version: 2
+    RefIds:
+    - rid: -2
+      type: {class: , ns: , asm: }
+    - rid: 5077774860369264757
+      type: {class: MopRecycleModifier, ns: , asm: Assembly-CSharp}
+      data: 
+    - rid: 5077774860369264758
+      type: {class: MopSlowModifier, ns: , asm: Assembly-CSharp}
+      data:
+        SlowAmount: 0.2
+        SlowDuration: 1.5
+    - rid: 5077774860369264759
+      type: {class: MopStunModifier, ns: , asm: Assembly-CSharp}
+      data:
+        SpeedAmount: 1
+        DamageAmount: 1
+        StunDuration: 0.5
+    - rid: 5077774860369264760
+      type: {class: MopSyncModifier, ns: , asm: Assembly-CSharp}
+      data: 
