@@ -44,7 +44,7 @@ public class PlayerZoneHandler : MonoBehaviour
         }
 
         // 현재 상태 디버그 확인
-        Debug.Log($"[상태 체크] 패턴활성:{activeSafeZonePatterns} | 안전지대내부:{safeZoneCount} | 장판수:{currentDangerZones.Count}");
+        // Debug.Log($"[상태 체크] 패턴활성:{activeSafeZonePatterns} | 안전지대내부:{safeZoneCount} | 장판수:{currentDangerZones.Count}");
 
         float bossPower = monsterBase.power;
         IDamageable player = GetComponent<IDamageable>();
@@ -56,7 +56,7 @@ public class PlayerZoneHandler : MonoBehaviour
             if (!IsInSafeZone)
             {
                 player.TakeDamage(bossPower);
-                Debug.Log($"<color=red>[데미지 발생]</color> 안전지대 외부! 피해량: {bossPower}");
+                // Debug.Log($"<color=red>[데미지 발생]</color> 안전지대 외부! 피해량: {bossPower}");
             }
             else
             {
@@ -73,7 +73,7 @@ public class PlayerZoneHandler : MonoBehaviour
             float finalDamage = bossPower * effectiveStack;
 
             player.TakeDamage(finalDamage);
-            Debug.Log($"<color=orange>[위험 지대 데미지]</color> 중첩수:{actualDangerCount}, 적용스택:{effectiveStack}, 총 피해:{finalDamage}");
+            // Debug.Log($"<color=orange>[위험 지대 데미지]</color> 중첩수:{actualDangerCount}, 적용스택:{effectiveStack}, 총 피해:{finalDamage}");
         }
     }
 
