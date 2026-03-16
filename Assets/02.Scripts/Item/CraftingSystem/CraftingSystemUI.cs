@@ -6,7 +6,7 @@ using UnityEngine.UI;
 
 
 [RequireComponent(typeof(CraftingSystem))]
-public class CraftingSystemUI : MonoBehaviour
+public class CraftingSystemUI : UIGroup
 {
     private CraftingSystem _craftingSystem;
     private PlayerLoadout _loadout;
@@ -28,8 +28,9 @@ public class CraftingSystemUI : MonoBehaviour
         _craftingSystem = GetComponent<CraftingSystem>();
     }
 
-    private void Start()
+    protected override void Start()
     {
+        base.Start();
         _inventory = _craftingSystem.UsingInventory;
         _loadout = ItemManager.Instance.Loadout;
     }

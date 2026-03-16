@@ -38,8 +38,8 @@ public class KISTest : MonoBehaviour
         inventory.GainEquipment(3000, 0 ,EQUIP_GRADE.Grimy);
 
 
-        inventory.GainEquipment(2000, 0 ,EQUIP_GRADE.Fresh);
-        inventory.GainEquipment(3000, 0 ,EQUIP_GRADE.Fresh);
+        //inventory.GainEquipment(2000, 0 ,EQUIP_GRADE.Fresh);
+        //inventory.GainEquipment(3000, 0 ,EQUIP_GRADE.Fresh);
     }
 
     [ContextMenu("인벤토리 내용물")]

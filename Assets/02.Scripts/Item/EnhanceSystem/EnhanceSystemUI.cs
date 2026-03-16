@@ -3,7 +3,7 @@ using UnityEngine;
 using UnityEngine.UI;
 
 [RequireComponent(typeof(EnhanceSystem))]
-public abstract class EnhanceSystemUI : MonoBehaviour
+public abstract class EnhanceSystemUI : UIGroup
 {
     [Header("이벤트 채널")]
     [SerializeField] protected VoidEventChannelSO _onChangeInventory;
@@ -48,8 +48,9 @@ public abstract class EnhanceSystemUI : MonoBehaviour
     }
 
 
-    protected virtual void Start()
+    protected override void Start()
     {
+        base.Start();
         _inventory = _enhanceSystem.UsingInventory;
         _currency = _enhanceSystem.UsingCurrency;
         UpdateCurrentGold();

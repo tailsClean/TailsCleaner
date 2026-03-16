@@ -10,6 +10,8 @@ public class UISlot : MonoBehaviour
 {
     [SerializeField] private TextMeshProUGUI _amountText;
 
+
+
     public ItemBase Item { get; private set; }
 
     private Image _image;
@@ -59,6 +61,25 @@ public class UISlot : MonoBehaviour
             _amountText.text = string.Empty;
         }
     }
+
+    //public void ShowSlot(ItemInstance item)
+    //{
+    //    var a = ItemDB.GetItemData<ItemBaseSO>(item.ID);
+    //    if (a != null)
+    //    {
+    //        _image.sprite = a.ImageSprite;
+    //        _amountText.text = item.Amount.ToString();
+    //    }
+    //    else
+    //    {
+    //        Debug.Log("값을 찾을 수 없다.");
+    //        _image.sprite = _baseSprite;
+    //        _amountText.text = string.Empty;
+    //    }
+
+    //    _button.onClick.AddListener( () => _onItemPopup.OnStartEvent(item) );
+    //}
+
 
     public void AddListener(Action action)
     {
