@@ -66,6 +66,8 @@ public class StageTimer
     public int GetMainTimeSecondsInt() => Mathf.FloorToInt(_mainTimeSeconds);
     public int GetBossTimeSecondsLeftInt() => Mathf.CeilToInt(_bossTimeSecondsLeft);
 
+    public int GetBossLimitSeconds() => _bossLimitSeconds;
+
     // StageController.Update 에서 호출
     // 시간을 진행시키는 외부에서 실질적으로 타이머를 연결시키는 것
     public void Tick(float _deltaTime)
