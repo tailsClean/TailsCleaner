@@ -1,7 +1,7 @@
-﻿using UnityEngine;
-using MonsterEnum;
-using System.Collections.Generic; 
+﻿using MonsterEnum;
 using System.Collections;       
+using System.Collections.Generic; 
+using UnityEngine;
 
 [RequireComponent(typeof(Rigidbody2D), typeof(Collider2D))]
 public abstract class MonsterBase : PoolObject, IDamageable, IMonsterStatus, IPullable
@@ -22,9 +22,14 @@ public abstract class MonsterBase : PoolObject, IDamageable, IMonsterStatus, IPu
     public float mass = 1.0f;
     public float KBResist = 1.0f;
 
+    public float MaxHp => maxHp;
+
+    public float knockbackUnitToPx = 100f; 
+    private int _stunCounter = 0; // 딕셔너리 카운터 역할
+
     // --- IMonsterStatus 상태 프로퍼티 ---
     public bool IsWeakened { get; protected set; }
-    public bool IsStunned { get; protected set; }
+    public bool IsStunned => _stunCounter > 0;
     public bool IsKnockbacked { get; protected set; }
     public bool HasReducedMaxHp { get; protected set; }
     public float StunAreaTime { get; protected set; }
@@ -95,7 +100,7 @@ public abstract class MonsterBase : PoolObject, IDamageable, IMonsterStatus, IPu
         _currentMoveSpeed = _baseMoveSpeed;
 
         IsWeakened = false;
-        IsStunned = false;
+        _stunCounter = 0; // 스폰 시 카운터 초기화
         IsKnockbacked = false;
         HasReducedMaxHp = false;
         StunAreaTime = 0f;
@@ -194,10 +199,13 @@ public abstract class MonsterBase : PoolObject, IDamageable, IMonsterStatus, IPu
 
     private IEnumerator StunRoutine(float duration)
     {
-        IsStunned = true;
+        EnterStunArea();
         OnCC();
+
         yield return new WaitForSeconds(duration);
-        IsStunned = false;
+
+        ExitStunArea();
+
     }
 
     public void Knockback(Vector2 direction, float force) => StartCoroutine(KnockbackRoutine(direction, force));
@@ -207,7 +215,7 @@ public abstract class MonsterBase : PoolObject, IDamageable, IMonsterStatus, IPu
         IsKnockbacked = true;
         OnCC();
         rb2D.bodyType = RigidbodyType2D.Dynamic;
-        rb2D.AddForce(direction * force, ForceMode2D.Impulse);
+        rb2D.AddForce(direction.normalized * force * knockbackUnitToPx, ForceMode2D.Impulse);
         yield return new WaitForSeconds(0.3f); // 넉백 지속 시간
         rb2D.linearVelocity = Vector2.zero;
         rb2D.bodyType = RigidbodyType2D.Kinematic;
@@ -223,8 +231,8 @@ public abstract class MonsterBase : PoolObject, IDamageable, IMonsterStatus, IPu
     }
 
     public void OnCC() { /* SuperClean 패시브 등 연동 */ }
-    public void EnterStunArea() { /* 장판 로직 */ }
-    public void ExitStunArea() { /* 장판 로직 */ }
+    public void EnterStunArea() { _stunCounter++; }
+    public void ExitStunArea() { _stunCounter = Mathf.Max(0, _stunCounter - 1); }
     public void ResetStunAreaTime() => StunAreaTime = 0;
 
     public void Pull(Vector2 targetPosition, float force)
