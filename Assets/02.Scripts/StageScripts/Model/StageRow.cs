@@ -88,12 +88,89 @@ public sealed class MonsterTypeTableRow
     public float type_mass;
     public float type_hit_box;
     public float type_nb;
-    public float base_exp; 
+    public float base_exp;
     public string exp_resource_id;
+}
+
+public sealed class PatternGroupTableRow
+{
+    public int pattern_group_id;
+    public string index;
+    public int max_concurrent_pattern;
+    public int overlap_rule;
+}
+
+public sealed class PatternGroupCompositionTableRow
+{
+    public int pattern_group_id;
+    public string index;
+    public int pattern_id;
+    public float pattern_cooldown;
+    public int priority;
+}
+
+public sealed class PatternTableRow
+{
+    public int pattern_id;
+    public string index;
+    public int resource_id;
+    public int pattern_type;
+    public string pattern_logic_type;
+
+    public int stat_target;
+    public float stat_value;
+
+    public float duration;
+    public float cast_time;
+    public float damage_multiply;
+    public float detect_range;
+    public float move_time;
+    public float zigzag_width;
+    public float jump_height;
+
+    public int projectile_type;
+    public float projectile_speed;
+    public float projectile_size;
+    public int projectile_count;
+    public float projectile_radius;
+    public float fire_interval;
+    public float life_time;
+    public int pierce_type;
+    public bool follow;
+    public float arc_height;
+
+    public float area_radius;
+    public float area_damage_interval;
+    public int area_target_type;
+    public float explode_range;
+
+    public int summon_monster_id;
+    public int summon_count;
+    public float summon_radius;
+    public int summon_position_type;
+
+    public int debuff_type;
+    public float debuff_duration;
+    public float debuff_value;
+    public float debuff_damage_interval;
+
+    public int barrier_target_type;
+    public int barrier_shape;
+    public float barrier_size_x;
+    public float barrier_size_y;
+    public float barrier_damage;
+    public bool barrier_collision_block;
+
+    public float dirty_to_hp_value;
+    public float enrage_time;
+    public float enrage_atk_rate;
+    public float enrage_hp_rate;
+    public int enrage_max_step;
+    public int item_id;
 }
 
 public enum SpecialSpawnType
 {
-    Periodic = 1, // 일정 주기 반복
-    Once = 2,     // 1회성
+    Periodic = 0, // 일정 주기 반복
+    Once = 1,     // 1회성
 }

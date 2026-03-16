@@ -29,9 +29,9 @@ public class PlayerUI : MonoBehaviour
 
     private void Start()
     {
-        _hpBar.maxValue = _player.Hp;
-        _hpBar.value = _player.Hp;
-        _expBar.maxValue = 50;
+        _hpBar.maxValue = _player.MaxHp;
+        _hpBar.value = _player.MaxHp;
+        _expBar.maxValue = _player.InGameMaxExp;
         _lvl.text = "레벨: 1";
 
         if (!_player)
@@ -40,9 +40,14 @@ public class PlayerUI : MonoBehaviour
 
     private void UpdateHp(float hp)
     {
+        _hpBar.maxValue = _player.MaxHp;
         _hpBar.value = hp;
     }
 
     private void UpdateExp(float exp) => _expBar.value = exp;
-    private void UpdateLevel(int level) => _lvl.text = level.ToString();
+    private void UpdateLevel(int level)
+    {
+        _lvl.text = "레벨: " + level.ToString();
+        _expBar.maxValue = _player.InGameMaxExp;
+    }
 }

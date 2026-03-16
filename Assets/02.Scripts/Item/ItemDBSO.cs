@@ -63,11 +63,14 @@ public static class ItemDB
 {
     private static ItemDBSO _itemDB;
 
+
+    public static ItemBaseSO GetItemData(int id) => GetItemData<ItemBaseSO>(id);
+
     public static T GetItemData<T>(int id) where T : ItemBaseSO
     {
         if(_itemDB == null)
         {
-            _itemDB = Resources.Load<ItemDBSO>("SO/Item/ItemDB");
+            _itemDB = Resources.Load<ItemDBSO>("Data/ScriptableObjects/Item/ItemDB");
             Debug.Log("<color=green>ItemDB 초기화</color>");
         }
 

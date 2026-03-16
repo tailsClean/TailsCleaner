@@ -6,6 +6,7 @@ public class RuleBasedMonsterSpawner : MonoBehaviour, IMonsterSpawnSystem
     private const float MIN_SPAWN_DISTANCE = 10f; //플레이어로부터 최소한의 스폰 거리
     private const float MAX_SPAWN_DISTANCE = 20f; //플레이어로부터 최대한의 스폰 거리
 
+
     private const int SPAWN_PER_SECOND = 5; //초당 스폰할 몬스터 수
     private const float SQUAD_RADIUS = 3f; //스쿼드 내 몬스터들이 모이는 반경
     private const int CIRCLE_SLOTS = 12; //원형 스폰 시 슬롯 수
@@ -203,17 +204,18 @@ public class RuleBasedMonsterSpawner : MonoBehaviour, IMonsterSpawnSystem
             _monster = Instantiate(_prefab, _spawnPos, Quaternion.identity);
 
         _monster.name = _name;
+
+        // 1. monsterId 먼저 주입
+        _monster.SetMonsterId(_monsterId);
+
         _monster.target = _playerTransform;
 
-        // wave modifier (현재 웨이브 기반)
         float waveHp = _currentWave != null ? _currentWave.waveHpModifier : 0f;
         float wavePower = _currentWave != null ? _currentWave.wavePowerModifier : 0f;
 
-        // 기획서 방식: 1 + tower + stage + wave
         float hpScale = 1f + _towerHpMod + _stageHpMod + waveHp;
         float powerScale = 1f + _towerPowerMod + _stagePowerMod + wavePower;
 
-        // 안전 클램프(음수 방지)
         hpScale = Mathf.Max(0.1f, hpScale);
         powerScale = Mathf.Max(0.1f, powerScale);
 
@@ -221,6 +223,16 @@ public class RuleBasedMonsterSpawner : MonoBehaviour, IMonsterSpawnSystem
 
         int exp = CalcExp(_monsterId);
         _monster.SetExpReward(exp);
+
+        // 2. 보스/특수 보스 계열이면 여기서 bind
+        if (_monster is SpecialBossMonsterBase specialBossMonster)
+        {
+            BossTriggerPatternRunner runner = specialBossMonster.GetComponent<BossTriggerPatternRunner>();
+            if (runner != null)
+            {
+                runner.Bind(specialBossMonster);
+            }
+        }
 
         _registry.Register(_monster.gameObject);
         return _monster;

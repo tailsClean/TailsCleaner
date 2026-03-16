@@ -13,12 +13,13 @@ public class BossMonsterShooter : MonoBehaviour
     public float detect_range = 15.0f;
     public int projectile_count = 5;
     public float fire_interval = 0.15f;
+    public float damage_multiply = 1.2f;
 
     [Header("--- 상태 관리 ---")]
     public MonsterState state = MonsterState.MOVE;
     private float current_cooldown = 0f;
-    
 
+    
     void Awake()
     {
        
@@ -74,24 +75,29 @@ public class BossMonsterShooter : MonoBehaviour
     {
         if (projectilePrefab == null || playerTarget == null) return;
 
-        // 발사 위치 계산 (플레이어 방향으로 약간 앞에서 생성)
+        BossMonster boss = GetComponent<BossMonster>();
+
+        //  boss를 찾지 못했을 경우를 대비한 방어 코드
+        if (boss == null)
+        {
+            Debug.LogError("BossMonster 스크립트를 찾을 수 없습니다!");
+            return;
+        }
+
+        // 발사 위치 계산
         Vector2 dirToPlayer = (playerTarget.position - transform.position).normalized;
         float offsetDistance = 1.2f;
         Vector3 spawnPos = (firePoint != null) ? firePoint.position : transform.position + (Vector3)(dirToPlayer * offsetDistance);
 
-        // 오브젝트 풀에서 보스 투사체 소환
-        // (BossMonsterProjectile은 PoolObject를 상속받았으므로 Spawn 사용 가능)
+        // 오브젝트 풀에서 투사체 소환
         BossMonsterProjectile projectile = ObjectPoolManager.Instance.Spawn(projectilePrefab, spawnPos, Quaternion.identity);
 
         if (projectile != null)
         {
+            float finalDamage = boss.monster_power * this.damage_multiply;
 
-            float monsterPower = 1.0f;
-            float typeMultiply = 1.0f;
-            float patternMultiply = 1.2f;
-
-           
-            projectile.Launch(playerTarget, monsterPower, typeMultiply, patternMultiply);
+            // 투사체에 최종 결과값 전달 
+            projectile.Launch(playerTarget, finalDamage);
         }
     }
 }

@@ -909,7 +909,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1504922216037344421
 RectTransform:
   m_ObjectHideFlags: 0
@@ -997,6 +997,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ac40b97c44cfa80439f9906be5df92c7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::RelicEnhanceUI
+  <Group>k__BackingField: 6
+  _exitButton:
+    <PushButton>k__BackingField: {fileID: 5551056495883287303}
+    <OpenGroup>k__BackingField: 0
   _onChangeInventory: {fileID: 11400000, guid: 3e998015f495cf442940df372117f73e, type: 2}
   _onChangeGold: {fileID: 11400000, guid: d4b0cb886c73b2948830c5db7b299ef5, type: 2}
   _enhanceEquipment: {fileID: 5647202573967780626}
@@ -3832,7 +3836,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 8284591446739490326}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1825979035387489101}
+        m_TargetAssemblyTypeName: 
+        m_MethodName: 
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: 
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1 &5887092422751456856
 GameObject:
   m_ObjectHideFlags: 0
