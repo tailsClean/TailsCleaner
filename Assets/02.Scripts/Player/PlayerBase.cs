@@ -45,6 +45,7 @@ public class PlayerBase : MonoBehaviour, IDamageable, ISkillable, ISkillStat
     public Vector2 MoveDir => _stateMachine.MoveDir;
     public Vector2 AttackDir { get; private set; }
     public Vector2 LastAttackDir { get; private set; }
+    public float AttackSpeed  => 100f;
 
 
     private void Awake()

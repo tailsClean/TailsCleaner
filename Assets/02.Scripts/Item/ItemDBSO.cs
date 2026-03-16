@@ -70,7 +70,7 @@ public static class ItemDB
     {
         if(_itemDB == null)
         {
-            _itemDB = Resources.Load<ItemDBSO>("SO/Item/ItemDB");
+            _itemDB = Resources.Load<ItemDBSO>("Data/ScriptableObjects/Item/ItemDB");
             Debug.Log("<color=green>ItemDB 초기화</color>");
         }
 
