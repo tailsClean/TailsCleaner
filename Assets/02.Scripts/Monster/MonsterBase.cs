@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using MonsterEnum;
 using System.Collections.Generic; 
-using System.Collections;       
+using System.Collections;
 
 [RequireComponent(typeof(Rigidbody2D), typeof(Collider2D))]
 public abstract class MonsterBase : PoolObject, IDamageable, IMonsterStatus, IPullable
@@ -186,7 +186,7 @@ public abstract class MonsterBase : PoolObject, IDamageable, IMonsterStatus, IPu
         float totalSlow = 0;
         foreach (var val in _slowModifiers.Values) totalSlow += val;
 
-        
+
         if (totalSlow < 0) _currentMoveSpeed = 0;
         else _currentMoveSpeed = _baseMoveSpeed * Mathf.Max(0, (1f - totalSlow));
     }
@@ -308,6 +308,17 @@ public abstract class MonsterBase : PoolObject, IDamageable, IMonsterStatus, IPu
         {
             // 매니저가 없으면 그냥 파괴
             Destroy(gameObject);
+        }
+    }
+
+    // BossTriggerPattern때문에 작성 2026-03-16
+    public virtual void SetAttackingState(bool attacking)
+    {
+        isAttacking = attacking;
+
+        if (rb2D != null && isAttacking)
+        {
+            rb2D.linearVelocity = Vector2.zero;
         }
     }
 }
