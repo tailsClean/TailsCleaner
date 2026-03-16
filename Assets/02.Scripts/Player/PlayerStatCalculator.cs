@@ -7,10 +7,19 @@ using UnityEngine;
 public class PlayerStatCalculator
 {
     private PlayerLoadout _enhanceInventory;
+    private PlayerStatFlat _plusStat;
+    private PlayerStatMul _multipleStat;
 
     public PlayerStatCalculator(PlayerLoadout enhanceInventory)
     {
         _enhanceInventory = enhanceInventory;
+    }
+
+    // 스킬 스탯값 세팅
+    public void SetSkillStat(PlayerStatFlat flat, PlayerStatMul multi)
+    {
+        _plusStat = flat;
+        _multipleStat = multi;
     }
 
     // 장비로 인한 증가값 계산

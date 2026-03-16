@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 
-public class SpinningToySkill : ActiveSkill<SpinningToyProjectile, SpinningToyModifierData>
+public class SpinningToySkill : ActiveSkill<SpinningToyProjectile, SpinningToyModifierData>, IMonsterStrengthBonus
 {
     public enum TOY_TYPE
     {
@@ -26,6 +26,9 @@ public class SpinningToySkill : ActiveSkill<SpinningToyProjectile, SpinningToyMo
 
     // 스폰 리스트 버퍼
     private List<TOY_TYPE> _spawnListBuffer = new();
+
+    // 해적선 적 강화 수치
+    public float MonsterStrengthBonus => _modifierData.PirateMonsterStr;
 
     protected override void OnActive(int index, int totalCount) { }
 

@@ -1,7 +1,7 @@
 ﻿using System.Collections;
 using UnityEngine;
 
-public class WashWaveSkill : ActiveSkill<WashWaveProjectile, WashWaveModifierData>
+public class WashWaveSkill : ActiveSkill<WashWaveProjectile, WashWaveModifierData>, IMonsterStrengthBonus
 {
     [Header("스폰 설정")]
     [SerializeField] private float _spawnOffsetDistance = 15f;  // 플레이어에서 스폰 중심까지 거리
@@ -14,6 +14,8 @@ public class WashWaveSkill : ActiveSkill<WashWaveProjectile, WashWaveModifierDat
     private WaitForSeconds _drainDelay;              // 탈수딜레이
     private WaitForSeconds _returnDelay;             // 밀물 썰물 딜레이
 
+    // 적 강화 수치
+    public float MonsterStrengthBonus => _modifierData.EnemyStrengthBonus;
 
     protected override void OnActive(int index, int totalCount) { } // 안씀
 

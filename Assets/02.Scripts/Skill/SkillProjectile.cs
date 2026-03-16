@@ -36,7 +36,7 @@ public class SkillProjectile<TModifierData> : SkillObjectBase
         if (col.TryGetComponent<MonsterBase>(out MonsterBase monster))
         {
             if (monster.hp <= 0) return;
-            monster.TakeDamage(_runtimeFinalStat.Damage);
+            monster.TakeDamage(GetFinalDamage());
         }
 
         // 현재 관통 추가
