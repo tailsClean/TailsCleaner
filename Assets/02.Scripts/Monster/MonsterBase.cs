@@ -41,6 +41,10 @@ public abstract class MonsterBase : PoolObject, IDamageable, IMonsterStatus, IPu
     private float _baseMoveSpeed;
     private float _currentMoveSpeed;
 
+    private int _stunAreaCount;         // 밟고있는 기절 장판 수
+    private float _requiredStunTime;    // 기절 장판 목표 체류 시간
+    private float _areaStunDuration;    // 기절 장판 기절 시간
+
     // 슬로우 중첩 관리를 위한 딕셔너리
     private Dictionary<string, float> _slowModifiers = new Dictionary<string, float>();
 
@@ -132,6 +136,25 @@ public abstract class MonsterBase : PoolObject, IDamageable, IMonsterStatus, IPu
         base.OnDespawn();
     }
 
+
+    protected virtual void Update()
+    {
+        // 기절 장판 위에 서있고 기절 상태 아닐 때
+        if (_stunAreaCount > 0 && IsStunned == false)
+        {
+            // 기절 장판 체류 시간 누적
+            StunAreaTime += Time.deltaTime;
+
+            // 일정 시간 넘으면 기절
+            if (StunAreaTime >= _requiredStunTime)
+            {
+                ApplyStun(_areaStunDuration);
+            }
+        }
+
+        // 슬로우 체크 추가
+    }
+
     protected virtual void FixedUpdate()
     {
         // 기절이나 넉백 중에는 이동하지 않음
@@ -199,13 +222,9 @@ public abstract class MonsterBase : PoolObject, IDamageable, IMonsterStatus, IPu
 
     private IEnumerator StunRoutine(float duration)
     {
-        EnterStunArea();
         OnCC();
 
         yield return new WaitForSeconds(duration);
-
-        ExitStunArea();
-
     }
 
     public void Knockback(Vector2 direction, float force) => StartCoroutine(KnockbackRoutine(direction, force));
@@ -230,9 +249,26 @@ public abstract class MonsterBase : PoolObject, IDamageable, IMonsterStatus, IPu
         HasReducedMaxHp = true;
     }
 
-    public void OnCC() { /* SuperClean 패시브 등 연동 */ }
-    public void EnterStunArea() { _stunCounter++; }
-    public void ExitStunArea() { _stunCounter = Mathf.Max(0, _stunCounter - 1); }
+    public void OnCC()
+    {
+        var handler = SkillManager.Instance;
+
+        if (handler != null && handler.HasPassive<SuperCleanModifier>(out var modifier))
+        {
+            ApplySlow("SuperClean", 0.2f, 5f);
+        }
+    }
+    public void EnterStunArea(float requireTime, float duration)
+    {
+        _stunAreaCount++;
+        _requiredStunTime = requireTime;
+        _areaStunDuration = duration;
+    }
+    public void ExitStunArea()
+    {
+        _stunAreaCount--;
+        if (_stunAreaCount <= 0) ResetStunAreaTime(); // 완전 다 나갈 때 초기화
+    }
     public void ResetStunAreaTime() => StunAreaTime = 0;
 
     public void Pull(Vector2 targetPosition, float force)
