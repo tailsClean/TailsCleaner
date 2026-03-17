@@ -58,6 +58,7 @@ MonoBehaviour:
   _energyPanel: {fileID: 0}
   _dungeonSelect: {fileID: 2103655650356592898}
   _stageSelect: {fileID: 2801877781154585793}
+  _stageButton: {fileID: 752883638381071025}
 --- !u!1001 &1902344984356723581
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -152,7 +153,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4360672255736498108, guid: daba0a2d0a11db14b9d49f5ff7a2da89, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6768813410320403301, guid: daba0a2d0a11db14b9d49f5ff7a2da89, type: 3}
       propertyPath: m_Sprite
@@ -171,6 +172,17 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: daba0a2d0a11db14b9d49f5ff7a2da89, type: 3}
+--- !u!114 &752883638381071025 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 1158756618020344268, guid: daba0a2d0a11db14b9d49f5ff7a2da89, type: 3}
+  m_PrefabInstance: {fileID: 1902344984356723581}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Button
 --- !u!224 &1798458572927555721 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 185514155414799348, guid: daba0a2d0a11db14b9d49f5ff7a2da89, type: 3}
@@ -698,7 +710,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7591501163352404759, guid: 1da36eed8fa8dd44890dcd26f22ef474, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8412431381941428898, guid: 1da36eed8fa8dd44890dcd26f22ef474, type: 3}
       propertyPath: _btnMain
