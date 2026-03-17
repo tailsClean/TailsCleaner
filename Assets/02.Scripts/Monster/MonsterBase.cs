@@ -307,22 +307,29 @@ public abstract class MonsterBase : PoolObject, IDamageable, IMonsterStatus, IPu
 
     public void OnCC()
     {
+        // 집중공략 패시브
+        // 군중제어 적용 시 추가로 일정시간 슬로우 적용
         if (SkillManager.Instance != null && SkillManager.Instance.HasPassive<SuperCleanModifier>(out var modifier))
         {
-            ApplySlow("SuperClean", 0.2f, 5f);
+            ApplySlow(SuperCleanModifier.DEBUFF_KEY, modifier.SlowAmont, modifier.SlowDuration);
         }
     }
 
     public void EnterStunArea(float requireTime, float duration)
     {
+        // 기절 장판 카운트
         _stunAreaCount++;
+        // 기절에 필요한 시간
         _requiredStunTime = requireTime;
+        // 기절 시간
         _areaStunDuration = duration;
     }
 
     public void ExitStunArea()
     {
+        // 기절 장판 카운트 빼기
         _stunAreaCount--;
+        // 장판 카운트 0 밑으로 떨어지면 기절 시간 초기화
         if (_stunAreaCount <= 0)
         {
             _stunAreaCount = 0;
@@ -330,8 +337,10 @@ public abstract class MonsterBase : PoolObject, IDamageable, IMonsterStatus, IPu
         }
     }
 
+    // 기절 시간 초기화
     public void ResetStunAreaTime() => StunAreaTime = 0;
 
+    // 당기기 (물폭탄 소용돌이)
     public void Pull(Vector2 targetPosition, float force)
     {
         Vector2 dir = (targetPosition - rb2D.position).normalized;
