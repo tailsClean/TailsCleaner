@@ -31,7 +31,7 @@ public class MonsterManager : MonoBehaviour
             // 신규 스폰 몬스터에게 현재까지 누적된 강화 적용
             if (_bonusStrength > 0)
             {
-                monster.ApplyEnhancement(bonusStrength);
+                monster.ApplyEnhancement(_bonusStrength);
             }
 
             OnMonsterSpawned?.Invoke(monster);
