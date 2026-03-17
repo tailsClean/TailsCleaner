@@ -35,7 +35,8 @@ public class GameManager : MonoBehaviour
 
         DontDestroyOnLoad(gameObject);
         _maxEnergy = _energySystem.MaxEnergy;
-        EnergyCount = _maxEnergy;
+        //EnergyCount = _maxEnergy;
+        EnergyCount = 125;
     }
 
     public void EnterStage()
