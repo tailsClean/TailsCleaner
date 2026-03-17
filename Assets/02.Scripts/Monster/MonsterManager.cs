@@ -12,6 +12,10 @@ public class MonsterManager : MonoBehaviour
     // 몬스터가 생성될 때 발생할 이벤트
     public event Action<MonsterBase> OnMonsterSpawned;
 
+    // 현재 적용 중인 전역 강화 수치
+    private float _globalHpEnhance = 0f;
+    private float _globalPowerEnhance = 0f;
+
     private void Awake()
     {
         if (Instance == null) Instance = this;
@@ -25,11 +29,23 @@ public class MonsterManager : MonoBehaviour
         {
             activeMonsters.Add(monster);
 
-            // 몬스터가 생성되어 필드에 등록될 때 호출
-            // 이 신호를 받은 다른 클래스 들이 각자 필요한 처리를 시작
-            OnMonsterSpawned?.Invoke(monster);
+            // 신규 스폰 몬스터에게 현재까지 누적된 강화 적용
+            if (_globalHpEnhance > 0 || _globalPowerEnhance > 0)
+            {
+                monster.ApplyEnhancement(_globalHpEnhance, _globalPowerEnhance);
+            }
 
-            Debug.Log($"[MonsterManager] {monster.name} 등록 완료. 현재 개수: {activeMonsters.Count}");
+            OnMonsterSpawned?.Invoke(monster);
+        }
+    }
+    public void ApplyAllEnemyEnhance(float hpPercent, float powerPercent)
+    {
+        _globalHpEnhance += hpPercent;
+        _globalPowerEnhance += powerPercent;
+
+        foreach (var monster in activeMonsters)
+        {
+            monster.ApplyEnhancement(hpPercent, powerPercent);
         }
     }
 
