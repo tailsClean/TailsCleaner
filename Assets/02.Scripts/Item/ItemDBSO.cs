@@ -9,7 +9,7 @@ public class ItemDBSO : ScriptableObject
     [SerializeField] private List<EquipmentSO> _equipments;
 
     [Header("유물")]
-    [SerializeField] private List<RelicSO> _Relics;
+    [SerializeField] private List<RelicLegacySO> _Relics;
 
     [Header("소모품")]
     [SerializeField] private List<ConsumeItemSO> _consumeItems;

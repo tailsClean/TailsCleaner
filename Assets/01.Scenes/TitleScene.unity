@@ -332,7 +332,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7ba7927fedf5d5d4080a017a35a9bc59, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnergySystem
-  _maxEnergy: 5
+  _maxEnergy: 999
   _increaseEnergyTime: 30
   _onIncreaseEnergy: {fileID: 11400000, guid: abfb39ad5a9c0614e9fbb06cdd536998, type: 2}
   _onStartStage: {fileID: 11400000, guid: bb5af9a30899d5441ae60b98e54bf231, type: 2}
@@ -703,9 +703,9 @@ MonoBehaviour:
   _isLoop: 1
   _isShuffle: 0
   _skillSfxPlayer: {fileID: 242543918}
-  _skillSfxClips: []
   _monsterSfxPlayer: {fileID: 2097713505}
   _monsterSfxClips: []
+  _debounceInterval: 0.1
 --- !u!4 &1231615606
 Transform:
   m_ObjectHideFlags: 0

@@ -1,5 +1,4 @@
-﻿using UnityEditor.MemoryProfiler;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.InputSystem;
 
 public class PlayerBase : MonoBehaviour, IDamageable, ISkillable, ISkillStat, IPlayerAni

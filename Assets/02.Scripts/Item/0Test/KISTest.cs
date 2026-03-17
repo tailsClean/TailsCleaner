@@ -1,15 +1,13 @@
 ﻿using UnityEngine;
 
-#if UNITY_EDITOR
+
 public class KISTest : MonoBehaviour
 {
     public ItemInventory inventory;
     public CraftingSystem craftingSystem;
     public int Id;
     public int Amount;
-
-
-
+#if UNITY_EDITOR
     [ContextMenu("강화 재료 재충전")]
     private void SetItem()
     {
@@ -57,5 +55,6 @@ public class KISTest : MonoBehaviour
             Debug.Log($"ID: {item.Key.ID} / 강화레벨: {item.Key.EnhanceLevel} / 등급: {item.Key.Grade} \n수량: {item.Value}");
         }
     }
+    #endif
+
 }
-#endif

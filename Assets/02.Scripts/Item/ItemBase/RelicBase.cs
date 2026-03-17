@@ -3,9 +3,9 @@
 
 public class RelicBase : ItemBase, IEnhancement
 {
-    public RelicSO Data { get; private set; }
+    public RelicLegacySO Data { get; private set; }
 
-    public override void Init(int id) => Data = ItemDB.GetItemData<RelicSO>(id);
+    public override void Init(int id) => Data = ItemDB.GetItemData<RelicLegacySO>(id);
 
 
     // 강화 데이터
