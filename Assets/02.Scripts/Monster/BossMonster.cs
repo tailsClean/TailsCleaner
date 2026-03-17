@@ -14,7 +14,6 @@ public class BossMonster : MonsterBase
     public bool useBarricade; // 바리게이트 
     public bool useOrbit; // 보스 전용 투사체
     
-
     private List<GameObject> activeOrbits = new List<GameObject>();
     private float orbitTimer = 0f;
     private bool isOrbiting = false;
@@ -30,6 +29,9 @@ public class BossMonster : MonsterBase
     public float jump_height = 3.0f;
     public Transform visualChild;
     public float fleeDistance = 4.0f;
+    
+    [Header("---UI 변경용 이벤트 채널---")]
+    [SerializeField] private FloatEventChannelSO _onBossHit;
 
     [Header("--- 점멸 패턴 설정 ---")]
     public float blink_detect_range = 5.0f;     // 점멸 발동 거리
@@ -332,6 +334,12 @@ public class BossMonster : MonsterBase
             if (fleeCooldownTimer > 0) fleeCooldownTimer -= Time.fixedDeltaTime;
         }
         rb2D.linearVelocity = dir * (isFleeing ? move_speed * pattern_multiply : move_speed);
+    }
+    public override void TakeDamage(float damage)
+    {
+        hp -= damage;
+        if (hp <= 0) Die();
+        _onBossHit.OnStartEvent(damage);
     }
 
     private void HandleJumpLogic()

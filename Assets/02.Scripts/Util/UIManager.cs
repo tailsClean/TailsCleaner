@@ -69,6 +69,7 @@ public class UIManager : MonoBehaviour
                 this._stageTimer = stageUI.TimerUI.GetComponent<StageTimerTextUI>();
                 this._gameOverPanel = stageUI.GameOverPanel;
                 this._stageClearPanel = stageUI.StageClearPanel;
+                this._BossHP = stageUI.BossHP;
             }
             if(container is LobbyUIContainer lobbyUI)
             {
@@ -168,7 +169,16 @@ public class UIManager : MonoBehaviour
             _stageSelect.SetActive(!_stageSelect.activeSelf);
         }
     }
-    
+    #endregion
 
+    #region BossUI
+    private GameObject _BossHP;
+    public void ChangeStateBossHP()
+    {
+        if(_BossHP != null)
+        {
+            _BossHP.SetActive(!_BossHP.activeSelf);
+        }
+    }
     #endregion
 }
