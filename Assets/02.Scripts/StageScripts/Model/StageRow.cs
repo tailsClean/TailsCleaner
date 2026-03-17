@@ -8,15 +8,20 @@ public sealed class StageTableRow
 
     public int main_time;
     public int boss_time;
-
     public int entry_energy;
 
     public int monster_group_id;
     public int special_group_id;
     public int boss_id;
 
+    public int reward_group_id;
+    public int rank_table_id;
+
     public float hp_modifier;
     public float power_modifier;
+
+    public int reward_preview;
+    public string map_resource;
 }
 
 public sealed class MonsterWaveRow

@@ -79,7 +79,7 @@ public class GameManager : MonoBehaviour
 
     public bool IsStageUnlocked(int towerId, int stageIndex)
     {
-        // 🔥 모든 타워의 1스테이지는 항상 열림
+        // 모든 타워의 1스테이지는 항상 열림
         if (stageIndex == 1)
             return true;
 
