@@ -46,7 +46,7 @@ public class BossState : IStageState
         //보스 소환
         _spawner.SpawnBoss(_bossId);
         UIManager.Instance.ChangeStateBossHP();
-
+        _timer.StopMain();
 
         if (_registry is MonsterRegistry mr && _spawner is RuleBasedMonsterSpawner rb)
         {

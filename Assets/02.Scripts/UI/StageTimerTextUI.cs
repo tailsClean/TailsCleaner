@@ -1,5 +1,4 @@
 ﻿using UnityEngine;
-
 using UnityEngine.UI;
 
 public sealed class StageTimerTextUI : MonoBehaviour
@@ -85,6 +84,9 @@ public sealed class StageTimerTextUI : MonoBehaviour
     private void HandleBossSecondTick(int secondsLeft)
     {
         _bossSeen = true;
+
+        if (_mainTimerText != null)
+            _mainTimerText.gameObject.SetActive(false);
 
         if (_bossTimerText != null && _showBossTimerOnlyWhenActive)
             _bossTimerText.gameObject.SetActive(true);
