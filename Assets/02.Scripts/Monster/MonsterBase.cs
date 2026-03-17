@@ -117,11 +117,17 @@ public abstract class MonsterBase : PoolObject, IDamageable, IMonsterStatus, IPu
         _currentMoveSpeed = _baseMoveSpeed;
 
 
-        _stunCounter = 0; // 스폰 시 카운터 초기화
         IsKnockbacked = false;
         HasReducedMaxHp = false;
         StunAreaTime = 0f;
+        foreach (var coroutine in _slowTimers.Values)
+            if (coroutine != null) StopCoroutine(coroutine);
         _slowModifiers.Clear();
+        _slowTimers.Clear();
+        _slowAreaCounts.Clear();
+        _stunCounter = 0;
+        _stunAreaCount = 0;
+        _currentStunEndTime = 0f;
 
         isAttacking = false;
         lastAttackTime = 0f;
@@ -160,7 +166,9 @@ public abstract class MonsterBase : PoolObject, IDamageable, IMonsterStatus, IPu
 
             // 일정 시간 넘으면 기절
             if (StunAreaTime >= _requiredStunTime)
-            {
+            { 
+                // 타이머 초기화 후 기절 적용
+                ResetStunAreaTime();
                 ApplyStun(_areaStunDuration);
             }
         }
