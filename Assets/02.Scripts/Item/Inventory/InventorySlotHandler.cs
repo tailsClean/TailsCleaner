@@ -5,7 +5,9 @@ using UnityEngine.UI;
 
 public class InventorySlotHandler : UIGroup
 {
+    [Header("핸들러 데이터")]
     [SerializeField] protected List<UISlot> _slots;
+    [SerializeField] private Sprite _selectedSprite;
     [SerializeField] private Button _handlerButton;
 
     [Header("이벤트 채널")]
@@ -15,7 +17,7 @@ public class InventorySlotHandler : UIGroup
     private List<int> _itemOrder = new();                    // 무작위로 들고 있는 _inventory의 값들에 순서를 부여
     private Dictionary<int, UISlot> _slotByItemId = new();   // 특정 ID가 슬롯에 배치됐는지 조회용 딕셔너리
     private Image _buttonImg;
-    private Color _baseColor;
+    private Sprite _baseSprite;
 
     protected List<ItemInstance> _items = new();
 
@@ -26,17 +28,17 @@ public class InventorySlotHandler : UIGroup
         _itemOrder = new List<int>();
         _slotByItemId = new Dictionary<int, UISlot>();
         _buttonImg = _handlerButton.GetComponent<Image>();
-        _baseColor = _buttonImg.color;
+        _baseSprite = _buttonImg.sprite;
     }
 
     private void OnEnable()
     {
-        _buttonImg.color = _handlerButton.colors.disabledColor;
+        _buttonImg.sprite = _selectedSprite;
     }
 
     private void OnDisable()
     {
-        _buttonImg.color = _baseColor;
+        _buttonImg.sprite = _baseSprite;
     }
 
     public virtual void UpdateInventory()
