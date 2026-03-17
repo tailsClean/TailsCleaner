@@ -243,7 +243,7 @@ public class GoldCrownModifier : PassiveModifier
 
     public override void ModifyPlayerPermanent( PlayerStatFlat flat, PlayerStatMul multi, SkillManager skillManager, int subTag)
     {
-        multi.MoveSpeed *= _speedMultiplier;
+        multi.MoveSpeed += _speedMultiplier;
     }
 }
 

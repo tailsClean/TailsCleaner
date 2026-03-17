@@ -1,0 +1,72 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 518aadcd99d59244b926a53624b75d00, type: 3}
+  m_Name: ActiveData_41003
+  m_EditorClassIdentifier: Assembly-CSharp::ActiveSkillData
+  MainTag: 41003
+  SkillName: "\uBB3C\uD3ED\uD0C4"
+  NameStringId: 44003
+  AttackType: 4101
+  TargetingType: 4202
+  Icon: {fileID: 0}
+  SkillPrefab: {fileID: 7069380065093817678, guid: fbc211416362f104ebe93a0b0835f7c4, type: 3}
+  SkillProjectilePrefab: {fileID: 7628259304275206489, guid: 390205471969a7b45afe756268ccb3bd, type: 3}
+  UpgradeModifierDatas:
+  - Name: "\uBB3C\uD3ED\uD0C4"
+    UpgradeId: 40017
+    Desc: "\uD50C\uB808\uC774\uC5B4 \uACF5\uACA9 \uBC29\uD5A5\uC758 \uAC00\uC7A5
+      \uAC00\uAE4C\uC6B4 \uB300\uC0C1 \uC704\uCE58\uC5D0 \uBC94\uC704 \uD53C\uD574\uB97C
+      \uC8FC\uB294 \uBB3C\uD3ED\uD0C4\uC744 \uC218\uC9C1\uC73C\uB85C \uB5A8\uAD7D\uB2C8\uB2E4."
+    DescStringId: 44027
+    Modifier:
+      rid: -2
+  - Name: "\uBB3C\uBC14\uB2E4"
+    UpgradeId: 40018
+    Desc: "\uBB3C\uD3ED\uD0C4 \uCC29\uD0C4 \uC9C0\uC810\uC5D0 8 \uBC29\uD5A5\uC73C\uB85C
+      \uCD94\uAC00 \uD22C\uC0AC\uCCB4\uB97C \uBC1C\uC0AC\uD569\uB2C8\uB2E4."
+    DescStringId: 44028
+    Modifier:
+      rid: 5077774860369264751
+  - Name: "\uC18C\uC6A9\uB3CC\uC774"
+    UpgradeId: 40019
+    Desc: "\uBB3C\uD3ED\uD0C4 \uCC29\uD0C4 \uC2DC, \uD574\uB2F9 \uC9C0\uC810\uC73C\uB85C
+      \uD22C\uC0AC\uCCB4\uC640 \uC801\uC744 1\uD68C \uB04C\uC5B4\uB2F9\uAE41\uB2C8\uB2E4."
+    DescStringId: 44029
+    Modifier:
+      rid: 5077774860369264752
+  - Name: "\uD3ED\uBC1C\uC740 \uC608\uC220\uC774\uB2E4!"
+    UpgradeId: 40020
+    Desc: "\uBB3C\uD3ED\uD0C4 \uCC29\uD0C4 \uC2DC, \uD574\uB2F9 \uC9C0\uC810\uC758
+      \uD0C4\uD658\uC774 \uC9C0\uC6CC\uC9D1\uB2C8\uB2E4."
+    DescStringId: 44030
+    Modifier:
+      rid: 5077774860369264753
+  references:
+    version: 2
+    RefIds:
+    - rid: -2
+      type: {class: , ns: , asm: }
+    - rid: 5077774860369264751
+      type: {class: WaterBombSplashModifier, ns: , asm: Assembly-CSharp}
+      data:
+        _splashCount: 8
+        _splashSize: 0.5
+        _splashDelay: 0.2
+    - rid: 5077774860369264752
+      type: {class: WaterBombVortexModifier, ns: , asm: Assembly-CSharp}
+      data:
+        _vortexSize: 1.5
+        _vortexDelay: 0.5
+        _vortexMoveTime: 0.1
+    - rid: 5077774860369264753
+      type: {class: WaterBombBulletClearModifier, ns: , asm: Assembly-CSharp}
+      data: 

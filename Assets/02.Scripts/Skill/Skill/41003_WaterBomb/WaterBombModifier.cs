@@ -16,6 +16,7 @@ public class WaterBombModifierData
     public int VortexPullCount = 0;         // 끌어당기기 횟수 (레벨마다 +1 누적)
     public float VortexSize = 0f;           // 크기 배율
     public float VortexPullDelay = 0f;      // 끌어당기기 텀
+    public float VortexMoveTime = 0f;       // 이동 시간
 
     // 폭발은 예술이다
     // 착탄 장판 범위 내 적 투사체 삭제
@@ -55,6 +56,8 @@ public class WaterBombVortexModifier : ActiveModifier<WaterBombSkill>
     [SerializeField] float _vortexSize = 1.5f;
     [Header("끌어당기기 딜레이")]
     [SerializeField] float _vortexDelay = 0.5f;
+    [Header("끌어당기기 이동시간")]
+    [SerializeField] float _vortexMoveTime = 0.1f;
 
     public override void ApplyModifier(WaterBombSkill skill, ActiveUpgradeData upgradeData)
     {
@@ -63,6 +66,7 @@ public class WaterBombVortexModifier : ActiveModifier<WaterBombSkill>
         skill._modifierData.VortexPullCount += level;
         skill._modifierData.VortexSize = _vortexSize;
         skill._modifierData.VortexPullDelay = _vortexDelay;
+        skill._modifierData.VortexMoveTime = _vortexMoveTime;
     }
 }
 

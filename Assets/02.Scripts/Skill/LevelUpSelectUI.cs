@@ -150,14 +150,14 @@ public class LevelUpSelectUI : MonoBehaviour
             {
                 case LevelUpSelect.OPTION_TYPE.Active:      // 액티브
                     ActiveSkillData activeSkill = SkillDataLoader.GetActiveSkillData(optionData.TargetMainTag);
-                    name = optionData.ActiveData.Name;
-                    desc = optionData.ActiveData.Desc;
+                    name = SkillDataLoader.GetString(activeSkill.NameStringId);
+                    desc = SkillDataLoader.GetString(optionData.ActiveData.DescStringId);;
                     icon = activeSkill.Icon;
                     break;
 
                 case LevelUpSelect.OPTION_TYPE.Passive:     // 패시브
-                    name = optionData.PassiveData.PassiveName;
-                    desc = optionData.PassiveData.Desc;
+                    name = SkillDataLoader.GetString(optionData.PassiveData.NameStringId);
+                    desc = SkillDataLoader.GetString(optionData.PassiveData.DescStringId);
                     icon = optionData.PassiveData.Icon;
                     break;
 

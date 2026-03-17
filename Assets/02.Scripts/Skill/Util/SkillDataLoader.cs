@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using UnityEngine;
 using static ActiveSkillData;
 
@@ -158,6 +157,8 @@ public static class SkillDataLoader     // 사실상 스킬 데이터 매니저 
     }
 
 
+    #region 데이터
+
     // 스킬 데이터
     public static ActiveSkillData GetActiveSkillData(int mainTag)
         => _activeSkillMap.TryGetValue(mainTag, out var data) ? data : null;
@@ -173,4 +174,64 @@ public static class SkillDataLoader     // 사실상 스킬 데이터 매니저 
     // 스킬 업그레이드 리스트
     public static List<ActiveUpgradeData> GetActiveUpgradeDatas(int mainTag)
         => _upgradeMap.TryGetValue(mainTag, out var datas) ? datas : null;
+
+
+    #endregion
+
+    #region 스트링
+    public static string GetString(string stringId)
+    {
+        // stringSO 가져오기
+        var stringSO = DataManager.Instance.GetSOData<StringSO>();
+
+        if (stringSO == null)
+        {
+            Debug.LogWarning("[SkillDataLoader] DataManager에서 StringSO를 찾을 수 없음");
+            return string.Empty;
+        }
+
+        // SO에서 Id로 찾아오기
+        var entry = stringSO.GetById(stringId);
+
+        if (entry == null)
+        {
+            Debug.LogWarning($"[SkillDataLoader] StringId {stringId} 를 찾을 수 없음");
+            return string.Empty;
+        }
+
+        // 언어 설정따라 분기하도록 해야함
+        return entry.kr ?? string.Empty;
+    }
+
+    // 액티브 스킬 이름
+    public static string GetActiveSkillName(int mainTag)
+    {
+        var data = GetActiveSkillData(mainTag);
+        return data != null ? GetString(data.NameStringId) : string.Empty;
+    }
+
+    // 업그레이드 설명
+    public static string GetUpgradeDesc(int upgradeId)
+    {
+        var data = GetActiveUpgradeData(upgradeId);
+        return data != null ? GetString(data.DescStringId) : string.Empty;
+    }
+
+    // 패시브 이름
+    public static string GetPassiveSkillName(int passiveId)
+    {
+        if (_passiveSkillMap.TryGetValue(passiveId, out var data))
+            return GetString(data.NameStringId);
+        return string.Empty;
+    }
+
+    // 패시브 설명
+    public static string GetPassiveSkillDesc(int passiveId)
+    {
+        if (_passiveSkillMap.TryGetValue(passiveId, out var data))
+            return GetString(data.DescStringId);
+        return string.Empty;
+    }
+    #endregion
+
 }
