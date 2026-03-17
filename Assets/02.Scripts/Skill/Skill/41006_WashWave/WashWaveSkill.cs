@@ -66,6 +66,9 @@ public class WashWaveSkill : ActiveSkill<WashWaveProjectile, WashWaveModifierDat
         int count = Mathf.Max(1, _finalStat.ProjectileCount);
         for (int i = 0; i < count; i++)
         {
+            // 파도 생성 시 사운드
+            PlaySpecialSFX();
+
             // 스폰 중심 기준 원 안 랜덤 위치
             Vector2 randomOffset = Random.insideUnitCircle * _spawnRadius;
             Vector2 spawnPos = spawnCenter + randomOffset;

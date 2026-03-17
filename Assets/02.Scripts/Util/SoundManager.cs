@@ -214,8 +214,14 @@ public class SoundManager : MonoBehaviour
         if (data == null) return;
         PlayRandomSkillClip(data.onExpire);
     }
+    // 스킬 특수 클립 재생
+    public void PlaySkillSpecialSFX(SkillSoundData data)
+    {
+        if (data == null) return;
+        PlayRandomSkillClip(data.onSpecial);
+    }
 
-    
+
     // 랜덤 클립 재생
     public void PlayRandomSkillClip(AudioClip[] clips)
     {
@@ -260,7 +266,7 @@ public class SoundManager : MonoBehaviour
         // 없으면 새로 생성해서 추가
         if (slot == null)
         {
-            slot = gameObject.AddComponent<AudioSource>();
+            slot = _skillSfxPlayer.gameObject.AddComponent<AudioSource>();
             slot.playOnAwake = false;
             slot.loop = true;
             _loopPool.Add(slot);

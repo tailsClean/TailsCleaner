@@ -443,15 +443,27 @@ public abstract class ActiveSkill : MonoBehaviour
 
     // 루프 사운드 재생
     protected void StartLoopSFX()
-        => SoundManager.Instance.PlaySkillLoopSFX(MainTag, _soundData);
+    {
+        if (SoundManager.Instance != null) SoundManager.Instance.PlaySkillLoopSFX(MainTag, _soundData);
+    }
 
     // 루프 사운드 중지
     protected void StopLoopSFX()
-        => SoundManager.Instance.StopSkillLoopSFX(MainTag);
+    {
+        if (SoundManager.Instance != null) SoundManager.Instance.StopSkillLoopSFX(MainTag);
+    }
 
     // 만료 사운드 재생
     protected void PlayExpireSFX()
-        => SoundManager.Instance.PlaySkillExpireSFX(_soundData);
+    {
+        if (SoundManager.Instance != null) SoundManager.Instance.PlaySkillExpireSFX(_soundData);
+    }
+
+    // 특수 사운드 재생
+    protected void PlaySpecialSFX()
+    {
+        if (SoundManager.Instance != null) SoundManager.Instance.PlaySkillSpecialSFX(_soundData);
+    }
 }
 
 // 프리팹과 모디파이어 타입 결정

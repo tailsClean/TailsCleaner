@@ -80,6 +80,9 @@ public class SpinningToySkill : ActiveSkill<SpinningToyProjectile, SpinningToyMo
 
             if (toy != null)
             {
+                // 공전체 하나당 사운드
+                PlaySpecialSFX();
+
                 // 공전상태로 초기화
                 toy.InitOrbit(this, _modifierData, spawnList[i], angle, _orbitRadius);
 
