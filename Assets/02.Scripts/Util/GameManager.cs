@@ -12,6 +12,7 @@ public class GameManager : MonoBehaviour
     public static int EnergyCount;
     public const int SPEND_ENERGY = 1;
     public int _maxEnergy;
+
     public TowerTable _currentTower;
 
     public StageTable _currentStage;
@@ -78,11 +79,12 @@ public class GameManager : MonoBehaviour
 
     public bool IsStageUnlocked(int towerId, int stageIndex)
     {
-        if (stageIndex <= 1)
-        { return true; } // 1스테이지는 잠금 해제    
+        // 🔥 모든 타워의 1스테이지는 항상 열림
+        if (stageIndex == 1)
+            return true;
 
-        int maxClearedIndex = GetMaxClearStageIndex(towerId);
-        return stageIndex <= maxClearedIndex + 1; // 다음 스테이지까지 허용
+        int maxCleared = GetMaxClearStageIndex(towerId);
+        return stageIndex <= maxCleared + 1;
     }
 
     public void MarkStageCleared(int towerId, int stageIndex)

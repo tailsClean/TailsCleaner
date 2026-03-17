@@ -20,12 +20,17 @@ public class StageEntry : MonoBehaviour
     private void Awake()
     {
         _planProvider = new DataParserStagePlanProvider();
+
+        ApplyStageFromGameManager();
+
+        if (_stageId <= 0)
+        {
+            Debug.LogError("[StageEntry] stageId가 0 → 잘못된 진입");
+        }
     }
 
     void Start()
     {
-        ApplySelectedStageFromGameManager();
-
         if (!TrySpendEntryEnergy(_stageId))
         { 
             // 에너지가 부족하면 타워씬으로 이동
@@ -50,20 +55,37 @@ public class StageEntry : MonoBehaviour
         _stageController.StartStage(_plan, _spawner, _register);
     }
 
-    private void ApplySelectedStageFromGameManager()
+    private void ApplyStageFromGameManager()
     {
-        if (GameManager.Instance == null) return;
-
-        if(GameManager.Instance._currentTower != null)
+        if (GameManager.Instance == null)
         {
-            _towerId = GameManager.Instance._currentTower.tower_id;
+            Debug.LogWarning("[StageEntry] GameManager 없음");
+            return;
         }
 
-        if(GameManager.Instance._currentStageId > 0)
+        var gm = GameManager.Instance;
+
+        // tower
+        if (gm._currentTower != null)
         {
-            _stageId = GameManager.Instance._currentStageId;
+            _towerId = gm._currentTower.tower_id;
         }
 
+        // stageId (핵심)
+        if (gm._currentStage != null)
+        {
+            _stageId = gm._currentStage.stage_id;
+            Debug.Log($"[StageEntry] stageId ← GameManager(stage) = {_stageId}");
+        }
+        else if (gm._currentStageId > 0)
+        {
+            _stageId = gm._currentStageId;
+            Debug.Log($"[StageEntry] stageId ← GameManager(stageId) = {_stageId}");
+        }
+        else
+        {
+            Debug.LogError("[StageEntry] GameManager에 stage 정보 없음 → Inspector 값 사용됨");
+        }
     }
 
     private void ApplyTowerModifier(StagePlan plan, int stageId)
