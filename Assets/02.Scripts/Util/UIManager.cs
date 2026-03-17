@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using DG.Tweening;
 using TMPro;
 using System;
@@ -66,10 +66,11 @@ public class UIManager : MonoBehaviour
                 this._gameOverPanel = stageUI.GameOverPanel;
                 this._stageClearPanel = stageUI.StageClearPanel;
             }
-            if(container is TowerUIContainer towerUI)
+            if(container is LobbyUIContainer lobbyUI)
             {
-                // TowerUIContainer 참조로 들고 있기
-                this._energyPanel = towerUI.EnergyPanel.GetComponent<EnergyPanel>();
+                // LobbyUIContainer 참조로 들고 있기
+                this._dungeonSelect = lobbyUI.DungeonSelect;
+                this._stageSelect = lobbyUI.StageSelect;
             }
         }
     }
@@ -103,7 +104,7 @@ public class UIManager : MonoBehaviour
     }
 
     #region ExitPanel
-    [SerializeField] private GameObject _exitPanel;
+    private GameObject _exitPanel;
 
     public void ChangeStateExitPanel()
     {
@@ -116,7 +117,7 @@ public class UIManager : MonoBehaviour
     #endregion
 
     #region StageClearPanel
-    [SerializeField] private GameObject _stageClearPanel;
+     private GameObject _stageClearPanel;
     public void OpenClear()
     {
         _stageClearPanel.SetActive(true);
@@ -125,7 +126,7 @@ public class UIManager : MonoBehaviour
     #endregion
 
     #region GameOverPanel
-    [SerializeField] private GameObject _gameOverPanel;
+    private GameObject _gameOverPanel;
      public void OpenGameOver()
     {
         _gameOverPanel.SetActive(true);
@@ -134,14 +135,40 @@ public class UIManager : MonoBehaviour
     #endregion
     
     #region StageTimer
-    [SerializeField] private StageTimerTextUI _stageTimer;
+     private StageTimerTextUI _stageTimer;
     public StageTimerTextUI StageTimer => _stageTimer;
 
     #endregion
 
     #region EnergyUI
-    [SerializeField] private EnergyPanel _energyPanel;
+    private EnergyPanel _energyPanel;
     public EnergyPanel EnergyPanel => _energyPanel;
+
+    public void SetEnergyPanel(EnergyPanel energyPanel)
+    {
+        _energyPanel = energyPanel;
+    }
+
     #endregion
 
+    #region LobbyUI
+    private GameObject _dungeonSelect;
+    private GameObject _stageSelect;
+    public void ChangeStateDungeonSelect()
+    {
+        if(_dungeonSelect != null)
+        {
+            _dungeonSelect.SetActive(!_dungeonSelect.activeSelf);
+        }
+    }
+    public void ChangeStateStageSelect()
+    {
+        if(_stageSelect != null)
+        {
+            _stageSelect.SetActive(!_stageSelect.activeSelf);
+        }
+    }
+    
+
+    #endregion
 }

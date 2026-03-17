@@ -1223,7 +1223,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::StageUIContainer
   _settingButton: {fileID: 2909823174975905087}
   _exitPanel: {fileID: 9036709914732264870}
-  _timerUI: {fileID: 4864524630507613082}
+  _timerUI: {fileID: 3057187004134021156}
   _gameOverPanel: {fileID: 7752616583717103425}
   _stageClearPanel: {fileID: 6899338133259334769}
   _uiGroupList:
@@ -1303,6 +1303,10 @@ PrefabInstance:
     - target: {fileID: 2267453621181883757, guid: fb9fa25ff97d3c4408fd203ef0e2af06, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3554155679608074011, guid: fb9fa25ff97d3c4408fd203ef0e2af06, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 1000
       objectReference: {fileID: 0}
     - target: {fileID: 4541890545109703961, guid: fb9fa25ff97d3c4408fd203ef0e2af06, type: 3}
       propertyPath: m_AnchorMax.x
@@ -2365,11 +2369,17 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: bc4506106a7c42149addebd22a3cf565, type: 3}
---- !u!1 &4864524630507613082 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 8618233529539803822, guid: bc4506106a7c42149addebd22a3cf565, type: 3}
+--- !u!114 &3057187004134021156 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 2194679887938619664, guid: bc4506106a7c42149addebd22a3cf565, type: 3}
   m_PrefabInstance: {fileID: 3753854584592781620}
   m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: caf8be5dd9206ce49afae91e38c0721a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::StageTimerTextUI
 --- !u!4 &7793965698266068420 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 6355111621066859760, guid: bc4506106a7c42149addebd22a3cf565, type: 3}

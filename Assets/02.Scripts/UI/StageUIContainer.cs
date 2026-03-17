@@ -7,8 +7,8 @@ public class StageUIContainer : MonoBehaviour, UIContainer // stageUI에서 연�
     [SerializeField] private Button _settingButton;
     [SerializeField] private GameObject _exitPanel;
     public GameObject ExitPanel => _exitPanel;
-    [SerializeField] private GameObject _timerUI;
-    public GameObject TimerUI => _timerUI;
+    [SerializeField] private StageTimerTextUI _timerUI;
+    public StageTimerTextUI TimerUI => _timerUI;
     [SerializeField] private GameObject _gameOverPanel;
     public GameObject GameOverPanel => _gameOverPanel;
     [SerializeField] private GameObject _stageClearPanel;

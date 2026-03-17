@@ -2,6 +2,7 @@ using UnityEngine;
 using DG.Tweening;
 using UnityEngine.UI;
 using System.Collections.Generic;
+using TMPro;
 /// <summary>
 /// 탑 선택 캐러셀 UI
 ///
@@ -26,6 +27,15 @@ public class DungeonSelect : MonoBehaviour
     [SerializeField] private Button _btnPrev;
     [SerializeField] private Button _btnNext;
     [SerializeField] private Button _btnSelect;
+    [SerializeField] private Button _btnMain;
+    
+    [Header("텍스트")]
+    [SerializeField] private TextMeshProUGUI _txtSelect;
+
+    [Header("패널")]
+    [SerializeField] private Image _ImgPrev; 
+    [SerializeField] private Image _ImgSelected;
+    [SerializeField] private Image _ImgNext;
  
     [Header("데이터")]
      private TowerTableSO _towerData;
@@ -48,6 +58,8 @@ public class DungeonSelect : MonoBehaviour
         _btnPrev.onClick.AddListener(OnPrev);
         _btnNext.onClick.AddListener(OnNext);
         _btnSelect.onClick.AddListener(OnSelect);
+        _btnMain.onClick.AddListener(OnGoToMain);
+        
         _towerData = DataManager.Instance.GetSOData<TowerTableSO>();
         Refresh(animate: false);
     }
@@ -75,9 +87,16 @@ public class DungeonSelect : MonoBehaviour
     private void OnSelect()
     {
         GameManager.Instance._currentTower = _towerData.dataList[_currentIndex];
+        this.gameObject.SetActive(false);
+        UIManager.Instance.ChangeStateStageSelect();
     }
+    private void OnGoToMain()
+    {
+        this.gameObject.SetActive(false);
+    }
+
  
-    private void Refresh(bool animate)
+    private void Refresh(bool animate) //버튼 누른 후 상태 초기화 
     {
         bool hasPrev = _currentIndex > 0;
         bool hasNext = _currentIndex < TowerCount - 1;
@@ -88,21 +107,25 @@ public class DungeonSelect : MonoBehaviour
         _btnPrev.interactable = hasPrev;
         _btnNext.interactable = hasNext;
  
-        BindSlot(_slotSelected, _currentIndex);
-        if (hasPrev) BindSlot(_slotPrev, _currentIndex - 1);
-        if (hasNext) BindSlot(_slotNext, _currentIndex + 1);
+        BindSlot(_slotSelected, _ImgSelected, _currentIndex, true);
+        if (hasPrev) BindSlot(_slotPrev, _ImgPrev, _currentIndex - 1, false);
+        if (hasNext) BindSlot(_slotNext, _ImgNext, _currentIndex + 1, false);
  
         AnimateSlot(_slotSelected, POS_SELECTED, SIZE_LARGE,  animate);
         if (hasPrev) AnimateSlot(_slotPrev,  POS_PREV,  SIZE_SMALL, animate);
         if (hasNext) AnimateSlot(_slotNext,  POS_NEXT,  SIZE_SMALL, animate);
     }
  
-    private void BindSlot(RectTransform slot, int index)
+    private void BindSlot(RectTransform slot, Image image, int index, bool isSelect)
     {
         if (_towerData == null || index < 0 || index >= TowerCount) return;
  
         var data = _towerData.dataList[index];
+        var imgName = data.tower_icon_resource; 
+        image.sprite = Resources.Load<Sprite>($"Stage/Tower_Image/{imgName}");
+        if(isSelect) _txtSelect.text = $"{index + 1}번 탑"; 
     }
+
 
     private void AnimateSlot(RectTransform rt, Vector2 targetPos, Vector2 targetSize, bool animate)
     {
