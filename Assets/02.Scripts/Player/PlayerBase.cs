@@ -1,7 +1,8 @@
-﻿using UnityEngine;
+﻿using UnityEditor.MemoryProfiler;
+using UnityEngine;
 using UnityEngine.InputSystem;
 
-public class PlayerBase : MonoBehaviour, IDamageable, ISkillable, ISkillStat
+public class PlayerBase : MonoBehaviour, IDamageable, ISkillable, ISkillStat, IPlayerAni
 {
     [field: SerializeField] public PlayerDataSO Data { get; private set; }
 
@@ -10,6 +11,7 @@ public class PlayerBase : MonoBehaviour, IDamageable, ISkillable, ISkillStat
 
     [Header("이벤트 채널")]
     [SerializeField] private FloatEventChannelSO _onHit;
+    [SerializeField] private FloatEventChannelSO _onHeal;
     [SerializeField] private FloatEventChannelSO _onPickupExp;
     [SerializeField] private FloatEventChannelSO _onGainInGameExp;
     [SerializeField] private IntEventChannelSO _onInGameLevelUp;
@@ -23,15 +25,16 @@ public class PlayerBase : MonoBehaviour, IDamageable, ISkillable, ISkillStat
     private PlayerLoadout _myEnhancement;
     private PlayerStatCalculator _statCalculator;
     private PlayerStateMachine _stateMachine;
+    private PlayerAni _playerAni;
 
 
-    public float Hp => _hpSystem.CurrentHp;
+    public float CurrentHp => _hpSystem.CurrentHp;
     public float InGameMaxExp => _levelSystem.InGameMaxExp;
     public float ItemDropRate => _statCalculator.GetFinalSat(Data.ItemDropRate, PLAYER_STAT.ItemDropRate);
     public float GoldGainRate => _statCalculator.GetFinalSat(Data.GoldGainRate, PLAYER_STAT.GoldGainRate);
 
 
-    public float MaxHp =>  _statCalculator.GetFinalSat(_hpSystem.MaxHp, PLAYER_STAT.MaxHp);
+    public float MaxHp => _hpSystem.MaxHp;
     public int MaxShield => _hpSystem.MaxSield;
     public int CurrentShield => _hpSystem.CurrentSield;
     public float AttackPower => _statCalculator.GetFinalSat(Data.AttackPower, PLAYER_STAT.AttackPower);
@@ -50,28 +53,28 @@ public class PlayerBase : MonoBehaviour, IDamageable, ISkillable, ISkillStat
 
     private void Awake()
     {
-        _hpSystem = new PlayerHpSystem(this);
         _levelSystem = new PlayerLevelSystem(this);
         _myEnhancement = ItemManager.Instance.Loadout;
         _statCalculator = new PlayerStatCalculator(_myEnhancement, _levelSystem);
+        _playerAni = new PlayerAni(GetComponent<Animator>());
+        _hpSystem = new PlayerHpSystem(this, _statCalculator);
 
         _stateMachine = new PlayerStateMachine(this);
     }
 
     private void OnEnable()
     {
-        _itemPickupSystem.OnEnterPickupRange += OnItemPickup;
-        _onPickupExp.AddListener(GainInGameExp);
+        EventConnect();
     }
 
     private void OnDisable()
     {
-        _itemPickupSystem.OnEnterPickupRange -= OnItemPickup;
-        _onPickupExp.RemoveListener(GainInGameExp);
+        EventDisconnect();
     }
 
     private void Start()
     {
+        _hpSystem.Init(MaxHp);
         _itemPickupSystem.SetColliderRange(Data.PickupRange);
         AttackDir = new Vector2(0, -1);
     }
@@ -84,36 +87,48 @@ public class PlayerBase : MonoBehaviour, IDamageable, ISkillable, ISkillStat
 
 
     // 이동 기능
-    public void OnMove(InputAction.CallbackContext ctx) => 
+    public void OnMove(InputAction.CallbackContext ctx)
+    {
         _stateMachine.MoveInput(ctx.ReadValue<Vector2>().normalized);
 
-
-    // 조이스틱 방향으로 공격
-    public void StickAttackDir(InputAction.CallbackContext ctx)
-    {
-        if (ctx.performed)
-            AttackDir = ctx.ReadValue<Vector2>().normalized;
-
-        else if (ctx.canceled)
-            AttackDir = Vector2.zero;
-
-        if (AttackDir != Vector2.zero)
-            LastAttackDir = AttackDir;
-    }
-    // 마우스 방향으로 공격
-    public void MouseAttackDir(InputAction.CallbackContext ctx)
-    {
-        Vector2 mousePos = Camera.main.ScreenToWorldPoint(ctx.ReadValue<Vector2>());
-        AttackDir = (mousePos - (Vector2)transform.position).normalized;
+        if(_stateMachine.MoveDir == Vector2.zero)
+            PlayAni(PlayerAni.Idle);
+        else
+            PlayAni(PlayerAni.Move);
     }
 
 
-    public void Heal(float amount) => _hpSystem.OnHeal(amount);
+    //// 조이스틱 방향으로 공격
+    //public void StickAttackDir(InputAction.CallbackContext ctx)
+    //{
+    //    if (ctx.performed)
+    //        AttackDir = ctx.ReadValue<Vector2>().normalized;
+
+    //    else if (ctx.canceled)
+    //        AttackDir = Vector2.zero;
+
+    //    if (AttackDir != Vector2.zero)
+    //        LastAttackDir = AttackDir;
+    //}
+    //// 마우스 방향으로 공격
+    //public void MouseAttackDir(InputAction.CallbackContext ctx)
+    //{
+    //    Vector2 mousePos = Camera.main.ScreenToWorldPoint(ctx.ReadValue<Vector2>());
+    //    AttackDir = (mousePos - (Vector2)transform.position).normalized;
+    //}
+
+
+    public void Heal(float amount)
+    {
+        _hpSystem.OnHeal(amount);
+        _onHeal.OnStartEvent(CurrentHp);
+    }
+
     // 피격시, 발동되는 메서드
     public void TakeDamage(float damage)
     {
-        _hpSystem.OnHit(damage);
-        _onHit.OnStartEvent(Hp);
+        _hpSystem.Hit(damage);
+        _onHit.OnStartEvent(CurrentHp);
 
         if (_hpSystem.IsDead)
             OnDead();
@@ -121,7 +136,7 @@ public class PlayerBase : MonoBehaviour, IDamageable, ISkillable, ISkillStat
     private void OnDead()
     {
         _onDead.OnStartEvent();
-        Destroy(gameObject);
+        _playerAni.PlayAni(PlayerAni.Dead);
     }
 
     // 최대 실드량 갱신
@@ -165,12 +180,55 @@ public class PlayerBase : MonoBehaviour, IDamageable, ISkillable, ISkillStat
     public void SetSkillStat(PlayerStatFlat flat, PlayerStatMul multi) =>
         _statCalculator.SetSkillStat(flat, multi);
 
+    // 애니메이션 재생
+    public void PlayAni(string aniName) => _playerAni.PlayAni(aniName);
+
+
+    // 이벤트 연결
+    private void EventConnect()
+    {
+        _hpSystem.OnHit += () => PlayAni(PlayerAni.Hit);
+        _itemPickupSystem.OnEnterPickupRange += OnItemPickup;
+        _onPickupExp.AddListener(GainInGameExp);
+    }
+
+    private void EventDisconnect()
+    {
+        _hpSystem.OnHit -= () => PlayAni(PlayerAni.Hit);
+        _itemPickupSystem.OnEnterPickupRange -= OnItemPickup;
+        _onPickupExp.RemoveListener(GainInGameExp);
+    }
+
+
+    [ContextMenu("데미지테스트")]
+    public void DamageTest()
+    {
+        Debug.Log(MaxHp);
+        Debug.Log(CurrentHp);
+        TakeDamage(1);
+    }
+
+    [ContextMenu("힐")]
+    public void HealTest()
+    {
+        Debug.Log(MaxHp);
+        Debug.Log(CurrentHp);
+        Heal(10);
+    }
+
+
+
+
+    // 디버그용
     [ContextMenu("스탯출력")]
     public void Stat()
     {
         float a = 0;
+        a = MaxHp;
+        a = CurrentHp;
         a = AttackPower;
         a = DefensePower;
         a = GoldGainRate;
     }
+    // 디버그용
 }

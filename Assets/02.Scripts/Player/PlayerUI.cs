@@ -9,12 +9,14 @@ public class PlayerUI : MonoBehaviour
     [SerializeField] private Slider _expBar;
     [SerializeField] private PlayerBase _player;
     [SerializeField] private FloatEventChannelSO _onHit;
+    [SerializeField] private FloatEventChannelSO _onHeal;
     [SerializeField] private FloatEventChannelSO _onGainExp;
     [SerializeField] private IntEventChannelSO _onLevelUp;
 
     private void OnEnable() 
     {
         _onHit.AddListener(UpdateHp);
+        _onHeal.AddListener(UpdateHp);
         _onGainExp.AddListener(UpdateExp);
         _onLevelUp.AddListener(UpdateLevel);
         _player = FindAnyObjectByType<PlayerBase>();
@@ -23,6 +25,7 @@ public class PlayerUI : MonoBehaviour
     private void OnDisable()
     {
         _onHit.RemoveListener(UpdateHp);
+        _onHeal.RemoveListener(UpdateHp);
         _onGainExp.RemoveListener(UpdateExp);
         _onLevelUp.RemoveListener(UpdateLevel);
     }
@@ -49,5 +52,22 @@ public class PlayerUI : MonoBehaviour
     {
         _lvl.text = "레벨: " + level.ToString();
         _expBar.maxValue = _player.InGameMaxExp;
+    }
+}
+
+public struct PlayrerUIData
+{
+    public float Hp;
+    public float MaxHp;
+    public int Level;
+    public float Exp;
+    public float MaxExp;
+    public PlayrerUIData(float hp, float maxHp, int level, float exp, float maxExp)
+    {
+        Hp = hp;
+        MaxHp = maxHp;
+        Level = level;
+        Exp = exp;
+        MaxExp = maxExp;
     }
 }

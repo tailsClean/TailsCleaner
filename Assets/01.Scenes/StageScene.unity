@@ -486,6 +486,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 64991d57e37b05b478ef46fa9b862737, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ItemManager
+  _uiGroupList: []
 --- !u!1001 &743476310
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -640,6 +641,7 @@ MonoBehaviour:
   _stageController: {fileID: 1499286055}
   _spawner: {fileID: 1493428061}
   _register: {fileID: 504285889}
+  _mapLoader: {fileID: 1595860031}
 --- !u!1 &830333434
 GameObject:
   m_ObjectHideFlags: 0
@@ -805,11 +807,6 @@ MonoBehaviour:
   _currentSceneUI: {fileID: 0}
   _stageTrans: {fileID: 0}
   _onStartInGame: {fileID: 11400000, guid: bb5af9a30899d5441ae60b98e54bf231, type: 2}
-  _exitPanel: {fileID: 0}
-  _stageClearPanel: {fileID: 0}
-  _gameOverPanel: {fileID: 0}
-  _stageTimer: {fileID: 0}
-  _energyPanel: {fileID: 0}
 --- !u!1 &1385904951
 GameObject:
   m_ObjectHideFlags: 0
@@ -935,7 +932,7 @@ SpriteRenderer:
   m_Size: {x: 19.2, y: 10.8}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
-  m_WasSpriteAssigned: 1
+  m_WasSpriteAssigned: 0
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
 --- !u!224 &1389569648
@@ -1183,7 +1180,7 @@ Transform:
   - {fileID: 1499286056}
   - {fileID: 638314648}
   - {fileID: 1912645489}
-  - {fileID: 2067045832}
+  - {fileID: 1595860030}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1546692383
@@ -1356,6 +1353,51 @@ MonoBehaviour:
       m_PostInfinity: 2
       m_RotationOrder: 4
   CustomBlends: {fileID: 0}
+--- !u!1 &1595860029
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1595860030}
+  - component: {fileID: 1595860031}
+  m_Layer: 0
+  m_Name: StageMapLoader
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1595860030
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1595860029}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -15.19105, y: -0.41346, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1545055642}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1595860031
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1595860029}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ac5a6bc114ea7784b9544e7e486c49b5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::StageMapLoader
+  _mapRoot: {fileID: 1389569648}
 --- !u!1 &1681391186
 GameObject:
   m_ObjectHideFlags: 0
@@ -1371,7 +1413,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1681391187
 Transform:
   m_ObjectHideFlags: 0
@@ -1385,6 +1427,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
+  - {fileID: 2067045832}
   - {fileID: 2087707048}
   - {fileID: 830333435}
   - {fileID: 698802775}
@@ -1601,7 +1644,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2d8a2437a2c30fa4291d6bfcfb8bcbc8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SoundManager
-  bgmPlayer: {fileID: 2067045830}
+  _bgmPlayer: {fileID: 0}
+  _bgmClips: []
+  _isLoop: 1
+  _isShuffle: 0
+  _skillSfxPlayer: {fileID: 0}
+  _skillSfxClips: []
+  _monsterSfxPlayer: {fileID: 0}
+  _monsterSfxClips: []
 --- !u!4 &2067045832
 Transform:
   m_ObjectHideFlags: 0
@@ -1615,7 +1665,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 1545055642}
+  m_Father: {fileID: 1681391187}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &2087707047
 GameObject:
@@ -1663,6 +1713,31 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::GameManager
   _energySystem: {fileID: 830333436}
   _maxEnergy: 5
+  _currentTower:
+    tower_id: 0
+    need_stage_id: 0
+    hp_modifier: 0
+    power_modifier: 0
+    tower_icon_resource: 
+    bgm_resource: 
+  _currentStage:
+    stage_id: 0
+    tower_id: 0
+    stage_index: 0
+    main_time: 0
+    boss_time: 0
+    entry_energy: 0
+    monster_group_id: 0
+    special_group_id: 0
+    boss_id: 0
+    reward_group_id: 0
+    rank_table_id: 0
+    hp_modifier: 0
+    power_modifier: 0
+    reward_preview: 0
+    map_resource: 
+  _currentStageId: 0
+  _currentStageIndex: 0
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

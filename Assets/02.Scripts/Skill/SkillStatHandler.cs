@@ -137,7 +137,7 @@ public class SkillStatHandler : MonoBehaviour
     public void HealByRatio(float ratio)
     {
         float maxHp = _player.MaxHp;                        // 최대 체력
-        float currentHp = _player.Hp;                       // 현재 체력
+        float currentHp = _player.CurrentHp;                       // 현재 체력
         float amount = maxHp * ratio;                       // 회복량
         float overflow = (currentHp + amount) - maxHp;      // 초과 회복
 

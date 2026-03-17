@@ -614,7 +614,6 @@ MonoBehaviour:
   _currentSceneUI: {fileID: 0}
   _stageTrans: {fileID: 0}
   _onStartInGame: {fileID: 11400000, guid: bb5af9a30899d5441ae60b98e54bf231, type: 2}
-  _exitPanel: {fileID: 1554443329}
 --- !u!1 &1389569646
 GameObject:
   m_ObjectHideFlags: 0
@@ -688,7 +687,7 @@ SpriteRenderer:
   m_Size: {x: 19.2, y: 10.8}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
-  m_WasSpriteAssigned: 1
+  m_WasSpriteAssigned: 0
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
 --- !u!224 &1389569648
@@ -837,6 +836,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::StageController
   _resultHandler: {fileID: 0}
   _playerRewardHandler: {fileID: 0}
+  _timerUI: {fileID: 0}
+  _onPlayerDead: {fileID: 0}
 --- !u!4 &1499286056
 Transform:
   m_ObjectHideFlags: 0
@@ -1076,11 +1077,6 @@ MonoBehaviour:
       m_PostInfinity: 2
       m_RotationOrder: 4
   CustomBlends: {fileID: 0}
---- !u!1 &1554443329 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 9036709914732264870, guid: 84c1860e7a3fdf64b87f5d8765e07b7c, type: 3}
-  m_PrefabInstance: {fileID: 3625929912722000372}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1757556135
 GameObject:
   m_ObjectHideFlags: 0
@@ -1176,17 +1172,33 @@ PrefabInstance:
       propertyPath: _player
       value: 
       objectReference: {fileID: 394270935}
+    - target: {fileID: 2838677532164719729, guid: 84c1860e7a3fdf64b87f5d8765e07b7c, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 2909823174975905087, guid: 84c1860e7a3fdf64b87f5d8765e07b7c, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
       objectReference: {fileID: 930883885}
     - target: {fileID: 4597601639303243933, guid: 84c1860e7a3fdf64b87f5d8765e07b7c, type: 3}
       propertyPath: m_AnchorMax.y
-      value: 0
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5272693489555878922, guid: 84c1860e7a3fdf64b87f5d8765e07b7c, type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5272693489555878922, guid: 84c1860e7a3fdf64b87f5d8765e07b7c, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5272693489555878922, guid: 84c1860e7a3fdf64b87f5d8765e07b7c, type: 3}
+      propertyPath: m_AnchorMin.x
+      value: 0.254
       objectReference: {fileID: 0}
     - target: {fileID: 7863669508871785043, guid: 84c1860e7a3fdf64b87f5d8765e07b7c, type: 3}
       propertyPath: m_AnchorMax.y
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8153447981590734788, guid: 84c1860e7a3fdf64b87f5d8765e07b7c, type: 3}
       propertyPath: m_Pivot.x
@@ -1271,6 +1283,10 @@ PrefabInstance:
     - target: {fileID: 9074208652883794327, guid: 84c1860e7a3fdf64b87f5d8765e07b7c, type: 3}
       propertyPath: m_Name
       value: StageSceneUI
+      objectReference: {fileID: 0}
+    - target: {fileID: 9074208652883794327, guid: 84c1860e7a3fdf64b87f5d8765e07b7c, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

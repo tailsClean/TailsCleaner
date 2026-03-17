@@ -59,8 +59,8 @@ public class PlayerDataSO : ScriptableObject
     public float OutMaxLevel => _outGameLevelData.Count;
     public float InMaxLevel => _inGameLevelData.Count;
     public float ExpGainRate => _expGainRate;
-    public OutGameLevelData GetOutLevelData(int level) => _outGameLevelData != null ? _outGameLevelData[level - 1] : new OutGameLevelData();
-    public InGameLevelData GetInLevelData(int level) => _inGameLevelData != null ? _inGameLevelData[level - 1] : new InGameLevelData();
+    public OutGameLevelData GetOutLevelData(int level) =>_outGameLevelData[level - 1];
+    public InGameLevelData GetInLevelData(int level) => _inGameLevelData[level - 1];
 
     #endregion
 }
@@ -72,14 +72,6 @@ public class OutGameLevelData
     [field: SerializeField] public int Level { get; private set; }
     [field: SerializeField] public float StatGrowth { get; private set; }
     [field: SerializeField] public float MaxExp { get; private set; }           // 배율 계산
-
-    public OutGameLevelData()
-    {
-        Level = 1;
-        StatGrowth = 1;
-        MaxExp = 1;
-        Debug.LogWarning("아웃게임 레벨업 스탯 데이터 없음");
-    }
 }
 
 [Serializable]
@@ -87,13 +79,6 @@ public class InGameLevelData
 {
     [field: SerializeField] public int Level { get; private set; }
     [field: SerializeField] public float MaxExp { get; private set; }           // 해당 경험치통 자체
-
-    public InGameLevelData()
-    {
-        Level = 1;
-        MaxExp = 100;
-        Debug.LogWarning("인게임 레벨업 스탯 데이터 없음");
-    }
 }
 # endregion
 
