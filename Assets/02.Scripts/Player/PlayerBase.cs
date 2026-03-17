@@ -136,7 +136,7 @@ public class PlayerBase : MonoBehaviour, IDamageable, ISkillable, ISkillStat, IP
     private void OnDead()
     {
         _onDead.OnStartEvent();
-        Destroy(gameObject);
+        _playerAni.PlayAni(PlayerAni.Dead);
     }
 
     // 최대 실드량 갱신
