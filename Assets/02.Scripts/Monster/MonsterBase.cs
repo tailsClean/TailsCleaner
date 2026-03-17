@@ -400,9 +400,19 @@ public abstract class MonsterBase : PoolObject, IDamageable, IMonsterStatus, IPu
 
     private void RefreshFinalStats()
     {
+        // 변경 전 최대 체력과 체력 비율 저장
+        float oldMaxHp = maxHp;
+        float hpPercent = (oldMaxHp > 0) ? (hp / oldMaxHp) : 1f;
+
+        // 강화 수치 적용
         float strengthBonus = 1f + _currentStrengthBonus / 100f;
+
+        // 새로운 최대 체력을 계산
         maxHp = _baseHp * strengthBonus;
         power = _basePower * strengthBonus;
+
+        // 갱신 하면서 체력바의 퍼센트가 유지
+        hp = maxHp * hpPercent;
     }
 
     protected virtual void Die()
