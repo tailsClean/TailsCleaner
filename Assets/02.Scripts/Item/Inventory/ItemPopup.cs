@@ -6,7 +6,9 @@ using UnityEngine.UI;
 
 public class ItemPopup : MonoBehaviour
 {
+    [field: SerializeField] public ITEM_TYPE ItemType { get; private set; }
     [SerializeField] private Button _background;
+    [SerializeField] private UISlot _itemSlot;
     [SerializeField] private List<InventoryUIOpenSet> _openButton;
 
 
@@ -17,7 +19,7 @@ public class ItemPopup : MonoBehaviour
     }
 
 
-
+    public void SetSlot(ItemInstance itemInstance) => _itemSlot.SetSlot(itemInstance.ID);
 
     private void SetButton()
     {
