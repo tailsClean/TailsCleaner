@@ -27,6 +27,9 @@ public class EquipmentSO : ItemBaseSO
     [SerializeField] private List<EquipGradeData> _gradeDataList;
 
 
+    private Dictionary<int, EquipData> _equipDict;
+
+
     public EQUIP_PARTS EquipmentPart => _equipmentPart;
     public override string Name => _name;
     public string Description => _script;
@@ -51,46 +54,113 @@ public class EquipmentSO : ItemBaseSO
     }
 
     // 해당 강화레벨 데이터를 반환
-    public ItemEnhanceData GetEnhanceData(int enhanceLevel)
+    public ItemEnhanceData GetEnhanceData(int id, int enhanceLevel)
     {
-        if (_enhances == null)
+        if (_equipDict == null)
             Init();
 
-        if(!_enhances.TryGetValue(enhanceLevel, out var enhanceData))
-            Debug.LogError($"{_name}는 강화 <color=yellow>{enhanceLevel}레벨</color>이 없습니다.");
+        if(!_equipDict.TryGetValue(id, out var equip))
+        { Debug.LogError($"{_name}는 강화 <color=yellow>{enhanceLevel}레벨</color>이 없습니다."); return null; }
 
-        return enhanceData;
+        foreach(var enhance in equip.Enhances)
+        {
+            if(enhance.level == enhanceLevel)
+                return new ItemEnhanceData(enhance);
+        }
+
+         return null;
+
+        //if(!_enhances.TryGetValue(enhanceLevel, out var enhanceData))
+        //    Debug.LogError($"{_name}는 강화 <color=yellow>{enhanceLevel}레벨</color>이 없습니다.");
+
     }
 
     // 해당 등급 데이터를 반환
-    public EquipGradeData GetGradeData(EQUIP_GRADE grade)
+    public EquipGradeData GetGradeData(int id, GRADE grade)
     {
-        if (_grades == null)
+        if (_equipDict == null)
             Init();
 
-        if (!_grades.TryGetValue(grade, out var gradeData))
-            Debug.LogError($"{_name}는 <color=yellow>{grade}</color>등급이 없습니다.");
+        if (!_equipDict.TryGetValue(id, out var equip))
+        { Debug.LogError($"{_name}는 <color=yellow>{grade}</color>등급이 없습니다."); return null; }
 
-        return gradeData;
+        foreach (var gradeData in equip.Grades)
+        {
+            if (gradeData.grade == grade)
+                return new EquipGradeData(gradeData);
+        }
+
+        return null;
+
+
+        //if (!_grades.TryGetValue(grade, out var gradeData))
+        //    Debug.LogError($"{_name}는 <color=yellow>{grade}</color>등급이 없습니다.");
+
     }
 
 
     private void Init()
     {
-        _enhances = new Dictionary<int, ItemEnhanceData> { { 0, new ItemEnhanceData() } };
-        foreach(var enhanceData in _enhanceDataList)
+        var equipData = DataManager.Instance.GetSOData<EquipitemSO>();
+        _equipDict = new Dictionary<int, EquipData>();
+        foreach (var equip in equipData.dataList)
         {
-            if (!_enhances.TryAdd(enhanceData.Level, enhanceData))
-                Debug.LogError($"{name}의 강화레벨이 중복됐습니다.");
+            _equipDict.Add(equip.id, new EquipData());
+            _equipDict[equip.id].GroupID = equip.group_id;
         }
 
-        _grades = new Dictionary<EQUIP_GRADE, EquipGradeData>();
-        foreach(var gradeData in _gradeDataList)
+        var equipEnhanceData = DataManager.Instance.GetSOData<EquipEnhanceSO>();
+        foreach (var enhance in equipEnhanceData.dataList)
         {
-            if (!_grades.TryAdd(gradeData.Grade, gradeData))
-                Debug.LogError($"{name}의 등급이 중복됐습니다.");
+            foreach(var equip in _equipDict.Values)
+            {
+                if(equip.GroupID == enhance.group_id)
+                {
+                    equip.Enhances.Add(enhance);
+                    break;
+                }
+            }
         }
+
+        var equipGradeData = DataManager.Instance.GetSOData<EquipGradeSO>();
+        foreach (var grade in equipGradeData.dataList)
+        {
+            foreach (var equip in _equipDict.Values)
+            {
+                if (equip.GroupID == grade.group_id)
+                {
+                    equip.Grades.Add(grade);
+                    break;
+                }
+            }
+        }
+
+
+
+
+        //_enhances = new Dictionary<int, ItemEnhanceData> { { 0, new ItemEnhanceData() } };
+        //foreach(var enhanceData in _enhanceDataList)
+        //{
+        //    if (!_enhances.TryAdd(enhanceData.Level, enhanceData))
+        //        Debug.LogError($"{name}의 강화레벨이 중복됐습니다.");
+        //}
+
+        //_grades = new Dictionary<EQUIP_GRADE, EquipGradeData>();
+        //foreach(var gradeData in _gradeDataList)
+        //{
+        //    if (!_grades.TryAdd(gradeData.Grade, gradeData))
+        //        Debug.LogError($"{name}의 등급이 중복됐습니다.");
+        //}
     }
+
+    public class EquipData
+    {
+        public int GroupID;
+        public Equipitem Equipmnet;
+        public List<EquipEnhance> Enhances;
+        public List<EquipGrade> Grades;
+    }
+
 
 
     // 장비의 스텟증가량 데이터 클래스
@@ -108,13 +178,25 @@ public class EquipmentSO : ItemBaseSO
     public class EquipGradeData
     {
         [field: SerializeField] public int ID { get; private set; }
+        [field: SerializeField] public string Desc { get; private set; }
         [field: SerializeField] public int GroupID { get; private set; }
-        [field: SerializeField] public EQUIP_GRADE Grade { get; private set; }
+        [field: SerializeField] public GRADE Grade { get; private set; }
         [field: SerializeField] public bool IsMaxGrade { get; private set; }
         [field: SerializeField] public int CostID { get; private set; }
         [field: SerializeField] public int CostCount { get; private set; }
         [field: SerializeField] public float StatRate { get; private set; }
-        [field: SerializeField] public int Price { get; private set; }
+
+        public EquipGradeData(EquipGrade grade)
+        {
+            ID = grade.id;
+            Desc = grade.desc;
+            GroupID = grade.group_id;
+            Grade = grade.grade;
+            IsMaxGrade = grade.is_max_grade;
+            CostID = grade.cost_id;
+            CostCount = grade.cost_count;
+            StatRate = grade.stat_rate;
+        }
     }
 
 #if UNITY_EDITOR

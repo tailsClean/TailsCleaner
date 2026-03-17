@@ -53,6 +53,7 @@ public class PlayerBase : MonoBehaviour, IDamageable, ISkillable, ISkillStat, IP
 
     private void Awake()
     {
+        Data.Init(PlayerDataSO.PlayerID);
         _levelSystem = new PlayerLevelSystem(this);
         _myEnhancement = ItemManager.Instance.Loadout;
         _statCalculator = new PlayerStatCalculator(_myEnhancement, _levelSystem);

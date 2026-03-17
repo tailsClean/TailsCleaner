@@ -59,7 +59,7 @@ public class RelicSO : ItemBaseSO
 
     private void Init()
     {
-        _enhances = new Dictionary<int, ItemEnhanceData> { { 0, new ItemEnhanceData() } };
+        _enhances = new Dictionary<int, ItemEnhanceData> { { 0, null } };
         foreach (var enhanceData in _enhanceDataList)
         {
             _enhances.Add(enhanceData.Level, enhanceData);
