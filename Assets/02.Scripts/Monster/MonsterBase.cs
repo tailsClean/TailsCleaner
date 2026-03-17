@@ -1,7 +1,7 @@
-﻿using UnityEngine;
-using MonsterEnum;
-using System.Collections.Generic; 
+﻿using MonsterEnum;
 using System.Collections;       
+using System.Collections.Generic; 
+using UnityEngine;
 
 [RequireComponent(typeof(Rigidbody2D), typeof(Collider2D))]
 public abstract class MonsterBase : PoolObject, IDamageable, IMonsterStatus, IPullable
@@ -22,9 +22,14 @@ public abstract class MonsterBase : PoolObject, IDamageable, IMonsterStatus, IPu
     public float mass = 1.0f;
     public float KBResist = 1.0f;
 
+    public float MaxHp => maxHp;
+
+    public float knockbackUnitToPx = 100f; 
+    private int _stunCounter = 0; // 딕셔너리 카운터 역할
+
     // --- IMonsterStatus 상태 프로퍼티 ---
-    public bool IsWeakened { get; protected set; }
-    public bool IsStunned { get; protected set; }
+    public bool IsStunned => Time.time < _currentStunEndTime;
+    public bool IsWeakened => _slowModifiers.Count > 0 || _slowAreaCount > 0;
     public bool IsKnockbacked { get; protected set; }
     public bool HasReducedMaxHp { get; protected set; }
     public float StunAreaTime { get; protected set; }
@@ -36,8 +41,18 @@ public abstract class MonsterBase : PoolObject, IDamageable, IMonsterStatus, IPu
     private float _baseMoveSpeed;
     private float _currentMoveSpeed;
 
+    private int _stunAreaCount;         // 밟고있는 기절 장판 수
+    private float _requiredStunTime;    // 기절 장판 목표 체류 시간
+    private float _areaStunDuration;    // 기절 장판 기절 시간
+    private float _currentStunEndTime; // 기절이 끝나는 시점
+
     // 슬로우 중첩 관리를 위한 딕셔너리
     private Dictionary<string, float> _slowModifiers = new Dictionary<string, float>();
+    private int _slowAreaCount = 0;
+
+    // --- 강화 데이터 ---
+    private float _currentHpBonusPercent = 0f;
+    private float _currentPowerBonusPercent = 0f;
 
     [Header("--- Drop Items ---")]
     [SerializeField] private PoolObject TestItem;
@@ -101,8 +116,8 @@ public abstract class MonsterBase : PoolObject, IDamageable, IMonsterStatus, IPu
         power = _basePower;
         _currentMoveSpeed = _baseMoveSpeed;
 
-        IsWeakened = false;
-        IsStunned = false;
+       
+        _stunCounter = 0; // 스폰 시 카운터 초기화
         IsKnockbacked = false;
         HasReducedMaxHp = false;
         StunAreaTime = 0f;
@@ -132,6 +147,23 @@ public abstract class MonsterBase : PoolObject, IDamageable, IMonsterStatus, IPu
             MonsterManager.Instance.UnregisterMonster(this);
         }
         base.OnDespawn();
+    }
+
+
+    protected virtual void Update()
+    {
+        // 기절 장판 위에 서있고 기절 상태 아닐 때
+        if (_stunAreaCount > 0 && IsStunned == false)
+        {
+            // 기절 장판 체류 시간 누적
+            StunAreaTime += Time.deltaTime;
+
+            // 일정 시간 넘으면 기절
+            if (StunAreaTime >= _requiredStunTime)
+            {
+                ApplyStun(_areaStunDuration);
+            }
+        }
     }
 
     protected virtual void FixedUpdate()
@@ -176,6 +208,9 @@ public abstract class MonsterBase : PoolObject, IDamageable, IMonsterStatus, IPu
         if (duration > 0) StartCoroutine(RemoveSlowRoutine(key, duration));
     }
 
+    public void EnterSlowArea() { _slowAreaCount++; UpdateSpeed(); }
+    public void ExitSlowArea() { _slowAreaCount = Mathf.Max(0, _slowAreaCount - 1); UpdateSpeed(); }
+
     public void RemoveSlow(string key)
     {
         if (_slowModifiers.Remove(key)) UpdateSpeed();
@@ -183,28 +218,39 @@ public abstract class MonsterBase : PoolObject, IDamageable, IMonsterStatus, IPu
 
     private void UpdateSpeed()
     {
-        float totalSlow = 0;
+        float totalSlow = 0f;
         foreach (var val in _slowModifiers.Values) totalSlow += val;
 
-        
-        if (totalSlow < 0) _currentMoveSpeed = 0;
-        else _currentMoveSpeed = _baseMoveSpeed * Mathf.Max(0, (1f - totalSlow));
+        // 장판 슬로우가 있다면 예시로 0.3f 추가 (기획에 따라 수치 조정)
+        if (_slowAreaCount > 0) totalSlow += 0.3f;
+
+        _currentMoveSpeed = _baseMoveSpeed * Mathf.Max(0, (1f - totalSlow));
     }
 
     private IEnumerator RemoveSlowRoutine(string key, float delay)
     {
         yield return new WaitForSeconds(delay);
-        RemoveSlow(key);
+        _slowModifiers.Remove(key);
+        UpdateSpeed();
     }
 
-    public void ApplyStun(float duration) => StartCoroutine(StunRoutine(duration));
+    // [기절 관리]
+    public void ApplyStun(float duration)
+    {
+        float newEndTime = Time.time + duration;
+        // 기존 기절 시간보다 길 경우에만 갱신 (강제 기절 포함)
+        if (newEndTime > _currentStunEndTime)
+        {
+            _currentStunEndTime = newEndTime;
+        }
+        OnCC();
+    }
 
     private IEnumerator StunRoutine(float duration)
     {
-        IsStunned = true;
         OnCC();
+
         yield return new WaitForSeconds(duration);
-        IsStunned = false;
     }
 
     public void Knockback(Vector2 direction, float force) => StartCoroutine(KnockbackRoutine(direction, force));
@@ -214,7 +260,7 @@ public abstract class MonsterBase : PoolObject, IDamageable, IMonsterStatus, IPu
         IsKnockbacked = true;
         OnCC();
         rb2D.bodyType = RigidbodyType2D.Dynamic;
-        rb2D.AddForce(direction * force, ForceMode2D.Impulse);
+        rb2D.AddForce(direction.normalized * force * knockbackUnitToPx, ForceMode2D.Impulse);
         yield return new WaitForSeconds(0.3f); // 넉백 지속 시간
         rb2D.linearVelocity = Vector2.zero;
         rb2D.bodyType = RigidbodyType2D.Kinematic;
@@ -229,9 +275,27 @@ public abstract class MonsterBase : PoolObject, IDamageable, IMonsterStatus, IPu
         HasReducedMaxHp = true;
     }
 
-    public void OnCC() { /* SuperClean 패시브 등 연동 */ }
-    public void EnterStunArea() { /* 장판 로직 */ }
-    public void ExitStunArea() { /* 장판 로직 */ }
+    public void OnCC()
+    {
+        if (SkillManager.Instance != null && SkillManager.Instance.HasPassive<SuperCleanModifier>(out var modifier))
+        {
+            ApplySlow("SuperClean", 0.2f, 5f);
+        }
+    }
+
+    public void EnterStunArea(float requireTime, float duration)
+    {
+        _stunAreaCount++;
+        _requiredStunTime = requireTime;
+        _areaStunDuration = duration;
+    }
+
+    public void ExitStunArea()
+    {
+        _stunAreaCount--;
+        if (_stunAreaCount <= 0) ResetStunAreaTime();
+    }
+
     public void ResetStunAreaTime() => StunAreaTime = 0;
 
     public void Pull(Vector2 targetPosition, float force)
@@ -268,9 +332,34 @@ public abstract class MonsterBase : PoolObject, IDamageable, IMonsterStatus, IPu
     public void ApplyScaling(float hpScale, float powerScale)
     {
         CacheBaseStats();
-        hp = _baseHp * hpScale;
-        maxHp = hp; // 스케일링된 체력을 최대 체력으로 설정
-        power = _basePower * powerScale;
+        _baseHp = hp * hpScale;
+        _basePower = power * powerScale;
+
+        // 강화 수치가 이미 있다면 적용
+        RefreshFinalStats();
+
+        hp = maxHp; // 스폰 시점 기준
+    }
+
+    public void ApplyEnhancement(float hpAddPercent, float powerAddPercent)
+    {
+        // 기존 적들은 증가량만큼 현재 체력도 늘려줌
+        float oldMaxHp = maxHp;
+
+        _currentHpBonusPercent += hpAddPercent;
+        _currentPowerBonusPercent += powerAddPercent;
+
+        RefreshFinalStats();
+
+        // 현재 체력 보정 (최대 체력이 늘어난 만큼 현재 체력도 더해줌)
+        float hpDiff = maxHp - oldMaxHp;
+        if (hpDiff > 0) hp += hpDiff;
+    }
+
+    private void RefreshFinalStats()
+    {
+        maxHp = _baseHp * (1f + _currentHpBonusPercent / 100f);
+        power = _basePower * (1f + _currentPowerBonusPercent / 100f);
     }
 
     protected virtual void Die()

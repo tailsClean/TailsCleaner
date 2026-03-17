@@ -39,7 +39,7 @@ public interface IMonsterStatus
     /// <summary>
     /// 기절 장판 입장
     /// </summary>
-    public void EnterStunArea();
+    public void EnterStunArea(float requiredTime, float duration);
     /// <summary>
     /// 기절 장판 퇴장
     /// </summary>
