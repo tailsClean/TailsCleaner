@@ -338,8 +338,9 @@ public class BossMonster : MonsterBase
     public override void TakeDamage(float damage)
     {
         hp -= damage;
+        Debug.Log(damage+"실제로 받는 데미지");
         if (hp <= 0) Die();
-        _onBossHit.OnStartEvent(damage);
+        _onBossHit.OnStartEvent(hp);
     }
 
     private void HandleJumpLogic()

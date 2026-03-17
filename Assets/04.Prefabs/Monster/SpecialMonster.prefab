@@ -125,26 +125,28 @@ MonoBehaviour:
   target: {fileID: 0}
   stoppingDistance: 0.1
   hp: 1
+  maxHp: 1
   power: 1
   moveSpeed: 1
   hitBox: 1
   mass: 1
   KBResist: 1
+  knockbackUnitToPx: 100
   TestItem: {fileID: 7621293018972681884, guid: 7bd74e2913a4ea44aa66ef718bc20d47, type: 3}
   damageCooldown: 1
   scoreReward: 1000
   goldReward: 500
+  _monsterSprite: {fileID: 0}
   pattern_group_id: 0
-  move_speed: 5
-  monster_power: 1
   detect_range: 5
   pattern_cooldown: 2
   cast_time: 1
   pattern_multiply: 1.5
   explosion_range: 0
-  pattern_damage: 0
+  damage_multiply: 0
   zigzag_width: 2
   patternFrequency: 5
+  type_power_multiply: 1
   moveType: 0
   jump_height: 2
   visualChild: {fileID: 5025330469006525766}
@@ -260,8 +262,8 @@ SpriteRenderer:
   m_SortingLayerID: -985789361
   m_SortingLayer: 4
   m_SortingOrder: 0
-  m_Sprite: {fileID: 7482667652216324306, guid: 75f5f34dc1b5347e0b8351032682f224, type: 3}
-  m_Color: {r: 1, g: 0.8392157, b: 0, a: 1}
+  m_Sprite: {fileID: -427612990466679437, guid: 76729c2225845704bac423b08d6aaaf1, type: 3}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0

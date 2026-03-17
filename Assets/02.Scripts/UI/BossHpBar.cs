@@ -15,7 +15,9 @@ public class BossHpBar : MonoBehaviour
     void OnEnable()
     {
         _currentBoss = FindAnyObjectByType<BossMonster>();
+        Debug.Log(_currentBoss);
         _onBossHit.AddListener(UpdateHp);
+        UpdateHp(_currentBoss.MaxHp);
     }
     void OnDisable()
     {
