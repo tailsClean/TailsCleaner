@@ -13,8 +13,7 @@ public class MonsterManager : MonoBehaviour
     public event Action<MonsterBase> OnMonsterSpawned;
 
     // 현재 적용 중인 전역 강화 수치
-    private float _globalHpEnhance = 0f;
-    private float _globalPowerEnhance = 0f;
+    private float _bonusStrength = 0f;
 
     private void Awake()
     {
@@ -30,22 +29,21 @@ public class MonsterManager : MonoBehaviour
             activeMonsters.Add(monster);
 
             // 신규 스폰 몬스터에게 현재까지 누적된 강화 적용
-            if (_globalHpEnhance > 0 || _globalPowerEnhance > 0)
+            if (_bonusStrength > 0)
             {
-                monster.ApplyEnhancement(_globalHpEnhance, _globalPowerEnhance);
+                monster.ApplyEnhancement(bonusStrength);
             }
 
             OnMonsterSpawned?.Invoke(monster);
         }
     }
-    public void ApplyAllEnemyEnhance(float hpPercent, float powerPercent)
+    public void ApplyAllEnemyEnhance(float bonusStrength)
     {
-        _globalHpEnhance += hpPercent;
-        _globalPowerEnhance += powerPercent;
+        _bonusStrength = bonusStrength;
 
         foreach (var monster in activeMonsters)
         {
-            monster.ApplyEnhancement(hpPercent, powerPercent);
+            monster.ApplyEnhancement(bonusStrength);
         }
     }
 

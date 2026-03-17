@@ -68,15 +68,10 @@ public class SkillStatHandler : MonoBehaviour
         }
 
         // 수치 달라졌으면 소환된 몬스터들 스탯 갱신
-        if (Mathf.Abs(prevStrength - TotalMonsterStrengthBonus) > 0.001f)
+        if (MonsterManager.Instance != null && Mathf.Abs(prevStrength - TotalMonsterStrengthBonus) > 0.001f)
         {
-            OnMonsterStrengthChanged?.Invoke(TotalMonsterStrengthBonus);
+            MonsterManager.Instance.ApplyAllEnemyEnhance(TotalMonsterStrengthBonus);
         }
-
-        //if (MonsterManager.Instance != null)
-        //{
-        //    MonsterManager.Instance.SetEnemyStrengthBonus(TotalMonsterStrengthBonus);
-        //}
 
         // 방어막 최대치 갱신 (NimbleBlockModifier)
         int newMax = 1;

@@ -50,11 +50,9 @@ public abstract class MonsterBase : PoolObject, IDamageable, IMonsterStatus, IPu
     private Dictionary<string, float> _slowModifiers = new();    // 적용된 슬로우 수치
     private Dictionary<string, Coroutine> _slowTimers = new();   // 적용된 슬로우 타이머
     private Dictionary<string, int> _slowAreaCounts = new();     // 밟은 슬로우 장판 수
-    private int _slowAreaCount = 0; // 사용 X 
 
     // --- 강화 데이터 ---
-    private float _currentHpBonusPercent = 0f;
-    private float _currentPowerBonusPercent = 0f;
+    private float _currentStrengthBonus = 0f;
 
     [Header("--- Drop Items ---")]
     [SerializeField] private PoolObject TestItem;
@@ -276,14 +274,8 @@ public abstract class MonsterBase : PoolObject, IDamageable, IMonsterStatus, IPu
         OnCC();
     }
 
-    private IEnumerator StunRoutine(float duration)
-    {
-        OnCC();
-
-        yield return new WaitForSeconds(duration);
-    }
-
-    public void Knockback(Vector2 direction, float force) => StartCoroutine(KnockbackRoutine(direction, force));
+    public void Knockback(Vector2 direction, float force)
+        => StartCoroutine(KnockbackRoutine(direction, force));
 
     private IEnumerator KnockbackRoutine(Vector2 direction, float force)
     {
@@ -375,13 +367,12 @@ public abstract class MonsterBase : PoolObject, IDamageable, IMonsterStatus, IPu
         hp = maxHp; // 스폰 시점 기준
     }
 
-    public void ApplyEnhancement(float hpAddPercent, float powerAddPercent)
+    public void ApplyEnhancement(float bonusStrength)
     {
         // 기존 적들은 증가량만큼 현재 체력도 늘려줌
         float oldMaxHp = maxHp;
 
-        _currentHpBonusPercent = hpAddPercent;
-        _currentPowerBonusPercent = powerAddPercent;
+        _currentStrengthBonus = bonusStrength;
 
         RefreshFinalStats();
 
@@ -392,8 +383,9 @@ public abstract class MonsterBase : PoolObject, IDamageable, IMonsterStatus, IPu
 
     private void RefreshFinalStats()
     {
-        maxHp = _baseHp * (1f + _currentHpBonusPercent / 100f);
-        power = _basePower * (1f + _currentPowerBonusPercent / 100f);
+        float strengthBonus = 1f + _currentStrengthBonus / 100f;
+        maxHp = _baseHp * strengthBonus;
+        power = _basePower * strengthBonus;
     }
 
     protected virtual void Die()
