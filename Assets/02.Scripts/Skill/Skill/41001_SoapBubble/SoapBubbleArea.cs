@@ -208,6 +208,9 @@ public class SoapBubbleArea : SkillArea<SoapBubbleModifierData>
     // 소멸 시
     protected override void OnExpire()
     {
+        // 루프 사운드 중지
+        if(_soapBubbleSkill != null) _soapBubbleSkill.OnAreaExpired();
+
         // 거품 펑!
         if (_modifierData.BurstOnExpire == true)
         {
@@ -234,9 +237,9 @@ public class SoapBubbleArea : SkillArea<SoapBubbleModifierData>
         foreach (var monster in _monstersInArea)
         {
             // 적 최대 체력 가져와서 BurstDamage 퍼센트의 데미지를 줌
-            // float burstDamage = monster.MaxHp * _modifierData.BurstDamage;
+             float burstDamage = monster.MaxHp * _modifierData.BurstDamage;
 
-            //monster.TakeDamage(burstDamage);
+            monster.TakeDamage(burstDamage);
         }
     }
 }
