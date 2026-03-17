@@ -8,10 +8,6 @@ public class SoapBubbleArea : SkillArea<SoapBubbleModifierData>
     [Header("거품 펑 오브젝트")]
     [SerializeField] SkillAnimator _burstAnimator;
 
-    // 적 체류 시작 시간
-    private readonly Dictionary<MonsterBase, float> _monsterEnterTimes = new();
-
-
     private SoapBubbleSkill _soapBubbleSkill;   // 스킬
     private MonsterBase _trackTarget = null;    // 현재 추적 대상
     private float _searchTimer = 0f;            // 탐색 타이머
@@ -25,7 +21,6 @@ public class SoapBubbleArea : SkillArea<SoapBubbleModifierData>
     {
         _soapBubbleSkill = owner as SoapBubbleSkill;
 
-        _monsterEnterTimes.Clear();
         _trackTarget = null;
 
         if (_burstAnimator != null)
@@ -45,10 +40,6 @@ public class SoapBubbleArea : SkillArea<SoapBubbleModifierData>
         // 추적 유효성 검사 및 탐색
         if (_modifierData.Tracking == true)
             CheckAndSearchTarget();
-
-        // 스턴 체류 체크
-        if (_modifierData.StunOnArea == true)
-            CheckStunInArea();
 
         // 틱 주기 처리 추가 base를 통해 수명 체크 ,스노우 볼링, 이동
         base.Update();
@@ -96,33 +87,33 @@ public class SoapBubbleArea : SkillArea<SoapBubbleModifierData>
         if (speed <= 0f) return;
 
         // 타겟 방향으로 물리 이동
-        //transform.position = Vector2.MoveTowards(transform.position, _trackTarget.transform.position, speed * Time.deltaTime);
         Vector2 nextPos = Vector2.MoveTowards(_rigidbody.position, _trackTarget.transform.position, speed * Time.fixedDeltaTime);
         _rigidbody.MovePosition(nextPos);
+    }
+
+    protected override void OnTick(MonsterBase monster)
+    {
+        base.OnTick(monster);
+
+        // 집중공략 약화 시 최대 체력 감소
+        foreach (var passive in _passiveModifiers)
+            passive.OnDamage(monster);
     }
 
 
     protected override void OnMonsterEnter(MonsterBase monster)
     {
-        // 약화 상태 체크
-        // 약화 상태인지 체크 후 최대 체력 감소
-        foreach (var passive in _passiveModifiers)
-        {
-            // if (monster.IsDebuffed)
-            //     passive.OnEnterArea(monster);
-        }
-
         // 빨래당함 슬로우
         if (_modifierData.SlowOnArea == true)
         {
-            // monster.AddSpeedDebuff(_modifierData.SlowAmount);
+            monster.EnterSlowArea(SoapBubbleModifierData.DEBUFF_KEY_SLOW, _modifierData.SlowAmount);
         }
 
-        // 슬랩스틱 체류 시간
+        // 슬랩스틱
         if (_modifierData.StunOnArea == true)
         {
-            // 체류 시간 기록
-            _monsterEnterTimes[monster] = Time.time;
+            // 장판 들어감
+            monster.EnterStunArea(_modifierData.StunRequiredTime, _modifierData.StunDuration);
         }
     }
 
@@ -131,14 +122,14 @@ public class SoapBubbleArea : SkillArea<SoapBubbleModifierData>
         // 빨래당함 슬로우
         if (_modifierData.SlowOnArea == true)
         {
-            // monster.RemoveSpeedDebuff(_modifierData.SlowAmount);
+            monster.ExitSlowArea(SoapBubbleModifierData.DEBUFF_KEY_SLOW);
         }
 
-        // 슬랩스틱 체류 시간
+        // 슬랩스틱
         if (_modifierData.StunOnArea == true)
         {
-            // 나가면 체류 시간 삭제
-            _monsterEnterTimes.Remove(monster);
+            // 장판 나감
+            monster.ExitStunArea();
         }
     }
 
@@ -172,39 +163,6 @@ public class SoapBubbleArea : SkillArea<SoapBubbleModifierData>
     {
         SkillManager.Instance.SkillStatHandler.RemoveRuntime(BUFF_KEY_BUBBLEBUBBLE);
         Debug.Log($"[SoapBubble] 버블버블 해제. 방어력 - {_modifierData.PlayerDefenseBonus}");
-    }
-
-
-    // 장판 스턴 체류 시간 체크
-    private void CheckStunInArea()
-    {
-        foreach (var monster in _monstersInArea)
-        {
-            if (monster == null) continue;
-
-            // 기절 상태 몬스터 스킵
-            // if (monster.IsStunned) continue;
-
-            // 몬스터 체류 시간 꺼내기
-            if (_monsterEnterTimes.TryGetValue(monster, out float enterTime) == false) continue;
-
-            // 체류 시간이 기준 이상이면 기절
-            if (Time.time - enterTime >= _modifierData.StunRequiredTime)
-            {
-                StunMonster(monster);
-            }
-        }
-    }
-
-    // 몬스터 스턴
-    private void StunMonster(MonsterBase monster)
-    {
-        // 몬스터 지속 시간동안 기절 
-        //monster.Stun(_modifierData.StunDuration);
-
-        // 스턴 패시브 추가 효과 (SuperClean)
-        foreach (var passive in _passiveModifiers)
-            passive.OnCC(monster);
     }
 
 
@@ -250,6 +208,9 @@ public class SoapBubbleArea : SkillArea<SoapBubbleModifierData>
     // 소멸 시
     protected override void OnExpire()
     {
+        // 루프 사운드 중지
+        if(_soapBubbleSkill != null) _soapBubbleSkill.OnAreaExpired();
+
         // 거품 펑!
         if (_modifierData.BurstOnExpire == true)
         {
@@ -276,9 +237,9 @@ public class SoapBubbleArea : SkillArea<SoapBubbleModifierData>
         foreach (var monster in _monstersInArea)
         {
             // 적 최대 체력 가져와서 BurstDamage 퍼센트의 데미지를 줌
-            // float burstDamage = monster.MaxHp * _modifierData.BurstDamage;
+             float burstDamage = monster.MaxHp * _modifierData.BurstDamage;
 
-            //monster.TakeDamage(burstDamage);
+            monster.TakeDamage(burstDamage);
         }
     }
 }

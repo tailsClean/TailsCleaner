@@ -79,8 +79,8 @@ SpriteRenderer:
   m_SortingLayerID: -985789361
   m_SortingLayer: 4
   m_SortingOrder: 0
-  m_Sprite: {fileID: 7482667652216324306, guid: 75f5f34dc1b5347e0b8351032682f224, type: 3}
-  m_Color: {r: 0.6515762, g: 0, b: 0.9607843, a: 1}
+  m_Sprite: {fileID: -6530803772284226788, guid: 51026ac6e25bca441a908555159e8d2a, type: 3}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -105,6 +105,7 @@ GameObject:
   - component: {fileID: 6267815479541013433}
   - component: {fileID: 2826055706734947764}
   - component: {fileID: 4676421205203308254}
+  - component: {fileID: -6858085959018721776}
   m_Layer: 7
   m_Name: Boss
   m_TagString: Monster
@@ -215,34 +216,40 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::BossMonster
   target: {fileID: 0}
   stoppingDistance: 0.1
-  hp: 1
-  power: 1
-  moveSpeed: 1
+  hp: 400
+  maxHp: 400
+  power: 100
+  moveSpeed: 10
   hitBox: 1
   mass: 1
   KBResist: 1
+  knockbackUnitToPx: 100
   TestItem: {fileID: 7621293018972681884, guid: 7bd74e2913a4ea44aa66ef718bc20d47, type: 3}
   damageCooldown: 1
   scoreReward: 1000
   goldReward: 500
-  useZigzag: 0
+  _monsterSprite: {fileID: 0}
   useJump: 0
   useFlee: 0
-  isSuicideUnit: 0
+  useBlink: 0
+  useBarricade: 0
+  useOrbit: 0
   move_speed: 3
   monster_power: 0
   detect_range: 5
   pattern_cooldown: 3
   cast_time: 10
   pattern_multiply: 2.5
-  explosion_range: 0
   pattern_damage: 0
-  zigzag_width: 1
-  patternFrequency: 5
   jump_height: 3
   visualChild: {fileID: 6844339646822135683}
   fleeDistance: 3
-  useBarricade: 0
+  _onBossHit: {fileID: 11400000, guid: 841b371bd87f3c5469f24f59d98ebfaa, type: 2}
+  blink_detect_range: 5
+  blink_cast_time: 1
+  blink_speed_multiplier: 4
+  blink_cooldown: 3
+  lineRenderer: {fileID: 0}
   barricadeSpawner: {fileID: 4676421205203308254}
   barricadeInterval: 5
   spawnLoc: 2
@@ -250,6 +257,15 @@ MonoBehaviour:
   barSize: {x: 12, y: 7}
   barDuration: 3
   barInteraction: 0
+  orbitPrefab: {fileID: 0}
+  orbitCount: 5
+  orbitRadius: 2.5
+  orbitRotateSpeed: 50
+  orbitDuration: 10
+  orbitSpawnInterval: 0.5
+  orbitDamageMultiplier: 1
+  explosionEffect: {fileID: 0}
+  damage: 0
 --- !u!114 &6267815479541013433
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -281,7 +297,8 @@ MonoBehaviour:
   detect_range: 15
   projectile_count: 5
   fire_interval: 0.15
-  state: 0
+  damage_multiply: 1.2
+  state: 1
 --- !u!114 &4676421205203308254
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -299,3 +316,21 @@ MonoBehaviour:
   warningDuration: 1.5
   minRandomRadius: 5
   maxRandomRadius: 10
+--- !u!114 &-6858085959018721776
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6242823153721604330}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 09bcc55db78bf5b4ba1a27d1e8ff86fb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::BossTriggerPatternRunner
+  _defaultWarningDuration: 2
+  _defaultExpAbsorbDelay: 5
+  _defaultExpAbsorbDuration: 3
+  _defaultDirtySpawnDuration: 5
+  _defaultDirtyAbsorbDuration: 2
+  _bossDirtyItemPrefab: {fileID: 5552913775526242404, guid: 7bd74e2913a4ea44aa66ef718bc20d47, type: 3}

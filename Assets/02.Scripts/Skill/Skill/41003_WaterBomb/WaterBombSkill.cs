@@ -18,6 +18,10 @@ public class WaterBombSkill : ActiveSkill<WaterBombArea, WaterBombModifierData>
 
     private WaitForSeconds _splashDelay;
 
+
+    // 착지 사운드
+    public void PlayLandSFX() => PlaySpecialSFX();
+
     protected override void OnActive(int index, int totalCount)
     {
         // 혹시나 타겟 없으면 스킵

@@ -27,7 +27,7 @@ public class UIManager : MonoBehaviour
         SceneManager.sceneLoaded += OnSceneLoaded;
     }
 
-    #region  Scene 초기 설정
+    #region Scene 초기 설정
     //▼ UI 설정 오브젝트 
     [SerializeField] private GameObject _currentSceneUI;
     public Transform _stageTrans;
@@ -52,6 +52,10 @@ public class UIManager : MonoBehaviour
            sceneUI = Instantiate(prefab, transform);
            SetUpReference(sceneUI); //todo: 참조를 하고나서 저장해두는 방식으로 바꿔야할듯
        }
+       else
+        {
+             Debug.Log("없음");
+        }
        return sceneUI;
     }
     private void SetUpReference(GameObject sceneUI)
@@ -65,22 +69,20 @@ public class UIManager : MonoBehaviour
                 this._stageTimer = stageUI.TimerUI.GetComponent<StageTimerTextUI>();
                 this._gameOverPanel = stageUI.GameOverPanel;
                 this._stageClearPanel = stageUI.StageClearPanel;
+                this._BossHP = stageUI.BossHP;
             }
-            if(container is TowerUIContainer towerUI)
+            if(container is LobbyUIContainer lobbyUI)
             {
-                // TowerUIContainer 참조로 들고 있기
-                this._energyPanel = towerUI.EnergyPanel.GetComponent<EnergyPanel>();
+                // LobbyUIContainer 참조로 들고 있기
+                this._dungeonSelect = lobbyUI.DungeonSelect;
+                this._stageSelect = lobbyUI.StageSelect;
             }
         }
+        
     }
 
     #endregion
     [SerializeField]private VoidEventChannelSO _onStartInGame;
-
-    public void GoToTower()
-    {
-        SceneManager.LoadScene("TowerScene");
-    }
 
     public void GoToLobby()
     {
@@ -89,8 +91,18 @@ public class UIManager : MonoBehaviour
 
     public void GoToStage()
     {
-        _onStartInGame.OnStartEvent();
+        SceneManager.sceneLoaded += OnStageLoaded;
         SceneManager.LoadScene("StageScene");
+    }
+
+    private void OnStageLoaded(Scene scene, LoadSceneMode mode)
+    {
+        if (scene.name != "StageScene") return;
+
+        SceneManager.sceneLoaded -= OnStageLoaded;
+
+        Debug.Log("StartEvent 받음");
+        _onStartInGame.OnStartEvent();
     }
 
     public void ExitGame()
@@ -103,7 +115,7 @@ public class UIManager : MonoBehaviour
     }
 
     #region ExitPanel
-    [SerializeField] private GameObject _exitPanel;
+    private GameObject _exitPanel;
 
     public void ChangeStateExitPanel()
     {
@@ -116,7 +128,7 @@ public class UIManager : MonoBehaviour
     #endregion
 
     #region StageClearPanel
-    [SerializeField] private GameObject _stageClearPanel;
+     private GameObject _stageClearPanel;
     public void OpenClear()
     {
         _stageClearPanel.SetActive(true);
@@ -125,7 +137,7 @@ public class UIManager : MonoBehaviour
     #endregion
 
     #region GameOverPanel
-    [SerializeField] private GameObject _gameOverPanel;
+    private GameObject _gameOverPanel;
      public void OpenGameOver()
     {
         _gameOverPanel.SetActive(true);
@@ -134,14 +146,49 @@ public class UIManager : MonoBehaviour
     #endregion
     
     #region StageTimer
-    [SerializeField] private StageTimerTextUI _stageTimer;
+     private StageTimerTextUI _stageTimer;
     public StageTimerTextUI StageTimer => _stageTimer;
 
     #endregion
 
     #region EnergyUI
-    [SerializeField] private EnergyPanel _energyPanel;
+    private EnergyPanel _energyPanel;
     public EnergyPanel EnergyPanel => _energyPanel;
+
+    public void SetEnergyPanel(EnergyPanel energyPanel)
+    {
+        _energyPanel = energyPanel;
+    }
+
     #endregion
 
+    #region LobbyUI
+    private GameObject _dungeonSelect;
+    private GameObject _stageSelect;
+    public void ChangeStateDungeonSelect()
+    {
+        if(_dungeonSelect != null)
+        {
+            _dungeonSelect.SetActive(!_dungeonSelect.activeSelf);
+        }
+    }
+    public void ChangeStateStageSelect()
+    {
+        if(_stageSelect != null)
+        {
+            _stageSelect.SetActive(!_stageSelect.activeSelf);
+        }
+    }
+    #endregion
+
+    #region BossUI
+    private GameObject _BossHP;
+    public void ChangeStateBossHP()
+    {
+        if(_BossHP != null)
+        {
+            _BossHP.SetActive(!_BossHP.activeSelf);
+        }
+    }
+    #endregion
 }

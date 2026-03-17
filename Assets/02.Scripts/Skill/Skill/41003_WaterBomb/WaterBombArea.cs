@@ -104,6 +104,9 @@ public class WaterBombArea : SkillArea<WaterBombModifierData>
         _createTime = Time.time;
         _lastTickTime = Time.time;
 
+        // 착지 사운드 재생
+        if (_waterBombSkill != null) _waterBombSkill.PlayLandSFX();
+
         // 낙하 종료 연출 후 오브젝트 끄기
         if (_fallAnimator != null) _fallAnimator.RequestExpire(() => _fallObject.SetActive(false));
         // 애니메이터 없으면 그냥 끄기

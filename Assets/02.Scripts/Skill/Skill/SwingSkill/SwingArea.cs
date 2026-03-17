@@ -30,34 +30,6 @@ public abstract class SwingArea<TModifierData> : SkillArea<TModifierData> where 
         _rigidbody.MovePosition(GetPlayerPos() + _dirOffset);
     }
 
-    // 장판 범위 진입
-    // 젖은 걸레 (슬로우)
-    // 어질어질 (기절)
-    protected override void OnMonsterEnter(MonsterBase monster)
-    {
-        // 젖은 걸레
-        if (_modifierData.SlowOnHit)
-        {
-            // monster.ApplySlow(_modifierData.SlowAmount, _modifierData.SlowDuration);
-            Debug.Log($"[SwingArea] 젖은 걸레 - 슬로우 {_modifierData.SlowAmount * 100f}% / {_modifierData.SlowDuration}s");
-
-            // 집중공략 (약화 적 최대체력 감소)
-            foreach (var passive in _passiveModifiers)
-                passive.OnEnterArea(monster);
-        }
-
-        // 어질어질
-        if (_modifierData.StunOnHit)
-        {
-            // monster.ApplyStun(_modifierData.StunDuration);
-            Debug.Log($"[SwingArea] 어질어질 - 기절 {_modifierData.StunDuration}s");
-
-            // SuperClean (기절 시 추가 슬로우 5초)
-            foreach (var passive in _passiveModifiers)
-                passive.OnCC(monster);
-        }
-    }
-
     // 장판에 적 투사체 들어올시
     protected override void OnBulletEnter(PoolObject projectile)
     {
@@ -69,5 +41,32 @@ public abstract class SwingArea<TModifierData> : SkillArea<TModifierData> where 
         // 하지만 이렇게 간단하게 피했습니다.
         // 탄환 제거 시 방어막 충전 (패시브 있으면)
         SkillManager.Instance.SkillStatHandler.OnBulletCleared();
+    }
+
+
+    // 틱 피해
+    // 젖은 걸레 (슬로우)
+    // 어질어질 (기절)
+    protected override void OnTick(MonsterBase monster)
+    {
+        base.OnTick(monster);
+
+        // 젖은 걸레
+        if (_modifierData.SlowOnHit)
+        {
+            monster.ApplySlow(SwingModifierData.DEBUFF_KEY_SLOW, _modifierData.SlowAmount, _modifierData.SlowDuration);
+            Debug.Log($"[SwingArea] 젖은 걸레 - 슬로우 {_modifierData.SlowAmount * 100f}% / {_modifierData.SlowDuration} 초");
+
+            // 집중공략 (약화 적 최대체력 감소)
+            foreach (var passive in _passiveModifiers)
+                passive.OnDamage(monster);
+        }
+
+        // 어질어질
+        if (_modifierData.StunOnHit)
+        {
+            monster.ApplyStun(_modifierData.StunDuration);
+            Debug.Log($"[SwingArea] 어질어질 - 기절 {_modifierData.StunDuration} 초");
+        }
     }
 }

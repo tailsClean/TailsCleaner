@@ -12,6 +12,9 @@ public class MonsterManager : MonoBehaviour
     // 몬스터가 생성될 때 발생할 이벤트
     public event Action<MonsterBase> OnMonsterSpawned;
 
+    // 현재 적용 중인 전역 강화 수치
+    private float _bonusStrength = 0f;
+
     private void Awake()
     {
         if (Instance == null) Instance = this;
@@ -25,11 +28,22 @@ public class MonsterManager : MonoBehaviour
         {
             activeMonsters.Add(monster);
 
-            // 몬스터가 생성되어 필드에 등록될 때 호출
-            // 이 신호를 받은 다른 클래스 들이 각자 필요한 처리를 시작
-            OnMonsterSpawned?.Invoke(monster);
+            // 신규 스폰 몬스터에게 현재까지 누적된 강화 적용
+            if (_bonusStrength > 0)
+            {
+                monster.ApplyEnhancement(_bonusStrength);
+            }
 
-            Debug.Log($"[MonsterManager] {monster.name} 등록 완료. 현재 개수: {activeMonsters.Count}");
+            OnMonsterSpawned?.Invoke(monster);
+        }
+    }
+    public void ApplyAllEnemyEnhance(float bonusStrength)
+    {
+        _bonusStrength = bonusStrength;
+
+        foreach (var monster in activeMonsters)
+        {
+            monster.ApplyEnhancement(bonusStrength);
         }
     }
 
@@ -40,15 +54,6 @@ public class MonsterManager : MonoBehaviour
         if (activeMonsters.Contains(monster))
         {
             activeMonsters.Remove(monster);
-        }
-    }
-
-    // 필드 전체 몬스터에게 명령 내리기 (예: 모든 적 기절)
-    public void ExecuteGlobalStun(float duration)
-    {
-        foreach (var monster in activeMonsters)
-        {
-            monster.ApplyStun(duration);
         }
     }
 }

@@ -66,6 +66,9 @@ public class WashWaveSkill : ActiveSkill<WashWaveProjectile, WashWaveModifierDat
         int count = Mathf.Max(1, _finalStat.ProjectileCount);
         for (int i = 0; i < count; i++)
         {
+            // 파도 생성 시 사운드
+            PlaySpecialSFX();
+
             // 스폰 중심 기준 원 안 랜덤 위치
             Vector2 randomOffset = Random.insideUnitCircle * _spawnRadius;
             Vector2 spawnPos = spawnCenter + randomOffset;
@@ -143,7 +146,7 @@ public class WashWaveSkill : ActiveSkill<WashWaveProjectile, WashWaveModifierDat
             // foreach (var monster in MonsterManager.Instance.ActiveMonsters)
             //     monster.TakeDamage(_modifierData.DrainAmount);
 
-            Debug.Log($"[WashWave] 탈수 - 플레이어/모든 적 체력 {_modifierData.DrainAmount * 100f} 감소");
+            Debug.Log($"[WashWave] 탈수 - 플레이어/모든 적 체력 {_modifierData.DrainAmount * 100f}% 감소");
 
             yield return _drainDelay;
         }

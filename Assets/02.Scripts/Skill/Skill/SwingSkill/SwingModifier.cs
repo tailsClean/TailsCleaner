@@ -14,6 +14,7 @@ public class SwingModifierData
     public bool BulletClear = false;
 
     // 젖은 걸레 (휘두르며로 타올에 복사)
+    public const string DEBUFF_KEY_SLOW = "SwingSlow";
     public bool SlowOnHit = false;
     public float SlowAmount = 0f;
     public float SlowDuration = 0f;

@@ -84,7 +84,8 @@ public class UISlot : MonoBehaviour
     public void AddListener(Action action)
     {
         if (_button == null)
-        { Debug.LogWarning("UI슬롯에 버튼이 없어서 이벤트 등록X", this); return; }
+            return;
+            //{ Debug.LogWarning("UI슬롯에 버튼이 없어서 이벤트 등록X", this); return; }
 
         _button.onClick.AddListener(() => action());
     }

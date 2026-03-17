@@ -11,6 +11,7 @@ public class SoapBubbleModifierData
     public float PlayerDefenseBonus = 0f;
 
     // 적 슬로우 효과
+    public const string DEBUFF_KEY_SLOW = "SoapBubbleSlow";
     public bool SlowOnArea = false;
     public float SlowAmount = 0f;               
 

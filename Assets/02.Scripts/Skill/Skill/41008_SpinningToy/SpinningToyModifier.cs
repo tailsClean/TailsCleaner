@@ -28,7 +28,7 @@ public class SpinningToyModifierData
 public class SpinningToyTrainModifier : ActiveModifier<SpinningToySkill>
 {
     [Header("증가 플레이어 이동속도")]
-    [SerializeField] private float _playerSpeed;
+    [SerializeField] private float _playerSpeed = 1f;
 
     public override void ApplyModifier(SpinningToySkill skill, ActiveUpgradeData upgradeData)
     {
@@ -41,7 +41,7 @@ public class SpinningToyTrainModifier : ActiveModifier<SpinningToySkill>
 public class SpinningToyTopModifier : ActiveModifier<SpinningToySkill>
 {
     [Header("증가 넉백")]
-    [SerializeField] private float _knockBack;
+    [SerializeField] private float _knockBack = 1f;
 
     public override void ApplyModifier(SpinningToySkill skill, ActiveUpgradeData upgradeData)
     { 
@@ -53,7 +53,7 @@ public class SpinningToyTopModifier : ActiveModifier<SpinningToySkill>
 public class SpinningToyMoonModifier : ActiveModifier<SpinningToySkill>
 {
     [Header("증가 플레이어 최대 체력")]
-    [SerializeField] private float _playerMaxHp;
+    [SerializeField] private float _playerMaxHp = 1f;
 
     public override void ApplyModifier(SpinningToySkill skill, ActiveUpgradeData upgradeData)
     {
@@ -84,9 +84,9 @@ public class SpinningToyDuckModifier : ActiveModifier<SpinningToySkill>
 public class SpinningToyPirateModifier : ActiveModifier<SpinningToySkill>
 {
     [Header("적 강화 수치")]
-    [SerializeField] private float _monsterStr;
+    [SerializeField] private float _monsterStr = 1f;
     [Header("증가 플레이어 획득 경험치")]
-    [SerializeField] private float _playerExpGain;
+    [SerializeField] private float _playerExpGain = 1f;
     public override void ApplyModifier(SpinningToySkill skill, ActiveUpgradeData upgradeData)
     {
         skill._modifierData.AddedToys.Add((TOY_TYPE.Pirate, upgradeData.ProjectileCount));
@@ -99,7 +99,7 @@ public class SpinningToyPirateModifier : ActiveModifier<SpinningToySkill>
 public class SpinningToySharkModifier : ActiveModifier<SpinningToySkill>
 {
     [Header("증가 플레이어 공격력")]
-    [SerializeField] private float _playerDamage;
+    [SerializeField] private float _playerDamage = 1f;
     public override void ApplyModifier(SpinningToySkill skill, ActiveUpgradeData upgradeData)
     {
         skill._modifierData.AddedToys.Add((TOY_TYPE.Shark, upgradeData.ProjectileCount));

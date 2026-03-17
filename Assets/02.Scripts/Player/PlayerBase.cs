@@ -224,12 +224,7 @@ public class PlayerBase : MonoBehaviour, IDamageable, ISkillable, ISkillStat, IP
     [ContextMenu("스탯출력")]
     public void Stat()
     {
-        float a = 0;
-        a = MaxHp;
-        a = CurrentHp;
-        a = AttackPower;
-        a = DefensePower;
-        a = GoldGainRate;
+        Debug.Log(AttackPower);
     }
     // 디버그용
 }

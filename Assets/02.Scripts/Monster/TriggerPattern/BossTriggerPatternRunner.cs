@@ -5,9 +5,9 @@ using UnityEngine;
 public class BossTriggerPatternRunner : MonoBehaviour
 {
     private const string MONSTER_TABLE_FILE = "monster_table";
-    private const string PATTERN_GROUP_TABLE_FILE = "pattern_group_table";
-    private const string PATTERN_GROUP_COMPOSITION_TABLE_FILE = "pattern_group_composition_table";
-    private const string PATTERN_TABLE_FILE = "pattern_table";
+    private const string PATTERN_GROUP_TABLE_FILE = "pattern_group";
+    private const string PATTERN_GROUP_COMPOSITION_TABLE_FILE = "pattern_group_composition";
+    private const string PATTERN_TABLE_FILE = "pattern";
 
     [Header("공통 기본값")]
     [SerializeField] private float _defaultWarningDuration = 2f;
@@ -19,7 +19,7 @@ public class BossTriggerPatternRunner : MonoBehaviour
     [Header("더러움 소환용 프리팹")]
     [SerializeField] private PoolObject _bossDirtyItemPrefab;
 
-    private SpecialBossMonsterBase _boss;
+    private MonsterBase _boss;
     private StageController _stageController;
     private StageTimer _timer;
 
@@ -36,7 +36,7 @@ public class BossTriggerPatternRunner : MonoBehaviour
 
     private Coroutine _runningRoutine;
 
-    public void Bind(SpecialBossMonsterBase boss)
+    public void Bind(MonsterBase boss)
     {
         Unbind();
 
@@ -232,7 +232,9 @@ public class BossTriggerPatternRunner : MonoBehaviour
             PatternTableRow row = _triggerRows[i];
             PatternGroupCompositionTableRow comp = FindComposition(row.pattern_id);
 
-            switch (row.pattern_logic_type)
+            string logicType = row.pattern_logic_type?.Trim().ToLower();
+
+            switch (logicType)
             {
                 case "trigger_exp_absorb":
                     TryTriggerExpAbsorb(row, comp, elapsed);

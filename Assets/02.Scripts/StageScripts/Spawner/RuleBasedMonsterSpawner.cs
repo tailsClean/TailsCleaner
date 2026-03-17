@@ -55,7 +55,7 @@ public class RuleBasedMonsterSpawner : MonoBehaviour, IMonsterSpawnSystem
     private Dictionary<int, int> _monsterIdToType;
     private Dictionary<int, float> _typeToBaseExp;
 
-    private const string MONSTER_TABLE_FILE = "monster";
+    private const string MONSTER_TABLE_FILE = "monster_table";
     private const string MONSTER_TYPE_TABLE_FILE = "monster_type";
 
 
@@ -203,11 +203,10 @@ public class RuleBasedMonsterSpawner : MonoBehaviour, IMonsterSpawnSystem
         else
             _monster = Instantiate(_prefab, _spawnPos, Quaternion.identity);
 
+        Debug.Log($"[Spawner] SpawnPrefab / name={_name}, monsterId={_monsterId}, type={_monster.GetType().Name}");
+
         _monster.name = _name;
-
-        // 1. monsterId 먼저 주입
         _monster.SetMonsterId(_monsterId);
-
         _monster.target = _playerTransform;
 
         float waveHp = _currentWave != null ? _currentWave.waveHpModifier : 0f;
@@ -224,14 +223,14 @@ public class RuleBasedMonsterSpawner : MonoBehaviour, IMonsterSpawnSystem
         int exp = CalcExp(_monsterId);
         _monster.SetExpReward(exp);
 
-        // 2. 보스/특수 보스 계열이면 여기서 bind
-        if (_monster is SpecialBossMonsterBase specialBossMonster)
+        // 보스/특수보스 여부를 상속 타입으로 제한하지 않고,
+        // 실제로 TriggerRunner가 붙어 있으면 바인딩한다.
+        BossTriggerPatternRunner runner = _monster.GetComponent<BossTriggerPatternRunner>();
+        Debug.Log($"[Spawner] runnerNull={runner == null}");
+
+        if (runner != null)
         {
-            BossTriggerPatternRunner runner = specialBossMonster.GetComponent<BossTriggerPatternRunner>();
-            if (runner != null)
-            {
-                runner.Bind(specialBossMonster);
-            }
+            runner.Bind(_monster);
         }
 
         _registry.Register(_monster.gameObject);

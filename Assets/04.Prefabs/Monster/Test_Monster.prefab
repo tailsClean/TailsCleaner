@@ -116,8 +116,8 @@ SpriteRenderer:
   m_SortingLayerID: -985789361
   m_SortingLayer: 4
   m_SortingOrder: 0
-  m_Sprite: {fileID: 7482667652216324306, guid: 75f5f34dc1b5347e0b8351032682f224, type: 3}
-  m_Color: {r: 1, g: 0, b: 0.0586915, a: 1}
+  m_Sprite: {fileID: -8620081384435416188, guid: dc5885c2563a3244ab9d5d7b0b809a85, type: 3}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -191,8 +191,8 @@ BoxCollider2D:
   m_Offset: {x: 0, y: 0.21133333}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
-    pivot: {x: 0.5, y: 0.28866667}
-    oldSize: {x: 1, y: 1}
+    pivot: {x: 0.5, y: 0.5}
+    oldSize: {x: 5.65, y: 5.7}
     newSize: {x: 1, y: 1}
     adaptiveTilingThreshold: 0.5
     drawMode: 0
@@ -215,15 +215,18 @@ MonoBehaviour:
   target: {fileID: 5385765747078865120, guid: 1d22e24c33ab46e4386a4162918e7702, type: 3}
   stoppingDistance: 0.1
   hp: 1
+  maxHp: 1
   power: 1
   moveSpeed: 1
   hitBox: 1
   mass: 1
   KBResist: 1
+  knockbackUnitToPx: 100
   TestItem: {fileID: 7621293018972681884, guid: 7bd74e2913a4ea44aa66ef718bc20d47, type: 3}
   damageCooldown: 1
   scoreReward: 1000
   goldReward: 500
+  _monsterSprite: {fileID: 7198065516040032104}
 --- !u!114 &1044938303917476684
 MonoBehaviour:
   m_ObjectHideFlags: 0

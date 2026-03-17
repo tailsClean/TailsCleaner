@@ -16,7 +16,12 @@ public class ItemInventory : MonoBehaviour
     public event Action<int> OnAddItem;
     public event Action<int> OnRemoveItem;
 
-
+    [ContextMenu("인벤토리 초기화")]
+    public void ClearInventory()
+    {
+        _inventory.Clear();
+        _onChangeInventory.OnStartEvent();
+    }
 
     private void Awake()
     {
