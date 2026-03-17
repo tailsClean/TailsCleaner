@@ -16,7 +16,7 @@ public class ExitPanel : MonoBehaviour
             gameObject.SetActive(false);
         }
 
-        _bGMSlider?.onValueChanged.AddListener (value => SoundManager.Instance.SetVolume(value));
+        _bGMSlider?.onValueChanged.AddListener (value => SoundManager.Instance.SetBGMVolume(value));
 
     }
 }
