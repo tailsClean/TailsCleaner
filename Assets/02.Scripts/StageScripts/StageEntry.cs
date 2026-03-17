@@ -15,6 +15,8 @@ public class StageEntry : MonoBehaviour
     [SerializeField] private RuleBasedMonsterSpawner _spawner;
     [SerializeField] private MonsterRegistry _register;
 
+    [SerializeField] private StageMapLoader _mapLoader;
+
     private IStagePlanProvider _planProvider;
 
     private void Awake()
@@ -43,6 +45,17 @@ public class StageEntry : MonoBehaviour
         if (_plan == null)
         {
             return;
+        }
+
+        Debug.Log($"[StageEntry] mapResource={_plan.mapResource}");
+
+        if (_mapLoader != null)
+        {
+            _mapLoader.LoadMap(_plan.mapResource);
+        }
+        else
+        {
+            Debug.LogWarning("[StageEntry] StageMapLoader is null.");
         }
 
         if (_useTimeOverride)

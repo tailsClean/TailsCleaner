@@ -75,7 +75,9 @@ public class StagePlanBuilder
             stageHpModifier = _stage.hp_modifier,
             stagePowerModifier = _stage.power_modifier,
             towerHpModifier = 0f,
-            towerPowerModifier = 0f
+            towerPowerModifier = 0f,
+
+            mapResource = _stage.map_resource
         };
     }
 }
