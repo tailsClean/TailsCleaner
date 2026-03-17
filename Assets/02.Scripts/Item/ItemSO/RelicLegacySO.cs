@@ -4,7 +4,7 @@ using UnityEngine;
 
 
 [CreateAssetMenu(fileName = "RelicSO", menuName = "ItemData/Relic")]
-public class RelicSO : ItemBaseSO
+public class RelicLegacySO : ItemBaseSO
 {
     [Header("유물 정보")]
     [SerializeField] private int _iD;
@@ -25,8 +25,6 @@ public class RelicSO : ItemBaseSO
     [Header("유물 계열")]
     [SerializeField] private List<Division> _divisionDataList;
 
-
-    
 
     public RELIC_STAT StatType => _statType;
     public int GroupID => _groupID;

@@ -1,19 +1,21 @@
 ﻿using System;
 
-public enum Relic_STAT_TYPE
+
+public enum STAT_TYPE
 {
-    Gold = 0, //골드 획득량 증가
-    Equipment = 1, //장비 획득 확률 증가
-    Exp = 2, //경험치 획득량 증가
-    Item_Range = 3, //아이템 획득 범위 증가 
+    Gold = 0,
+    Equipment = 1,
+    Exp = 2,
+    ItemRange = 3,
 }
 
-public enum DIVISION_TYPE
+// TODO: 'RelicType' 멤버 이름을 실제 값으로 수정하세요.
+public enum RELIC_TYPE
 {
     Twinkle = 0, //반짝반짝
-    Smooth = 1, //매끈매끈
-    Scrub = 2, //쓱쓱싹싹
-    Float = 3, //둥실둥실
+    Smooth= 1,
+    Swish= 2,
+    Floating = 3,
 }
 
 [Serializable]
@@ -21,10 +23,10 @@ public class Relic
 {
     public int id;
     public string desc;
-    public Relic_STAT_TYPE stat_type;
+    public STAT_TYPE stat_type;
     public float stat_value;
     public int group_id;
-    public DIVISION_TYPE division_type;
+    public RELIC_TYPE relic_type;
     public string name;
     public string script;
     public string sprite;

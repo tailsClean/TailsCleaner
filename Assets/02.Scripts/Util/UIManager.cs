@@ -132,6 +132,7 @@ public class UIManager : MonoBehaviour
     public void OpenClear()
     {
         _stageClearPanel.SetActive(true);
+        StageTimer.gameObject.SetActive(false);
     }
     
     #endregion
@@ -141,6 +142,7 @@ public class UIManager : MonoBehaviour
      public void OpenGameOver()
     {
         _gameOverPanel.SetActive(true);
+        StageTimer.gameObject.SetActive(false);
     }
     
     #endregion

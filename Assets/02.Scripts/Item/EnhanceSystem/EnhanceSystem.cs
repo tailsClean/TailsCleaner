@@ -143,7 +143,7 @@ public class EnhancingInfo
                     return ItemDB.GetItemData<EquipmentSO>(ItemID).GetEnhanceData(EnhanceLevel + 1);
 
                 case ITEM_TYPE.Relic:
-                    return ItemDB.GetItemData<RelicSO>(ItemID).GetEnhanceData(EnhanceLevel + 1);
+                    return ItemDB.GetItemData<RelicLegacySO>(ItemID).GetEnhanceData(EnhanceLevel + 1);
             }
             return null;
         }

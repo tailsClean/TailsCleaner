@@ -635,9 +635,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::StageEntry
   _stageId: 50201
   _towerId: 0
-  _useTimeOverride: 1
-  _overrideMainTimeSeconds: 10
-  _overrideBossTimeSeconds: 60
+  _useTimeOverride: 0
+  _overrideMainTimeSeconds: 300
+  _overrideBossTimeSeconds: 180
   _stageController: {fileID: 1499286055}
   _spawner: {fileID: 1493428061}
   _register: {fileID: 504285889}
@@ -1649,9 +1649,9 @@ MonoBehaviour:
   _isLoop: 1
   _isShuffle: 0
   _skillSfxPlayer: {fileID: 0}
-  _skillSfxClips: []
   _monsterSfxPlayer: {fileID: 0}
   _monsterSfxClips: []
+  _debounceInterval: 0.1
 --- !u!4 &2067045832
 Transform:
   m_ObjectHideFlags: 0
