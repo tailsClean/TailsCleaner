@@ -106,14 +106,14 @@ public class SoapBubbleArea : SkillArea<SoapBubbleModifierData>
         // 빨래당함 슬로우
         if (_modifierData.SlowOnArea == true)
         {
-            monster.ApplySlow(SoapBubbleModifierData.DEBUFF_KEY_SLOW, _modifierData.SlowAmount);
+            monster.EnterSlowArea(SoapBubbleModifierData.DEBUFF_KEY_SLOW, _modifierData.SlowAmount);
         }
 
         // 슬랩스틱
         if (_modifierData.StunOnArea == true)
         {
             // 장판 들어감
-            monster.EnterStunArea();
+            monster.EnterStunArea(_modifierData.StunRequiredTime, _modifierData.StunDuration);
         }
     }
 
@@ -122,7 +122,7 @@ public class SoapBubbleArea : SkillArea<SoapBubbleModifierData>
         // 빨래당함 슬로우
         if (_modifierData.SlowOnArea == true)
         {
-            monster.RemoveSlow(SoapBubbleModifierData.DEBUFF_KEY_SLOW);
+            monster.ExitSlowArea(SoapBubbleModifierData.DEBUFF_KEY_SLOW);
         }
 
         // 슬랩스틱

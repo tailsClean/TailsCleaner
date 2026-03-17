@@ -28,13 +28,19 @@ public interface IMonsterStatus
     public float StunAreaTime { get; }
 
     /// <summary>
-    /// 슬로우 적용
+    /// 시간제 슬로우 적용
     /// </summary>
-    public void ApplySlow(string key, float amount, float duration = -1f);
+    public void ApplySlow(string key, float amount, float duration);
+
     /// <summary>
-    /// 슬로우 제거
+    /// 슬로우 장판 입장
     /// </summary>
-    public void RemoveSlow(string key);
+    public void EnterSlowArea(string key, float amount);
+
+    /// <summary>
+    /// 슬로우 장판 퇴장
+    /// </summary>
+    public void ExitSlowArea(string key);
 
     /// <summary>
     /// 기절 장판 입장
