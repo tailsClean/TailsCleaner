@@ -38,8 +38,9 @@ public class PlayerStatCalculator
         float plusStat = _plusStat.Get(stat);
         float multipleStat = _multipleStat.Get(stat);
 
-        Debug.Log("레벨: " + stat + " / " + baseStat);
-        Debug.Log("아이템: " + stat + " / " + itemStat);
+        //Debug.Log("기본: " + stat + " / " + initialStat);
+        //Debug.Log("레벨로 증가하는 스텟: " + _levelStat.Get(stat));
+        //Debug.Log("아이템: " + stat + " / " + itemStat);
 
         return baseStat + itemStat + plusStat + multipleStat;
     }

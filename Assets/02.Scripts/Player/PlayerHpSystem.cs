@@ -1,9 +1,11 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using UnityEngine;
 
 public class PlayerHpSystem
 {
     private PlayerBase _player;
+    private PlayerStatCalculator _calculator;
     private SpriteRenderer _playerSprite;
     private float _maxHp;
     private int _maxSield;
@@ -12,31 +14,41 @@ public class PlayerHpSystem
 
     public bool IsDead => _currentHp <= 0;
     public bool IsInvincible { get; private set; }         // 피격시, 잠시 무적(true)이 됨
-    public float MaxHp => _maxHp;
+    public float MaxHp => _calculator.GetFinalSat(_maxHp, PLAYER_STAT.MaxHp);
     public int MaxSield => _maxSield;
     public float CurrentHp
     {
         get {  return _currentHp; }
-        private set { _currentHp = Mathf.Max(0, value); }
+        private set 
+        { 
+            _currentHp = value < MaxHp ? Mathf.Max(0, value) : MaxHp;
+        }
     }
     public int CurrentSield
     {
         get { return _currentSield; }
-        private set { _currentSield = Mathf.Max(0, value); }
+        private set 
+        { 
+            _currentSield = value < _maxSield ? Mathf.Max(0, value) : _maxSield; 
+        }
     }
 
+    public event Action OnHit;
+    public event Action OnShieldBloak;
 
-
-    public PlayerHpSystem(PlayerBase player)
+    public PlayerHpSystem(PlayerBase player, PlayerStatCalculator calculator)
     {
         _player = player;
+        _calculator = calculator;
         _maxHp = player.Data.Maxhp;
+        _currentHp = _maxHp;
         _playerSprite = player.GetComponent<SpriteRenderer>();
     }
 
 
-    public void OnHit(float damage)
+    public void Hit(float damage)
     {
+        Debug.Log("현재" + CurrentHp);
         if (damage < 0)
         { Debug.LogError("데미지가 음수값으로 들어왔습니다."); return; }
 
@@ -47,10 +59,16 @@ public class PlayerHpSystem
         CurrentHp -= damage;
 
         if(damage > 0)
+        {
+            OnHit?.Invoke();
             _player.StartCoroutine(StartHitInvincibility(true));
+        }
 
         else if (damage == 0)
+        {
+            OnShieldBloak?.Invoke();
             _player.StartCoroutine(StartHitInvincibility(false));
+        }
     }
     // 피격 시, 무적 + 피격이펙트(깜빡임)
     private IEnumerator StartHitInvincibility(bool HpDown)
@@ -75,9 +93,9 @@ public class PlayerHpSystem
 
     public void OnHeal(float amount)
     {
-        if(amount < 0)
+        if (amount < 0)
         { Debug.LogError("체력회복량이 음수입니다."); return; }
-        _currentHp += amount;
+        CurrentHp += amount;
     }
 
     public void SetMaxShield(float amount)
@@ -92,6 +110,13 @@ public class PlayerHpSystem
         float result = _currentSield + amount;
         CurrentSield = (int)result;
         return result < 0 ? -result : 0;
+    }
+
+    public void Init(float maxHp)
+    {
+        _currentHp = MaxHp;
+        Debug.Log("현재 체력" + _currentHp);
+        Debug.Log("현재 체력 프로퍼티" + CurrentHp);
     }
 }
 
