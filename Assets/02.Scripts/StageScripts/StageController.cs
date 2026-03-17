@@ -151,11 +151,19 @@ public class StageController : MonoBehaviour
             _onPlayerDead.RemoveListener(HandlePlayerDead);
             _onPlayerDead.AddListener(HandlePlayerDead);
         }
+        if (_timerUI == null)
+        {
+            _timerUI = UIManager.Instance != null ? UIManager.Instance.StageTimer : null;
+        }
+
         if (_timerUI != null)
+        {
             _timerUI.Bind(_events);
+        }
         else
-            _timerUI = UIManager.Instance.StageTimer;
-            _timerUI.Bind(_events);
+        {
+            Debug.LogWarning("[StageController] StageTimerTextUI is null. Timer UI binding skipped.");
+        }
 
         _stateMachine.ChangeState(new CombatState(_timer, _waveScheduler));
         _spawner.SetSpawningEnabled(true);

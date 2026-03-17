@@ -5,7 +5,6 @@ using UnityEngine;
 public class StageEntry : MonoBehaviour
 {
     [SerializeField] private int _stageId = 50201;
-
     [SerializeField] private int _towerId = 0;
 
     [SerializeField] private bool _useTimeOverride;
@@ -25,6 +24,8 @@ public class StageEntry : MonoBehaviour
 
     void Start()
     {
+        ApplySelectedStageFromGameManager();
+
         if (!TrySpendEntryEnergy(_stageId))
         { 
             // 에너지가 부족하면 타워씬으로 이동
@@ -47,6 +48,22 @@ public class StageEntry : MonoBehaviour
 
         ApplyTowerModifier(_plan, _stageId);
         _stageController.StartStage(_plan, _spawner, _register);
+    }
+
+    private void ApplySelectedStageFromGameManager()
+    {
+        if (GameManager.Instance == null) return;
+
+        if(GameManager.Instance._currentTower != null)
+        {
+            _towerId = GameManager.Instance._currentTower.tower_id;
+        }
+
+        if(GameManager.Instance._currentStageId > 0)
+        {
+            _stageId = GameManager.Instance._currentStageId;
+        }
+
     }
 
     private void ApplyTowerModifier(StagePlan plan, int stageId)
