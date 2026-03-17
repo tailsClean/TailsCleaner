@@ -433,4 +433,15 @@ public abstract class MonsterBase : PoolObject, IDamageable, IMonsterStatus, IPu
             Destroy(gameObject);
         }
     }
+    
+    // BossTriggerPattern때문에 작성 2026-03-16
+    public virtual void SetAttackingState(bool attacking)
+    {
+        isAttacking = attacking;
+
+        if (rb2D != null && isAttacking)
+        {
+            rb2D.linearVelocity = Vector2.zero;
+        }
+    }
 }
