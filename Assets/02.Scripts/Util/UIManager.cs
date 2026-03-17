@@ -1,4 +1,4 @@
-using UnityEngine;
+﻿using UnityEngine;
 using DG.Tweening;
 using TMPro;
 using System;
@@ -90,8 +90,18 @@ public class UIManager : MonoBehaviour
 
     public void GoToStage()
     {
-        _onStartInGame.OnStartEvent();
+        SceneManager.sceneLoaded += OnStageLoaded;
         SceneManager.LoadScene("StageScene");
+    }
+
+    private void OnStageLoaded(Scene scene, LoadSceneMode mode)
+    {
+        if (scene.name != "StageScene") return;
+
+        SceneManager.sceneLoaded -= OnStageLoaded;
+
+        Debug.Log("StartEvent 받음");
+        _onStartInGame.OnStartEvent();
     }
 
     public void ExitGame()
