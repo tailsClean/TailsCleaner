@@ -8,7 +8,7 @@ public class ItemInventoryUI : UIGroup
     [SerializeField] private ItemInventory _inventory;
 
     [Header("아이템 팝업UI")]
-    [SerializeField] private GameObject _itemPopupUI;
+    [SerializeField] private List<ItemPopup> _itemPopupUI;
     [SerializeField] private UISlot _popupUISlot;
 
     [Header("인벤토리 패널리스트")]
@@ -26,12 +26,17 @@ public class ItemInventoryUI : UIGroup
 
     private void Awake()
     {
-        Init();
+        InventoryUIInit();
     }
 
-    private void Start()
+    protected override void Start()
     {
-        _itemPopupUI.gameObject.SetActive(false);
+        base.Start();
+        foreach(var popup in _itemPopupUI)
+        {
+            popup.gameObject.SetActive(false);
+        }
+        
         SetSlotHandler();
         SetSelectButtons();
     }
@@ -86,7 +91,7 @@ public class ItemInventoryUI : UIGroup
     {
         foreach(var slot in _slotHandlerList)
         {
-            slot.Init();
+            slot.HandlerInit();
         }
         foreach(var itemInstance in _inventory.Inventory)
         {
@@ -117,7 +122,7 @@ public class ItemInventoryUI : UIGroup
     private void SetItem(UI_GROUP group, ItemInstance itemInstance) => _uiGroupDict[group].SetItem(itemInstance);
 
 
-    public void Init()
+    public void InventoryUIInit()
     {
         _uiGroupDict = new Dictionary<UI_GROUP, InventorySlotHandler>();
 
@@ -136,9 +141,17 @@ public class ItemInventoryUI : UIGroup
     #region 아이템 팜업
     private void ShowPopup(ItemInstance item)
     {
-        _itemPopupUI.gameObject.SetActive(true);
-
-        _popupUISlot.SetSlot(item.ID);
+        foreach(var popup in _itemPopupUI)
+        {
+            if(popup.ItemType == ItemDB.GetItemData<ItemBaseSO>(item.ID).ItemType)
+            {
+                popup.gameObject.SetActive(true);
+                popup.SetSlot(item);
+                break;
+            }
+            else
+                popup.gameObject.SetActive(false);
+        }
     }
 
 

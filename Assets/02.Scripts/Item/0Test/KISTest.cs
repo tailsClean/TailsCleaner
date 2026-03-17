@@ -42,6 +42,13 @@ public class KISTest : MonoBehaviour
         //inventory.GainEquipment(3000, 0 ,EQUIP_GRADE.Fresh);
     }
 
+    [ContextMenu("소모품 획득")]
+
+    public void Consume()
+    {
+        inventory.GainStackItem(123, Amount);
+    }
+
     [ContextMenu("인벤토리 내용물")]
     public void Get()
     {

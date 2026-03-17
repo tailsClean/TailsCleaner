@@ -5,19 +5,19 @@ using UnityEngine.UI;
 
 public class InventorySlotHandler : UIGroup
 {
-    [SerializeField] private List<UISlot> _slots;
+    [SerializeField] protected List<UISlot> _slots;
     [SerializeField] private Button _handlerButton;
 
     [Header("이벤트 채널")]
     [SerializeField] private ItemInstanceEventChannelSO _onItemPopup;
 
     private Dictionary<int, int> _inventory;
-    private List<int> _itemOrder = new();                           // 무작위로 들고 있는 _inventory의 값들에 순서를 부여
+    private List<int> _itemOrder = new();                    // 무작위로 들고 있는 _inventory의 값들에 순서를 부여
     private Dictionary<int, UISlot> _slotByItemId = new();   // 특정 ID가 슬롯에 배치됐는지 조회용 딕셔너리
     private Image _buttonImg;
     private Color _baseColor;
 
-    private List<ItemInstance> _items = new();
+    protected List<ItemInstance> _items = new();
 
 
     private void Awake()
@@ -39,7 +39,7 @@ public class InventorySlotHandler : UIGroup
         _buttonImg.color = _baseColor;
     }
 
-    public void UpdateInventory()
+    public virtual void UpdateInventory()
     {
         int i = 0;
         foreach(var item in _items)
@@ -68,7 +68,7 @@ public class InventorySlotHandler : UIGroup
 
 
 
-    public void Init()
+    public void HandlerInit()
     {
         _items.Clear();
 
