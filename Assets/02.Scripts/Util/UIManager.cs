@@ -27,7 +27,7 @@ public class UIManager : MonoBehaviour
         SceneManager.sceneLoaded += OnSceneLoaded;
     }
 
-    #region  Scene 초기 설정
+    #region Scene 초기 설정
     //▼ UI 설정 오브젝트 
     [SerializeField] private GameObject _currentSceneUI;
     public Transform _stageTrans;
@@ -52,6 +52,10 @@ public class UIManager : MonoBehaviour
            sceneUI = Instantiate(prefab, transform);
            SetUpReference(sceneUI); //todo: 참조를 하고나서 저장해두는 방식으로 바꿔야할듯
        }
+       else
+        {
+             Debug.Log("없음");
+        }
        return sceneUI;
     }
     private void SetUpReference(GameObject sceneUI)
@@ -73,15 +77,11 @@ public class UIManager : MonoBehaviour
                 this._stageSelect = lobbyUI.StageSelect;
             }
         }
+        
     }
 
     #endregion
     [SerializeField]private VoidEventChannelSO _onStartInGame;
-
-    public void GoToTower()
-    {
-        SceneManager.LoadScene("TowerScene");
-    }
 
     public void GoToLobby()
     {
