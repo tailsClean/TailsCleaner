@@ -21,11 +21,14 @@ public abstract class MonsterBase : PoolObject, IDamageable, IMonsterStatus, IPu
     public float hitBox = 1.0f;
     public float mass = 1.0f;
     public float KBResist = 1.0f;
+    private float _hpScale = 1f;            // 체력 배율
+    private float _powerScale = 1f;         // 파워 배율
+    private float _reducedMaxHpRatio = 1f;  // 최대 체력 감소 배율 (집중공략)
 
     public float MaxHp => maxHp;
 
+    [Header("넉백 밀리는 픽셀")]
     public float knockbackUnitToPx = 100f;
-    private int _stunCounter = 0; // 딕셔너리 카운터 역할
 
     // --- IMonsterStatus 상태 프로퍼티 ---
     public bool IsStunned => Time.time < _currentStunEndTime;
@@ -116,12 +119,23 @@ public abstract class MonsterBase : PoolObject, IDamageable, IMonsterStatus, IPu
         power = _basePower;
         _currentMoveSpeed = _baseMoveSpeed;
 
+        // 배율 초기화
+        _hpScale = 1f;
+        _powerScale = 1f;
+        _reducedMaxHpRatio = 1f;
+        _currentStrengthBonus = 0f;
 
-        _stunCounter = 0; // 스폰 시 카운터 초기화
+        // 스킬 기능 초기화
         IsKnockbacked = false;
         HasReducedMaxHp = false;
         StunAreaTime = 0f;
+        foreach (var coroutine in _slowTimers.Values)
+            if (coroutine != null) StopCoroutine(coroutine);
         _slowModifiers.Clear();
+        _slowTimers.Clear();
+        _slowAreaCounts.Clear();
+        _stunAreaCount = 0;
+        _currentStunEndTime = 0f;
 
         isAttacking = false;
         lastAttackTime = 0f;
@@ -160,7 +174,9 @@ public abstract class MonsterBase : PoolObject, IDamageable, IMonsterStatus, IPu
 
             // 일정 시간 넘으면 기절
             if (StunAreaTime >= _requiredStunTime)
-            {
+            { 
+                // 타이머 초기화 후 기절 적용
+                ResetStunAreaTime();
                 ApplyStun(_areaStunDuration);
             }
         }
@@ -275,7 +291,10 @@ public abstract class MonsterBase : PoolObject, IDamageable, IMonsterStatus, IPu
     }
 
     public void Knockback(Vector2 direction, float force)
-        => StartCoroutine(KnockbackRoutine(direction, force));
+    {
+        // 넉백은 OBT 제작으로 넘김
+        //StartCoroutine(KnockbackRoutine(direction, force));
+    }
 
     private IEnumerator KnockbackRoutine(Vector2 direction, float force)
     {
@@ -292,29 +311,40 @@ public abstract class MonsterBase : PoolObject, IDamageable, IMonsterStatus, IPu
     public void TryReduceMaxHp(float ratio)
     {
         if (HasReducedMaxHp) return;
-        maxHp *= (1f - ratio);
-        if (hp > maxHp) hp = maxHp;
         HasReducedMaxHp = true;
+
+        // 최대 체력 감소 비율 저장
+        _reducedMaxHpRatio = 1f - ratio;
+
+        // 재계산
+        RefreshFinalStats();
     }
 
     public void OnCC()
     {
+        // 집중공략 패시브
+        // 군중제어 적용 시 추가로 일정시간 슬로우 적용
         if (SkillManager.Instance != null && SkillManager.Instance.HasPassive<SuperCleanModifier>(out var modifier))
         {
-            ApplySlow("SuperClean", 0.2f, 5f);
+            ApplySlow(SuperCleanModifier.DEBUFF_KEY, modifier.SlowAmont, modifier.SlowDuration);
         }
     }
 
     public void EnterStunArea(float requireTime, float duration)
     {
+        // 기절 장판 카운트
         _stunAreaCount++;
+        // 기절에 필요한 시간
         _requiredStunTime = requireTime;
+        // 기절 시간
         _areaStunDuration = duration;
     }
 
     public void ExitStunArea()
     {
+        // 기절 장판 카운트 빼기
         _stunAreaCount--;
+        // 장판 카운트 0 밑으로 떨어지면 기절 시간 초기화
         if (_stunAreaCount <= 0)
         {
             _stunAreaCount = 0;
@@ -322,8 +352,10 @@ public abstract class MonsterBase : PoolObject, IDamageable, IMonsterStatus, IPu
         }
     }
 
+    // 기절 시간 초기화
     public void ResetStunAreaTime() => StunAreaTime = 0;
 
+    // 당기기 (물폭탄 소용돌이)
     public void Pull(Vector2 targetPosition, float force)
     {
         Vector2 dir = (targetPosition - rb2D.position).normalized;
@@ -358,8 +390,13 @@ public abstract class MonsterBase : PoolObject, IDamageable, IMonsterStatus, IPu
     public void ApplyScaling(float hpScale, float powerScale)
     {
         CacheBaseStats();
-        _baseHp = hp * hpScale;
-        _basePower = power * powerScale;
+
+        // 배율 적용
+        _hpScale = hpScale;
+        _powerScale = powerScale;
+
+        //_baseHp = hp * hpScale;
+        //_basePower = power * powerScale;
 
         // 강화 수치가 이미 있다면 적용
         RefreshFinalStats();
@@ -369,23 +406,30 @@ public abstract class MonsterBase : PoolObject, IDamageable, IMonsterStatus, IPu
 
     public void ApplyEnhancement(float bonusStrength)
     {
-        // 기존 적들은 증가량만큼 현재 체력도 늘려줌
-        float oldMaxHp = maxHp;
-
         _currentStrengthBonus = bonusStrength;
 
         RefreshFinalStats();
-
-        // 현재 체력 보정 (최대 체력이 늘어난 만큼 현재 체력도 더해줌)
-        float hpDiff = maxHp - oldMaxHp;
-        if (hpDiff > 0) hp += hpDiff;
     }
 
     private void RefreshFinalStats()
     {
+        // 변경 전 최대 체력과 체력 비율 저장
+        float oldMaxHp = maxHp;
+        float hpPercent = (oldMaxHp > 0) ? (hp / oldMaxHp) : 1f;
+
+        // 강화 수치 적용
         float strengthBonus = 1f + _currentStrengthBonus / 100f;
-        maxHp = _baseHp * strengthBonus;
-        power = _basePower * strengthBonus;
+
+        // 새로운 최대 체력을 계산
+        // 원본 * 배율 * 적강화 배율 * 최대 체력 감소 배율(집중공략)
+        maxHp = _baseHp * _hpScale * strengthBonus * _reducedMaxHpRatio;
+        power = _basePower * _powerScale * strengthBonus;
+
+        // 갱신 하면서 체력바의 퍼센트가 유지
+        hp = maxHp * hpPercent;
+
+        // 체력 비례 감소로 0 이하가 되면 사망
+        if (hp <= 0) Die(); 
     }
 
     protected virtual void Die()

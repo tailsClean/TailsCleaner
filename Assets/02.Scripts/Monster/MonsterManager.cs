@@ -56,13 +56,4 @@ public class MonsterManager : MonoBehaviour
             activeMonsters.Remove(monster);
         }
     }
-
-    // 필드 전체 몬스터에게 명령 내리기 (예: 모든 적 기절)
-    public void ExecuteGlobalStun(float duration)
-    {
-        foreach (var monster in activeMonsters)
-        {
-            monster.ApplyStun(duration);
-        }
-    }
 }
