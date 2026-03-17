@@ -90,6 +90,9 @@ public class BluetoothShowerSkill : ActiveSkill<BluetoothShowerProjectile, Bluet
     // 시전 시작 시
     private void OnCastStart()
     {
+        // 루프 사운드 재생
+        StartLoopSFX();
+
         // 방수코팅
         if (_modifierData.DefenseOnActive == true)
         {
@@ -114,6 +117,9 @@ public class BluetoothShowerSkill : ActiveSkill<BluetoothShowerProjectile, Bluet
     // 시전 종료 시
     private void OnCastEnd()
     {
+        // 루프 사운드 중지
+        StopLoopSFX();
+
         // 방수코팅 해제
         if (_modifierData.DefenseOnActive)
         {

@@ -78,6 +78,9 @@ public class SunDryingSkill : ActiveSkill<SunDryingArea, SunDryingModifierData>
     // 일광건조 만료 시
     public void OnAreaExpired()
     {
+        // 만료 사운드 재생
+        PlayExpireSFX();
+
         // 두꺼운 이불
         // 꺼질 때 방어막 생성
         if (_modifierData.ShieldOnDeactivate)

@@ -62,6 +62,9 @@ public abstract class ActiveSkill : MonoBehaviour
     protected Vector2 PlayerPos => SkillManager.Instance.CurrentPlayerPos;  // 현재 위치
     protected Vector2 AttackDir => GetAttackDir();  // 공격 방향
 
+    // 사운드 데이터
+    protected SkillSoundData _soundData;
+
 
 
     private void Awake()
@@ -91,6 +94,9 @@ public abstract class ActiveSkill : MonoBehaviour
 
         // 기본 스탯
         _baseStat = upgradeData.GetSkillStat();
+        
+        // 사운드 데이터
+        _soundData = skillData.SoundData;
 
         Debug.Log($"[ActiveSkill] {upgradeData.Name} 생성 완료.");
     }
@@ -160,6 +166,9 @@ public abstract class ActiveSkill : MonoBehaviour
     // 스킬 발동 로직
     private void Active()
     {
+        // 발동 사운드 재생
+        SoundManager.Instance.PlaySkillActiveSFX(_soundData);
+        // 발사 코루틴
         StartCoroutine(ActiveCoroutine());
     }
 
@@ -430,6 +439,19 @@ public abstract class ActiveSkill : MonoBehaviour
 
     // 스킬 업그레이드로 플레이어 스탯 영구 증가 (세탁파도, 회전장난감)
     public virtual void ModifyPlayerBonus(PlayerStatFlat flat, PlayerStatMul mul) { }
+
+
+    // 루프 사운드 재생
+    protected void StartLoopSFX()
+        => SoundManager.Instance.PlaySkillLoopSFX(MainTag, _soundData);
+
+    // 루프 사운드 중지
+    protected void StopLoopSFX()
+        => SoundManager.Instance.StopSkillLoopSFX(MainTag);
+
+    // 만료 사운드 재생
+    protected void PlayExpireSFX()
+        => SoundManager.Instance.PlaySkillExpireSFX(_soundData);
 }
 
 // 프리팹과 모디파이어 타입 결정

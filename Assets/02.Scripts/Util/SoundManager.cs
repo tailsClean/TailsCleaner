@@ -1,4 +1,4 @@
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 
 public enum BGMName
@@ -59,19 +59,28 @@ public class SoundManager : MonoBehaviour
 
     [Header("Skill SFX")]
     [SerializeField] private AudioSource _skillSfxPlayer;
-    [SerializeField] private SkillSFXClipInfo[] _skillSfxClips;
+    //[SerializeField] private SkillSFXClipInfo[] _skillSfxClips;     // 사용 X
 
     [Header("Monster SFX")]
     [SerializeField] private AudioSource _monsterSfxPlayer;
     [SerializeField] private MonsterSFXClipInfo[] _monsterSfxClips;
+
+    [Header("같은 클립 최소 재생 간격")]
+    [SerializeField] private float _debounceInterval = 0.1f;
 
     private List<int> _shuffleOrder = new List<int>();
     private int _currentBGMIndex = 0;
     private int _shuffleIndex = 0;
 
     private Dictionary<BGMName, AudioClip> _bgmDict = new Dictionary<BGMName, AudioClip>();
-    private Dictionary<SkillSFXName, AudioClip> _skillSfxDict = new Dictionary<SkillSFXName, AudioClip>();
+    //private Dictionary<SkillSFXName, AudioClip> _skillSfxDict = new Dictionary<SkillSFXName, AudioClip>();          // 사용 X
     private Dictionary<MonsterSFXName, AudioClip> _monsterSfxDict = new Dictionary<MonsterSFXName, AudioClip>();
+
+    // 스킬 관련
+    private List<AudioSource> _loopPool = new();                                     // 루프 
+    private Dictionary<int, (AudioSource source, int count)> _loopChannels = new();  // 루프 채널   Key : MainTag  /  Value : (AudioSource, 카운트)
+    private Dictionary<AudioClip, float> _lastPlayTimes = new();                     // 원샷 마지막 재생 시간
+
 
     private void Awake()
     {
@@ -86,8 +95,8 @@ public class SoundManager : MonoBehaviour
         foreach (var info in _bgmClips)
             _bgmDict[info.name] = info.clip;
 
-        foreach (var info in _skillSfxClips)
-            _skillSfxDict[info.name] = info.clip;
+        //foreach (var info in _skillSfxClips)
+        //    _skillSfxDict[info.name] = info.clip;
 
         foreach (var info in _monsterSfxClips)
             _monsterSfxDict[info.name] = info.clip;
@@ -192,19 +201,128 @@ public class SoundManager : MonoBehaviour
     public void ResumeBGM() => _bgmPlayer.UnPause();
     public void SetBGMVolume(float volume) => _bgmPlayer.volume = Mathf.Clamp01(volume);
 
-    public void PlaySkillSFX(SkillSFXName sfxName)
+
+    // 스킬 시전 클립 재생
+    public void PlaySkillActiveSFX(SkillSoundData data)
     {
-        if (_skillSfxDict.TryGetValue(sfxName, out AudioClip clip))
-            _skillSfxPlayer.PlayOneShot(clip);
+        if (data == null) return;
+        PlayRandomSkillClip(data.onCast);
+    }
+    // 스킬 만료 클립 재생
+    public void PlaySkillExpireSFX(SkillSoundData data)
+    {
+        if (data == null) return;
+        PlayRandomSkillClip(data.onExpire);
     }
 
-    public void PlaySkillSFX(SkillSFXName sfxName, float volume)
+    
+    // 랜덤 클립 재생
+    public void PlayRandomSkillClip(AudioClip[] clips)
     {
-        if (_skillSfxDict.TryGetValue(sfxName, out AudioClip clip))
-            _skillSfxPlayer.PlayOneShot(clip, volume);
+        if (clips == null || clips.Length == 0) return;
+        PlaySkillClip(clips[Random.Range(0, clips.Length)]);
     }
 
-    public void SetSkillSFXVolume(float volume) => _skillSfxPlayer.volume = Mathf.Clamp01(volume);
+    // 클립 재생
+    public void PlaySkillClip(AudioClip clip)
+    {
+        if (clip == null) return;
+
+        float time = Time.time;
+
+        /// debounceInterval 이내에 같은 클립 재생 시도 시 스킵
+        if (_lastPlayTimes.TryGetValue(clip, out float last) && time - last < _debounceInterval)
+            return;
+
+        // 시간 기록 후 재생
+        _lastPlayTimes[clip] = time;
+        _skillSfxPlayer.PlayOneShot(clip);
+    }
+
+
+
+    // 스킬 지속 효과음 재생
+    public void PlaySkillLoopSFX(int mainTag, SkillSoundData data)
+    {
+        if (data == null || data.loopClip == null) return;
+
+        // 루프 채널 재생 중이면
+        if (_loopChannels.TryGetValue(mainTag, out var entry))
+        {
+            // 카운트만 증가
+            _loopChannels[mainTag] = (entry.source, entry.count + 1);
+            return;
+        }
+
+        // 빈 슬롯 탐색
+        AudioSource slot = FindFreeSlot();
+
+        // 없으면 새로 생성해서 추가
+        if (slot == null)
+        {
+            slot = gameObject.AddComponent<AudioSource>();
+            slot.playOnAwake = false;
+            slot.loop = true;
+            _loopPool.Add(slot);
+        }
+
+        // 슬롯 세팅 후 재생
+        slot.clip = data.loopClip;
+        slot.volume = 1f;
+        slot.Play();
+
+        _loopChannels[mainTag] = (slot, 1);
+    }
+
+    // 스킬 지속 효과음 중지
+    public void StopSkillLoopSFX(int mainTag)
+    {
+        if (_loopChannels.TryGetValue(mainTag, out var entry) == false) return;
+
+        // 하나 빼기
+        int newCount = entry.count - 1;
+
+        // 전부 다 중지되면
+        if (newCount <= 0)
+        {
+            // 멈추고 비우기
+            if (entry.source != null)
+            {
+                entry.source.Stop();
+                entry.source.clip = null;
+                _loopChannels.Remove(mainTag);
+            }
+
+            // 채널에서 제거
+            _loopChannels.Remove(mainTag);
+        }
+        // 아니면 카운트 갱신
+        else
+        {
+            _loopChannels[mainTag] = (entry.source, newCount);
+        }
+    }
+
+    public void SetSkillSFXVolume(float volume)
+    {
+        float skillVolume = Mathf.Clamp01(volume);
+        // 단일 볼륨
+        _skillSfxPlayer.volume = skillVolume;
+
+        // 루프 볼륨
+        foreach (var source in _loopPool)
+            source.volume = skillVolume;
+    }
+
+    // 빈 슬롯 찾기
+    private AudioSource FindFreeSlot()
+    {
+        foreach (var source in _loopPool)
+        {
+            if (source.isPlaying == false) return source;
+        }
+        return null;
+    }
 
     public void PlayMonsterSFX(MonsterSFXName sfxName)
     {

@@ -17,6 +17,9 @@ public class SoapBubbleSkill : ActiveSkill<SoapBubbleArea, SoapBubbleModifierDat
 
         // 초기화
         if(area != null) area.Init(this, _modifierData);
+
+        // 루프 사운드 재생
+        StartLoopSFX();
     }
 
     public override void RecheckModifiers()
@@ -29,5 +32,12 @@ public class SoapBubbleSkill : ActiveSkill<SoapBubbleArea, SoapBubbleModifierDat
             BubbleBonus.Reset();
             BubbleBonus.DefensePower = _modifierData.PlayerDefenseBonus;
         }
+    }
+
+    // 장판 만료 시
+    public void OnAreaExpired()
+    {
+        // 루프 사운드 중지
+        StopLoopSFX();
     }
 }

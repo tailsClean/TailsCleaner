@@ -21,6 +21,9 @@ public class ActiveSkillData : ScriptableObject
     [Header("투사체 프리팹")]
     public GameObject SkillProjectilePrefab;
 
+    [Header("사운드 데이터")]
+    public SkillSoundData SoundData;
+
     [Header("업그레이드별 모디파이어 설정")]
     public List<UpgradeModifierData> UpgradeModifierDatas = new();
 
