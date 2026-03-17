@@ -371,7 +371,7 @@ public abstract class MonsterBase : PoolObject, IDamageable, IMonsterStatus, IPu
         _expReward = exp;
     }
 
-    public void TakeDamage(float damage)
+    public virtual void TakeDamage(float damage)
     {
         hp -= damage;
         if (hp <= 0) Die();
@@ -469,7 +469,7 @@ public abstract class MonsterBase : PoolObject, IDamageable, IMonsterStatus, IPu
             Destroy(gameObject);
         }
     }
-    
+
     // BossTriggerPattern때문에 작성 2026-03-16
     public virtual void SetAttackingState(bool attacking)
     {

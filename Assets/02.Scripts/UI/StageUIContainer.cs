@@ -13,6 +13,8 @@ public class StageUIContainer : MonoBehaviour, UIContainer // stageUI에서 연�
     public GameObject GameOverPanel => _gameOverPanel;
     [SerializeField] private GameObject _stageClearPanel;
     public GameObject StageClearPanel => _stageClearPanel;
+    [SerializeField] private GameObject _bossHP;
+    public GameObject BossHP => _bossHP;
 
 
     [SerializeField] private List<UIGroup> _uiGroupList;

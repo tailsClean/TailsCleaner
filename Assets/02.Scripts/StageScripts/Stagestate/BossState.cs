@@ -45,7 +45,9 @@ public class BossState : IStageState
         _registry.KillAllMonsters();
         //보스 소환
         _spawner.SpawnBoss(_bossId);
-        
+        UIManager.Instance.ChangeStateBossHP();
+
+
         if (_registry is MonsterRegistry mr && _spawner is RuleBasedMonsterSpawner rb)
         {
             mr.MarkBoss(rb.LastSpawnedBoss);
@@ -63,5 +65,6 @@ public class BossState : IStageState
     {
         _timer.StopBoss();
         _registry.ClearBossMark();
+        UIManager.Instance.ChangeStateBossHP();
     }
 }
