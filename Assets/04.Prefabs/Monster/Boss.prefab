@@ -218,10 +218,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::BossMonster
   target: {fileID: 0}
   stoppingDistance: 0.1
-  hp: 400
-  maxHp: 400
-  power: 400
-  moveSpeed: 10
+  hp: 1
+  maxHp: 1
+  power: 1
+  moveSpeed: 1
   hitBox: 1
   mass: 1
   KBResist: 1
@@ -238,7 +238,6 @@ MonoBehaviour:
   useBarricade: 0
   useOrbit: 0
   move_speed: 3
-  monster_power: 0
   detect_range: 5
   pattern_cooldown: 3
   cast_time: 10
@@ -263,18 +262,15 @@ MonoBehaviour:
   barInteraction: 0
   zoneSpawner: {fileID: 0}
   orbitPrefab: {fileID: 179680022358413590, guid: 309667af28148ca4f88af1a3c18bf838, type: 3}
-  orbitCount: 5
-  orbitRadius: 2.5
-  orbitRotateSpeed: 50
-  orbitDuration: 10
-  orbitSpawnInterval: 0.5
-  orbitDamageMultiplier: 1
   explosionEffect: {fileID: 0}
-  useOrbitDebugOverride: 0
-  orbitRadiusOverride: 20
-  orbitCountOverride: 5
-  orbitScaleOverride: 1
-  orbitProjectileScale: 1
+  defaultOrbitCount: 5
+  defaultOrbitRadius: 2
+  defaultOrbitRotateSpeed: 50
+  defaultOrbitDuration: 10
+  defaultOrbitSpawnInterval: 0.5
+  defaultOrbitDamageMultiplier: 1
+  defaultOrbitProjectileScale: 1.2
+  orbitRotateSpeedMultiplier: 30
   damage: 0
 --- !u!114 &6267815479541013433
 MonoBehaviour:
