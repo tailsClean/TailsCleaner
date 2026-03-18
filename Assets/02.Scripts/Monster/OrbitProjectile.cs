@@ -9,6 +9,7 @@ public class OrbitProjectile : MonoBehaviour
     public void SetDamage(float damage)
     {
         finalDamage = damage;
+        Debug.Log("[BossMonster] 공전 패턴 시작");
     }
 
     private void OnTriggerEnter2D(Collider2D collision)

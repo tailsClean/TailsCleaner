@@ -3,79 +3,114 @@ using System.Collections;
 
 public abstract class AreaEffector : MonoBehaviour
 {
-    public float previewTime = 2.0f;
-    public float activeTime = 5.0f;
-    public float radius = 3.0f;
+    [Header("Timing")]
+    public float previewTime = 2f;
+    public float activeTime = 5f;
 
+    [Header("Shape")]
+    public float radius = 3f;
+
+    [Header("Effects")]
     public GameObject previewEffect;
     public GameObject activeEffect;
     public GameObject destroyEffect;
 
     protected bool isActive = false;
-    private Coroutine areaRoutine;
+    private Coroutine lifeRoutine;
 
     protected virtual void OnEnable()
     {
-        transform.localScale = new Vector3(radius, radius, 1f);
-        isActive = false;
-
-        // 예고/활성 이펙트 초기 상태 설정
-        if (previewEffect != null) previewEffect.SetActive(false);
-        if (activeEffect != null) activeEffect.SetActive(false);
-
-        if (areaRoutine != null) StopCoroutine(areaRoutine);
-        areaRoutine = StartCoroutine(AreaRoutine());
+        ResetVisualState();
+        ApplyShape();
+        StartLifeRoutine();
     }
 
-    // 비활성화될 때 코루틴 정리
     protected virtual void OnDisable()
     {
-        if (areaRoutine != null)
+        StopLifeRoutine();
+        isActive = false;
+        ResetVisualState();
+    }
+
+    public virtual void Initialize(float newRadius, float newPreviewTime, float newActiveTime)
+    {
+        radius = newRadius;
+        previewTime = newPreviewTime;
+        activeTime = newActiveTime;
+
+        ApplyShape();
+    }
+
+    private void StartLifeRoutine()
+    {
+        StopLifeRoutine();
+        lifeRoutine = StartCoroutine(LifeRoutine());
+    }
+
+    private void StopLifeRoutine()
+    {
+        if (lifeRoutine != null)
         {
-            StopCoroutine(areaRoutine);
-            areaRoutine = null;
+            StopCoroutine(lifeRoutine);
+            lifeRoutine = null;
         }
     }
 
-    IEnumerator AreaRoutine()
+    private void ResetVisualState()
     {
-        if (previewEffect != null) previewEffect.SetActive(true);
+        if (previewEffect != null) previewEffect.SetActive(false);
+        if (activeEffect != null) activeEffect.SetActive(false);
+    }
+
+    protected virtual void ApplyShape()
+    {
+        // radius를 반지름으로 간주 → 스케일은 지름
+        transform.localScale = new Vector3(radius * 2f, radius * 2f, 1f);
+    }
+
+    private IEnumerator LifeRoutine()
+    {
+        if (previewEffect != null)
+            previewEffect.SetActive(true);
+
         yield return new WaitForSeconds(previewTime);
 
-        if (previewEffect != null) previewEffect.SetActive(false);
-        if (activeEffect != null) activeEffect.SetActive(true);
+        if (previewEffect != null)
+            previewEffect.SetActive(false);
+
+        if (activeEffect != null)
+            activeEffect.SetActive(true);
 
         isActive = true;
         OnActivate();
 
         yield return new WaitForSeconds(activeTime);
 
+        isActive = false;
         OnDeactivate();
+
+        if (activeEffect != null)
+            activeEffect.SetActive(false);
 
         if (destroyEffect != null)
             Instantiate(destroyEffect, transform.position, Quaternion.identity);
 
+        ReturnToPoolOrDestroy();
+    }
+
+    private void ReturnToPoolOrDestroy()
+    {
         if (ObjectPoolManager.Instance != null)
         {
-            // 붙어있는 PoolObject를 가져옴
             PoolObject po = GetComponent<PoolObject>();
-
             if (po != null)
             {
-                // PoolObject 타입으로 반납
                 ObjectPoolManager.Instance.ReturnObject(po);
+                return;
             }
-            else
-            {
-                // PoolObject가 없으면 매니저 규칙 위반이므로 그냥 파괴
-                Destroy(gameObject);
-            }
-        }
-        else
-        {
-            Destroy(gameObject);
         }
 
+        Destroy(gameObject);
     }
 
     protected abstract void OnActivate();

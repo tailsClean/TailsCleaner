@@ -1,66 +1,88 @@
 ﻿using UnityEngine;
-using System.Collections.Generic;
 using System.Collections;
+using System.Collections.Generic;
 
 public class ZoneTestCaller : MonoBehaviour
 {
+    public enum SpawnTarget
+    {
+        Player,
+        Monster
+    }
+
+    public enum ZonePatternType
+    {
+        DangerZone,
+        SafeZone
+    }
+
     [System.Serializable]
     public class ZonePattern
     {
         public string patternName = "New Pattern";
-        public bool onlyUseThis; // 이 패턴만 반복 실행하고 싶을 때 체크
-        public GameObject zonePrefab;
-        public bool isSafeZone;
+        public bool onlyUseThis;
+        public bool triggerPattern;
 
-        [Header("Spawn Settings")]
+        [Header("Pattern Type")]
+        public ZonePatternType patternType;
+
+        [Header("Prefab")]
+        public GameObject zonePrefab;
+
+        [Header("Spawn")]
         public SpawnTarget targetType;
         public int count = 1;
         public float range = 5f;
         public float radius = 3f;
 
-        [Header("Time Settings")]
+        [Header("Timing")]
         public float startDelay = 0.5f;
-        public float cooldown = 3.0f;
+        public float previewTime = 2f;
+        public float activeTime = 5f;
+        public float cooldown = 3f;
+
+        [Header("Damage")]
+        public float damagePerTick = 10f;
+        public float damageInterval = 0.5f;
 
         [HideInInspector] public bool isCooldown = false;
-        public bool triggerPattern;
     }
-
-    public enum SpawnTarget { Player, Monster }
 
     [Header("References")]
     public Transform playerTransform;
     public Transform monsterTransform;
+    public ZoneSpawner spawner;
 
-    [Header("Auto Play Settings")]
+    [Header("Auto Play")]
     public bool autoPlay = false;
     public bool useRandomOrder = false;
-    public float timeBetweenPatterns = 2.0f;
+    public bool runImmediatelyAfterCooldown = true;
+    public float timeBetweenPatterns = 2f;
 
-    [Header("Patterns List")]
+    [Header("Patterns")]
     public List<ZonePattern> patterns = new List<ZonePattern>();
 
-    private ZoneSpawner spawner;
     private Coroutine autoPlayCoroutine;
 
-    void Start()
+    private void Awake()
     {
-        spawner = GetComponent<ZoneSpawner>();
+        if (spawner == null)
+            spawner = GetComponent<ZoneSpawner>();
     }
 
-    void Update()
+    private void Update()
     {
-        // 수동 실행
-        foreach (var pattern in patterns)
+        for (int i = 0; i < patterns.Count; i++)
         {
-            if (pattern.triggerPattern)
+            if (patterns[i].triggerPattern)
             {
-                pattern.triggerPattern = false;
-                if (!pattern.isCooldown) StartCoroutine(ExecutePatternRoutine(pattern));
+                patterns[i].triggerPattern = false;
+
+                if (!patterns[i].isCooldown)
+                    StartCoroutine(ExecutePatternRoutine(patterns[i]));
             }
         }
 
-        // 2. 자동 실행 스위치 감지
         if (autoPlay && autoPlayCoroutine == null)
         {
             autoPlayCoroutine = StartCoroutine(AutoPlayRoutine());
@@ -78,50 +100,102 @@ public class ZoneTestCaller : MonoBehaviour
 
         while (autoPlay)
         {
-            if (patterns.Count == 0) yield break;
+            if (patterns.Count == 0)
+                yield break;
 
-            ZonePattern p = null;
-
-            // Only Use This가 체크된 패턴이 있는지 리스트에서 찾음
             ZonePattern forcedPattern = patterns.Find(x => x.onlyUseThis);
+            ZonePattern patternToRun = forcedPattern;
 
-            if (forcedPattern != null)
+            if (patternToRun == null)
             {
-                // 체크된 게 있다면 그것만 실행
-                p = forcedPattern;
+                int index = useRandomOrder ? Random.Range(0, patterns.Count) : currentIndex;
+                patternToRun = patterns[index];
+                currentIndex = (currentIndex + 1) % patterns.Count;
+            }
+
+            if (patternToRun != null && !patternToRun.isCooldown)
+            {
+                yield return StartCoroutine(ExecutePatternRoutine(patternToRun));
             }
             else
             {
-                // 체크된 게 없다면 기존 방식대로 (랜덤 혹은 순서대로) 선택
-                int indexToRun = useRandomOrder ? Random.Range(0, patterns.Count) : currentIndex;
-                p = patterns[indexToRun];
-                currentIndex = (currentIndex + 1) % patterns.Count;
+                yield return null;
             }
-            
 
-            yield return StartCoroutine(ExecutePatternRoutine(p));
-            yield return new WaitForSeconds(timeBetweenPatterns);
+            if (!runImmediatelyAfterCooldown && timeBetweenPatterns > 0f)
+            {
+                yield return new WaitForSeconds(timeBetweenPatterns);
+            }
         }
     }
 
-    private IEnumerator ExecutePatternRoutine(ZonePattern p)
+    private IEnumerator ExecutePatternRoutine(ZonePattern pattern)
     {
-        p.isCooldown = true;
-        if (p.startDelay > 0) yield return new WaitForSeconds(p.startDelay);
+        pattern.isCooldown = true;
 
-        ExecutePattern(p);
+        if (pattern.startDelay > 0f)
+            yield return new WaitForSeconds(pattern.startDelay);
 
-        yield return new WaitForSeconds(p.cooldown);
-        p.isCooldown = false;
+        ExecutePattern(pattern);
+
+        float lifetime = pattern.previewTime + pattern.activeTime;
+        if (lifetime > 0f)
+            yield return new WaitForSeconds(lifetime);
+
+        if (pattern.cooldown > 0f)
+            yield return new WaitForSeconds(pattern.cooldown);
+
+        pattern.isCooldown = false;
     }
 
-    private void ExecutePattern(ZonePattern p)
+    private void ExecutePattern(ZonePattern pattern)
     {
-        if (spawner == null) return;
-        Transform target = (p.targetType == SpawnTarget.Player) ? playerTransform : monsterTransform;
-        if (target != null)
+        if (spawner == null)
+            return;
+
+        Transform target = GetTargetTransform(pattern.targetType);
+        if (target == null)
+            return;
+
+        switch (pattern.patternType)
         {
-            spawner.SpawnZone(p.zonePrefab, target, p.count, p.range, p.isSafeZone, p.radius);
+            case ZonePatternType.DangerZone:
+                spawner.SpawnDangerZones(
+                    pattern.zonePrefab,
+                    target,
+                    pattern.count,
+                    pattern.range,
+                    pattern.radius,
+                    pattern.previewTime,
+                    pattern.activeTime,
+                    pattern.damagePerTick,
+                    pattern.damageInterval
+                );
+                break;
+
+            case ZonePatternType.SafeZone:
+                SafeZonePatternController.Instance?.StartPattern(
+                    pattern.previewTime,
+                    pattern.activeTime,
+                    pattern.damagePerTick,
+                    pattern.damageInterval
+                );
+
+                spawner.SpawnSafeZones(
+                    pattern.zonePrefab,
+                    target,
+                    pattern.count,
+                    pattern.range,
+                    pattern.radius,
+                    pattern.previewTime,
+                    pattern.activeTime
+                );
+                break;
         }
+    }
+
+    private Transform GetTargetTransform(SpawnTarget targetType)
+    {
+        return targetType == SpawnTarget.Player ? playerTransform : monsterTransform;
     }
 }
