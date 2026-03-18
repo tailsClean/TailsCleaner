@@ -7,6 +7,7 @@ public struct ItemInstance
     public readonly int ID;
     public readonly int EnhanceLevel;
     public readonly GRADE Grade;
+    public readonly ITEM_TYPE ItemType;
 
     public int Amount { get; private set; }
     public const int NoneEnhanceLevel = -1;
@@ -27,6 +28,8 @@ public struct ItemInstance
         ID = id;
         EnhanceLevel = NoneEnhanceLevel;
         Grade = GRADE.None;
+        ItemType = ItemDB.GetData<ItemDataBase>(id).Type;
+
         Amount = 1;
     }
 
@@ -41,7 +44,10 @@ public struct ItemInstance
         ID = id;
         EnhanceLevel = enhanceLevel;
         Grade = grad;
+        ItemType = ItemDB.GetData<ItemDataBase>(id).Type;
+
         Amount = 1;
+
     }
 
     public void SetAmount(int amount) => Amount = amount;

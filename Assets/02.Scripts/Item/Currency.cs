@@ -7,6 +7,7 @@ public class Currency : MonoBehaviour
 {
     [Header("이벤트 채널")]
     [SerializeField] private VoidEventChannelSO _onChangeGold;
+    [SerializeField] private IntEventChannelSO _onSellingItem;
 
     [SerializeField] private int _goldAmount = 1000;
 
@@ -19,6 +20,17 @@ public class Currency : MonoBehaviour
             return Mathf.Max(_goldAmount, 0);
         }
     }
+
+    private void Awake()
+    {
+        _onSellingItem.AddListener(GainGold);
+    }
+
+    private void OnDestroy()
+    {
+        _onSellingItem.RemoveListener(GainGold);
+    }
+
 
     public ItemInstance GetGold()
     {
