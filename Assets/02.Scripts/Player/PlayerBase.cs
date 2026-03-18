@@ -127,7 +127,9 @@ public class PlayerBase : MonoBehaviour, IDamageable, ISkillable, ISkillStat, IP
     public void TakeDamage(float damage)
     {
         _hpSystem.Hit(damage);
+        Debug.Log($"{damage}의 피해를 받음");
         _onHit.OnStartEvent(CurrentHp);
+
 
         if (_hpSystem.IsDead)
             OnDead();

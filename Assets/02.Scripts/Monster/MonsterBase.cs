@@ -349,7 +349,26 @@ public abstract class MonsterBase : PoolObject, IDamageable, IMonsterStatus, IPu
 
         if (hp <= 0) Die();
     }
-
+    protected virtual void OnTriggerStay2D(Collider2D other)
+    {
+           // 닿은 대상이 target인지 확인
+        if (target != null && other.gameObject == target.gameObject)
+        {
+            // 공격 주기가 되었는지 확인
+            if (Time.time >= lastAttackTime + damageCooldown)
+            {
+                // 플레이어에게 데미지 전달 시도
+                IDamageable player = other.gameObject.GetComponent<IDamageable>();
+              if (player != null)
+                {
+                    player.TakeDamage(this.power); // 플레이어의 함수 호출
+                    lastAttackTime = Time.time;    // 쿨타임 초기화
+                   // 확인을 위한 로그
+                    //Debug.Log($"{gameObject.name}가 트리거로 플레이어에게 데미지를 입혔음.");
+                }
+            }
+        }
+    }
     private void CacheBaseStats()
     {
         if (_baseCached) return;

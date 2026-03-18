@@ -1,12 +1,15 @@
 ﻿using UnityEngine;
+using UnityEngine.AddressableAssets;
+using UnityEngine.ResourceManagement.AsyncOperations;
+using System.Threading.Tasks;
 
 public class StageMapLoader : MonoBehaviour
 {
     [SerializeField] private Transform _mapRoot;
 
-    private GameObject _currentMapInstance;
+    private AsyncOperationHandle<GameObject> _currentMapInstance;
 
-    public void LoadMap(string mapResource)
+    public async Task LoadMap(string mapResource)
     {
         if (string.IsNullOrWhiteSpace(mapResource))
         {
@@ -15,26 +18,28 @@ public class StageMapLoader : MonoBehaviour
         }
 
         mapResource = mapResource.Trim();
+        Debug.Log($"[StageMapLoader] load address = '{mapResource}'");
 
-        string path = $"Prefabs/Map/{mapResource}";
-        Debug.Log($"[StageMapLoader] load path = '{path}'");
+        ClearMap();
 
-        GameObject mapPrefab = Resources.Load<GameObject>(path);
-        if (mapPrefab == null)
-        {
-            Debug.LogError($"[StageMapLoader] Map prefab not found: {path}");
-            return;
-        }
-
-        Instantiate(mapPrefab, transform.position, Quaternion.identity, transform);
+        _currentMapInstance = Addressables.InstantiateAsync(
+            mapResource,
+            transform.position,
+            Quaternion.identity,
+            transform
+        );     
     }
 
     public void ClearMap()
     {
-        if (_currentMapInstance != null)
+        if (_currentMapInstance.IsValid())
         {
-            Destroy(_currentMapInstance);
-            _currentMapInstance = null;
+           Addressables.ReleaseInstance(_currentMapInstance);
         }
+    }
+
+    private void OnDestroy()
+    {
+        ClearMap();
     }
 }

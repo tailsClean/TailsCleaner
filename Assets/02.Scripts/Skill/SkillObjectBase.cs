@@ -289,9 +289,7 @@ public class SkillObjectBase : PoolObject
 
         // 플레이어 최종 데미지 * 스킬 데미지 계수
         float damage = player.AttackPower * _runtimeFinalStat.Damage;
-        Debug.Log(_runtimeFinalStat.Damage + "데미지");
-        Debug.Log(player.AttackPower + "어택파워");
-        Debug.Log(damage + "최종데미지");
+     
 
         // 치명타 확률
         float critChance = player.CriticalChance / 100;
