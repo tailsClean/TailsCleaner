@@ -1,6 +1,6 @@
 ﻿using System;
 using UnityEngine;
-using static EquipmentSO;
+using static ItemDataLegacySO;
 
 
 public partial class CraftingSystem : MonoBehaviour
@@ -181,8 +181,8 @@ public class CraftingInfo
     public readonly int ItemID;
     public GRADE Grad;
 
-    public PART Parts => ItemDataBase.GetItemData<EquipmentSO>().GetEquipData(ItemID).Equipmnet.part;
-    public EquipGrade GradeData => ItemDataBase.GetItemData<EquipmentSO>().GetEquipData(ItemID).Grades[(int)Grad];
+    public PART Parts => ItemDB.GetItemData<ItemDataLegacySO>().GetEquipData(ItemID).Equipmnet.part;
+    public EquipGrade GradeData => ItemDB.GetItemData<ItemDataLegacySO>().GetEquipData(ItemID).Grades[(int)Grad];
     public readonly bool IsLoadout;
 
     /// <summary>

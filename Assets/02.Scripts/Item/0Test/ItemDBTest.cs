@@ -3,12 +3,12 @@ using UnityEngine;
 
 public class ItemDBTest : MonoBehaviour
 {
-    public EquipmentSO equip;
+    public ItemDataLegacySO equip;
 
     [ContextMenu("아이템 호출")]
     public void Sterr()
     {
-        equip.Init();
+        equip.EquipInit();
 
         foreach (var a in equip.EquipDict)
         {
@@ -21,6 +21,23 @@ public class ItemDBTest : MonoBehaviour
                 Debug.Log("강화정보" + b.add_value);
             foreach(var c in a.Value.Grades)
                 Debug.Log("세트정보" + c.grade);
+            Debug.Log("========");
+        }
+    }
+    [ContextMenu("유물 호출")]
+    public void Steedrr()
+    {
+        equip.RelicInit();
+
+        foreach (var a in equip.RelicDict)
+        {
+            Debug.Log("========");
+            Debug.Log("ID: " + a.Key);
+            Debug.Log("이름: " + a.Value.Relic.name);
+            foreach (var b in a.Value.Enhances)
+                Debug.Log("강화정보" + b.add_value);
+            Debug.Log("세트정보" + a.Value.Division);
+            Debug.Log("세트정보" + a.Value.Division.name);
             Debug.Log("========");
         }
     }

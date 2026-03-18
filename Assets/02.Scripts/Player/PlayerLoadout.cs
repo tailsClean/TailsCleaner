@@ -18,10 +18,10 @@ public class PlayerLoadout
         _myRelics = new List<RelicBase>(3);
         _myEquipments = new Dictionary<PART, EquipmentBase>
         {
-            {PART.Weapon, ItemDataBase.CreateItem<EquipmentBase>(ItemID.DefaultWeapon)},
-            {PART.Helmet, ItemDataBase.CreateItem<EquipmentBase>(ItemID.DefaultHat)},
-            {PART.Cloak, ItemDataBase.CreateItem<EquipmentBase>(ItemID.DefaultCloak)},
-            {PART.Shoes, ItemDataBase.CreateItem<EquipmentBase>(ItemID.DefaultShose)}
+            {PART.Weapon, ItemDB.CreateItem<EquipmentBase>(ItemID.DefaultWeapon)},
+            {PART.Helmet, ItemDB.CreateItem<EquipmentBase>(ItemID.DefaultHat)},
+            {PART.Cloak, ItemDB.CreateItem<EquipmentBase>(ItemID.DefaultCloak)},
+            {PART.Shoes, ItemDB.CreateItem<EquipmentBase>(ItemID.DefaultShose)}
         };
     }
 
@@ -58,16 +58,16 @@ public class PlayerLoadout
     }
 
     // 유물리스트의 스텟 증가량을 반환
-    public float GetIncreaseStat(RELIC_STAT stat)
+    public float GetIncreaseStat(STAT_TYPE stat)
     {
-        int result = 0;
+        float result = 0;
         foreach (var relic in _myRelics)
         {
             if (relic == null)
                 continue;
 
-            if (relic.Data.StatType == stat)
-                result += relic.Data.GetIncreaseStat();
+            if (relic.Data.Relic.stat_type == stat)
+                result += relic.Data.Relic.stat_value;
         }
         return result;
     }

@@ -140,10 +140,10 @@ public class EnhancingInfo
             switch(ItemType)
             {
                 case ITEM_TYPE.Equipment:
-                    return new ItemEnhanceData(ItemID, EnhanceLevel + 1);
+                    return new ItemEnhanceData(ItemDB.GetItemData<ItemDataLegacySO>().GetEquipData(ItemID), EnhanceLevel + 1);
 
                 case ITEM_TYPE.Relic:
-                    return ItemDB.GetItemData<RelicLegacySO>(ItemID).GetEnhanceData(EnhanceLevel + 1);
+                    return new ItemEnhanceData(ItemDB.GetItemData<ItemDataLegacySO>().GetRelicData(ItemID), EnhanceLevel + 1);
             }
             return default;
         }

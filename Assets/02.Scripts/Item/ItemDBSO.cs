@@ -6,7 +6,7 @@ using UnityEngine;
 public class ItemDBSO : ScriptableObject
 {
     [Header("장비")]
-    [SerializeField] private List<EquipmentSO> _equipments;
+    [SerializeField] private List<ItemDataLegacySO> _equipments;
 
     [Header("유물")]
     [SerializeField] private List<RelicLegacySO> _Relics;
@@ -68,7 +68,7 @@ public static class ItemDB
 
 
 
-    public static T GetItemData<T>(int id) where T : ItemBaseSO
+    public static T GetItemData<T>(int id = 0) where T : ItemBaseSO
     {
         if(_itemDB == null)
         {
@@ -88,31 +88,31 @@ public static class ItemDB
     }
 }
 
-public static class ItemDataBase
-{
-    private static ItemDBSO _itemDB;
+//public static class ItemDB
+//{
+//    private static ItemDBSO _itemDB;
 
 
-    //public static ItemBaseSO GetItemData(int id) => GetItemData<ItemBaseSO>(id);
+//    //public static ItemBaseSO GetItemData(int id) => GetItemData<ItemBaseSO>(id);
 
 
 
-    public static T GetItemData<T>() where T : ItemBaseSO
-    {
-        if (_itemDB == null)
-        {
-            _itemDB = Resources.Load<ItemDBSO>("Data/ScriptableObjects/Item/ItemDB");
-            Debug.Log("<color=green>ItemDB 초기화</color>");
-        }
+//    public static T GetItemData<T>() where T : ItemBaseSO
+//    {
+//        if (_itemDB == null)
+//        {
+//            _itemDB = Resources.Load<ItemDBSO>("Data/ScriptableObjects/Item/ItemDB");
+//            Debug.Log("<color=green>ItemDB 초기화</color>");
+//        }
 
-        return _itemDB.GetValue<T>(0);
-    }
+//        return _itemDB.GetValue<T>(0);
+//    }
 
-    public static T CreateItem<T>(int id) where T : ItemBase, new()
-    {
-        var item = new T();
-        item.Init(id);
+//    public static T CreateItem<T>(int id) where T : ItemBase, new()
+//    {
+//        var item = new T();
+//        item.Init(id);
 
-        return item;
-    }
-}
+//        return item;
+//    }
+//}

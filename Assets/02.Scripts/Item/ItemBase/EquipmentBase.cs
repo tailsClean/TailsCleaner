@@ -5,11 +5,11 @@ using UnityEngine;
 public class EquipmentBase : ItemBase, IEnhancement
 {
     public EquipData Data { get; private set; }
-    public override void Init(int id) => Data = ItemDataBase.GetItemData<EquipmentSO>().GetEquipData(id);
+    public override void Init(int id) => Data = ItemDB.GetItemData<ItemDataLegacySO>().GetEquipData(id);
 
 
     // 강화 데이터
-    public int EnhanceLevel { get; private set; }
+    public int EnhanceLevel { get; private set; } = 1;
     public EquipEnhance EnhanceData => Data.Enhances[EnhanceLevel - 1];
 
     // 등급 데이터
