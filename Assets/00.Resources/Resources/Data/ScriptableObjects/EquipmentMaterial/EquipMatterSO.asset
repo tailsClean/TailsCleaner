@@ -1,0 +1,275 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 038b3c18ca2a68747aa55a4734a76795, type: 3}
+  m_Name: EquipMatterSO
+  m_EditorClassIdentifier: Assembly-CSharp::EquipMatterSO
+  dataList:
+  - id: 39001
+    desc: "\uAF2C\uC9C8\uD55C \uBB34\uAE30 \uC7AC\uB8CC \uC7A5\uBE44"
+    part_type: 0
+    grade: 0
+    max_stack: 99
+    cost_id: 39001
+    cost_count: 2
+    price: 0
+    name: equip_name_39001
+    script: equip_script_39001
+    sprite: equip_sprite_39001
+    effect: equip_effect_39001
+    sound: equip_sound_39001
+  - id: 39002
+    desc: "\uD3C9\uBC94\uD55C \uBB34\uAE30 \uC7AC\uB8CC \uC7A5\uBE44"
+    part_type: 0
+    grade: 1
+    max_stack: 99
+    cost_id: 39002
+    cost_count: 2
+    price: 50000
+    name: equip_name_39002
+    script: equip_script_39002
+    sprite: equip_sprite_39002
+    effect: equip_effect_39002
+    sound: equip_sound_39002
+  - id: 39003
+    desc: "\uD5A5\uAE0B\uD55C \uBB34\uAE30 \uC7AC\uB8CC \uC7A5\uBE44"
+    part_type: 0
+    grade: 2
+    max_stack: 99
+    cost_id: 39003
+    cost_count: 2
+    price: 80000
+    name: equip_name_39003
+    script: equip_script_39003
+    sprite: equip_sprite_39003
+    effect: equip_effect_39003
+    sound: equip_sound_39003
+  - id: 39004
+    desc: "\uAE54\uB054\uD55C \uBB34\uAE30 \uC7AC\uB8CC \uC7A5\uBE44"
+    part_type: 0
+    grade: 3
+    max_stack: 99
+    cost_id: 39004
+    cost_count: 2
+    price: 140000
+    name: equip_name_39004
+    script: equip_script_39004
+    sprite: equip_sprite_39004
+    effect: equip_effect_39004
+    sound: equip_sound_39004
+  - id: 39005
+    desc: "\uB208\uBD80\uC2E0 \uBB34\uAE30 \uC7AC\uB8CC \uC7A5\uBE44"
+    part_type: 0
+    grade: 4
+    max_stack: 99
+    cost_id: 0
+    cost_count: 0
+    price: 250000
+    name: equip_name_39005
+    script: equip_script_39005
+    sprite: equip_sprite_39005
+    effect: equip_effect_39005
+    sound: equip_sound_39005
+  - id: 39101
+    desc: "\uAF2C\uC9C8\uD55C \uBAA8\uC790 \uC7AC\uB8CC \uC7A5\uBE44"
+    part_type: 1
+    grade: 0
+    max_stack: 99
+    cost_id: 39101
+    cost_count: 2
+    price: 0
+    name: equip_name_39101
+    script: equip_script_39101
+    sprite: equip_sprite_39101
+    effect: equip_effect_39101
+    sound: equip_sound_39101
+  - id: 39102
+    desc: "\uD3C9\uBC94\uD55C \uBAA8\uC790 \uC7AC\uB8CC \uC7A5\uBE44"
+    part_type: 1
+    grade: 1
+    max_stack: 99
+    cost_id: 39102
+    cost_count: 2
+    price: 50000
+    name: equip_name_39102
+    script: equip_script_39102
+    sprite: equip_sprite_39102
+    effect: equip_effect_39102
+    sound: equip_sound_39102
+  - id: 39103
+    desc: "\uD5A5\uAE0B\uD55C \uBAA8\uC790 \uC7AC\uB8CC \uC7A5\uBE44"
+    part_type: 1
+    grade: 2
+    max_stack: 99
+    cost_id: 39103
+    cost_count: 2
+    price: 80000
+    name: equip_name_39103
+    script: equip_script_39103
+    sprite: equip_sprite_39103
+    effect: equip_effect_39103
+    sound: equip_sound_39103
+  - id: 39104
+    desc: "\uAE54\uB054\uD55C \uBAA8\uC790 \uC7AC\uB8CC \uC7A5\uBE44"
+    part_type: 1
+    grade: 3
+    max_stack: 99
+    cost_id: 39104
+    cost_count: 2
+    price: 140000
+    name: equip_name_39104
+    script: equip_script_39104
+    sprite: equip_sprite_39104
+    effect: equip_effect_39104
+    sound: equip_sound_39104
+  - id: 39105
+    desc: "\uB208\uBD80\uC2E0 \uBAA8\uC790 \uC7AC\uB8CC \uC7A5\uBE44"
+    part_type: 1
+    grade: 4
+    max_stack: 99
+    cost_id: 0
+    cost_count: 0
+    price: 250000
+    name: equip_name_39105
+    script: equip_script_39105
+    sprite: equip_sprite_39105
+    effect: equip_effect_39105
+    sound: equip_sound_39105
+  - id: 39201
+    desc: "\uAF2C\uC9C8\uD55C \uB9DD\uD1A0 \uC7AC\uB8CC \uC7A5\uBE44"
+    part_type: 2
+    grade: 0
+    max_stack: 99
+    cost_id: 39201
+    cost_count: 2
+    price: 0
+    name: equip_name_39201
+    script: equip_script_39201
+    sprite: equip_sprite_39201
+    effect: equip_effect_39201
+    sound: equip_sound_39201
+  - id: 39202
+    desc: "\uD3C9\uBC94\uD55C \uB9DD\uD1A0 \uC7AC\uB8CC \uC7A5\uBE44"
+    part_type: 2
+    grade: 1
+    max_stack: 99
+    cost_id: 39202
+    cost_count: 2
+    price: 50000
+    name: equip_name_39202
+    script: equip_script_39202
+    sprite: equip_sprite_39202
+    effect: equip_effect_39202
+    sound: equip_sound_39202
+  - id: 39203
+    desc: "\uD5A5\uAE0B\uD55C \uB9DD\uD1A0 \uC7AC\uB8CC \uC7A5\uBE44"
+    part_type: 2
+    grade: 2
+    max_stack: 99
+    cost_id: 39203
+    cost_count: 2
+    price: 80000
+    name: equip_name_39203
+    script: equip_script_39203
+    sprite: equip_sprite_39203
+    effect: equip_effect_39203
+    sound: equip_sound_39203
+  - id: 39204
+    desc: "\uAE54\uB054\uD55C \uB9DD\uD1A0 \uC7AC\uB8CC \uC7A5\uBE44"
+    part_type: 2
+    grade: 3
+    max_stack: 99
+    cost_id: 39204
+    cost_count: 2
+    price: 140000
+    name: equip_name_39204
+    script: equip_script_39204
+    sprite: equip_sprite_39204
+    effect: equip_effect_39204
+    sound: equip_sound_39204
+  - id: 39205
+    desc: "\uB208\uBD80\uC2E0 \uB9DD\uD1A0 \uC7AC\uB8CC \uC7A5\uBE44"
+    part_type: 2
+    grade: 4
+    max_stack: 99
+    cost_id: 0
+    cost_count: 0
+    price: 250000
+    name: equip_name_39205
+    script: equip_script_39205
+    sprite: equip_sprite_39205
+    effect: equip_effect_39205
+    sound: equip_sound_39205
+  - id: 39301
+    desc: "\uAF2C\uC9C8\uD55C \uC2E0\uBC1C \uC7AC\uB8CC \uC7A5\uBE44"
+    part_type: 3
+    grade: 0
+    max_stack: 99
+    cost_id: 39301
+    cost_count: 2
+    price: 0
+    name: equip_name_39301
+    script: equip_script_39301
+    sprite: equip_sprite_39301
+    effect: equip_effect_39301
+    sound: equip_sound_39301
+  - id: 39302
+    desc: "\uD3C9\uBC94\uD55C \uC2E0\uBC1C \uC7AC\uB8CC \uC7A5\uBE44"
+    part_type: 3
+    grade: 1
+    max_stack: 99
+    cost_id: 39302
+    cost_count: 2
+    price: 50000
+    name: equip_name_39302
+    script: equip_script_39302
+    sprite: equip_sprite_39302
+    effect: equip_effect_39302
+    sound: equip_sound_39302
+  - id: 39303
+    desc: "\uD5A5\uAE0B\uD55C \uC2E0\uBC1C \uC7AC\uB8CC \uC7A5\uBE44"
+    part_type: 3
+    grade: 2
+    max_stack: 99
+    cost_id: 39303
+    cost_count: 2
+    price: 80000
+    name: equip_name_39303
+    script: equip_script_39303
+    sprite: equip_sprite_39303
+    effect: equip_effect_39303
+    sound: equip_sound_39303
+  - id: 39304
+    desc: "\uAE54\uB054\uD55C \uC2E0\uBC1C \uC7AC\uB8CC \uC7A5\uBE44"
+    part_type: 3
+    grade: 3
+    max_stack: 99
+    cost_id: 39304
+    cost_count: 2
+    price: 140000
+    name: equip_name_39304
+    script: equip_script_39304
+    sprite: equip_sprite_39304
+    effect: equip_effect_39304
+    sound: equip_sound_39304
+  - id: 39305
+    desc: "\uB208\uBD80\uC2E0 \uC2E0\uBC1C \uC7AC\uB8CC \uC7A5\uBE44"
+    part_type: 3
+    grade: 4
+    max_stack: 99
+    cost_id: 0
+    cost_count: 0
+    price: 250000
+    name: equip_name_39305
+    script: equip_script_39305
+    sprite: equip_sprite_39305
+    effect: equip_effect_39305
+    sound: equip_sound_39305

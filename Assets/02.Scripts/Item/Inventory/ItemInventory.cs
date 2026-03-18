@@ -7,6 +7,7 @@ public class ItemInventory : MonoBehaviour
 {
     [Header("이벤트 채널")]
     [SerializeField] private VoidEventChannelSO _onChangeInventory;
+    [SerializeField] private IntEventChannelSO _onSellingItem;
 
     // Key: 아이템 , Value: 소지갯수
     private Dictionary<ItemInstance, int> _inventory;
@@ -36,6 +37,31 @@ public class ItemInventory : MonoBehaviour
         OnRemoveItem = null;
     }
 
+    public void SellItem(ITEM_TYPE type, ItemInstance item, int amount = 1)
+    {
+        bool isSuccess = false;
+        switch (type)
+        {
+            case ITEM_TYPE.Equipment:
+               isSuccess = RemoveEquipment(item, amount);
+                break;
+
+            case ITEM_TYPE.Relic:
+                isSuccess = RemoveRelic(item.ID, item.EnhanceLevel);
+                break;
+
+            case ITEM_TYPE.Reinforcement:
+            case ITEM_TYPE.Consume:
+                isSuccess = UseStakItem(item.ID, amount);
+                break;
+        }
+
+        if(!isSuccess)
+        { Debug.Log($"<color=red>아이템 판매에 실패했습니다.</color> 판매하려는 아이템: {item.ID}"); return; }
+
+        _onSellingItem.OnStartEvent(10 * amount);
+    }
+
 
     #region 장비 아이템
 
@@ -51,11 +77,11 @@ public class ItemInventory : MonoBehaviour
 
 
     /// 장비 아이템 제거
-    public void RemoveEquipment(int id, int enhanceLevel, GRADE grade, int amount = 1) =>
+    public bool RemoveEquipment(int id, int enhanceLevel, GRADE grade, int amount = 1) =>
         UseItem(id, enhanceLevel, grade, amount);
 
 
-    public void RemoveEquipment(ItemInstance item, int amount = 1) =>
+    public bool RemoveEquipment(ItemInstance item, int amount = 1) => 
         UseItem(item.ID, item.EnhanceLevel, item.Grade, amount);
 
 
@@ -67,7 +93,7 @@ public class ItemInventory : MonoBehaviour
 
 
     /// 유물 아이템 읽기
-    public bool TryGetRelic(int id, int enhanceLevel, out ItemInstance item) => 
+    public bool TryGetRelic(int id, int enhanceLevel, out ItemInstance item) =>
         TryGetItem(id, enhanceLevel, GRADE.None, out item);
     public ItemInstance GetRelic(int id, int enhanceLevel) => GetItem(id, enhanceLevel, GRADE.None);
 
@@ -89,15 +115,18 @@ public class ItemInventory : MonoBehaviour
     }
 
 
-    // 유물 아이템 사용
-    public void RemoveRelic(int id, int enhanceLevel)
+    // 유물 아이템 삭제
+    public bool RemoveRelic(int id, int enhanceLevel)
     {
         var item = SearchItem(id, enhanceLevel, GRADE.None);
+        
         if (!HasItem(item))
-        { Debug.Log($"사용하려는 {id} 아이템을 소지하지 않았습니다."); return; }
+        { Debug.Log($"사용하려는 {id} 아이템을 소지하지 않았습니다."); return false; }
 
         _inventory.Remove(item);
         _onChangeInventory.OnStartEvent();
+
+        return true;
     }
 
 
@@ -118,7 +147,7 @@ public class ItemInventory : MonoBehaviour
 
 
     // 스택형 아이템 사용
-    public void UseStakItem(int id, int amount) =>
+    public bool UseStakItem(int id, int amount) => 
         UseItem(id, ItemInstance.NoneEnhanceLevel, GRADE.None, amount);
 
 
@@ -132,7 +161,7 @@ public class ItemInventory : MonoBehaviour
     private bool TryGetItem(int id, int enhanceLevel, GRADE grad, out ItemInstance item)
     {
         item = SearchItem(id, enhanceLevel, grad);
-        if(HasItem(item))
+        if (HasItem(item))
         {
             item.SetAmount(_inventory[item]);
             return true;
@@ -172,23 +201,25 @@ public class ItemInventory : MonoBehaviour
     }
 
     // 인벤토리 내부전용 아이템 사용 메서드
-    private void UseItem(int id, int enhanceLevel, GRADE grade, int amount)
+    private bool UseItem(int id, int enhanceLevel, GRADE grade, int amount)
     {
         if (amount < 0)
-        { Debug.LogError("사용하려는 값이 음수입니다."); return; }
+        { Debug.LogError("사용하려는 값이 음수입니다."); return false; }
 
         var item = SearchItem(id, enhanceLevel, grade);
         if (!HasItem(item))
-        { Debug.Log($"사용하려는 {id} 아이템을 소지하지 않았습니다."); return; }
+        { Debug.Log($"사용하려는 {id} 아이템을 소지하지 않았습니다."); return false; }
 
         if (_inventory[item] < amount)
-        { Debug.Log($"사용량이 {id} 아이템 소지갯수를 초과합니다."); return; }
+        { Debug.Log($"사용량이 {id} 아이템 소지갯수를 초과합니다."); return false; }
 
         _inventory[item] -= amount;
 
-        if(_inventory[item] == 0)
+        if (_inventory[item] == 0)
             _inventory.Remove(item);
         _onChangeInventory.OnStartEvent();
+
+        return true;
     }
 
 
