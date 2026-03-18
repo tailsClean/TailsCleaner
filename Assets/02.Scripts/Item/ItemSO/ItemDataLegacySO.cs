@@ -146,6 +146,44 @@ public class ItemDataLegacySO : ItemBaseSO
     }
 
     #endregion
+
+
+    // 재료, 소모품 데이터는 여기서 관리
+    #region 아이템 관리 데이터 매칭
+    private Dictionary<int, ItemData> _itemDict;
+
+    public ItemData GetItemData(int ManageID)
+    {
+        if (_itemDict == null)
+            ItemInit();
+
+        if (_itemDict.TryGetValue(ManageID, out var item))
+            return item;
+        
+        Debug.LogWarning($"{ManageID}에 해당하는 아이템 데이터가 없습니다.");
+        return null;
+    }
+
+    public void ItemInit()
+    {
+        _itemDict = new Dictionary<int, ItemData>();
+        var itemManageData = DataManager.Instance.GetSOData<ItemManageTableSO>();
+        var itemConsumeData = DataManager.Instance.GetSOData<ItemConsumeTableSO>();
+        foreach (var manage in itemManageData.dataList)
+        {
+            _itemDict.Add(manage.item_id, new ItemData());
+            _itemDict[manage.item_id].ManageID = manage.item_id;
+            _itemDict[manage.item_id].Type = manage.item_type;
+            _itemDict[manage.item_id].ManageData = manage;
+        }
+        foreach (var consume in itemConsumeData.dataList)
+        {
+            if (_itemDict.TryGetValue(consume.item_id, out var item))
+                item.Consume = consume;
+        }
+    }
+
+    #endregion
 }
 
 public class EquipData
@@ -176,6 +214,14 @@ public class RelicData
     {
         Enhances = new List<RelicEnhance>();
     }
+}
+
+public class ItemData
+{
+    public int ManageID;
+    public ITEM_TYPE Type;
+    public ItemManageTable ManageData;
+    public ItemConsumeTable Consume;
 }
 
 
