@@ -7,6 +7,9 @@ public class TestSpawner : MonoBehaviour
     [SerializeField] private PoolObject prefab;
     [SerializeField] private int defaultSize = 20;
 
+    [Header("Monster Settings")]
+    [SerializeField] private int monsterId = 1;
+
     [Header("Spawn Settings")]
     [SerializeField] private bool autoSpawn = false;
     [SerializeField] private float spawnInterval = 0.5f;
@@ -20,13 +23,11 @@ public class TestSpawner : MonoBehaviour
 
     void Update()
     {
-        // 즉시 스폰 (마우스 좌클릭)
         if (Input.GetMouseButtonDown(0))
         {
             Spawn();
         }
 
-        // 딜레이 스폰 (스페이스바)
         if (Input.GetKeyDown(KeyCode.Space))
         {
             StartCoroutine(SpawnWithDelay());
@@ -37,10 +38,9 @@ public class TestSpawner : MonoBehaviour
     {
         if (prefab == null) return;
 
-        ObjectPoolManager.Instance.Spawn(prefab, transform.position, Quaternion.identity);
+        ObjectPoolManager.Instance.Spawn(prefab, transform.position, Quaternion.identity, monsterId);
     }
 
-    // 지정한 spawnDelay 시간만큼 대기한 뒤 Spawn()을 실행
     private IEnumerator SpawnWithDelay()
     {
         yield return new WaitForSeconds(spawnDelay);

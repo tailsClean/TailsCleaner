@@ -1,7 +1,5 @@
 ﻿using MonsterEnum;
-using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
 
 public abstract class SpecialBossMonsterBase : MonsterBase
@@ -11,47 +9,45 @@ public abstract class SpecialBossMonsterBase : MonsterBase
     protected enum MonsterState { MOVE, PATTERN }
     protected MonsterState currentState = MonsterState.MOVE;
 
-
     [Header("--- 데이터 테이블 연동 ---")]
     public int pattern_group_id;
 
-    [Header("--- monster_table 연동  ---")]
-    public float detect_range;             // 플레이어를 감지하거나 패턴을 발동하는 기준 거리
+    [Header("--- monster_table 연동 ---")]
+    public float detect_range;
 
     [Header("--- pattern_table 연동 ---")]
-    public float pattern_cooldown;         // 패턴 대기 시간
-    public float cast_time;                // 패턴 발동 전 대기 시간
-    public float pattern_multiply;         // 패턴 중 가속 배율
-    public float explosion_range;          // 자폭/광역 공격의 물리적 타격 반경
-    public float damage_multiply;          // 패턴 성공 시 플레이어에게 주는 데미지 배율
-    public float zigzag_width;             // 좌우 이동 폭
-    public float patternFrequency = 5.0f;  // 지그재그 주기
+    public float pattern_cooldown;
+    public float cast_time;
+    public float pattern_multiply;
+    public float explosion_range;
+    public float damage_multiply;
+    public float zigzag_width;
+    public float patternFrequency = 5.0f;
     public float type_power_multiply = 1.0f;
 
     [Header("--- 이동 특수 패턴 설정 ---")]
-    public MONSTERMOVE moveType;           // 이 몬스터가 어떤 이동 패턴을 쓸지 결정
+    protected Pattern currentPattern;
 
     [Header("--- 점프 전용 상세 설정 ---")]
-    public float jump_height = 2.0f;       // 시각적 높이
+    public float jump_height = 2.0f;
     public Transform visualChild;
 
-    // --- 내부 제어용 변수 ---
-    protected float patternTimer = 0f;     // 지그재그용 타이머
-    protected float stateTimer = 0f;       // 쿨타임 및 시전 대기 타이머
-    protected bool isWaiting = false;      // 시전 대기 중(cast_time 체크용)
-    protected bool isJumping = false;      // 점프 여부
-    private bool hasHitTargetInCurrentJump = false; // 중복 데미지 방지용
-    private Vector2 jumpStartPos;          // 점프 시작 지점
-    private Vector2 jumpTargetPos;         // 점프 착지 시점
-    private float jumpProgress = 0f;       // 점프 진행도 (0~1)
+    protected float patternTimer = 0f;
+    protected float stateTimer = 0f;
+    protected bool isWaiting = false;
+    protected bool isJumping = false;
+    private bool hasHitTargetInCurrentJump = false;
+    private Vector2 jumpStartPos;
+    private Vector2 jumpTargetPos;
+    private float jumpProgress = 0f;
 
-    protected bool isFleeingState = false; // 도망 여부
-    protected bool isWaitingFlee = false;  // 도망 대기 여부
-    private Vector2 currentFleeTargetPos;  // 선택된 도망 목표 지점
+    protected bool isFleeingState = false;
+    protected bool isWaitingFlee = false;
+    private Vector2 currentFleeTargetPos;
 
-    public bool isSuicideUnit = false;     // 자폭 여부
-    private bool hasExploded = false;      // 이미 터졌는지 체크
-    private float currentCastTimer;        // 실시간 자폭 대기 타이머
+    public bool isSuicideUnit = false;
+    private bool hasExploded = false;
+    private float currentCastTimer;
 
     private BossTriggerPatternRunner _triggerRunner;
 
@@ -65,7 +61,7 @@ public abstract class SpecialBossMonsterBase : MonsterBase
         if (target == null) return;
         if (hasExploded) return;
 
-        if (this.hp <= 0)
+        if (hp <= 0)
         {
             rb2D.linearVelocity = Vector2.zero;
             return;
@@ -73,7 +69,7 @@ public abstract class SpecialBossMonsterBase : MonsterBase
 
         if (isSuicideUnit)
         {
-            if (currentCastTimer > 0)
+            if (currentCastTimer > 0f)
             {
                 currentCastTimer -= Time.fixedDeltaTime;
                 MoveToTarget();
@@ -81,15 +77,14 @@ public abstract class SpecialBossMonsterBase : MonsterBase
             else
             {
                 ExecuteExplosion();
-                return;
             }
+
+            return;
         }
-        else
+
+        if (!isAttacking)
         {
-            if (!isAttacking)
-            {
-                MoveToTarget();
-            }
+            MoveToTarget();
         }
     }
 
@@ -97,26 +92,79 @@ public abstract class SpecialBossMonsterBase : MonsterBase
     {
         base.OnSpawn();
 
+        Debug.Log($"[SpecialBossMonsterBase] OnSpawn / MonsterId:{MonsterId}");
+
+        if (MonsterId <= 0)
+        {
+            Debug.LogError($"[SpecialBossMonsterBase] 유효하지 않은 MonsterId: {MonsterId}");
+            return;
+        }
+
+        MonsterSO monsterSO = DataManager.Instance.GetSOData<MonsterSO>();
+        if (monsterSO == null)
+        {
+            Debug.LogError("[SpecialBossMonsterBase] MonsterSO를 찾을 수 없습니다.");
+            return;
+        }
+
+        Monster monsterData = monsterSO.GetById(MonsterId);
+        if (monsterData == null)
+        {
+            Debug.LogError($"[SpecialBossMonsterBase] 몬스터 데이터 없음. MonsterId: {MonsterId}");
+            return;
+        }
+
+        pattern_group_id = monsterData.pattern_group_id;
+
+        if (pattern_group_id <= 0)
+        {
+            Debug.LogError($"[SpecialBossMonsterBase] monster_table의 pattern_group_id가 유효하지 않음. MonsterId:{MonsterId}, pattern_group_id:{pattern_group_id}");
+            return;
+        }
+
+        PatternGroupCompositionSO compositionSO = DataManager.Instance.GetSOData<PatternGroupCompositionSO>();
+        if (compositionSO == null)
+        {
+            Debug.LogError("[SpecialBossMonsterBase] PatternGroupCompositionSO를 찾을 수 없습니다.");
+            return;
+        }
+
+        PatternGroupComposition compositionData = compositionSO.GetById(pattern_group_id);
+        if (compositionData == null)
+        {
+            Debug.LogError($"[SpecialBossMonsterBase] composition 데이터 없음. pattern_group_id:{pattern_group_id}");
+            return;
+        }
+
+        int pattern_id = compositionData.pattern_id;
+
+        if (pattern_id <= 0)
+        {
+            Debug.LogError($"[SpecialBossMonsterBase] composition의 pattern_id가 유효하지 않음. pattern_group_id:{pattern_group_id}, pattern_id:{pattern_id}");
+            return;
+        }
+
+        PatternSO patternSO = DataManager.Instance.GetSOData<PatternSO>();
+        if (patternSO == null)
+        {
+            Debug.LogError("[SpecialBossMonsterBase] PatternSO를 찾을 수 없습니다.");
+            return;
+        }
+
+        Pattern patternData = patternSO.GetById(pattern_id);
+        if (patternData == null)
+        {
+            Debug.LogError($"[SpecialBossMonsterBase] 패턴 데이터 없음. pattern_id:{pattern_id}, pattern_group_id:{pattern_group_id}");
+            return;
+        }
+
+        currentPattern = patternData;
+
+        ApplyPatternData(patternData);
+        ResetRuntimeState();
+
         if (!activeMonsters.Contains(this))
             activeMonsters.Add(this);
-
-        hasExploded = false;
-        isJumping = false;
-        isWaiting = false;
-        isFleeingState = false;
-        isWaitingFlee = false;
-        hasHitTargetInCurrentJump = false;
-
-        patternTimer = 0f;
-        stateTimer = 0f;
-        jumpProgress = 0f;
-        currentCastTimer = 0f;
-
-        if (rb2D != null)
-        {
-            rb2D.linearVelocity = Vector2.zero;
-            rb2D.angularVelocity = 0f;
-        }
 
         if (isSuicideUnit)
         {
@@ -138,11 +186,18 @@ public abstract class SpecialBossMonsterBase : MonsterBase
                 target = playerObj.transform;
         }
 
+        Debug.Log(
+            $"[Pattern 적용 완료] " +
+            $"MonsterId:{MonsterId}, PatternGroupId:{pattern_group_id}, PatternId:{pattern_id}, Logic:{currentPattern.pattern_logic_type}, " +
+            $"Cooldown:{pattern_cooldown}, Cast:{cast_time}, SpeedMul:{pattern_multiply}, Detect:{detect_range}, " +
+            $"ZigzagWidth:{zigzag_width}, JumpHeight:{jump_height}, ExplosionRange:{explosion_range}, DamageMul:{damage_multiply}"
+        );
     }
 
     public override void OnDespawn()
     {
         base.OnDespawn();
+
         activeMonsters.Remove(this);
 
         hasExploded = false;
@@ -170,9 +225,7 @@ public abstract class SpecialBossMonsterBase : MonsterBase
             visualChild.localPosition = Vector2.zero;
 
         if (_triggerRunner != null)
-        {
             _triggerRunner.Unbind();
-        }
     }
 
     protected override void MoveToTarget()
@@ -182,8 +235,7 @@ public abstract class SpecialBossMonsterBase : MonsterBase
 
         if (isSuicideUnit && !hasExploded)
         {
-            // 부모의 moveSpeed 사용
-            float suicideSpeed = this.moveSpeed * pattern_multiply;
+            float suicideSpeed = moveSpeed * pattern_multiply;
             Vector2 dir = ((Vector2)target.position - rb2D.position).normalized;
             float dist = Vector2.Distance(target.position, rb2D.position);
 
@@ -191,16 +243,41 @@ public abstract class SpecialBossMonsterBase : MonsterBase
                 rb2D.linearVelocity = dir * suicideSpeed;
             else
                 rb2D.linearVelocity = Vector2.zero;
+
             return;
         }
 
-        switch (moveType)
+        if (currentPattern == null)
         {
-            case MONSTERMOVE.StraightChase: StraightChase(); break;
-            case MONSTERMOVE.Zigzag: ZigzagMove(); break;
-            case MONSTERMOVE.Jump: JumpMove(); break;
-            case MONSTERMOVE.Flee: FleeMove(); break;
-            default: StraightChase(); break;
+            Debug.LogError("[SpecialBossMonsterBase] currentPattern 없음 → StraightChase fallback");
+            StraightChase();
+            return;
+        }
+
+        string logic = NormalizePatternLogic(currentPattern.pattern_logic_type);
+
+        switch (logic)
+        {
+            case "StraightChase":
+                StraightChase();
+                break;
+
+            case "Zigzag":
+                ZigzagMove();
+                break;
+
+            case "Jump":
+                JumpMove();
+                break;
+
+            case "Flee":
+                FleeMove();
+                break;
+
+            default:
+                Debug.LogWarning($"[SpecialBossMonsterBase] 알 수 없는 pattern_logic_type: {currentPattern.pattern_logic_type} → StraightChase fallback");
+                StraightChase();
+                break;
         }
     }
 
@@ -211,13 +288,13 @@ public abstract class SpecialBossMonsterBase : MonsterBase
         Vector2 toTarget = targetPos - myPos;
         float dist = toTarget.magnitude;
 
-        Vector2 baselineDir = (dist > 0.1f) ? toTarget.normalized : rb2D.linearVelocity.normalized;
+        Vector2 baselineDir = (dist > 0.1f) ? toTarget.normalized : Vector2.zero;
         Vector2 sideDir = new Vector2(-baselineDir.y, baselineDir.x);
 
         float sideOffset = Mathf.Sin(patternTimer * patternFrequency) * zigzag_width;
         float damping = Mathf.Clamp01((dist - 0.2f) / 0.8f);
 
-        float zigzagSpeed = this.moveSpeed * pattern_multiply;
+        float zigzagSpeed = moveSpeed * pattern_multiply;
         Vector2 movement = (baselineDir * zigzagSpeed) + (sideDir * sideOffset * patternFrequency * damping);
 
         if (dist < 0.1f)
@@ -229,27 +306,37 @@ public abstract class SpecialBossMonsterBase : MonsterBase
     protected virtual void OnTriggerEnter2D(Collider2D collision)
     {
         if (isSuicideUnit) return;
+        if (!collision.CompareTag("Player")) return;
 
-        if (collision.CompareTag("Player"))
+        IDamageable player = collision.GetComponent<IDamageable>();
+        if (player == null) return;
+
+        if (currentPattern == null)
         {
-            IDamageable player = collision.GetComponent<IDamageable>();
-            if (player == null) return;
+            player.TakeDamage(power);
+            return;
+        }
 
-            if (moveType == MONSTERMOVE.Zigzag)
-            {
-                player.TakeDamage(this.power);
-                return;
-            }
+        string logic = NormalizePatternLogic(currentPattern.pattern_logic_type);
 
-            if (moveType == MONSTERMOVE.Jump && isJumping && !hasHitTargetInCurrentJump)
-            {
-                float finalJumpDamage = this.power * this.damage_multiply;
-                player.TakeDamage(finalJumpDamage);
-                hasHitTargetInCurrentJump = true;
-                return;
-            }
+        switch (logic)
+        {
+            case "Zigzag":
+                player.TakeDamage(power);
+                break;
 
-            player.TakeDamage(this.power);
+            case "Jump":
+                if (isJumping && !hasHitTargetInCurrentJump)
+                {
+                    float finalJumpDamage = power * damage_multiply;
+                    player.TakeDamage(finalJumpDamage);
+                    hasHitTargetInCurrentJump = true;
+                }
+                break;
+
+            default:
+                player.TakeDamage(power);
+                break;
         }
     }
 
@@ -267,13 +354,15 @@ public abstract class SpecialBossMonsterBase : MonsterBase
 
             currentState = MonsterState.PATTERN;
             isWaiting = true;
-            stateTimer = 0;
+            stateTimer = 0f;
             rb2D.linearVelocity = Vector2.zero;
             return;
         }
 
         if (isWaiting)
         {
+            rb2D.linearVelocity = Vector2.zero;
+
             if (stateTimer >= cast_time)
             {
                 isWaiting = false;
@@ -282,20 +371,21 @@ public abstract class SpecialBossMonsterBase : MonsterBase
                 jumpStartPos = rb2D.position;
                 jumpTargetPos = target.position;
                 jumpProgress = 0f;
-                stateTimer = 0;
+                stateTimer = 0f;
             }
+
             return;
         }
 
         if (isJumping)
         {
-            float actualSpeed = this.moveSpeed * pattern_multiply;
+            float actualSpeed = moveSpeed * pattern_multiply;
             float totalDistance = Vector2.Distance(jumpStartPos, jumpTargetPos);
-            float duration = (totalDistance > 0) ? totalDistance / actualSpeed : 0.1f;
+            float duration = (totalDistance > 0f && actualSpeed > 0f) ? totalDistance / actualSpeed : 0.1f;
 
             jumpProgress += Time.fixedDeltaTime / duration;
 
-            if (this.hp <= 0)
+            if (hp <= 0)
             {
                 if (visualChild != null) visualChild.localPosition = Vector2.zero;
                 rb2D.linearVelocity = Vector2.zero;
@@ -309,19 +399,21 @@ public abstract class SpecialBossMonsterBase : MonsterBase
                 rb2D.position = jumpTargetPos;
                 isJumping = false;
                 currentState = MonsterState.MOVE;
-                stateTimer = 0;
-                if (visualChild != null) visualChild.localPosition = Vector2.zero;
+                stateTimer = 0f;
+
+                if (visualChild != null)
+                    visualChild.localPosition = Vector2.zero;
             }
             else
             {
                 Vector2 nextTargetPos = Vector2.Lerp(jumpStartPos, jumpTargetPos, jumpProgress);
-                Vector2 moveDir = (nextTargetPos - rb2D.position);
+                Vector2 moveDir = nextTargetPos - rb2D.position;
                 rb2D.linearVelocity = moveDir / Time.fixedDeltaTime;
 
                 if (visualChild != null)
                 {
                     float currentHeight = Mathf.Sin(jumpProgress * Mathf.PI) * jump_height;
-                    visualChild.localPosition = new Vector2(0, currentHeight);
+                    visualChild.localPosition = new Vector2(0f, currentHeight);
                 }
             }
         }
@@ -338,25 +430,25 @@ public abstract class SpecialBossMonsterBase : MonsterBase
                 StraightChase();
                 return;
             }
-            else
-            {
-                rb2D.linearVelocity = Vector2.zero;
-                isWaitingFlee = true;
-                stateTimer = 0;
-                return;
-            }
+
+            rb2D.linearVelocity = Vector2.zero;
+            isWaitingFlee = true;
+            stateTimer = 0f;
+            return;
         }
 
         if (isWaitingFlee)
         {
             rb2D.linearVelocity = Vector2.zero;
+
             if (stateTimer >= cast_time)
             {
                 isWaitingFlee = false;
                 isFleeingState = true;
-                stateTimer = 0;
-                currentFleeTargetPos = GetSmartFleePosition();
+                stateTimer = 0f;
+                currentFleeTargetPos = GetFleePosition();
             }
+
             return;
         }
 
@@ -365,7 +457,7 @@ public abstract class SpecialBossMonsterBase : MonsterBase
             Vector2 dir = (currentFleeTargetPos - rb2D.position).normalized;
             float distToTarget = Vector2.Distance(rb2D.position, currentFleeTargetPos);
 
-            rb2D.linearVelocity = dir * (this.moveSpeed * pattern_multiply);
+            rb2D.linearVelocity = dir * (moveSpeed * pattern_multiply);
 
             if (distToTarget < 0.5f || Vector2.Distance(target.position, currentFleeTargetPos) < 2f)
             {
@@ -380,7 +472,40 @@ public abstract class SpecialBossMonsterBase : MonsterBase
         isWaitingFlee = false;
         rb2D.linearVelocity = Vector2.zero;
         currentState = MonsterState.MOVE;
-        stateTimer = 0;
+        stateTimer = 0f;
+    }
+
+    private Vector2 GetFleePosition()
+    {
+        if (currentPattern == null)
+            return GetSmartFleePosition();
+
+        switch (currentPattern.escape_target)
+        {
+            case ESCAPE_TARGET.Reverse:
+                return GetReverseFleePosition();
+
+            case ESCAPE_TARGET.Crowd:
+                return GetSmartFleePosition();
+
+            case ESCAPE_TARGET.Target_Location:
+                return GetSmartFleePosition();
+
+            default:
+                return GetSmartFleePosition();
+        }
+    }
+
+    private Vector2 GetReverseFleePosition()
+    {
+        if (target == null) return rb2D.position;
+
+        Vector2 dir = (rb2D.position - (Vector2)target.position).normalized;
+        if (dir.sqrMagnitude <= 0.0001f)
+            dir = Vector2.up;
+
+        float fleeDistance = Mathf.Max(detect_range, 3f);
+        return rb2D.position + dir * fleeDistance;
     }
 
     private Vector2 GetSmartFleePosition()
@@ -404,9 +529,9 @@ public abstract class SpecialBossMonsterBase : MonsterBase
 
         GameObject[] allMonsters = GameObject.FindGameObjectsWithTag("Monster");
 
-        foreach (var mObj in allMonsters)
+        foreach (GameObject mObj in allMonsters)
         {
-            if (mObj == this.gameObject) continue;
+            if (mObj == gameObject) continue;
 
             float minDist = float.MaxValue;
             int closestArea = -1;
@@ -432,6 +557,7 @@ public abstract class SpecialBossMonsterBase : MonsterBase
         for (int i = 0; i < 6; i++)
         {
             float distToPlayer = Vector2.Distance(areaCenters[i], target.position);
+
             if (monsterCounts[i] > maxCount || (monsterCounts[i] == maxCount && distToPlayer > maxPlayerDist))
             {
                 maxCount = monsterCounts[i];
@@ -448,30 +574,32 @@ public abstract class SpecialBossMonsterBase : MonsterBase
         if (hasExploded) return;
         hasExploded = true;
 
-        // 부모 power * 패턴 배율
-        float finalDamage = this.power * this.damage_multiply;
+        float finalDamage = power * damage_multiply;
 
         Collider2D[] hits = Physics2D.OverlapCircleAll(rb2D.position, explosion_range);
 
-        foreach (var hit in hits)
+        foreach (Collider2D hit in hits)
         {
-            if (hit.CompareTag("Player"))
+            if (!hit.CompareTag("Player")) continue;
+
+            IDamageable player = hit.GetComponent<IDamageable>();
+            if (player != null)
             {
-                IDamageable player = hit.GetComponent<IDamageable>();
-                if (player != null)
-                {
-                    player.TakeDamage(finalDamage);
-                }
-                break;
+                player.TakeDamage(finalDamage);
             }
+
+            break;
         }
+
         ObjectPoolManager.Instance.ReturnObject(this);
     }
 
-    public void SetAttackingState(bool attacking)
+    public override void SetAttackingState(bool attacking)
     {
         isAttacking = attacking;
-        if (isAttacking && rb2D != null) rb2D.linearVelocity = Vector2.zero;
+
+        if (isAttacking && rb2D != null)
+            rb2D.linearVelocity = Vector2.zero;
     }
 
     protected new void StraightChase()
@@ -481,11 +609,92 @@ public abstract class SpecialBossMonsterBase : MonsterBase
 
         if (distance > 0.1f)
         {
-            rb2D.linearVelocity = dir * this.moveSpeed;
+            rb2D.linearVelocity = dir * moveSpeed;
         }
         else
         {
             rb2D.linearVelocity = Vector2.zero;
+        }
+    }
+
+    private void ApplyPatternData(Pattern patternData)
+    {
+        pattern_cooldown = patternData.cooldown;
+        cast_time = patternData.cast_time;
+        damage_multiply = (patternData.damage_multiply > 0f) ? patternData.damage_multiply : 1f;
+        zigzag_width = patternData.zigzag_width;
+        explosion_range = patternData.explode_range;
+        detect_range = patternData.detect_range;
+        jump_height = (patternData.jump_height > 0f) ? patternData.jump_height : jump_height;
+        pattern_multiply = ResolvePatternMultiply(patternData);
+
+        isSuicideUnit = (patternData.pattern_type == PATTERN_TYPE.SelfDestruct);
+    }
+
+    private void ResetRuntimeState()
+    {
+        hasExploded = false;
+        isJumping = false;
+        isWaiting = false;
+        isFleeingState = false;
+        isWaitingFlee = false;
+        hasHitTargetInCurrentJump = false;
+
+        patternTimer = 0f;
+        stateTimer = 0f;
+        jumpProgress = 0f;
+        currentCastTimer = 0f;
+
+        if (rb2D != null)
+        {
+            rb2D.linearVelocity = Vector2.zero;
+            rb2D.angularVelocity = 0f;
+        }
+    }
+
+    private float ResolvePatternMultiply(Pattern patternData)
+    {
+        if (patternData == null) return 1f;
+
+        if (patternData.rush_speed > 0f)
+            return patternData.rush_speed;
+
+        if (patternData.pattern_type == PATTERN_TYPE.Move && patternData.stat_value > 0f)
+            return patternData.stat_value;
+
+        return 1f;
+    }
+
+    private string NormalizePatternLogic(string rawLogic)
+    {
+        if (string.IsNullOrWhiteSpace(rawLogic))
+            return "StraightChase";
+
+        string logic = rawLogic.Trim().ToLower();
+
+        switch (logic)
+        {
+            case "straightchase":
+            case "straight_chase":
+            case "move_straight":
+            case "move_straightchase":
+            case "move_chase":
+                return "StraightChase";
+
+            case "zigzag":
+            case "move_zigzag":
+                return "Zigzag";
+
+            case "jump":
+            case "move_jump":
+                return "Jump";
+
+            case "flee":
+            case "move_flee":
+                return "Flee";
+
+            default:
+                return "StraightChase";
         }
     }
 }

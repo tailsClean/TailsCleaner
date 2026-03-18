@@ -15,8 +15,8 @@ public class ObjectPoolManager : MonoBehaviour
         else Destroy(gameObject);
     }
 
-    // [즉시 소환] T는 PoolObject를 상속받은 타입이어야 함
-    public T Spawn<T>(T prefab, Vector3 position, Quaternion rotation) where T : PoolObject
+    // 내부 공통 생성 로직
+    private T GetOrCreateObject<T>(T prefab) where T : PoolObject
     {
         string key = prefab.name;
 
@@ -33,8 +33,16 @@ public class ObjectPoolManager : MonoBehaviour
         else
         {
             obj = Instantiate(prefab, transform);
-            obj.PoolKey = key; // 키 값을 부여해 반납 위치를 기억하게 함
+            obj.PoolKey = key;
         }
+
+        return obj;
+    }
+
+    // 기본 Spawn
+    public T Spawn<T>(T prefab, Vector3 position, Quaternion rotation) where T : PoolObject
+    {
+        T obj = GetOrCreateObject(prefab);
 
         obj.transform.SetPositionAndRotation(position, rotation);
         obj.gameObject.SetActive(true);
@@ -43,16 +51,46 @@ public class ObjectPoolManager : MonoBehaviour
         return obj;
     }
 
-    // [지연 소환 기능] 코루틴 활용
+    // 몬스터 ID를 먼저 넣고 스폰하는 오버로드
+    public T Spawn<T>(T prefab, Vector3 position, Quaternion rotation, int monsterId) where T : PoolObject
+    {
+        T obj = GetOrCreateObject(prefab);
+
+        obj.transform.SetPositionAndRotation(position, rotation);
+
+        if (obj.TryGetComponent<MonsterBase>(out var monster))
+        {
+            monster.SetMonsterId(monsterId);
+        }
+
+        obj.gameObject.SetActive(true);
+        obj.OnSpawn();
+
+        return obj;
+    }
+
+    // 지연 소환 기능
     public void SpawnWithDelay<T>(T prefab, Vector3 position, Quaternion rotation, float delay) where T : PoolObject
     {
         StartCoroutine(CoSpawnDelay(prefab, position, rotation, delay));
+    }
+
+    // 몬스터 ID 포함 지연 소환 기능
+    public void SpawnWithDelay<T>(T prefab, Vector3 position, Quaternion rotation, float delay, int monsterId) where T : PoolObject
+    {
+        StartCoroutine(CoSpawnDelay(prefab, position, rotation, delay, monsterId));
     }
 
     private IEnumerator CoSpawnDelay<T>(T prefab, Vector3 position, Quaternion rotation, float delay) where T : PoolObject
     {
         yield return new WaitForSeconds(delay);
         Spawn(prefab, position, rotation);
+    }
+
+    private IEnumerator CoSpawnDelay<T>(T prefab, Vector3 position, Quaternion rotation, float delay, int monsterId) where T : PoolObject
+    {
+        yield return new WaitForSeconds(delay);
+        Spawn(prefab, position, rotation, monsterId);
     }
 
     // 풀로 반납
@@ -69,7 +107,6 @@ public class ObjectPoolManager : MonoBehaviour
 
         if (!_poolDictionary.ContainsKey(obj.PoolKey))
         {
-            // 만약 키는 있는데 딕셔너리에 없다면 새로 생성해줌 (예외 방지)
             _poolDictionary.Add(obj.PoolKey, new Queue<PoolObject>());
         }
 
