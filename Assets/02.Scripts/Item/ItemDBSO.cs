@@ -97,6 +97,8 @@ public class ItemDBSO : ScriptableObject
             _equipDict[equip.id].GroupID = equip.group_id;
             _equipDict[equip.id].Equipmnet = equip;
             _equipDict[equip.id].StringData = nameData.GetById(equip.name);
+            //_equipDict[equip.id].SpriteImg = Resources.Load<Sprite>($"All_Resource/image/Total_Item_Image/{equip.sprite}");
+            _equipDict[equip.id].SpriteImg = Resources.Load<Sprite>($"Total_Item_Image/{equip.sprite}");
         }
 
         // 장비 스텟을 추가
@@ -171,9 +173,10 @@ public class ItemDBSO : ScriptableObject
         var relicData = DataManager.Instance.GetSOData<RelicSO>();
         foreach (var relic in relicData.dataList)
         {
-            _relicDict.Add(relic.group_id, new RelicData());
-            _relicDict[relic.group_id].GroupID = relic.group_id;
-            _relicDict[relic.group_id].Relic = relic;
+            _relicDict.Add(relic.id, new RelicData());
+            _relicDict[relic.id].GroupID = relic.group_id;
+            _relicDict[relic.id].Relic = relic;
+            _relicDict[relic.id].SpriteImg = Resources.Load<Sprite>($"Total_Item_Image/{relic.sprite}");
         }
 
         // 유물 강화 데이터 매칭
@@ -237,6 +240,7 @@ public class ItemDBSO : ScriptableObject
             _itemDict[manage.item_id].ManageID = manage.item_id;
             _itemDict[manage.item_id].Type = manage.item_type;
             _itemDict[manage.item_id].ManageData = manage;
+            _itemDict[manage.item_id].SpriteImg = Resources.Load<Sprite>($"Total_Item_Image/{manage.item_img}");
         }
         foreach (var consume in itemConsumeData.dataList)
         {
