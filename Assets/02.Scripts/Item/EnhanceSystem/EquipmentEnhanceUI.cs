@@ -43,8 +43,8 @@ public class EquipmentEnhanceUI : EnhanceSystemUI
         foreach (var equipment in _playerLoadout.MyEquipments.Values)
         {
             var slot = _loadoutSlots[i++];
-            slot.SetSlot(equipment.Data.UniqueID);
-            slot.AddListener(() => _enhanceSystem.SetEquipment(equipment.Data.EquipmentPart));
+            slot.SetSlot(equipment.Data.Equipmnet.id);
+            slot.AddListener(() => _enhanceSystem.SetEquipment(equipment.Data.Equipmnet.part));
         }
     }
 

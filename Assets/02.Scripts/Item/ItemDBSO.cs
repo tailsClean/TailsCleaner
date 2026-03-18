@@ -66,6 +66,8 @@ public static class ItemDB
 
     public static ItemBaseSO GetItemData(int id) => GetItemData<ItemBaseSO>(id);
 
+
+
     public static T GetItemData<T>(int id) where T : ItemBaseSO
     {
         if(_itemDB == null)
@@ -78,6 +80,35 @@ public static class ItemDB
     }
 
     public static T CreateItem<T>(int id) where T: ItemBase, new()
+    {
+        var item = new T();
+        item.Init(id);
+
+        return item;
+    }
+}
+
+public static class ItemDataBase
+{
+    private static ItemDBSO _itemDB;
+
+
+    //public static ItemBaseSO GetItemData(int id) => GetItemData<ItemBaseSO>(id);
+
+
+
+    public static T GetItemData<T>() where T : ItemBaseSO
+    {
+        if (_itemDB == null)
+        {
+            _itemDB = Resources.Load<ItemDBSO>("Data/ScriptableObjects/Item/ItemDB");
+            Debug.Log("<color=green>ItemDB 초기화</color>");
+        }
+
+        return _itemDB.GetValue<T>(0);
+    }
+
+    public static T CreateItem<T>(int id) where T : ItemBase, new()
     {
         var item = new T();
         item.Init(id);

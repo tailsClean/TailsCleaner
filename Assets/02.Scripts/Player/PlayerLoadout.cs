@@ -7,26 +7,26 @@ using UnityEngine;
 /// </summary>
 public class PlayerLoadout
 {
-    private Dictionary<EQUIP_PARTS, EquipmentBase> _myEquipments;
+    private Dictionary<PART, EquipmentBase> _myEquipments;
     private List<RelicBase> _myRelics;
 
-    public Dictionary<EQUIP_PARTS, EquipmentBase> MyEquipments => _myEquipments;
+    public Dictionary<PART, EquipmentBase> MyEquipments => _myEquipments;
     public List<RelicBase> MyRelics => _myRelics;
 
     public PlayerLoadout()
     {
         _myRelics = new List<RelicBase>(3);
-        _myEquipments = new Dictionary<EQUIP_PARTS, EquipmentBase>
+        _myEquipments = new Dictionary<PART, EquipmentBase>
         {
-            {EQUIP_PARTS.Weapon, ItemDB.CreateItem<EquipmentBase>(ItemID.DefaultWeapon)},
-            {EQUIP_PARTS.Hat, ItemDB.CreateItem<EquipmentBase>(ItemID.DefaultHat)},
-            {EQUIP_PARTS.Cloak, ItemDB.CreateItem<EquipmentBase>(ItemID.DefaultCloak)},
-            {EQUIP_PARTS.Shoes, ItemDB.CreateItem<EquipmentBase>(ItemID.DefaultShose)}
+            {PART.Weapon, ItemDataBase.CreateItem<EquipmentBase>(ItemID.DefaultWeapon)},
+            {PART.Helmet, ItemDataBase.CreateItem<EquipmentBase>(ItemID.DefaultHat)},
+            {PART.Cloak, ItemDataBase.CreateItem<EquipmentBase>(ItemID.DefaultCloak)},
+            {PART.Shoes, ItemDataBase.CreateItem<EquipmentBase>(ItemID.DefaultShose)}
         };
     }
 
     // 장비의 스텟 증가량을 반환
-    public float GetIncreaseStat(EQUIP_STAT stat)
+    public float GetIncreaseStat(EQUIP_STAT_TYPE stat)
     {
         if (_myEquipments == null)
             return 0;
@@ -34,20 +34,20 @@ public class PlayerLoadout
         EquipmentBase equipment = null;
         switch (stat)
         {
-            case EQUIP_STAT.AttackPower:
-                equipment = _myEquipments[EQUIP_PARTS.Weapon];
+            case EQUIP_STAT_TYPE.Attack:
+                equipment = _myEquipments[PART.Weapon];
                 break;
 
-            case EQUIP_STAT.CriticalChance:
-                equipment = _myEquipments[EQUIP_PARTS.Hat];
+            case EQUIP_STAT_TYPE.CriticalRate:
+                equipment = _myEquipments[PART.Helmet];
                 break;
 
-            case EQUIP_STAT.MaxHp or EQUIP_STAT.DefensePower:
-                equipment = _myEquipments[EQUIP_PARTS.Cloak];
+            case EQUIP_STAT_TYPE.MaxHP or EQUIP_STAT_TYPE.Defense:
+                equipment = _myEquipments[PART.Cloak];
                 break;
 
-            case EQUIP_STAT.MoveSpeed or EQUIP_STAT.EvasionChance:
-                equipment = _myEquipments[EQUIP_PARTS.Shoes];
+            case EQUIP_STAT_TYPE.MoveSpeed or EQUIP_STAT_TYPE.Dodge:
+                equipment = _myEquipments[PART.Shoes];
                 break;
 
             default:

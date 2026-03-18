@@ -10,9 +10,8 @@ public abstract class ItemBase
 
 public interface IEnhancement
 {
-    public ItemBaseSO ItemData { get; }
     public int EnhanceLevel { get; }
-    public ItemEnhanceData EnhanceData { get; }
+    public EquipEnhance EnhanceData { get; }
 
     public void OnEnhance(EnhancingInfo result);
 }

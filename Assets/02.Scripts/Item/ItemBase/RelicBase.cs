@@ -13,6 +13,8 @@ public class RelicBase : ItemBase, IEnhancement
     public ItemBaseSO ItemData => Data;
     public ItemEnhanceData EnhanceData => Data.GetEnhanceData(EnhanceLevel);
 
+    EquipEnhance IEnhancement.EnhanceData => throw new System.NotImplementedException();
+
 
 
     // 최종 스텟 증가량 제공 메서드(유물 증가량, 강화 증가량)

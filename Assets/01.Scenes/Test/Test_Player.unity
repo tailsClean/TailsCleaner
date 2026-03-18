@@ -129,6 +129,51 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 4677375691398020662, guid: ffee7820d9b4e904b8b320d894c87800, type: 3}
   m_PrefabInstance: {fileID: 7093416450722849385}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &354803594
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 354803596}
+  - component: {fileID: 354803595}
+  m_Layer: 0
+  m_Name: ItemDBTest
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &354803595
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 354803594}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0526986d053bfda4783e5c56acf6250e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ItemDBTest
+  equip: {fileID: 11400000, guid: 57143a0ff64f2a84d9b34c6b35f4dd07, type: 2}
+--- !u!4 &354803596
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 354803594}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 900.9948, y: 541.92224, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &390370186 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 8156760126618120044, guid: 7bd74e2913a4ea44aa66ef718bc20d47, type: 3}
@@ -2555,7 +2600,7 @@ PrefabInstance:
       objectReference: {fileID: 6757619409351875452, guid: 03fe383af04fb7c4c8a90b62d23a8671, type: 3}
     - target: {fileID: 3071444597831318424, guid: ffee7820d9b4e904b8b320d894c87800, type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3076711180210732228, guid: ffee7820d9b4e904b8b320d894c87800, type: 3}
       propertyPath: m_Type
@@ -3371,7 +3416,7 @@ PrefabInstance:
       objectReference: {fileID: 1132961464566745655, guid: 9b7047ed825471c44a69b7434587b06b, type: 3}
     - target: {fileID: 4784876293940930371, guid: ffee7820d9b4e904b8b320d894c87800, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 0.000018400824
+      value: 0.000808477
       objectReference: {fileID: 0}
     - target: {fileID: 4787666111525646891, guid: ffee7820d9b4e904b8b320d894c87800, type: 3}
       propertyPath: m_Type
@@ -3571,7 +3616,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5391085522913103060, guid: ffee7820d9b4e904b8b320d894c87800, type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5491757490665271940, guid: ffee7820d9b4e904b8b320d894c87800, type: 3}
       propertyPath: m_AnchorMax.y
@@ -3783,7 +3828,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5780313714144160092, guid: ffee7820d9b4e904b8b320d894c87800, type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5789290480304803927, guid: ffee7820d9b4e904b8b320d894c87800, type: 3}
       propertyPath: m_AnchorMax.y
@@ -4899,7 +4944,7 @@ PrefabInstance:
       objectReference: {fileID: 1132961464566745655, guid: 9b7047ed825471c44a69b7434587b06b, type: 3}
     - target: {fileID: 7786254015313059219, guid: ffee7820d9b4e904b8b320d894c87800, type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7832681801231453548, guid: ffee7820d9b4e904b8b320d894c87800, type: 3}
       propertyPath: m_AnchorMax.y
@@ -5479,3 +5524,4 @@ SceneRoots:
   - {fileID: 1112349164}
   - {fileID: 1489735718}
   - {fileID: 1202588380}
+  - {fileID: 354803596}

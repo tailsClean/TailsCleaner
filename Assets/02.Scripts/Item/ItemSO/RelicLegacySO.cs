@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using UnityEngine;
+using static EquipmentSO;
 
 
 [CreateAssetMenu(fileName = "RelicSO", menuName = "ItemData/Relic")]
@@ -24,6 +25,11 @@ public class RelicLegacySO : ItemBaseSO
 
     [Header("유물 계열")]
     [SerializeField] private List<Division> _divisionDataList;
+
+    private Dictionary<int, RelicData> _relicDict;
+
+    
+
 
 
     public RELIC_STAT StatType => _statType;
@@ -55,13 +61,73 @@ public class RelicLegacySO : ItemBaseSO
         return enhanceData;
     }
 
+    public RelicData GetRelicData(int id)
+    {
+        if (_relicDict == null)
+            Init();
+
+        if (_relicDict.TryGetValue(id, out var equip))
+            return equip;
+
+        Debug.LogWarning($"{id}에 해당하는 장비 데이터가 없습니다.");
+        return null;
+    }
+
     private void Init()
     {
-        _enhances = new Dictionary<int, ItemEnhanceData> { { 0, null } };
-        foreach (var enhanceData in _enhanceDataList)
+        _relicDict = new Dictionary<int, RelicData>();
+
+        // 유물 데이터 매칭
+        var relicData = DataManager.Instance.GetSOData<RelicSO>();
+        foreach(var relic in relicData.dataList)
         {
-            _enhances.Add(enhanceData.Level, enhanceData);
+            _relicDict.Add(relic.group_id, new RelicData());
+            _relicDict[relic.group_id].GroupID = relic.group_id;
         }
+
+        // 유물 강화 데이터 매칭
+        var relicEnhanceData = DataManager.Instance.GetSOData<RelicEnhanceSO>();
+        foreach(var enhance in relicEnhanceData.dataList)
+        {
+            foreach(var relic in _relicDict.Values)
+            {
+                if (relic.GroupID == enhance.group_id)
+                {
+                    relic.Enhances.Add(enhance);
+                    break;
+                }
+            }
+        }
+
+        // 유물 계열 데이터 매칭
+        var relicDivisionData = DataManager.Instance.GetSOData<RelicDivisionSO>();
+        foreach(var relic in _relicDict.Values)
+        {
+            foreach(var division in relicDivisionData.dataList)
+            {
+                if(relic.Relic.relic_type == division.division_type)
+                {
+                    relic.Division = division;
+                    break;
+                }
+            }
+        }
+
+
+        //_enhances = new Dictionary<int, ItemEnhanceData> { { 0, null } };
+        //foreach (var enhanceData in _enhanceDataList)
+        //{
+        //    _enhances.Add(enhanceData.Level, enhanceData);
+        //}
+    }
+
+
+    public class RelicData
+    {
+        public int GroupID;
+        public Relic Relic;
+        public List<RelicEnhance> Enhances;
+        public RelicDivision Division;
     }
 
     // 유물 계역 데이터 클래스
