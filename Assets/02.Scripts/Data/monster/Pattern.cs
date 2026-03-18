@@ -111,7 +111,7 @@ public class Pattern
     public bool follow;
     public float arc_height;
     public float projectile_radius;
-    public string area_radius;
+    public float area_radius;
     public float area_damage_interval;
     public AREA_TARGET_TYPE area_target_type;
     public float explode_range;

@@ -58,6 +58,23 @@ public class BossMonsterProjectile : PoolObject
         rb2D.gravityScale = 0f;
     }
 
+    public void ApplyProjectileData(
+    float speed,
+    float size,
+    float lifeTime,
+    bool homing,
+    PierceType pierce,
+    float arcHeightValue)
+    {
+        projectile_speed = speed;
+        life_time = lifeTime;
+        is_homing = homing;
+        pierce_flags = pierce;
+        arc_height = arcHeightValue;
+
+        transform.localScale = Vector3.one * size;
+    }
+
     public void Launch(Transform playerTarget, float calculatedDamage)
     {
         if (playerTarget == null) return;
@@ -154,8 +171,13 @@ public class BossMonsterProjectile : PoolObject
         {
             Debug.Log($"플레이어 피격! 적용 데미지: {finalDamage}");
 
-            // 관통 로직이 있으면 리턴하여 소멸 방지
-            if (pierce_flags.HasFlag(PierceType.PIERCE)) return;
+            if (other.TryGetComponent(out PlayerBase player))
+            {
+                player.TakeDamage(finalDamage);
+            }
+
+            if (pierce_flags.HasFlag(PierceType.PIERCE))
+                return;
         }
 
         // 벽 반사 로직
