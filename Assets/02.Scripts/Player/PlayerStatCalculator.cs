@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
-using static ItemDataLegacySO;
 
 /// <summary>
 /// 플레이어 스텟 계산기

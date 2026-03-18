@@ -5,6 +5,7 @@
 public struct ItemInstance
 {
     public readonly int ID;
+    public readonly string Name;
     public readonly int EnhanceLevel;
     public readonly GRADE Grade;
     public readonly ITEM_TYPE ItemType;
@@ -25,10 +26,12 @@ public struct ItemInstance
     /// <param name="id"></param>
     public ItemInstance(int id)
     {
+        var item = ItemDB.GetData<ItemDataBase>(id);
         ID = id;
+        Name = item.StringData.kr;
         EnhanceLevel = NoneEnhanceLevel;
         Grade = GRADE.None;
-        ItemType = ItemDB.GetData<ItemDataBase>(id).Type;
+        ItemType = item.Type;
 
         Amount = 1;
     }
@@ -41,10 +44,12 @@ public struct ItemInstance
     /// <param name="grad"></param>
     public ItemInstance(int id, int enhanceLevel, GRADE grad)
     {
+        var item = ItemDB.GetData<ItemDataBase>(id);
         ID = id;
+        Name = item.StringData.kr;
         EnhanceLevel = enhanceLevel;
         Grade = grad;
-        ItemType = ItemDB.GetData<ItemDataBase>(id).Type;
+        ItemType = item.Type;
 
         Amount = 1;
 

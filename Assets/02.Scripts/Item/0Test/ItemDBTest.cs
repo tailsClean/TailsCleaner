@@ -6,15 +6,13 @@ public class ItemDBTest : MonoBehaviour
 {
     public SpriteRenderer[] Sprites;
 
-    public ItemDataLegacySO equip;
-
     public ItemDBSO itemDB;
 
     [ContextMenu("아이템 호출")]
     public void Sterr()
     {
-
-        foreach (var a in equip.EquipDict)
+        var equip = itemDB;
+        foreach (var a in equip.DefaultEquipDict)
         {
             Debug.Log("========");
             Debug.Log("ID: " + a.Key);
@@ -33,6 +31,7 @@ public class ItemDBTest : MonoBehaviour
     [ContextMenu("유물 호출")]
     public void Steedrr()
     {
+        var equip = itemDB;
         equip.RelicInit();
 
         foreach (var a in equip.RelicDict)
@@ -51,12 +50,13 @@ public class ItemDBTest : MonoBehaviour
     [ContextMenu("특정 아이템 정보 호출")]
     public void Sterrsef()
     {
+        var equip = itemDB;
         equip.ItemInit();
 
         foreach(var data in equip.ItemDict.Values)
         {
             Debug.Log("========");
-            Debug.Log("ID: " + data.ManageID);
+            Debug.Log("ID: " + data.UniqueID);
             Debug.Log("타입: " + data.Type);
             Debug.LogWarning(DataManager.Instance.GetSOData<StringSO>().GetById(data.ManageData.item_name_key.ToString()).kr);
             Debug.Log(data.Consume);
@@ -68,7 +68,7 @@ public class ItemDBTest : MonoBehaviour
     [ContextMenu("DB호출")]
     public void Sterrded()
     {
-        var A = ItemDB.GetData<EquipData>(ItemID.DefaultWeapon);
+        var A = ItemDB.GetData<DefaultEquipData>(ItemID.DefaultWeapon);
         var B = ItemDB.GetData<ItemManageData>(ItemID.RelicReinforceResource);
 
         Debug.Log(A.Equipmnet.name);
@@ -78,13 +78,13 @@ public class ItemDBTest : MonoBehaviour
     [ContextMenu("DB호출2")]
     public void asdf()
     {
-        itemDB.EquipInit();
+        itemDB.DefaultEquipInit();
         itemDB.RelicInit();
         itemDB.ItemInit();
 
         List<ItemDataBase> list = new List<ItemDataBase>();
 
-        var a = itemDB.EquipDict;
+        var a = itemDB.DefaultEquipDict;
         foreach(var data in a.Values)
         {
             list.Add(data);
@@ -99,7 +99,7 @@ public class ItemDBTest : MonoBehaviour
     [ContextMenu("DB호출3")]
     public void asdfdedd()
     {
-        itemDB.EquipInit();
+        itemDB.DefaultEquipInit();
         itemDB.RelicInit();
         itemDB.ItemInit();
 
