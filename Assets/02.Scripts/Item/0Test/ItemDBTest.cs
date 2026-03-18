@@ -1,9 +1,14 @@
 ﻿using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class ItemDBTest : MonoBehaviour
 {
+    public SpriteRenderer[] Sprites;
+
     public ItemDataLegacySO equip;
+
+    public ItemDBSO itemDB;
 
     [ContextMenu("아이템 호출")]
     public void Sterr()
@@ -69,5 +74,50 @@ public class ItemDBTest : MonoBehaviour
         Debug.Log(A.Equipmnet.name);
         Debug.Log(B.ManageData.item_name_key);
     }
+
+    [ContextMenu("DB호출2")]
+    public void asdf()
+    {
+        itemDB.EquipInit();
+        itemDB.RelicInit();
+        itemDB.ItemInit();
+
+        List<ItemDataBase> list = new List<ItemDataBase>();
+
+        var a = itemDB.EquipDict;
+        foreach(var data in a.Values)
+        {
+            list.Add(data);
+        }
+        
+        for(int i = 0; i < list.Count; i++)
+        {
+            Sprites[i].sprite = list[i].SpriteImg;
+        }
+    }    
+
+    [ContextMenu("DB호출3")]
+    public void asdfdedd()
+    {
+        itemDB.EquipInit();
+        itemDB.RelicInit();
+        itemDB.ItemInit();
+
+        List<ItemDataBase> list = new List<ItemDataBase>();
+
+        var a = itemDB.ItemDict;
+        foreach(var data in a.Values)
+        {
+            list.Add(data);
+        }
+        
+        for(int i = 0; i < list.Count; i++)
+        {
+            if(list[i].SpriteImg == null)
+                Sprites[i].gameObject.SetActive(false);
+
+            Sprites[i].sprite = list[i].SpriteImg;
+        }
+    }    
 
 }
