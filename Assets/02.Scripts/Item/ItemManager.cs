@@ -28,10 +28,12 @@ public class ItemManager : MonoBehaviour
         DontDestroyOnLoad(gameObject);
         #endregion
 
-        Loadout = new PlayerLoadout();
 
     }
-
+    private void Start()
+    {
+        Loadout = new PlayerLoadout();
+    }
 
     public void OpenUI(UI_GROUP group)
     {
@@ -43,6 +45,19 @@ public class ItemManager : MonoBehaviour
             else
                 uiGroup.gameObject.SetActive(true);
         }
+    }
+
+    [ContextMenu("UI 그룹 매핑")]
+    public void asd()
+    {
+        foreach (var equip in Loadout.MyEquipments.Values)
+        {
+            Debug.Log("========");
+            Debug.Log(equip.Data.Equipmnet.id);
+            Debug.Log(equip.Data.Equipmnet.part);
+            Debug.Log("========");
+        }
+        
     }
 }
 

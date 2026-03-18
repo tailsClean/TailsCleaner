@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
-using static EquipmentSO;
+using static ItemDataLegacySO;
 
 /// <summary>
 /// 플레이어 스텟 계산기
@@ -56,17 +56,17 @@ public class PlayerStatCalculator
         return stat switch
         {
             // 장비로 상승하는 값
-            PLAYER_STAT.MaxHp => _playerLoadout.GetIncreaseStat(EQUIP_STAT.MaxHp),
-            PLAYER_STAT.AttackPower => _playerLoadout.GetIncreaseStat(EQUIP_STAT.AttackPower),
-            PLAYER_STAT.DefensePower => _playerLoadout.GetIncreaseStat(EQUIP_STAT.DefensePower),
-            PLAYER_STAT.CriticalChance => _playerLoadout.GetIncreaseStat(EQUIP_STAT.CriticalChance),
-            PLAYER_STAT.EvasionChance => _playerLoadout.GetIncreaseStat(EQUIP_STAT.EvasionChance),
-            PLAYER_STAT.MoveSpeed => _playerLoadout.GetIncreaseStat(EQUIP_STAT.MoveSpeed),
+            PLAYER_STAT.MaxHp => _playerLoadout.GetIncreaseStat(EQUIP_STAT_TYPE.MaxHP),
+            PLAYER_STAT.AttackPower => _playerLoadout.GetIncreaseStat(EQUIP_STAT_TYPE.Attack),
+            PLAYER_STAT.DefensePower => _playerLoadout.GetIncreaseStat(EQUIP_STAT_TYPE.Defense),
+            PLAYER_STAT.CriticalChance => _playerLoadout.GetIncreaseStat(EQUIP_STAT_TYPE.CriticalRate),
+            PLAYER_STAT.EvasionChance => _playerLoadout.GetIncreaseStat(EQUIP_STAT_TYPE.Dodge),
+            PLAYER_STAT.MoveSpeed => _playerLoadout.GetIncreaseStat(EQUIP_STAT_TYPE.MoveSpeed),
             
             // 유물로 상승하는 값
-            PLAYER_STAT.GoldGainRate => _playerLoadout.GetIncreaseStat(RELIC_STAT.GoldGainRate),
-            PLAYER_STAT.ItemDropRate => _playerLoadout.GetIncreaseStat(RELIC_STAT.ItemDropRate),
-            PLAYER_STAT.ExpGainRate => _playerLoadout.GetIncreaseStat(RELIC_STAT.ExpGainRate),
+            PLAYER_STAT.GoldGainRate => _playerLoadout.GetIncreaseStat(STAT_TYPE.Gold),
+            PLAYER_STAT.ItemDropRate => _playerLoadout.GetIncreaseStat(STAT_TYPE.ItemRange),
+            PLAYER_STAT.ExpGainRate => _playerLoadout.GetIncreaseStat(STAT_TYPE.Exp),
             _ => 0f
         };
     }

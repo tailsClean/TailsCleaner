@@ -41,17 +41,17 @@ public class ItemInventory : MonoBehaviour
 
 
     // 장비 아이템 읽기
-    public bool TryGetEquipment(int id, int enhanceLevel, EQUIP_GRADE grade, out ItemInstance item) => TryGetItem(id, enhanceLevel, grade, out item);
-    public ItemInstance GetEquipment(int id, int enhanceLevel, EQUIP_GRADE grade) => GetItem(id, enhanceLevel, grade);
+    public bool TryGetEquipment(int id, int enhanceLevel, GRADE grade, out ItemInstance item) => TryGetItem(id, enhanceLevel, grade, out item);
+    public ItemInstance GetEquipment(int id, int enhanceLevel, GRADE grade) => GetItem(id, enhanceLevel, grade);
 
 
     // 장비 아이템 획득
-    public void GainEquipment(int id, int enhanceLevel, EQUIP_GRADE grade, int amount = 1) =>
+    public void GainEquipment(int id, int enhanceLevel, GRADE grade, int amount = 1) =>
         GainItem(id, enhanceLevel, grade, amount);
 
 
     /// 장비 아이템 제거
-    public void RemoveEquipment(int id, int enhanceLevel, EQUIP_GRADE grade, int amount = 1) =>
+    public void RemoveEquipment(int id, int enhanceLevel, GRADE grade, int amount = 1) =>
         UseItem(id, enhanceLevel, grade, amount);
 
 
@@ -68,14 +68,14 @@ public class ItemInventory : MonoBehaviour
 
     /// 유물 아이템 읽기
     public bool TryGetRelic(int id, int enhanceLevel, out ItemInstance item) => 
-        TryGetItem(id, enhanceLevel, EQUIP_GRADE.None, out item);
-    public ItemInstance GetRelic(int id, int enhanceLevel) => GetItem(id, enhanceLevel, EQUIP_GRADE.None);
+        TryGetItem(id, enhanceLevel, GRADE.None, out item);
+    public ItemInstance GetRelic(int id, int enhanceLevel) => GetItem(id, enhanceLevel, GRADE.None);
 
 
     // 유물 아이템 획득
     public void GainRelic(int id, int enhanceLevel)
     {
-        var item = SearchItem(id, enhanceLevel, EQUIP_GRADE.None);
+        var item = SearchItem(id, enhanceLevel, GRADE.None);
 
         // 아이템을 소지하고 있었을 때
         if (HasItem(item))
@@ -83,7 +83,7 @@ public class ItemInventory : MonoBehaviour
 
         // 아이템을 소지하지 않았을 때
         else
-            _inventory.Add(new ItemInstance(id, enhanceLevel, EQUIP_GRADE.None), ItemInstance.NoneStackAmount);
+            _inventory.Add(new ItemInstance(id, enhanceLevel, GRADE.None), ItemInstance.NoneStackAmount);
 
         _onChangeInventory.OnStartEvent();
     }
@@ -92,7 +92,7 @@ public class ItemInventory : MonoBehaviour
     // 유물 아이템 사용
     public void RemoveRelic(int id, int enhanceLevel)
     {
-        var item = SearchItem(id, enhanceLevel, EQUIP_GRADE.None);
+        var item = SearchItem(id, enhanceLevel, GRADE.None);
         if (!HasItem(item))
         { Debug.Log($"사용하려는 {id} 아이템을 소지하지 않았습니다."); return; }
 
@@ -108,18 +108,18 @@ public class ItemInventory : MonoBehaviour
 
 
     // 스택형 아이템 읽기
-    public bool TryGetStackItem(int id, out ItemInstance item) => TryGetItem(id, ItemInstance.NoneEnhanceLevel, EQUIP_GRADE.None, out item);
-    public ItemInstance GetStackItem(int id) => GetItem(id, ItemInstance.NoneEnhanceLevel, EQUIP_GRADE.None);
+    public bool TryGetStackItem(int id, out ItemInstance item) => TryGetItem(id, ItemInstance.NoneEnhanceLevel, GRADE.None, out item);
+    public ItemInstance GetStackItem(int id) => GetItem(id, ItemInstance.NoneEnhanceLevel, GRADE.None);
 
 
     // 스택형 아이템 획득
     public void GainStackItem(int id, int amount = 1) =>
-        GainItem(id, ItemInstance.NoneEnhanceLevel, EQUIP_GRADE.None, amount);
+        GainItem(id, ItemInstance.NoneEnhanceLevel, GRADE.None, amount);
 
 
     // 스택형 아이템 사용
     public void UseStakItem(int id, int amount) =>
-        UseItem(id, ItemInstance.NoneEnhanceLevel, EQUIP_GRADE.None, amount);
+        UseItem(id, ItemInstance.NoneEnhanceLevel, GRADE.None, amount);
 
 
     #endregion
@@ -129,7 +129,7 @@ public class ItemInventory : MonoBehaviour
     #region 인벤토리 내부전용 메서드
 
 
-    private bool TryGetItem(int id, int enhanceLevel, EQUIP_GRADE grad, out ItemInstance item)
+    private bool TryGetItem(int id, int enhanceLevel, GRADE grad, out ItemInstance item)
     {
         item = SearchItem(id, enhanceLevel, grad);
         if(HasItem(item))
@@ -143,7 +143,7 @@ public class ItemInventory : MonoBehaviour
     }
 
     // 인벤토리 내부전용 아이템 확인 메서드
-    private ItemInstance GetItem(int id, int enhanceLevel, EQUIP_GRADE grad)
+    private ItemInstance GetItem(int id, int enhanceLevel, GRADE grad)
     {
         var item = SearchItem(id, enhanceLevel, grad);
         if (HasItem(item))
@@ -158,7 +158,7 @@ public class ItemInventory : MonoBehaviour
 
 
     // 인벤토리 내부전용 아이템 획득 메서드
-    private void GainItem(int id, int enhanceLevel, EQUIP_GRADE grad, int amount)
+    private void GainItem(int id, int enhanceLevel, GRADE grad, int amount)
     {
         var item = SearchItem(id, enhanceLevel, grad);
 
@@ -172,7 +172,7 @@ public class ItemInventory : MonoBehaviour
     }
 
     // 인벤토리 내부전용 아이템 사용 메서드
-    private void UseItem(int id, int enhanceLevel, EQUIP_GRADE grade, int amount)
+    private void UseItem(int id, int enhanceLevel, GRADE grade, int amount)
     {
         if (amount < 0)
         { Debug.LogError("사용하려는 값이 음수입니다."); return; }
@@ -193,7 +193,7 @@ public class ItemInventory : MonoBehaviour
 
 
     // 인벤토리 내부전용 아이템 찾기 메서드
-    private ItemInstance SearchItem(int id, int enhanceLevel, EQUIP_GRADE grade)
+    private ItemInstance SearchItem(int id, int enhanceLevel, GRADE grade)
     {
         foreach (var item in _inventory)
         {

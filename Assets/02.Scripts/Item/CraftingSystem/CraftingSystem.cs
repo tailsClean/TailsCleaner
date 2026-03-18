@@ -1,6 +1,6 @@
 ﻿using System;
 using UnityEngine;
-using static EquipmentSO;
+using static ItemDataLegacySO;
 
 
 public partial class CraftingSystem : MonoBehaviour
@@ -49,7 +49,7 @@ public partial class CraftingSystem : MonoBehaviour
         { Debug.LogError("설정하려는 아이템이 없습니다."); return; }
 
         _mainCraftSlot = mainEquip;
-        _resourceCraftSlots = new CraftingInfo[mainEquip.GradeData.CostCount];
+        _resourceCraftSlots = new CraftingInfo[mainEquip.GradeData.cost_count];
 
         OnSetEquipment?.Invoke();
     }
@@ -88,7 +88,7 @@ public partial class CraftingSystem : MonoBehaviour
     public void OnStartCrafting()
     {
         // 최대 등급 확인
-        if (_mainCraftSlot.GradeData.IsMaxGrade)
+        if (_mainCraftSlot.GradeData.is_max_grade)
         { Debug.Log("최대 등급의 장비입니다."); return; }
 
         // 필요 재료 갯수 확인
@@ -168,7 +168,7 @@ public partial class CraftingSystem : MonoBehaviour
             _inventory.RemoveEquipment(slot.InventoryKey);
         }
 
-        _resourceCraftSlots = new CraftingInfo[_mainCraftSlot.GradeData.CostCount];
+        _resourceCraftSlots = new CraftingInfo[_mainCraftSlot.GradeData.cost_count];
     }
 
 
@@ -179,10 +179,12 @@ public class CraftingInfo
 {
     public ItemInstance InventoryKey;
     public readonly int ItemID;
-    public EQUIP_GRADE Grad;
+    public GRADE Grad;
 
-    public EQUIP_PARTS Parts => ItemDB.GetItemData<EquipmentSO>(ItemID).EquipmentPart;
-    public EquipGradeData GradeData => ItemDB.GetItemData<EquipmentSO>(ItemID).GetGradeData(Grad);
+    public PART Parts => ItemDB.GetData<EquipData>(ItemID).Equipmnet.part;
+    //public PART Parts => ItemDB.GetItemData<ItemDataLegacySO>().GetEquipData(ItemID).Equipmnet.part;
+    public EquipGrade GradeData => ItemDB.GetData<EquipData>(ItemID).Grades[(int)Grad];
+    //public EquipGrade GradeData => ItemDB.GetItemData<ItemDataLegacySO>().GetEquipData(ItemID).Grades[(int)Grad];
     public readonly bool IsLoadout;
 
     /// <summary>
@@ -203,8 +205,8 @@ public class CraftingInfo
     /// <param name="equipment"></param>
     public CraftingInfo(EquipmentBase equipment)
     {
-        ItemID = equipment.Data.UniqueID;
-        Grad = equipment.Grade;
+        ItemID = equipment.Data.Equipmnet.id;
+        Grad = equipment.GradeData.grade;
         IsLoadout = true;
     }
 

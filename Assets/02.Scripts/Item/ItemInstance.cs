@@ -1,8 +1,4 @@
-﻿
-
-using System;
-using System.Xml;
-using UnityEngine;
+﻿using System;
 
 /// <summary>
 /// 인벤토리의 아이템의 정보와 수량을 담은 정보 전달용 구조체
@@ -10,7 +6,7 @@ public struct ItemInstance
 {
     public readonly int ID;
     public readonly int EnhanceLevel;
-    public readonly EQUIP_GRADE Grade;
+    public readonly GRADE Grade;
 
     public int Amount { get; private set; }
     public const int NoneEnhanceLevel = -1;
@@ -20,7 +16,7 @@ public struct ItemInstance
     /// <summary>
     /// 아이템의 존재여부 확인용 존재할 수 없는 인벤토리 인스턴스
     /// </summary>
-    public static ItemInstance None => new ItemInstance(-1, -1, EQUIP_GRADE.None);
+    public static ItemInstance None => new ItemInstance(-1, -1, GRADE.None);
 
     /// <summary>
     /// 스택형 아이템의 아이템객체
@@ -30,7 +26,7 @@ public struct ItemInstance
     {
         ID = id;
         EnhanceLevel = NoneEnhanceLevel;
-        Grade = EQUIP_GRADE.None;
+        Grade = GRADE.None;
         Amount = 1;
     }
 
@@ -40,7 +36,7 @@ public struct ItemInstance
     /// <param name="id"></param>
     /// <param name="enhanceLevel"></param>
     /// <param name="grad"></param>
-    public ItemInstance(int id, int enhanceLevel, EQUIP_GRADE grad)
+    public ItemInstance(int id, int enhanceLevel, GRADE grad)
     {
         ID = id;
         EnhanceLevel = enhanceLevel;

@@ -1,11 +1,10 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class RuleBasedMonsterSpawner : MonoBehaviour, IMonsterSpawnSystem
 {
     private const float MIN_SPAWN_DISTANCE = 10f; //플레이어로부터 최소한의 스폰 거리
     private const float MAX_SPAWN_DISTANCE = 20f; //플레이어로부터 최대한의 스폰 거리
-
 
     private const int SPAWN_PER_SECOND = 5; //초당 스폰할 몬스터 수
     private const float SQUAD_RADIUS = 3f; //스쿼드 내 몬스터들이 모이는 반경
@@ -57,7 +56,6 @@ public class RuleBasedMonsterSpawner : MonoBehaviour, IMonsterSpawnSystem
 
     private const string MONSTER_TABLE_FILE = "monster_table";
     private const string MONSTER_TYPE_TABLE_FILE = "monster_type";
-
 
     public void SetSpawningEnabled(bool _isenabled)
     {
@@ -113,7 +111,6 @@ public class RuleBasedMonsterSpawner : MonoBehaviour, IMonsterSpawnSystem
             SpawnOneFromWave();
             TrySpawnSpecialByTime();
         }
-
     }
 
     public void SpawnBoss(int _bossId)
@@ -208,11 +205,13 @@ public class RuleBasedMonsterSpawner : MonoBehaviour, IMonsterSpawnSystem
         _monster.name = _name;
         _monster.SetMonsterId(_monsterId);
         _monster.target = _playerTransform;
-
+    
         float waveHp = _currentWave != null ? _currentWave.waveHpModifier : 0f;
         float wavePower = _currentWave != null ? _currentWave.wavePowerModifier : 0f;
 
         float hpScale = 1f + _towerHpMod + _stageHpMod + waveHp;
+        
+
         float powerScale = 1f + _towerPowerMod + _stagePowerMod + wavePower;
 
         hpScale = Mathf.Max(0.1f, hpScale);
@@ -222,11 +221,12 @@ public class RuleBasedMonsterSpawner : MonoBehaviour, IMonsterSpawnSystem
 
         int exp = CalcExp(_monsterId);
         _monster.SetExpReward(exp);
+        
 
         // 보스/특수보스 여부를 상속 타입으로 제한하지 않고,
         // 실제로 TriggerRunner가 붙어 있으면 바인딩한다.
         BossTriggerPatternRunner runner = _monster.GetComponent<BossTriggerPatternRunner>();
-        Debug.Log($"[Spawner] runnerNull={runner == null}");
+       
 
         if (runner != null)
         {

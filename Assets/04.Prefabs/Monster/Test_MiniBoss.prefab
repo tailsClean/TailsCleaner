@@ -85,7 +85,7 @@ SpriteRenderer:
   m_SortingLayerID: -985789361
   m_SortingLayer: 4
   m_SortingOrder: 0
-  m_Sprite: {fileID: 7482667652216324306, guid: 75f5f34dc1b5347e0b8351032682f224, type: 3}
+  m_Sprite: {fileID: -543440774144996595, guid: 3114087356348124e8bf10542bc46033, type: 3}
   m_Color: {r: 0.7008996, g: 0, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -160,8 +160,8 @@ BoxCollider2D:
   m_Offset: {x: 0, y: 0.21133333}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
-    pivot: {x: 0.5, y: 0.28866667}
-    oldSize: {x: 1, y: 1}
+    pivot: {x: 0.5, y: 0.5}
+    oldSize: {x: 6.75, y: 5.43}
     newSize: {x: 1, y: 1}
     adaptiveTilingThreshold: 0.5
     drawMode: 0
@@ -184,25 +184,28 @@ MonoBehaviour:
   target: {fileID: 0}
   stoppingDistance: 0.1
   hp: 1
+  maxHp: 1
   power: 1
   moveSpeed: 1
   hitBox: 1
   mass: 1
   KBResist: 1
+  knockbackUnitToPx: 100
   TestItem: {fileID: 7621293018972681884, guid: 7bd74e2913a4ea44aa66ef718bc20d47, type: 3}
   damageCooldown: 1
   scoreReward: 1000
   goldReward: 500
-  move_speed: 0
-  monster_power: 0
+  _monsterSprite: {fileID: 0}
+  pattern_group_id: 0
   detect_range: 0
   pattern_cooldown: 0
   cast_time: 0
   pattern_multiply: 0
   explosion_range: 0
-  pattern_damage: 0
+  damage_multiply: 0
   zigzag_width: 0
   patternFrequency: 5
+  type_power_multiply: 1
   moveType: 2
   jump_height: 2
   visualChild: {fileID: 0}

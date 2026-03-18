@@ -12,7 +12,7 @@ public enum ITEM_CONSUME_TYPE
 public class ItemConsumeTable
 {
     public int item_id;
-    public ITEM_TYPE item_stat_type;
+    public ITEM_CONSUME_TYPE item_stat_type;
     public int item_opt;
     public int item_opt_desc;
     public int item_script;

@@ -43,8 +43,8 @@ public class EquipmentEnhanceUI : EnhanceSystemUI
         foreach (var equipment in _playerLoadout.MyEquipments.Values)
         {
             var slot = _loadoutSlots[i++];
-            slot.SetSlot(equipment.Data.UniqueID);
-            slot.AddListener(() => _enhanceSystem.SetEquipment(equipment.Data.EquipmentPart));
+            slot.SetSlot(equipment.Data.Equipmnet.id);
+            slot.AddListener(() => _enhanceSystem.SetEquipment(equipment.Data.Equipmnet.part));
         }
     }
 
@@ -83,8 +83,8 @@ public class EquipmentEnhanceUI : EnhanceSystemUI
     public override void UpdateCurrentGold()
     {
         ItemInstance gold = _currency.GetGold();
-        var goldData = ItemDB.GetItemData<ItemBaseSO>(gold.ID);
-        _currentGoldImage.sprite = goldData.ImageSprite;
+        var goldData = ItemDB.GetData<ItemManageData>(gold.ID);
+        _currentGoldImage.sprite = goldData.SpriteImg;
         _currentGoldText.text = gold.Amount.ToString();
     }
 }

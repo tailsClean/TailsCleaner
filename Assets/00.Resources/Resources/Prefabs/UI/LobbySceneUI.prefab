@@ -2971,6 +2971,17 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 3071444597831318424, guid: ffee7820d9b4e904b8b320d894c87800, type: 3}
   m_PrefabInstance: {fileID: 2863915272527698094}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &5126755321605175321 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 6961244549763752119, guid: ffee7820d9b4e904b8b320d894c87800, type: 3}
+  m_PrefabInstance: {fileID: 2863915272527698094}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 946140007466492726}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0d0df84b37506dc46b2235dfe8702fcd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::InventoryUI
 --- !u!4 &7446644450941937304 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4677375691398020662, guid: ffee7820d9b4e904b8b320d894c87800, type: 3}
@@ -3633,6 +3644,18 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 873151086022604881, guid: e84ac6fc0d20ec347a13122943d09f31, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 5126755321605175321}
+    - target: {fileID: 873151086022604881, guid: e84ac6fc0d20ec347a13122943d09f31, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: ShowEquipUI
+      objectReference: {fileID: 0}
+    - target: {fileID: 873151086022604881, guid: e84ac6fc0d20ec347a13122943d09f31, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: ItemInventoryUI, Assembly-CSharp
+      objectReference: {fileID: 0}
     - target: {fileID: 1004291158112028867, guid: e84ac6fc0d20ec347a13122943d09f31, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
@@ -3716,6 +3739,18 @@ PrefabInstance:
     - target: {fileID: 2837288244395366696, guid: e84ac6fc0d20ec347a13122943d09f31, type: 3}
       propertyPath: m_AnchoredPosition.x
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4392379789653166650, guid: e84ac6fc0d20ec347a13122943d09f31, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 5126755321605175321}
+    - target: {fileID: 4392379789653166650, guid: e84ac6fc0d20ec347a13122943d09f31, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: ShowRelicUI
+      objectReference: {fileID: 0}
+    - target: {fileID: 4392379789653166650, guid: e84ac6fc0d20ec347a13122943d09f31, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: ItemInventoryUI, Assembly-CSharp
       objectReference: {fileID: 0}
     - target: {fileID: 5033759486784635974, guid: e84ac6fc0d20ec347a13122943d09f31, type: 3}
       propertyPath: m_AnchorMax.y
