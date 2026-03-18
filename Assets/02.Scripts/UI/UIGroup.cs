@@ -25,5 +25,5 @@ public enum UI_GROUP
 {
     //StageClear, StageOver, 
     EquipmentPanel, RelicPanel, ReinforceResourcePanel, SpendablePanel,
-    Inventory, EquipEnhanceUI, RelicEnhanceUI, EquipCraftingUI, SellingUI
+    Inventory, EquipEnhanceUI, RelicEnhanceUI, EquipCraftingUI, SellingUI, LoadoutEquipUI, LoadoutRelicUI
 }
