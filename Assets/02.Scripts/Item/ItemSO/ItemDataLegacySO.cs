@@ -146,15 +146,56 @@ public class ItemDataLegacySO : ItemBaseSO
     }
 
     #endregion
+
+
+    // 재료, 소모품 데이터는 여기서 관리
+    #region 아이템 관리 데이터 매칭
+    private Dictionary<int, ItemManageData> _itemDict;
+
+    public Dictionary<int, ItemManageData> ItemDict => _itemDict;
+
+    public ItemManageData GetItemData(int ManageID)
+    {
+        if (_itemDict == null)
+            ItemInit();
+
+        if (_itemDict.TryGetValue(ManageID, out var item))
+            return item;
+
+        Debug.LogWarning($"{ManageID}에 해당하는 아이템 데이터가 없습니다.");
+        return null;
+    }
+
+    public void ItemInit()
+    {
+        _itemDict = new Dictionary<int, ItemManageData>();
+        var itemManageData = DataManager.Instance.GetSOData<ItemManageTableSO>();
+        var itemConsumeData = DataManager.Instance.GetSOData<ItemConsumeTableSO>();
+        foreach (var manage in itemManageData.dataList)
+        {
+            _itemDict.Add(manage.item_id, new ItemManageData());
+            _itemDict[manage.item_id].ManageID = manage.item_id;
+            _itemDict[manage.item_id].Type = manage.item_type;
+            _itemDict[manage.item_id].ManageData = manage;
+        }
+        foreach (var consume in itemConsumeData.dataList)
+        {
+            if (_itemDict.TryGetValue(consume.item_id, out var item))
+                item.Consume = consume;
+        }
+    }
+
+    #endregion
 }
 
-public class EquipData
+public class EquipData : ItemDataBase
 {
     public int GroupID;
     public Equipitem Equipmnet;
     public Dictionary<EQUIP_STAT_TYPE, EquipStat> Stat;
     public List<EquipEnhance> Enhances;
     public List<EquipGrade> Grades;
+    public override ITEM_TYPE Type => ITEM_TYPE.Equipment;
 
     public EquipData()
     {
@@ -165,17 +206,28 @@ public class EquipData
 }
 
 
-public class RelicData
+public class RelicData : ItemDataBase
 {
     public int GroupID;
     public Relic Relic;
     public List<RelicEnhance> Enhances;
     public RelicDivision Division;
+    public override ITEM_TYPE Type => ITEM_TYPE.Relic;
 
     public RelicData()
     {
         Enhances = new List<RelicEnhance>();
     }
+}
+
+public class ItemManageData : ItemDataBase
+{
+    public int ManageID;
+    public ItemManageTable ManageData;
+    public ItemConsumeTable Consume;
+
+    public override ITEM_TYPE Type { get; set; }
+
 }
 
 

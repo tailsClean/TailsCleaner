@@ -69,6 +69,18 @@ public class ItemInventoryUI : UIGroup
     }
 
 
+    public void ShowEquipUI()
+    {
+        gameObject.SetActive(true);
+        ShowUIGroup(UI_GROUP.EquipmentPanel);
+    }
+
+    public void ShowRelicUI()
+    {
+        gameObject.SetActive(true);
+        ShowUIGroup(UI_GROUP.RelicPanel);
+    }
+
     // 특정 인벤토리 창 보여주는 메서드
     public void ShowUIGroup(UI_GROUP group)
     {
@@ -98,7 +110,7 @@ public class ItemInventoryUI : UIGroup
             ItemInstance itemKey = itemInstance.Key;
             itemKey.SetAmount(itemInstance.Value);
 
-            ITEM_TYPE type = ItemDB.GetItemData(itemInstance.Key.ID).ItemType;
+            ITEM_TYPE type = ItemDB.GetData<ItemDataBase>(itemInstance.Key.ID).Type;
             switch (type)
             {
                 case ITEM_TYPE.Equipment:
@@ -143,7 +155,7 @@ public class ItemInventoryUI : UIGroup
     {
         foreach(var popup in _itemPopupUI)
         {
-            if(popup.ItemType == ItemDB.GetItemData<ItemBaseSO>(item.ID).ItemType)
+            if(popup.ItemType == ItemDB.GetData<ItemDataBase>(item.ID).Type)
             {
                 popup.gameObject.SetActive(true);
                 popup.SetSlot(item);

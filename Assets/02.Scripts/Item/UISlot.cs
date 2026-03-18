@@ -28,10 +28,10 @@ public class UISlot : MonoBehaviour
     // 슬롯에 아이템(ID)과 벨류(갯수, 강화수치등)를 표시
     public void SetSlot(int id, int? value = null)
     {
-        var a = ItemDB.GetItemData<ItemBaseSO>(id);
+        var a = ItemDB.GetData<ItemDataBase>(id);
         if (a != null)
         {
-            _image.sprite = a.ImageSprite;
+            _image.sprite = a.SpriteImg;
             _amountText.text = value.ToString();
         }
         else
@@ -48,10 +48,10 @@ public class UISlot : MonoBehaviour
     // 슬롯에 아이템(ID)과 벨류(갯수, 강화수치등)를 표시
     public void SetSlot(int id, string value)
     {
-        var a = ItemDB.GetItemData<ItemBaseSO>(id);
+        var a = ItemDB.GetData<ItemDataBase>(id);
         if (a != null)
         {
-            _image.sprite = a.ImageSprite;
+            _image.sprite = a.SpriteImg;
             _amountText.text = value;
         }
         else

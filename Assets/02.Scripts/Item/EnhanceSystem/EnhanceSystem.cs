@@ -140,10 +140,10 @@ public class EnhancingInfo
             switch(ItemType)
             {
                 case ITEM_TYPE.Equipment:
-                    return new ItemEnhanceData(ItemDB.GetItemData<ItemDataLegacySO>().GetEquipData(ItemID), EnhanceLevel + 1);
+                    return new ItemEnhanceData(ItemDB.GetData<EquipData>(ItemID), EnhanceLevel + 1);
 
                 case ITEM_TYPE.Relic:
-                    return new ItemEnhanceData(ItemDB.GetItemData<ItemDataLegacySO>().GetRelicData(ItemID), EnhanceLevel + 1);
+                    return new ItemEnhanceData(ItemDB.GetData<RelicData>(ItemID), EnhanceLevel + 1);
             }
             return default;
         }
@@ -160,7 +160,7 @@ public class EnhancingInfo
         InventoryKey = inventoryKey;
         ItemID = itemID;
         EnhanceLevel = enhanceLevel;
-        ItemType = ItemDB.GetItemData<ItemBaseSO>(itemID).ItemType;
+        ItemType = ItemDB.GetData<ItemDataBase>(itemID).Type;
     }
 
     /// <summary>
@@ -172,7 +172,7 @@ public class EnhancingInfo
     {
         ItemID = itemID;
         EnhanceLevel = enhanceLevel;
-        ItemType = ItemDB.GetItemData<ItemBaseSO>(itemID).ItemType;
+        ItemType = ItemDB.GetData<ItemDataBase>(itemID).Type;
     }
 
     public bool IsEquals(ItemInstance item)

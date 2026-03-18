@@ -5,7 +5,7 @@ using UnityEngine;
 public class EquipmentBase : ItemBase, IEnhancement
 {
     public EquipData Data { get; private set; }
-    public override void Init(int id) => Data = ItemDB.GetItemData<ItemDataLegacySO>().GetEquipData(id);
+    public override void Init(int id) => Data = ItemDB.GetData<EquipData>(id);
 
 
     // 강화 데이터
