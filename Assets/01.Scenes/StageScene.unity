@@ -500,9 +500,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::StageEntry
   _stageId: 50201
   _towerId: 0
-  _useTimeOverride: 0
-  _overrideMainTimeSeconds: 300
-  _overrideBossTimeSeconds: 180
+  _useTimeOverride: 1
+  _overrideMainTimeSeconds: 30
+  _overrideBossTimeSeconds: 30
   _stageController: {fileID: 1499286055}
   _spawner: {fileID: 1493428061}
   _register: {fileID: 504285889}
@@ -624,6 +624,7 @@ MonoBehaviour:
   _currentSceneUI: {fileID: 0}
   _stageTrans: {fileID: 0}
   _onStartInGame: {fileID: 11400000, guid: bb5af9a30899d5441ae60b98e54bf231, type: 2}
+  _settingPrefab: {fileID: 0}
 --- !u!1 &1385904951
 GameObject:
   m_ObjectHideFlags: 0
