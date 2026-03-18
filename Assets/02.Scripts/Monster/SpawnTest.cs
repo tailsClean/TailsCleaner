@@ -10,7 +10,7 @@ public class SpawnTest : MonoBehaviour
             MonsterManager.Instance.OnMonsterSpawned += (monster) => {
                 Debug.Log($"<color=yellow>[테스트 성공]</color> 수신! 방금 나온 몬스터: {monster.name}");
             };
-            Debug.Log("테스트 준비 완료: 방송을 기다리는 중...");
+            // Debug.Log("테스트 준비 완료: 방송을 기다리는 중...");
         }
     }
 }
