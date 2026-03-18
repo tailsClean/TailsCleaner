@@ -54,6 +54,7 @@ public class UIManager : MonoBehaviour
        if(prefab != null)
        {
            sceneUI = Instantiate(prefab, transform);
+           sceneUI.transform.SetAsFirstSibling();
            SetUpReference(sceneUI); //todo: 참조를 하고나서 저장해두는 방식으로 바꿔야할듯
        }
        else
@@ -207,4 +208,38 @@ public class UIManager : MonoBehaviour
         }
     }
     #endregion
+
+    #region ItemManager
+    [SerializeField] public GameObject _inventoryUI;
+    [SerializeField] public GameObject _relicUI;
+    [SerializeField] public GameObject _equipUI;
+
+     public void ChangeStateInventory()
+    {
+        if(_inventoryUI != null)
+        {
+            _inventoryUI.SetActive(!_inventoryUI.activeSelf);
+        }
+    }
+
+     public void ChangeStateRelic()
+    {
+        if(_relicUI != null)
+        {
+            _relicUI.SetActive(!_relicUI.activeSelf);
+        }
+    }
+     public void ChangeStateEquipUI()
+    {
+        if(_equipUI != null)
+        {
+            _equipUI.SetActive(!_equipUI.activeSelf);
+        }
+    }
+
+
+    #endregion
+
+
+
 }

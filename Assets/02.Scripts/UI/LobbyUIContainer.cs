@@ -12,16 +12,22 @@ public class LobbyUIContainer : MonoBehaviour, UIContainer
     public GameObject StageSelect => _stageSelect;
     [SerializeField] private Button _stageButton;
     [SerializeField] private Button _settingButton;
-    
+    [SerializeField] private Button _relicButton;
+    [SerializeField] private Button _equipmentButton;
+    [SerializeField] private Button _inventoryButton;
+     
      
     
     void Start()
     {
         _dungeonButton.onClick.AddListener(UIManager.Instance.ChangeStateDungeonSelect);
         _stageButton.onClick.AddListener(UIManager.Instance.GoToStage);
-        _settingButton.onClick.AddListener(() => {
-        UIManager.Instance.ChangeStateSettingPanel();
-    });
+        _settingButton.onClick.AddListener(UIManager.Instance.ChangeStateSettingPanel);
+        _relicButton.onClick.AddListener(UIManager.Instance.ChangeStateRelic);
+        _equipmentButton.onClick.AddListener(UIManager.Instance.ChangeStateEquipUI);
+        _inventoryButton.onClick.AddListener(UIManager.Instance.ChangeStateInventory);
+    
+
     }
 
 }

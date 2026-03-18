@@ -8,6 +8,7 @@ public class GoldText: MonoBehaviour
 
     private void OnEnable()
     {
+        _currency = FindAnyObjectByType<Currency>();
         _onChangeGold.AddListener(RefreshTxt);
     }
     private void OnDisable()
