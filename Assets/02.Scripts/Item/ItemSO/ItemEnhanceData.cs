@@ -14,7 +14,7 @@ public struct ItemEnhanceData
     [field: SerializeField] public int CostBluePrint { get; private set; }
     [field: SerializeField] public int BluePrintID { get; private set; }
 
-    public ItemEnhanceData(EquipData equip, int enhanceLevel)
+    public ItemEnhanceData(DefaultEquipData equip, int enhanceLevel)
     {
         var data = equip.Enhances[enhanceLevel];
         ID = equip.Equipmnet.id;

@@ -1,25 +1,24 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 
 
-[CreateAssetMenu(fileName = "EquipmentSO", menuName = "ItemData/Equipment")]
-public class ItemDataLegacySO : ItemBaseSO
+[CreateAssetMenu(fileName = "ItemDB", menuName = "ItemDB")]
+public class ItemDBSO : ScriptableObject
 {
 
-    #region 장비 데이터 매칭
+    #region 기본 장비 데이터 매칭
 
-    private Dictionary<int, EquipData> _equipDict;
+    private Dictionary<int, DefaultEquipData> _defaultEquipDict;
 
-    public Dictionary<int, EquipData> EquipDict => _equipDict;
+    public Dictionary<int, DefaultEquipData> DefaultEquipDict => _defaultEquipDict;
 
 
-    public EquipData GetEquipData(int id)
+    public DefaultEquipData GetDefaultEquipData(int id)
     {
-        if (_equipDict == null)
-            EquipInit();
+        if (_defaultEquipDict == null)
+            DefaultEquipInit();
 
-        if (_equipDict.TryGetValue(id, out var equip))
+        if (_defaultEquipDict.TryGetValue(id, out var equip))
             return equip;
 
         Debug.LogWarning($"{id}에 해당하는 장비 데이터가 없습니다.");
@@ -27,23 +26,29 @@ public class ItemDataLegacySO : ItemBaseSO
     }
 
 
-    public void EquipInit()
+    public void DefaultEquipInit()
     {
-        _equipDict = new Dictionary<int, EquipData>();
-        // 장비 데이터 추가
+        _defaultEquipDict = new Dictionary<int, DefaultEquipData>();
+
+        var nameData = DataManager.Instance.GetSOData<StringSO>();
         var equipData = DataManager.Instance.GetSOData<EquipitemSO>();
+
         foreach (var equip in equipData.dataList)
         {
-            _equipDict.Add(equip.id, new EquipData());
-            _equipDict[equip.id].GroupID = equip.group_id;
-            _equipDict[equip.id].Equipmnet = equip;
+            _defaultEquipDict.Add(equip.id, new DefaultEquipData());
+            _defaultEquipDict[equip.id].UniqueID = equip.id;
+            _defaultEquipDict[equip.id].GroupID = equip.group_id;
+            _defaultEquipDict[equip.id].Equipmnet = equip;
+            _defaultEquipDict[equip.id].StringData = nameData.GetById(equip.name);
+            //_equipDict[equip.id].SpriteImg = Resources.Load<Sprite>($"All_Resource/image/Total_Item_Image/{equip.sprite}");
+            _defaultEquipDict[equip.id].SpriteImg = Resources.Load<Sprite>($"Total_Item_Image/{equip.sprite}");
         }
 
         // 장비 스텟을 추가
         var equipStatData = DataManager.Instance.GetSOData<EquipStatSO>();
         foreach (var stat in equipStatData.dataList)
         {
-            foreach (var equip in _equipDict.Values)
+            foreach (var equip in _defaultEquipDict.Values)
             {
                 if (equip.GroupID == stat.group_id)
                 {
@@ -57,7 +62,7 @@ public class ItemDataLegacySO : ItemBaseSO
         var equipEnhanceData = DataManager.Instance.GetSOData<EquipEnhanceSO>();
         foreach (var enhance in equipEnhanceData.dataList)
         {
-            foreach (var equip in _equipDict.Values)
+            foreach (var equip in _defaultEquipDict.Values)
             {
                 if (equip.GroupID == enhance.group_id)
                 {
@@ -71,7 +76,7 @@ public class ItemDataLegacySO : ItemBaseSO
         var equipGradeData = DataManager.Instance.GetSOData<EquipGradeSO>();
         foreach (var grade in equipGradeData.dataList)
         {
-            foreach (var equip in _equipDict.Values)
+            foreach (var equip in _defaultEquipDict.Values)
             {
                 if (equip.GroupID == grade.group_id)
                 {
@@ -84,7 +89,45 @@ public class ItemDataLegacySO : ItemBaseSO
 
     #endregion
 
+    #region 재료 장비 데이터 매칭
+
+
+    private Dictionary<int, MaterialEquipData> _materialEquipDict;
+
+    public MaterialEquipData GetMaterialEquipData(int id)
+    {
+        if (_materialEquipDict == null)
+            MaterialEquipInit();
+
+        if (_materialEquipDict.TryGetValue(id, out var equip))
+            return equip;
+
+        Debug.LogWarning($"{id}에 해당하는 재료 장비 데이터가 없습니다.");
+        return null;
+    }
+
+    public void MaterialEquipInit()
+    {
+        _materialEquipDict = new Dictionary<int, MaterialEquipData>();
+
+        var nameData = DataManager.Instance.GetSOData<StringSO>();
+        var equipment = DataManager.Instance.GetSOData<EquipMatterSO>();
+
+        foreach (var equip in equipment.dataList)
+        {
+            _materialEquipDict.Add(equip.id, new MaterialEquipData());
+            _materialEquipDict[equip.id].UniqueID = equip.id;
+            _materialEquipDict[equip.id].EquipMatter = equip;
+            _materialEquipDict[equip.id].StringData = nameData.GetById(equip.name);
+            _materialEquipDict[equip.id].SpriteImg = Resources.Load<Sprite>($"Total_Item_Image/{equip.sprite}");
+        }
+    }
+
+
+    #endregion
+
     #region 유물 데이터 매칭
+
 
     private Dictionary<int, RelicData> _relicDict;
 
@@ -111,9 +154,11 @@ public class ItemDataLegacySO : ItemBaseSO
         var relicData = DataManager.Instance.GetSOData<RelicSO>();
         foreach (var relic in relicData.dataList)
         {
-            _relicDict.Add(relic.group_id, new RelicData());
-            _relicDict[relic.group_id].GroupID = relic.group_id;
-            _relicDict[relic.group_id].Relic = relic;
+            _relicDict.Add(relic.id, new RelicData());
+            _relicDict[relic.id].UniqueID = relic.id;
+            _relicDict[relic.id].GroupID = relic.group_id;
+            _relicDict[relic.id].Relic = relic;
+            _relicDict[relic.id].SpriteImg = Resources.Load<Sprite>($"Total_Item_Image/{relic.sprite}");
         }
 
         // 유물 강화 데이터 매칭
@@ -145,11 +190,13 @@ public class ItemDataLegacySO : ItemBaseSO
         }
     }
 
-    #endregion
 
+    #endregion
 
     // 재료, 소모품 데이터는 여기서 관리
     #region 아이템 관리 데이터 매칭
+
+
     private Dictionary<int, ItemManageData> _itemDict;
 
     public Dictionary<int, ItemManageData> ItemDict => _itemDict;
@@ -174,9 +221,10 @@ public class ItemDataLegacySO : ItemBaseSO
         foreach (var manage in itemManageData.dataList)
         {
             _itemDict.Add(manage.item_id, new ItemManageData());
-            _itemDict[manage.item_id].ManageID = manage.item_id;
+            _itemDict[manage.item_id].UniqueID = manage.item_id;
             _itemDict[manage.item_id].Type = manage.item_type;
             _itemDict[manage.item_id].ManageData = manage;
+            _itemDict[manage.item_id].SpriteImg = Resources.Load<Sprite>($"Total_Item_Image/{manage.item_img}");
         }
         foreach (var consume in itemConsumeData.dataList)
         {
@@ -185,61 +233,70 @@ public class ItemDataLegacySO : ItemBaseSO
         }
     }
 
+
     #endregion
-}
 
-public class EquipData : ItemDataBase
-{
-    public int GroupID;
-    public Equipitem Equipmnet;
-    public Dictionary<EQUIP_STAT_TYPE, EquipStat> Stat;
-    public List<EquipEnhance> Enhances;
-    public List<EquipGrade> Grades;
-    public override ITEM_TYPE Type => ITEM_TYPE.Equipment;
 
-    public EquipData()
+
+    public T GetData<T>(int id) where T : ItemDataBase
     {
-        Stat = new Dictionary<EQUIP_STAT_TYPE, EquipStat>();
-        Enhances = new List<EquipEnhance>();
-        Grades = new List<EquipGrade>();
+
+        T item = (T)(ItemDataBase)GetDefaultEquipData(id);
+
+        if (item == null)
+            item = (T)(ItemDataBase)GetMaterialEquipData(id);
+
+        if (item == null)
+            item = (T)(ItemDataBase)GetRelicData(id);
+
+        if (item == null)
+            item = (T)(ItemDataBase)GetItemData(id);
+
+        if (item == null)
+            Debug.LogError($"ID: {id} / 타입: {typeof(T)}에 맞는 아이템은 없습니다.");
+
+        return item;
     }
 }
 
 
-public class RelicData : ItemDataBase
+// 전역 참조
+public static class ItemDB
 {
-    public int GroupID;
-    public Relic Relic;
-    public List<RelicEnhance> Enhances;
-    public RelicDivision Division;
-    public override ITEM_TYPE Type => ITEM_TYPE.Relic;
+    private static ItemDBSO _itemDB;
 
-    public RelicData()
+
+    public static T GetData<T>(int id) where T : ItemDataBase
     {
-        Enhances = new List<RelicEnhance>();
+        if(_itemDB == null)
+        {
+            _itemDB = Resources.Load<ItemDBSO>("Data/ScriptableObjects/Item/ItemDB");
+            Debug.Log("<color=green>ItemDB 초기화</color>");
+        }
+
+        return _itemDB.GetData<T>(id);
+    }
+
+    public static T CreateItem<T>(int id) where T: ItemBase, new()
+    {
+        var item = new T();
+        item.Init(id);
+
+        return item;
     }
 }
 
-public class ItemManageData : ItemDataBase
+public class ItemDataBase
 {
-    public int ManageID;
-    public ItemManageTable ManageData;
-    public ItemConsumeTable Consume;
+    public int UniqueID;
+    public String StringData;
+    public Sprite SpriteImg;
 
-    public override ITEM_TYPE Type { get; set; }
-
+    public virtual ITEM_TYPE Type { get; set; }
 }
 
 
-
-//public enum STAT_TYPE
-//{
-//    GoldGainRate,   // 골드 획득량 증가
-//    ItemDropRate,   // 아이템 획득 확률 증가
-//    ExpGainRate     // 경험치 획득량 증가
-//}
-
-public enum Relic_CONDITION
+public enum ITEM_TYPE
 {
-    // 값 미지정
+    System, Equipment, Relic, Reinforcement, Consume
 }

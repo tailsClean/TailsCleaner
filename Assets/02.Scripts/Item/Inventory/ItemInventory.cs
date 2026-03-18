@@ -17,6 +17,7 @@ public class ItemInventory : MonoBehaviour
     public event Action<int> OnAddItem;
     public event Action<int> OnRemoveItem;
 
+
     [ContextMenu("인벤토리 초기화")]
     public void ClearInventory()
     {
@@ -37,29 +38,18 @@ public class ItemInventory : MonoBehaviour
         OnRemoveItem = null;
     }
 
-    public void SellItem(ITEM_TYPE type, ItemInstance item, int amount = 1)
+    public void SellItem(ItemInstance item, int amount = 1)
     {
         bool isSuccess = false;
-        switch (type)
-        {
-            case ITEM_TYPE.Equipment:
-               isSuccess = RemoveEquipment(item, amount);
-                break;
+        if(item.ItemType == ITEM_TYPE.Equipment)
+            RemoveEquipment(item, amount);
 
-            case ITEM_TYPE.Relic:
-                isSuccess = RemoveRelic(item.ID, item.EnhanceLevel);
-                break;
 
-            case ITEM_TYPE.Reinforcement:
-            case ITEM_TYPE.Consume:
-                isSuccess = UseStakItem(item.ID, amount);
-                break;
-        }
+        if (!isSuccess)
+        { Debug.Log($"<color=red>아이템 판매에 실패했습니다.</color> \n판매하려는 아이템: {item.Name}({item.ID})"); return; }
 
-        if(!isSuccess)
-        { Debug.Log($"<color=red>아이템 판매에 실패했습니다.</color> 판매하려는 아이템: {item.ID}"); return; }
-
-        _onSellingItem.OnStartEvent(10 * amount);
+        var equip = ItemDB.GetData<MaterialEquipData>(item.ID);
+        _onSellingItem.OnStartEvent(equip.EquipMatter.price * amount);
     }
 
 
@@ -67,18 +57,18 @@ public class ItemInventory : MonoBehaviour
 
 
     // 장비 아이템 읽기
-    public bool TryGetEquipment(int id, int enhanceLevel, GRADE grade, out ItemInstance item) => TryGetItem(id, enhanceLevel, grade, out item);
+    public bool TryGetEquipment(int id, GRADE grade, out ItemInstance item) => TryGetItem(id, ItemInstance.NoneEnhanceLevel, grade, out item);
     public ItemInstance GetEquipment(int id, int enhanceLevel, GRADE grade) => GetItem(id, enhanceLevel, grade);
 
 
     // 장비 아이템 획득
-    public void GainEquipment(int id, int enhanceLevel, GRADE grade, int amount = 1) =>
-        GainItem(id, enhanceLevel, grade, amount);
+    public void GainEquipment(int id, GRADE grade, int amount = 1) =>
+        GainItem(id, ItemInstance.NoneEnhanceLevel, grade, amount);
 
 
     /// 장비 아이템 제거
-    public bool RemoveEquipment(int id, int enhanceLevel, GRADE grade, int amount = 1) =>
-        UseItem(id, enhanceLevel, grade, amount);
+    public bool RemoveEquipment(int id, GRADE grade, int amount = 1) =>
+        UseItem(id, ItemInstance.NoneEnhanceLevel, grade, amount);
 
 
     public bool RemoveEquipment(ItemInstance item, int amount = 1) => 

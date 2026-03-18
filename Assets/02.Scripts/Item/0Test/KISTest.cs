@@ -31,9 +31,9 @@ public class KISTest : MonoBehaviour
 
     public void GainEquip()
     {
-        inventory.GainEquipment(1000, 0 ,GRADE.Dirty);
-        inventory.GainEquipment(2000, 0 ,GRADE.Dirty);
-        inventory.GainEquipment(3000, 0 ,GRADE.Dirty);
+        inventory.GainEquipment(1000,GRADE.Dirty);
+        inventory.GainEquipment(2000,GRADE.Dirty);
+        inventory.GainEquipment(3000,GRADE.Dirty);
 
 
         //inventory.GainEquipment(2000, 0 ,EQUIP_GRADE.Fresh);

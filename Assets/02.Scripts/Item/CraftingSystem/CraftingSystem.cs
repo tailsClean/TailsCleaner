@@ -1,6 +1,5 @@
 ﻿using System;
 using UnityEngine;
-using static ItemDataLegacySO;
 
 
 public partial class CraftingSystem : MonoBehaviour
@@ -117,14 +116,14 @@ public partial class CraftingSystem : MonoBehaviour
     private void EquipRemoveAndCreate()
     {
         var originalEquip = _mainCraftSlot.InventoryKey;
-        _inventory.RemoveEquipment(originalEquip.ID, originalEquip.EnhanceLevel, originalEquip.Grade);
-        _inventory.GainEquipment(originalEquip.ID, originalEquip.EnhanceLevel, originalEquip.Grade + 1);
+        _inventory.RemoveEquipment(originalEquip.ID, originalEquip.Grade);
+        _inventory.GainEquipment(originalEquip.ID, originalEquip.Grade + 1);
 
         foreach(var slot in _resourceCraftSlots)
         {
             ItemInstance resource = slot.InventoryKey;
-            _inventory.RemoveEquipment(resource.ID, resource.EnhanceLevel, resource.Grade);
-            _inventory.GainEquipment(resource.ID, resource.EnhanceLevel, resource.Grade);
+            _inventory.RemoveEquipment(resource.ID, resource.Grade);
+            _inventory.GainEquipment(resource.ID, resource.Grade);
         }
     }
 
@@ -181,9 +180,9 @@ public class CraftingInfo
     public readonly int ItemID;
     public GRADE Grad;
 
-    public PART Parts => ItemDB.GetData<EquipData>(ItemID).Equipmnet.part;
+    public PART Parts => ItemDB.GetData<DefaultEquipData>(ItemID).Equipmnet.part;
     //public PART Parts => ItemDB.GetItemData<ItemDataLegacySO>().GetEquipData(ItemID).Equipmnet.part;
-    public EquipGrade GradeData => ItemDB.GetData<EquipData>(ItemID).Grades[(int)Grad];
+    public EquipGrade GradeData => ItemDB.GetData<DefaultEquipData>(ItemID).Grades[(int)Grad];
     //public EquipGrade GradeData => ItemDB.GetItemData<ItemDataLegacySO>().GetEquipData(ItemID).Grades[(int)Grad];
     public readonly bool IsLoadout;
 
