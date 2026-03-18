@@ -27,7 +27,7 @@ public class EnhanceSystem : MonoBehaviour
 
 
     // 강화할 장비 세팅
-    public void SetEquipment(EQUIP_PARTS part)
+    public void SetEquipment(PART part)
     {
         EquipmentBase equipment = _playerLoadout.MyEquipments[part];
 
@@ -35,10 +35,10 @@ public class EnhanceSystem : MonoBehaviour
         //OnEnhance -= SetRelicInventory;
         _settingItem = equipment;
 
-        _enhanceInfo = new EnhancingInfo(equipment.Data.UniqueID, equipment.EnhanceLevel);
+        _enhanceInfo = new EnhancingInfo(equipment.Data.Equipmnet.id, equipment.EnhanceLevel);
 
-        _bluePrintID = equipment.EnhanceData.BluePrintID;
-        _bluePrintCost = equipment.EnhanceData.CostBluePrint;
+        _bluePrintID = equipment.EnhanceData.blueprint_id;
+        _bluePrintCost = equipment.EnhanceData.cost_blueprint;
 
         OnEnhance += _settingItem.OnEnhance;
         OnSetEquipment?.Invoke(_enhanceInfo);
@@ -140,12 +140,12 @@ public class EnhancingInfo
             switch(ItemType)
             {
                 case ITEM_TYPE.Equipment:
-                    return ItemDB.GetItemData<EquipmentSO>(ItemID).GetEnhanceData(EnhanceLevel + 1);
+                    return new ItemEnhanceData(ItemDB.GetItemData<ItemDataLegacySO>().GetEquipData(ItemID), EnhanceLevel + 1);
 
                 case ITEM_TYPE.Relic:
-                    return ItemDB.GetItemData<RelicLegacySO>(ItemID).GetEnhanceData(EnhanceLevel + 1);
+                    return new ItemEnhanceData(ItemDB.GetItemData<ItemDataLegacySO>().GetRelicData(ItemID), EnhanceLevel + 1);
             }
-            return null;
+            return default;
         }
     }
 

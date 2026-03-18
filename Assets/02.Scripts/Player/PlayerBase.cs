@@ -52,6 +52,7 @@ public class PlayerBase : MonoBehaviour, IDamageable, ISkillable, ISkillStat, IP
 
     private void Awake()
     {
+        Data.Init(PlayerDataSO.PlayerID);
         _levelSystem = new PlayerLevelSystem(this);
         _myEnhancement = ItemManager.Instance.Loadout;
         _statCalculator = new PlayerStatCalculator(_myEnhancement, _levelSystem);
@@ -81,6 +82,7 @@ public class PlayerBase : MonoBehaviour, IDamageable, ISkillable, ISkillStat, IP
     private void Update()
     {
         _stateMachine.Update();
+        Debug.Log(MoveDir);
     }
 
 
@@ -95,26 +97,6 @@ public class PlayerBase : MonoBehaviour, IDamageable, ISkillable, ISkillStat, IP
         else
             PlayAni(PlayerAni.Move);
     }
-
-
-    //// 조이스틱 방향으로 공격
-    //public void StickAttackDir(InputAction.CallbackContext ctx)
-    //{
-    //    if (ctx.performed)
-    //        AttackDir = ctx.ReadValue<Vector2>().normalized;
-
-    //    else if (ctx.canceled)
-    //        AttackDir = Vector2.zero;
-
-    //    if (AttackDir != Vector2.zero)
-    //        LastAttackDir = AttackDir;
-    //}
-    //// 마우스 방향으로 공격
-    //public void MouseAttackDir(InputAction.CallbackContext ctx)
-    //{
-    //    Vector2 mousePos = Camera.main.ScreenToWorldPoint(ctx.ReadValue<Vector2>());
-    //    AttackDir = (mousePos - (Vector2)transform.position).normalized;
-    //}
 
 
     public void Heal(float amount)

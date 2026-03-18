@@ -3,23 +3,22 @@
 
 public class RelicBase : ItemBase, IEnhancement
 {
-    public RelicLegacySO Data { get; private set; }
+    public RelicData Data { get; private set; }
 
-    public override void Init(int id) => Data = ItemDB.GetItemData<RelicLegacySO>(id);
+    public override void Init(int id) => Data = ItemDB.GetItemData<ItemDataLegacySO>().GetRelicData(id);
 
 
     // 강화 데이터
     public int EnhanceLevel { get; private set; }
-    public ItemBaseSO ItemData => Data;
-    public ItemEnhanceData EnhanceData => Data.GetEnhanceData(EnhanceLevel);
+    public RelicEnhance EnhanceData => Data.Enhances[EnhanceLevel - 1];
 
 
 
     // 최종 스텟 증가량 제공 메서드(유물 증가량, 강화 증가량)
-    public int GetIncreaseStat(RELIC_STAT stat)
+    public int GetIncreaseStat(STAT_TYPE stat)
     {
-        float statValue = Data.GetIncreaseStat();
-        float enhanceValue = EnhanceData.AddValue;
+        float statValue = Data.Relic.stat_value;
+        float enhanceValue = Data.Enhances[EnhanceLevel - 1].add_value;
         return (int)(statValue + enhanceValue);
     }
 
