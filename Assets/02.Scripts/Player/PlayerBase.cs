@@ -82,7 +82,7 @@ public class PlayerBase : MonoBehaviour, IDamageable, ISkillable, ISkillStat, IP
     private void Update()
     {
         _stateMachine.Update();
-        Debug.Log(MoveDir);
+        
     }
 
 

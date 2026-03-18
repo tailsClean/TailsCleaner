@@ -112,13 +112,13 @@ public abstract class MonsterBase : PoolObject, IDamageable, IMonsterStatus, IPu
     public override void OnSpawn()
     {
         base.OnSpawn();
-        CacheBaseStats();
-
+        
         // 상태 초기화
         hp = _baseHp;
         maxHp = _baseHp;
         power = _basePower;
         _currentMoveSpeed = _baseMoveSpeed;
+        Debug.Log($"hp{hp}");
 
 
         _stunCounter = 0; // 스폰 시 카운터 초기화
@@ -414,6 +414,8 @@ public abstract class MonsterBase : PoolObject, IDamageable, IMonsterStatus, IPu
 
     protected virtual void Die()
     {
+        maxHp = _baseHp;
+        power = _basePower;
         PlayerRewardHandler handler = Object.FindFirstObjectByType<PlayerRewardHandler>();
 
         // 몬스터를 잡으면 획득 가능한 골드를 획득 가능

@@ -2,15 +2,17 @@
 using UnityEngine.AddressableAssets;
 using UnityEngine.ResourceManagement.AsyncOperations;
 using System.Threading.Tasks;
+using Unity.Cinemachine;
+
 
 public class StageMapLoader : MonoBehaviour
 {
     [SerializeField] private Transform _mapRoot;
-
+    [SerializeField] private CinemachineConfiner2D _confiner;
     private AsyncOperationHandle<GameObject> _currentMapInstance;
 
     public async Task LoadMap(string mapResource)
-    {
+    { 
         if (string.IsNullOrWhiteSpace(mapResource))
         {
             Debug.LogWarning("[StageMapLoader] mapResource is null or empty.");
@@ -27,7 +29,11 @@ public class StageMapLoader : MonoBehaviour
             transform.position,
             Quaternion.identity,
             transform
-        );     
+        );  
+        await _currentMapInstance.Task;
+        GameObject mapInstance = _currentMapInstance.Result;   
+      
+        _confiner.BoundingShape2D = mapInstance.GetComponent<Collider2D>();
     }
 
     public void ClearMap()
