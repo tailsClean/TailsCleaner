@@ -28,6 +28,7 @@ public class DungeonSelect : MonoBehaviour
     [SerializeField] private Button _btnNext;
     [SerializeField] private Button _btnSelect;
     [SerializeField] private Button _btnMain;
+    [SerializeField] private Button _btnSetting;
     
     [Header("텍스트")]
     [SerializeField] private TextMeshProUGUI _txtSelect;
@@ -59,6 +60,7 @@ public class DungeonSelect : MonoBehaviour
         _btnNext.onClick.AddListener(OnNext);
         _btnSelect.onClick.AddListener(OnSelect);
         _btnMain.onClick.AddListener(OnGoToMain);
+        _btnSetting.onClick.AddListener(UIManager.Instance.ChangeStateSettingPanel);
         
         _towerData = DataManager.Instance.GetSOData<TowerTableSO>();
         Refresh(animate: false);

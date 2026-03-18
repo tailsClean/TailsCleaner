@@ -38,8 +38,12 @@ public class UIManager : MonoBehaviour
         {
             Destroy(_currentSceneUI);
         }
-        
+        if(_settingPanel != null)
+        {
+            Destroy(_settingPanel);
+        }
         _currentSceneUI = OpenSceneUI($"{scene.name}");
+        
     }
 
     private GameObject OpenSceneUI(string sceneName)
