@@ -92,6 +92,7 @@ public class StageTimer
         if (_uiSeconds != _lastMainUiSeconds)
         {
             _lastMainUiSeconds = _uiSeconds;
+            Debug.Log($"[StageTimer] main={_uiSeconds}/{_mainLimitSeconds}");
             _events.RaiseMainSecondTick(_uiSeconds);
         }
 
@@ -100,6 +101,7 @@ public class StageTimer
         {
             _mainTimeSeconds = _mainLimitSeconds;
             _isMainRunning = false;
+            Debug.Log("[StageTimer] Main timer reached limit");
             _events.RaiseMainTimerReachedLimit();
         }
     }
