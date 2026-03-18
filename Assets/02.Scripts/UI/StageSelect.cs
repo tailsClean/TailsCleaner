@@ -249,7 +249,7 @@ public class StageSelect : MonoBehaviour
 
     private void OnOpenSetting()
     {
-        UIManager.Instance.ChangeStateExitPanel();
+        UIManager.Instance.ChangeStateSettingPanel();
     }
 
     // 나중에 스크롤 뷰 붙을 때 외부에서 호출할 수 있도록 남겨둠

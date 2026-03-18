@@ -33,7 +33,7 @@ public class StageUIContainer : MonoBehaviour, UIContainer // stageUI에서 연�
     void Start()
     {
         _settingButton.onClick.AddListener(() => {
-        UIManager.Instance.ChangeStateExitPanel();
+        UIManager.Instance.ChangeStateSettingPanel();
     });
         
     }

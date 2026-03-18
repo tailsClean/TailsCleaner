@@ -65,7 +65,6 @@ public class UIManager : MonoBehaviour
             if(container is StageUIContainer stageUI) // UI 참조 연경
             {
                 // StageUIContainer 참조로 들고 있기
-                this._exitPanel = stageUI.ExitPanel;
                 this._stageTimer = stageUI.TimerUI.GetComponent<StageTimerTextUI>();
                 this._gameOverPanel = stageUI.GameOverPanel;
                 this._stageClearPanel = stageUI.StageClearPanel;
@@ -114,14 +113,25 @@ public class UIManager : MonoBehaviour
 #endif    
     }
 
-    #region ExitPanel
-    private GameObject _exitPanel;
-
-    public void ChangeStateExitPanel()
+    #region SettingPanel
+    private GameObject _settingPanel;
+    [SerializeField] private GameObject _settingPrefab;
+    public void ChangeStateSettingPanel()
     {
-        if(_exitPanel != null)
+        if (_settingPanel == null)
         {
-            _exitPanel.SetActive(!_exitPanel.activeSelf);
+            if (_settingPrefab == null)
+            {
+                Debug.LogError("_settingPrefab이 할당되지 않았습니다!");
+                return;
+            }
+            _settingPanel = Instantiate(_settingPrefab, this.transform);
+            _settingPanel.transform.SetAsLastSibling();
+            _settingPanel.SetActive(true);   
+        }
+        else
+        {
+            _settingPanel.SetActive(!_settingPanel.activeSelf);
         }
     }
 

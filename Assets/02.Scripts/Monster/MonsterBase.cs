@@ -97,6 +97,7 @@ public abstract class MonsterBase : PoolObject, IDamageable, IMonsterStatus, IPu
         rb2D.constraints = RigidbodyConstraints2D.FreezeRotation;
         rb2D.sleepMode = RigidbodySleepMode2D.NeverSleep;
         originHp = hp;
+        originPower = power;
 
         CacheBaseStats();
     }
@@ -391,6 +392,7 @@ public abstract class MonsterBase : PoolObject, IDamageable, IMonsterStatus, IPu
         CacheBaseStats();
         _baseHp = OriginHp * hpScale;
         _basePower = OriginPower * powerScale;
+        Debug.Log(OriginPower+"기본 파워" + powerScale + "파워 배율 ");
 
         // 강화 수치가 이미 있다면 적용
         RefreshFinalStats();
