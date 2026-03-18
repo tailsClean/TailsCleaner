@@ -62,8 +62,8 @@ public class StagePlanBuilder
         return new StagePlan
         {
             stageId = _stage.stage_id,
-            mainLimitSeconds = Mathf.Max(0, _stage.main_time) * 60,
-            bossLimitSeconds = Mathf.Max(0, _stage.boss_time) * 60,
+            mainLimitSeconds = Mathf.Max(0, _stage.main_time),
+            bossLimitSeconds = Mathf.Max(0, _stage.boss_time),
 
             entryEnergy = Mathf.Max(0, _stage.entry_energy),
 
