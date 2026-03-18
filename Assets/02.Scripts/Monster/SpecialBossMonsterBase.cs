@@ -129,18 +129,18 @@ public abstract class SpecialBossMonsterBase : MonsterBase
             return;
         }
 
-        PatternGroupComposition compositionData = compositionSO.GetById(pattern_group_id);
-        if (compositionData == null)
+        List<PatternGroupComposition> compositionList = compositionSO.GetAllByGroupId(pattern_group_id);
+
+        Debug.Log($"[Composition 개수] pattern_group_id:{pattern_group_id}, count:{compositionList.Count}");
+
+        foreach (var comp in compositionList)
         {
-            Debug.LogError($"[SpecialBossMonsterBase] composition 데이터 없음. pattern_group_id:{pattern_group_id}");
-            return;
+            Debug.Log($"[Composition] group:{comp.pattern_group_id}, pattern:{comp.pattern_id}, priority:{comp.priority}");
         }
 
-        int pattern_id = compositionData.pattern_id;
-
-        if (pattern_id <= 0)
+        if (compositionList == null || compositionList.Count == 0)
         {
-            Debug.LogError($"[SpecialBossMonsterBase] composition의 pattern_id가 유효하지 않음. pattern_group_id:{pattern_group_id}, pattern_id:{pattern_id}");
+            Debug.LogError($"[SpecialBossMonsterBase] composition 데이터 없음. pattern_group_id:{pattern_group_id}");
             return;
         }
 
@@ -151,17 +151,79 @@ public abstract class SpecialBossMonsterBase : MonsterBase
             return;
         }
 
-        Pattern patternData = patternSO.GetById(pattern_id);
-        if (patternData == null)
+        Pattern movePattern = null;
+        Pattern projectilePattern = null;
+
+        foreach (var composition in compositionList)
         {
-            Debug.LogError($"[SpecialBossMonsterBase] 패턴 데이터 없음. pattern_id:{pattern_id}, pattern_group_id:{pattern_group_id}");
-            return;
+            Pattern pattern = patternSO.GetById(composition.pattern_id);
+            if (pattern == null) continue;
+
+            Debug.Log($"[Pattern 확인] pattern_id:{pattern.pattern_id}, type:{pattern.pattern_type}, logic:{pattern.pattern_logic_type}");
+
+            if (pattern.pattern_type == PATTERN_TYPE.Projectile && projectilePattern == null)
+            {
+                projectilePattern = pattern;
+            }
+            else if (pattern.pattern_type == PATTERN_TYPE.Move && movePattern == null)
+            {
+                movePattern = pattern;
+            }
         }
 
-        currentPattern = patternData;
+        MonsterShooter shooter = GetComponent<MonsterShooter>();
 
-        ApplyPatternData(patternData);
-        ResetRuntimeState();
+        // Projectile 우선
+        if (projectilePattern != null)
+        {
+            currentPattern = null; // 이동 특수 패턴 미적용 시 StraightChase fallback (기본 이동)
+            ResetRuntimeState();
+
+            isSuicideUnit = false;
+            damage_multiply = projectilePattern.damage_multiply > 0f ? projectilePattern.damage_multiply : 1f;
+            detect_range = projectilePattern.detect_range > 0f ? projectilePattern.detect_range : detect_range;
+            cast_time = 0f;
+            explosion_range = 0f;
+
+            if (shooter != null)
+            {
+                shooter.ApplyProjectilePattern(projectilePattern);
+            }
+
+            Debug.Log(
+                $"[Projectile 적용 완료] " +
+                $"MonsterId:{MonsterId}, PatternGroupId:{pattern_group_id}, PatternId:{projectilePattern.pattern_id}, Logic:{projectilePattern.pattern_logic_type}, " +
+                $"Count:{projectilePattern.projectile_count}, FireInterval:{projectilePattern.fire_interval}, Speed:{projectilePattern.projectile_speed}, " +
+                $"Size:{projectilePattern.projectile_size}, Life:{projectilePattern.life_time}, Follow:{projectilePattern.follow}"
+            );
+        }
+        else
+        {
+            if (shooter != null)
+            {
+                shooter.DisableShooter();
+            }
+
+            if (movePattern != null)
+            {
+                currentPattern = movePattern;
+                ApplyPatternData(movePattern);
+
+                Debug.Log(
+                    $"[Move 적용 완료] " +
+                    $"MonsterId:{MonsterId}, PatternGroupId:{pattern_group_id}, PatternId:{movePattern.pattern_id}, Logic:{movePattern.pattern_logic_type}, " +
+                    $"Cooldown:{pattern_cooldown}, Cast:{cast_time}, SpeedMul:{pattern_multiply}, Detect:{detect_range}, " +
+                    $"ZigzagWidth:{zigzag_width}, JumpHeight:{jump_height}, ExplosionRange:{explosion_range}, DamageMul:{damage_multiply}"
+                );
+            }
+            else
+            {
+                currentPattern = null; // 기본 StraightChase
+                ResetRuntimeState();
+
+                Debug.Log($"[기본 이동 적용] MonsterId:{MonsterId}, PatternGroupId:{pattern_group_id}");
+            }
+        }
 
         if (!activeMonsters.Contains(this))
             activeMonsters.Add(this);
@@ -185,13 +247,6 @@ public abstract class SpecialBossMonsterBase : MonsterBase
             if (playerObj != null)
                 target = playerObj.transform;
         }
-
-        Debug.Log(
-            $"[Pattern 적용 완료] " +
-            $"MonsterId:{MonsterId}, PatternGroupId:{pattern_group_id}, PatternId:{pattern_id}, Logic:{currentPattern.pattern_logic_type}, " +
-            $"Cooldown:{pattern_cooldown}, Cast:{cast_time}, SpeedMul:{pattern_multiply}, Detect:{detect_range}, " +
-            $"ZigzagWidth:{zigzag_width}, JumpHeight:{jump_height}, ExplosionRange:{explosion_range}, DamageMul:{damage_multiply}"
-        );
     }
 
     public override void OnDespawn()
@@ -249,7 +304,6 @@ public abstract class SpecialBossMonsterBase : MonsterBase
 
         if (currentPattern == null)
         {
-            Debug.LogError("[SpecialBossMonsterBase] currentPattern 없음 → StraightChase fallback");
             StraightChase();
             return;
         }

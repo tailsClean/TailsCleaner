@@ -147,10 +147,9 @@ MonoBehaviour:
   zigzag_width: 2
   patternFrequency: 5
   type_power_multiply: 1
-  moveType: 0
   jump_height: 2
   visualChild: {fileID: 5025330469006525766}
-  isSuicideUnit: 1
+  isSuicideUnit: 0
 --- !u!114 &3096486886849442316
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -158,7 +157,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3897748407859779734}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 91e90c980cd2b54429434b66344f9b0c, type: 3}
   m_Name: 
@@ -170,6 +169,12 @@ MonoBehaviour:
   detect_range: 10
   projectile_count: 3
   fire_interval: 0.2
+  projectile_speed: 10
+  projectile_size: 1
+  life_time: 5
+  is_homing: 0
+  pierce_type: 0
+  arc_height: 0
   state: 0
 --- !u!114 &-2927482154274583182
 MonoBehaviour:

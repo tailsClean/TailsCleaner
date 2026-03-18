@@ -14,10 +14,21 @@ public class MonsterShooter : MonoBehaviour
     public float pattern_cooldown = 5.0f;     
     public float detect_range = 10.0f;        
     public int projectile_count = 3;          
-    public float fire_interval = 0.2f;        
+    public float fire_interval = 0.2f;
+
+    [Header("--- 투사체 데이터 연동 ---")]
+    public float projectile_speed = 10f;
+    public float projectile_size = 1f;
+    public float life_time = 5f;
+    public bool is_homing = false;
+    public PierceType pierce_type = PierceType.DISAPPEAR;
+    public float arc_height = 0f;
+
 
     public MonsterState state = MonsterState.MOVE; 
     private float current_cooldown = 0f;
+    private bool isPatternReady = false;
+
 
     void Start()
     {
@@ -26,6 +37,9 @@ public class MonsterShooter : MonoBehaviour
 
     void Update()
     {
+        if (!enabled) return;
+        if (!isPatternReady) return;
+
         // 쿨타임 상시 검사
         if (current_cooldown > 0)
         {
@@ -40,6 +54,53 @@ public class MonsterShooter : MonoBehaviour
                 StartCoroutine(AttackPatternRoutine());
             }
         }
+    }
+
+    public void ApplyProjectilePattern(Pattern patternData)
+    {
+        if (patternData == null)
+        {
+            DisableShooter();
+            return;
+        }
+
+        pattern_cooldown = patternData.cast_time > 0f ? patternData.cast_time : 1f;
+        detect_range = patternData.detect_range > 0f ? patternData.detect_range : 10f;
+        projectile_count = patternData.projectile_count > 0 ? patternData.projectile_count : 1;
+        fire_interval = patternData.fire_interval > 0f ? patternData.fire_interval : 0.2f;
+
+        projectile_speed = patternData.projectile_speed > 0f ? patternData.projectile_speed : 10f;
+        projectile_size = patternData.projectile_size > 0f ? patternData.projectile_size : 1f;
+        life_time = patternData.life_time > 0f ? patternData.life_time : 5f;
+        is_homing = patternData.follow;
+        arc_height = patternData.arc_height;
+
+        switch (patternData.pierce_type)
+        {
+            case PIERCE_TYPE.Extinction:
+                pierce_type = PierceType.DISAPPEAR;
+                break;
+            case PIERCE_TYPE.Piece:
+                pierce_type = PierceType.PIERCE;
+                break;
+            case PIERCE_TYPE.Reflect:
+                pierce_type = PierceType.REFLECT;
+                break;
+        }
+
+        current_cooldown = 0f;
+        state = MonsterState.MOVE;
+        isPatternReady = true;
+        enabled = true;
+    }
+
+    public void DisableShooter()
+    {
+        StopAllCoroutines();
+        current_cooldown = 0f;
+        state = MonsterState.MOVE;
+        isPatternReady = false;
+        enabled = false;
     }
 
     IEnumerator AttackPatternRoutine()
@@ -76,7 +137,6 @@ public class MonsterShooter : MonoBehaviour
         if (projectilePrefab == null || playerTarget == null) return;
 
         SpecialBossMonsterBase monsterBase = GetComponent<SpecialBossMonsterBase>();
-
         float finalDamage = 0f;
 
         if (monsterBase != null)
@@ -96,19 +156,26 @@ public class MonsterShooter : MonoBehaviour
 
         MonsterProjectile prefabScript = projectilePrefab.GetComponent<MonsterProjectile>();
 
-        if (prefabScript != null)
-        {
-            // 제네릭 Spawn<T> 호출: 자동으로 PoolKey를 심어주고 OnSpawn을 실행
-            MonsterProjectile projectile = ObjectPoolManager.Instance.Spawn(prefabScript, spawnPos, Quaternion.identity);
-
-            if (projectile != null)
-            {
-                projectile.Launch(playerTarget, finalDamage);
-            }
-        }
-        else
+        if (prefabScript == null)
         {
             Debug.LogError("projectilePrefab에 MonsterProjectile 스크립트가 없습니다!");
+            return;
+        }
+
+        MonsterProjectile projectile = ObjectPoolManager.Instance.Spawn(prefabScript, spawnPos, Quaternion.identity);
+        if (projectile != null)
+        {
+            projectile.ApplyProjectileData(
+                projectile_speed,
+                projectile_size,
+                life_time,
+                is_homing,
+                pierce_type,
+                arc_height
+            );
+
+            projectile.Launch(playerTarget, finalDamage);
         }
     }
+
 }

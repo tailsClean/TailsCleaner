@@ -48,6 +48,24 @@ public class MonsterProjectile : PoolObject
         // 수명 후 자동 반납 예약 (CancelInvoke는 Launch에서 수행)
     }
 
+    public void ApplyProjectileData(
+    float speed,
+    float size,
+    float lifeTime,
+    bool homing,
+    PierceType pierce,
+    float arcHeightValue)
+    {
+        projectile_speed = speed;
+        life_time = lifeTime;
+        is_homing = homing;
+        pierce_type = pierce;
+        arc_height = arcHeightValue;
+
+        transform.localScale = Vector3.one * size;
+    }
+
+
     public void Launch(Transform playerTarget, float damage)
     {
         this.finalDamage = damage;
