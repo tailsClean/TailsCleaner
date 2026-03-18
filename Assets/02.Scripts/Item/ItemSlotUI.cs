@@ -35,10 +35,10 @@ public class ItemSlotUI : MonoBehaviour
 
     public void ShowSlot(ItemInstance item)
     {
-        var a = ItemDB.GetItemData<ItemBaseSO>(item.ID);
+        var a = ItemDB.GetData<ItemDataBase>(item.ID);
         if (a != null)
         {
-            _image.sprite = a.ImageSprite;
+            _image.sprite = a.SpriteImg;
             _amountText.text = item.Amount.ToString();
         }
         else

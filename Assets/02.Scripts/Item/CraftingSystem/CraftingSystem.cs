@@ -181,8 +181,10 @@ public class CraftingInfo
     public readonly int ItemID;
     public GRADE Grad;
 
-    public PART Parts => ItemDB.GetItemData<ItemDataLegacySO>().GetEquipData(ItemID).Equipmnet.part;
-    public EquipGrade GradeData => ItemDB.GetItemData<ItemDataLegacySO>().GetEquipData(ItemID).Grades[(int)Grad];
+    public PART Parts => ItemDB.GetData<EquipData>(ItemID).Equipmnet.part;
+    //public PART Parts => ItemDB.GetItemData<ItemDataLegacySO>().GetEquipData(ItemID).Equipmnet.part;
+    public EquipGrade GradeData => ItemDB.GetData<EquipData>(ItemID).Grades[(int)Grad];
+    //public EquipGrade GradeData => ItemDB.GetItemData<ItemDataLegacySO>().GetEquipData(ItemID).Grades[(int)Grad];
     public readonly bool IsLoadout;
 
     /// <summary>

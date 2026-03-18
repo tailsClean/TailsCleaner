@@ -3,7 +3,7 @@
 
 public class ConsumeItem : ItemBase
 {
-    private ConsumeItemSO Data;
+    private ItemManageData Data;
 
-    public override void Init(int id) => Data = ItemDB.GetItemData<ConsumeItemSO>(id);
+    public override void Init(int id) => Data = ItemDB.GetData<ItemManageData>(id);
 }
