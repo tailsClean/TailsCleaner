@@ -4,15 +4,16 @@ using TMPro;
 public class EnergyPanel : MonoBehaviour
 {
     [SerializeField] private TextMeshProUGUI _energyText;
-    [SerializeField] private VoidEventChannelSO _OnStartInGame;
+    [SerializeField] private VoidEventChannelSO _OnEnergyChange;
     private void Start()
     {
         UpdateEnergyText();
-        _OnStartInGame.AddListener(UpdateEnergyText);
+        _OnEnergyChange.AddListener(UpdateEnergyText);
+    
     }
     private void OnDestroy()
     {
-        _OnStartInGame.RemoveListener(UpdateEnergyText);
+        _OnEnergyChange.RemoveListener(UpdateEnergyText);
     }
    
     public void UpdateEnergyText()

@@ -18,7 +18,7 @@ public class EnergySystem : MonoBehaviour
     public bool IsStartInGame => _currentEnergy > 0;
     void Awake()
     {
-        _currentEnergy = _maxEnergy;
+        _currentEnergy = 125;
     }
     private void OnEnable()
     {

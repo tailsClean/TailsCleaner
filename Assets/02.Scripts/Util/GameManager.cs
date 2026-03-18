@@ -6,10 +6,10 @@ public class GameManager : MonoBehaviour
     private static GameManager instance;
     public static GameManager Instance { get => instance; private set => instance = value;}
 
-
+    
     public EnergySystem _energySystem;
 
-    public static int EnergyCount;
+    public static int EnergyCount = 125;
     public const int SPEND_ENERGY = 1;
     public int _maxEnergy;
 
@@ -19,6 +19,7 @@ public class GameManager : MonoBehaviour
     public int _currentStageId;
     public int _currentStageIndex;
 
+    [SerializeField] private VoidEventChannelSO OnEnergyChange;
     private Dictionary<int, int> _maxClearStageIndexByTower = new Dictionary<int, int>();
 
     private void Awake()
@@ -36,7 +37,6 @@ public class GameManager : MonoBehaviour
         DontDestroyOnLoad(gameObject);
         _maxEnergy = _energySystem.MaxEnergy;
         //EnergyCount = _maxEnergy;
-        EnergyCount = 125;
     }
 
     public void EnterStage()
@@ -50,7 +50,7 @@ public class GameManager : MonoBehaviour
     public void UpdateEnergyCount(int energy)
     {
         EnergyCount = energy;
-        UIManager.Instance.EnergyPanel?.UpdateEnergyText();
+        OnEnergyChange.OnStartEvent();
     }
 
     public void SetCurrentStage(StageTable stage)
