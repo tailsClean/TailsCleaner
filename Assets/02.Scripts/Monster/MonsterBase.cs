@@ -22,6 +22,12 @@ public abstract class MonsterBase : PoolObject, IDamageable, IMonsterStatus, IPu
     public float mass = 1.0f;
     public float KBResist = 1.0f;
 
+    private float originHp;
+    private float originPower;
+
+    private float OriginHp => originHp;
+    private float OriginPower => originPower;
+
     public float MaxHp => maxHp;
 
     public float knockbackUnitToPx = 100f;
@@ -90,6 +96,7 @@ public abstract class MonsterBase : PoolObject, IDamageable, IMonsterStatus, IPu
         rb2D.gravityScale = 0f;
         rb2D.constraints = RigidbodyConstraints2D.FreezeRotation;
         rb2D.sleepMode = RigidbodySleepMode2D.NeverSleep;
+        originHp = hp;
 
         CacheBaseStats();
     }
@@ -382,8 +389,8 @@ public abstract class MonsterBase : PoolObject, IDamageable, IMonsterStatus, IPu
     public void ApplyScaling(float hpScale, float powerScale)
     {
         CacheBaseStats();
-        _baseHp = hp * hpScale;
-        _basePower = power * powerScale;
+        _baseHp = OriginHp * hpScale;
+        _basePower = OriginPower * powerScale;
 
         // 강화 수치가 이미 있다면 적용
         RefreshFinalStats();

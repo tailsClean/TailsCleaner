@@ -1,5 +1,6 @@
 using System;
 
+[Serializable]
 public class EquipMatter
 {
     public int id;
