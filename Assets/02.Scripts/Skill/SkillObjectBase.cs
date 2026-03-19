@@ -45,8 +45,8 @@ public class SkillObjectBase : PoolObject
         _skill = owner;
         _dir = dir;
 
-        // 충돌 켜기
-        if (_collider != null) _collider.enabled = true;
+        // 물리 초기화
+        InitPhysics();
 
         // 스킬 스탯 스냅샷
         _runtimeBaseStat.CopyFrom(owner.BaseStat);
@@ -74,6 +74,27 @@ public class SkillObjectBase : PoolObject
                 passive.ModifyPostFinal(_runtimeFinalStat);
         }
 
+        // 애니메이션
+        AnimatorSequence();
+    }
+
+    private void InitPhysics()
+    {
+        // 콜라이더 초기화
+        if (_collider != null)
+        {
+            _collider.transform.localPosition = Vector3.zero;
+            _collider.transform.localRotation = Quaternion.identity;
+
+            _collider.enabled = true;
+        }
+
+        // 리지드바디 위치 초기화
+        if (_rigidbody != null) _rigidbody.position = transform.position;
+    }
+
+    private void AnimatorSequence()
+    {
         // 리셋
         if (_animator != null)
             _animator.ResetState();

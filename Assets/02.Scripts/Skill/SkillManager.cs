@@ -142,6 +142,8 @@ public class SkillManager : MonoBehaviour
 
         //ApplyActiveOption(41005, SkillDataLoader.GetActiveUpgradeData(40066));  // 지속 시간
         //ApplyActiveOption(41001, SkillDataLoader.GetActiveUpgradeData(40067));  // 연사
+        //ApplyActiveOption(41001, SkillDataLoader.GetActiveUpgradeData(40067));  // 연사
+        //ApplyActiveOption(41001, SkillDataLoader.GetActiveUpgradeData(40067));  // 연사
         //ApplyActiveOption(41002, SkillDataLoader.GetActiveUpgradeData(40067));  // 연사
         //ApplyActiveOption(41003, SkillDataLoader.GetActiveUpgradeData(40067));  // 연사
         //ApplyActiveOption(41004, SkillDataLoader.GetActiveUpgradeData(40067));  // 연사

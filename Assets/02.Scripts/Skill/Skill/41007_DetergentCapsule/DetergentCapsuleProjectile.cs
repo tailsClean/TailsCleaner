@@ -7,6 +7,18 @@ public class DetergentCapsuleProjectile : SkillProjectile<DetergentCapsuleModifi
 
     [Header("속도 대비 회전 배율")]
     [SerializeField] private float _spinMultiplier = 30f;
+    
+    
+    public override void Init(ActiveSkill owner, DetergentCapsuleModifierData modifierData, Vector2 dir)
+    {
+        base.Init(owner, modifierData, dir);
+
+        // 재사용 시 회전 객체의 각도 초기화
+        if (_rotObject != null)
+        {
+            _rotObject.localRotation = Quaternion.identity;
+        }
+    }
 
     protected override void Update()
     {
