@@ -17,8 +17,12 @@ public class PlayerLoadout
     private readonly RelicBase _relicZero;
     private readonly int _relicSlotLength = 3;
 
-    public PlayerLoadout()
+    private VoidEventChannelSO _onChangeLoadout;
+
+    public PlayerLoadout(VoidEventChannelSO onChangeLoadout)
     {
+        _onChangeLoadout = onChangeLoadout;
+
         _relicZero = new RelicBase();
         _myRelics = new List<RelicBase>();
         _outputRelics = new List<RelicBase>();
@@ -94,6 +98,7 @@ public class PlayerLoadout
             {
                 _myRelics[i] = relic;
                 _outputRelics.Add(relic);
+                _onChangeLoadout.OnStartEvent();
                 return;
             }
         }
@@ -111,8 +116,12 @@ public class PlayerLoadout
                 _myRelics.RemoveAt(i);
                 _outputRelics.Remove(relic);
                 _myRelics.Add(_relicZero);
+                _onChangeLoadout.OnStartEvent();
                 return;
             }
         }
+        
     }
+
+    public void OnChangeLoadout() => _onChangeLoadout.OnStartEvent();
 }

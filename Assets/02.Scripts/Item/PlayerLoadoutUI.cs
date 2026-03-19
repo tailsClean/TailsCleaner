@@ -15,7 +15,8 @@ public class PlayerLoadoutUI : UIGroup
     [SerializeField] private List<Button> _popUpButtons;
     [SerializeField] private ItemPopup _popUp;
 
-
+    [Header("이벤트 채널")]
+    [SerializeField] private VoidEventChannelSO _onChangeLoadout;
 
     
     private PlayerLoadout _loadout;
@@ -30,7 +31,14 @@ public class PlayerLoadoutUI : UIGroup
             UpdateRelicLoadoutSlot();
             SetPopupRelicButtons();
         }
+        _onChangeLoadout?.AddListener(UpdateRelicLoadoutSlot);
+        _onChangeLoadout?.AddListener(SetPopupRelicButtons);
+    }
 
+    private void OnDisable()
+    {
+        _onChangeLoadout?.RemoveListener(UpdateRelicLoadoutSlot);
+        _onChangeLoadout?.RemoveListener(SetPopupRelicButtons);
     }
 
 
@@ -39,14 +47,17 @@ public class PlayerLoadoutUI : UIGroup
         base.Start();
         _loadout = ItemManager.Instance.Loadout;
 
-            UpdateLoadoutSlot();
+        UpdateLoadoutSlot();
 
-            UpdateRelicLoadoutSlot();
+        UpdateRelicLoadoutSlot();
+        SetPopupRelicButtons();
+
 
         SetPopupButtons();
     }
 
 
+    // 장비 로드아웃UI슬롯 갱신
     private void UpdateLoadoutSlot()
     {
         if (_loadoutSlots != null && _loadoutSlots.Count > 0)
@@ -59,6 +70,7 @@ public class PlayerLoadoutUI : UIGroup
         }
     }
 
+    // 유물 로드아웃UI슬롯 갱신
     private void UpdateRelicLoadoutSlot()
     {
 
@@ -77,6 +89,7 @@ public class PlayerLoadoutUI : UIGroup
     }
 
 
+    // 팝업 여는 기능 버튼에 부여
     private void SetPopupButtons()
     {
         int i = 0;
@@ -91,6 +104,8 @@ public class PlayerLoadoutUI : UIGroup
         }
     }
 
+
+    // 플레이어 유물 로드아웃UI
     private void SetPopupRelicButtons()
     {
         int i = 0;

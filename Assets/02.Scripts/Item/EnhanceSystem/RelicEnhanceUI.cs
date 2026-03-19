@@ -39,7 +39,7 @@ public class RelicEnhanceUI : EnhanceSystemUI
         int i = 0;
         foreach(var relic in relicInventory.Keys)
         {
-            ITEM_TYPE type = ItemDB.GetData<ItemDataBase>(relic.ID).Type;
+            ITEM_TYPE type = ItemDB.GetData(relic.ID).Type;
             //ITEM_TYPE type = ItemDB.GetData<RelicData>(relic.ID).Type;
             if (type != ITEM_TYPE.Relic)
                 continue;
@@ -57,7 +57,7 @@ public class RelicEnhanceUI : EnhanceSystemUI
 
     public override void UpdateResourceUI()
     {
-        _resourceImage.sprite = ItemDB.GetData<ItemDataBase>(ItemID.RelicReinforceResource).SpriteImg;
+        _resourceImage.sprite = ItemDB.GetData(ItemID.RelicReinforceResource).SpriteImg;
 
         if (!_inventory.TryGetStackItem(ItemID.RelicReinforceResource, out var item))
         {
@@ -66,7 +66,7 @@ public class RelicEnhanceUI : EnhanceSystemUI
         }
 
         
-        var itemData = ItemDB.GetData<ItemDataBase>(item.ID);
+        var itemData = ItemDB.GetData(item.ID);
         _resourceImage.sprite = itemData.SpriteImg;
 
         if(item.Amount == ItemInstance.NoneStackAmount)
@@ -78,7 +78,7 @@ public class RelicEnhanceUI : EnhanceSystemUI
     public override void UpdateCurrentGold()
     {
         ItemInstance gold = _currency.GetGold();
-        var goldData = ItemDB.GetData<ItemManageData>(gold.ID);
+        var goldData = ItemDB.GetData(gold.ID);
         _currentGoldImage.sprite = goldData.SpriteImg;
         _currentGoldText.text = gold.Amount.ToString();
     }

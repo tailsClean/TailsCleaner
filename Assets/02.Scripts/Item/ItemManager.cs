@@ -6,6 +6,9 @@ using UnityEngine.UI;
 
 public class ItemManager : MonoBehaviour
 {
+    [Header("이벤트 채널")]
+    [SerializeField] private VoidEventChannelSO _onChangeLoadout;
+
     public static ItemManager Instance { get; private set; }
 
     [SerializeField] private List<UIGroup> _uiGroupList;
@@ -32,7 +35,7 @@ public class ItemManager : MonoBehaviour
     }
     private void Start()
     {
-        Loadout = new PlayerLoadout();
+        Loadout = new PlayerLoadout(_onChangeLoadout);
     }
 
     public void OpenUI(UI_GROUP group)

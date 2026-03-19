@@ -68,11 +68,11 @@ public class ItemDBTest : MonoBehaviour
     [ContextMenu("DB호출")]
     public void Sterrded()
     {
-        var A = ItemDB.GetData<DefaultEquipData>(ItemID.DefaultWeapon);
-        var B = ItemDB.GetData<ItemManageData>(ItemID.RelicReinforceResource);
+        var A = ItemDB.GetData(ItemID.DefaultWeapon);
+        var B = ItemDB.GetData(ItemID.RelicReinforceResource);
 
-        Debug.Log(A.Equipmnet.name);
-        Debug.Log(B.ManageData.item_name_key);
+        //Debug.Log(A.Equipmnet.name);
+        //Debug.Log(B.ManageData.item_name_key);
     }
 
     [ContextMenu("DB호출2")]

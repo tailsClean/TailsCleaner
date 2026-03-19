@@ -48,8 +48,11 @@ public class ItemInventory : MonoBehaviour
         if (!isSuccess)
         { Debug.Log($"<color=red>아이템 판매에 실패했습니다.</color> \n판매하려는 아이템: {item.Name}({item.ID})"); return; }
 
-        var equip = ItemDB.GetData<MaterialEquipData>(item.ID);
-        _onSellingItem.OnStartEvent(equip.EquipMatter.price * amount);
+
+        if (!ItemDB.TryGetData<MaterialEquipData>(item.ID, out var material))
+            return;
+
+        _onSellingItem.OnStartEvent(material.EquipMatter.price * amount);
     }
 
 

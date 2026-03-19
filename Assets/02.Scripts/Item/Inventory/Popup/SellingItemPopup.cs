@@ -100,7 +100,10 @@ public class SellingItemPopup : ItemPopup
         _countText[0].text = TenCount.ToString();
         _countText[1].text = OneCount.ToString();
 
-        var price = ItemDB.GetData<MaterialEquipData>(_currentItem.ID).EquipMatter.price;
+        int price = 0;
+        if (ItemDB.TryGetData<MaterialEquipData>(_currentItem.ID, out var materialEquip))
+            price = materialEquip.EquipMatter.price;
+
         _price = price * _count;
         _priceText.text = _price.ToString();
 

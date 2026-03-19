@@ -35,7 +35,7 @@ public class ItemSlotUI : MonoBehaviour
 
     public void ShowSlot(ItemInstance item)
     {
-        var a = ItemDB.GetData<ItemDataBase>(item.ID);
+        var a = ItemDB.GetData(item.ID);
         if (a != null)
         {
             _image.sprite = a.SpriteImg;

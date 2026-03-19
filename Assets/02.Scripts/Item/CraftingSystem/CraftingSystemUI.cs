@@ -119,7 +119,7 @@ public class CraftingSystemUI : UIGroup
         int i = 0;
         foreach(var item in _inventory.Inventory.Keys)
         {
-            var type = ItemDB.GetData<ItemDataBase>(item.ID).Type;
+            var type = ItemDB.GetData(item.ID).Type;
             //var type = ItemDB.GetData<ItemManageData>(item.ID).Type;
             if (type != ITEM_TYPE.Equipment)
                 continue;

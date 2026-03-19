@@ -25,7 +25,6 @@ public class EquipedPopup : ItemPopup
 
     private void SetEquipedButton()
     {
-        Debug.Log("장착 버튼 설정 " + _currentItem.Name);
         _equipedButton.onClick.RemoveAllListeners();
         _equipedButton.onClick.AddListener(SetRelic);
         _equipedButton.onClick.AddListener(EquipedNext);

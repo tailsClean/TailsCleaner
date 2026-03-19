@@ -5,7 +5,11 @@ using UnityEngine;
 public class EquipmentBase : ItemBase, IEnhancement
 {
     public DefaultEquipData Data { get; private set; }
-    public override void Init(int id) => Data = ItemDB.GetData<DefaultEquipData>(id);
+    public override void Init(int id)
+    {
+        if(ItemDB.TryGetData<DefaultEquipData>(id, out var data))
+            Data = data;
+    }
 
 
     // 강화 데이터
