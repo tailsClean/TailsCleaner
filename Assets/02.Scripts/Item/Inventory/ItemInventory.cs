@@ -42,7 +42,7 @@ public class ItemInventory : MonoBehaviour
     {
         bool isSuccess = false;
         if(item.ItemType == ITEM_TYPE.Equipment)
-            RemoveEquipment(item, amount);
+            isSuccess = RemoveEquipment(item, amount);
 
 
         if (!isSuccess)
@@ -99,7 +99,9 @@ public class ItemInventory : MonoBehaviour
 
         // 아이템을 소지하지 않았을 때
         else
+        {
             _inventory.Add(new ItemInstance(id, enhanceLevel, GRADE.None), ItemInstance.NoneStackAmount);
+        }
 
         _onChangeInventory.OnStartEvent();
     }

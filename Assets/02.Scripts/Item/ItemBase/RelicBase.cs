@@ -22,5 +22,7 @@ public class RelicBase : ItemBase, IEnhancement
         return (int)(statValue + enhanceValue);
     }
 
+    public void SetEnhanceLevel(int level) => EnhanceLevel = level;
+
     public void OnEnhance(EnhancingInfo result) => EnhanceLevel++;
 }

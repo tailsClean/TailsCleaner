@@ -9,13 +9,25 @@ public class PlayerLoadout
 {
     private Dictionary<PART, EquipmentBase> _myEquipments;
     private List<RelicBase> _myRelics;
+    private List<RelicBase> _outputRelics;                                      // 외부 출력용 리스트
 
     public Dictionary<PART, EquipmentBase> MyEquipments => _myEquipments;
-    public List<RelicBase> MyRelics => _myRelics;
+    public List<RelicBase> MyRelics => _outputRelics;
+
+    private readonly RelicBase _relicZero;
+    private readonly int _relicSlotLength = 3;
 
     public PlayerLoadout()
     {
-        _myRelics = new List<RelicBase>(3);
+        _relicZero = new RelicBase();
+        _myRelics = new List<RelicBase>();
+        _outputRelics = new List<RelicBase>();
+        for(int i = 0; i < _relicSlotLength; i++)
+        {
+            _myRelics.Add(_relicZero);
+        }
+
+
         _myEquipments = new Dictionary<PART, EquipmentBase>
         {
             {PART.Weapon, ItemDB.CreateItem<EquipmentBase>(ItemID.DefaultWeapon)},
@@ -70,5 +82,37 @@ public class PlayerLoadout
                 result += relic.Data.Relic.stat_value;
         }
         return result;
+    }
+
+    public void SetRelic(ItemInstance item)
+    {
+        RelicBase relic = ItemDB.CreateItem<RelicBase>(item.ID);
+        relic.SetEnhanceLevel(item.EnhanceLevel);
+        for(int i = 0; i < _myRelics.Count; i++)
+        {
+            if (_myRelics[i] == _relicZero)
+            {
+                _myRelics[i] = relic;
+                _outputRelics.Add(relic);
+                return;
+            }
+        }
+
+        Debug.Log($"<color=yellow>유물칸이 꽉 차서 {item.Name} 장착 실패</color>");
+    }
+
+    public void RemoveRelic(int id, int enhanceLevel)
+    {
+        for (int i = 0; i < _myRelics.Count; i++)
+        {
+            var relic = _myRelics[i];
+            if (relic != null && relic.Data.Relic.id == id && relic.EnhanceLevel == enhanceLevel)
+            {
+                _myRelics.RemoveAt(i);
+                _outputRelics.Remove(relic);
+                _myRelics.Add(_relicZero);
+                return;
+            }
+        }
     }
 }

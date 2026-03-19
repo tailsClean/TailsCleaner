@@ -155,7 +155,7 @@ public class ItemInventoryUI : UIGroup
     {
         foreach(var popup in _itemPopupUI)
         {
-            if(popup.ItemType == ItemDB.GetData<ItemDataBase>(item.ID).Type)
+            if(popup.ItemType == item.ItemType)
             {
                 popup.gameObject.SetActive(true);
                 popup.SetSlot(item);
