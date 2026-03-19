@@ -15,6 +15,7 @@ GameObject:
   - component: {fileID: 4623907807441698298}
   - component: {fileID: 5514830495199837496}
   - component: {fileID: 6612712607612896099}
+  - component: {fileID: 3178603656011100005}
   m_Layer: 7
   m_Name: Test_Boss
   m_TagString: Monster
@@ -206,7 +207,6 @@ MonoBehaviour:
   zigzag_width: 0
   patternFrequency: 5
   type_power_multiply: 1
-  moveType: 3
   jump_height: 2
   visualChild: {fileID: 0}
   isSuicideUnit: 0
@@ -229,6 +229,12 @@ MonoBehaviour:
   detect_range: 10
   projectile_count: 3
   fire_interval: 0.2
+  projectile_speed: 10
+  projectile_size: 1
+  life_time: 5
+  is_homing: 0
+  pierce_type: 0
+  arc_height: 0
   state: 0
 --- !u!114 &6612712607612896099
 MonoBehaviour:
@@ -242,6 +248,23 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cba0c930577f8e240a095f334c21bc3e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PoolObject
+--- !u!114 &3178603656011100005
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 899191179583652646}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 69f67a59712802844be664ca423c4c41, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::BarricadeSpawner
+  barricadePrefab: {fileID: 8461779969420871315, guid: 324193de02afd244086bf02906f5df83, type: 3}
+  warningPrefab: {fileID: 6383617728571696591, guid: 5f468878613da5548bda63fe56d158e8, type: 3}
+  warningDuration: 1.5
+  minRandomRadius: 5
+  maxRandomRadius: 10
 --- !u!1 &3649750411503255337
 GameObject:
   m_ObjectHideFlags: 0

@@ -2,19 +2,76 @@
 
 public class ZoneSpawner : MonoBehaviour
 {
-    public LayerMask zoneLayer;
-    public int maxSpawnAttempts = 10;
+    [Header("Spawn")]
+    public LayerMask safeZoneLayer;
+    public int maxSpawnAttempts = 15;
 
-    public void SpawnZone(GameObject zonePrefab, Transform target, int count, float range, bool isSafeZone, float radius)
+    [Header("Default Prefabs")]
+    public GameObject defaultDangerZonePrefab;
+    public GameObject defaultSafeZonePrefab;
+
+    public void SpawnDangerZones(
+        GameObject zonePrefab,
+        Transform target,
+        int count,
+        float range,
+        float radius,
+        float previewTime,
+        float activeTime,
+        float damagePerTick,
+        float tickInterval)
     {
-        // 프리팹에서 PoolObject 컴포넌트를 미리 확인
-        PoolObject poolPrefab = zonePrefab.GetComponent<PoolObject>();
+        if (zonePrefab == null)
+            zonePrefab = defaultDangerZonePrefab;
 
+        if (zonePrefab == null || target == null)
+            return;
+
+        PoolObject poolPrefab = zonePrefab.GetComponent<PoolObject>();
         if (poolPrefab == null)
         {
-            Debug.LogError($"{zonePrefab.name} 프리팹에 PoolObject 스크립트가 없습니다! 풀링을 사용할 수 없습니다.");
+            Debug.LogError($"{zonePrefab.name} 프리팹에 PoolObject가 없습니다.");
             return;
         }
+
+        for (int i = 0; i < count; i++)
+        {
+            Vector3 spawnPos = GetRandomPointAroundTarget(target.position, range);
+
+            PoolObject spawned = ObjectPoolManager.Instance.Spawn(poolPrefab, spawnPos, Quaternion.identity);
+            if (spawned == null) continue;
+
+            DangerZone zone = spawned.GetComponent<DangerZone>();
+            if (zone != null)
+            {
+                zone.InitializeDanger(radius, previewTime, activeTime, damagePerTick, tickInterval);
+            }
+        }
+    }
+
+    public void SpawnSafeZones(
+        GameObject zonePrefab,
+        Transform target,
+        int count,
+        float range,
+        float radius,
+        float previewTime,
+        float activeTime)
+    {
+        if (zonePrefab == null)
+            zonePrefab = defaultSafeZonePrefab;
+
+        if (zonePrefab == null || target == null)
+            return;
+
+        PoolObject poolPrefab = zonePrefab.GetComponent<PoolObject>();
+        if (poolPrefab == null)
+        {
+            Debug.LogError($"{zonePrefab.name} 프리팹에 PoolObject가 없습니다.");
+            return;
+        }
+
+        int safeLayer = GetLayerFromMask(safeZoneLayer);
 
         for (int i = 0; i < count; i++)
         {
@@ -23,46 +80,49 @@ public class ZoneSpawner : MonoBehaviour
 
             for (int attempt = 0; attempt < maxSpawnAttempts; attempt++)
             {
-                Vector2 randomCircle = Random.insideUnitCircle * range;
-                spawnPos = new Vector3(target.position.x + randomCircle.x, target.position.y + randomCircle.y, 0);
+                spawnPos = GetRandomPointAroundTarget(target.position, range);
 
-                if (isSafeZone)
+                Collider2D hit = Physics2D.OverlapCircle(spawnPos, radius * 2f, safeZoneLayer);
+                if (hit == null)
                 {
-                    // 레이어 마스크를 이용해 해당 위치에 이미 안전 지대가 있는지 체크
-                    Collider2D hit = Physics2D.OverlapCircle(spawnPos, radius, zoneLayer);
-                    if (hit == null) { success = true; break; }
+                    success = true;
+                    break;
                 }
-                else { success = true; break; }
             }
 
-            if (success)
+            if (!success)
+                continue;
+
+            PoolObject spawned = ObjectPoolManager.Instance.Spawn(poolPrefab, spawnPos, Quaternion.identity);
+            if (spawned == null) continue;
+
+            spawned.gameObject.layer = safeLayer;
+
+            SafeZone zone = spawned.GetComponent<SafeZone>();
+            if (zone != null)
             {
-                // Instantiate 대신 ObjectPoolManager를 통해 소환
-                PoolObject spawnedObj = ObjectPoolManager.Instance.Spawn(poolPrefab, spawnPos, Quaternion.identity);
-
-                // 소환된 객체에서 AreaEffector를 찾아 반지름(radius)을 설정합니다.
-                if (spawnedObj.TryGetComponent<AreaEffector>(out var effector))
-                {
-                    effector.radius = radius;
-                }
-
-                // 안전 지대일 경우 레이어를 설정하여 중복 생성을 방지
-                if (isSafeZone)
-                {
-                    spawnedObj.gameObject.layer = GetLayerFromMask(zoneLayer);
-                }
+                zone.InitializeSafe(radius, previewTime, activeTime);
             }
         }
+    }
+
+    private Vector3 GetRandomPointAroundTarget(Vector3 center, float range)
+    {
+        Vector2 offset = Random.insideUnitCircle * range;
+        return new Vector3(center.x + offset.x, center.y + offset.y, 0f);
     }
 
     private int GetLayerFromMask(LayerMask mask)
     {
         int bitmask = mask.value;
         if (bitmask == 0) return 0;
+
         for (int i = 0; i < 32; i++)
         {
-            if (((1 << i) & bitmask) != 0) return i;
+            if ((bitmask & (1 << i)) != 0)
+                return i;
         }
+
         return 0;
     }
 }

@@ -1,36 +1,65 @@
 ﻿using UnityEngine;
+using System.Collections.Generic;
 
 public class SafeZone : AreaEffector
 {
-    private PlayerZoneHandler playerHandler;
+    private readonly HashSet<PlayerZoneHandler> playersInside = new HashSet<PlayerZoneHandler>();
+
+    public void InitializeSafe(float newRadius, float newPreviewTime, float newActiveTime)
+    {
+        Initialize(newRadius, newPreviewTime, newActiveTime);
+    }
+
     protected override void OnActivate()
     {
-        // 활성화 시점에 플레이어에게 패턴 시작 알림
-        playerHandler = GameObject.FindGameObjectWithTag("Player")?.GetComponent<PlayerZoneHandler>();
+        SafeZonePatternController.Instance?.NotifySafeZoneActivated();
 
-        if (playerHandler != null)
+        Collider2D[] hits = Physics2D.OverlapCircleAll(transform.position, radius);
+        foreach (var hit in hits)
         {
-            playerHandler.RegisterSafeZonePattern(true);
+            if (!hit.CompareTag("Player")) continue;
+
+            PlayerZoneHandler handler = hit.GetComponent<PlayerZoneHandler>();
+            if (handler != null && playersInside.Add(handler))
+            {
+                handler.EnterSafeZone(this);
+            }
         }
     }
+
     protected override void OnDeactivate()
     {
-        // 소멸 시점에 패턴 종료 알림
-        if (playerHandler != null)
+        foreach (var handler in playersInside)
         {
-            playerHandler.RegisterSafeZonePattern(false);
+            if (handler != null)
+                handler.ExitSafeZone(this);
         }
+
+        playersInside.Clear();
+
+        SafeZonePatternController.Instance?.NotifySafeZoneDeactivated();
     }
 
     private void OnTriggerEnter2D(Collider2D other)
     {
-        if (other.CompareTag("Player"))
-            other.GetComponent<PlayerZoneHandler>().EnterSafeZone();
+        if (!isActive) return;
+        if (!other.CompareTag("Player")) return;
+
+        PlayerZoneHandler handler = other.GetComponent<PlayerZoneHandler>();
+        if (handler != null && playersInside.Add(handler))
+        {
+            handler.EnterSafeZone(this);
+        }
     }
 
     private void OnTriggerExit2D(Collider2D other)
     {
-        if (other.CompareTag("Player"))
-            other.GetComponent<PlayerZoneHandler>().ExitSafeZone();
+        if (!other.CompareTag("Player")) return;
+
+        PlayerZoneHandler handler = other.GetComponent<PlayerZoneHandler>();
+        if (handler != null && playersInside.Remove(handler))
+        {
+            handler.ExitSafeZone(this);
+        }
     }
 }

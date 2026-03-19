@@ -7,20 +7,21 @@ public class BossMonster : MonsterBase
 {
     public override MonsterEnum.MONSTERTYPE monsterType => MonsterEnum.MONSTERTYPE.Boss;
 
+    [Header("--- 데이터 테이블 연동 ---")]
+    public int pattern_group_id;
+
     [Header("--- 패턴 중첩 활성화 제어 ---")]
-    public bool useJump; // 점프
-    public bool useFlee; // 도망
-    public bool useBlink; // 점멸 
-    public bool useBarricade; // 바리게이트 
-    public bool useOrbit; // 보스 전용 투사체
-    
+    public bool useJump;
+    public bool useFlee;
+    public bool useBlink;
+    public bool useBarricade;
+    public bool useOrbit;
+
     private List<GameObject> activeOrbits = new List<GameObject>();
-    private float orbitTimer = 0f;
     private bool isOrbiting = false;
 
     [Header("--- 기획 데이터 연동 ---")]
     public float move_speed;
-    public float monster_power;
     public float detect_range;
     public float pattern_cooldown;
     public float cast_time;
@@ -29,16 +30,17 @@ public class BossMonster : MonsterBase
     public float jump_height = 3.0f;
     public Transform visualChild;
     public float fleeDistance = 4.0f;
-    
+
     [Header("---UI 변경용 이벤트 채널---")]
     [SerializeField] private FloatEventChannelSO _onBossHit;
 
     [Header("--- 점멸 패턴 설정 ---")]
-    public float blink_detect_range = 5.0f;     // 점멸 발동 거리
-    public float blink_cast_time = 1.0f;       // 점멸 예고 시간 (기 모으기)
-    public float blink_speed_multiplier = 4.0f; // 점멸 이동 속도 배율
-    public float blink_cooldown = 3.0f;        // 점멸 전용 쿨타임
-    public LineRenderer lineRenderer;          // 점멸 경로 예고용 라인 렌더러
+    public float blink_detect_range = 5.0f;
+    public float blink_cast_time = 1.0f;
+    public float blink_speed_multiplier = 4.0f;
+    public float blink_cooldown = 3.0f;
+    public LineRenderer lineRenderer;
+    [SerializeField] private float blinkLineWidth = 1.0f;
 
     [Header("--- 바리케이드 패턴 설정 ---")]
     public BarricadeSpawner barricadeSpawner;
@@ -49,15 +51,46 @@ public class BossMonster : MonsterBase
     public float barDuration = 5.0f;
     public BarricadeSpawner.InteractionType barInteraction = BarricadeSpawner.InteractionType.BlockedWithDamage;
 
+    [Header("--- 영역 패턴 설정 ---")]
+    public ZoneSpawner zoneSpawner;
+    private readonly List<BossAreaPatternRuntime> areaPatterns = new List<BossAreaPatternRuntime>();
+
+    private class BossAreaPatternRuntime
+    {
+        public bool isSafeZone;
+        public float cooldown;
+        public float currentCooldown;
+        public float previewTime;
+        public float activeTime;
+        public float radius;
+        public float damagePerTick;
+        public float damageInterval;
+        public int count;
+        public float range;
+        public ZoneTestCaller.SpawnTarget targetType;
+    }
+
     [Header("--- 공전 투사체 패턴 설정 ---")]
-    public GameObject orbitPrefab;       // 공전할 투사체 프리팹
-    public int orbitCount = 5;           // 투사체 개수
-    public float orbitRadius = 2.5f;     // 공전 반지름
-    public float orbitRotateSpeed = 50f; // 공전 회전 속도
-    public float orbitDuration = 10f;    // 각 투사체 유지 시간
-    public float orbitSpawnInterval = 0.5f; // 생성 간격
-    public float orbitDamageMultiplier = 1.0f; // 데미지 배율
-    public GameObject explosionEffect;    // 소멸 시 파괴 이펙트 프리팹
+    public GameObject orbitPrefab;
+    public GameObject explosionEffect;
+
+    public int defaultOrbitCount = 5;
+    public float defaultOrbitRadius = 2.0f;
+    public float defaultOrbitRotateSpeed = 50f;
+    public float defaultOrbitDuration = 10f;
+    public float defaultOrbitSpawnInterval = 0.5f;
+    public float defaultOrbitDamageMultiplier = 1.0f;
+    public float defaultOrbitProjectileScale = 1.2f;
+
+    private int orbitCount = 5;
+    private float orbitRadius = 2.0f;
+    private float orbitRotateSpeed = 50f;
+    private float orbitDuration = 10f;
+    private float orbitSpawnInterval = 0.5f;
+    private float orbitDamageMultiplier = 1.0f;
+    private float orbitProjectileScale = 0.6f;
+    private float orbitPatternCooldown = 3f;
+    public float orbitRotateSpeedMultiplier = 30f;
 
 
     // 내부 제어 변수
@@ -66,32 +99,197 @@ public class BossMonster : MonsterBase
     private float blinkCooldownTimer = 0f;
     private float barricadeTimer = 0f;
     private float orbitCooldownTimer = 0f;
+
     public float damage;
 
     private bool isJumping = false;
     private bool isWaitingJump = false;
     private bool isFleeing = false;
-    private bool isBlinking = false; // 점멸 실행 중 여부
-    private bool isWaitingBlink = false; // 점멸 예고 중 여부
+    private bool isBlinking = false;
+    private bool isWaitingBlink = false;
     private Vector2 currentFleeTarget;
+
+    private BossMonsterShooter shooter;
+
+
+    private float GetMinimumOrbitRadius()
+    {
+        float estimatedDiameter = Mathf.Max(0.1f, orbitProjectileScale);
+        float circumference = estimatedDiameter * orbitCount * 1.2f;
+        return circumference / (2f * Mathf.PI);
+    }
 
     protected override void Start()
     {
         base.Start();
-        if (move_speed == 0) move_speed = base.moveSpeed;
 
-        jumpCooldownTimer = pattern_cooldown;
-        blinkCooldownTimer = blink_cooldown;
-        orbitTimer = pattern_cooldown; 
+        if (move_speed == 0f)
+            move_speed = base.moveSpeed;
 
         if (barricadeSpawner == null)
             barricadeSpawner = GetComponent<BarricadeSpawner>();
 
-        // 스크립트가 시작될 때 자동으로 LineRenderer를 찾거나 초기화
-        if (lineRenderer == null) lineRenderer = GetComponent<LineRenderer>();
-        if (lineRenderer != null) lineRenderer.enabled = false;
+        if (lineRenderer == null)
+            lineRenderer = GetComponent<LineRenderer>();
 
+        if (lineRenderer != null)
+        {
+            lineRenderer.enabled = false;
+            lineRenderer.useWorldSpace = true;  
+            lineRenderer.positionCount = 2;
+            lineRenderer.alignment = LineAlignment.View;
+        }
+
+        if (zoneSpawner == null)
+            zoneSpawner = GetComponent<ZoneSpawner>();
+
+        shooter = GetComponent<BossMonsterShooter>();
+    }
+
+    public override void OnSpawn()
+    {
+        base.OnSpawn();
+
+        ResetRuntimeState();
+
+        Debug.Log($"[BossMonster] OnSpawn / MonsterId:{MonsterId}");
+
+        if (MonsterId <= 0)
+        {
+            Debug.LogError($"[BossMonster] 유효하지 않은 MonsterId: {MonsterId}");
+            return;
+        }
+
+        MonsterSO monsterSO = DataManager.Instance.GetSOData<MonsterSO>();
+        if (monsterSO == null)
+        {
+            Debug.LogError("[BossMonster] MonsterSO를 찾을 수 없습니다.");
+            return;
+        }
+
+        Monster monsterData = monsterSO.GetById(MonsterId);
+        if (monsterData == null)
+        {
+            Debug.LogError($"[BossMonster] 몬스터 데이터 없음. MonsterId:{MonsterId}");
+            return;
+        }
+
+        pattern_group_id = monsterData.pattern_group_id;
+
+        if (pattern_group_id <= 0)
+        {
+            Debug.LogWarning($"[BossMonster] pattern_group_id 없음. 기본 보스 동작 사용 / MonsterId:{MonsterId}");
+            return;
+        }
+
+        PatternGroupCompositionSO compositionSO = DataManager.Instance.GetSOData<PatternGroupCompositionSO>();
+        if (compositionSO == null)
+        {
+            Debug.LogError("[BossMonster] PatternGroupCompositionSO를 찾을 수 없습니다.");
+            return;
+        }
+
+        List<PatternGroupComposition> compositionList = compositionSO.GetAllByGroupId(pattern_group_id);
+        if (compositionList == null || compositionList.Count == 0)
+        {
+            Debug.LogError($"[BossMonster] composition 데이터 없음. pattern_group_id:{pattern_group_id}");
+            return;
+        }
+
+        PatternSO patternSO = DataManager.Instance.GetSOData<PatternSO>();
+        if (patternSO == null)
+        {
+            Debug.LogError("[BossMonster] PatternSO를 찾을 수 없습니다.");
+            return;
+        }
+
+        // 보스는 여러 패턴을 동시에 가질 수 있음
+        foreach (var composition in compositionList)
+        {
+            Pattern patternData = patternSO.GetById(composition.pattern_id);
+            if (patternData == null)
+                continue;
+
+            Debug.Log($"[Boss Pattern 확인] pattern_id:{patternData.pattern_id}, type:{patternData.pattern_type}, logic:{patternData.pattern_logic_type}");
+
+            switch (patternData.pattern_type)
+            {
+                case PATTERN_TYPE.Move:
+                    ApplyBossMovePattern(patternData);
+                    break;
+
+                case PATTERN_TYPE.Projectile:
+                    ApplyBossProjectilePattern(patternData, composition.pattern_cooldown);
+                    break;
+
+                case PATTERN_TYPE.Barricade:
+                    ApplyBossBarricadePattern(patternData);
+                    break;
+
+                case PATTERN_TYPE.Trigger:
+                    Debug.Log($"[BossMonster] Trigger 패턴 감지: {patternData.pattern_logic_type} (아직 미연동)");
+                    break;
+
+                case PATTERN_TYPE.Area:
+                    ApplyBossAreaPattern(patternData, composition.pattern_cooldown);
+                    break;
+
+                case PATTERN_TYPE.Summon:
+                    Debug.Log($"[BossMonster] Summon 패턴 감지: {patternData.pattern_logic_type} (아직 미연동)");
+                    break;
+
+                case PATTERN_TYPE.Layser:
+                    Debug.Log($"[BossMonster] Laser 패턴 감지: {patternData.pattern_logic_type} (아직 미연동)");
+                    break;
+
+                case PATTERN_TYPE.SelfDestruct:
+                    Debug.Log($"[BossMonster] SelfDestruct 패턴 감지: {patternData.pattern_logic_type} (보스는 현재 미사용)");
+                    break;
+
+            }
+        }
+
+        // 투사체 패턴이 하나도 없으면 Shooter 끄기
+        if (shooter != null && !useOrbit && !IsShooterConfigured())
+        {
+            shooter.DisableShooter();
+        }
+
+        jumpCooldownTimer = pattern_cooldown;
+        blinkCooldownTimer = blink_cooldown;
         barricadeTimer = barricadeInterval;
+
+        // Orbit은 ApplyBossProjectilePattern()에서 직접 세팅됨
+        if (!useOrbit)
+            orbitCooldownTimer = 0f;
+
+        Debug.Log(
+            $"[Boss 패턴 적용 완료] " +
+            $"MonsterId:{MonsterId}, PatternGroupId:{pattern_group_id}, " +
+            $"Jump:{useJump}, Flee:{useFlee}, Blink:{useBlink}, Barricade:{useBarricade}, Orbit:{useOrbit}"
+        );
+    }
+
+    public override void OnDespawn()
+    {
+        base.OnDespawn();
+
+        StopAllCoroutines();
+
+        foreach (var orbit in activeOrbits)
+        {
+            if (orbit != null)
+                Destroy(orbit);
+        }
+        activeOrbits.Clear();
+
+        if (lineRenderer != null)
+            lineRenderer.enabled = false;
+
+        if (shooter != null)
+            shooter.DisableShooter();
+
+        ResetRuntimeState();
     }
 
     protected override void FixedUpdate()
@@ -110,39 +308,325 @@ public class BossMonster : MonsterBase
             return;
         }
         // 공전 투사체 패턴
-        if (useOrbit && !isOrbiting && orbitCooldownTimer <= 0)
+        if (useOrbit && !isOrbiting && orbitCooldownTimer <= 0f)
         {
+            Debug.Log("[BossMonster] 공전 패턴 시작");
+            Debug.Log($"[Orbit Final] count={orbitCount}, radius={orbitRadius}, scale={orbitProjectileScale}, bossScale={transform.localScale}");
             StartCoroutine(OrbitPatternRoutine());
         }
-        else if (orbitCooldownTimer > 0)
+        else if (orbitCooldownTimer > 0f)
         {
             orbitCooldownTimer -= Time.fixedDeltaTime;
         }
 
-        // 투사체들이 있다면 매 프레임 위치를 계산해서 회전
         if (activeOrbits.Count > 0)
         {
             UpdateOrbitPositions();
         }
 
-        if (useBlink) HandleBlinkLogic();
-        if (useJump && !isBlinking && !isWaitingBlink) HandleJumpLogic();
-        if (!isJumping && !isWaitingJump && !isBlinking && !isWaitingBlink) MoveProcess();
-        if (useBarricade) HandleBarricadeLogic();
+        if (useBlink)
+            HandleBlinkLogic();
+
+        if (useJump && !isBlinking && !isWaitingBlink)
+            HandleJumpLogic();
+
+        if (!isJumping && !isWaitingJump && !isBlinking && !isWaitingBlink)
+            MoveProcess();
+
+        if (useBarricade)
+            HandleBarricadeLogic();
+
+        HandleAreaPatternLogic();
     }
+
+    #region 데이터 적용 함수
+    private void ApplyBossMovePattern(Pattern patternData)
+    {
+        string logic = NormalizeBossMoveLogic(patternData.pattern_logic_type);
+
+        detect_range = patternData.detect_range > 0f ? patternData.detect_range : detect_range;
+        cast_time = patternData.cast_time > 0f ? patternData.cast_time : cast_time;
+        pattern_cooldown = patternData.cooldown > 0f ? patternData.cooldown : pattern_cooldown;
+        pattern_multiply = ResolveMoveMultiply(patternData);
+        pattern_damage = power * (patternData.damage_multiply > 0f ? patternData.damage_multiply : 1f);
+        jump_height = patternData.jump_height > 0f ? patternData.jump_height : jump_height;
+
+        switch (logic)
+        {
+            case "Jump":
+                useJump = true;
+                break;
+
+            case "Flee":
+                useFlee = true;
+                fleeDistance = detect_range > 0f ? detect_range : fleeDistance;
+                break;
+
+            case "Blink":
+                useBlink = true;
+                blink_detect_range = detect_range > 0f ? detect_range : blink_detect_range;
+                blink_cast_time = cast_time > 0f ? cast_time : blink_cast_time;
+                blink_cooldown = pattern_cooldown > 0f ? pattern_cooldown : blink_cooldown;
+                blink_speed_multiplier = pattern_multiply > 0f ? pattern_multiply : blink_speed_multiplier;
+                break;
+
+            default:
+                Debug.LogWarning($"[BossMonster] 지원하지 않는 Move 로직: {patternData.pattern_logic_type}");
+                break;
+        }
+    }
+
+    private void ApplyBossAreaPattern(Pattern patternData, float compositionCooldown = -1f)
+    {
+        if (zoneSpawner == null)
+        {
+            zoneSpawner = GetComponent<ZoneSpawner>();
+        }
+
+        if (zoneSpawner == null)
+        {
+            Debug.LogWarning($"[BossMonster] ZoneSpawner 없음. area 패턴 적용 불가 / pattern_id:{patternData.pattern_id}");
+            return;
+        }
+
+        string logic = patternData.pattern_logic_type?.Trim().ToLower();
+
+        BossAreaPatternRuntime data = new BossAreaPatternRuntime();
+        data.isSafeZone = logic == "area_safe";
+        data.cooldown = compositionCooldown > 0f
+            ? compositionCooldown
+            : (patternData.cooldown > 0f ? patternData.cooldown : 3f);
+
+        data.currentCooldown = data.cooldown;
+        data.previewTime = patternData.cast_time > 0f ? patternData.cast_time : 1f;
+        data.activeTime = patternData.duration > 0f ? patternData.duration : 3f;
+        data.radius = patternData.area_radius > 0f ? patternData.area_radius : 3f;
+
+        // 여기 설계 따라 조정 가능
+        // 지금은 "보스 공격력 * damage_multiply" 로 처리
+        data.damagePerTick = this.power * (patternData.damage_multiply > 0f ? patternData.damage_multiply : 1f);
+
+        data.damageInterval = patternData.area_damage_interval > 0f ? patternData.area_damage_interval : 0.5f;
+        data.count = 1;
+        data.range = 0f;
+
+        switch (patternData.area_target_type)
+        {
+            case AREA_TARGET_TYPE.Player:
+                data.targetType = ZoneTestCaller.SpawnTarget.Player;
+                break;
+
+            case AREA_TARGET_TYPE.Boss:
+                data.targetType = ZoneTestCaller.SpawnTarget.Monster;
+                break;
+
+            default:
+                data.targetType = ZoneTestCaller.SpawnTarget.Player;
+                break;
+        }
+
+        areaPatterns.Add(data);
+
+        Debug.Log(
+            $"[Boss Area 적용 완료] " +
+            $"PatternId:{patternData.pattern_id}, Logic:{patternData.pattern_logic_type}, " +
+            $"Cooldown:{data.cooldown}, Preview:{data.previewTime}, Active:{data.activeTime}, " +
+            $"Radius:{data.radius}, Damage:{data.damagePerTick}, Tick:{data.damageInterval}, " +
+            $"Safe:{data.isSafeZone}, Target:{data.targetType}"
+        );
+    }
+
+    private void HandleAreaPatternLogic()
+    {
+        if (zoneSpawner == null) return;
+        if (target == null) return;
+        if (areaPatterns.Count == 0) return;
+
+        for (int i = 0; i < areaPatterns.Count; i++)
+        {
+            BossAreaPatternRuntime pattern = areaPatterns[i];
+            pattern.currentCooldown -= Time.fixedDeltaTime;
+
+            if (pattern.currentCooldown > 0f)
+                continue;
+
+            Transform spawnTarget = pattern.targetType == ZoneTestCaller.SpawnTarget.Player
+                ? target
+                : transform;
+
+            if (pattern.isSafeZone)
+            {
+                SafeZonePatternController.Instance?.StartPattern(
+                    pattern.previewTime,
+                    pattern.activeTime,
+                    pattern.damagePerTick,
+                    pattern.damageInterval
+                );
+
+                zoneSpawner.SpawnSafeZones(
+                    null,
+                    spawnTarget,
+                    pattern.count,
+                    pattern.range,
+                    pattern.radius,
+                    pattern.previewTime,
+                    pattern.activeTime
+                );
+            }
+            else
+            {
+                zoneSpawner.SpawnDangerZones(
+                    null,
+                    spawnTarget,
+                    pattern.count,
+                    pattern.range,
+                    pattern.radius,
+                    pattern.previewTime,
+                    pattern.activeTime,
+                    pattern.damagePerTick,
+                    pattern.damageInterval
+                );
+            }
+
+            pattern.currentCooldown = pattern.cooldown;
+        }
+    }
+
+
+    private void ApplyBossProjectilePattern(Pattern patternData, float compositionCooldown = -1f)
+    {
+        if (NormalizeProjectileLogic(patternData.pattern_logic_type) == "Orbit")
+        {
+            useOrbit = true;
+
+            orbitCount = patternData.projectile_count > 0
+                ? patternData.projectile_count
+                : defaultOrbitCount;
+
+            orbitRadius = patternData.projectile_radius > 0f
+                ? patternData.projectile_radius
+                : defaultOrbitRadius;
+
+            orbitSpawnInterval = patternData.fire_interval > 0f
+                ? patternData.fire_interval
+                : defaultOrbitSpawnInterval;
+
+            orbitDuration = patternData.life_time > 0f
+                ? patternData.life_time
+                : defaultOrbitDuration;
+
+            orbitDamageMultiplier = patternData.damage_multiply > 0f
+                ? patternData.damage_multiply
+                : defaultOrbitDamageMultiplier;
+
+            //  projectile_speed를 공전 회전 속도로 사용
+            orbitRotateSpeed = patternData.projectile_speed > 0f
+                ? patternData.projectile_speed * orbitRotateSpeedMultiplier
+                : defaultOrbitRotateSpeed;
+
+            // projectile_size를 공전 오브젝트 크기로 사용
+            orbitProjectileScale = patternData.projectile_size > 0f
+                ? patternData.projectile_size
+                : defaultOrbitProjectileScale;
+
+            orbitPatternCooldown = compositionCooldown > 0f
+                ? compositionCooldown
+                : (patternData.cooldown > 0f ? patternData.cooldown : 3f);
+
+            orbitCooldownTimer = orbitPatternCooldown;
+
+            orbitRadius = Mathf.Max(orbitRadius, GetMinimumOrbitRadius());
+
+            Debug.Log(
+                $"[Boss Orbit 적용 완료] " +
+                $"PatternId:{patternData.pattern_id}, " +
+                $"DataSpeed:{patternData.projectile_speed}, DataSize:{patternData.projectile_size}, " +
+                $"Count:{orbitCount}, Radius:{orbitRadius}, RotateSpeed:{orbitRotateSpeed}, " +
+                $"SpawnInterval:{orbitSpawnInterval}, Duration:{orbitDuration}, " +
+                $"DamageMul:{orbitDamageMultiplier}, Scale:{orbitProjectileScale}, " +
+                $"Cooldown:{orbitPatternCooldown}"
+            );
+            return;
+        }
+
+        if (shooter == null)
+        {
+            shooter = GetComponent<BossMonsterShooter>();
+        }
+
+        if (shooter != null)
+        {
+            shooter.ApplyProjectilePattern(patternData, compositionCooldown);
+        }
+        else
+        {
+            Debug.LogWarning($"[BossMonster] BossMonsterShooter 없음. projectile 패턴 적용 불가 / pattern_id:{patternData.pattern_id}");
+        }
+    }
+
+    private void ApplyBossBarricadePattern(Pattern patternData)
+    {
+        useBarricade = true;
+
+        barricadeInterval = patternData.cooldown > 0f ? patternData.cooldown : barricadeInterval;
+        barDuration = patternData.duration > 0f ? patternData.duration : barDuration;
+
+        barShape = patternData.barrier_shape == BarrierShapeType.Circle
+            ? BarricadeSpawner.BarricadeShape.Circle
+            : BarricadeSpawner.BarricadeShape.Rectangle;
+
+        barSize = new Vector2(
+            patternData.barrier_size_x > 0f ? patternData.barrier_size_x : barSize.x,
+            patternData.barrier_size_y > 0f ? patternData.barrier_size_y : barSize.y
+        );
+
+        switch (patternData.barrier_target_type)
+        {
+            case BARRIER_TARGET_TYPE.Player:
+                spawnLoc = BarricadeSpawner.SpawnLocation.Player;
+                break;
+            case BARRIER_TARGET_TYPE.Boss:
+                spawnLoc = BarricadeSpawner.SpawnLocation.Boss;
+                break;
+            case BARRIER_TARGET_TYPE.Both:
+                spawnLoc = BarricadeSpawner.SpawnLocation.Both;
+                break;
+            case BARRIER_TARGET_TYPE.Nobody:
+                spawnLoc = BarricadeSpawner.SpawnLocation.None;
+                break;
+        }
+
+        barInteraction = patternData.barrier_collision_block
+            ? BarricadeSpawner.InteractionType.BlockedWithDamage
+            : BarricadeSpawner.InteractionType.PassableWithDamage;
+
+
+        Debug.Log($"[Boss Barrier 적용 완료] " +
+            $"PatternId:{patternData.pattern_id}, " +
+            $"Cooldown:{barricadeInterval}, Duration:{barDuration}, " +
+            $"Shape:{barShape}, Size:{barSize}, SpawnLoc:{spawnLoc}, Interaction:{barInteraction}"
+        );
+
+
+
+    }
+    #endregion
 
     #region 점멸(Blink) 로직
     private void HandleBlinkLogic()
     {
         if (isBlinking || isWaitingBlink) return;
-        if (blinkCooldownTimer > 0)
+
+        if (blinkCooldownTimer > 0f)
         {
             blinkCooldownTimer -= Time.fixedDeltaTime;
             return;
         }
 
         float dist = Vector2.Distance(target.position, rb2D.position);
-        if (dist <= blink_detect_range) StartCoroutine(BlinkRoutine());
+
+        if (dist <= blink_detect_range && !isWaitingBlink)
+            StartCoroutine(BlinkRoutine());
     }
 
     private IEnumerator BlinkRoutine()
@@ -150,49 +634,53 @@ public class BossMonster : MonsterBase
         isWaitingBlink = true;
         rb2D.linearVelocity = Vector2.zero;
 
-        Vector2 startPos = rb2D.position;
-        Vector2 blinkTargetPos = target.position;
-
-        // --- [경로 표시 추가] ---
         if (lineRenderer != null)
         {
             lineRenderer.enabled = true;
+            lineRenderer.useWorldSpace = true;
             lineRenderer.positionCount = 2;
-            lineRenderer.SetPosition(0, startPos);     // 시작점: 보스 위치
-            lineRenderer.SetPosition(1, blinkTargetPos); // 끝점: 플레이어 위치
+            lineRenderer.startWidth = blinkLineWidth;
+            lineRenderer.endWidth = blinkLineWidth;
+            lineRenderer.sortingOrder = 100;
         }
 
-        yield return new WaitForSeconds(blink_cast_time);
+        float elapsedCast = 0f;
+        while (elapsedCast < blink_cast_time)
+        {
+            elapsedCast += Time.deltaTime;
 
-        // --- [이동 시작 시 경로 삭제] ---
-        if (lineRenderer != null) lineRenderer.enabled = false;
+            if (lineRenderer != null && target != null)
+            {
+                Vector3 s = transform.position;
+                Vector3 e = target.position;
+                s.z = transform.position.z;
+                e.z = transform.position.z;
+
+                lineRenderer.SetPosition(0, s);
+                lineRenderer.SetPosition(1, e);
+            }
+
+            yield return null;
+        }
+
+        Vector2 moveStart = rb2D.position;
+        Vector2 moveTarget = target.position; 
+
+        if (lineRenderer != null)
+            lineRenderer.enabled = false;
 
         isWaitingBlink = false;
         isBlinking = true;
 
-        float distance = Vector2.Distance(startPos, blinkTargetPos);
+        float distance = Vector2.Distance(moveStart, moveTarget);
         float duration = distance / (move_speed * blink_speed_multiplier);
         float elapsed = 0f;
-        bool hasDealtDamage = false;
 
         while (elapsed < duration && this.hp > 0)
         {
             elapsed += Time.fixedDeltaTime;
             float p = elapsed / duration;
-
-            Vector2 nextPos = Vector2.Lerp(startPos, blinkTargetPos, p);
-            rb2D.MovePosition(nextPos);
-
-            if (!hasDealtDamage)
-            {
-                Collider2D hit = Physics2D.OverlapCircle(rb2D.position, 0.8f, LayerMask.GetMask("Player"));
-                if (hit != null && hit.CompareTag("Player"))
-                {
-                    float finalDmg = pattern_damage > 0 ? pattern_damage : monster_power;
-                    hit.GetComponent<IDamageable>()?.TakeDamage(finalDmg);
-                    hasDealtDamage = true;
-                }
-            }
+            rb2D.MovePosition(Vector2.Lerp(moveStart, moveTarget, p));
             yield return new WaitForFixedUpdate();
         }
 
@@ -201,59 +689,64 @@ public class BossMonster : MonsterBase
     }
     #endregion
 
-
     #region 공전 투사체(Orbit) 로직
-
     private IEnumerator OrbitPatternRoutine()
     {
+        if (orbitPrefab == null)
+        {
+            Debug.LogWarning("[BossMonster] orbitPrefab이 없습니다. 공전 패턴을 실행할 수 없습니다.");
+            isOrbiting = false;
+            yield break;
+        }
+
         isOrbiting = true;
 
-        // 데미지 중첩 방지
         foreach (var oldOrbit in activeOrbits)
         {
             if (oldOrbit != null)
             {
-                // 폭발 이펙트 없이 조용히 삭제 (원치 않으면 실행)
                 Destroy(oldOrbit);
             }
         }
-        activeOrbits.Clear(); // 리스트 초기화
+        activeOrbits.Clear();
 
-        // 투사체 순차 생성
         for (int i = 0; i < orbitCount; i++)
         {
-            if (this.hp <= 0) break;
+            if (hp <= 0)
+            {
+                isOrbiting = false;
+                yield break;
+            }
 
             GameObject orbit = Instantiate(orbitPrefab, transform.position, Quaternion.identity);
+            orbit.transform.localScale = Vector3.one * orbitProjectileScale;
 
-            // 데미지 전달 로직 
             var proj = orbit.GetComponent<OrbitProjectile>();
             if (proj != null)
             {
-                proj.SetDamage(monster_power * orbitDamageMultiplier);
+                proj.SetDamage(power * orbitDamageMultiplier);
             }
 
             activeOrbits.Add(orbit);
-
-            // 생성된 순서대로 소멸 타이머 가동
             StartCoroutine(DestroyOrbitAfterTime(orbit, orbitDuration));
 
             yield return new WaitForSeconds(orbitSpawnInterval);
         }
 
-        orbitCooldownTimer = pattern_cooldown * 1.5f;
+        orbitCooldownTimer = orbitPatternCooldown;
         isOrbiting = false;
     }
 
     private void UpdateOrbitPositions()
     {
-        // 유효한(파괴되지 않은) 투사체만 필터링
         activeOrbits.RemoveAll(item => item == null);
 
-        for (int i = 0; i < activeOrbits.Count; i++)
+        int currentCount = activeOrbits.Count;
+        if (currentCount == 0) return;
+
+        for (int i = 0; i < currentCount; i++)
         {
-            // 균등 간격 계산 + 시간에 따른 회전
-            float angle = (i * (360f / orbitCount)) + (Time.time * orbitRotateSpeed);
+            float angle = (i * (360f / Mathf.Max(1, currentCount))) + (Time.time * orbitRotateSpeed);
             float rad = angle * Mathf.Deg2Rad;
 
             Vector2 offset = new Vector2(Mathf.Cos(rad), Mathf.Sin(rad)) * orbitRadius;
@@ -268,7 +761,9 @@ public class BossMonster : MonsterBase
         if (orbit != null)
         {
             activeOrbits.Remove(orbit);
-            if (explosionEffect != null) Instantiate(explosionEffect, orbit.transform.position, Quaternion.identity);
+            if (explosionEffect != null)
+                Instantiate(explosionEffect, orbit.transform.position, Quaternion.identity);
+
             Destroy(orbit);
         }
     }
@@ -296,7 +791,17 @@ public class BossMonster : MonsterBase
         if (barricadeTimer <= 0f)
         {
             if (barricadeSpawner != null)
-                barricadeSpawner.SpawnBarricade(GetSpawnPosition(spawnLoc), barShape, barSize, barDuration, barInteraction, this.power);
+            {
+                barricadeSpawner.SpawnBarricade(
+                    GetSpawnPosition(spawnLoc),
+                    barShape,
+                    barSize,
+                    barDuration,
+                    barInteraction,
+                    this.power
+                );
+            }
+
             barricadeTimer = barricadeInterval;
         }
     }
@@ -304,16 +809,31 @@ public class BossMonster : MonsterBase
     private Vector2 GetSpawnPosition(BarricadeSpawner.SpawnLocation loc)
     {
         if (target == null) return rb2D.position;
+
         switch (loc)
         {
-            case BarricadeSpawner.SpawnLocation.Player: return target.position;
-            case BarricadeSpawner.SpawnLocation.Boss: return rb2D.position;
-            case BarricadeSpawner.SpawnLocation.Both: return (rb2D.position + (Vector2)target.position) / 2f;
+            case BarricadeSpawner.SpawnLocation.Player:
+                return target.position;
+
+            case BarricadeSpawner.SpawnLocation.Boss:
+                return rb2D.position;
+
+            case BarricadeSpawner.SpawnLocation.Both:
+                return (rb2D.position + (Vector2)target.position) / 2f;
+
             case BarricadeSpawner.SpawnLocation.None:
-                Camera cam = Camera.main; if (cam == null) return rb2D.position;
-                float h = cam.orthographicSize; float w = h * cam.aspect;
-                return (Vector2)cam.transform.position + new Vector2(Random.Range(-w * 0.9f, w * 0.9f), Random.Range(-h * 0.9f, h * 0.9f));
-            default: return rb2D.position;
+                Camera cam = Camera.main;
+                if (cam == null) return rb2D.position;
+
+                float h = cam.orthographicSize;
+                float w = h * cam.aspect;
+                return (Vector2)cam.transform.position + new Vector2(
+                    Random.Range(-w * 0.9f, w * 0.9f),
+                    Random.Range(-h * 0.9f, h * 0.9f)
+                );
+
+            default:
+                return rb2D.position;
         }
     }
 
@@ -323,69 +843,104 @@ public class BossMonster : MonsterBase
         float dist = Vector2.Distance(target.position, myPos);
         Vector2 dir;
 
-        if (useFlee && !isFleeing && dist < fleeDistance && fleeCooldownTimer <= 0)
+        if (useFlee && !isFleeing && dist < fleeDistance && fleeCooldownTimer <= 0f)
         {
             currentFleeTarget = GetSmartFleePosition();
             isFleeing = true;
         }
+
         if (isFleeing)
         {
             dir = (currentFleeTarget - myPos).normalized;
-            if (Vector2.Distance(myPos, currentFleeTarget) < 0.5f) { isFleeing = false; fleeCooldownTimer = pattern_cooldown; }
+            if (Vector2.Distance(myPos, currentFleeTarget) < 0.5f)
+            {
+                isFleeing = false;
+                fleeCooldownTimer = pattern_cooldown;
+            }
         }
         else
         {
             dir = ((Vector2)target.position - myPos).normalized;
-            if (fleeCooldownTimer > 0) fleeCooldownTimer -= Time.fixedDeltaTime;
+            if (fleeCooldownTimer > 0f)
+                fleeCooldownTimer -= Time.fixedDeltaTime;
         }
+
         rb2D.linearVelocity = dir * (isFleeing ? move_speed * pattern_multiply : move_speed);
     }
+
     public override void TakeDamage(float damage)
     {
         hp -= damage;
-        Debug.Log(damage+"실제로 받는 데미지");
-        if (hp <= 0) Die();
+        Debug.Log(damage + "실제로 받는 데미지");
+
+        if (hp <= 0)
+            Die();
+
         _onBossHit.OnStartEvent(hp);
     }
 
     private void HandleJumpLogic()
     {
         if (isJumping || isWaitingJump) return;
-        if (jumpCooldownTimer > 0) { jumpCooldownTimer -= Time.fixedDeltaTime; return; }
-        if (Vector2.Distance(target.position, rb2D.position) <= detect_range) StartCoroutine(JumpRoutine());
+
+        if (jumpCooldownTimer > 0f)
+        {
+            jumpCooldownTimer -= Time.fixedDeltaTime;
+            return;
+        }
+
+        if (Vector2.Distance(target.position, rb2D.position) <= detect_range)
+        {
+            StartCoroutine(JumpRoutine());
+        }
     }
 
     private IEnumerator JumpRoutine()
     {
-        isWaitingJump = true; rb2D.linearVelocity = Vector2.zero;
+        isWaitingJump = true;
+        rb2D.linearVelocity = Vector2.zero;
+
         yield return new WaitForSeconds(cast_time);
-        isWaitingJump = false; isJumping = true;
-        Vector2 start = rb2D.position; Vector2 dest = target.position;
+
+        isWaitingJump = false;
+        isJumping = true;
+
+        Vector2 start = rb2D.position;
+        Vector2 dest = target.position;
 
         float dur = Vector2.Distance(start, dest) / (move_speed * pattern_multiply);
         float elp = 0f;
 
         while (elp < dur && this.hp > 0)
         {
-            elp += Time.fixedDeltaTime; float p = elp / dur;
+            elp += Time.fixedDeltaTime;
+            float p = elp / dur;
 
             rb2D.MovePosition(Vector2.Lerp(start, dest, p));
-            if (visualChild != null) visualChild.localPosition = new Vector2(0, Mathf.Sin(p * Mathf.PI) * jump_height);
+            if (visualChild != null)
+                visualChild.localPosition = new Vector2(0f, Mathf.Sin(p * Mathf.PI) * jump_height);
 
             yield return new WaitForFixedUpdate();
         }
-        if (visualChild != null) visualChild.localPosition = Vector2.zero;
-        isJumping = false; jumpCooldownTimer = pattern_cooldown;
+
+        if (visualChild != null)
+            visualChild.localPosition = Vector2.zero;
+
+        isJumping = false;
+        jumpCooldownTimer = pattern_cooldown;
     }
 
     private Vector2 GetSmartFleePosition()
     {
-        Camera cam = Camera.main; if (cam == null) return rb2D.position;
+        Camera cam = Camera.main;
+        if (cam == null) return rb2D.position;
 
-        float h = 2f * cam.orthographicSize; float w = h * cam.aspect;
+        float h = 2f * cam.orthographicSize;
+        float w = h * cam.aspect;
 
         Vector2 camP = (Vector2)cam.transform.position;
-        Vector2[] areas = new Vector2[6]; int[] counts = new int[6];
+        Vector2[] areas = new Vector2[6];
+        int[] counts = new int[6];
 
         for (int i = 0; i < 6; i++)
         {
@@ -397,16 +952,27 @@ public class BossMonster : MonsterBase
         foreach (var m in GameObject.FindGameObjectsWithTag("Monster"))
         {
             if (m == gameObject) continue;
-            float minD = float.MaxValue; int cA = -1;
+
+            float minD = float.MaxValue;
+            int cA = -1;
+
             for (int j = 0; j < 6; j++)
             {
                 float d = Vector2.Distance(m.transform.position, areas[j]);
-                if (d < minD) { minD = d; cA = j; }
+                if (d < minD)
+                {
+                    minD = d;
+                    cA = j;
+                }
             }
-            if (cA != -1) counts[cA]++;
+
+            if (cA != -1)
+                counts[cA]++;
         }
 
-        int best = 0; int maxC = -1; float maxD = -1f;
+        int best = 0;
+        int maxC = -1;
+        float maxD = -1f;
 
         for (int i = 0; i < 6; i++)
         {
@@ -414,9 +980,132 @@ public class BossMonster : MonsterBase
 
             if (counts[i] > maxC || (counts[i] == maxC && dP > maxD))
             {
-                maxC = counts[i]; maxD = dP; best = i;
+                maxC = counts[i];
+                maxD = dP;
+                best = i;
             }
         }
+
         return areas[best];
+    }
+
+    private void ResetRuntimeState()
+    {
+        useJump = false;
+        useFlee = false;
+        useBlink = false;
+        useBarricade = false;
+        useOrbit = false;
+
+        isJumping = false;
+        isWaitingJump = false;
+        isFleeing = false;
+        isBlinking = false;
+        isWaitingBlink = false;
+        isOrbiting = false;
+
+        jumpCooldownTimer = 0f;
+        fleeCooldownTimer = 0f;
+        blinkCooldownTimer = 0f;
+        barricadeTimer = 0f;
+        orbitCooldownTimer = 0f;
+
+        pattern_cooldown = 0f;
+        cast_time = 0f;
+        detect_range = 0f;
+        pattern_multiply = 1f;
+        pattern_damage = 0f;
+
+        if (move_speed <= 0f)
+            move_speed = moveSpeed;
+
+        if (rb2D != null)
+        {
+            rb2D.linearVelocity = Vector2.zero;
+            rb2D.angularVelocity = 0f;
+        }
+
+        foreach (var orbit in activeOrbits)
+        {
+            if (orbit != null)
+                Destroy(orbit);
+        }
+        activeOrbits.Clear();
+
+        if (lineRenderer != null)
+            lineRenderer.enabled = false;
+
+        areaPatterns.Clear();
+
+        // Orbit 런타임 값 초기화
+        orbitCount = defaultOrbitCount;
+        orbitRadius = defaultOrbitRadius;
+        orbitRotateSpeed = defaultOrbitRotateSpeed;
+        orbitDuration = defaultOrbitDuration;
+        orbitSpawnInterval = defaultOrbitSpawnInterval;
+        orbitDamageMultiplier = defaultOrbitDamageMultiplier;
+        orbitProjectileScale = defaultOrbitProjectileScale;
+        orbitPatternCooldown = 3f;
+    }
+
+    private float ResolveMoveMultiply(Pattern patternData)
+    {
+        if (patternData == null) return 1f;
+
+        if (patternData.rush_speed > 0f)
+            return patternData.rush_speed;
+
+        if (patternData.stat_value > 0f)
+            return patternData.stat_value;
+
+        return 1f;
+    }
+
+    private string NormalizeBossMoveLogic(string rawLogic)
+    {
+        if (string.IsNullOrWhiteSpace(rawLogic))
+            return string.Empty;
+
+        string logic = rawLogic.Trim().ToLower();
+
+        switch (logic)
+        {
+            case "move_jump":
+            case "jump":
+                return "Jump";
+
+            case "move_escape":
+            case "move_flee":
+            case "flee":
+                return "Flee";
+
+            case "move_blink":
+            case "blink":
+                return "Blink";
+
+            default:
+                return string.Empty;
+        }
+    }
+
+    private string NormalizeProjectileLogic(string rawLogic)
+    {
+        if (string.IsNullOrWhiteSpace(rawLogic))
+            return string.Empty;
+
+        string logic = rawLogic.Trim().ToLower();
+
+        switch (logic)
+        {
+            case "projectile_turn":
+                return "Orbit";
+            default:
+                return logic;
+        }
+    }
+
+    private bool IsShooterConfigured()
+    {
+        return shooter != null && shooter.enabled;
     }
 }

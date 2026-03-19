@@ -190,12 +190,12 @@ public abstract class SpecialBossMonsterBase : MonsterBase
                 shooter.ApplyProjectilePattern(projectilePattern);
             }
 
-            Debug.Log(
-                $"[Projectile 적용 완료] " +
-                $"MonsterId:{MonsterId}, PatternGroupId:{pattern_group_id}, PatternId:{projectilePattern.pattern_id}, Logic:{projectilePattern.pattern_logic_type}, " +
-                $"Count:{projectilePattern.projectile_count}, FireInterval:{projectilePattern.fire_interval}, Speed:{projectilePattern.projectile_speed}, " +
-                $"Size:{projectilePattern.projectile_size}, Life:{projectilePattern.life_time}, Follow:{projectilePattern.follow}"
-            );
+            //Debug.Log(
+            //    $"[Projectile 적용 완료] " +
+            //    $"MonsterId:{MonsterId}, PatternGroupId:{pattern_group_id}, PatternId:{projectilePattern.pattern_id}, Logic:{projectilePattern.pattern_logic_type}, " +
+            //    $"Count:{projectilePattern.projectile_count}, FireInterval:{projectilePattern.fire_interval}, Speed:{projectilePattern.projectile_speed}, " +
+            //    $"Size:{projectilePattern.projectile_size}, Life:{projectilePattern.life_time}, Follow:{projectilePattern.follow}"
+            //);
         }
         else
         {

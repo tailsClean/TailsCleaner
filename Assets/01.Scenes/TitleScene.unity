@@ -884,7 +884,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SoundManager
   _bgmPlayer: {fileID: 2047228965}
-  _bgmClips: []
+  _bgmClips:
+  - name: 1
+    clip: {fileID: 8300000, guid: 109f0c2242d3fbe42b3c0f9dfc315217, type: 3}
   _isLoop: 1
   _isShuffle: 0
   _skillSfxPlayer: {fileID: 242543918}
@@ -4526,6 +4528,10 @@ PrefabInstance:
       propertyPath: m_Color.r
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 3928640195679760650, guid: 179039d95f3b17346bdbb1d749aee08a, type: 3}
+      propertyPath: _onSellingItem
+      value: 
+      objectReference: {fileID: 11400000, guid: f1457ebe49b60db4d9e0fbada7b0812d, type: 2}
     - target: {fileID: 3937143954083796327, guid: 179039d95f3b17346bdbb1d749aee08a, type: 3}
       propertyPath: m_AnchorMax.y
       value: 1
@@ -7554,6 +7560,10 @@ PrefabInstance:
       propertyPath: _onChangeGold
       value: 
       objectReference: {fileID: 11400000, guid: d4b0cb886c73b2948830c5db7b299ef5, type: 2}
+    - target: {fileID: 6067503137370641201, guid: baf35b79efc030740a07c4c6a28c2e4b, type: 3}
+      propertyPath: _onSellingItem
+      value: 
+      objectReference: {fileID: 11400000, guid: f1457ebe49b60db4d9e0fbada7b0812d, type: 2}
     - target: {fileID: 7255210684938404490, guid: baf35b79efc030740a07c4c6a28c2e4b, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5
