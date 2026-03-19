@@ -13,7 +13,7 @@ public class ItemDBSO : ScriptableObject
     public Dictionary<int, DefaultEquipData> DefaultEquipDict => _defaultEquipDict;
 
 
-    public DefaultEquipData GetDefaultEquipData(int id)
+    private DefaultEquipData GetDefaultEquipData(int id)
     {
         if (_defaultEquipDict == null)
             DefaultEquipInit();
@@ -21,7 +21,6 @@ public class ItemDBSO : ScriptableObject
         if (_defaultEquipDict.TryGetValue(id, out var equip))
             return equip;
 
-        Debug.LogWarning($"{id}에 해당하는 장비 데이터가 없습니다.");
         return null;
     }
 
@@ -39,7 +38,7 @@ public class ItemDBSO : ScriptableObject
             _defaultEquipDict[equip.id].UniqueID = equip.id;
             _defaultEquipDict[equip.id].GroupID = equip.group_id;
             _defaultEquipDict[equip.id].Equipmnet = equip;
-            _defaultEquipDict[equip.id].StringData = nameData.GetById(equip.name);
+            _defaultEquipDict[equip.id].Name = nameData.GetById(equip.name).kr;
             //_equipDict[equip.id].SpriteImg = Resources.Load<Sprite>($"All_Resource/image/Total_Item_Image/{equip.sprite}");
             _defaultEquipDict[equip.id].SpriteImg = Resources.Load<Sprite>($"Total_Item_Image/{equip.sprite}");
         }
@@ -94,7 +93,7 @@ public class ItemDBSO : ScriptableObject
 
     private Dictionary<int, MaterialEquipData> _materialEquipDict;
 
-    public MaterialEquipData GetMaterialEquipData(int id)
+    private MaterialEquipData GetMaterialEquipData(int id)
     {
         if (_materialEquipDict == null)
             MaterialEquipInit();
@@ -102,7 +101,6 @@ public class ItemDBSO : ScriptableObject
         if (_materialEquipDict.TryGetValue(id, out var equip))
             return equip;
 
-        Debug.LogWarning($"{id}에 해당하는 재료 장비 데이터가 없습니다.");
         return null;
     }
 
@@ -118,7 +116,7 @@ public class ItemDBSO : ScriptableObject
             _materialEquipDict.Add(equip.id, new MaterialEquipData());
             _materialEquipDict[equip.id].UniqueID = equip.id;
             _materialEquipDict[equip.id].EquipMatter = equip;
-            _materialEquipDict[equip.id].StringData = nameData.GetById(equip.name);
+            _materialEquipDict[equip.id].Name =  /*nameData.GetById(equip.name).kr;*/ "재료 장비";
             _materialEquipDict[equip.id].SpriteImg = Resources.Load<Sprite>($"Total_Item_Image/{equip.sprite}");
         }
     }
@@ -133,7 +131,7 @@ public class ItemDBSO : ScriptableObject
 
     public Dictionary<int, RelicData> RelicDict => _relicDict;
 
-    public RelicData GetRelicData(int id)
+    private RelicData GetRelicData(int id)
     {
         if (_relicDict == null)
             RelicInit();
@@ -141,7 +139,6 @@ public class ItemDBSO : ScriptableObject
         if (_relicDict.TryGetValue(id, out var equip))
             return equip;
 
-        Debug.LogWarning($"{id}에 해당하는 장비 데이터가 없습니다.");
         return null;
     }
 
@@ -151,13 +148,16 @@ public class ItemDBSO : ScriptableObject
         _relicDict = new Dictionary<int, RelicData>();
 
         // 유물 데이터 매칭
+        var nameData = DataManager.Instance.GetSOData<StringSO>();
         var relicData = DataManager.Instance.GetSOData<RelicSO>();
+
         foreach (var relic in relicData.dataList)
         {
             _relicDict.Add(relic.id, new RelicData());
             _relicDict[relic.id].UniqueID = relic.id;
             _relicDict[relic.id].GroupID = relic.group_id;
             _relicDict[relic.id].Relic = relic;
+            _relicDict[relic.id].Name = nameData.GetById(relic.name).kr;
             _relicDict[relic.id].SpriteImg = Resources.Load<Sprite>($"Total_Item_Image/{relic.sprite}");
         }
 
@@ -201,7 +201,7 @@ public class ItemDBSO : ScriptableObject
 
     public Dictionary<int, ItemManageData> ItemDict => _itemDict;
 
-    public ItemManageData GetItemData(int ManageID)
+    private ItemManageData GetItemData(int ManageID)
     {
         if (_itemDict == null)
             ItemInit();
@@ -209,7 +209,6 @@ public class ItemDBSO : ScriptableObject
         if (_itemDict.TryGetValue(ManageID, out var item))
             return item;
 
-        Debug.LogWarning($"{ManageID}에 해당하는 아이템 데이터가 없습니다.");
         return null;
     }
 
@@ -218,12 +217,14 @@ public class ItemDBSO : ScriptableObject
         _itemDict = new Dictionary<int, ItemManageData>();
         var itemManageData = DataManager.Instance.GetSOData<ItemManageTableSO>();
         var itemConsumeData = DataManager.Instance.GetSOData<ItemConsumeTableSO>();
+
         foreach (var manage in itemManageData.dataList)
         {
             _itemDict.Add(manage.item_id, new ItemManageData());
             _itemDict[manage.item_id].UniqueID = manage.item_id;
             _itemDict[manage.item_id].Type = manage.item_type;
             _itemDict[manage.item_id].ManageData = manage;
+            _itemDict[manage.item_id].Name = manage.desc;
             _itemDict[manage.item_id].SpriteImg = Resources.Load<Sprite>($"Total_Item_Image/{manage.item_img}");
         }
         foreach (var consume in itemConsumeData.dataList)
@@ -289,7 +290,7 @@ public static class ItemDB
 public class ItemDataBase
 {
     public int UniqueID;
-    public String StringData;
+    public string Name;
     public Sprite SpriteImg;
 
     public virtual ITEM_TYPE Type { get; set; }

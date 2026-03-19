@@ -18,7 +18,7 @@ public struct ItemInstance
     /// <summary>
     /// 아이템의 존재여부 확인용 존재할 수 없는 인벤토리 인스턴스
     /// </summary>
-    public static ItemInstance None => new ItemInstance(-1, -1, GRADE.None);
+    public static ItemInstance None => new ItemInstance("Zero");
 
     /// <summary>
     /// 스택형 아이템의 아이템객체
@@ -28,7 +28,7 @@ public struct ItemInstance
     {
         var item = ItemDB.GetData<ItemDataBase>(id);
         ID = id;
-        Name = item.StringData.kr;
+        Name = item.Name;
         EnhanceLevel = NoneEnhanceLevel;
         Grade = GRADE.None;
         ItemType = item.Type;
@@ -46,13 +46,18 @@ public struct ItemInstance
     {
         var item = ItemDB.GetData<ItemDataBase>(id);
         ID = id;
-        Name = item.StringData.kr;
+        Name = item.Name;
         EnhanceLevel = enhanceLevel;
         Grade = grad;
         ItemType = item.Type;
 
         Amount = 1;
 
+    }
+
+    private ItemInstance(string zero)
+    {
+        ID = -1; Name = zero; EnhanceLevel = -1; Grade = GRADE.None; ItemType = ITEM_TYPE.System; Amount = 1;
     }
 
     public void SetAmount(int amount) => Amount = amount;
