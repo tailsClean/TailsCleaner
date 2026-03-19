@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using UnityEngine.InputSystem;
 
 public class TestSpawner : MonoBehaviour
 {
@@ -23,12 +24,15 @@ public class TestSpawner : MonoBehaviour
 
     void Update()
     {
-        if (Input.GetMouseButtonDown(0))
+        // 2. 새로운 Input System 방식으로 체크
+        // 마우스 왼쪽 버튼 클릭
+        if (Mouse.current.leftButton.wasPressedThisFrame)
         {
             Spawn();
         }
 
-        if (Input.GetKeyDown(KeyCode.Space))
+        // 스페이스바 입력
+        if (Keyboard.current.spaceKey.wasPressedThisFrame)
         {
             StartCoroutine(SpawnWithDelay());
         }
