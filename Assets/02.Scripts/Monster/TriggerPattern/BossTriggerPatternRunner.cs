@@ -327,7 +327,16 @@ public class BossTriggerPatternRunner : MonoBehaviour
 
         yield return new WaitForSeconds(absorbDuration + 0.05f);
 
-        _boss.hp += absorbedCount * row.dirty_to_hp_value;
+        float healAmount = absorbedCount * row.dirty_to_hp_value;
+
+        if (_boss is BossMonster bossMonster)
+        {
+            bossMonster.HealBoss(healAmount);
+        }
+        else
+        {
+            _boss.hp += healAmount;
+        }
 
         _boss.SetAttackingState(false);
         _patternRunning = false;
@@ -364,7 +373,16 @@ public class BossTriggerPatternRunner : MonoBehaviour
 
         yield return new WaitForSeconds(_defaultDirtyAbsorbDuration + 0.05f);
 
-        _boss.hp += absorbedCount * row.dirty_to_hp_value;
+        float healAmount = absorbedCount * row.dirty_to_hp_value;
+
+        if (_boss is BossMonster bossMonster)
+        {
+            bossMonster.HealBoss(healAmount);
+        }
+        else
+        {
+            _boss.hp += healAmount;
+        }
 
         _boss.SetAttackingState(false);
         _patternRunning = false;
@@ -382,6 +400,11 @@ public class BossTriggerPatternRunner : MonoBehaviour
 
         _boss.hp *= Mathf.Max(1f, row.enrage_hp_rate);
         _boss.power *= Mathf.Max(1f, row.enrage_atk_rate);
+
+        if (_boss is BossMonster bossMonster)
+        {
+            bossMonster.RefreshBossHpUI();
+        }
 
         _boss.SetAttackingState(false);
         _patternRunning = false;
