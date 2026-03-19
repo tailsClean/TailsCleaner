@@ -321,6 +321,14 @@ public abstract class ActiveSkill : MonoBehaviour
             passive.Modifier.ModifyBaseAdd(resultStat);
         }
 
+        // 기본 관통력 0인데 관통 공용 업그레이드 했을 때
+        if (resultStat.PierceCount == 0 && commonStat.PierceCount > 1)
+        {
+            // 0 * 2 방지 위해서 1 추가
+            // 근데 하드코딩임
+            resultStat.PierceCount = 1;
+        }
+
         // 공용 스탯 (곱)
         resultStat.Multiply(commonStat);
 
