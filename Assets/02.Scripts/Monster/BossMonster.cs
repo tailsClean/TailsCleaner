@@ -879,6 +879,18 @@ public class BossMonster : MonsterBase
         _onBossHit.OnStartEvent(hp);
     }
 
+    public void HealBoss(float amount)
+    {
+        if (amount <= 0f) return;
+
+        hp = Mathf.Min(maxHp, hp + amount);
+        _onBossHit?.OnStartEvent(hp);
+    }
+
+    public void RefreshBossHpUI()
+    {
+        _onBossHit?.OnStartEvent(hp);
+    }
     private void HandleJumpLogic()
     {
         if (isJumping || isWaitingJump) return;
