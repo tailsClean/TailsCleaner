@@ -103,7 +103,12 @@ public class BossMonster : MonsterBase
         }
 
         // --- 패턴 로직 실행 ---
-
+        // 트리거 패턴 중 보스 정지 하기
+        if (isAttacking)
+        {
+            rb2D.linearVelocity = Vector2.zero;
+            return;
+        }
         // 공전 투사체 패턴
         if (useOrbit && !isOrbiting && orbitCooldownTimer <= 0)
         {
