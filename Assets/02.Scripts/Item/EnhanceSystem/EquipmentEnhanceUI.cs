@@ -83,8 +83,8 @@ public class EquipmentEnhanceUI : EnhanceSystemUI
     public override void UpdateCurrentGold()
     {
         ItemInstance gold = _currency.GetGold();
-        var goldData = ItemDB.GetData<ItemManageData>(gold.ID);
-        _currentGoldImage.sprite = goldData.SpriteImg;
+        //var goldData = ItemDB.GetData<ItemManageData>(ItemID.Gold);
+        //_currentGoldImage.sprite = goldData.SpriteImg;
         _currentGoldText.text = gold.Amount.ToString();
     }
 }

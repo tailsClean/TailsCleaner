@@ -242,21 +242,23 @@ public class ItemDBSO : ScriptableObject
     public T GetData<T>(int id) where T : ItemDataBase
     {
 
-        T item = (T)(ItemDataBase)GetDefaultEquipData(id);
+        ItemDataBase data = null;
 
-        if (item == null)
-            item = (T)(ItemDataBase)GetMaterialEquipData(id);
+        data = GetDefaultEquipData(id);
+        if (data is T result) return result;
 
-        if (item == null)
-            item = (T)(ItemDataBase)GetRelicData(id);
+        data = GetMaterialEquipData(id);
+        if (data is T result2) return result2;
 
-        if (item == null)
-            item = (T)(ItemDataBase)GetItemData(id);
+        data = GetRelicData(id);
+        if (data is T result3) return result3;
 
-        if (item == null)
-            Debug.LogError($"ID: {id} / 타입: {typeof(T)}에 맞는 아이템은 없습니다.");
+        data = GetItemData(id);
+        if (data is T result4) return result4;
 
-        return item;
+        Debug.LogError($"ID: {id} / 타입: {typeof(T)}에 맞는 아이템은 없습니다.");
+
+        return null;
     }
 }
 

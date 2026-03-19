@@ -15,6 +15,11 @@ public class ItemPopup : MonoBehaviour
     [SerializeField] private Button _sellingButton;
     [SerializeField] private SellingItemPopup _sellingPopup;
 
+    [Header("유물 상태창 전용")]
+    [SerializeField] private Button _releaseRelic;
+    [SerializeField] private PlayerLoadout _loadout;
+
+
     protected ItemInstance _currentItem;
 
 
@@ -30,6 +35,7 @@ public class ItemPopup : MonoBehaviour
     {
         _currentItem = itemInstance;
         _itemSlot.SetSlot(itemInstance.ID);
+        SetReleaseButton();
     }
 
 
@@ -57,5 +63,14 @@ public class ItemPopup : MonoBehaviour
     }
 
 
+    private void SetReleaseButton()
+    {
+        if (_releaseRelic == null)
+            return;
+
+        _releaseRelic.onClick.RemoveAllListeners();
+        _releaseRelic.onClick.AddListener(() => _loadout.RemoveRelic(_currentItem.ID, _currentItem.EnhanceLevel));
+        _releaseRelic.onClick.AddListener(() => gameObject.SetActive(false));
+    }
 
 }
