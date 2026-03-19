@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+
 public class InGameExpItem : PoolObject, IPickable
 {
     public static readonly List<InGameExpItem> ActiveItems = new List<InGameExpItem>();

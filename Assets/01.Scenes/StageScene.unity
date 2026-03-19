@@ -344,7 +344,7 @@ MonoBehaviour:
     CustomLookAtTarget: 0
   Lens:
     FieldOfView: 60
-    OrthographicSize: 15
+    OrthographicSize: 10
     NearClipPlane: 0.3
     FarClipPlane: 1000
     Dutch: 0
@@ -501,8 +501,8 @@ MonoBehaviour:
   _stageId: 50201
   _towerId: 0
   _useTimeOverride: 0
-  _overrideMainTimeSeconds: 30
-  _overrideBossTimeSeconds: 30
+  _overrideMainTimeSeconds: 1
+  _overrideBossTimeSeconds: 180
   _stageController: {fileID: 1499286055}
   _spawner: {fileID: 1493428061}
   _register: {fileID: 504285889}
@@ -625,6 +625,54 @@ MonoBehaviour:
   _stageTrans: {fileID: 0}
   _onStartInGame: {fileID: 11400000, guid: bb5af9a30899d5441ae60b98e54bf231, type: 2}
   _settingPrefab: {fileID: 0}
+  _inventoryUI: {fileID: 0}
+  _relicUI: {fileID: 0}
+  _equipUI: {fileID: 0}
+--- !u!1 &1134108279
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1134108280}
+  - component: {fileID: 1134108281}
+  m_Layer: 0
+  m_Name: MonsterManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1134108280
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1134108279}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1545055642}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1134108281
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1134108279}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 13051b01e0dda1143a4f46ac6f438463, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::MonsterManager
+  activeMonsters: []
 --- !u!1 &1385904951
 GameObject:
   m_ObjectHideFlags: 0
@@ -849,6 +897,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
+  - {fileID: 1134108280}
   - {fileID: 1476404926}
   - {fileID: 1385904953}
   - {fileID: 504285890}
@@ -897,8 +946,8 @@ Camera:
   m_GameObject: {fileID: 1546692383}
   m_Enabled: 1
   serializedVersion: 2
-  m_ClearFlags: 1
-  m_BackGroundColor: {r: 0.19215687, g: 0.3019608, b: 0.4745098, a: 0}
+  m_ClearFlags: 2
+  m_BackGroundColor: {r: 0, g: 0, b: 0, a: 0}
   m_projectionMatrixMode: 1
   m_GateFitMode: 2
   m_FOVAxisMode: 0
@@ -923,7 +972,7 @@ Camera:
   far clip plane: 1000
   field of view: 60
   orthographic: 1
-  orthographic size: 15
+  orthographic size: 10
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
@@ -1076,6 +1125,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::StageMapLoader
   _mapRoot: {fileID: 1595860030}
   _confiner: {fileID: 679197708}
+  cinemachineCamera: {fileID: 679197706}
+  player: {fileID: 394270937}
 --- !u!1 &1757556135
 GameObject:
   m_ObjectHideFlags: 0
