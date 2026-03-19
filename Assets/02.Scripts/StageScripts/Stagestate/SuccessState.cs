@@ -11,10 +11,9 @@ public class SuccessState : IStageState
 
     public void Enter()
     {
-        Debug.Log("[Stage] Enter SuccessState -> FinalizeReward(Victory)");
-        
         SaveStageClearProgress();
 
+        Debug.Log("[Stage] Enter SuccessState -> FinalizeReward(Victory)");
         UIManager.Instance.OpenClear();
         _controller?.RewardHandler?.FinalizeReward(GameResult.Victory);
     }
@@ -27,21 +26,11 @@ public class SuccessState : IStageState
 
     private void SaveStageClearProgress()
     {
-        if (GameManager.Instance == null)
-        {
-            Debug.LogWarning("[SuccessState] GameManager is null. Clear progress not saved.");
-            return;
-        }
+        if (GameManager.Instance == null) return;
+        if (GameManager.Instance._currentStage == null) return;
 
         StageTable currentStage = GameManager.Instance._currentStage;
-        if (currentStage == null)
-        {
-            Debug.LogWarning("[SuccessState] CurrentStage is null. Clear progress not saved.");
-            return;
-        }
-
+        // RewardManager.Instance.SendToInventory(); 대충 이런거 보내야함.
         GameManager.Instance.MarkStageCleared(currentStage.tower_id, currentStage.stage_index);
-
-        Debug.Log($"[SuccessState] Stage clear saved. towerId={currentStage.tower_id}, stageIndex={currentStage.stage_index}");
     }
 }

@@ -52,6 +52,9 @@ public class StageSelect : MonoBehaviour
         if (_contentRoot == null || _panelPrefab == null || _stageTableSO == null)
             return;
 
+        if (_scrollRect != null)
+            _scrollRect.verticalNormalizedPosition = 1f;
+
         ClearItems();
         BuildStageList();
         CreateItems();
@@ -149,7 +152,7 @@ public class StageSelect : MonoBehaviour
         return max;
     }
 
-    private int GetHighestUnlockedStageIndex()
+    private int GetFocusStageIndex()
     {
         int highestUnlocked = 0;
 
@@ -160,6 +163,11 @@ public class StageSelect : MonoBehaviour
                 highestUnlocked = Mathf.Max(highestUnlocked, _towerStages[i].stage_index);
             }
         }
+
+        // 현재 탑에 열린 스테이지가 하나도 없으면
+        // 잠긴 1스테이지를 기준으로 보여준다.
+        if (highestUnlocked <= 0)
+            return 1;
 
         return highestUnlocked;
     }
@@ -183,9 +191,8 @@ public class StageSelect : MonoBehaviour
 
         if (_scrollRect == null || _viewport == null || _spawnedPanels.Count == 0)
             yield break;
-
-        int highestUnlockedStage = GetHighestUnlockedStageIndex();
-        int panelIndex = GetPanelIndexByStageIndex(highestUnlockedStage);
+        int focusStageIndex = GetFocusStageIndex();
+        int panelIndex = GetPanelIndexByStageIndex(focusStageIndex);
 
         if (panelIndex < 0 || panelIndex >= _spawnedPanels.Count)
             yield break;
