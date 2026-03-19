@@ -29,6 +29,8 @@ public class SkillProjectile<TModifierData> : SkillObjectBase
     // 트리거 충돌 체크
     protected virtual void OnTriggerEnter2D(Collider2D col)
     {
+        if (_expired == true) return;
+
         // 몬스터 태그 아니면 무시
         if (col.CompareTag("Monster") == false) return;
 
