@@ -24,15 +24,14 @@ public class BossTriggerPatternRunner : MonoBehaviour
     private StageTimer _timer;
 
     private PatternGroupTableRow _patternGroupRow;
-    private List<PatternGroupCompositionTableRow> _compositionRows = new List<PatternGroupCompositionTableRow>();
-    private List<PatternTableRow> _triggerRows = new List<PatternTableRow>();
+    private readonly List<PatternGroupCompositionTableRow> _compositionRows = new List<PatternGroupCompositionTableRow>();
+    private readonly List<PatternTableRow> _triggerRows = new List<PatternTableRow>();
 
     private bool _bound;
     private bool _patternRunning;
 
     private readonly HashSet<int> _triggeredOncePatternIds = new HashSet<int>();
     private readonly Dictionary<int, int> _enrageCurrentStepByPatternId = new Dictionary<int, int>();
-    private readonly Dictionary<int, int> _lastTriggerElapsedByPatternId = new Dictionary<int, int>();
 
     private Coroutine _runningRoutine;
 
@@ -80,15 +79,26 @@ public class BossTriggerPatternRunner : MonoBehaviour
         if (_bound && _stageController != null && _stageController.Events != null)
             _stageController.Events.OnBossSecondTick -= HandleBossSecondTick;
 
-        if (_runningRoutine != null && _stageController != null)
-            _stageController.StopCoroutine(_runningRoutine);
+        if (_runningRoutine != null)
+            StopCoroutine(_runningRoutine);
 
+        if (_boss != null)
+            _boss.SetAttackingState(false);
+
+        _patternRunning = false;
         _runningRoutine = null;
         _bound = false;
 
         _patternGroupRow = null;
         _compositionRows.Clear();
         _triggerRows.Clear();
+        _triggeredOncePatternIds.Clear();
+        _enrageCurrentStepByPatternId.Clear();
+    }
+
+    private void OnDisable()
+    {
+        Unbind();
     }
 
     private void OnDestroy()
@@ -101,13 +111,11 @@ public class BossTriggerPatternRunner : MonoBehaviour
         _patternRunning = false;
         _triggeredOncePatternIds.Clear();
         _enrageCurrentStepByPatternId.Clear();
-        _lastTriggerElapsedByPatternId.Clear();
 
         for (int i = 0; i < _triggerRows.Count; i++)
         {
             int patternId = _triggerRows[i].pattern_id;
             _enrageCurrentStepByPatternId[patternId] = 0;
-            _lastTriggerElapsedByPatternId[patternId] = -9999;
         }
     }
 
@@ -172,9 +180,7 @@ public class BossTriggerPatternRunner : MonoBehaviour
         for (int i = 0; i < compositionRows.Count; i++)
         {
             if (compositionRows[i].pattern_group_id == patternGroupId)
-            {
                 _compositionRows.Add(compositionRows[i]);
-            }
         }
 
         if (_compositionRows.Count == 0)
@@ -194,9 +200,8 @@ public class BossTriggerPatternRunner : MonoBehaviour
                 if (patternRows[j].pattern_id == patternId)
                 {
                     if (IsTriggerPattern(patternRows[j].pattern_logic_type))
-                    {
                         _triggerRows.Add(patternRows[j]);
-                    }
+
                     break;
                 }
             }
@@ -205,7 +210,10 @@ public class BossTriggerPatternRunner : MonoBehaviour
 
     private bool IsTriggerPattern(string logicType)
     {
-        logicType = logicType.Trim();
+        if (string.IsNullOrWhiteSpace(logicType))
+            return false;
+
+        logicType = logicType.Trim().ToLower();
 
         return logicType == "trigger_exp_absorb"
             || logicType == "trigger_dirty_spawn"
@@ -230,22 +238,20 @@ public class BossTriggerPatternRunner : MonoBehaviour
         for (int i = 0; i < _triggerRows.Count; i++)
         {
             PatternTableRow row = _triggerRows[i];
-            PatternGroupCompositionTableRow comp = FindComposition(row.pattern_id);
-
             string logicType = row.pattern_logic_type?.Trim().ToLower();
 
             switch (logicType)
             {
                 case "trigger_exp_absorb":
-                    TryTriggerExpAbsorb(row, comp, elapsed);
+                    TryTriggerExpAbsorb(row, elapsed);
                     break;
 
                 case "trigger_dirty_spawn":
-                    TryTriggerDirtySpawn(row, comp, elapsed);
+                    TryTriggerDirtySpawn(row, elapsed);
                     break;
 
                 case "trigger_enrage":
-                    TryTriggerEnrage(row, comp, elapsed);
+                    TryTriggerEnrage(row, elapsed);
                     break;
             }
 
@@ -254,28 +260,21 @@ public class BossTriggerPatternRunner : MonoBehaviour
         }
     }
 
-    private PatternGroupCompositionTableRow FindComposition(int patternId)
-    {
-        for (int i = 0; i < _compositionRows.Count; i++)
-        {
-            if (_compositionRows[i].pattern_id == patternId)
-                return _compositionRows[i];
-        }
-        return null;
-    }
-
-    private void TryTriggerExpAbsorb(PatternTableRow row, PatternGroupCompositionTableRow comp, int elapsed)
+    private void TryTriggerExpAbsorb(PatternTableRow row, int elapsed)
     {
         if (_triggeredOncePatternIds.Contains(row.pattern_id)) return;
 
-        int triggerTime = row.cast_time > 0f ? Mathf.RoundToInt(row.cast_time) : Mathf.RoundToInt(_defaultExpAbsorbDelay);
+        int triggerTime = row.cast_time > 0f
+            ? Mathf.RoundToInt(row.cast_time)
+            : Mathf.RoundToInt(_defaultExpAbsorbDelay);
+
         if (elapsed < triggerTime) return;
 
         _triggeredOncePatternIds.Add(row.pattern_id);
-        _runningRoutine = _stageController.StartCoroutine(CoExpAbsorb(row));
+        _runningRoutine = StartCoroutine(CoExpAbsorb(row));
     }
 
-    private void TryTriggerDirtySpawn(PatternTableRow row, PatternGroupCompositionTableRow comp, int elapsed)
+    private void TryTriggerDirtySpawn(PatternTableRow row, int elapsed)
     {
         if (_triggeredOncePatternIds.Contains(row.pattern_id)) return;
 
@@ -283,10 +282,10 @@ public class BossTriggerPatternRunner : MonoBehaviour
         if (elapsed < triggerTime) return;
 
         _triggeredOncePatternIds.Add(row.pattern_id);
-        _runningRoutine = _stageController.StartCoroutine(CoDirtySpawn(row));
+        _runningRoutine = StartCoroutine(CoDirtySpawn(row));
     }
 
-    private void TryTriggerEnrage(PatternTableRow row, PatternGroupCompositionTableRow comp, int elapsed)
+    private void TryTriggerEnrage(PatternTableRow row, int elapsed)
     {
         if (row.enrage_max_step <= 0) return;
 
@@ -299,7 +298,7 @@ public class BossTriggerPatternRunner : MonoBehaviour
         int nextTriggerTime = interval * (currentStep + 1);
         if (elapsed < nextTriggerTime) return;
 
-        _runningRoutine = _stageController.StartCoroutine(CoEnrage(row));
+        _runningRoutine = StartCoroutine(CoEnrage(row));
     }
 
     private IEnumerator CoExpAbsorb(PatternTableRow row)
@@ -308,24 +307,27 @@ public class BossTriggerPatternRunner : MonoBehaviour
         _boss.SetAttackingState(true);
 
         float warning = row.cast_time > 0f ? row.cast_time : _defaultWarningDuration;
-
-        // TODO: 경험치 방치 예고 연출
         yield return new WaitForSeconds(warning);
 
         List<InGameExpItem> targets = InGameExpItem.GetAllUncleaned();
         float absorbDuration = row.duration > 0f ? row.duration : _defaultExpAbsorbDuration;
 
+        int absorbedCount = 0;
+
         for (int i = 0; i < targets.Count; i++)
         {
             if (targets[i] != null)
-                _stageController.StartCoroutine(targets[i].MoveToBossAndAbsorb(_boss.transform, absorbDuration));
+            {
+                StartCoroutine(targets[i].MoveToBossAndAbsorb(_boss.transform, absorbDuration, () =>
+                {
+                    absorbedCount++;
+                }));
+            }
         }
 
-        yield return new WaitForSeconds(absorbDuration);
+        yield return new WaitForSeconds(absorbDuration + 0.05f);
 
-        _boss.hp += targets.Count * row.dirty_to_hp_value;
-
-        // TODO: 경험치 방치 이펙트
+        _boss.hp += absorbedCount * row.dirty_to_hp_value;
 
         _boss.SetAttackingState(false);
         _patternRunning = false;
@@ -338,8 +340,6 @@ public class BossTriggerPatternRunner : MonoBehaviour
         _boss.SetAttackingState(true);
 
         float warning = row.cast_time > 0f ? row.cast_time : _defaultWarningDuration;
-
-        // TODO: 더러움 소환 예고 연출
         yield return new WaitForSeconds(warning);
 
         SpawnDirtyItems(row);
@@ -349,17 +349,22 @@ public class BossTriggerPatternRunner : MonoBehaviour
 
         List<InGameExpItem> targets = InGameExpItem.GetBossSpawnedUncleaned();
 
+        int absorbedCount = 0;
+
         for (int i = 0; i < targets.Count; i++)
         {
             if (targets[i] != null)
-                _stageController.StartCoroutine(targets[i].MoveToBossAndAbsorb(_boss.transform, _defaultDirtyAbsorbDuration));
+            {
+                StartCoroutine(targets[i].MoveToBossAndAbsorb(_boss.transform, _defaultDirtyAbsorbDuration, () =>
+                {
+                    absorbedCount++;
+                }));
+            }
         }
 
-        yield return new WaitForSeconds(_defaultDirtyAbsorbDuration);
+        yield return new WaitForSeconds(_defaultDirtyAbsorbDuration + 0.05f);
 
-        _boss.hp += targets.Count * row.dirty_to_hp_value;
-
-        // TODO: 더러움 소환 이펙트
+        _boss.hp += absorbedCount * row.dirty_to_hp_value;
 
         _boss.SetAttackingState(false);
         _patternRunning = false;
@@ -371,15 +376,12 @@ public class BossTriggerPatternRunner : MonoBehaviour
         _patternRunning = true;
         _boss.SetAttackingState(true);
 
-        // TODO: 광폭화 예고 연출
         yield return new WaitForSeconds(_defaultWarningDuration);
 
         _enrageCurrentStepByPatternId[row.pattern_id]++;
 
         _boss.hp *= Mathf.Max(1f, row.enrage_hp_rate);
         _boss.power *= Mathf.Max(1f, row.enrage_atk_rate);
-
-        // TODO: 광폭화 이펙트
 
         _boss.SetAttackingState(false);
         _patternRunning = false;
@@ -417,9 +419,6 @@ public class BossTriggerPatternRunner : MonoBehaviour
 
             usedPositions.Add(spawnPos);
         }
-
-        // TODO:
-        // item_id 기준으로 실제 아이템 리소스를 선택하도록 변경
     }
 
     private Vector3 FindNonOverlappingPosition(Vector3 center, float radius, List<Vector3> usedPositions)

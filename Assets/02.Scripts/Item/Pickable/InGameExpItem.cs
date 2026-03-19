@@ -57,8 +57,7 @@ public class InGameExpItem : PoolObject, IPickable
         if (collision.TryGetComponent<PlayerBase>(out var player))
         {
             IsCleaned = true;
-
-            _onPickupExp.OnStartEvent(_expPoint);
+            _onPickupExp?.OnStartEvent(_expPoint);
 
             if (ObjectPoolManager.Instance != null)
                 ObjectPoolManager.Instance.ReturnObject(this);
@@ -67,10 +66,11 @@ public class InGameExpItem : PoolObject, IPickable
         }
     }
 
-    public IEnumerator MoveToBossAndAbsorb(Transform bossTransform, float duration)
+    public IEnumerator MoveToBossAndAbsorb(Transform bossTransform, float duration, Action onAbsorbed = null)
     {
         if (bossTransform == null) yield break;
         if (IsCleaned) yield break;
+        if (IsAbsorbing) yield break;
 
         IsAbsorbing = true;
 
@@ -80,6 +80,7 @@ public class InGameExpItem : PoolObject, IPickable
         while (elapsed < duration)
         {
             if (bossTransform == null) yield break;
+            if (IsCleaned) yield break;
 
             elapsed += Time.deltaTime;
             float t = Mathf.Clamp01(elapsed / duration);
@@ -89,6 +90,9 @@ public class InGameExpItem : PoolObject, IPickable
 
         if (!IsCleaned)
         {
+            IsCleaned = true;
+            onAbsorbed?.Invoke();
+
             if (ObjectPoolManager.Instance != null)
                 ObjectPoolManager.Instance.ReturnObject(this);
             else
@@ -103,7 +107,7 @@ public class InGameExpItem : PoolObject, IPickable
         for (int i = 0; i < ActiveItems.Count; i++)
         {
             InGameExpItem item = ActiveItems[i];
-            if (item != null && !item.IsCleaned)
+            if (item != null && !item.IsCleaned && !item.IsAbsorbing)
                 result.Add(item);
         }
 
@@ -117,7 +121,7 @@ public class InGameExpItem : PoolObject, IPickable
         for (int i = 0; i < ActiveItems.Count; i++)
         {
             InGameExpItem item = ActiveItems[i];
-            if (item != null && !item.IsCleaned && item.IsBossSpawnedDirt)
+            if (item != null && !item.IsCleaned && !item.IsAbsorbing && item.IsBossSpawnedDirt)
                 result.Add(item);
         }
 

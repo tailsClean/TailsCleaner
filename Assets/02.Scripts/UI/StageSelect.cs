@@ -1,12 +1,15 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class StageSelect : MonoBehaviour
 {
     [Header("UI")]
-    [SerializeField] private Transform _contentRoot;       // stageVerticalLayout
-    [SerializeField] private StageSelectPanel _panelPrefab; // StagePanel prefab
+    [SerializeField] private RectTransform _contentRoot;          // stageVerticalLayout
+    [SerializeField] private StageSelectPanel _panelPrefab;       // StagePanel prefab
+    [SerializeField] private ScrollRect _scrollRect;
+    [SerializeField] private RectTransform _viewport;
 
     [Header("Buttons")]
     [SerializeField] private Button _btnBack;
@@ -14,6 +17,7 @@ public class StageSelect : MonoBehaviour
 
     private StageTableSO _stageTableSO;
     private readonly List<StageTable> _towerStages = new List<StageTable>();
+    private readonly List<StageSelectPanel> _spawnedPanels = new List<StageSelectPanel>();
 
     private void Start()
     {
@@ -51,10 +55,15 @@ public class StageSelect : MonoBehaviour
         ClearItems();
         BuildStageList();
         CreateItems();
+
+        StopAllCoroutines();
+        StartCoroutine(CoScrollToCurrentOpenStage());
     }
 
     private void ClearItems()
     {
+        _spawnedPanels.Clear();
+
         for (int i = _contentRoot.childCount - 1; i >= 0; i--)
         {
             Destroy(_contentRoot.GetChild(i).gameObject);
@@ -85,7 +94,7 @@ public class StageSelect : MonoBehaviour
                 _towerStages.Add(stage);
         }
 
-        _towerStages.Sort((a, b) => a.stage_index.CompareTo(b.stage_index));
+        _towerStages.Sort((a, b) => b.stage_index.CompareTo(a.stage_index));
     }
 
     private void CreateItems()
@@ -97,6 +106,8 @@ public class StageSelect : MonoBehaviour
 
             StageSelectPanel panel = Instantiate(_panelPrefab, _contentRoot);
             panel.SetData(stage, unlocked, OnClickStage);
+
+            _spawnedPanels.Add(panel);
         }
     }
 
@@ -112,13 +123,13 @@ public class StageSelect : MonoBehaviour
         if (towerId == 5001 && stageIndex == 1)
             return true;
 
-        // 같은 탑 내부
+        // 같은 탑 내부는 이전 스테이지 클리어 시 해금
         if (stageIndex > 1)
         {
             return GameManager.Instance.GetMaxClearStageIndex(towerId) >= stageIndex - 1;
         }
 
-        // 이전 탑 마지막 스테이지를 클리어해야 다음 탑 1스테이지 오픈
+        // 다음 탑의 1스테이지는 이전 탑 마지막 스테이지 클리어 시 해금
         int prevTowerId = towerId - 1;
         int lastStageIndex = GetLastStageIndex(prevTowerId);
 
@@ -136,6 +147,69 @@ public class StageSelect : MonoBehaviour
         }
 
         return max;
+    }
+
+    private int GetHighestUnlockedStageIndex()
+    {
+        int highestUnlocked = 0;
+
+        for (int i = 0; i < _towerStages.Count; i++)
+        {
+            if (IsStageUnlocked(_towerStages[i]))
+            {
+                highestUnlocked = Mathf.Max(highestUnlocked, _towerStages[i].stage_index);
+            }
+        }
+
+        return highestUnlocked;
+    }
+
+    private int GetPanelIndexByStageIndex(int stageIndex)
+    {
+        for (int i = 0; i < _towerStages.Count; i++)
+        {
+            if (_towerStages[i].stage_index == stageIndex)
+                return i;
+        }
+
+        return -1;
+    }
+
+    private IEnumerator CoScrollToCurrentOpenStage()
+    {
+        yield return null;
+        Canvas.ForceUpdateCanvases();
+        LayoutRebuilder.ForceRebuildLayoutImmediate(_contentRoot);
+
+        if (_scrollRect == null || _viewport == null || _spawnedPanels.Count == 0)
+            yield break;
+
+        int highestUnlockedStage = GetHighestUnlockedStageIndex();
+        int panelIndex = GetPanelIndexByStageIndex(highestUnlockedStage);
+
+        if (panelIndex < 0 || panelIndex >= _spawnedPanels.Count)
+            yield break;
+
+        RectTransform target = _spawnedPanels[panelIndex].GetComponent<RectTransform>();
+
+        float contentHeight = _contentRoot.rect.height;
+        float viewportHeight = _viewport.rect.height;
+        float hiddenHeight = Mathf.Max(0f, contentHeight - viewportHeight);
+
+        if (hiddenHeight <= 0f)
+        {
+            _scrollRect.verticalNormalizedPosition = 1f;
+            yield break;
+        }
+
+        float targetTop = Mathf.Abs(target.anchoredPosition.y);
+
+        // 0.5면 중앙, 0.6이면 중앙보다 약간 아래
+        float desiredOffset = viewportHeight * 0.75f;
+
+        float targetScrollY = Mathf.Clamp(targetTop - desiredOffset, 0f, hiddenHeight);
+
+        _contentRoot.anchoredPosition = new Vector2(_contentRoot.anchoredPosition.x, targetScrollY);
     }
 
     private void OnClickStage(StageTable stage)
