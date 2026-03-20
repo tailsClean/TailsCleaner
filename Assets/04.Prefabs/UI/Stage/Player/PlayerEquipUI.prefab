@@ -417,6 +417,7 @@ GameObject:
   - component: {fileID: 5268725075699825564}
   - component: {fileID: 8371807857156316082}
   - component: {fileID: 8657497330706302143}
+  - component: {fileID: 5884861650368964576}
   m_Layer: 5
   m_Name: PlayerEquipUI
   m_TagString: Untagged
@@ -520,6 +521,31 @@ MonoBehaviour:
   - {fileID: 5768497080311569239}
   - {fileID: 5048959203877355736}
   _popUp: {fileID: 2858417285904675358}
+  _onChangeLoadout: {fileID: 0}
+--- !u!114 &5884861650368964576
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1520803279633926926}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bfcd0e22a6b11024ab00eb654f4ba437, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PlayerLoadoutUI
+  <Group>k__BackingField: 9
+  _exitButton:
+    <PushButton>k__BackingField: {fileID: 0}
+    <OpenGroup>k__BackingField: 4
+  _loadoutSlots:
+  - {fileID: 6005164644491434913}
+  - {fileID: 7229751410131613527}
+  - {fileID: 2413273109424849926}
+  - {fileID: 3222630477574923031}
+  _loadoutRelicSlots: []
+  _popUpButtons: []
+  _popUp: {fileID: 0}
   _onChangeLoadout: {fileID: 0}
 --- !u!1 &3060927512551625986
 GameObject:
@@ -942,6 +968,7 @@ GameObject:
   - component: {fileID: 862969450647454171}
   - component: {fileID: 1869288404945095764}
   - component: {fileID: 5048959203877355736}
+  - component: {fileID: 3222630477574923031}
   m_Layer: 5
   m_Name: ShoseUI
   m_TagString: Untagged
@@ -1064,6 +1091,19 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls: []
+--- !u!114 &3222630477574923031
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4124531659681101369}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2430af02565869a4892d927c88b1ddf7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::UISlot
+  _amountText: {fileID: 2717608195233822177}
 --- !u!1 &4173511742620314005
 GameObject:
   m_ObjectHideFlags: 0
@@ -1213,6 +1253,7 @@ GameObject:
   - component: {fileID: 8994246389288887720}
   - component: {fileID: 4219318964147927931}
   - component: {fileID: 5768497080311569239}
+  - component: {fileID: 2413273109424849926}
   m_Layer: 5
   m_Name: CloakUI
   m_TagString: Untagged
@@ -1335,6 +1376,19 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls: []
+--- !u!114 &2413273109424849926
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4224596414202884727}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2430af02565869a4892d927c88b1ddf7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::UISlot
+  _amountText: {fileID: 2607994690630501763}
 --- !u!1 &4528924097609201115
 GameObject:
   m_ObjectHideFlags: 0
@@ -1348,6 +1402,7 @@ GameObject:
   - component: {fileID: 1807897498001017198}
   - component: {fileID: 7604479633557010909}
   - component: {fileID: 4869306274144141909}
+  - component: {fileID: 7229751410131613527}
   m_Layer: 5
   m_Name: WeaponUI
   m_TagString: Untagged
@@ -1470,6 +1525,19 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls: []
+--- !u!114 &7229751410131613527
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4528924097609201115}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2430af02565869a4892d927c88b1ddf7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::UISlot
+  _amountText: {fileID: 3729580582227623344}
 --- !u!1 &4709204179789752787
 GameObject:
   m_ObjectHideFlags: 0
@@ -2115,6 +2183,7 @@ GameObject:
   - component: {fileID: 3296675292284444608}
   - component: {fileID: 1784308266812471227}
   - component: {fileID: 537165952195048389}
+  - component: {fileID: 6005164644491434913}
   m_Layer: 5
   m_Name: HatUI
   m_TagString: Untagged
@@ -2237,6 +2306,19 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls: []
+--- !u!114 &6005164644491434913
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8319180968098800141}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2430af02565869a4892d927c88b1ddf7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::UISlot
+  _amountText: {fileID: 6335067437315207284}
 --- !u!1001 &731976469583861435
 PrefabInstance:
   m_ObjectHideFlags: 0

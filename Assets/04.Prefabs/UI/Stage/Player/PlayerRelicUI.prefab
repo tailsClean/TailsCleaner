@@ -554,6 +554,7 @@ GameObject:
   - component: {fileID: 4457641960782661837}
   - component: {fileID: 4271689776141834648}
   - component: {fileID: 543777098158429385}
+  - component: {fileID: 7001723938549215993}
   m_Layer: 5
   m_Name: RelicUI (1)
   m_TagString: Untagged
@@ -676,6 +677,19 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls: []
+--- !u!114 &7001723938549215993
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2675869478192710054}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2430af02565869a4892d927c88b1ddf7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::UISlot
+  _amountText: {fileID: 3209008651608369272}
 --- !u!1 &4656464396803824204
 GameObject:
   m_ObjectHideFlags: 0
@@ -825,6 +839,7 @@ GameObject:
   - component: {fileID: 5654679384655980547}
   - component: {fileID: 2155528582858695983}
   - component: {fileID: 573331613310611899}
+  - component: {fileID: 5763663264175968975}
   m_Layer: 5
   m_Name: RelicUI (3)
   m_TagString: Untagged
@@ -947,6 +962,19 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls: []
+--- !u!114 &5763663264175968975
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5235614536374558825}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2430af02565869a4892d927c88b1ddf7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::UISlot
+  _amountText: {fileID: 5212568004787002578}
 --- !u!1 &5645685592288569201
 GameObject:
   m_ObjectHideFlags: 0
@@ -1035,6 +1063,7 @@ GameObject:
   - component: {fileID: 2501371865263109421}
   - component: {fileID: 6320381923501562722}
   - component: {fileID: 5808270747863898824}
+  - component: {fileID: 5673284065638302905}
   m_Layer: 5
   m_Name: PlayerRelicUI
   m_TagString: Untagged
@@ -1135,6 +1164,30 @@ MonoBehaviour:
   - {fileID: 573331613310611899}
   _popUp: {fileID: 976537949849923968}
   _onChangeLoadout: {fileID: 11400000, guid: 65741d46afe83434f8e50560a43fcc55, type: 2}
+--- !u!114 &5673284065638302905
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5656920318152907906}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bfcd0e22a6b11024ab00eb654f4ba437, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PlayerLoadoutUI
+  <Group>k__BackingField: 10
+  _exitButton:
+    <PushButton>k__BackingField: {fileID: 0}
+    <OpenGroup>k__BackingField: 0
+  _loadoutSlots: []
+  _loadoutRelicSlots:
+  - {fileID: 7001723938549215993}
+  - {fileID: 6833090152971694245}
+  - {fileID: 5763663264175968975}
+  _popUpButtons: []
+  _popUp: {fileID: 0}
+  _onChangeLoadout: {fileID: 0}
 --- !u!1 &5892176004958502801
 GameObject:
   m_ObjectHideFlags: 0
@@ -1783,6 +1836,7 @@ GameObject:
   - component: {fileID: 1641586907070204510}
   - component: {fileID: 1833708373605073904}
   - component: {fileID: 7930904535989787503}
+  - component: {fileID: 6833090152971694245}
   m_Layer: 5
   m_Name: RelicUI (2)
   m_TagString: Untagged
@@ -1905,6 +1959,19 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls: []
+--- !u!114 &6833090152971694245
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8436161927663998099}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2430af02565869a4892d927c88b1ddf7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::UISlot
+  _amountText: {fileID: 5653476526007364096}
 --- !u!1001 &3945490559258254723
 PrefabInstance:
   m_ObjectHideFlags: 0

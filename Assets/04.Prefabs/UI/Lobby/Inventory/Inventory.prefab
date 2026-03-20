@@ -1342,7 +1342,6 @@ RectTransform:
   - {fileID: 292780130302015354}
   - {fileID: 2213694087481240761}
   - {fileID: 6556528754975878008}
-  - {fileID: 5146836478786908768}
   - {fileID: 6156329366106450931}
   - {fileID: 3143602408920947280}
   - {fileID: 8874065201109027076}
@@ -6702,6 +6701,17 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 12648cd923507644c89237ce3a2bfb3a, type: 3}
+--- !u!114 &1157723605548375027 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 6007653991620381243, guid: 12648cd923507644c89237ce3a2bfb3a, type: 3}
+  m_PrefabInstance: {fileID: 4849943616719032776}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 32682367a808d864bbd6e7d7e8385dc3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::SellingItemPopup
 --- !u!224 &8874065201109027076 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 4064909114113022156, guid: 12648cd923507644c89237ce3a2bfb3a, type: 3}
@@ -9687,7 +9697,7 @@ PrefabInstance:
     - target: {fileID: 2190940485608944245, guid: d237d99fb41600243a24f2e07869d530, type: 3}
       propertyPath: _sellingPopup
       value: 
-      objectReference: {fileID: 3196201922987319447}
+      objectReference: {fileID: 1157723605548375027}
     - target: {fileID: 2190940485608944245, guid: d237d99fb41600243a24f2e07869d530, type: 3}
       propertyPath: _sellingButton
       value: 
@@ -11066,124 +11076,3 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2430af02565869a4892d927c88b1ddf7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::InventorySlot
---- !u!1001 &9152521497437924012
-PrefabInstance:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    serializedVersion: 3
-    m_TransformParent: {fileID: 7937123196578195409}
-    m_Modifications:
-    - target: {fileID: 4064909114113022156, guid: 12648cd923507644c89237ce3a2bfb3a, type: 3}
-      propertyPath: m_Pivot.x
-      value: 0.5
-      objectReference: {fileID: 0}
-    - target: {fileID: 4064909114113022156, guid: 12648cd923507644c89237ce3a2bfb3a, type: 3}
-      propertyPath: m_Pivot.y
-      value: 0.5
-      objectReference: {fileID: 0}
-    - target: {fileID: 4064909114113022156, guid: 12648cd923507644c89237ce3a2bfb3a, type: 3}
-      propertyPath: m_AnchorMax.x
-      value: 0.5
-      objectReference: {fileID: 0}
-    - target: {fileID: 4064909114113022156, guid: 12648cd923507644c89237ce3a2bfb3a, type: 3}
-      propertyPath: m_AnchorMax.y
-      value: 0.5
-      objectReference: {fileID: 0}
-    - target: {fileID: 4064909114113022156, guid: 12648cd923507644c89237ce3a2bfb3a, type: 3}
-      propertyPath: m_AnchorMin.x
-      value: 0.5
-      objectReference: {fileID: 0}
-    - target: {fileID: 4064909114113022156, guid: 12648cd923507644c89237ce3a2bfb3a, type: 3}
-      propertyPath: m_AnchorMin.y
-      value: 0.5
-      objectReference: {fileID: 0}
-    - target: {fileID: 4064909114113022156, guid: 12648cd923507644c89237ce3a2bfb3a, type: 3}
-      propertyPath: m_SizeDelta.x
-      value: 800
-      objectReference: {fileID: 0}
-    - target: {fileID: 4064909114113022156, guid: 12648cd923507644c89237ce3a2bfb3a, type: 3}
-      propertyPath: m_SizeDelta.y
-      value: 700
-      objectReference: {fileID: 0}
-    - target: {fileID: 4064909114113022156, guid: 12648cd923507644c89237ce3a2bfb3a, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4064909114113022156, guid: 12648cd923507644c89237ce3a2bfb3a, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4064909114113022156, guid: 12648cd923507644c89237ce3a2bfb3a, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4064909114113022156, guid: 12648cd923507644c89237ce3a2bfb3a, type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 4064909114113022156, guid: 12648cd923507644c89237ce3a2bfb3a, type: 3}
-      propertyPath: m_LocalRotation.x
-      value: -0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4064909114113022156, guid: 12648cd923507644c89237ce3a2bfb3a, type: 3}
-      propertyPath: m_LocalRotation.y
-      value: -0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4064909114113022156, guid: 12648cd923507644c89237ce3a2bfb3a, type: 3}
-      propertyPath: m_LocalRotation.z
-      value: -0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4064909114113022156, guid: 12648cd923507644c89237ce3a2bfb3a, type: 3}
-      propertyPath: m_AnchoredPosition.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4064909114113022156, guid: 12648cd923507644c89237ce3a2bfb3a, type: 3}
-      propertyPath: m_AnchoredPosition.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4064909114113022156, guid: 12648cd923507644c89237ce3a2bfb3a, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4064909114113022156, guid: 12648cd923507644c89237ce3a2bfb3a, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4064909114113022156, guid: 12648cd923507644c89237ce3a2bfb3a, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4578664964593848911, guid: 12648cd923507644c89237ce3a2bfb3a, type: 3}
-      propertyPath: m_Name
-      value: EquipMaterial SellingUI
-      objectReference: {fileID: 0}
-    - target: {fileID: 4578664964593848911, guid: 12648cd923507644c89237ce3a2bfb3a, type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6007653991620381243, guid: 12648cd923507644c89237ce3a2bfb3a, type: 3}
-      propertyPath: _equipStatusPopup
-      value: 
-      objectReference: {fileID: 9006765406643132210}
-    m_RemovedComponents: []
-    m_RemovedGameObjects: []
-    m_AddedGameObjects: []
-    m_AddedComponents: []
-  m_SourcePrefab: {fileID: 100100000, guid: 12648cd923507644c89237ce3a2bfb3a, type: 3}
---- !u!114 &3196201922987319447 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 6007653991620381243, guid: 12648cd923507644c89237ce3a2bfb3a, type: 3}
-  m_PrefabInstance: {fileID: 9152521497437924012}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 32682367a808d864bbd6e7d7e8385dc3, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::SellingItemPopup
---- !u!224 &5146836478786908768 stripped
-RectTransform:
-  m_CorrespondingSourceObject: {fileID: 4064909114113022156, guid: 12648cd923507644c89237ce3a2bfb3a, type: 3}
-  m_PrefabInstance: {fileID: 9152521497437924012}
-  m_PrefabAsset: {fileID: 0}
