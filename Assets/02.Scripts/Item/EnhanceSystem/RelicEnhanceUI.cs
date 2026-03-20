@@ -40,7 +40,6 @@ public class RelicEnhanceUI : EnhanceSystemUI
         foreach(var relic in relicInventory.Keys)
         {
             ITEM_TYPE type = ItemDB.GetData(relic.ID).Type;
-            //ITEM_TYPE type = ItemDB.GetData<RelicData>(relic.ID).Type;
             if (type != ITEM_TYPE.Relic)
                 continue;
 

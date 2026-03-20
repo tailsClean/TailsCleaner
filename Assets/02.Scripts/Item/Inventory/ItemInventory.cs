@@ -142,7 +142,7 @@ public class ItemInventory : MonoBehaviour
 
 
     // 스택형 아이템 사용
-    public bool UseStakItem(int id, int amount) => 
+    public bool UseStackItem(int id, int amount) => 
         UseItem(id, ItemInstance.NoneEnhanceLevel, GRADE.None, amount);
 
 
@@ -229,7 +229,6 @@ public class ItemInventory : MonoBehaviour
             if (isItem)
                 return item.Key;
         }
-
         return ItemInstance.None;
     }
 

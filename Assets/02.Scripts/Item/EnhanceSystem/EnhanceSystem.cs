@@ -31,8 +31,7 @@ public class EnhanceSystem : MonoBehaviour
     {
         EquipmentBase equipment = _playerLoadout.MyEquipments[part];
 
-        OnEnhance -= _settingItem != null ? _settingItem.OnEnhance : null;
-        //OnEnhance -= SetRelicInventory;
+        //OnEnhance -= _settingItem != null ? _settingItem.OnEnhance : null;
         _settingItem = equipment;
 
         _enhanceInfo = new EnhancingInfo(equipment.Data.Equipmnet.id, equipment.EnhanceLevel);
@@ -40,7 +39,7 @@ public class EnhanceSystem : MonoBehaviour
         _bluePrintID = equipment.EnhanceData.blueprint_id;
         _bluePrintCost = equipment.EnhanceData.cost_blueprint;
 
-        OnEnhance += _settingItem.OnEnhance;
+        //OnEnhance += _settingItem.OnEnhance;
         OnSetEquipment?.Invoke(_enhanceInfo);
     }
 
@@ -49,7 +48,7 @@ public class EnhanceSystem : MonoBehaviour
     {
         ItemInstance item = _inventory.GetRelic(id, enhanceLevel);
         _enhanceInfo = new EnhancingInfo(id, enhanceLevel, item);
-        OnEnhance -= _settingItem != null ? _settingItem.OnEnhance : null;
+        //OnEnhance -= _settingItem != null ? _settingItem.OnEnhance : null;
         
 
         _bluePrintID = _enhanceInfo.EnhanceData.BluePrintID;
@@ -67,11 +66,23 @@ public class EnhanceSystem : MonoBehaviour
         if (_isEnhancable)
         {
             _currency.UseGold(_enhanceInfo.EnhanceData.CostGold);
-            _inventory.UseStakItem(_bluePrintID, _bluePrintCost);
+            _inventory.UseStackItem(_bluePrintID, _bluePrintCost);
 
             _enhanceInfo.EnhanceLevel = _enhanceInfo.EnhanceLevel + 1;
-            _inventory.RemoveRelic(_enhanceInfo.ItemID, _enhanceInfo.EnhanceLevel);
-            _inventory.GainRelic(_enhanceInfo.ItemID, _enhanceInfo.EnhanceLevel);
+            switch(_enhanceInfo.ItemType)
+            {
+                case ITEM_TYPE.Equipment:
+                    if (ItemDB.TryGetData<DefaultEquipData>(_enhanceInfo.ItemID, out var equipData))
+                        _playerLoadout.MyEquipments[equipData.Equipmnet.part].OnEnhance(_enhanceInfo);
+                    break;
+
+                case ITEM_TYPE.Relic:
+                    var itemInstance = _enhanceInfo.InventoryKey;
+                    _inventory.RemoveRelic(itemInstance.ID, itemInstance.EnhanceLevel);
+                    _inventory.GainRelic(itemInstance.ID, itemInstance.EnhanceLevel + 1);
+                    break;
+            }
+            
 
             OnEnhance?.Invoke(_enhanceInfo);
             Debug.Log("강화성공!");

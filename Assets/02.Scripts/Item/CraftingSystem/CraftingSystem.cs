@@ -50,6 +50,9 @@ public partial class CraftingSystem : MonoBehaviour
         _mainCraftSlot = mainEquip;
         _resourceCraftSlots = new CraftingInfo[mainEquip.CostCount];
 
+        if (!mainEquip.IsLoadout)
+            _inventory.RemoveEquipment(mainEquip.InventoryKey);
+
         OnSetEquipment?.Invoke();
     }
 
@@ -71,6 +74,9 @@ public partial class CraftingSystem : MonoBehaviour
             if(slot == null)
             {
                 _resourceCraftSlots[i] = resourceEquip;
+
+                if (!resourceEquip.IsLoadout)
+                    _inventory.RemoveEquipment(resourceEquip.InventoryKey);
                 OnSetEquipment?.Invoke();
                 return;
             }
@@ -78,7 +84,7 @@ public partial class CraftingSystem : MonoBehaviour
         Debug.Log("<color=yellow>재료 장비칸이 가득 찼습니다.</color>");
     }
     // 재료의 등급 확인
-    private bool CheckGrade(CraftingInfo resourceEquip) => _mainCraftSlot.Grad == resourceEquip.Grad;
+    private bool CheckGrade(CraftingInfo resourceEquip) => _mainCraftSlot.Grade == resourceEquip.Grade;
     // 재료의 부위 확인
     private bool CheckParts(CraftingInfo resourceEquip) => _mainCraftSlot.Parts == resourceEquip.Parts;
 
@@ -97,7 +103,7 @@ public partial class CraftingSystem : MonoBehaviour
 
         
 
-        _mainCraftSlot.Grad++;
+        _mainCraftSlot.Grade++;
         if(_mainCraftSlot.IsLoadout)
         {
             var parts = _mainCraftSlot.Parts;
@@ -116,13 +122,16 @@ public partial class CraftingSystem : MonoBehaviour
     private void EquipRemoveAndCreate()
     {
         var originalEquip = _mainCraftSlot.InventoryKey;
-        _inventory.RemoveEquipment(originalEquip.ID, originalEquip.Grade);
+        
         _inventory.GainEquipment(originalEquip.ID, originalEquip.Grade + 1);
-
-        foreach(var slot in _resourceCraftSlots)
+        ReturnResourceItem();
+    }
+    
+    private void ReturnResourceItem()
+    {
+        foreach (var slot in _resourceCraftSlots)
         {
             ItemInstance resource = slot.InventoryKey;
-            _inventory.RemoveEquipment(resource.ID, resource.Grade);
             _inventory.GainEquipment(resource.ID, resource.Grade);
         }
     }
@@ -134,8 +143,17 @@ public partial class CraftingSystem : MonoBehaviour
     {
         if(_mainCraftSlot != null &&  _mainCraftSlot.IsEquals(equip.InventoryKey))
         {
+            if(!equip.IsLoadout)
+            {
+                var originalEquip = _mainCraftSlot.InventoryKey;
+                _inventory.GainEquipment(originalEquip.ID, originalEquip.Grade);
+            }
+
+            //_inventory.GainEquipment(equip.ItemID, equip.Grade);
+
             _mainCraftSlot = null;
             _resourceCraftSlots = null;
+
         }
     }
 
@@ -150,6 +168,7 @@ public partial class CraftingSystem : MonoBehaviour
             var slot = _resourceCraftSlots[i - 1];
             if (slot != null && slot.IsEquals(equip.InventoryKey))
             {
+                _inventory.GainEquipment(slot.InventoryKey.ID, slot.InventoryKey.Grade);
                 _resourceCraftSlots[i - 1] = null;
                 return;
             }
@@ -178,7 +197,7 @@ public class CraftingInfo
 {
     public readonly ItemInstance InventoryKey;
     public readonly int ItemID;
-    public GRADE Grad;
+    public GRADE Grade;
     public int CostCount;
     public bool IsMaxGrade;
     public readonly PART Parts;
@@ -192,10 +211,10 @@ public class CraftingInfo
     {
         InventoryKey = inventoryKey;
         ItemID = inventoryKey.ID;
-        Grad = inventoryKey.Grade;
+        Grade = inventoryKey.Grade;
         ItemDB.TryGetData<MaterialEquipData>(ItemID, out var result);
         CostCount = result.EquipMatter.cost_count;
-        IsMaxGrade = Grad == GRADE.None - 1;
+        IsMaxGrade = Grade == GRADE.None - 1;
         Parts = result.EquipMatter.part_type;
         IsLoadout = false;
     }
@@ -207,10 +226,10 @@ public class CraftingInfo
     public CraftingInfo(EquipmentBase equipment)
     {
         ItemID = equipment.Data.Equipmnet.id;
-        Grad = equipment.GradeData.grade;
+        Grade = equipment.GradeData.grade;
         ItemDB.TryGetData<DefaultEquipData>(ItemID, out var result);
-        CostCount = result.Grades[(int)Grad].cost_count;
-        IsMaxGrade = result.Grades[(int)Grad].is_max_grade;
+        CostCount = result.Grades[(int)Grade].cost_count;
+        IsMaxGrade = result.Grades[(int)Grade].is_max_grade;
         Parts = result.Equipmnet.part;
         IsLoadout = true;
     }
