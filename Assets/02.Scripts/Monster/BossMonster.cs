@@ -114,6 +114,10 @@ public class BossMonster : MonsterBase
     private bool isFleeing = false;
     private bool isBlinking = false;
     private bool isWaitingBlink = false;
+
+    private bool isDataInitialized = false;
+    private bool isWaitingForMonsterId = false;
+
     private Vector2 currentFleeTarget;
 
     private BossMonsterShooter shooter;
@@ -153,19 +157,166 @@ public class BossMonster : MonsterBase
         shooter = GetComponent<BossMonsterShooter>();
     }
 
+    //public override void OnSpawn()
+    //{
+    //    base.OnSpawn();
+
+    //    ResetRuntimeState();
+
+    //    Debug.Log($"[BossMonster] OnSpawn / MonsterId:{MonsterId}");
+
+    //    if (MonsterId <= 0)
+    //    {
+    //        Debug.LogError($"[BossMonster] 유효하지 않은 MonsterId: {MonsterId}");
+    //        return;
+    //    }
+
+    //    MonsterSO monsterSO = DataManager.Instance.GetSOData<MonsterSO>();
+    //    if (monsterSO == null)
+    //    {
+    //        Debug.LogError("[BossMonster] MonsterSO를 찾을 수 없습니다.");
+    //        return;
+    //    }
+
+    //    Monster monsterData = monsterSO.GetById(MonsterId);
+    //    if (monsterData == null)
+    //    {
+    //        Debug.LogError($"[BossMonster] 몬스터 데이터 없음. MonsterId:{MonsterId}");
+    //        return;
+    //    }
+
+    //    pattern_group_id = monsterData.pattern_group_id;
+
+    //    if (pattern_group_id <= 0)
+    //    {
+    //        Debug.LogWarning($"[BossMonster] pattern_group_id 없음. 기본 보스 동작 사용 / MonsterId:{MonsterId}");
+    //        return;
+    //    }
+
+    //    PatternGroupCompositionSO compositionSO = DataManager.Instance.GetSOData<PatternGroupCompositionSO>();
+    //    if (compositionSO == null)
+    //    {
+    //        Debug.LogError("[BossMonster] PatternGroupCompositionSO를 찾을 수 없습니다.");
+    //        return;
+    //    }
+
+    //    List<PatternGroupComposition> compositionList = compositionSO.GetAllByGroupId(pattern_group_id);
+    //    if (compositionList == null || compositionList.Count == 0)
+    //    {
+    //        Debug.LogError($"[BossMonster] composition 데이터 없음. pattern_group_id:{pattern_group_id}");
+    //        return;
+    //    }
+
+    //    PatternSO patternSO = DataManager.Instance.GetSOData<PatternSO>();
+    //    if (patternSO == null)
+    //    {
+    //        Debug.LogError("[BossMonster] PatternSO를 찾을 수 없습니다.");
+    //        return;
+    //    }
+
+    //    // 보스는 여러 패턴을 동시에 가질 수 있음
+    //    foreach (var composition in compositionList)
+    //    {
+    //        Pattern patternData = patternSO.GetById(composition.pattern_id);
+    //        if (patternData == null)
+    //            continue;
+
+    //        Debug.Log($"[Boss Pattern 확인] pattern_id:{patternData.pattern_id}, type:{patternData.pattern_type}, logic:{patternData.pattern_logic_type}");
+
+    //        switch (patternData.pattern_type)
+    //        {
+    //            case PATTERN_TYPE.Move:
+    //                ApplyBossMovePattern(patternData);
+    //                break;
+
+    //            case PATTERN_TYPE.Projectile:
+    //                ApplyBossProjectilePattern(patternData, composition.pattern_cooldown);
+    //                break;
+
+    //            case PATTERN_TYPE.Barricade:
+    //                ApplyBossBarricadePattern(patternData);
+    //                break;
+
+    //            case PATTERN_TYPE.Trigger:
+    //                Debug.Log($"[BossMonster] Trigger 패턴 감지: {patternData.pattern_logic_type} (아직 미연동)");
+    //                break;
+
+    //            case PATTERN_TYPE.Area:
+    //                ApplyBossAreaPattern(patternData, composition.pattern_cooldown);
+    //                break;
+
+    //            case PATTERN_TYPE.Summon:
+    //                Debug.Log($"[BossMonster] Summon 패턴 감지: {patternData.pattern_logic_type} (아직 미연동)");
+    //                break;
+
+    //            case PATTERN_TYPE.Layser:
+    //                Debug.Log($"[BossMonster] Laser 패턴 감지: {patternData.pattern_logic_type} (아직 미연동)");
+    //                break;
+
+    //            case PATTERN_TYPE.SelfDestruct:
+    //                Debug.Log($"[BossMonster] SelfDestruct 패턴 감지: {patternData.pattern_logic_type} (보스는 현재 미사용)");
+    //                break;
+
+    //        }
+    //    }
+
+    //    // 투사체 패턴이 하나도 없으면 Shooter 끄기
+    //    if (shooter != null && !useOrbit && !IsShooterConfigured())
+    //    {
+    //        shooter.DisableShooter();
+    //    }
+
+    //    jumpCooldownTimer = pattern_cooldown;
+    //    blinkCooldownTimer = blink_cooldown;
+    //    barricadeTimer = barricadeInterval;
+
+    //    // Orbit은 ApplyBossProjectilePattern()에서 직접 세팅됨
+    //    if (!useOrbit)
+    //        orbitCooldownTimer = 0f;
+
+    //    Debug.Log(
+    //        $"[Boss 패턴 적용 완료] " +
+    //        $"MonsterId:{MonsterId}, PatternGroupId:{pattern_group_id}, " +
+    //        $"Jump:{useJump}, Flee:{useFlee}, Blink:{useBlink}, Barricade:{useBarricade}, Orbit:{useOrbit}"
+    //    );
+    //}
+
     public override void OnSpawn()
     {
         base.OnSpawn();
 
         ResetRuntimeState();
 
+        isDataInitialized = false;
+        isWaitingForMonsterId = false;
+
         Debug.Log($"[BossMonster] OnSpawn / MonsterId:{MonsterId}");
+
+        if (MonsterId <= 0)
+        {
+            Debug.LogWarning($"[BossMonster] OnSpawn 시점 MonsterId 미설정. 대기 후 초기화 예정 / MonsterId:{MonsterId}");
+            isWaitingForMonsterId = true;
+            return;
+        }
+
+        InitializeBossData();
+    }
+
+    private void InitializeBossData()
+    {
+        if (isDataInitialized)
+            return;
 
         if (MonsterId <= 0)
         {
             Debug.LogError($"[BossMonster] 유효하지 않은 MonsterId: {MonsterId}");
             return;
         }
+
+        isDataInitialized = true;
+        isWaitingForMonsterId = false;
+
+        Debug.Log($"[BossMonster] InitializeBossData / MonsterId:{MonsterId}");
 
         MonsterSO monsterSO = DataManager.Instance.GetSOData<MonsterSO>();
         if (monsterSO == null)
@@ -210,7 +361,6 @@ public class BossMonster : MonsterBase
             return;
         }
 
-        // 보스는 여러 패턴을 동시에 가질 수 있음
         foreach (var composition in compositionList)
         {
             Pattern patternData = patternSO.GetById(composition.pattern_id);
@@ -252,11 +402,9 @@ public class BossMonster : MonsterBase
                 case PATTERN_TYPE.SelfDestruct:
                     Debug.Log($"[BossMonster] SelfDestruct 패턴 감지: {patternData.pattern_logic_type} (보스는 현재 미사용)");
                     break;
-
             }
         }
 
-        // 투사체 패턴이 하나도 없으면 Shooter 끄기
         if (shooter != null && !useOrbit && !IsShooterConfigured())
         {
             shooter.DisableShooter();
@@ -266,14 +414,13 @@ public class BossMonster : MonsterBase
         blinkCooldownTimer = blink_cooldown;
         barricadeTimer = barricadeInterval;
 
-        // Orbit은 ApplyBossProjectilePattern()에서 직접 세팅됨
         if (!useOrbit)
             orbitCooldownTimer = 0f;
 
         Debug.Log(
             $"[Boss 패턴 적용 완료] " +
             $"MonsterId:{MonsterId}, PatternGroupId:{pattern_group_id}, " +
-            $"Jump:{useJump}, Flee:{useFlee}, Blink:{useBlink}, Barricade:{useBarricade}, Orbit:{useOrbit}"
+            $"Jump:{useJump}, Flee:{useFlee}, Blink:{useBlink}, Barricade:{useBarricade}, Orbit:{useOrbit}, Zigzag:{useZigzag}"
         );
     }
 
@@ -297,10 +444,25 @@ public class BossMonster : MonsterBase
             shooter.DisableShooter();
 
         ResetRuntimeState();
+
+        isDataInitialized = false;
+        isWaitingForMonsterId = false;
     }
 
     protected override void FixedUpdate()
     {
+        if (!isDataInitialized)
+        {
+            if (MonsterId > 0)
+            {
+                InitializeBossData();
+            }
+            else
+            {
+                return;
+            }
+        }
+
         if (target == null || this.hp <= 0)
         {
             rb2D.linearVelocity = Vector2.zero;
