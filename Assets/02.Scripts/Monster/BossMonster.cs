@@ -11,11 +11,13 @@ public class BossMonster : MonsterBase
     public int pattern_group_id;
 
     [Header("--- 패턴 중첩 활성화 제어 ---")]
+    public bool useZigzag;
     public bool useJump;
     public bool useFlee;
     public bool useBlink;
     public bool useBarricade;
     public bool useOrbit;
+    
 
     private List<GameObject> activeOrbits = new List<GameObject>();
     private bool isOrbiting = false;
@@ -30,6 +32,11 @@ public class BossMonster : MonsterBase
     public float jump_height = 3.0f;
     public Transform visualChild;
     public float fleeDistance = 4.0f;
+
+    public float zigzag_width = 1.5f;
+    public float zigzagFrequency = 5.0f;
+
+    private float zigzagTimer = 0f;
 
     [Header("---UI 변경용 이벤트 채널---")]
     [SerializeField] private FloatEventChannelSO _onBossHit;
@@ -368,6 +375,11 @@ public class BossMonster : MonsterBase
                 blink_cast_time = cast_time > 0f ? cast_time : blink_cast_time;
                 blink_cooldown = pattern_cooldown > 0f ? pattern_cooldown : blink_cooldown;
                 blink_speed_multiplier = pattern_multiply > 0f ? pattern_multiply : blink_speed_multiplier;
+                break;
+
+            case "Zigzag":
+                useZigzag = true;
+                zigzag_width = patternData.zigzag_width > 0f ? patternData.zigzag_width : zigzag_width;
                 break;
 
             default:
@@ -841,6 +853,33 @@ public class BossMonster : MonsterBase
     {
         Vector2 myPos = rb2D.position;
         float dist = Vector2.Distance(target.position, myPos);
+
+        if (useZigzag)
+        {
+            zigzagTimer += Time.fixedDeltaTime;
+
+            Vector2 toTarget = (Vector2)target.position - myPos;
+            float distToTarget = toTarget.magnitude;
+
+            if (distToTarget < 0.1f)
+            {
+                rb2D.linearVelocity = Vector2.zero;
+                return;
+            }
+
+            Vector2 forward = toTarget.normalized;
+            Vector2 side = new Vector2(-forward.y, forward.x);
+
+            float sideOffset = Mathf.Sin(zigzagTimer * zigzagFrequency) * zigzag_width;
+            float damping = Mathf.Clamp01((distToTarget - 0.2f) / 0.8f);
+
+            float zigzagSpeed = move_speed * pattern_multiply;
+            Vector2 movement = (forward * zigzagSpeed) + (side * sideOffset * zigzagFrequency * damping);
+
+            rb2D.linearVelocity = movement;
+            return;
+        }
+
         Vector2 dir;
 
         if (useFlee && !isFleeing && dist < fleeDistance && fleeCooldownTimer <= 0f)
@@ -1008,6 +1047,7 @@ public class BossMonster : MonsterBase
         useBlink = false;
         useBarricade = false;
         useOrbit = false;
+        useZigzag = false;
 
         isJumping = false;
         isWaitingJump = false;
@@ -1021,6 +1061,7 @@ public class BossMonster : MonsterBase
         blinkCooldownTimer = 0f;
         barricadeTimer = 0f;
         orbitCooldownTimer = 0f;
+        zigzagTimer = 0f;
 
         pattern_cooldown = 0f;
         cast_time = 0f;
@@ -1094,6 +1135,10 @@ public class BossMonster : MonsterBase
             case "move_blink":
             case "blink":
                 return "Blink";
+
+            case "move_zigzag":
+            case "zigzag":
+                return "Zigzag";
 
             default:
                 return string.Empty;
