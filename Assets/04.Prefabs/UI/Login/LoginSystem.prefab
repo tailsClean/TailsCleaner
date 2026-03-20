@@ -266,7 +266,7 @@ GameObject:
   - component: {fileID: 4899696287343563901}
   - component: {fileID: 7902791042518585195}
   m_Layer: 5
-  m_Name: Button
+  m_Name: LoginButton
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -373,7 +373,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 4899696287343563901}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 3151480359189848193}
+        m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
+        m_MethodName: SetActive
+        m_Mode: 6
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1 &2196117119761247428
 GameObject:
   m_ObjectHideFlags: 0
@@ -609,6 +621,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2620934941053987951}
+  - component: {fileID: 1610351231425779125}
   m_Layer: 5
   m_Name: LoginSystem
   m_TagString: Untagged
@@ -637,6 +650,34 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &1610351231425779125
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3151480359189848193}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c35a1e537f81d8b4db9628e39ff04ea4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::LoginSystem
+  _login1: {fileID: 427457740965166872}
+  _login2: {fileID: 3616608624462601411}
+  _chekBoxSprites:
+    CheckImg: {fileID: 5744904054898057027, guid: a4a47de0ea4757b44b96dd2cbbe8962c, type: 3}
+    UnCheckImg: {fileID: 4822740046693585885, guid: 0407876135c373d4899ce2eb649dd755, type: 3}
+  _checkBoxes:
+  - button: {fileID: 7152835884988166356}
+    image: {fileID: 5329996397008195212}
+    isChecked: 0
+  - button: {fileID: 200500260702111956}
+    image: {fileID: 3010632906676902760}
+    isChecked: 0
+  - button: {fileID: 6799613209840559789}
+    image: {fileID: 1207813650728932904}
+    isChecked: 0
+  _loginButton: {fileID: 7902791042518585195}
 --- !u!1 &3282697391832078354
 GameObject:
   m_ObjectHideFlags: 0
@@ -865,7 +906,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &1634292846971316613
 RectTransform:
   m_ObjectHideFlags: 0
@@ -1493,8 +1534,8 @@ MonoBehaviour:
     m_FadeDuration: 0.1
   m_SpriteState:
     m_HighlightedSprite: {fileID: 0}
-    m_PressedSprite: {fileID: 5744904054898057027, guid: a4a47de0ea4757b44b96dd2cbbe8962c, type: 3}
-    m_SelectedSprite: {fileID: 5744904054898057027, guid: a4a47de0ea4757b44b96dd2cbbe8962c, type: 3}
+    m_PressedSprite: {fileID: 0}
+    m_SelectedSprite: {fileID: 0}
     m_DisabledSprite: {fileID: 0}
   m_AnimationTriggers:
     m_NormalTrigger: Normal
@@ -1702,7 +1743,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 537989118747043805}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 3616608624462601411}
+        m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
+        m_MethodName: SetActive
+        m_Mode: 6
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 1
+        m_CallState: 2
 --- !u!1 &6037266375416445830
 GameObject:
   m_ObjectHideFlags: 0
@@ -2158,8 +2211,8 @@ MonoBehaviour:
     m_FadeDuration: 0.1
   m_SpriteState:
     m_HighlightedSprite: {fileID: 0}
-    m_PressedSprite: {fileID: 5744904054898057027, guid: a4a47de0ea4757b44b96dd2cbbe8962c, type: 3}
-    m_SelectedSprite: {fileID: 5744904054898057027, guid: a4a47de0ea4757b44b96dd2cbbe8962c, type: 3}
+    m_PressedSprite: {fileID: 0}
+    m_SelectedSprite: {fileID: 0}
     m_DisabledSprite: {fileID: 0}
   m_AnimationTriggers:
     m_NormalTrigger: Normal
@@ -2280,8 +2333,8 @@ MonoBehaviour:
     m_FadeDuration: 0.1
   m_SpriteState:
     m_HighlightedSprite: {fileID: 0}
-    m_PressedSprite: {fileID: 5744904054898057027, guid: a4a47de0ea4757b44b96dd2cbbe8962c, type: 3}
-    m_SelectedSprite: {fileID: 5744904054898057027, guid: a4a47de0ea4757b44b96dd2cbbe8962c, type: 3}
+    m_PressedSprite: {fileID: 0}
+    m_SelectedSprite: {fileID: 0}
     m_DisabledSprite: {fileID: 0}
   m_AnimationTriggers:
     m_NormalTrigger: Normal

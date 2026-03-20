@@ -15,11 +15,16 @@ public class LoginSystem : MonoBehaviour
     [SerializeField] private CheckBoxSprites _chekBoxSprites;
     [SerializeField] private List<CheckBox> _checkBoxes;
 
+    [Header("로그인 버튼")]
+    [SerializeField] private Button _loginButton;
+
     private void Awake()
     {
-        foreach(var checkBox in _checkBoxes)
+        _loginButton.interactable = false;
+        foreach (var checkBox in _checkBoxes)
         {
             checkBox.checkBoxSprites = _chekBoxSprites;
+            checkBox.SetAction(ActiveLogin);
         }
     }
 
@@ -50,12 +55,30 @@ public class LoginSystem : MonoBehaviour
         }
     }
 
+    private void ActiveLogin()
+    {
+        if (_checkBoxes == null)
+            return;
+        foreach(var checkbox in _checkBoxes)
+        {
+            if (!checkbox.isChecked)
+            {
+                _loginButton.interactable = false;
+                return;
+            }
+        }
+
+        if(_loginButton == null)
+        { Debug.LogError("로그인 버튼 넣어라"); return; }
+        _loginButton.interactable = true;
+    }
+
 
     [Serializable]
     private class CheckBoxSprites
     {
         public Sprite CheckImg;
-        public Sprite UnDoCheckImg;
+        public Sprite UnCheckImg;
     }
 
     [Serializable]
@@ -65,7 +88,9 @@ public class LoginSystem : MonoBehaviour
         public Image image;
         public bool isChecked = false;
 
-        public CheckBoxSprites checkBoxSprites { get; set; }
+        public CheckBoxSprites checkBoxSprites { get; set;  }
+
+        private event Action _onChecking;
 
 
         public void SetImg() 
@@ -76,7 +101,17 @@ public class LoginSystem : MonoBehaviour
             if (!isChecked)
                 image.sprite = checkBoxSprites.CheckImg;
             else
-                image.sprite = checkBoxSprites.UnDoCheckImg;
+                image.sprite = checkBoxSprites.UnCheckImg;
+
+            isChecked = image.sprite == checkBoxSprites.CheckImg;
+
+            _onChecking?.Invoke();
+        }
+
+        public void SetAction(Action action)
+        {
+            _onChecking = null;
+            _onChecking += action;
         }
     }
 
