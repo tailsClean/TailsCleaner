@@ -8,7 +8,7 @@ public class KISTest : MonoBehaviour
     public Currency currency;
     public CraftingSystem craftingSystem;
     public int Id;
-    public int Amount = 1000;
+    public int Amount = 10000000;
 
 
     private void Start()
@@ -28,6 +28,7 @@ public class KISTest : MonoBehaviour
         GainEquip();
         Consume();
         SDFE();
+        AASD();
     }
 
 
@@ -121,7 +122,7 @@ public class KISTest : MonoBehaviour
     [ContextMenu("골드 추가 및 소모")]
     public void AASD()
     {
-        currency.GainGold(100);
+        currency.GainGold(100 + Amount);
         Debug.Log("골드 " + currency.GoldAmount);
     }
 

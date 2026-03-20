@@ -57,7 +57,7 @@ public class CraftingSystemUI : UIGroup
 
         var mainEquip = _craftingSystem.MainEquip;
         _mainEquipSlot.Init();
-        _mainEquipSlot.SetSlot(mainEquip.ItemID, mainEquip.Grad.ToString());
+        _mainEquipSlot.SetSlot(mainEquip.ItemID, mainEquip.Grade.ToString());
         _mainEquipSlot.AddListener(() => _craftingSystem.RemoveMainEquip(mainEquip));
     }
 
@@ -76,7 +76,7 @@ public class CraftingSystemUI : UIGroup
             }
             var resource = _craftingSystem.ResourceEquips[i];
             _resourceCostSlots[i].Init();
-            _resourceCostSlots[i].SetSlot(resource.ItemID, resource.Grad.ToString());
+            _resourceCostSlots[i].SetSlot(resource.ItemID, resource.Grade.ToString());
             _resourceCostSlots[i].AddListener(() => _craftingSystem.RemoveResourceEquip(resource));
         }
     }
@@ -105,7 +105,7 @@ public class CraftingSystemUI : UIGroup
         {
             var craftingInfo = new CraftingInfo(equip);
             _loadoutSlots[i].Init();
-            _loadoutSlots[i].SetSlot(craftingInfo.ItemID, craftingInfo.Grad.ToString());
+            _loadoutSlots[i].SetSlot(craftingInfo.ItemID, craftingInfo.Grade.ToString());
             _loadoutSlots[i++].AddListener(() => _craftingSystem.SetCraftSlot(craftingInfo));
         }
     }
@@ -119,7 +119,8 @@ public class CraftingSystemUI : UIGroup
         int i = 0;
         foreach(var item in _inventory.Inventory.Keys)
         {
-            var type = ItemDB.GetData<ItemManageData>(item.ID).Type;
+            var type = ItemDB.GetData(item.ID).Type;
+            //var type = ItemDB.GetData<ItemManageData>(item.ID).Type;
             if (type != ITEM_TYPE.Equipment)
                 continue;
 

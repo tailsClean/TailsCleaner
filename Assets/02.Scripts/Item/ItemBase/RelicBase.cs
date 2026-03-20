@@ -5,7 +5,11 @@ public class RelicBase : ItemBase, IEnhancement
 {
     public RelicData Data { get; private set; }
 
-    public override void Init(int id) => Data = ItemDB.GetData<RelicData>(id);
+    public override void Init(int id)
+    {
+        if (ItemDB.TryGetData<RelicData>(id, out var data))
+            Data = data;
+    }
 
 
     // 강화 데이터

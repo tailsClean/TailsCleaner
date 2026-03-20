@@ -26,7 +26,7 @@ public struct ItemInstance
     /// <param name="id"></param>
     public ItemInstance(int id)
     {
-        var item = ItemDB.GetData<ItemDataBase>(id);
+        var item = ItemDB.GetData(id);
         ID = id;
         Name = item.Name;
         EnhanceLevel = NoneEnhanceLevel;
@@ -44,7 +44,7 @@ public struct ItemInstance
     /// <param name="grad"></param>
     public ItemInstance(int id, int enhanceLevel, GRADE grad)
     {
-        var item = ItemDB.GetData<ItemDataBase>(id);
+        var item = ItemDB.GetData(id);
         ID = id;
         Name = item.Name;
         EnhanceLevel = enhanceLevel;

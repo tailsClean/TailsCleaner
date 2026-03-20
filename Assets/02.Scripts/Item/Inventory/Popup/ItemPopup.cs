@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -17,7 +18,7 @@ public class ItemPopup : MonoBehaviour
 
     [Header("유물 상태창 전용")]
     [SerializeField] private Button _releaseRelic;
-    [SerializeField] private PlayerLoadout _loadout;
+    private PlayerLoadout _loadout;
 
 
     protected ItemInstance _currentItem;
@@ -65,6 +66,9 @@ public class ItemPopup : MonoBehaviour
 
     private void SetReleaseButton()
     {
+        if (_loadout == null)
+            _loadout = ItemManager.Instance.Loadout;
+
         if (_releaseRelic == null)
             return;
 

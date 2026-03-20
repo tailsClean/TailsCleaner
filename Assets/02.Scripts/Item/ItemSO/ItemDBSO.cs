@@ -239,26 +239,24 @@ public class ItemDBSO : ScriptableObject
 
 
 
-    public T GetData<T>(int id) where T : ItemDataBase
+    public ItemDataBase GetData(int id)
     {
 
-        ItemDataBase data = null;
+        ItemDataBase data = GetDefaultEquipData(id);
 
-        data = GetDefaultEquipData(id);
-        if (data is T result) return result;
+        if(data == null)
+            data = GetMaterialEquipData(id);
 
-        data = GetMaterialEquipData(id);
-        if (data is T result2) return result2;
+        if(data == null)
+            data = GetRelicData(id);
 
-        data = GetRelicData(id);
-        if (data is T result3) return result3;
+        if(data == null)
+            data = GetItemData(id);
 
-        data = GetItemData(id);
-        if (data is T result4) return result4;
+        if(data == null)
+            Debug.LogError($"ID: {id}에 맞는 아이템은 없습니다.");
 
-        Debug.LogError($"ID: {id} / 타입: {typeof(T)}에 맞는 아이템은 없습니다.");
-
-        return null;
+        return data;
     }
 }
 
@@ -269,7 +267,7 @@ public static class ItemDB
     private static ItemDBSO _itemDB;
 
 
-    public static T GetData<T>(int id) where T : ItemDataBase
+    public static ItemDataBase GetData(int id)
     {
         if(_itemDB == null)
         {
@@ -277,8 +275,11 @@ public static class ItemDB
             Debug.Log("<color=green>ItemDB 초기화</color>");
         }
 
-        return _itemDB.GetData<T>(id);
+        return _itemDB.GetData(id);
     }
+
+
+    
 
     public static T CreateItem<T>(int id) where T: ItemBase, new()
     {
@@ -287,6 +288,22 @@ public static class ItemDB
 
         return item;
     }
+
+
+    public static bool TryGetData<T>(int id, out T result) where T : ItemDataBase
+    {
+        result = GetData(id) as T;
+        if(result == null)
+            Debug.LogError($"ID: <color=red>{id}는 {typeof(T)}</color>의 타입을 갖지 않습니다.");
+        return result != null;
+    }
+
+    public static bool TryGetData<T>(this ItemDataBase data, out T result) where T : ItemDataBase
+    { 
+        result = data as T;
+        return result != null;
+    }
+
 }
 
 public class ItemDataBase

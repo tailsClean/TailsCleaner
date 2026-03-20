@@ -60,8 +60,8 @@ public abstract class EnhanceSystemUI : UIGroup
     // 강화할 장비UI 갱신
     protected void UpdateEnhanceEquipmentUI(EnhancingInfo equipment)
     {
-        var resourceItem = ItemDB.GetData<ItemManageData>(equipment.EnhanceData.BluePrintID);
-        var goldData = ItemDB.GetData<ItemManageData>(ItemID.Gold);
+        var resourceItem = ItemDB.GetData(equipment.EnhanceData.BluePrintID);
+        var goldData = ItemDB.GetData(ItemID.Gold);
 
         if (equipment.EnhanceData.IsMaxLevel)
         {
