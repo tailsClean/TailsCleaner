@@ -26,7 +26,7 @@ public class ItemManager : MonoBehaviour
             Destroy(gameObject);
             return;
         }
-        
+        transform.SetParent(null);
         Instance = this;
         DontDestroyOnLoad(gameObject);
         #endregion
