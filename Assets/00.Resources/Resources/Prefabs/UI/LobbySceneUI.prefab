@@ -54,7 +54,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::LobbyUIContainer
   _dungeonButton: {fileID: 550948654124005497}
-  _energyPanel: {fileID: 3720678663532728648}
+  _energyPanel: {fileID: 0}
   _dungeonSelect: {fileID: 2103655650356592898}
   _stageSelect: {fileID: 2801877781154585793}
   _settingButton: {fileID: 6957117471252477147}
@@ -212,10 +212,7 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 8480175813736707722, guid: daba0a2d0a11db14b9d49f5ff7a2da89, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 3720678663532728648}
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: daba0a2d0a11db14b9d49f5ff7a2da89, type: 3}
 --- !u!224 &1798458572927555721 stripped
 RectTransform:
@@ -227,36 +224,6 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 4360672255736498108, guid: daba0a2d0a11db14b9d49f5ff7a2da89, type: 3}
   m_PrefabInstance: {fileID: 1902344984356723581}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &7874715973163942213 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 8588048773720840760, guid: daba0a2d0a11db14b9d49f5ff7a2da89, type: 3}
-  m_PrefabInstance: {fileID: 1902344984356723581}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Unity.TextMeshPro::TMPro.TextMeshProUGUI
---- !u!1 &8055213870189817335 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 8480175813736707722, guid: daba0a2d0a11db14b9d49f5ff7a2da89, type: 3}
-  m_PrefabInstance: {fileID: 1902344984356723581}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &3720678663532728648
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8055213870189817335}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1e3727cac9c3d6f4d8d7d299e5e1dec5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::EnergyPanel
-  _energyText: {fileID: 7874715973163942213}
-  _OnEnergyChange: {fileID: 0}
 --- !u!1001 &2919322594238938185
 PrefabInstance:
   m_ObjectHideFlags: 0
