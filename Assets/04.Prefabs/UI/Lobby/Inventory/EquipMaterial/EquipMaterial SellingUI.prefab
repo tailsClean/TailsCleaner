@@ -527,19 +527,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 7626293393896823798}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 4578664964593848911}
-        m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
-        m_MethodName: SetActive
-        m_Mode: 6
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
 --- !u!1 &1347100143219447292
 GameObject:
   m_ObjectHideFlags: 0
@@ -551,6 +539,7 @@ GameObject:
   - component: {fileID: 7453046910412590979}
   - component: {fileID: 5276251775233304870}
   - component: {fileID: 8928084310397877896}
+  - component: {fileID: 3997323642557684385}
   m_Layer: 5
   m_Name: Equip Img
   m_TagString: Untagged
@@ -615,6 +604,19 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!114 &3997323642557684385
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1347100143219447292}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2430af02565869a4892d927c88b1ddf7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::UISlot
+  _amountText: {fileID: 528495916928623828}
 --- !u!1 &1702516805068559048
 GameObject:
   m_ObjectHideFlags: 0
@@ -1021,19 +1023,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 7642385535335072528}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 4578664964593848911}
-        m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
-        m_MethodName: SetActive
-        m_Mode: 6
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
 --- !u!1 &3917471672655851446
 GameObject:
   m_ObjectHideFlags: 0
@@ -1188,7 +1178,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &4064909114113022156
 RectTransform:
   m_ObjectHideFlags: 0
@@ -1196,7 +1186,7 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4578664964593848911}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 1
@@ -1262,10 +1252,27 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::SellingItemPopup
   <ItemType>k__BackingField: 0
   _background: {fileID: 2804411110952832628}
-  _itemSlot: {fileID: 0}
+  _itemSlot: {fileID: 3997323642557684385}
   _openButton:
   - <PushButton>k__BackingField: {fileID: 0}
     <OpenGroup>k__BackingField: 0
+  _sellingButton: {fileID: 6278082719376757363}
+  _sellingPopup: {fileID: 0}
+  _releaseRelic: {fileID: 0}
+  _inventory: {fileID: 0}
+  _upDownButton:
+  - {fileID: 1818390268865418423}
+  - {fileID: 990021759081312333}
+  - {fileID: 1166065067846041797}
+  - {fileID: 3338307394231276814}
+  _countText:
+  - {fileID: 2842029961498183228}
+  - {fileID: 6513644328432750355}
+  _cancelSellButton: {fileID: 898908544575976112}
+  _executeSellButton: {fileID: 6278082719376757363}
+  _priceText: {fileID: 4664872883482356676}
+  _equipStatusPopup: {fileID: 0}
+  _sellingPopupImg: {fileID: 0}
 --- !u!1 &6331695989589214994
 GameObject:
   m_ObjectHideFlags: 0
@@ -1597,19 +1604,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 6520001416408482236}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 4578664964593848911}
-        m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
-        m_MethodName: SetActive
-        m_Mode: 6
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
 --- !u!1 &6612446023473129481
 GameObject:
   m_ObjectHideFlags: 0
@@ -1730,19 +1725,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 2793498849622068486}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 4578664964593848911}
-        m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
-        m_MethodName: SetActive
-        m_Mode: 6
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
 --- !u!1 &7091242224778588397
 GameObject:
   m_ObjectHideFlags: 0
@@ -1950,19 +1933,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 4396994218433893666}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 4578664964593848911}
-        m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
-        m_MethodName: SetActive
-        m_Mode: 6
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
 --- !u!1 &8284156920298695786
 GameObject:
   m_ObjectHideFlags: 0
@@ -2159,19 +2130,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 2651255667300360024}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 4578664964593848911}
-        m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
-        m_MethodName: SetActive
-        m_Mode: 6
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
 --- !u!1 &8348420738064336717
 GameObject:
   m_ObjectHideFlags: 0
