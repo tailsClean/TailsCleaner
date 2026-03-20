@@ -29,6 +29,7 @@ public class PlayerBase : MonoBehaviour, IDamageable, ISkillable, ISkillStat, IP
 
     public float CurrentHp => _hpSystem.CurrentHp;
     public float InGameMaxExp => _levelSystem.InGameMaxExp;
+    public float InGameCurrentExp => _levelSystem.InGameCurrentExp;
     public float ItemDropRate => _statCalculator.GetFinalSat(Data.ItemDropRate, PLAYER_STAT.ItemDropRate);
     public float GoldGainRate => _statCalculator.GetFinalSat(Data.GoldGainRate, PLAYER_STAT.GoldGainRate);
 
@@ -46,12 +47,12 @@ public class PlayerBase : MonoBehaviour, IDamageable, ISkillable, ISkillStat, IP
     public float PickupRange => Data.PickupRange;
     public Vector2 MoveDir => _stateMachine.MoveDir;
     public Vector2 AttackDir { get; private set; }
-    public Vector2 LastAttackDir { get; private set; }
     public float AttackSpeed  => 100f;
 
 
     private void Awake()
     {
+
         Data.Init(PlayerDataSO.PlayerID);
         _levelSystem = new PlayerLevelSystem(this);
         _myEnhancement = ItemManager.Instance.Loadout;
@@ -82,7 +83,6 @@ public class PlayerBase : MonoBehaviour, IDamageable, ISkillable, ISkillStat, IP
     private void Update()
     {
         _stateMachine.Update();
-        
     }
 
 
