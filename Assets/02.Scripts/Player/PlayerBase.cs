@@ -28,8 +28,12 @@ public class PlayerBase : MonoBehaviour, IDamageable, ISkillable, ISkillStat, IP
 
 
     public float CurrentHp => _hpSystem.CurrentHp;
+    public int InGameLevel => _levelSystem.InGameLevel;
     public float InGameMaxExp => _levelSystem.InGameMaxExp;
     public float InGameCurrentExp => _levelSystem.InGameCurrentExp;
+    public int OutGameLevel => _levelSystem.OutGameLevel;
+    public float OutGameMaxExp => _levelSystem.OutGameMaxExp;
+    public float OutGameCurrentExp => _levelSystem.OutGameCurrentExp;
     public float ItemDropRate => _statCalculator.GetFinalSat(Data.ItemDropRate, PLAYER_STAT.ItemDropRate);
     public float GoldGainRate => _statCalculator.GetFinalSat(Data.GoldGainRate, PLAYER_STAT.GoldGainRate);
 
@@ -199,8 +203,8 @@ public class PlayerBase : MonoBehaviour, IDamageable, ISkillable, ISkillStat, IP
         Heal(10);
     }
 
-
-
+    [ContextMenu("아웃경험치10증가")]
+    public void OutGameExp() => GainOutGameExp(10);
 
     // 디버그용
     [ContextMenu("스탯출력")]

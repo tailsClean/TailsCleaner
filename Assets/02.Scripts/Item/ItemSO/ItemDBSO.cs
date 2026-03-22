@@ -318,5 +318,5 @@ public class ItemDataBase
 
 public enum ITEM_TYPE
 {
-    System, Equipment, Relic, Reinforcement, Consume
+    System, Equipment, Relic, Reinforcement, Consume, None
 }
