@@ -35,10 +35,13 @@ public class SkillProjectile<TModifierData> : SkillObjectBase
         if (col.CompareTag("Monster") == false) return;
 
         // 몬스터 컴포넌트 참조 시도 후 피해
-        if (col.TryGetComponent<MonsterBase>(out MonsterBase monster))
+        if (col.TryGetComponent(out MonsterBase monster))
         {
             if (monster.hp <= 0) return;
+            // 데미지 계산 후 피해
             monster.TakeDamage(GetFinalDamage());
+            // 넉백 시도
+            TryKnockback(monster);
         }
 
         // 현재 관통 추가
