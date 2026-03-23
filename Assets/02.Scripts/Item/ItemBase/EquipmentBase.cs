@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 
@@ -14,7 +15,17 @@ public class EquipmentBase : ItemBase, IEnhancement
 
     // 강화 데이터
     public int EnhanceLevel { get; private set; } = 1;
-    public EquipEnhance EnhanceData => Data.Enhances[EnhanceLevel - 1];
+    public EquipEnhance EnhanceData
+    {
+        get
+        {
+            if (EnhanceLevel <= 0)
+                EnhanceLevel = 1;
+
+            return Data.Enhances[EnhanceLevel - 1];
+        }
+    }
+
 
     // 등급 데이터
     public GRADE Grade { get; private set; }

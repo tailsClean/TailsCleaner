@@ -121,6 +121,16 @@ public class PlayerLoadout
     // 유물 장착 메서드
     public void SetRelic(ItemInstance item)
     {
+        // 중복 착용 확인
+        foreach(var checkRelic in _outputRelics)
+        {
+            if(checkRelic.Data.UniqueID == item.ID)
+            {
+                WarningText.ShowText("착용 중인 유물입니다.");
+                Debug.Log("<color=yellow>착용 중인 유물입니다.</color>"); return; 
+            }
+        }
+
         RelicBase relic = ItemDB.CreateItem<RelicBase>(item.ID);
         relic.SetEnhanceLevel(item.EnhanceLevel);
         for (int i = 0; i < _myRelics.Count; i++)
@@ -134,6 +144,7 @@ public class PlayerLoadout
             }
         }
 
+        WarningText.ShowText("유물착용칸이 가득 찼습니다.");
         Debug.Log($"<color=yellow>유물칸이 꽉 차서 {item.Name} 장착 실패</color>");
     }
 

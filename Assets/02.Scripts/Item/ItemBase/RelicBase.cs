@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 
 
 public class RelicBase : ItemBase, IEnhancement
@@ -13,9 +14,17 @@ public class RelicBase : ItemBase, IEnhancement
 
 
     // 강화 데이터
-    public int EnhanceLevel { get; private set; }
-    public RelicEnhance EnhanceData => Data.Enhances[EnhanceLevel - 1];
+    public int EnhanceLevel { get; private set; } = 1;
+    public RelicEnhance EnhanceData
+    {
+        get
+        {
+            if(EnhanceLevel <= 0)
+                EnhanceLevel = 1;
 
+            return Data.Enhances[EnhanceLevel - 1];
+        }
+    }
 
 
     // 최종 스텟 증가량 제공 메서드(유물 증가량, 강화 증가량)

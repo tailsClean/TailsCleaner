@@ -18,6 +18,9 @@ public struct ItemEnhanceData
     public ItemEnhanceData(DefaultEquipData equip, int enhanceLevel)
     {
         var data = equip.Enhances[enhanceLevel];
+        Debug.LogError("입력레벨" + enhanceLevel);
+        Debug.LogError("강화레벨" +  data.level);
+        Debug.LogError("강화맥스" +  data.is_max_level);
         ID = equip.Equipmnet.id;
         Level = enhanceLevel;
         IsMaxLevel = data.is_max_level;

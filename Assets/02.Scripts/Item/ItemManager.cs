@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 
 
-public class ItemManager : MonoBehaviour
+public partial class ItemManager : MonoBehaviour
 {
     [Header("인벤토리/재화가방")]
     [field: SerializeField] public ItemInventory Inventory { get; private set; }

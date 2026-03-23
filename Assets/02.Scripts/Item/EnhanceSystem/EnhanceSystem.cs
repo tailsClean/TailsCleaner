@@ -49,7 +49,8 @@ public class EnhanceSystem : MonoBehaviour
         ItemInstance item = _inventory.GetRelic(id, enhanceLevel);
         _enhanceInfo = new EnhancingInfo(id, enhanceLevel, item);
         //OnEnhance -= _settingItem != null ? _settingItem.OnEnhance : null;
-        
+
+        //var enhanceData = _enhanceInfo.RelicInfo.Enhances[enhanceLevel];
 
         _bluePrintID = _enhanceInfo.EnhanceData.BluePrintID;
         _bluePrintCost = _enhanceInfo.EnhanceData.CostBluePrint;
@@ -96,6 +97,9 @@ public class EnhanceSystem : MonoBehaviour
         if (!_isEnhancable)
             return;
 
+        Debug.Log($"<color=yellow>강화레벨: {_enhanceInfo.EnhanceLevel}</color>");
+        Debug.Log($"<color=yellow>강화 표본레벨: {_enhanceInfo.EnhanceData.Level}</color>");
+        Debug.Log($"<color=yellow>최대강화인가?: {_enhanceInfo.EnhanceData.IsMaxLevel}</color>");
         _isEnhancable = !_enhanceInfo.EnhanceData.IsMaxLevel;
 
         if (!_isEnhancable)
@@ -144,6 +148,9 @@ public class EnhancingInfo
     public int ItemID;
     public int EnhanceLevel;
     public ITEM_TYPE ItemType;
+    public DefaultEquipData EquipInfo;
+    public RelicData RelicInfo;
+
     public ItemEnhanceData EnhanceData
     {
         get
@@ -154,15 +161,13 @@ public class EnhancingInfo
                     var data1 = ItemDB.GetData(ItemID);
                     if (data1.TryGetData<DefaultEquipData>(out var equipData))
                         return new ItemEnhanceData(equipData, EnhanceLevel + 1);
-
-                    return default;
+                    break;
 
                 case ITEM_TYPE.Relic:
                     var data2 = ItemDB.GetData(ItemID);
                     if (data2.TryGetData<RelicData>(out var relicData))
                         return new ItemEnhanceData(relicData, EnhanceLevel + 1);
-
-                    return default;
+                    break;
             }
             return default;
         }
@@ -191,7 +196,13 @@ public class EnhancingInfo
     {
         ItemID = itemID;
         EnhanceLevel = enhanceLevel;
-        ItemType = ItemDB.GetData(itemID).Type;
+        var itemData = ItemDB.GetData(itemID);
+        ItemType = itemData.Type;
+        if (ItemDB.TryGetData<DefaultEquipData>(itemData, out var equipData))
+            EquipInfo = equipData;
+
+        if (ItemDB.TryGetData<RelicData>(itemData, out var relicData))
+            RelicInfo = relicData;
     }
 
     public bool IsEquals(ItemInstance item)

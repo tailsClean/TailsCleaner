@@ -685,6 +685,25 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 8156760126618120044, guid: 7bd74e2913a4ea44aa66ef718bc20d47, type: 3}
   m_PrefabInstance: {fileID: 496876320}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &492030064 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 8755340304995332221, guid: d4ea12e617ff6da40a91645cfee22035, type: 3}
+  m_PrefabInstance: {fileID: 2022660194}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &492030069
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 492030064}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 83e3dbb73e5405f47b784f9f7aa7dc44, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::CheckingLoadout
+  equips: []
+  relics: []
 --- !u!1001 &496876320
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1383,6 +1402,14 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 2458115226853915091, guid: d4ea12e617ff6da40a91645cfee22035, type: 3}
+      propertyPath: _uiGroupList.Array.size
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 2458115226853915091, guid: d4ea12e617ff6da40a91645cfee22035, type: 3}
+      propertyPath: '_uiGroupList.Array.data[5]'
+      value: 
+      objectReference: {fileID: 2087095297}
     - target: {fileID: 3337194189212659789, guid: d4ea12e617ff6da40a91645cfee22035, type: 3}
       propertyPath: m_Pivot.x
       value: 0
@@ -1470,8 +1497,22 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 8755340304995332221, guid: d4ea12e617ff6da40a91645cfee22035, type: 3}
+      insertIndex: 1
+      addedObject: {fileID: 492030069}
   m_SourcePrefab: {fileID: 100100000, guid: d4ea12e617ff6da40a91645cfee22035, type: 3}
+--- !u!114 &2087095297 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 1260973485416755298, guid: d4ea12e617ff6da40a91645cfee22035, type: 3}
+  m_PrefabInstance: {fileID: 2022660194}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bfcd0e22a6b11024ab00eb654f4ba437, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PlayerLoadoutUI
 --- !u!1001 &2137228109
 PrefabInstance:
   m_ObjectHideFlags: 0
