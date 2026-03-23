@@ -79,8 +79,9 @@ public class PlayerLoadout
         float result = 0;
         foreach (var relic in _myRelics)
         {
-            if (relic == null)
+            if (relic == null || relic == _relicZero)
                 continue;
+
 
             if (relic.Data.Relic.stat_type == stat)
                 result += relic.Data.Relic.stat_value;
