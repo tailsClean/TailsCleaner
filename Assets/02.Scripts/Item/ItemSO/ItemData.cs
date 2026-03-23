@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+// 장착 장비 데이터
 public class DefaultEquipData : ItemDataBase
 {
     public int GroupID;
@@ -21,6 +22,7 @@ public class DefaultEquipData : ItemDataBase
     }
 }
 
+// 재료 장비 데이터
 public class MaterialEquipData : ItemDataBase
 {
     public int EquipID;
@@ -30,7 +32,7 @@ public class MaterialEquipData : ItemDataBase
     public override ITEM_TYPE Type => ITEM_TYPE.Equipment;
 }
 
-
+// 유물 데이터
 public class RelicData : ItemDataBase
 {
     public int GroupID;
@@ -45,6 +47,7 @@ public class RelicData : ItemDataBase
     }
 }
 
+// 기타 아이템 데이터
 public class ItemManageData : ItemDataBase
 {
     public ItemManageTable ManageData;

@@ -16,7 +16,7 @@ public class PlayerStatCalculator
         _playerLoadout = enhanceInventory;
         _levelStat = levelStat;
 
-        if(_plusStat == null)
+        if (_plusStat == null)
             _plusStat = new PlayerStatFlat();
         if(_multipleStat == null)
             _multipleStat = new PlayerStatMul();
@@ -36,20 +36,18 @@ public class PlayerStatCalculator
         float itemStat = GetItemStat(stat);
         float plusStat = _plusStat.Get(stat);
         float multipleStat = _multipleStat.Get(stat);
+        float divisionStat = _playerLoadout.GetRelicDivisionValue(stat);
 
         //Debug.Log("기본: " + stat + " / " + initialStat);
         //Debug.Log("레벨로 증가하는 스텟: " + _levelStat.Get(stat));
         //Debug.Log("아이템: " + stat + " / " + itemStat);
 
-        return baseStat + itemStat + plusStat + multipleStat;
+        return baseStat + itemStat + plusStat + multipleStat + divisionStat;
     }
 
-    
-    private float Calculate(float baseStat, float itemStat, float plusStat, float multipleStat, PLAYER_STAT stat)
-    {
-        return 0;
-    }
 
+
+    // 아이템으로 인한 스텟 증가값
     private float GetItemStat(PLAYER_STAT stat)
     {
         return stat switch
@@ -69,6 +67,7 @@ public class PlayerStatCalculator
             _ => 0f
         };
     }
+
 
 }
 

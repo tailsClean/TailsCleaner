@@ -7,9 +7,13 @@ using UnityEngine;
 /// </summary>
 public class PlayerLoadout
 {
+    // 장착 장비 필드
     private Dictionary<PART, EquipmentBase> _myEquipments;
+
+    // 유물 관련 필드
     private List<RelicBase> _myRelics;
     private List<RelicBase> _outputRelics;                                      // 외부 출력용 리스트
+    private RelicDivisionSystem _relicDivisionSystem;
 
     public Dictionary<PART, EquipmentBase> MyEquipments => _myEquipments;
     public List<RelicBase> MyRelics => _outputRelics;
@@ -30,6 +34,7 @@ public class PlayerLoadout
         {
             _myRelics.Add(_relicZero);
         }
+        _relicDivisionSystem = new RelicDivisionSystem(this);
 
 
         _myEquipments = new Dictionary<PART, EquipmentBase>
@@ -40,6 +45,8 @@ public class PlayerLoadout
             {PART.Shoes, ItemDB.CreateItem<EquipmentBase>(ItemID.DefaultShose)}
         };
     }
+
+    #region 장비&유물 스탯 반환
 
     // 장비의 스텟 증가량을 반환
     public float GetIncreaseStat(EQUIP_STAT_TYPE stat)
@@ -89,6 +96,23 @@ public class PlayerLoadout
         return result;
     }
 
+    // 유물의 공명효과로 증가하는 스탯 증가값
+    public float GetRelicDivisionValue(PLAYER_STAT stat)
+    {
+        float divisionValue = _relicDivisionSystem.GetIncreaseStat(out var statType);
+
+        if (stat != statType)
+            return 0;
+
+        return divisionValue;
+    }
+
+    #endregion
+
+
+    #region 유물창
+
+    // 유물 장착 메서드
     public void SetRelic(ItemInstance item)
     {
         RelicBase relic = ItemDB.CreateItem<RelicBase>(item.ID);
@@ -107,6 +131,7 @@ public class PlayerLoadout
         Debug.Log($"<color=yellow>유물칸이 꽉 차서 {item.Name} 장착 실패</color>");
     }
 
+    // 유물 장착 해제 메서드
     public void RemoveRelic(int id, int enhanceLevel)
     {
         for (int i = 0; i < _myRelics.Count; i++)
@@ -121,8 +146,7 @@ public class PlayerLoadout
                 return;
             }
         }
-        
     }
 
-    public void OnChangeLoadout() => _onChangeLoadout.OnStartEvent();
+    #endregion
 }

@@ -11,7 +11,6 @@ public abstract class ItemBase
 public interface IEnhancement
 {
     public int EnhanceLevel { get; }
-    //public EquipEnhance EnhanceData { get; }
 
     public void OnEnhance(EnhancingInfo result);
 }

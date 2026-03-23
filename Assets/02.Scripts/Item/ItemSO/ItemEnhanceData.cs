@@ -14,6 +14,7 @@ public struct ItemEnhanceData
     [field: SerializeField] public int CostBluePrint { get; private set; }
     [field: SerializeField] public int BluePrintID { get; private set; }
 
+    // 장착 장비의 강화 데이터 생성자
     public ItemEnhanceData(DefaultEquipData equip, int enhanceLevel)
     {
         var data = equip.Enhances[enhanceLevel];
@@ -25,6 +26,8 @@ public struct ItemEnhanceData
         CostBluePrint = data.cost_blueprint;
         BluePrintID = data.blueprint_id;
     }
+
+    // 유물의 강화 데이터 생성자
     public ItemEnhanceData(RelicData relic, int enhanceLevel)
     {
         var data = relic.Enhances[enhanceLevel];
