@@ -54,7 +54,7 @@ public class SkillArea<TModifierData> : SkillObjectBase
     {
         if (col.CompareTag("Monster"))          // 몬스터
         {
-            if (col.TryGetComponent<MonsterBase>(out var monster))
+            if (col.TryGetComponent(out MonsterBase monster))
             {
                 _monstersInArea.Add(monster);
                 OnMonsterEnter(monster);
@@ -67,7 +67,7 @@ public class SkillArea<TModifierData> : SkillObjectBase
         }
         else if (col.CompareTag("MonsterBullet")) // 적 투사체
         {
-            if (col.TryGetComponent<PoolObject>(out var projectile))
+            if (col.TryGetComponent(out PoolObject projectile))
             {
                 OnBulletEnter(projectile);
             }
@@ -78,20 +78,23 @@ public class SkillArea<TModifierData> : SkillObjectBase
     {
         if (col.CompareTag("Monster"))          // 몬스터
         {
-            if (col.TryGetComponent<MonsterBase>(out var monster))
+            if (col.TryGetComponent(out MonsterBase monster))
             {
-                _monstersInArea.Remove(monster);
-                OnMonsterExit(monster);
+                if (_monstersInArea.Remove(monster))
+                    OnMonsterExit(monster);
             }
         }
         else if (col.CompareTag("Player"))      // 플레이어
         {
-            _isPlayerInArea = false;
-            OnPlayerExit();
+            if (_isPlayerInArea)
+            {
+                _isPlayerInArea = false;
+                OnPlayerExit();
+            }
         }
         else if (col.CompareTag("MonsterBullet")) // 적 투사체
         {
-            if (col.TryGetComponent<MonsterProjectile>(out var projectile))
+            if (col.TryGetComponent(out MonsterProjectile projectile))
             {
                 OnBulletExit(projectile);
             }
@@ -139,6 +142,9 @@ public class SkillArea<TModifierData> : SkillObjectBase
 
             // 전용 모디파이어 로직
             OnTick(monster);
+
+            // 넉백 시도
+            TryKnockback(monster);
         }
     }
 
@@ -166,6 +172,7 @@ public class SkillArea<TModifierData> : SkillObjectBase
         {
             if (monster != null && monster.gameObject.activeInHierarchy)
             {
+                Debug.Log("몬스터 장판 나감");
                 OnMonsterExit(monster);
             }
         }
