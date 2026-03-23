@@ -191,6 +191,11 @@ MonoBehaviour:
   mass: 1
   KBResist: 1
   knockbackUnitToPx: 100
+  avoidanceRadius: 1.5
+  avoidanceForce: 2
+  monsterLayer:
+    serializedVersion: 2
+    m_Bits: 128
   TestItem: {fileID: 7621293018972681884, guid: 7bd74e2913a4ea44aa66ef718bc20d47, type: 3}
   damageCooldown: 1
   scoreReward: 1000
@@ -206,7 +211,6 @@ MonoBehaviour:
   zigzag_width: 0
   patternFrequency: 5
   type_power_multiply: 1
-  moveType: 2
   jump_height: 2
   visualChild: {fileID: 0}
   isSuicideUnit: 0
@@ -229,6 +233,12 @@ MonoBehaviour:
   detect_range: 10
   projectile_count: 3
   fire_interval: 0.2
+  projectile_speed: 10
+  projectile_size: 1
+  life_time: 5
+  is_homing: 0
+  pierce_type: 0
+  arc_height: 0
   state: 0
 --- !u!114 &7039035210718007216
 MonoBehaviour:
