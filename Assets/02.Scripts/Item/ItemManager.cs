@@ -6,6 +6,10 @@ using UnityEngine.UI;
 
 public class ItemManager : MonoBehaviour
 {
+    [Header("인벤토리/재화가방")]
+    [field: SerializeField] public ItemInventory Inventory { get; private set; }
+    [field: SerializeField] public ItemCurrency Currency { get; private set; }      // 재화 가방
+
     [Header("이벤트 채널")]
     [SerializeField] private VoidEventChannelSO _onChangeLoadout;
 

@@ -3,7 +3,7 @@
 /// <summary>
 /// 추가 수정 필요
 /// </summary>
-public class Currency : MonoBehaviour
+public class ItemCurrency : MonoBehaviour
 {
     [Header("이벤트 채널")]
     [SerializeField] private VoidEventChannelSO _onChangeGold;

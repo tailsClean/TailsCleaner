@@ -31,10 +31,22 @@ public class CheckingPlayerStat : MonoBehaviour
     public float ExpGainRate;
 
 
-    [Header("기타등등")]
+    [Header("경험치")]
+    public int InGameLevel;
     public float InGameMaxExp;
     public float InGameCurrentExp;
+    public int OutGameLevel;
+    public float OutGameMaxExp;
+    public float OutGameCurrentExp;
+
+    [Header("경험치 획득범위")]
     public float PickupRange;
+
+    private void Awake()
+    {
+        if(Player == null)
+            Player = GetComponent<PlayerBase>();
+    }
 
     private void Update()
     {
@@ -60,10 +72,13 @@ public class CheckingPlayerStat : MonoBehaviour
         GoldGainRate = player.GoldGainRate;
         ExpGainRate = player.ExpGainRate;
 
+        InGameLevel = player.InGameLevel;
         InGameMaxExp = player.InGameMaxExp;
         InGameCurrentExp = player.InGameCurrentExp;
+        OutGameLevel = player.OutGameLevel;
+        OutGameMaxExp = player.OutGameMaxExp;
+        OutGameCurrentExp = player.OutGameCurrentExp;
         PickupRange = player.PickupRange;
-
     }
 
 

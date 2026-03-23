@@ -2,13 +2,14 @@
 
 /// <summary>
 /// 인벤토리의 아이템의 정보와 수량을 담은 정보 전달용 구조체
+[Serializable]
 public struct ItemInstance
 {
-    public readonly int ID;
-    public readonly string Name;
-    public readonly int EnhanceLevel;
-    public readonly GRADE Grade;
-    public readonly ITEM_TYPE ItemType;
+    public int ID;
+    public string Name;
+    public int EnhanceLevel;
+    public GRADE Grade;
+    public ITEM_TYPE ItemType;
 
     public int Amount { get; private set; }
     public const int NoneEnhanceLevel = -1;
@@ -46,13 +47,12 @@ public struct ItemInstance
     {
         var item = ItemDB.GetData(id);
         ID = id;
-        Name = item.Name;
+        Name = item != null ? item.Name : $"<color=red>{id}의 아이템은 없습니다.</color>";
         EnhanceLevel = enhanceLevel;
         Grade = grad;
-        ItemType = item.Type;
+        ItemType = item != null ? item.Type : ITEM_TYPE.None;
 
         Amount = 1;
-
     }
 
     private ItemInstance(string zero)
