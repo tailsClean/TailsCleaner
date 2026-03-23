@@ -368,63 +368,51 @@ public abstract class MonsterBase : PoolObject, IDamageable, IMonsterStatus, IPu
         IsKnockbacked = true;
         OnCC();
 
-        rb2D.bodyType = RigidbodyType2D.Dynamic;
-        rb2D.AddForce(direction.normalized * force * knockbackUnitToPx, ForceMode2D.Impulse);
-
-        float t = 0f;
-        while (t < 0.3f)
+        float pauseWaitElapsed = 0f;
+        while (pauseWaitElapsed < 0.3f)
         {
             if (!isPaused)
-                t += Time.deltaTime;
+                pauseWaitElapsed += Time.deltaTime;
 
             yield return null;
-        } // 넉백 지속 시간
+        }
 
-        rb2D.linearVelocity = Vector2.zero;
-        rb2D.bodyType = RigidbodyType2D.Kinematic;
-        OnCC();// 냥빨래 보유 체크, 화면 내부인지 체크
         bool hasCatLaundry = TryGetCatLaundry(startPos, out var catLaundry);
-        // 중복적용 방지용
         bool catLaundryTriggered = false;
 
-        // 벽 충돌 체크 (레이캐스트로 벽 위치에 맞게 시간 비율 조정)
-        float duration = _knockbackDuration; // 시간은 복사
+        float duration = _knockbackDuration;
         KnockBackOffset(startPos, dir, totalDistance, ref targetPos, ref duration);
 
-        // 경과 시간
         float elapsed = 0f;
 
-        // 애니메이션 커브 기반 이동
         while (elapsed < duration)
         {
-            elapsed += Time.fixedDeltaTime;               // 시간 증가
-            float t = Mathf.Clamp01(elapsed / duration);  // 비율
-            float curvedT = _knockbackCurve.Evaluate(t);  // 비율의 커브 값
+            if (isPaused)
+            {
+                yield return _waitForFixedUpdate;
+                continue;
+            }
 
-            // 0,1 제한 없는 Lerp로 다음 위치 설정
+            elapsed += Time.fixedDeltaTime;
+            float normalizedTime = Mathf.Clamp01(elapsed / duration);
+            float curvedT = _knockbackCurve.Evaluate(normalizedTime);
+
             Vector2 nextPos = Vector2.LerpUnclamped(startPos, targetPos, curvedT);
             rb2D.MovePosition(nextPos);
 
-            // 냥빨래 보유, 냥빨래 트리거 Off, 화면 외부
-            // 셋 다 충족 시
-            if (hasCatLaundry && catLaundryTriggered == false && IsInsideScreen(nextPos) == false)
+            if (hasCatLaundry && !catLaundryTriggered && !IsInsideScreen(nextPos))
             {
-                // 중복적용 방지 트리거 On
                 catLaundryTriggered = true;
 
-                // 최대 체력 비례 피해
                 float damage = maxHp * catLaundry.OffScreenDamageRatio;
                 TakeDamage(damage);
             }
 
-            // FixedUpdate 싱크
             yield return _waitForFixedUpdate;
         }
 
-        // 다 이동 후 확실히 이동
         rb2D.MovePosition(targetPos);
 
-        // 넉백 종료
         IsKnockbacked = false;
         _knockbackCoroutine = null;
     }
