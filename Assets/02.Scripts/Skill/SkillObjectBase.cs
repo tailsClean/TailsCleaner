@@ -133,8 +133,6 @@ public class SkillObjectBase : PoolObject
         // 방향 벡터 제곱 길이가 0보다 클 때만
         if (_dir.sqrMagnitude > 0f)
         {
-            // 이부분도 최적화 이슈
-            //transform.Translate(_dir * (_runtimeFinalStat.ProjectileSpeed * Time.deltaTime), Space.World);
             Vector2 nextPos = _rigidbody.position + _dir * (_runtimeFinalStat.ProjectileSpeed * Time.fixedDeltaTime);
             _rigidbody.MovePosition(nextPos);
         }
@@ -297,6 +295,22 @@ public class SkillObjectBase : PoolObject
     // 스킬 애니메이터 발동 연출 시작 전
     // 자식의 설정 오버라이드
     protected virtual void OnBeforeStartSequence() { }
+
+    // 넉백 적용
+    protected void TryKnockback(MonsterBase monster)
+    {
+        // 넉백 없으면 스킵
+        if (_runtimeFinalStat.Knockback <= 0f) return;
+
+        // 넉백 방향 투사체에서 몬스터 방향
+        Vector2 dir = (monster.Position - _rigidbody.position).normalized;
+
+        // 혹시 겹쳐서 방향 없으면 아래로
+        if (dir == Vector2.zero) dir = Vector2.down;
+
+        // 넉백 적용
+        monster.Knockback(dir, _runtimeFinalStat.Knockback);
+    }
 
     // 플레이어 위치
     protected Vector2 GetPlayerPos()

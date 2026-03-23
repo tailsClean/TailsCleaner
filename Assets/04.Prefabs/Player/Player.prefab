@@ -119,7 +119,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5385765747078865120}
   - component: {fileID: 4910411865821873109}
-  - component: {fileID: -5625884646748208213}
+  - component: {fileID: 4095262477972361850}
   - component: {fileID: 7566682362595537252}
   - component: {fileID: 2359834465883610264}
   - component: {fileID: 6972170408732417574}
@@ -212,7 +212,7 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!114 &-5625884646748208213
+--- !u!114 &4095262477972361850
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -221,14 +221,31 @@ MonoBehaviour:
   m_GameObject: {fileID: 8060241405893911967}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: cb4a0ea03496c834f80d5cc0da18ebbc, type: 3}
+  m_Script: {fileID: 11500000, guid: 6c294a02b81724940944101fb6cd4851, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::LevelupTestStat
-  MaxHp: 10
-  AttackPower: 3
-  DefensePower: 2
-  HealthRegen: 1
-  CombatMaxExp: 10
+  m_EditorClassIdentifier: Assembly-CSharp::CheckingPlayerStat
+  Player: {fileID: 7566682362595537252}
+  AttackPower: 0
+  CriticalChance: 0
+  CriticalDamageMultiplier: 0
+  AttackSpeed: 0
+  MaxHp: 0
+  CurrentHp: 0
+  DefensePower: 0
+  EvasionChance: 0
+  MaxShield: 0
+  CurrentShield: 0
+  MoveSpeed: 0
+  ItemDropRate: 0
+  GoldGainRate: 0
+  ExpGainRate: 0
+  InGameLevel: 0
+  InGameMaxExp: 0
+  InGameCurrentExp: 0
+  OutGameLevel: 0
+  OutGameMaxExp: 0
+  OutGameCurrentExp: 0
+  PickupRange: 0
 --- !u!114 &7566682362595537252
 MonoBehaviour:
   m_ObjectHideFlags: 0

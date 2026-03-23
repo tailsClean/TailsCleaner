@@ -124,14 +124,19 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::SpecialMonster
   target: {fileID: 0}
   stoppingDistance: 0.1
-  hp: 1
-  maxHp: 1
+  hp: 1000
+  maxHp: 1000
   power: 1
   moveSpeed: 1
   hitBox: 1
   mass: 1
   KBResist: 1
   knockbackUnitToPx: 100
+  avoidanceRadius: 1.5
+  avoidanceForce: 2
+  monsterLayer:
+    serializedVersion: 2
+    m_Bits: 128
   TestItem: {fileID: 7621293018972681884, guid: 7bd74e2913a4ea44aa66ef718bc20d47, type: 3}
   damageCooldown: 1
   scoreReward: 1000

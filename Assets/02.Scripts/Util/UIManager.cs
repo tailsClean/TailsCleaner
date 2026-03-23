@@ -21,7 +21,7 @@ public class UIManager : MonoBehaviour
         {
             instance = this;
         }
-
+        transform.SetParent(null);
         DontDestroyOnLoad(gameObject);
 
         SceneManager.sceneLoaded += OnSceneLoaded;

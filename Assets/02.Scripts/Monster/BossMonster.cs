@@ -11,11 +11,13 @@ public class BossMonster : MonsterBase
     public int pattern_group_id;
 
     [Header("--- 패턴 중첩 활성화 제어 ---")]
+    public bool useZigzag;
     public bool useJump;
     public bool useFlee;
     public bool useBlink;
     public bool useBarricade;
     public bool useOrbit;
+    
 
     private List<GameObject> activeOrbits = new List<GameObject>();
     private bool isOrbiting = false;
@@ -30,6 +32,11 @@ public class BossMonster : MonsterBase
     public float jump_height = 3.0f;
     public Transform visualChild;
     public float fleeDistance = 4.0f;
+
+    public float zigzag_width = 1.5f;
+    public float zigzagFrequency = 5.0f;
+
+    private float zigzagTimer = 0f;
 
     [Header("---UI 변경용 이벤트 채널---")]
     [SerializeField] private FloatEventChannelSO _onBossHit;
@@ -107,6 +114,10 @@ public class BossMonster : MonsterBase
     private bool isFleeing = false;
     private bool isBlinking = false;
     private bool isWaitingBlink = false;
+
+    private bool isDataInitialized = false;
+    private bool isWaitingForMonsterId = false;
+
     private Vector2 currentFleeTarget;
 
     private BossMonsterShooter shooter;
@@ -152,13 +163,36 @@ public class BossMonster : MonsterBase
 
         ResetRuntimeState();
 
+        isDataInitialized = false;
+        isWaitingForMonsterId = false;
+
         Debug.Log($"[BossMonster] OnSpawn / MonsterId:{MonsterId}");
+
+        if (MonsterId <= 0)
+        {
+            Debug.LogWarning($"[BossMonster] OnSpawn 시점 MonsterId 미설정. 대기 후 초기화 예정 / MonsterId:{MonsterId}");
+            isWaitingForMonsterId = true;
+            return;
+        }
+
+        InitializeBossData();
+    }
+
+    private void InitializeBossData()
+    {
+        if (isDataInitialized)
+            return;
 
         if (MonsterId <= 0)
         {
             Debug.LogError($"[BossMonster] 유효하지 않은 MonsterId: {MonsterId}");
             return;
         }
+
+        isDataInitialized = true;
+        isWaitingForMonsterId = false;
+
+        Debug.Log($"[BossMonster] InitializeBossData / MonsterId:{MonsterId}");
 
         MonsterSO monsterSO = DataManager.Instance.GetSOData<MonsterSO>();
         if (monsterSO == null)
@@ -203,7 +237,6 @@ public class BossMonster : MonsterBase
             return;
         }
 
-        // 보스는 여러 패턴을 동시에 가질 수 있음
         foreach (var composition in compositionList)
         {
             Pattern patternData = patternSO.GetById(composition.pattern_id);
@@ -245,11 +278,9 @@ public class BossMonster : MonsterBase
                 case PATTERN_TYPE.SelfDestruct:
                     Debug.Log($"[BossMonster] SelfDestruct 패턴 감지: {patternData.pattern_logic_type} (보스는 현재 미사용)");
                     break;
-
             }
         }
 
-        // 투사체 패턴이 하나도 없으면 Shooter 끄기
         if (shooter != null && !useOrbit && !IsShooterConfigured())
         {
             shooter.DisableShooter();
@@ -259,14 +290,13 @@ public class BossMonster : MonsterBase
         blinkCooldownTimer = blink_cooldown;
         barricadeTimer = barricadeInterval;
 
-        // Orbit은 ApplyBossProjectilePattern()에서 직접 세팅됨
         if (!useOrbit)
             orbitCooldownTimer = 0f;
 
         Debug.Log(
             $"[Boss 패턴 적용 완료] " +
             $"MonsterId:{MonsterId}, PatternGroupId:{pattern_group_id}, " +
-            $"Jump:{useJump}, Flee:{useFlee}, Blink:{useBlink}, Barricade:{useBarricade}, Orbit:{useOrbit}"
+            $"Jump:{useJump}, Flee:{useFlee}, Blink:{useBlink}, Barricade:{useBarricade}, Orbit:{useOrbit}, Zigzag:{useZigzag}"
         );
     }
 
@@ -290,6 +320,9 @@ public class BossMonster : MonsterBase
             shooter.DisableShooter();
 
         ResetRuntimeState();
+
+        isDataInitialized = false;
+        isWaitingForMonsterId = false;
     }
 
     protected override void FixedUpdate()
@@ -299,6 +332,17 @@ public class BossMonster : MonsterBase
             if (rb2D != null)
                 rb2D.linearVelocity = Vector2.zero;
             return;
+            
+        if (!isDataInitialized)
+        {
+            if (MonsterId > 0)
+            {
+                InitializeBossData();
+            }
+            else
+            {
+                return;
+            }
         }
 
         if (target == null || this.hp <= 0)
@@ -375,6 +419,11 @@ public class BossMonster : MonsterBase
                 blink_cast_time = cast_time > 0f ? cast_time : blink_cast_time;
                 blink_cooldown = pattern_cooldown > 0f ? pattern_cooldown : blink_cooldown;
                 blink_speed_multiplier = pattern_multiply > 0f ? pattern_multiply : blink_speed_multiplier;
+                break;
+
+            case "Zigzag":
+                useZigzag = true;
+                zigzag_width = patternData.zigzag_width > 0f ? patternData.zigzag_width : zigzag_width;
                 break;
 
             default:
@@ -858,6 +907,33 @@ public class BossMonster : MonsterBase
     {
         Vector2 myPos = rb2D.position;
         float dist = Vector2.Distance(target.position, myPos);
+
+        if (useZigzag)
+        {
+            zigzagTimer += Time.fixedDeltaTime;
+
+            Vector2 toTarget = (Vector2)target.position - myPos;
+            float distToTarget = toTarget.magnitude;
+
+            if (distToTarget < 0.1f)
+            {
+                rb2D.linearVelocity = Vector2.zero;
+                return;
+            }
+
+            Vector2 forward = toTarget.normalized;
+            Vector2 side = new Vector2(-forward.y, forward.x);
+
+            float sideOffset = Mathf.Sin(zigzagTimer * zigzagFrequency) * zigzag_width;
+            float damping = Mathf.Clamp01((distToTarget - 0.2f) / 0.8f);
+
+            float zigzagSpeed = move_speed * pattern_multiply;
+            Vector2 movement = (forward * zigzagSpeed) + (side * sideOffset * zigzagFrequency * damping);
+
+            rb2D.linearVelocity = movement;
+            return;
+        }
+
         Vector2 dir;
 
         if (useFlee && !isFleeing && dist < fleeDistance && fleeCooldownTimer <= 0f)
@@ -1028,6 +1104,7 @@ public class BossMonster : MonsterBase
         useBlink = false;
         useBarricade = false;
         useOrbit = false;
+        useZigzag = false;
 
         isJumping = false;
         isWaitingJump = false;
@@ -1041,6 +1118,7 @@ public class BossMonster : MonsterBase
         blinkCooldownTimer = 0f;
         barricadeTimer = 0f;
         orbitCooldownTimer = 0f;
+        zigzagTimer = 0f;
 
         pattern_cooldown = 0f;
         cast_time = 0f;
@@ -1114,6 +1192,10 @@ public class BossMonster : MonsterBase
             case "move_blink":
             case "blink":
                 return "Blink";
+
+            case "move_zigzag":
+            case "zigzag":
+                return "Zigzag";
 
             default:
                 return string.Empty;

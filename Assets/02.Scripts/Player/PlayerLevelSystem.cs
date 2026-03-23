@@ -28,13 +28,13 @@ public class PlayerLevelSystem : ILevelStat
 
 
     // 외부 게임모드에 따른 경험치 획득 메서드
-    public bool GainExp(GameMode gameMode, float gainExp)
+    public bool GainExp(GAME_MODE gameMode, float gainExp)
     {
         bool isLevelUp = false;
 
         switch(gameMode)
         {
-            case GameMode.InGame:
+            case GAME_MODE.InGame:
                 InGameCurrentExp += gainExp;
                 isLevelUp = InGameCurrentExp >= InGameMaxExp ? true : false;
 
@@ -43,7 +43,7 @@ public class PlayerLevelSystem : ILevelStat
                 break;
 
 
-            case GameMode.OutGame:
+            case GAME_MODE.OutGame:
                 OutGameCurrentExp += gainExp;
                 isLevelUp = OutGameCurrentExp > OutGameMaxExp ? true : false;
 
@@ -56,16 +56,16 @@ public class PlayerLevelSystem : ILevelStat
     }
 
     // 외부 게임모드에 따른 레벨업 메서드
-    public void LevelUp(GameMode gameMode)
+    public void LevelUp(GAME_MODE gameMode)
     {
         switch (gameMode)
         {
-            case GameMode.InGame:
+            case GAME_MODE.InGame:
                 InGameCurrentExp -= InGameMaxExp;
                 InGameLevel++;
                 break;
 
-            case GameMode.OutGame:
+            case GAME_MODE.OutGame:
                 OutGameCurrentExp -= OutGameMaxExp;
                 OutGameLevel++;
                 break;
@@ -74,7 +74,7 @@ public class PlayerLevelSystem : ILevelStat
 
 
 
-    public enum GameMode { InGame,  OutGame }
+    public enum GAME_MODE { InGame,  OutGame }
 }
 
 public interface ILevelStat

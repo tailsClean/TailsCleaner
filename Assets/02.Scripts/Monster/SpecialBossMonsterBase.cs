@@ -51,6 +51,9 @@ public abstract class SpecialBossMonsterBase : MonsterBase
 
     private BossTriggerPatternRunner _triggerRunner;
 
+    private bool isDataInitialized = false;
+    private bool isWaitingForMonsterId = false;
+
     protected override void Start()
     {
         base.Start();
@@ -58,6 +61,21 @@ public abstract class SpecialBossMonsterBase : MonsterBase
 
     protected override void FixedUpdate()
     {
+        if (!isDataInitialized)
+        {
+            if (MonsterId <= 0)
+            {
+                return;
+            }
+
+            InitializeMonsterData();
+
+            if (!isDataInitialized)
+            {
+                return;
+            }
+        }
+
         if (target == null) return;
         if (hasExploded) return;
 
@@ -88,17 +106,31 @@ public abstract class SpecialBossMonsterBase : MonsterBase
         }
     }
 
+    
     public override void OnSpawn()
     {
         base.OnSpawn();
 
-        Debug.Log($"[SpecialBossMonsterBase] OnSpawn / MonsterId:{MonsterId}");
+        ResetRuntimeState();
+
+        isDataInitialized = false;
+        isWaitingForMonsterId = true;
+
+        Debug.Log($"[SpecialBossMonsterBase] OnSpawn / MonsterId:{MonsterId} (deferred init)");
+    }
+
+    private void InitializeMonsterData()
+    {
+        if (isDataInitialized)
+            return;
 
         if (MonsterId <= 0)
         {
-            Debug.LogError($"[SpecialBossMonsterBase] 유효하지 않은 MonsterId: {MonsterId}");
+            Debug.LogError($"[SpecialBossMonsterBase] 유효하지 않은 MonsterId: {MonsterId}, name:{name}, instanceId:{GetInstanceID()}");
             return;
         }
+
+        Debug.Log($"[SpecialBossMonsterBase] InitializeMonsterData / name:{name}, instanceId:{GetInstanceID()}, MonsterId:{MonsterId}");
 
         MonsterSO monsterSO = DataManager.Instance.GetSOData<MonsterSO>();
         if (monsterSO == null)
@@ -107,18 +139,32 @@ public abstract class SpecialBossMonsterBase : MonsterBase
             return;
         }
 
+        // 실제 데이터 조회
         Monster monsterData = monsterSO.GetById(MonsterId);
+
+        // 데이터 없음 → 원인 추적 로그
         if (monsterData == null)
         {
-            Debug.LogError($"[SpecialBossMonsterBase] 몬스터 데이터 없음. MonsterId: {MonsterId}");
+            Debug.LogError($"[SpecialBossMonsterBase] 몬스터 데이터 없음. MonsterId:{MonsterId}, name:{name}");
+
+            // 디버그용: 특정 ID들 존재 여부 확인
+            int[] debugIds = { 102001, 102002, 200001, 201001, 202001 };
+
+            foreach (int id in debugIds)
+            {
+                Monster test = monsterSO.GetById(id);
+                Debug.Log($"[MonsterSO Check] id:{id}, exists:{test != null}");
+            }
+
             return;
         }
 
+        // 정상 데이터 로딩
         pattern_group_id = monsterData.pattern_group_id;
 
         if (pattern_group_id <= 0)
         {
-            Debug.LogError($"[SpecialBossMonsterBase] monster_table의 pattern_group_id가 유효하지 않음. MonsterId:{MonsterId}, pattern_group_id:{pattern_group_id}");
+            Debug.LogError($"[SpecialBossMonsterBase] pattern_group_id invalid. MonsterId:{MonsterId}, pattern_group_id:{pattern_group_id}");
             return;
         }
 
@@ -131,17 +177,17 @@ public abstract class SpecialBossMonsterBase : MonsterBase
 
         List<PatternGroupComposition> compositionList = compositionSO.GetAllByGroupId(pattern_group_id);
 
+        if (compositionList == null || compositionList.Count == 0)
+        {
+            Debug.LogError($"[SpecialBossMonsterBase] composition 데이터 없음. pattern_group_id:{pattern_group_id}");
+            return;
+        }
+
         Debug.Log($"[Composition 개수] pattern_group_id:{pattern_group_id}, count:{compositionList.Count}");
 
         foreach (var comp in compositionList)
         {
             Debug.Log($"[Composition] group:{comp.pattern_group_id}, pattern:{comp.pattern_id}, priority:{comp.priority}");
-        }
-
-        if (compositionList == null || compositionList.Count == 0)
-        {
-            Debug.LogError($"[SpecialBossMonsterBase] composition 데이터 없음. pattern_group_id:{pattern_group_id}");
-            return;
         }
 
         PatternSO patternSO = DataManager.Instance.GetSOData<PatternSO>();
@@ -176,7 +222,7 @@ public abstract class SpecialBossMonsterBase : MonsterBase
         // Projectile 우선
         if (projectilePattern != null)
         {
-            currentPattern = null; // 이동 특수 패턴 미적용 시 StraightChase fallback (기본 이동)
+            currentPattern = null;
             ResetRuntimeState();
 
             isSuicideUnit = false;
@@ -189,13 +235,6 @@ public abstract class SpecialBossMonsterBase : MonsterBase
             {
                 shooter.ApplyProjectilePattern(projectilePattern);
             }
-
-            //Debug.Log(
-            //    $"[Projectile 적용 완료] " +
-            //    $"MonsterId:{MonsterId}, PatternGroupId:{pattern_group_id}, PatternId:{projectilePattern.pattern_id}, Logic:{projectilePattern.pattern_logic_type}, " +
-            //    $"Count:{projectilePattern.projectile_count}, FireInterval:{projectilePattern.fire_interval}, Speed:{projectilePattern.projectile_speed}, " +
-            //    $"Size:{projectilePattern.projectile_size}, Life:{projectilePattern.life_time}, Follow:{projectilePattern.follow}"
-            //);
         }
         else
         {
@@ -218,7 +257,7 @@ public abstract class SpecialBossMonsterBase : MonsterBase
             }
             else
             {
-                currentPattern = null; // 기본 StraightChase
+                currentPattern = null;
                 ResetRuntimeState();
 
                 Debug.Log($"[기본 이동 적용] MonsterId:{MonsterId}, PatternGroupId:{pattern_group_id}");
@@ -247,6 +286,9 @@ public abstract class SpecialBossMonsterBase : MonsterBase
             if (playerObj != null)
                 target = playerObj.transform;
         }
+
+        isDataInitialized = true;
+        isWaitingForMonsterId = false;
     }
 
     public override void OnDespawn()
@@ -281,6 +323,11 @@ public abstract class SpecialBossMonsterBase : MonsterBase
 
         if (_triggerRunner != null)
             _triggerRunner.Unbind();
+
+        isDataInitialized = false;
+        isWaitingForMonsterId = false;
+
+        SetMonsterId(0);
     }
 
     protected override void MoveToTarget()
@@ -698,6 +745,9 @@ public abstract class SpecialBossMonsterBase : MonsterBase
         stateTimer = 0f;
         jumpProgress = 0f;
         currentCastTimer = 0f;
+
+        currentPattern = null;
+        isSuicideUnit = false;
 
         if (rb2D != null)
         {

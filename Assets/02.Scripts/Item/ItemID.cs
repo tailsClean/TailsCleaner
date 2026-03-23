@@ -14,5 +14,5 @@ public static class ItemID
     public const int ShoseReinforceResource = 34004;
     public const int RelicReinforceResource = 34005;
 
-    public const int Gold = 31001;
+    public const int Gold = 30001;
 }
