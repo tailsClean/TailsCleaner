@@ -39,9 +39,6 @@ public abstract class MonsterBase : PoolObject, IDamageable, IMonsterStatus, IPu
 
     public float MaxHp => maxHp;
 
-    
-    private int _stunCounter = 0; // 딕셔너리 카운터 역할
-
     // --- IMonsterStatus 상태 프로퍼티 ---
     public bool IsStunned => Time.time < _currentStunEndTime;
     public bool IsWeakened => _slowModifiers.Count > 0;
@@ -59,7 +56,7 @@ public abstract class MonsterBase : PoolObject, IDamageable, IMonsterStatus, IPu
     private int _stunAreaCount;         // 밟고있는 기절 장판 수
     private float _requiredStunTime;    // 기절 장판 목표 체류 시간
     private float _areaStunDuration;    // 기절 장판 기절 시간
-    private float _currentStunEndTime; // 기절이 끝나는 시점
+    private float _currentStunEndTime;  // 기절이 끝나는 시점
 
     // 슬로우 중첩 관리를 위한 딕셔너리
     private Dictionary<string, float> _slowModifiers = new();    // 적용된 슬로우 수치
@@ -91,6 +88,15 @@ public abstract class MonsterBase : PoolObject, IDamageable, IMonsterStatus, IPu
 
     [Header("---몬스터 스프라이트---")]
     [SerializeField] public SpriteRenderer _monsterSprite;
+    
+    [Header("--- 넉백 설정 ---")]
+    [SerializeField] float _knockbackDuration = 0.1f;                                           // 넉백 시간
+    [SerializeField] LayerMask _wallLayerMask;                                                  // 벽 레이어
+    [SerializeField] AnimationCurve _knockbackCurve = AnimationCurve.Linear(0f, 0f, 1f, 1f);    // 선형은 Linear, 아니면 EaseInOut
+    private float _knockbackUnitToPx = 1f;                                                      // 넉백 픽셀
+    private Coroutine _knockbackCoroutine;                                                      // 넉백 코루틴
+    private Camera _mainCamera;                                                                 // 카메라
+    private static readonly WaitForFixedUpdate _waitForFixedUpdate = new WaitForFixedUpdate();  // 대기시간
 
 
     public void SetMonsterId(int id)
@@ -107,6 +113,8 @@ public abstract class MonsterBase : PoolObject, IDamageable, IMonsterStatus, IPu
         rb2D.sleepMode = RigidbodySleepMode2D.NeverSleep;
         originHp = hp;
         originPower = power;
+
+        _mainCamera = Camera.main;
 
         CacheBaseStats();
     }
@@ -135,17 +143,18 @@ public abstract class MonsterBase : PoolObject, IDamageable, IMonsterStatus, IPu
         maxHp = _baseHp;
         power = _basePower;
         _currentMoveSpeed = _baseMoveSpeed;
+        _currentStrengthBonus = 0f;
         Debug.Log($"hp{hp}");
 
 
-        _stunCounter = 0; // 스폰 시 카운터 초기화
         IsKnockbacked = false;
         HasReducedMaxHp = false;
         StunAreaTime = 0f;
+        _currentStunEndTime = 0f;
+        _stunAreaCount = 0;
         _slowModifiers.Clear();
-
-        isAttacking = false;
-        lastAttackTime = 0f;
+        _slowTimers.Clear();
+        _slowAreaCounts.Clear();
 
         if (rb2D != null)
         {
@@ -179,9 +188,10 @@ public abstract class MonsterBase : PoolObject, IDamageable, IMonsterStatus, IPu
             // 기절 장판 체류 시간 누적
             StunAreaTime += Time.deltaTime;
 
-            // 일정 시간 넘으면 기절
+            // 일정 시간 넘으면 기절 후 초기화
             if (StunAreaTime >= _requiredStunTime)
             {
+                ResetStunAreaTime();
                 ApplyStun(_areaStunDuration);
             }
         }
@@ -325,19 +335,118 @@ public abstract class MonsterBase : PoolObject, IDamageable, IMonsterStatus, IPu
     }
 
     public void Knockback(Vector2 direction, float force)
-        => StartCoroutine(KnockbackRoutine(direction, force));
+    {
+        // 넉백 힘 없으면 패스
+        if (force <= 0f) return;
 
-    private IEnumerator KnockbackRoutine(Vector2 direction, float force)
+        float distance = force * _knockbackUnitToPx;    // 넉백 거리
+        Vector2 startPos = rb2D.position;              // 넉백 시작 위치
+        Vector2 dir = direction.normalized;       // 넉백 방향
+        Vector2 targetPos = startPos + dir * distance;  // 넉백 목표 위치
+
+        // 넉백 중이면 중단
+        if (_knockbackCoroutine != null)
+            StopCoroutine(_knockbackCoroutine);
+
+        // 넉백 실행
+        _knockbackCoroutine = StartCoroutine(KnockbackCoroutine(startPos, targetPos, dir, distance));
+    }
+
+    private IEnumerator KnockbackCoroutine(Vector2 startPos, Vector2 targetPos, Vector2 dir, float totalDistance)
     {
         IsKnockbacked = true;
-        OnCC();
-        rb2D.bodyType = RigidbodyType2D.Dynamic;
-        rb2D.AddForce(direction.normalized * force * knockbackUnitToPx, ForceMode2D.Impulse);
-        yield return new WaitForSeconds(0.3f); // 넉백 지속 시간
-        rb2D.linearVelocity = Vector2.zero;
-        rb2D.bodyType = RigidbodyType2D.Kinematic;
+        OnCC();// 냥빨래 보유 체크, 화면 내부인지 체크
+        bool hasCatLaundry = TryGetCatLaundry(startPos, out var catLaundry);
+        // 중복적용 방지용
+        bool catLaundryTriggered = false;
+
+        // 벽 충돌 체크 (레이캐스트로 벽 위치에 맞게 시간 비율 조정)
+        float duration = _knockbackDuration; // 시간은 복사
+        KnockBackOffset(startPos, dir, totalDistance, ref targetPos, ref duration);
+
+        // 경과 시간
+        float elapsed = 0f;
+
+        // 애니메이션 커브 기반 이동
+        while (elapsed < duration)
+        {
+            elapsed += Time.fixedDeltaTime;               // 시간 증가
+            float t = Mathf.Clamp01(elapsed / duration);  // 비율
+            float curvedT = _knockbackCurve.Evaluate(t);  // 비율의 커브 값
+
+            // 0,1 제한 없는 Lerp로 다음 위치 설정
+            Vector2 nextPos = Vector2.LerpUnclamped(startPos, targetPos, curvedT);
+            rb2D.MovePosition(nextPos);
+
+            // 냥빨래 보유, 냥빨래 트리거 Off, 화면 외부
+            // 셋 다 충족 시
+            if (hasCatLaundry && catLaundryTriggered == false && IsInsideScreen(nextPos) == false)
+            {
+                // 중복적용 방지 트리거 On
+                catLaundryTriggered = true;
+
+                // 최대 체력 비례 피해
+                float damage = maxHp * catLaundry.OffScreenDamageRatio;
+                TakeDamage(damage);
+            }
+
+            // FixedUpdate 싱크
+            yield return _waitForFixedUpdate;
+        }
+
+        // 다 이동 후 확실히 이동
+        rb2D.MovePosition(targetPos);
+
+        // 넉백 종료
         IsKnockbacked = false;
+        _knockbackCoroutine = null;
     }
+
+    // 넉백 벽 충돌 보정
+    // 벽 있으면 목표 지점, 지속 시간을 비율로 줄임
+    private void KnockBackOffset(Vector2 startPos, Vector2 dir, float totalDistance, ref Vector2 target, ref float duration)
+    {
+        // 너무 짧은 거리면 패스
+        if (totalDistance <= 0.001f) return;
+
+        // 레이캐스트로 벽 판정
+        RaycastHit2D hit = Physics2D.Raycast(startPos, dir, totalDistance, _wallLayerMask);
+
+        // 벽 없으면 패스
+        if (hit.collider == null) return;
+
+        // 거리 비율 (총 넉백 거리, 벽 충돌 거리)
+        float distance = Mathf.Max(0f, hit.distance);
+        float ratio = distance / totalDistance;
+
+        target = startPos + dir * distance;     // 목표 지점 갱신
+        duration = _knockbackDuration * ratio;  // 넉백 시간 갱신
+    }
+
+    // 냥빨래 설정
+    // 루프 전에 한 번만 패시브 체크
+    // 화면 밖 시작이면 냥빨래 대상 아님
+    private bool TryGetCatLaundry(Vector2 startPos, out CatLaundryModifier catLaundry)
+    {
+        catLaundry = null;
+
+        if (IsInsideScreen(startPos) == false) return false;
+
+        return SkillManager.Instance.HasPassive(out catLaundry);
+    }
+
+    // 화면 내부인지 체크
+    private bool IsInsideScreen(Vector2 worldPos)
+    {
+        // 캐싱된 카메라 없으면 그냥 항상 화면 내부 판정
+        if (_mainCamera == null) return true;
+
+        Vector3 viewPoint = _mainCamera.WorldToViewportPoint(worldPos);
+        return viewPoint.x >= 0f && viewPoint.x <= 1f &&
+               viewPoint.y >= 0f && viewPoint.y <= 1f;
+    }
+
+
 
     public void TryReduceMaxHp(float ratio)
     {
@@ -349,9 +458,11 @@ public abstract class MonsterBase : PoolObject, IDamageable, IMonsterStatus, IPu
 
     public void OnCC()
     {
-        if (SkillManager.Instance != null && SkillManager.Instance.HasPassive<SuperCleanModifier>(out var modifier))
+        // SuperClean
+        if (SkillManager.Instance != null && SkillManager.Instance.HasPassive(out SuperCleanModifier modifier))
         {
-            ApplySlow("SuperClean", 0.2f, 5f);
+            // 이동속도 감소
+            ApplySlow(SuperCleanModifier.DEBUFF_KEY, modifier.SlowAmont, modifier.SlowDuration);
         }
     }
 
