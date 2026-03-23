@@ -8,7 +8,7 @@ public class RelicDivisionSystem
     private List<RelicBase> _relics;
 
     public bool IsDivisionActive => DivitionActivable();
-    public RelicDivision _currentDivision { get; private set; }
+    public RelicDivision CurrentDivision { get; private set; }
 
 
     public RelicDivisionSystem(PlayerLoadout loadout)
@@ -25,7 +25,7 @@ public class RelicDivisionSystem
             return 0;
 
         increaseStat = GetIncreaseStatType();
-        return _currentDivision.value;
+        return CurrentDivision.value;
     }
 
     private bool DivitionActivable()
@@ -37,11 +37,11 @@ public class RelicDivisionSystem
         if(_relics.Count < 3)
             return false;
 
-        _currentDivision = _relics[0].Data.Division;
+        CurrentDivision = _relics[0].Data.Division;
         foreach(var relic in _relics)
         {
             var divition = relic.Data.Division;
-            if (divition.division_type != _currentDivision.division_type)
+            if (divition.division_type != CurrentDivision.division_type)
                 return false;
         }
 

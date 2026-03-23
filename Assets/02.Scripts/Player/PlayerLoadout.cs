@@ -7,6 +7,12 @@ using UnityEngine;
 /// </summary>
 public class PlayerLoadout
 {
+
+    // 고정 수치값
+    private const int _relicSlotLength = 3;
+    private readonly RelicBase _relicZero = new RelicBase();                    // 빈 유물 공간을 의미
+
+
     // 장착 장비 필드
     private Dictionary<PART, EquipmentBase> _myEquipments;
 
@@ -15,22 +21,21 @@ public class PlayerLoadout
     private List<RelicBase> _outputRelics;                                      // 외부 출력용 리스트
     private RelicDivisionSystem _relicDivisionSystem;
 
+    private VoidEventChannelSO _onChangeLoadout;
+
+
     public Dictionary<PART, EquipmentBase> MyEquipments => _myEquipments;
     public List<RelicBase> MyRelics => _outputRelics;
 
-    private readonly RelicBase _relicZero;
-    private readonly int _relicSlotLength = 3;
 
-    private VoidEventChannelSO _onChangeLoadout;
 
     public PlayerLoadout(VoidEventChannelSO onChangeLoadout)
     {
         _onChangeLoadout = onChangeLoadout;
 
-        _relicZero = new RelicBase();
         _myRelics = new List<RelicBase>();
         _outputRelics = new List<RelicBase>();
-        for(int i = 0; i < _relicSlotLength; i++)
+        for (int i = 0; i < _relicSlotLength; i++)
         {
             _myRelics.Add(_relicZero);
         }
@@ -45,6 +50,7 @@ public class PlayerLoadout
             {PART.Shoes, ItemDB.CreateItem<EquipmentBase>(ItemID.DefaultShose)}
         };
     }
+
 
     #region 장비&유물 스탯 반환
 
@@ -117,7 +123,7 @@ public class PlayerLoadout
     {
         RelicBase relic = ItemDB.CreateItem<RelicBase>(item.ID);
         relic.SetEnhanceLevel(item.EnhanceLevel);
-        for(int i = 0; i < _myRelics.Count; i++)
+        for (int i = 0; i < _myRelics.Count; i++)
         {
             if (_myRelics[i] == _relicZero)
             {
@@ -146,6 +152,19 @@ public class PlayerLoadout
                 return;
             }
         }
+    }
+
+    // 유물의 공명 효과가 활성화됐는지 여부
+    public bool TryGetRelicDivision(out RELIC_TYPE divisionType)
+    {
+        bool isDivision = _relicDivisionSystem.IsDivisionActive;
+
+        if (isDivision)
+            divisionType = _relicDivisionSystem.CurrentDivision.division_type;
+        else
+            divisionType = (RELIC_TYPE)(-1);
+
+        return isDivision;
     }
 
     #endregion

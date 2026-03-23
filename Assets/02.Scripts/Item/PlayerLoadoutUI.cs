@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -10,6 +11,7 @@ public class PlayerLoadoutUI : UIGroup
 
     [Header("유물일 경우 세팅하는 슬롯")]
     [SerializeField] private List<UISlot> _loadoutRelicSlots;
+    [SerializeField] private TextMeshProUGUI _relicDivisionSlot;
 
     [Header("팝업 출력을 위한 버튼")]
     [SerializeField] private List<Button> _popUpButtons;
@@ -73,7 +75,6 @@ public class PlayerLoadoutUI : UIGroup
     // 유물 로드아웃UI슬롯 갱신
     private void UpdateRelicLoadoutSlot()
     {
-
         if(_loadoutRelicSlots != null && _loadoutRelicSlots.Count > 0)
         {
             int i = 0;
@@ -86,6 +87,14 @@ public class PlayerLoadoutUI : UIGroup
                 _loadoutRelicSlots[i].Init();
             }
         }
+
+        if (_relicDivisionSlot == null)
+            return;
+
+        if (_loadout.TryGetRelicDivision(out var divisionType))
+            _relicDivisionSlot.text = divisionType.ToString();
+        else
+            _relicDivisionSlot.text = string.Empty;
     }
 
 
