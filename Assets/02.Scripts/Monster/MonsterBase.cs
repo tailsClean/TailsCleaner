@@ -1,13 +1,14 @@
-using MonsterEnum;
+﻿using MonsterEnum;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using static UnityEngine.RuleTile.TilingRuleOutput;
 
 [RequireComponent(typeof(Rigidbody2D), typeof(Collider2D))]
 public abstract class MonsterBase : PoolObject, IDamageable, IMonsterStatus, IPullable
 {
     [Header("--- 환경 설정 ---")]
-    public Transform target;
+    public UnityEngine.Transform target;
     public float stoppingDistance = 0.1f;
 
     [Header("--- 몬스터 정체성 ---")]
@@ -21,6 +22,14 @@ public abstract class MonsterBase : PoolObject, IDamageable, IMonsterStatus, IPu
     public float hitBox = 1.0f;
     public float mass = 1.0f;
     public float KBResist = 1.0f;
+    public float knockbackUnitToPx = 100f;
+
+    [Header("--- 겹침 방지 설정 ---")]
+    [Tooltip("몬스터끼리 서로 밀어내기 시작하는 거리")]
+    [SerializeField] private float avoidanceRadius = 0.5f; // 몬스터끼리 띄울 거리
+    [Tooltip("몬스터끼리 서로 밀어내는 힘의 세기")]
+    [SerializeField] private float avoidanceForce = 1.5f;  // 밀어내는 힘의 세기
+    [SerializeField] private LayerMask monsterLayer;       // 몬스터 전용 레이어 
 
     private float originHp;
     private float originPower;
@@ -30,7 +39,7 @@ public abstract class MonsterBase : PoolObject, IDamageable, IMonsterStatus, IPu
 
     public float MaxHp => maxHp;
 
-    public float knockbackUnitToPx = 100f;
+    
     private int _stunCounter = 0; // 딕셔너리 카운터 역할
 
     // --- IMonsterStatus 상태 프로퍼티 ---
@@ -193,19 +202,48 @@ public abstract class MonsterBase : PoolObject, IDamageable, IMonsterStatus, IPu
 
     protected void StraightChase()
     {
+        // 기본 위치 및 타겟 확인
         Vector2 myPos = rb2D.position;
+        if (target == null) return; // 타겟이 없으면 중단
+
         Vector2 targetPos = target.position;
         Vector2 diff = targetPos - myPos;
 
+        // 정지 거리 체크 (도착 시 멈춤)
         if (diff.magnitude <= stoppingDistance)
         {
             rb2D.linearVelocity = Vector2.zero;
             return;
         }
 
-        Vector2 dir = diff.normalized;
-        // _currentMoveSpeed(슬로우 적용값) 사용
-        Vector2 nextPos = myPos + dir * _currentMoveSpeed * Time.fixedDeltaTime;
+        //  플레이어를 향한 기본 방향 벡터
+        Vector2 chaseDir = diff.normalized;
+
+        // 주변 몬스터를 피하는 회피 벡터 계산
+        Vector2 separationDir = Vector2.zero;
+        Collider2D[] neighbors = Physics2D.OverlapCircleAll(myPos, avoidanceRadius, monsterLayer);
+
+        foreach (var neighbor in neighbors)
+        {
+            // 자기 자신 제외
+            if (neighbor.gameObject == gameObject) continue;
+
+            Vector2 avoidDiff = myPos - (Vector2)neighbor.transform.position;
+            float dist = avoidDiff.magnitude;
+
+            if (dist > 0 && dist < avoidanceRadius)
+            {
+                // 거리가 가까울수록 더 강하게 밀어내도록 합산
+                separationDir += avoidDiff.normalized / dist;
+            }
+        }
+
+        // 두 벡터를 합쳐서 최종 방향 결정
+        // avoidanceForce를 통해 거리 조절.
+        Vector2 finalDir = (chaseDir + separationDir * avoidanceForce).normalized;
+
+        // 리지드바디 이동 적용
+        Vector2 nextPos = myPos + finalDir * _currentMoveSpeed * Time.fixedDeltaTime;
         rb2D.MovePosition(nextPos);
     }
 
