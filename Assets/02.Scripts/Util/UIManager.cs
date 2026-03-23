@@ -74,8 +74,9 @@ public class UIManager : MonoBehaviour
                 this._gameOverPanel = stageUI.GameOverPanel;
                 this._stageClearPanel = stageUI.StageClearPanel;
                 this._BossHP = stageUI.BossHP;
+                this._stageWaveBanner = stageUI.WaveBannerUI;
             }
-            if(container is LobbyUIContainer lobbyUI)
+            if (container is LobbyUIContainer lobbyUI)
             {
                 // LobbyUIContainer 참조로 들고 있기
                 this._dungeonSelect = lobbyUI.DungeonSelect;
@@ -240,6 +241,9 @@ public class UIManager : MonoBehaviour
 
     #endregion
 
-
+    #region StageWaveBanner
+    private StageWaveBannerUI _stageWaveBanner;
+    public StageWaveBannerUI StageWaveBanner => _stageWaveBanner;
+    #endregion
 
 }

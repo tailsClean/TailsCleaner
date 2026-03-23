@@ -167,6 +167,16 @@ public class StageController : MonoBehaviour
 
         _stateMachine.ChangeState(new CombatState(_timer, _waveScheduler));
         _spawner.SetSpawningEnabled(true);
+
+        if(UIManager.Instance != null && UIManager.Instance.StageWaveBanner != null)
+        {
+            Debug.Log("[StageController] PlayStageStart 호출");
+            StartCoroutine(UIManager.Instance.StageWaveBanner.PlayStageStart());
+        }
+        else
+        {
+            Debug.Log("[StageController] StageWaveBanner가 null이라 호출 불가");
+        }
     }
 
     public void SetPaused(bool isPaused)
@@ -181,7 +191,7 @@ public class StageController : MonoBehaviour
         Debug.Log($"[Stage] Main timer reached. planNull={_plan == null}, bossId={(_plan != null ? _plan.bossId : -999)}");
         Debug.Log($"[Stage] spawnerNull={_spawner == null}, registryNull={_registry == null}, timerNull={_timer == null}");
 
-        IStageState _bossState = new BossState(_timer, _registry, _spawner, _plan.bossId);
+        IStageState _bossState = new BossState(this, _timer, _registry, _spawner, _plan.bossId);
         _stateMachine.ChangeState(_bossState);
     }
 
