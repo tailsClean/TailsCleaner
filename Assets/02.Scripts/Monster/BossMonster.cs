@@ -332,7 +332,7 @@ public class BossMonster : MonsterBase
             if (rb2D != null)
                 rb2D.linearVelocity = Vector2.zero;
             return;
-            
+        }
         if (!isDataInitialized)
         {
             if (MonsterId > 0)
