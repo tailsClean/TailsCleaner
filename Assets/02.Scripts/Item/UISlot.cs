@@ -62,23 +62,35 @@ public class UISlot : MonoBehaviour
         }
     }
 
-    //public void ShowSlot(ItemInstance item)
-    //{
-    //    var a = ItemDB.GetItemData<ItemBaseSO>(item.ID);
-    //    if (a != null)
-    //    {
-    //        _image.sprite = a.ImageSprite;
-    //        _amountText.text = item.Amount.ToString();
-    //    }
-    //    else
-    //    {
-    //        Debug.Log("값을 찾을 수 없다.");
-    //        _image.sprite = _baseSprite;
-    //        _amountText.text = string.Empty;
-    //    }
+    public void SetSlot(ItemInstance item, TEXT_TYPE textType = TEXT_TYPE.Amount)
+    {
+        var itemData = ItemDB.GetData(item.ID);
+        if (itemData == null)
+        {
+            Debug.Log("값을 찾을 수 없다.");
+            _image.sprite = _baseSprite;
+            _amountText.text = string.Empty;
+            return;
+        }
 
-    //    _button.onClick.AddListener( () => _onItemPopup.OnStartEvent(item) );
-    //}
+        _image.sprite = itemData.SpriteImg;
+
+        if (_amountText == null)
+            return;
+
+        switch(textType)
+        {
+            case TEXT_TYPE.Amount:
+                _amountText.text = item.Amount.ToString();
+                break;
+            case TEXT_TYPE.Name:
+                _amountText.text = item.Name;
+                break;
+            case TEXT_TYPE.None:
+                _amountText.text = string.Empty;
+                break;
+        }
+    }
 
 
     public void AddListener(Action action)
@@ -97,5 +109,10 @@ public class UISlot : MonoBehaviour
 
         if(_button != null)
             _button.onClick.RemoveAllListeners();
+    }
+
+    public enum TEXT_TYPE
+    {
+        Amount, Name, None
     }
 }

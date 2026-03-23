@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class RewardSystem
@@ -6,11 +7,13 @@ public class RewardSystem
     private ItemInventory _inventory;
     private ItemCurrency _currency;
 
-    public RewardDTO _currentReward;
+    private RewardDTO _currentReward;
     private RewardCreator _rewardSystem;
 
     public int StageGroupID => _rewardSystem.StageGroupID;
     public RewardDTO CurrentReward => _currentReward;
+
+    public event Action OnReward;
 
     /// <summary>
     /// 전역 데이터 참조를 위해 Start에서 생성자 호출해야 함
@@ -29,7 +32,7 @@ public class RewardSystem
     {
         _rewardSystem.OnGainReward(stageGroupID);
 
-        SetRewardToInventory();
+        OnReward?.Invoke();
     }
 
     // 현재 보상목록을 인벤토리에 추가하는 메서드
