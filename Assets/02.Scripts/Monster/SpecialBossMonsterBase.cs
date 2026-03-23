@@ -74,6 +74,8 @@ public abstract class SpecialBossMonsterBase : MonsterBase
             {
                 return;
             }
+
+            Debug.Log($"[SpecialBossMonsterBase] FixedUpdate ACTIVE / name:{name}, MonsterId:{MonsterId}, hp:{hp}, targetNull:{target == null}");
         }
 
         if (target == null) return;
@@ -116,7 +118,7 @@ public abstract class SpecialBossMonsterBase : MonsterBase
         isDataInitialized = false;
         isWaitingForMonsterId = true;
 
-        Debug.Log($"[SpecialBossMonsterBase] OnSpawn / MonsterId:{MonsterId} (deferred init)");
+        Debug.Log($"[SpecialBossMonsterBase] OnSpawn / name:{name}, MonsterId:{MonsterId}, instanceId:{GetInstanceID()} (deferred init)");
     }
 
     private void InitializeMonsterData()
@@ -161,6 +163,43 @@ public abstract class SpecialBossMonsterBase : MonsterBase
 
         // 정상 데이터 로딩
         pattern_group_id = monsterData.pattern_group_id;
+
+        if (monsterData.monster_type == MONSTERTYPE.Elite && pattern_group_id <= 0)
+        {
+            Debug.Log($"[SpecialBossMonsterBase] >>> Elite fallback ENTER <<< name:{name}, MonsterId:{MonsterId}, pattern_group_id:{pattern_group_id}");
+
+            currentPattern = null;
+            isSuicideUnit = false;
+            currentState = MonsterState.MOVE;
+            currentCastTimer = 0f;
+
+            MonsterShooter fallbackShooter = GetComponent<MonsterShooter>();
+            if (fallbackShooter != null)
+            {
+                fallbackShooter.DisableShooter();
+            }
+
+            if (!activeMonsters.Contains(this))
+                activeMonsters.Add(this);
+
+            if (visualChild != null)
+                visualChild.localPosition = Vector2.zero;
+
+            if (target == null)
+            {
+                GameObject playerObj = GameObject.FindWithTag("Player");
+                if (playerObj != null)
+                    target = playerObj.transform;
+            }
+
+            isDataInitialized = true;
+            isWaitingForMonsterId = false;
+
+            Debug.Log($"[SpecialBossMonsterBase] >>> Elite fallback COMPLETE <<< name:{name}, MonsterId:{MonsterId}, isDataInitialized:{isDataInitialized}, targetNull:{target == null}");
+
+            return;
+        }
+
 
         if (pattern_group_id <= 0)
         {
@@ -289,6 +328,10 @@ public abstract class SpecialBossMonsterBase : MonsterBase
 
         isDataInitialized = true;
         isWaitingForMonsterId = false;
+
+        Debug.Log($"[SpecialBossMonsterBase] >>> Elite fallback COMPLETE <<< name:{name}, MonsterId:{MonsterId}, isDataInitialized:{isDataInitialized}, targetNull:{target == null}");
+
+        return;
     }
 
     public override void OnDespawn()
