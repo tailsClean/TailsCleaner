@@ -135,7 +135,7 @@ public class BossMonster : MonsterBase
         if (lineRenderer != null)
         {
             lineRenderer.enabled = false;
-            lineRenderer.useWorldSpace = true;  
+            lineRenderer.useWorldSpace = true;
             lineRenderer.positionCount = 2;
             lineRenderer.alignment = LineAlignment.View;
         }
@@ -294,6 +294,13 @@ public class BossMonster : MonsterBase
 
     protected override void FixedUpdate()
     {
+        if (isPaused)
+        {
+            if (rb2D != null)
+                rb2D.linearVelocity = Vector2.zero;
+            return;
+        }
+
         if (target == null || this.hp <= 0)
         {
             rb2D.linearVelocity = Vector2.zero;
@@ -647,6 +654,9 @@ public class BossMonster : MonsterBase
         float elapsedCast = 0f;
         while (elapsedCast < blink_cast_time)
         {
+            while (isPaused)
+                yield return null;
+
             elapsedCast += Time.deltaTime;
 
             if (lineRenderer != null && target != null)
@@ -664,7 +674,7 @@ public class BossMonster : MonsterBase
         }
 
         Vector2 moveStart = rb2D.position;
-        Vector2 moveTarget = target.position; 
+        Vector2 moveTarget = target.position;
 
         if (lineRenderer != null)
             lineRenderer.enabled = false;
@@ -678,6 +688,9 @@ public class BossMonster : MonsterBase
 
         while (elapsed < duration && this.hp > 0)
         {
+            while (isPaused)
+                yield return new WaitForFixedUpdate();
+
             elapsed += Time.fixedDeltaTime;
             float p = elapsed / duration;
             rb2D.MovePosition(Vector2.Lerp(moveStart, moveTarget, p));
@@ -771,6 +784,8 @@ public class BossMonster : MonsterBase
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
+        if (isPaused) return;
+
         if (isBlinking && collision.gameObject.CompareTag("Player"))
         {
             collision.gameObject.GetComponent<IDamageable>()?.TakeDamage(pattern_damage);
@@ -779,6 +794,8 @@ public class BossMonster : MonsterBase
 
     private void OnTriggerEnter2D(Collider2D other)
     {
+        if (isPaused) return;
+
         if (isBlinking && other.CompareTag("Player"))
         {
             other.GetComponent<IDamageable>()?.TakeDamage(pattern_damage);
@@ -925,6 +942,9 @@ public class BossMonster : MonsterBase
 
         while (elp < dur && this.hp > 0)
         {
+            while (isPaused)
+                yield return new WaitForFixedUpdate();
+
             elp += Time.fixedDeltaTime;
             float p = elp / dur;
 
@@ -1119,5 +1139,22 @@ public class BossMonster : MonsterBase
     private bool IsShooterConfigured()
     {
         return shooter != null && shooter.enabled;
+    }
+
+    public override void SetPaused(bool paused)
+    {
+        base.SetPaused(paused);
+
+        if (paused)
+        {
+            isBlinking = false;
+            isWaitingBlink = false;
+            isJumping = false;
+            isWaitingJump = false;
+            isFleeing = false;
+
+            if (lineRenderer != null)
+                lineRenderer.enabled = false;
+        }
     }
 }

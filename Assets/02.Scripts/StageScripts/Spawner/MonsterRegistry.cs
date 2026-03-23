@@ -24,56 +24,76 @@ public class MonsterRegistry : MonoBehaviour, IMonsterRegistry
         return _aliveMonsters.Count < MAX_FIELD_MONSTER_COUNT;
     }
 
-    public void MarkBoss(GameObject _boss)
+    public void MarkBoss(GameObject boss)
     {
-        _bossObject = _boss;
+        _bossObject = boss;
     }
 
-    public bool IsBoss(GameObject _boss)
+    public bool IsBoss(GameObject obj)
     {
-        return _boss != null && _boss == _bossObject;
+        return obj != null && obj == _bossObject;
     }
 
-    public void Register(GameObject _monster)
+    public void ClearBossMark()
     {
-        if (_monster == null)
-        { return; }
+        _bossObject = null;
+    }
 
-        _aliveMonsters.Add(_monster);
+    public void Register(GameObject monster)
+    {
+        if (monster == null)
+            return;
 
-        MonsterRegistryHook _hook = _monster.GetComponent<MonsterRegistryHook>();
-
-        if (_hook == null)
+        if (_aliveMonsters.Add(monster))
         {
-            _hook = _monster.AddComponent<MonsterRegistryHook>();
+            MonsterRegistryHook hook = monster.GetComponent<MonsterRegistryHook>();
+            if (hook == null)
+            {
+                hook = monster.AddComponent<MonsterRegistryHook>();
+            }
+
+            hook.Bind(this, monster);
+            OnRegistered?.Invoke(monster);
+        }
+    }
+
+    public void Unregister(GameObject monster)
+    {
+        if (monster == null)
+            return;
+
+        if (_aliveMonsters.Remove(monster))
+        {
+            OnUnregistered?.Invoke(monster);
         }
 
-        _hook.Bind(this, _monster);
-
-        OnRegistered?.Invoke(_monster);
-    }
-
-    public void Unregister(GameObject _monster)
-    {
-        if (_monster == null)
-        { return; }
-
-        _aliveMonsters.Remove(_monster);
-
-        OnUnregistered?.Invoke(_monster);
+        if (_bossObject == monster)
+        {
+            _bossObject = null;
+        }
     }
 
     public void KillAllMonsters()
     {
+        KillAllMonsters(includeBoss: false);
+    }
+
+    public void KillAllMonsters(bool includeBoss)
+    {
         List<GameObject> toRemove = new List<GameObject>(_aliveMonsters);
+
         for (int i = 0; i < toRemove.Count; i++)
         {
             GameObject obj = toRemove[i];
-            if (obj == null) continue;
+            if (obj == null)
+                continue;
+
+            if (!includeBoss && obj == _bossObject)
+                continue;
 
             if (obj.TryGetComponent<PoolObject>(out var poolObj))
             {
-                poolObj.ReturnToPoolAfter(0);
+                poolObj.ReturnToPoolAfter(0f);
             }
             else
             {
@@ -81,12 +101,39 @@ public class MonsterRegistry : MonoBehaviour, IMonsterRegistry
             }
         }
 
-        _aliveMonsters.Clear();
+        _aliveMonsters.RemoveWhere(obj =>
+            obj == null || (includeBoss || obj != _bossObject));
     }
 
-    public void ClearBossMark()
+    public void SetAllMonstersPaused(bool paused, bool includeBoss = true)
     {
-        _bossObject = null;
+        List<GameObject> snapshot = new List<GameObject>(_aliveMonsters);
+
+        for (int i = 0; i < snapshot.Count; i++)
+        {
+            GameObject obj = snapshot[i];
+            if (obj == null)
+                continue;
+
+            if (!includeBoss && obj == _bossObject)
+                continue;
+
+            if (obj.TryGetComponent<MonsterBase>(out var monsterBase))
+            {
+                monsterBase.SetPaused(paused);
+            }
+        }
+    }
+
+    public void SetBossPaused(bool paused)
+    {
+        if (_bossObject == null)
+            return;
+
+        if (_bossObject.TryGetComponent<MonsterBase>(out var bossMonster))
+        {
+            bossMonster.SetPaused(paused);
+        }
     }
 }
 
@@ -95,22 +142,20 @@ public class MonsterRegistryHook : MonoBehaviour
     private MonsterRegistry _registry;
     private GameObject _self;
 
-    public void Bind(MonsterRegistry _registry, GameObject _self)
+    public void Bind(MonsterRegistry registry, GameObject self)
     {
-        this._registry = _registry;
-        this._self = _self;
+        _registry = registry;
+        _self = self;
     }
 
     private void OnDisable()
     {
-        // 풀링 반납(SetActive(false)) 시점에 호출됨
         if (_registry != null && _self != null)
         {
             _registry.Unregister(_self);
         }
     }
 
-    // 나중에 파괴는 지울거임 -> 몬스터 베이스 옵젝풀링 끝나면 제거 될 부분
     private void OnDestroy()
     {
         if (_registry != null && _self != null)
@@ -118,5 +163,4 @@ public class MonsterRegistryHook : MonoBehaviour
             _registry.Unregister(_self);
         }
     }
-
 }

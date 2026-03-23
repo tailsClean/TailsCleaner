@@ -17,6 +17,16 @@ public interface IMonsterSpawnSystem
 // 보스 시작/스테이지 종료 등 특정 상황에서 몬스터 전체 정리가 필요할 때 사용.
 public interface IMonsterRegistry
 {
+    int GetAliveCount();
+    bool CanSpawnMore();
+
+    void MarkBoss(GameObject boss);
+    bool IsBoss(GameObject obj);
+    void Register(GameObject monster);
+    void Unregister(GameObject monster);
     void KillAllMonsters();
     void ClearBossMark();
+
+    void SetAllMonstersPaused(bool paused, bool includeBoss = true);
+    void SetBossPaused(bool paused);
 }

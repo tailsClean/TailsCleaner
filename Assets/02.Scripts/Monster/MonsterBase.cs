@@ -1,4 +1,4 @@
-using MonsterEnum;
+﻿using MonsterEnum;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -120,7 +120,7 @@ public abstract class MonsterBase : PoolObject, IDamageable, IMonsterStatus, IPu
     public override void OnSpawn()
     {
         base.OnSpawn();
-        
+
         // 상태 초기화
         hp = _baseHp;
         maxHp = _baseHp;
@@ -164,6 +164,9 @@ public abstract class MonsterBase : PoolObject, IDamageable, IMonsterStatus, IPu
 
     protected virtual void Update()
     {
+        if (isPaused)
+            return;
+
         // 기절 장판 위에 서있고 기절 상태 아닐 때
         if (_stunAreaCount > 0 && IsStunned == false)
         {
@@ -176,10 +179,18 @@ public abstract class MonsterBase : PoolObject, IDamageable, IMonsterStatus, IPu
                 ApplyStun(_areaStunDuration);
             }
         }
+
     }
 
     protected virtual void FixedUpdate()
     {
+        if (isPaused)
+        {
+            if (rb2D != null)
+                rb2D.linearVelocity = Vector2.zero;
+            return;
+        }
+
         // 기절이나 넉백 중에는 이동하지 않음
         if (target == null || isAttacking || IsStunned || IsKnockbacked)
         {
@@ -293,9 +304,19 @@ public abstract class MonsterBase : PoolObject, IDamageable, IMonsterStatus, IPu
     {
         IsKnockbacked = true;
         OnCC();
+
         rb2D.bodyType = RigidbodyType2D.Dynamic;
         rb2D.AddForce(direction.normalized * force * knockbackUnitToPx, ForceMode2D.Impulse);
-        yield return new WaitForSeconds(0.3f); // 넉백 지속 시간
+
+        float t = 0f;
+        while (t < 0.3f)
+        {
+            if (!isPaused)
+                t += Time.deltaTime;
+
+            yield return null;
+        } // 넉백 지속 시간
+
         rb2D.linearVelocity = Vector2.zero;
         rb2D.bodyType = RigidbodyType2D.Kinematic;
         IsKnockbacked = false;
@@ -359,7 +380,10 @@ public abstract class MonsterBase : PoolObject, IDamageable, IMonsterStatus, IPu
     }
     protected virtual void OnTriggerStay2D(Collider2D other)
     {
-           // 닿은 대상이 target인지 확인
+        if (isPaused)
+            return;
+
+        // 닿은 대상이 target인지 확인
         if (target != null && other.gameObject == target.gameObject)
         {
             // 공격 주기가 되었는지 확인
@@ -367,12 +391,12 @@ public abstract class MonsterBase : PoolObject, IDamageable, IMonsterStatus, IPu
             {
                 // 플레이어에게 데미지 전달 시도
                 IDamageable player = other.gameObject.GetComponent<IDamageable>();
-              if (player != null)
+                if (player != null)
                 {
                     player.TakeDamage(this.power); // 플레이어의 함수 호출
                     lastAttackTime = Time.time;    // 쿨타임 초기화
-                   // 확인을 위한 로그
-                    //Debug.Log($"{gameObject.name}가 트리거로 플레이어에게 데미지를 입혔음.");
+                                                   // 확인을 위한 로그
+                                                   //Debug.Log($"{gameObject.name}가 트리거로 플레이어에게 데미지를 입혔음.");
                 }
             }
         }
@@ -392,7 +416,7 @@ public abstract class MonsterBase : PoolObject, IDamageable, IMonsterStatus, IPu
         CacheBaseStats();
         _baseHp = OriginHp * hpScale;
         _basePower = OriginPower * powerScale;
-        Debug.Log(OriginPower+"기본 파워" + powerScale + "파워 배율 ");
+        Debug.Log(OriginPower + "기본 파워" + powerScale + "파워 배율 ");
 
         // 강화 수치가 이미 있다면 적용
         RefreshFinalStats();
@@ -471,4 +495,24 @@ public abstract class MonsterBase : PoolObject, IDamageable, IMonsterStatus, IPu
             rb2D.linearVelocity = Vector2.zero;
         }
     }
+
+    protected bool isPaused;
+
+    public virtual void SetPaused(bool paused)
+    {
+        isPaused = paused;
+
+        if (rb2D != null)
+        {
+            rb2D.linearVelocity = Vector2.zero;
+            rb2D.angularVelocity = 0f;
+        }
+
+        if (paused)
+        {
+            isAttacking = false;
+        }
+    }
+
+    public bool IsPaused => isPaused;
 }

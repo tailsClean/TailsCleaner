@@ -1,4 +1,4 @@
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -15,6 +15,8 @@ public class StageUIContainer : MonoBehaviour, UIContainer // stageUI에서 연�
     public GameObject StageClearPanel => _stageClearPanel;
     [SerializeField] private GameObject _bossHP;
     public GameObject BossHP => _bossHP;
+    [SerializeField] private StageWaveBannerUI _waveBannerUI;
+    public StageWaveBannerUI WaveBannerUI => _waveBannerUI;
 
 
     [SerializeField] private List<UIGroup> _uiGroupList;
@@ -32,6 +34,7 @@ public class StageUIContainer : MonoBehaviour, UIContainer // stageUI에서 연�
 
     void Start()
     {
+        Debug.Log($"[StageUIContainer] WaveBannerUI ref = {_waveBannerUI != null}");
         _settingButton.onClick.AddListener(() => {
         UIManager.Instance.ChangeStateSettingPanel();
     });
