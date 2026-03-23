@@ -346,7 +346,9 @@ public abstract class MonsterBase : PoolObject, IDamageable, IMonsterStatus, IPu
     }
 
     public void Knockback(Vector2 direction, float force)
-    {
+    { 
+        // 죽은 상태면 패스
+        if (hp <= 0) return;
         // 넉백 힘 없으면 패스
         if (force <= 0f) return;
 
