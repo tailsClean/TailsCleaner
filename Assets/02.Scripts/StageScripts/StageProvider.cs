@@ -6,12 +6,12 @@ public interface IStagePlanProvider
     StagePlan GetStagePlan(int _stageId);
 }
 
-//CSV 파일에서 스테이지 계획을 읽어오는 구현체
+// CSV 파일에서 스테이지 계획을 읽어오는 구현체
 public sealed class DataParserStagePlanProvider : IStagePlanProvider
 {
-    private const string STAGE_TABLE_FILE = "stage_table";
-    private const string WAVE_TABLE_FILE = "monster_wave_table";
-    private const string SPECIAL_TABLE_FILE = "special_monster_table";
+    private const string STAGE_TABLE_FILE = "stage/stage_table";
+    private const string WAVE_TABLE_FILE = "stage/monster_wave_table";
+    private const string SPECIAL_TABLE_FILE = "stage/special_monster_table";
 
     private readonly StagePlanBuilder _builder = new StagePlanBuilder();
 
@@ -23,7 +23,10 @@ public sealed class DataParserStagePlanProvider : IStagePlanProvider
 
         if (_stages == null || _waves == null || _specialRows == null)
         {
-            Debug.LogError("[StagePlanProvider] CSV parse failed.");
+            Debug.LogError(
+                $"[StagePlanProvider] CSV parse failed. " +
+                $"stagesNull={_stages == null}, wavesNull={_waves == null}, specialNull={_specialRows == null}"
+            );
             return null;
         }
 
@@ -59,11 +62,26 @@ public sealed class DataParserStagePlanProvider : IStagePlanProvider
 
         if (_group.Count == 0)
         {
-            Debug.LogError($"[StagePlanProv" +
-                $"ider] wave group not found: group_id={_stage.monster_group_id}");
+            Debug.LogError(
+                $"[StagePlanProvider] wave group not found: group_id={_stage.monster_group_id}, stageId={_stageId}"
+            );
             return null;
         }
 
-        return _builder.Build(_stage, _group, specialGroup);
+        StagePlan builtPlan = _builder.Build(_stage, _group, specialGroup);
+
+        if (builtPlan == null)
+        {
+            Debug.LogError($"[StagePlanProvider] StagePlan build failed. stageId={_stageId}");
+            return null;
+        }
+
+        Debug.Log(
+            $"[StagePlanProvider] StagePlan built. " +
+            $"stageId={builtPlan.stageId}, waves={builtPlan.wavePlans?.Count ?? 0}, " +
+            $"specialRows={builtPlan.specialRows?.Count ?? 0}, bossId={builtPlan.bossId}"
+        );
+
+        return builtPlan;
     }
 }
