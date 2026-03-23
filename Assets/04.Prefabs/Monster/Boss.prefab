@@ -218,8 +218,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::BossMonster
   target: {fileID: 0}
   stoppingDistance: 0.1
-  hp: 500
-  maxHp: 500
+  hp: 2000
+  maxHp: 2000
   power: 1
   moveSpeed: 1
   hitBox: 1
@@ -232,6 +232,7 @@ MonoBehaviour:
   goldReward: 500
   _monsterSprite: {fileID: 0}
   pattern_group_id: 0
+  useZigzag: 0
   useJump: 0
   useFlee: 0
   useBlink: 0
@@ -246,6 +247,8 @@ MonoBehaviour:
   jump_height: 3
   visualChild: {fileID: 6844339646822135683}
   fleeDistance: 3
+  zigzag_width: 1.5
+  zigzagFrequency: 5
   _onBossHit: {fileID: 11400000, guid: 841b371bd87f3c5469f24f59d98ebfaa, type: 2}
   blink_detect_range: 5
   blink_cast_time: 1

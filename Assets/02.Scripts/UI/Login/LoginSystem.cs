@@ -161,6 +161,9 @@ public class LoginSystem : MonoBehaviour
 
     private void OnEnterBtn()
     {
+#if UNITY_EDITOR
+        UIManager.Instance.GoToLobby();
+#endif
         if (_isLoggedIn)
             UIManager.Instance.GoToLobby();
         else
