@@ -1,4 +1,4 @@
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 
 public class RuleBasedMonsterSpawner : MonoBehaviour, IMonsterSpawnSystem
@@ -54,8 +54,8 @@ public class RuleBasedMonsterSpawner : MonoBehaviour, IMonsterSpawnSystem
     private Dictionary<int, int> _monsterIdToType;
     private Dictionary<int, float> _typeToBaseExp;
 
-    private const string MONSTER_TABLE_FILE = "monster_table";
-    private const string MONSTER_TYPE_TABLE_FILE = "monster_type";
+    private const string MONSTER_TABLE_FILE = "monster/monster";
+    private const string MONSTER_TYPE_TABLE_FILE = "monster/monster_type";
 
     public void SetSpawningEnabled(bool _isenabled)
     {

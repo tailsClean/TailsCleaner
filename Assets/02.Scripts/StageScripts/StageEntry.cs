@@ -103,7 +103,7 @@ public class StageEntry : MonoBehaviour
 
     private void ApplyTowerModifier(StagePlan plan, int stageId)
     {
-        List<TowerTableRow> towers = DataParser.Parse<TowerTableRow>("tower_table");
+        List<TowerTableRow> towers = DataParser.Parse<TowerTableRow>("stage/tower_table");
         if (towers == null || towers.Count == 0)
         {
             plan.towerHpModifier = 0f;
@@ -145,7 +145,7 @@ public class StageEntry : MonoBehaviour
 
     private bool TrySpendEntryEnergy(int stageId)
     {
-        List<StageTableRow> stages = DataParser.Parse<StageTableRow>("stage_table");
+        List<StageTableRow> stages = DataParser.Parse<StageTableRow>("stage/stage_table");
         if (stages == null || stages.Count == 0)
         {
             Debug.LogWarning("[StageEntry] stage_table load failed. Fallback: allow entry.");

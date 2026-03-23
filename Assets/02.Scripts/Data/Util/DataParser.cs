@@ -1,127 +1,152 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Reflection;
 using UnityEngine;
-using UnityEditor;
 
 public static class DataParser
 {
     static readonly int DATA_START_IDX = 3;
     static readonly int DATA_HEADER_IDX = 1;
 
-    public static List<T> Parse<T>(string filename) where T : new()
+    public static List<T> Parse<T>(string relativePath) where T : new()
     {
-        filename = filename.ToLower();
-
-        List<T> data = new List<T>();
-
-        //csv파일가져오기
-        TextAsset csv = Resources.Load<TextAsset>($"Data/CSV/{filename}");
-        
-        if (csv == null)
+        if (string.IsNullOrWhiteSpace(relativePath))
         {
-            //Debug.LogWarning($"csv 파일이 없습니다. Data/{filename}");
+            Debug.LogError("[DataParser] relativePath is null or empty.");
             return null;
         }
 
-       
-        string[] rows = csv.text.Trim().Split(new string[] { "\r\n", "\r", "\n" }, System.StringSplitOptions.None);
+        relativePath = relativePath.Trim().Replace("\\", "/");
+
+        // Data/CSV 하위 상대 경로만 받도록 통일
+        string loadPath = $"Data/CSV/{relativePath}";
+        TextAsset csv = Resources.Load<TextAsset>(loadPath);
+
+        if (csv == null)
+        {
+            Debug.LogError($"[DataParser] csv 파일이 없습니다. path={loadPath}");
+            return null;
+        }
+
+        string[] rows = csv.text.Trim().Split(
+            new string[] { "\r\n", "\r", "\n" },
+            StringSplitOptions.None
+        );
+
         if (rows.Length < DATA_START_IDX)
         {
-            //Debug.LogWarning($"데이터가 없습니다.");
-            return data;
+            return new List<T>();
         }
 
         string[] headers = rows[DATA_HEADER_IDX].Split(',');
+        List<T> data = new List<T>();
 
-        for(int i = DATA_START_IDX; i < rows.Length; i++)
+        FieldInfo[] fields = typeof(T).GetFields(BindingFlags.Public | BindingFlags.Instance);
+
+        for (int i = DATA_START_IDX; i < rows.Length; i++)
         {
             string[] values = rows[i].Split(',');
-            //빈값이 들어오면 패스
-            if (string.IsNullOrEmpty(values[0].Trim())) continue;
 
-            //제목의 개수와 데이터의 개수가 다르면 오류이므로 패스!
-            if (values.Length != headers.Length) continue;
-            
+            if (values.Length == 0 || string.IsNullOrEmpty(values[0].Trim()))
+                continue;
+
+            if (values.Length != headers.Length)
+            {
+                Debug.LogWarning($"[DataParser] 헤더/값 개수 불일치. path={loadPath}, row={i + 1}");
+                continue;
+            }
+
             T item = new T();
-             //T클래스에 선언된 변수들을 배열 형태로 반환
-            //BindingFlags.Public : 접근제어가 public인것만 찾음
-            //BindingFlags.Instance : static 변수가 아닌, 객체를 생성해야 메모리가 올라가는 일반 인스턴스 변수만 찾음.
-            FieldInfo[] fields = typeof(T).GetFields(BindingFlags.Public | BindingFlags.Instance);
 
             for (int j = 0; j < headers.Length; j++)
             {
-                string header = headers[j].Trim().Replace(" ","");
+                string header = headers[j].Trim().Replace(" ", "");
                 string value = values[j].Trim();
 
-                //Debug.Log($"{j} : {header},{value}");
+                FieldInfo field = Array.Find(fields,
+                    f => f.Name.Equals(header, StringComparison.OrdinalIgnoreCase));
 
-                //T클래스의 변수명과 csv파일의 헤더명이 같은지
-                //if(filename.Equals("debuff"))
-                //Debug.Log($"{header} : {fields[j].Name}");
-                //StringComparison.OrdinalIgnoreCase : 대소문자 구분하지않고 비교하는 옵션
-                FieldInfo field = Array.Find(fields, f => f.Name.Equals(header, StringComparison.OrdinalIgnoreCase));
+                if (field == null)
+                    continue;
 
-                //Debug.Log(field);
+                bool isInvalidValue = string.IsNullOrEmpty(value) || value == "-";
+                object convertedValue;
 
-                if (field != null)
+                if (isInvalidValue)
                 {
-                    //빈 문자열이거나 "-" 인 경우 예외 처리
-                    bool isInvalidValue = string.IsNullOrEmpty(value) || value == "-";
-
-                    object convertedValue;
-
-                    if (isInvalidValue)
+                    if (field.FieldType == typeof(string))
                     {
-                        //타입에 따라 기본값 할당
-                        if (field.FieldType == typeof(string))
-                        {
-                            //스트링은 빈 값으로
-                            convertedValue = string.Empty; 
-                        }
-                        else if (field.FieldType == typeof(int) || field.FieldType == typeof(float))
-                        {
-                            //숫자형은 -1로
-                            convertedValue = -1; 
-                        }
-                        else
-                        {
-                            //그 외 타입은 시스템 기본값
-                            convertedValue = field.FieldType.IsValueType ? Activator.CreateInstance(field.FieldType) : null;
-                        }
+                        convertedValue = string.Empty;
+                    }
+                    else if (field.FieldType == typeof(int))
+                    {
+                        convertedValue = -1;
+                    }
+                    else if (field.FieldType == typeof(float))
+                    {
+                        convertedValue = -1f;
+                    }
+                    else if (field.FieldType == typeof(bool))
+                    {
+                        convertedValue = false;
+                    }
+                    else if (field.FieldType.IsEnum)
+                    {
+                        convertedValue = Activator.CreateInstance(field.FieldType);
                     }
                     else
                     {
-                        try
+                        convertedValue = field.FieldType.IsValueType
+                            ? Activator.CreateInstance(field.FieldType)
+                            : null;
+                    }
+                }
+                else
+                {
+                    try
+                    {
+                        if (field.FieldType.IsEnum)
                         {
-                            //enum 처리 추가
-                            if(field.FieldType.IsEnum)
-                            {
-                                convertedValue = Enum.Parse(field.FieldType, value);
-                            }
+                            // enum 숫자값/문자열 둘 다 대응
+                            if (int.TryParse(value, out int enumInt))
+                                convertedValue = Enum.ToObject(field.FieldType, enumInt);
                             else
-                            {
-                                convertedValue = Convert.ChangeType(value, field.FieldType);
-                            }
-        
+                                convertedValue = Enum.Parse(field.FieldType, value, true);
                         }
-                        catch (Exception ex)
+                        else if (field.FieldType == typeof(bool))
                         {
-                            Debug.LogWarning($"{header} 필드 형변환 실패: {value} (Error: {ex.Message})");
-                            continue;
+                            if (value == "1")
+                                convertedValue = true;
+                            else if (value == "0")
+                                convertedValue = false;
+                            else
+                                convertedValue = Convert.ChangeType(value, field.FieldType);
+                        }
+                        else
+                        {
+                            convertedValue = Convert.ChangeType(value, field.FieldType);
                         }
                     }
-
-                    field.SetValue(item, convertedValue);
+                    catch (Exception ex)
+                    {
+                        Debug.LogWarning(
+                            $"[DataParser] 형변환 실패. path={loadPath}, row={i + 1}, field={header}, value={value}, error={ex.Message}"
+                        );
+                        continue;
+                    }
                 }
+
+                field.SetValue(item, convertedValue);
             }
+
             data.Add(item);
         }
+
+        Debug.Log($"[DataParser] parsed {typeof(T).Name} count={data.Count}, path={loadPath}");
         return data;
     }
-
 }
-          
 
-    
+
+
 
