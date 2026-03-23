@@ -19,7 +19,7 @@ public abstract class EnhanceSystemUI : UIGroup
     protected EnhanceSystem _enhanceSystem;
 
     protected ItemInventory _inventory;
-    protected Currency _currency;                         // 필요 금화를 읽어올 재화 가방
+    protected ItemCurrency _currency;                         // 필요 금화를 읽어올 재화 가방
 
 
 

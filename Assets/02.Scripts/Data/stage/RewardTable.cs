@@ -24,7 +24,7 @@ public class RewardTable
     public int _description;
     public int reward_group_id;
     public REWARD_CATEGORY reward_category;
-    public REWARD_TYPE reward_type1;
+    public REWARD_TYPE reward_type;
     public int item_id;
     public int min_count;
     public int max_count;

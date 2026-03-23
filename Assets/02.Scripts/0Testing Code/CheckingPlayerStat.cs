@@ -42,6 +42,12 @@ public class CheckingPlayerStat : MonoBehaviour
     [Header("경험치 획득범위")]
     public float PickupRange;
 
+    private void Awake()
+    {
+        if(Player == null)
+            Player = GetComponent<PlayerBase>();
+    }
+
     private void Update()
     {
         TestSetStat(Player);

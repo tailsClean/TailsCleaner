@@ -24,7 +24,7 @@ public class PlayerBase : MonoBehaviour, IDamageable, ISkillable, ISkillStat, IP
     private PlayerLoadout _myEnhancement;
     private PlayerStatCalculator _statCalculator;
     private PlayerStateMachine _stateMachine;
-    private PlayerAni _playerAni;
+    private PlayerAnimation _playerAni;
 
 
     public float CurrentHp => _hpSystem.CurrentHp;
@@ -61,10 +61,10 @@ public class PlayerBase : MonoBehaviour, IDamageable, ISkillable, ISkillStat, IP
         _levelSystem = new PlayerLevelSystem(this);
         _myEnhancement = ItemManager.Instance.Loadout;
         _statCalculator = new PlayerStatCalculator(_myEnhancement, _levelSystem);
-        _playerAni = new PlayerAni(GetComponent<Animator>());
+        _playerAni = new PlayerAnimation(GetComponent<Animator>());
         _hpSystem = new PlayerHpSystem(this, _statCalculator);
 
-        _stateMachine = new PlayerStateMachine(this);
+        _stateMachine = new PlayerStateMachine(this, _playerAni);
     }
 
     private void OnEnable()
@@ -95,11 +95,6 @@ public class PlayerBase : MonoBehaviour, IDamageable, ISkillable, ISkillStat, IP
     public void OnMove(InputAction.CallbackContext ctx)
     {
         _stateMachine.MoveInput(ctx.ReadValue<Vector2>().normalized);
-
-        if(_stateMachine.MoveDir == Vector2.zero)
-            PlayAni(PlayerAni.Idle);
-        else
-            PlayAni(PlayerAni.Move);
     }
 
 
@@ -122,8 +117,9 @@ public class PlayerBase : MonoBehaviour, IDamageable, ISkillable, ISkillStat, IP
     }
     private void OnDead()
     {
+        _stateMachine.DeadInput(_hpSystem);
         _onDead.OnStartEvent();
-        _playerAni.PlayAni(PlayerAni.Dead);
+        PlayAni(PlayerAnimation.Dead);
     }
 
     // 최대 실드량 갱신
@@ -142,7 +138,8 @@ public class PlayerBase : MonoBehaviour, IDamageable, ISkillable, ISkillStat, IP
     // 인게임 경험치 획득 로직
     public void GainInGameExp(float exp)
     {
-        bool isLevelUp = _levelSystem.GainExp(PlayerLevelSystem.GameMode.InGame, exp);
+        bool isLevelUp = _levelSystem.GainExp(PlayerLevelSystem.GAME_MODE.InGame, exp);
+        PlayAni(PlayerAnimation.Sweep);
         _onGainInGameExp.OnStartEvent(_levelSystem.InGameCurrentExp);
 
         if (isLevelUp)
@@ -151,7 +148,7 @@ public class PlayerBase : MonoBehaviour, IDamageable, ISkillable, ISkillStat, IP
     // 아웃게임 경험치 획득 로직
     public void GainOutGameExp(float exp)
     {
-        bool isLevelUp = _levelSystem.GainExp(PlayerLevelSystem.GameMode.OutGame, exp);
+        bool isLevelUp = _levelSystem.GainExp(PlayerLevelSystem.GAME_MODE.OutGame, exp);
         _onGainOutGameExp.OnStartEvent(_levelSystem.OutGameCurrentExp);
 
         if (isLevelUp)
@@ -174,14 +171,14 @@ public class PlayerBase : MonoBehaviour, IDamageable, ISkillable, ISkillStat, IP
     // 이벤트 연결
     private void EventConnect()
     {
-        _hpSystem.OnHit += () => PlayAni(PlayerAni.Hit);
+        _hpSystem.OnHit += () => PlayAni(PlayerAnimation.Hit);
         _itemPickupSystem.OnEnterPickupRange += OnItemPickup;
         _onPickupExp.AddListener(GainInGameExp);
     }
 
     private void EventDisconnect()
     {
-        _hpSystem.OnHit -= () => PlayAni(PlayerAni.Hit);
+        _hpSystem.OnHit -= () => PlayAni(PlayerAnimation.Hit);
         _itemPickupSystem.OnEnterPickupRange -= OnItemPickup;
         _onPickupExp.RemoveListener(GainInGameExp);
     }
@@ -195,6 +192,12 @@ public class PlayerBase : MonoBehaviour, IDamageable, ISkillable, ISkillStat, IP
         TakeDamage(1);
     }
 
+    [ContextMenu("죽음체험")]
+    public void Deadth()
+    {
+        TakeDamage(1000);
+    }
+
     [ContextMenu("힐")]
     public void HealTest()
     {
@@ -205,6 +208,9 @@ public class PlayerBase : MonoBehaviour, IDamageable, ISkillable, ISkillStat, IP
 
     [ContextMenu("아웃경험치10증가")]
     public void OutGameExp() => GainOutGameExp(10);
+
+    [ContextMenu("인경험치10증가")]
+    public void InGameExp() => GainInGameExp(10);
 
     // 디버그용
     [ContextMenu("스탯출력")]

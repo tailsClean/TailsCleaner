@@ -1,8 +1,11 @@
 ﻿using UnityEngine;
 
-class PlayerAni
+public class PlayerAnimation
 {
     private Animator _animator;
+
+
+    public float CurrentAniTime => _animator.GetCurrentAnimatorStateInfo(0).length;
 
     public const string Idle = "Idle";
     public const string Move = "Move";
@@ -10,12 +13,13 @@ class PlayerAni
     public const string Dead = "Dead";
 
     public const string Attack = "Attack";
+    public const string SkillCount = "AttackCount";
     public const string Skill1 = "Skill1";
     public const string Skill2 = "Skill2";
     public const string Skill3 = "Skill3";
     public const string Sweep = "Sweep";
 
-    public PlayerAni(Animator animator)
+    public PlayerAnimation(Animator animator)
     {
         _animator = animator;
     }
@@ -25,11 +29,16 @@ class PlayerAni
         switch(aniName)
         {
             case Idle:
+                _animator.SetTrigger(Idle);
                 _animator.SetFloat(Move, 0f);
                 break;
 
             case Move:
                 _animator.SetFloat(Move, 1f);
+                break;
+
+            case Sweep:
+                _animator.SetTrigger(Sweep);
                 break;
 
             case Hit:
@@ -41,21 +50,23 @@ class PlayerAni
                 break;
 
             case Skill1:
-                _animator.SetInteger(Attack, 0);
+                OnSkill(0);
                 break;
 
             case Skill2:
-                _animator.SetInteger(Attack, 1);
+                OnSkill(1);
                 break;
 
             case Skill3:
-                _animator.SetInteger(Attack, 2);
-                break;
-
-            case Sweep:
-                _animator.SetInteger(Attack, 3);
+                OnSkill(2);
                 break;
         }
+    }
+
+    private void OnSkill(int skillNum)
+    {
+        _animator.SetInteger(Attack, skillNum);
+        _animator.SetTrigger(SkillCount);
     }
 }
 

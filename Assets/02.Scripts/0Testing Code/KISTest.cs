@@ -5,7 +5,7 @@ using UnityEngine;
 public class KISTest : MonoBehaviour
 {
     public ItemInventory inventory;
-    public Currency currency;
+    public ItemCurrency currency;
     public CraftingSystem craftingSystem;
     public int Id;
     public int Amount = 10000000;

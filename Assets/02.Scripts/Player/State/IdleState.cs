@@ -1,6 +1,6 @@
 ﻿
 
-public class IdleState : IPlayerState
+public class IdleState : PlayerState
 {
     private PlayerBase _player;
 
@@ -9,21 +9,8 @@ public class IdleState : IPlayerState
         _player = player;
     }
 
-    public void Enter()
+    public override void Enter()
     {
-
-    }
-
-    public void Exit()
-    {
-    }
-
-    public void Update()
-    {
-
-    }
-
-    public void HandleInput(PlayerInputData input)
-    {
+        _player.PlayAni(PlayerAnimation.Idle);
     }
 }

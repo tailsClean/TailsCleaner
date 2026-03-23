@@ -2,7 +2,7 @@
 using System.Collections;
 using UnityEngine;
 
-public class PlayerHpSystem
+public class PlayerHpSystem : IRevive
 {
     private PlayerBase _player;
     private PlayerStatCalculator _calculator;
@@ -112,11 +112,20 @@ public class PlayerHpSystem
         return result < 0 ? -result : 0;
     }
 
+    public void OnRevive()
+    {
+        CurrentHp = MaxHp;
+        Debug.Log("<color=green>부활</color>");
+    }
+
+
     public void Init(float maxHp)
     {
         _currentHp = MaxHp;
         Debug.Log("현재 체력" + _currentHp);
         Debug.Log("현재 체력 프로퍼티" + CurrentHp);
     }
+
+
 }
 

@@ -1,91 +1,64 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 
 public class RewardSystem
 {
-    [field: SerializeField] public int StageGroupID { get; private set; }
-    public RewardDTO CurrentReward { get; private set; }
+    private ItemInventory _inventory;
+    private ItemCurrency _currency;
 
+    public RewardDTO _currentReward;
+    private RewardCreator _rewardSystem;
 
+    public int StageGroupID => _rewardSystem.StageGroupID;
+    public RewardDTO CurrentReward => _currentReward;
+
+    /// <summary>
+    /// 전역 데이터 참조를 위해 Start에서 생성자 호출해야 함
+    /// </summary>
     public RewardSystem()
     {
-        CurrentReward = new RewardDTO();
+        _rewardSystem = new RewardCreator();
+        _currentReward = _rewardSystem.CurrentReward;
+        _inventory = ItemManager.Instance.Inventory;
+        _currency = ItemManager.Instance.Currency;
     }
 
 
-    // 그룹ID로 보상 얻는 메서드
-    public void OnGainReward(int groupID)
+    // 리워드 보상 호출
+    public void OnGainReward(int stageGroupID)
     {
-        StageGroupID = groupID;
+        _rewardSystem.OnGainReward(stageGroupID);
 
-        SetRewardAmount();
+        SetRewardToInventory();
     }
 
-
-    
-    // 해당 그룹ID의 보상을 모두 계산
-    private void SetRewardAmount()
+    // 현재 보상목록을 인벤토리에 추가하는 메서드
+    public void SetRewardToInventory()
     {
-        CurrentReward.Init();
-        var dataBundle = RewardDB.GetRewardTable(StageGroupID);
-        foreach(var rewardData in dataBundle.datas)
+        if(_currentReward == null ) 
+        { Debug.LogError("인벤토리에 추가할 보상 목록이 없습니다."); return; }
+
+        _currency.GainGold(_currentReward.GoldAmount);
+
+        foreach(var reward in _currentReward.Items)
         {
-            if (rewardData.isNonReward)
-                continue;
-
-            SetCurrentReward(rewardData.data);
-
-            RewardTable data = rewardData.data;
-            if(data.reward_category == REWARD_CATEGORY.First)
-                rewardData.isNonReward = true;
+            GainItem(reward);
         }
     }
 
-    // 현재 보상에 값을 세팅
-    private void SetCurrentReward(RewardTable rewardData)
+    // 아이템의 타입을 선별해서 인벤토라에 넣기
+    private void GainItem(ItemInstance item)
     {
-        int random = UnityEngine.Random.Range(rewardData.min_count, rewardData.max_count + 1);
-        switch (rewardData.reward_type1)
+        switch(item.ItemType)
         {
-            case REWARD_TYPE.Gold:
-                random = UnityEngine.Random.Range(rewardData.min_count, rewardData.max_count + 100);
-                random /= 100;
-                CurrentReward.GoldAmount = random * 100;
+            // 얻는 System 인게임 보상은 골드뿐
+            case ITEM_TYPE.Equipment:
+                _inventory.GainEquipment(item.ID, item.Grade, item.Amount);
                 break;
 
-            case REWARD_TYPE.Equipment:
-                var equip = new ItemInstance(rewardData.item_id, ItemInstance.NoneEnhanceLevel, GRADE.Dirty);
-                equip.SetAmount(random);
-                CurrentReward.Items.Add(equip);
+            case ITEM_TYPE.Reinforcement:
+                _inventory.GainStackItem(item.ID, item.Amount);
                 break;
-
-            case REWARD_TYPE.BluePrint:
-                var item = new ItemInstance(rewardData.item_id);
-                item.SetAmount(random);
-                CurrentReward.Items.Add(item);
-                break;
-
         }
-        Debug.Log($"{rewardData.item_id}의 갯수: {random}");
-    }
-}
-
-[Serializable]
-public class RewardDTO
-{
-    public int GoldAmount;
-    public List<ItemInstance> Items;
-
-    public RewardDTO()
-    {
-        Items = new List<ItemInstance>();
-    }
-
-
-    public void Init()
-    {
-        GoldAmount = 0;
-        Items.Clear();
     }
 }

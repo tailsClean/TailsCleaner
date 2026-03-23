@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-public class MoveState : IPlayerState
+public class MoveState : PlayerState
 {
     private PlayerBase _player;
     private float _moveSpeed;
@@ -13,20 +13,20 @@ public class MoveState : IPlayerState
         _moveSpeed = player.MoveSpeed;
     }
 
-    public void Enter() { }
+    public override void Enter() 
+    {
+        _player.PlayAni(PlayerAnimation.Move);
+    }
 
-    public void Exit() { }
-
-    public void Update()
+    public override void Tick()
     {
         OnMove();
     }
 
-    public void HandleInput(PlayerInputData input)
+    public override void HandleInput(PlayerInputData input)
     {
         _moveDir = input.MoveDir;
     }
-
 
 
     private void OnMove()

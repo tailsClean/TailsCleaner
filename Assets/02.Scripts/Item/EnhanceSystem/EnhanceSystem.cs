@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class EnhanceSystem : MonoBehaviour
 {
-    [SerializeField] private Currency _currency;                // 필요 금화를 읽어올 재화 가방
+    [SerializeField] private ItemCurrency _currency;                // 필요 금화를 읽어올 재화 가방
     [SerializeField] private ItemInventory _inventory;
 
 
@@ -15,7 +15,7 @@ public class EnhanceSystem : MonoBehaviour
     private bool _isEnhancable;                                 // 강화 가능 여부 판단
 
     public ItemInventory UsingInventory => _inventory;
-    public Currency UsingCurrency => _currency;
+    public ItemCurrency UsingCurrency => _currency;
 
     public event Action<EnhancingInfo> OnSetEquipment;
     public event Action<EnhancingInfo> OnEnhance;
