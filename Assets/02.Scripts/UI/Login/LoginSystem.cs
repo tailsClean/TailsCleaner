@@ -34,6 +34,7 @@ public class LoginSystem : MonoBehaviour
     private void Awake()
     {
         _loginButton.interactable = false;
+
         foreach (var checkBox in _checkBoxes)
         {
             checkBox.checkBoxSprites = _chekBoxSprites;
@@ -54,11 +55,12 @@ public class LoginSystem : MonoBehaviour
 
                 _isLoggedIn  = _auth.CurrentUser != null;
                 Debug.Log("Firebase 초기화 완료");
+                _logoutBtn.gameObject.SetActive(false);
             }
             if (_auth.CurrentUser != null)
             {
                 _isLoggedIn = true;
-                _logoutBtn.gameObject.SetActive(_isLoggedIn);
+                _logoutBtn.gameObject.SetActive(true);
             }
         }); 
     }
@@ -169,6 +171,7 @@ public class LoginSystem : MonoBehaviour
     {
 #if UNITY_EDITOR
         UIManager.Instance.GoToLobby();
+        return;
 #endif
         if (_isLoggedIn)
             UIManager.Instance.GoToLobby();
@@ -194,14 +197,21 @@ public class LoginSystem : MonoBehaviour
     {
         if (task.IsFaulted || task.IsCanceled)
         {
-            Debug.LogWarning("구글 로그인 실패 또는 취소");
+            var ex = task.Exception?.InnerException;
+            if (ex != null)
+            {
+                var statusProp = ex.GetType().GetProperty("Status");
+                var status = statusProp?.GetValue(ex);
+                Debug.LogWarning($"구글 로그인 실패 Status: {status}");
+            }
+            
             _googleLoginBtn.interactable = true;
             return;
         }
 
         Credential credential = GoogleAuthProvider.GetCredential(task.Result.IdToken, null);
 
-        _auth.SignInWithCredentialAsync(credential).ContinueWith(authTask =>
+        _auth.SignInWithCredentialAsync(credential).ContinueWithOnMainThread(authTask =>
         {
             _googleLoginBtn.interactable = true;
 
@@ -212,8 +222,7 @@ public class LoginSystem : MonoBehaviour
             }
 
             FirebaseUser user = authTask.Result;
-            Debug.Log($"로그인 성공 | 이름: {user.DisplayName} | UID: {user.UserId}");
-            
+            //Debug.Log($"로그인 성공 | 이름: {user.DisplayName} | UID: {user.UserId}");     
         });
        
     }
@@ -222,7 +231,7 @@ public class LoginSystem : MonoBehaviour
     {
         _guestLoginBtn.interactable = false;
 
-        _auth.SignInAnonymouslyAsync().ContinueWith(task =>
+        _auth.SignInAnonymouslyAsync().ContinueWithOnMainThread(task =>
         {
             _guestLoginBtn.interactable = true;
 
@@ -241,6 +250,8 @@ public class LoginSystem : MonoBehaviour
     {
         _isLoggedIn = _auth.CurrentUser != null;
         _logoutBtn.gameObject.SetActive(_isLoggedIn);
+        Debug.Log($"StateChanged 호출 | _isLoggedIn: {_isLoggedIn}");
+       
     }
 
     private void OnLogout()
