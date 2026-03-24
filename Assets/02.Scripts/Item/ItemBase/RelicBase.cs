@@ -14,17 +14,17 @@ public class RelicBase : ItemBase
 
 
     // 강화 데이터
-    public int CurrentEnhanceLevel { get; private set; } = 1;
-    public RelicEnhance CurrentEnhanceData //=> Data.GetEnhance(CurrentEnhanceLevel);
-    {
-        get
-        {
-            if(CurrentEnhanceLevel <= 0)
-                CurrentEnhanceLevel = 1;
+    public int CurrentEnhanceLevel { get; private set; } = 0;
+    public RelicEnhance CurrentEnhanceData => Data.GetEnhance(CurrentEnhanceLevel);
+    //{
+    //    get
+    //    {
+    //        if(CurrentEnhanceLevel <= 0)
+    //            CurrentEnhanceLevel = 1;
 
-            return Data.GetEnhance(CurrentEnhanceLevel);
-        }
-    }
+    //        return Data.GetEnhance(CurrentEnhanceLevel);
+    //    }
+    //}
 
 
     // 최종 스텟 증가량 제공 메서드(유물 증가량, 강화 증가량)

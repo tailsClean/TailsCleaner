@@ -45,12 +45,12 @@ public class KISTest : MonoBehaviour
     [ContextMenu("유물 획득")]
     private void Set()
     {
-        inventory.GainRelic(33001, 1);
-        inventory.GainRelic(33002, 1);
-        //inventory.GainRelic(33003, 1);
-        //inventory.GainRelic(33004, 1);
-        //inventory.GainRelic(33005, 1);
-        //inventory.GainRelic(33006, 1);
+        inventory.GainRelic(33001, 0);
+        inventory.GainRelic(33002, 0);
+        inventory.GainRelic(33003, 0);
+        inventory.GainRelic(33004, 0);
+        inventory.GainRelic(33005, 0);
+        inventory.GainRelic(33006, 0);
 
     }
 
@@ -58,34 +58,34 @@ public class KISTest : MonoBehaviour
 
     public void GainEquip()
     {
-        //inventory.GainEquipment(1000,GRADE.Dirty);
-        //inventory.GainEquipment(2000,GRADE.Dirty);
-        //inventory.GainEquipment(3000,GRADE.Dirty);
+        //inventory.GainEquipment(1000, GRADE.Dirty);
+        //inventory.GainEquipment(2000, GRADE.Dirty);
+        //inventory.GainEquipment(3000, GRADE.Dirty);
 
 
-        //inventory.GainEquipment(2000, 0 ,EQUIP_GRADE.Fresh);
-        //inventory.GainEquipment(3000, 0 ,EQUIP_GRADE.Fresh);
+        //inventory.GainEquipment(2000, 0, GRADE.);
+        //inventory.GainEquipment(3000, 0, GRADE.Fresh);
     }
 
     [ContextMenu("소모품 획득")]
 
     public void Consume()
     {
-        //inventory.GainStackItem(34005, 10);
-        //inventory.GainStackItem(35001, 10);
-        //inventory.GainStackItem(35002, 10);
+        inventory.GainStackItem(34005, 10);
+        inventory.GainStackItem(35001, 10);
+        inventory.GainStackItem(35002, 10);
     }
 
 
     [ContextMenu("재료 장비 확인")]
     public void SDFE()
     {
-        //inventory.GainEquipment(39001, GRADE.Dirty, 15);
-        //inventory.GainEquipment(39002, GRADE.Normal, 15);
-        //inventory.GainEquipment(39101, GRADE.Dirty, 15);
-        //inventory.GainEquipment(39102, GRADE.Normal, 15);
-        //inventory.GainEquipment(39201, GRADE.Dirty, 15);
-        //inventory.GainEquipment(39202, GRADE.Dirty, 15);
+        inventory.GainEquipment(39001, GRADE.Dirty, 15);
+        inventory.GainEquipment(39002, GRADE.Normal, 15);
+        inventory.GainEquipment(39101, GRADE.Dirty, 15);
+        inventory.GainEquipment(39102, GRADE.Normal, 15);
+        inventory.GainEquipment(39201, GRADE.Dirty, 15);
+        inventory.GainEquipment(39202, GRADE.Dirty, 15);
     }
 
 

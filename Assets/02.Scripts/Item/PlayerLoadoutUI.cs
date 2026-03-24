@@ -67,7 +67,10 @@ public class PlayerLoadoutUI : UIGroup
             int i = 0;
             foreach (var equip in _loadout.MyEquipments.Values)
             {
-                _loadoutSlots[i++].SetSlot(equip.Data.Equipmnet.id);
+                if(equip.CurrentEnhanceLevel == 0)
+                    _loadoutSlots[i++].SetSlot(equip.Data.Equipmnet.id);
+                else
+                    _loadoutSlots[i++].SetSlot(equip.Data.Equipmnet.id, $"+{equip.CurrentEnhanceLevel}");
             }
         }
     }
@@ -80,7 +83,10 @@ public class PlayerLoadoutUI : UIGroup
             int i = 0;
             foreach (var relic in _loadout.MyRelics)
             {
-                _loadoutRelicSlots[i++].SetSlot(relic.Data.Relic.id);
+                if(relic.CurrentEnhanceLevel == 0)
+                    _loadoutRelicSlots[i++].SetSlot(relic.Data.Relic.id);
+                else
+                    _loadoutRelicSlots[i++].SetSlot(relic.Data.Relic.id, $"+{relic.CurrentEnhanceLevel}");
             }
             for (; i < _loadoutRelicSlots.Count; i++)
             {

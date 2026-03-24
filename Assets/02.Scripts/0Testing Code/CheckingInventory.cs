@@ -45,6 +45,7 @@ public class CheckingInventory : MonoBehaviour
         public int ID;
         public string Name;
         public int EnhanceLevel;
+        public GRADE Grade;
         public ITEM_TYPE Type;
         public int Amount;
 
@@ -53,6 +54,8 @@ public class CheckingInventory : MonoBehaviour
             ID = item.ID;
             Name = item.Name;
             EnhanceLevel = item.EnhanceLevel;
+            Grade = item.Grade;
+
             Type = item.ItemType;
             Amount = amount;
         }

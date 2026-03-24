@@ -72,6 +72,15 @@ public class UISlot : MonoBehaviour
             _amountText.text = string.Empty;
             return;
         }
+        if (itemData.TryGetData<DefaultEquipData>(out var equipData))
+        {
+            _image.sprite = equipData.GetEquipSprite(item.Grade);
+            return;
+        }
+
+        //if(itemData.TryGetData<MaterialEquipData>(out var materData))
+            //_image.sprite = materData
+
 
         _image.sprite = itemData.SpriteImg;
 
@@ -90,6 +99,30 @@ public class UISlot : MonoBehaviour
                 _amountText.text = string.Empty;
                 break;
         }
+    }
+
+    public void SetSlot(ItemInstance item, string value)
+    {
+        var itemData = ItemDB.GetData(item.ID);
+        if (itemData == null)
+        {
+            Debug.Log("값을 찾을 수 없다.");
+            _image.sprite = _baseSprite;
+            _amountText.text = string.Empty;
+            return;
+        }
+        if (itemData.TryGetData<DefaultEquipData>(out var equipData))
+        {
+            _image.sprite = equipData.GetEquipSprite(item.Grade);
+            return;
+        }
+
+        _image.sprite = itemData.SpriteImg;
+
+        if (_amountText == null)
+            return;
+
+        _amountText.text = value;
     }
 
 

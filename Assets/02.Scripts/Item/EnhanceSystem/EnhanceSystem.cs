@@ -30,10 +30,12 @@ public class EnhanceSystem : MonoBehaviour
     {
         EquipmentBase equipment = _playerLoadout.MyEquipments[part];
 
-        _enhanceInfo = new EnhancingInfo(equipment.Data.Equipmnet.id, equipment.CurrentEnhanceLevel);
+        _enhanceInfo = new EnhancingInfo(equipment);
 
-        _bluePrintID = equipment.CurrentEnhanceData.blueprint_id;
-        _bluePrintCost = equipment.CurrentEnhanceData.cost_blueprint;
+        _bluePrintID = _enhanceInfo.NextEnhanceData.BluePrintID;
+        _bluePrintCost = _enhanceInfo.NextEnhanceData.CostBluePrint;
+        //_bluePrintID = equipment.CurrentEnhanceData.blueprint_id;
+        //_bluePrintCost = equipment.CurrentEnhanceData.cost_blueprint;
 
         OnSetEquipment?.Invoke(_enhanceInfo);
     }
@@ -161,10 +163,12 @@ public class EnhancingInfo
             switch (ItemType)
             {
                 case ITEM_TYPE.Equipment:
-                    return _equipData.GetEnhance(CurrentEnhanceLevel).is_max_level;
+                    var equipEnhance = _equipData.GetEnhance(CurrentEnhanceLevel);
+                    return equipEnhance != null ? equipEnhance.is_max_level : false;
 
                 case ITEM_TYPE.Relic:
-                    return _relicData.GetEnhance(CurrentEnhanceLevel).is_max_level;
+                    var relicEnhance = _relicData.GetEnhance(CurrentEnhanceLevel);
+                    return relicEnhance != null ? relicEnhance.is_max_level : false;
             }
             return default;
         }
@@ -215,14 +219,16 @@ public class EnhancingInfo
     /// </summary>
     /// <param name="itemID"></param>
     /// <param name="enhanceLevel"></param>
-    public EnhancingInfo(int itemID, int enhanceLevel)
+    public EnhancingInfo(EquipmentBase equipment)
     {
-        var itemData = ItemDB.GetData(itemID);
+        InventoryKey = new ItemInstance(equipment.Data.UniqueID, equipment.CurrentEnhanceLevel, equipment.CurrentGrade);
+
+        var itemData = ItemDB.GetData(equipment.Data.UniqueID);
         ItemDB.TryGetData(itemData, out _equipData);
         ItemDB.TryGetData(itemData, out _relicData);
 
-        ItemID = itemID;
-        CurrentEnhanceLevel = enhanceLevel;
+        ItemID = equipment.Data.UniqueID;
+        CurrentEnhanceLevel = equipment.CurrentEnhanceLevel;
         ItemType = itemData.Type;
     }
 

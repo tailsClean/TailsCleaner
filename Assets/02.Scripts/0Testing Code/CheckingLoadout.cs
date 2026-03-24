@@ -3,6 +3,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using static CheckingLoadout;
 
 public class CheckingLoadout : MonoBehaviour
 {
@@ -66,7 +67,10 @@ public class CheckingLoadout : MonoBehaviour
             name = data.Name;
             part = data.Equipmnet.part;
             enhanceLvl = equip.CurrentEnhanceLevel;
-            maxlvl = equip.CurrentEnhanceData.is_max_level;
+            if (equip.CurrentEnhanceData != null)
+                maxlvl = equip.CurrentEnhanceData.is_max_level;
+            else
+                maxlvl = false;
             grade = equip.CurrentGrade;
         }
     }

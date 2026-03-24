@@ -10,11 +10,9 @@ public class DefaultEquipData : ItemDataBase
     public Dictionary<EQUIP_STAT_TYPE, EquipStat> Stat;
     public List<EquipGrade> Grades;
     private List<EquipEnhance> _enhances;                    // 메서드로 접근
+    private List<Sprite> _sprites;
 
-    public bool IsLoadoutable => true;
     public override ITEM_TYPE Type => ITEM_TYPE.Equipment;
-
-    
 
 
     public DefaultEquipData()
@@ -22,12 +20,13 @@ public class DefaultEquipData : ItemDataBase
         Stat = new Dictionary<EQUIP_STAT_TYPE, EquipStat>();
         Grades = new List<EquipGrade>();
         _enhances = new List<EquipEnhance>();
+        _sprites = new List<Sprite>();
     }
 
     public EquipEnhance GetEnhance(int enhanceLevel)
     {
-        //if (enhanceLevel == 0)
-        //    return null;
+        if (enhanceLevel == 0)
+            return null;
 
         if (enhanceLevel < 1 || enhanceLevel > _enhances.Count)
         { Debug.LogError($"{Equipmnet.id}의 강화레벨 조회 불가"); return null; }
@@ -36,6 +35,9 @@ public class DefaultEquipData : ItemDataBase
     }
 
     public void SetEnhance(EquipEnhance enhance) => _enhances.Add(enhance);
+
+    public void SetEquipSprite(Sprite sprite) => _sprites.Add(sprite);
+    public Sprite GetEquipSprite(GRADE grade) => _sprites[(int)grade];
 }
 
 // 재료 장비 데이터
@@ -44,7 +46,6 @@ public class MaterialEquipData : ItemDataBase
     public int EquipID;
     public EquipMatter EquipMatter;
 
-    public bool IsLoadoutable => false;
     public override ITEM_TYPE Type => ITEM_TYPE.Equipment;
 }
 
@@ -65,8 +66,8 @@ public class RelicData : ItemDataBase
 
     public RelicEnhance GetEnhance(int enhanceLevel)
     {
-        //if(enhanceLevel == 0)
-        //    return null;
+        if (enhanceLevel == 0)
+            return null;
 
         if (enhanceLevel < 1 || enhanceLevel > _enhances.Count)
         { Debug.LogError($"{Relic.id}의 강화레벨 조회 불가"); return null; }
