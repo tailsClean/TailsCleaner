@@ -6,6 +6,7 @@ using Google;
 using UnityEngine;
 using UnityEngine.UI;
 using System;
+using Firebase.Extensions;
 
 public class LoginSystem : MonoBehaviour
 {
@@ -24,6 +25,7 @@ public class LoginSystem : MonoBehaviour
     [SerializeField] Button _googleLoginBtn;
     [SerializeField] Button _guestLoginBtn;
     [SerializeField] Button _enterBtn;
+    [SerializeField] Button _logoutBtn;
 
     private const string WebClientId = "769814245650-db36h61fdh23dv03gbj5atkgk47ldhgq.apps.googleusercontent.com";
     private FirebaseAuth _auth;
@@ -41,18 +43,22 @@ public class LoginSystem : MonoBehaviour
         _googleLoginBtn.onClick.AddListener(OnGoogleLogin);
         _guestLoginBtn.onClick.AddListener(OnGuestLogin);
         _enterBtn.onClick.AddListener(OnEnterBtn);
+        _logoutBtn.onClick.AddListener(OnLogout);
 
-        FirebaseApp.CheckAndFixDependenciesAsync().ContinueWith(task =>
+        FirebaseApp.CheckAndFixDependenciesAsync().ContinueWithOnMainThread(task =>
         {
             if (task.Result == DependencyStatus.Available)
             {
                 _auth = FirebaseAuth.DefaultInstance;
                 _auth.StateChanged += ChangeLoginState;
+
+                _isLoggedIn  = _auth.CurrentUser != null;
                 Debug.Log("Firebase 초기화 완료");
             }
-            else
+            if (_auth.CurrentUser != null)
             {
-                Debug.LogError($"Firebase 초기화 실패: {task.Result}");
+                _isLoggedIn = true;
+                _logoutBtn.gameObject.SetActive(_isLoggedIn);
             }
         }); 
     }
@@ -212,7 +218,7 @@ public class LoginSystem : MonoBehaviour
        
     }
 
-     private void OnGuestLogin()
+    private void OnGuestLogin()
     {
         _guestLoginBtn.interactable = false;
 
@@ -234,6 +240,12 @@ public class LoginSystem : MonoBehaviour
     private void ChangeLoginState(object sender, EventArgs a )
     {
         _isLoggedIn = _auth.CurrentUser != null;
+        _logoutBtn.gameObject.SetActive(_isLoggedIn);
+    }
+
+    private void OnLogout()
+    {
+        _auth.SignOut();
     }
 
 }
