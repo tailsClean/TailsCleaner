@@ -27,7 +27,7 @@ public class LoginSystem : MonoBehaviour
     [SerializeField] Button _enterBtn;
     [SerializeField] Button _logoutBtn;
 
-    private const string WebClientId = "769814245650-db36h61fdh23dv03gbj5atkgk47ldhgq.apps.googleusercontent.com";
+    private const string WEB_CLIENT_ID = "769814245650-db36h61fdh23dv03gbj5atkgk47ldhgq.apps.googleusercontent.com";
     private FirebaseAuth _auth;
     private bool _isLoggedIn;
 
@@ -185,7 +185,7 @@ public class LoginSystem : MonoBehaviour
 
         GoogleSignIn.Configuration = new GoogleSignInConfiguration
         {
-            WebClientId = WebClientId,
+            WebClientId = WEB_CLIENT_ID,
             RequestIdToken = true,
             RequestEmail = true
         };
