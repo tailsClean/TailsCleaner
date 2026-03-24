@@ -65,9 +65,9 @@ public class CheckingLoadout : MonoBehaviour
             id = data.UniqueID;
             name = data.Name;
             part = data.Equipmnet.part;
-            enhanceLvl = equip.EnhanceLevel;
-            maxlvl = equip.EnhanceData.is_max_level;
-            grade = equip.Grade;
+            enhanceLvl = equip.CurrentEnhanceLevel;
+            maxlvl = equip.CurrentEnhanceData.is_max_level;
+            grade = equip.CurrentGrade;
         }
     }
 
@@ -84,8 +84,11 @@ public class CheckingLoadout : MonoBehaviour
             var data = relic.Data;
             id = data.UniqueID;
             name = data.Name;
-            enchantLevel = relic.EnhanceLevel;
-            maxlevel = relic.EnhanceData.is_max_level;
+            enchantLevel = relic.CurrentEnhanceLevel;
+            if (relic.CurrentEnhanceData != null)
+                maxlevel = relic.CurrentEnhanceData.is_max_level;
+            else
+                maxlevel = false;
         }
     }    
 }

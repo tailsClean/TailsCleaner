@@ -45,12 +45,12 @@ public class KISTest : MonoBehaviour
     [ContextMenu("유물 획득")]
     private void Set()
     {
-        inventory.GainRelic(33001, 0);
-        inventory.GainRelic(33002, 0);
-        inventory.GainRelic(33003, 0);
-        inventory.GainRelic(33004, 0);
-        inventory.GainRelic(33005, 0);
-        inventory.GainRelic(33006, 0);
+        inventory.GainRelic(33001, 1);
+        inventory.GainRelic(33002, 1);
+        //inventory.GainRelic(33003, 1);
+        //inventory.GainRelic(33004, 1);
+        //inventory.GainRelic(33005, 1);
+        //inventory.GainRelic(33006, 1);
 
     }
 
@@ -71,21 +71,21 @@ public class KISTest : MonoBehaviour
 
     public void Consume()
     {
-        inventory.GainStackItem(34005, 10);
-        inventory.GainStackItem(35001, 10);
-        inventory.GainStackItem(35002, 10);
+        //inventory.GainStackItem(34005, 10);
+        //inventory.GainStackItem(35001, 10);
+        //inventory.GainStackItem(35002, 10);
     }
 
 
     [ContextMenu("재료 장비 확인")]
     public void SDFE()
     {
-        inventory.GainEquipment(39001, GRADE.Dirty, 15);
-        inventory.GainEquipment(39002, GRADE.Normal, 15);
-        inventory.GainEquipment(39101, GRADE.Dirty, 15);
-        inventory.GainEquipment(39102, GRADE.Normal, 15);
-        inventory.GainEquipment(39201, GRADE.Dirty, 15);
-        inventory.GainEquipment(39202, GRADE.Dirty, 15);
+        //inventory.GainEquipment(39001, GRADE.Dirty, 15);
+        //inventory.GainEquipment(39002, GRADE.Normal, 15);
+        //inventory.GainEquipment(39101, GRADE.Dirty, 15);
+        //inventory.GainEquipment(39102, GRADE.Normal, 15);
+        //inventory.GainEquipment(39201, GRADE.Dirty, 15);
+        //inventory.GainEquipment(39202, GRADE.Dirty, 15);
     }
 
 
@@ -113,7 +113,7 @@ public class KISTest : MonoBehaviour
 
         foreach(var relic in relics)
         {
-            Debug.Log($"ID: {relic.Data.Name} / 강화레벨: {relic.EnhanceLevel}");
+            Debug.Log($"ID: {relic.Data.Name} / 강화레벨: {relic.CurrentEnhanceLevel}");
         }
     }
 

@@ -65,7 +65,7 @@ public class ItemDBSO : ScriptableObject
             {
                 if (equip.GroupID == enhance.group_id)
                 {
-                    equip.Enhances.Add(enhance);
+                    equip.SetEnhance(enhance);
                     break;
                 }
             }
@@ -169,7 +169,7 @@ public class ItemDBSO : ScriptableObject
             {
                 if (relic.GroupID == enhance.group_id)
                 {
-                    relic.Enhances.Add(enhance);
+                    relic.SetEnhance(enhance);
                     break;
                 }
             }

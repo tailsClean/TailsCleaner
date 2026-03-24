@@ -103,7 +103,7 @@ public class ItemInventory : MonoBehaviour
         // 아이템을 소지하지 않았을 때
         else
         {
-            _inventory.Add(new ItemInstance(id, enhanceLevel, GRADE.None), ItemInstance.NoneStackAmount);
+            _inventory.Add(new ItemInstance(id, enhanceLevel, GRADE.None), 1);
         }
 
         _onChangeInventory.OnStartEvent();
@@ -114,7 +114,7 @@ public class ItemInventory : MonoBehaviour
     public bool RemoveRelic(int id, int enhanceLevel)
     {
         var item = SearchItem(id, enhanceLevel, GRADE.None);
-        
+
         if (!HasItem(item))
         { Debug.Log($"사용하려는 {id} 아이템을 소지하지 않았습니다."); return false; }
 
@@ -176,7 +176,7 @@ public class ItemInventory : MonoBehaviour
             return item;
         }
 
-        Debug.LogError($"{id} 아이템은 인벤토리에 없습니다.");
+        Debug.LogError($"{id} / 강화{enhanceLevel}아이템은 인벤토리에 없습니다.");
         return item;
     }
 

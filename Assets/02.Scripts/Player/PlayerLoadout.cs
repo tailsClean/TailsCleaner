@@ -154,7 +154,7 @@ public class PlayerLoadout
         for (int i = 0; i < _myRelics.Count; i++)
         {
             var relic = _myRelics[i];
-            if (relic != null && relic.Data.Relic.id == id && relic.EnhanceLevel == enhanceLevel)
+            if (relic != null && relic.Data.Relic.id == id && relic.CurrentEnhanceLevel == enhanceLevel)
             {
                 _myRelics.RemoveAt(i);
                 _outputRelics.Remove(relic);

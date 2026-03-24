@@ -60,10 +60,9 @@ public abstract class EnhanceSystemUI : UIGroup
     // 강화할 장비UI 갱신
     protected void UpdateEnhanceEquipmentUI(EnhancingInfo equipment)
     {
-        var resourceItem = ItemDB.GetData(equipment.EnhanceData.BluePrintID);
-        var goldData = ItemDB.GetData(ItemID.Gold);
 
-        if (equipment.EnhanceData.IsMaxLevel)
+
+        if (equipment.IsCurrentMaxLevel)
         {
             _enhanceEquipment.SetSlot(equipment.ItemID, "Max");
             _resourceCostText.text = "Max";
@@ -71,13 +70,16 @@ public abstract class EnhanceSystemUI : UIGroup
         }
         else
         {
-            _enhanceEquipment.SetSlot(equipment.ItemID, equipment.EnhanceLevel);
-            _resourceCostText.text = equipment.EnhanceData.CostBluePrint.ToString();
-            _costGoldText.text = equipment.EnhanceData.CostGold.ToString();
+            var resourceItem = ItemDB.GetData(equipment.NextEnhanceData.BluePrintID);
+            var goldData = ItemDB.GetData(ItemID.Gold);
+            _enhanceEquipment.SetSlot(equipment.ItemID, equipment.CurrentEnhanceLevel);
+            _resourceCostText.text = equipment.NextEnhanceData.CostBluePrint.ToString();
+            _costGoldText.text = equipment.NextEnhanceData.CostGold.ToString();
+            _resourceCostImage.sprite = resourceItem.SpriteImg;
+            _costGoldImage.sprite = goldData.SpriteImg;
         }
 
-        _resourceCostImage.sprite = resourceItem.SpriteImg;
-        _costGoldImage.sprite = goldData.SpriteImg;
+
     }
 
     // 현재 골드량 갱신

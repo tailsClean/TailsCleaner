@@ -108,7 +108,7 @@ public class PlayerLoadoutUI : UIGroup
             foreach (var equip in _loadout.MyEquipments.Values)
             {
                 _popUpButtons[i].onClick.AddListener(() => _popUp.gameObject.SetActive(true));
-                _popUpButtons[i++].onClick.AddListener(() => _popUp.SetSlot(new ItemInstance(equip.Data.UniqueID, equip.EnhanceLevel, equip.Grade)));
+                _popUpButtons[i++].onClick.AddListener(() => _popUp.SetSlot(new ItemInstance(equip.Data.UniqueID, equip.CurrentEnhanceLevel, equip.CurrentGrade)));
             }
         }
     }
@@ -124,7 +124,7 @@ public class PlayerLoadoutUI : UIGroup
             {
                 _popUpButtons[i].onClick.RemoveAllListeners();
                 _popUpButtons[i].onClick.AddListener(() => _popUp.gameObject.SetActive(true));
-                _popUpButtons[i++].onClick.AddListener(() => _popUp.SetSlot(new ItemInstance(relic.Data.UniqueID, relic.EnhanceLevel, GRADE.None)));
+                _popUpButtons[i++].onClick.AddListener(() => _popUp.SetSlot(new ItemInstance(relic.Data.UniqueID, relic.CurrentEnhanceLevel, GRADE.None)));
             }
             for (; i < _popUpButtons.Count; i++)
             {
