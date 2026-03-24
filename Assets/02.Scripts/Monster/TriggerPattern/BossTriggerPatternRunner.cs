@@ -4,10 +4,10 @@ using UnityEngine;
 
 public class BossTriggerPatternRunner : MonoBehaviour
 {
-    private const string MONSTER_TABLE_FILE = "monster_table";
-    private const string PATTERN_GROUP_TABLE_FILE = "pattern_group";
-    private const string PATTERN_GROUP_COMPOSITION_TABLE_FILE = "pattern_group_composition";
-    private const string PATTERN_TABLE_FILE = "pattern";
+    private const string MONSTER_TABLE_FILE = "monster/monster";
+    private const string PATTERN_GROUP_TABLE_FILE = "monster/pattern_group";
+    private const string PATTERN_GROUP_COMPOSITION_TABLE_FILE = "monster/pattern_group_composition";
+    private const string PATTERN_TABLE_FILE = "monster/pattern";
 
     [Header("공통 기본값")]
     [SerializeField] private float _defaultWarningDuration = 2f;
@@ -191,6 +191,8 @@ public class BossTriggerPatternRunner : MonoBehaviour
 
         _compositionRows.Sort((a, b) => a.priority.CompareTo(b.priority));
 
+        HashSet<int> addedPatternIds = new HashSet<int>();
+
         for (int i = 0; i < _compositionRows.Count; i++)
         {
             int patternId = _compositionRows[i].pattern_id;
@@ -199,13 +201,27 @@ public class BossTriggerPatternRunner : MonoBehaviour
             {
                 if (patternRows[j].pattern_id == patternId)
                 {
-                    if (IsTriggerPattern(patternRows[j].pattern_logic_type))
-                        _triggerRows.Add(patternRows[j]);
+                    string logicType = patternRows[j].pattern_logic_type?.Trim().ToLower();
+
+                    if (IsTriggerPattern(logicType))
+                    {
+                        if (addedPatternIds.Contains(patternId))
+                        {
+                            Debug.LogWarning($"[BossTriggerPatternRunner] duplicate pattern_id ignored: {patternId}");
+                        }
+                        else
+                        {
+                            _triggerRows.Add(patternRows[j]);
+                            addedPatternIds.Add(patternId);
+                        }
+                    }
 
                     break;
                 }
             }
         }
+
+        Debug.Log($"[BossTriggerPatternRunner] trigger rows loaded = {_triggerRows.Count}");
     }
 
     private bool IsTriggerPattern(string logicType)
@@ -304,12 +320,17 @@ public class BossTriggerPatternRunner : MonoBehaviour
     private IEnumerator CoExpAbsorb(PatternTableRow row)
     {
         _patternRunning = true;
-        _boss.SetAttackingState(true);
 
         float warning = row.cast_time > 0f ? row.cast_time : _defaultWarningDuration;
-        yield return new WaitForSeconds(warning);
+        yield return StartCoroutine(CoPlayTriggerWarning(
+            GetTriggerWarningMessage("trigger_exp_absorb"),
+            warning
+        ));
 
         List<InGameExpItem> targets = InGameExpItem.GetAllUncleaned();
+
+        Debug.Log($"[ExpAbsorb] targetCount={targets.Count}");
+
         float absorbDuration = row.duration > 0f ? row.duration : _defaultExpAbsorbDuration;
 
         int absorbedCount = 0;
@@ -330,13 +351,9 @@ public class BossTriggerPatternRunner : MonoBehaviour
         float healAmount = absorbedCount * row.dirty_to_hp_value;
 
         if (_boss is BossMonster bossMonster)
-        {
             bossMonster.HealBoss(healAmount);
-        }
         else
-        {
             _boss.hp += healAmount;
-        }
 
         _boss.SetAttackingState(false);
         _patternRunning = false;
@@ -346,15 +363,26 @@ public class BossTriggerPatternRunner : MonoBehaviour
     private IEnumerator CoDirtySpawn(PatternTableRow row)
     {
         _patternRunning = true;
-        _boss.SetAttackingState(true);
 
         float warning = row.cast_time > 0f ? row.cast_time : _defaultWarningDuration;
-        yield return new WaitForSeconds(warning);
+        yield return StartCoroutine(CoPlayTriggerWarning(
+            GetTriggerWarningMessage("trigger_dirty_spawn", false),
+            warning
+        ));
 
         SpawnDirtyItems(row);
 
         float dirtyDuration = row.duration > 0f ? row.duration : _defaultDirtySpawnDuration;
-        yield return new WaitForSeconds(dirtyDuration);
+        float absorbDuration = _defaultDirtyAbsorbDuration;
+
+        float waitBeforeAbsorbWarning = Mathf.Max(0f, dirtyDuration - 2f);
+        if (waitBeforeAbsorbWarning > 0f)
+            yield return new WaitForSeconds(waitBeforeAbsorbWarning);
+
+        yield return StartCoroutine(CoPlayTriggerWarning(
+            GetTriggerWarningMessage("trigger_dirty_spawn", true),
+            _defaultWarningDuration
+        ));
 
         List<InGameExpItem> targets = InGameExpItem.GetBossSpawnedUncleaned();
 
@@ -364,25 +392,21 @@ public class BossTriggerPatternRunner : MonoBehaviour
         {
             if (targets[i] != null)
             {
-                StartCoroutine(targets[i].MoveToBossAndAbsorb(_boss.transform, _defaultDirtyAbsorbDuration, () =>
+                StartCoroutine(targets[i].MoveToBossAndAbsorb(_boss.transform, absorbDuration, () =>
                 {
                     absorbedCount++;
                 }));
             }
         }
 
-        yield return new WaitForSeconds(_defaultDirtyAbsorbDuration + 0.05f);
+        yield return new WaitForSeconds(absorbDuration + 0.05f);
 
         float healAmount = absorbedCount * row.dirty_to_hp_value;
 
         if (_boss is BossMonster bossMonster)
-        {
             bossMonster.HealBoss(healAmount);
-        }
         else
-        {
             _boss.hp += healAmount;
-        }
 
         _boss.SetAttackingState(false);
         _patternRunning = false;
@@ -392,9 +416,11 @@ public class BossTriggerPatternRunner : MonoBehaviour
     private IEnumerator CoEnrage(PatternTableRow row)
     {
         _patternRunning = true;
-        _boss.SetAttackingState(true);
 
-        yield return new WaitForSeconds(_defaultWarningDuration);
+        yield return StartCoroutine(CoPlayTriggerWarning(
+            GetTriggerWarningMessage("trigger_enrage"),
+            _defaultWarningDuration
+        ));
 
         _enrageCurrentStepByPatternId[row.pattern_id]++;
 
@@ -402,9 +428,7 @@ public class BossTriggerPatternRunner : MonoBehaviour
         _boss.power *= Mathf.Max(1f, row.enrage_atk_rate);
 
         if (_boss is BossMonster bossMonster)
-        {
             bossMonster.RefreshBossHpUI();
-        }
 
         _boss.SetAttackingState(false);
         _patternRunning = false;
@@ -469,5 +493,41 @@ public class BossTriggerPatternRunner : MonoBehaviour
         }
 
         return center;
+    }
+
+    private string GetTriggerWarningMessage(string logicType, bool isSecondPhase = false)
+    {
+        switch (logicType)
+        {
+            case "trigger_exp_absorb":
+                return "엄청 꼬질한 녀석이 나타났어요!";
+
+            case "trigger_dirty_spawn":
+                return isSecondPhase
+                    ? "더러움을 먹고 점점 강해지고 있어요!"
+                    : "바닥이 더러워지고 있어요!";
+
+            case "trigger_enrage":
+                return "갑자기 난폭해졌어요!";
+
+            default:
+                return "위험한 패턴을 준비 중이에요!";
+        }
+    }
+
+    private IEnumerator CoPlayTriggerWarning(string message, float warningDuration)
+    {
+        _boss.SetAttackingState(true);
+
+        if (UIManager.Instance != null && UIManager.Instance.StageWaveBanner != null)
+        {
+            yield return StartCoroutine(
+                UIManager.Instance.StageWaveBanner.PlayWarningOnly(message, warningDuration)
+            );
+        }
+        else
+        {
+            yield return new WaitForSecondsRealtime(warningDuration);
+        }
     }
 }

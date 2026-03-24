@@ -26,7 +26,7 @@ public class StageWaveBannerUI : MonoBehaviour
     [TextArea]
     [SerializeField] private string _defaultStageStartMessage = "스테이지 청소 시작!";
     [TextArea]
-    [SerializeField] private string _defaultBossIntroMessage = "엄청 꼬질한 녀석이 나타났어요!";
+    [SerializeField] private string _defaultBossIntroMessage = "보스 등장 !!!";
 
     [Header("Visual Style")]
     [SerializeField] private Color _warningOverlayColor = new Color(173f / 255f, 99f / 255f, 99f / 255f, 1f);
@@ -44,7 +44,7 @@ public class StageWaveBannerUI : MonoBehaviour
     [SerializeField] private float _fadeOutDuration = 1.0f;
     [SerializeField] private float _blackHoldDuration = 1.0f;
     [SerializeField] private float _fadeInDuration = 1.0f;
-    
+
     [Header("Wipe Fade")]
     [SerializeField] private bool _useSmoothStepForWipe = true;
     [SerializeField] private float _fallbackScreenWidth = 1920f;
@@ -301,5 +301,68 @@ public class StageWaveBannerUI : MonoBehaviour
         SetFadeAlpha(1f);
         ResetFadePanelWidth();
         gameObject.SetActive(false);
+    }
+
+    public IEnumerator PlayWarningOnly(string message, float warningDuration = -1f)
+    {
+        gameObject.SetActive(true);
+        transform.SetAsLastSibling();
+
+        ApplyVisualDefaults();
+        ResetFadePanelWidth();
+        SetFadeAlpha(1f);
+        SetFadeWidth(0f);
+
+        SetBannerAlpha(0f);
+        SetWarningOverlayAlpha(0f);
+
+        if (_backgroundImage != null)
+            _backgroundImage.sprite = _bossStartSprite;
+
+        if (_messageText != null)
+            _messageText.text = message;
+
+        if (_bannerCanvasGroup != null)
+            _bannerCanvasGroup.transform.SetAsFirstSibling();
+
+        if (_warningOverlayCanvasGroup != null)
+            _warningOverlayCanvasGroup.transform.SetSiblingIndex(1);
+
+        if (_fadeCanvasGroup != null)
+            _fadeCanvasGroup.transform.SetAsLastSibling();
+
+        float duration = warningDuration > 0f ? warningDuration : _warningTotalDuration;
+        yield return CoWarningPhase(duration);
+
+        HideAllImmediate();
+    }
+
+    private IEnumerator CoWarningPhase(float totalDuration)
+    {
+        yield return FadeCanvasGroup(_bannerCanvasGroup, 0f, 1f, _bannerFadeDuration);
+
+        float elapsed = 0f;
+        bool overlayOn = false;
+
+        while (elapsed < totalDuration)
+        {
+            overlayOn = !overlayOn;
+
+            if (overlayOn)
+            {
+                SetWarningOverlayAlpha(_warningOverlayVisibleAlpha);
+                yield return new WaitForSecondsRealtime(_warningBlinkOnDuration);
+                elapsed += _warningBlinkOnDuration;
+            }
+            else
+            {
+                SetWarningOverlayAlpha(0f);
+                yield return new WaitForSecondsRealtime(_warningBlinkOffDuration);
+                elapsed += _warningBlinkOffDuration;
+            }
+        }
+
+        SetWarningOverlayAlpha(0f);
+        yield return FadeCanvasGroup(_bannerCanvasGroup, 1f, 0f, _bannerFadeDuration);
     }
 }
