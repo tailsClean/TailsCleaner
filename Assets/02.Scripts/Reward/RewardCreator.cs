@@ -42,7 +42,7 @@ public class RewardCreator
         }
     }
 
-    // 현재 보상에 값을 세팅
+    // 현재 보상에 값(아이템의 정보, 획득 수량)을 세팅
     private void SetCurrentReward(RewardTable rewardData)
     {
         int random = UnityEngine.Random.Range(rewardData.min_count, rewardData.max_count + 1);
@@ -67,7 +67,6 @@ public class RewardCreator
                 break;
 
         }
-        Debug.Log($"{rewardData.item_id}의 갯수: {random}");
     }
 }
 

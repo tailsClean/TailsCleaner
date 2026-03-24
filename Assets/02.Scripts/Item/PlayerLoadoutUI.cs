@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -10,6 +11,7 @@ public class PlayerLoadoutUI : UIGroup
 
     [Header("유물일 경우 세팅하는 슬롯")]
     [SerializeField] private List<UISlot> _loadoutRelicSlots;
+    [SerializeField] private TextMeshProUGUI _relicDivisionSlot;
 
     [Header("팝업 출력을 위한 버튼")]
     [SerializeField] private List<Button> _popUpButtons;
@@ -65,7 +67,10 @@ public class PlayerLoadoutUI : UIGroup
             int i = 0;
             foreach (var equip in _loadout.MyEquipments.Values)
             {
-                _loadoutSlots[i++].SetSlot(equip.Data.Equipmnet.id);
+                if(equip.CurrentEnhanceLevel == 0)
+                    _loadoutSlots[i++].SetSlot(equip.Data.Equipmnet.id);
+                else
+                    _loadoutSlots[i++].SetSlot(equip.Data.Equipmnet.id, $"+{equip.CurrentEnhanceLevel}");
             }
         }
     }
@@ -73,19 +78,29 @@ public class PlayerLoadoutUI : UIGroup
     // 유물 로드아웃UI슬롯 갱신
     private void UpdateRelicLoadoutSlot()
     {
-
         if(_loadoutRelicSlots != null && _loadoutRelicSlots.Count > 0)
         {
             int i = 0;
             foreach (var relic in _loadout.MyRelics)
             {
-                _loadoutRelicSlots[i++].SetSlot(relic.Data.Relic.id);
+                if(relic.CurrentEnhanceLevel == 0)
+                    _loadoutRelicSlots[i++].SetSlot(relic.Data.Relic.id);
+                else
+                    _loadoutRelicSlots[i++].SetSlot(relic.Data.Relic.id, $"+{relic.CurrentEnhanceLevel}");
             }
             for (; i < _loadoutRelicSlots.Count; i++)
             {
                 _loadoutRelicSlots[i].Init();
             }
         }
+
+        if (_relicDivisionSlot == null)
+            return;
+
+        if (_loadout.TryGetRelicDivision(out var divisionType))
+            _relicDivisionSlot.text = divisionType.ToString();
+        else
+            _relicDivisionSlot.text = string.Empty;
     }
 
 
@@ -99,7 +114,7 @@ public class PlayerLoadoutUI : UIGroup
             foreach (var equip in _loadout.MyEquipments.Values)
             {
                 _popUpButtons[i].onClick.AddListener(() => _popUp.gameObject.SetActive(true));
-                _popUpButtons[i++].onClick.AddListener(() => _popUp.SetSlot(new ItemInstance(equip.Data.UniqueID, equip.EnhanceLevel, equip.Grade)));
+                _popUpButtons[i++].onClick.AddListener(() => _popUp.SetSlot(new ItemInstance(equip.Data.UniqueID, equip.CurrentEnhanceLevel, equip.CurrentGrade)));
             }
         }
     }
@@ -115,7 +130,7 @@ public class PlayerLoadoutUI : UIGroup
             {
                 _popUpButtons[i].onClick.RemoveAllListeners();
                 _popUpButtons[i].onClick.AddListener(() => _popUp.gameObject.SetActive(true));
-                _popUpButtons[i++].onClick.AddListener(() => _popUp.SetSlot(new ItemInstance(relic.Data.UniqueID, relic.EnhanceLevel, GRADE.None)));
+                _popUpButtons[i++].onClick.AddListener(() => _popUp.SetSlot(new ItemInstance(relic.Data.UniqueID, relic.CurrentEnhanceLevel, GRADE.None)));
             }
             for (; i < _popUpButtons.Count; i++)
             {

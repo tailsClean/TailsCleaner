@@ -65,7 +65,7 @@ public class ItemDBSO : ScriptableObject
             {
                 if (equip.GroupID == enhance.group_id)
                 {
-                    equip.Enhances.Add(enhance);
+                    equip.SetEnhance(enhance);
                     break;
                 }
             }
@@ -79,6 +79,7 @@ public class ItemDBSO : ScriptableObject
             {
                 if (equip.GroupID == grade.group_id)
                 {
+                    equip.SetEquipSprite(Resources.Load<Sprite>($"Total_Item_Image/{grade.grade_sprite}"));
                     equip.Grades.Add(grade);
                     break;
                 }
@@ -108,7 +109,7 @@ public class ItemDBSO : ScriptableObject
     {
         _materialEquipDict = new Dictionary<int, MaterialEquipData>();
 
-        var nameData = DataManager.Instance.GetSOData<StringSO>();
+        //var nameData = DataManager.Instance.GetSOData<StringSO>();
         var equipment = DataManager.Instance.GetSOData<EquipMatterSO>();
 
         foreach (var equip in equipment.dataList)
@@ -116,7 +117,8 @@ public class ItemDBSO : ScriptableObject
             _materialEquipDict.Add(equip.id, new MaterialEquipData());
             _materialEquipDict[equip.id].UniqueID = equip.id;
             _materialEquipDict[equip.id].EquipMatter = equip;
-            _materialEquipDict[equip.id].Name =  /*nameData.GetById(equip.name).kr;*/ "재료 장비";
+            _materialEquipDict[equip.id].Name = equip.desc;
+            //_materialEquipDict[equip.id].Name = nameData.GetById(equip.name).kr;
             _materialEquipDict[equip.id].SpriteImg = Resources.Load<Sprite>($"Total_Item_Image/{equip.sprite}");
         }
     }
@@ -169,7 +171,7 @@ public class ItemDBSO : ScriptableObject
             {
                 if (relic.GroupID == enhance.group_id)
                 {
-                    relic.Enhances.Add(enhance);
+                    relic.SetEnhance(enhance);
                     break;
                 }
             }
@@ -310,7 +312,8 @@ public class ItemDataBase
 {
     public int UniqueID;
     public string Name;
-    public Sprite SpriteImg;
+
+    public virtual Sprite SpriteImg { get; set; }
 
     public virtual ITEM_TYPE Type { get; set; }
 }

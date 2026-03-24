@@ -58,13 +58,13 @@ public class KISTest : MonoBehaviour
 
     public void GainEquip()
     {
-        //inventory.GainEquipment(1000,GRADE.Dirty);
-        //inventory.GainEquipment(2000,GRADE.Dirty);
-        //inventory.GainEquipment(3000,GRADE.Dirty);
+        //inventory.GainEquipment(1000, GRADE.Dirty);
+        //inventory.GainEquipment(2000, GRADE.Dirty);
+        //inventory.GainEquipment(3000, GRADE.Dirty);
 
 
-        //inventory.GainEquipment(2000, 0 ,EQUIP_GRADE.Fresh);
-        //inventory.GainEquipment(3000, 0 ,EQUIP_GRADE.Fresh);
+        //inventory.GainEquipment(2000, 0, GRADE.);
+        //inventory.GainEquipment(3000, 0, GRADE.Fresh);
     }
 
     [ContextMenu("소모품 획득")]
@@ -113,7 +113,7 @@ public class KISTest : MonoBehaviour
 
         foreach(var relic in relics)
         {
-            Debug.Log($"ID: {relic.Data.Name} / 강화레벨: {relic.EnhanceLevel}");
+            Debug.Log($"ID: {relic.Data.Name} / 강화레벨: {relic.CurrentEnhanceLevel}");
         }
     }
 

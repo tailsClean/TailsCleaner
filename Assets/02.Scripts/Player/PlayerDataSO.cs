@@ -161,5 +161,7 @@ public enum PLAYER_STAT
     PickupRange,
     GoldGainRate,
     ItemDropRate,
+    EquipmentDropRate,
     ExpGainRate,
+    None
 }

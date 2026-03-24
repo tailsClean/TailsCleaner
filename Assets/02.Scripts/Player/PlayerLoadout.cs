@@ -7,29 +7,39 @@ using UnityEngine;
 /// </summary>
 public class PlayerLoadout
 {
+
+    // 고정 수치값
+    private const int _relicSlotLength = 3;
+    private readonly RelicBase _relicZero = new RelicBase();                    // 빈 유물 공간을 의미
+
+
+    // 장착 장비 필드
     private Dictionary<PART, EquipmentBase> _myEquipments;
+
+    // 유물 관련 필드
     private List<RelicBase> _myRelics;
     private List<RelicBase> _outputRelics;                                      // 외부 출력용 리스트
+    private RelicDivisionSystem _relicDivisionSystem;
+
+    private VoidEventChannelSO _onChangeLoadout;
+
 
     public Dictionary<PART, EquipmentBase> MyEquipments => _myEquipments;
     public List<RelicBase> MyRelics => _outputRelics;
 
-    private readonly RelicBase _relicZero;
-    private readonly int _relicSlotLength = 3;
 
-    private VoidEventChannelSO _onChangeLoadout;
 
     public PlayerLoadout(VoidEventChannelSO onChangeLoadout)
     {
         _onChangeLoadout = onChangeLoadout;
 
-        _relicZero = new RelicBase();
         _myRelics = new List<RelicBase>();
         _outputRelics = new List<RelicBase>();
-        for(int i = 0; i < _relicSlotLength; i++)
+        for (int i = 0; i < _relicSlotLength; i++)
         {
             _myRelics.Add(_relicZero);
         }
+        _relicDivisionSystem = new RelicDivisionSystem(this);
 
 
         _myEquipments = new Dictionary<PART, EquipmentBase>
@@ -40,6 +50,9 @@ public class PlayerLoadout
             {PART.Shoes, ItemDB.CreateItem<EquipmentBase>(ItemID.DefaultShose)}
         };
     }
+
+
+    #region 장비&유물 스탯 반환
 
     // 장비의 스텟 증가량을 반환
     public float GetIncreaseStat(EQUIP_STAT_TYPE stat)
@@ -89,11 +102,38 @@ public class PlayerLoadout
         return result;
     }
 
+    // 유물의 공명효과로 증가하는 스탯 증가값
+    public float GetRelicDivisionValue(PLAYER_STAT stat)
+    {
+        float divisionValue = _relicDivisionSystem.GetIncreaseStat(out var statType);
+
+        if (stat != statType)
+            return 0;
+
+        return divisionValue;
+    }
+
+    #endregion
+
+
+    #region 유물창
+
+    // 유물 장착 메서드
     public void SetRelic(ItemInstance item)
     {
+        // 중복 착용 확인
+        foreach(var checkRelic in _outputRelics)
+        {
+            if(checkRelic.Data.UniqueID == item.ID)
+            {
+                WarningText.ShowText("착용 중인 유물입니다.");
+                Debug.Log("<color=yellow>착용 중인 유물입니다.</color>"); return; 
+            }
+        }
+
         RelicBase relic = ItemDB.CreateItem<RelicBase>(item.ID);
         relic.SetEnhanceLevel(item.EnhanceLevel);
-        for(int i = 0; i < _myRelics.Count; i++)
+        for (int i = 0; i < _myRelics.Count; i++)
         {
             if (_myRelics[i] == _relicZero)
             {
@@ -104,15 +144,17 @@ public class PlayerLoadout
             }
         }
 
+        WarningText.ShowText("유물착용칸이 가득 찼습니다.");
         Debug.Log($"<color=yellow>유물칸이 꽉 차서 {item.Name} 장착 실패</color>");
     }
 
+    // 유물 장착 해제 메서드
     public void RemoveRelic(int id, int enhanceLevel)
     {
         for (int i = 0; i < _myRelics.Count; i++)
         {
             var relic = _myRelics[i];
-            if (relic != null && relic.Data.Relic.id == id && relic.EnhanceLevel == enhanceLevel)
+            if (relic != null && relic.Data.Relic.id == id && relic.CurrentEnhanceLevel == enhanceLevel)
             {
                 _myRelics.RemoveAt(i);
                 _outputRelics.Remove(relic);
@@ -121,8 +163,20 @@ public class PlayerLoadout
                 return;
             }
         }
-        
     }
 
-    public void OnChangeLoadout() => _onChangeLoadout.OnStartEvent();
+    // 유물의 공명 효과가 활성화됐는지 여부
+    public bool TryGetRelicDivision(out RELIC_TYPE divisionType)
+    {
+        bool isDivision = _relicDivisionSystem.IsDivisionActive;
+
+        if (isDivision)
+            divisionType = _relicDivisionSystem.CurrentDivision.division_type;
+        else
+            divisionType = (RELIC_TYPE)(-1);
+
+        return isDivision;
+    }
+
+    #endregion
 }

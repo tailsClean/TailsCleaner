@@ -226,7 +226,7 @@ public class CraftingInfo
     public CraftingInfo(EquipmentBase equipment)
     {
         ItemID = equipment.Data.Equipmnet.id;
-        Grade = equipment.GradeData.grade;
+        Grade = equipment.CurrentGradeData.grade;
         ItemDB.TryGetData<DefaultEquipData>(ItemID, out var result);
         CostCount = result.Grades[(int)Grade].cost_count;
         IsMaxGrade = result.Grades[(int)Grade].is_max_grade;

@@ -23,4 +23,6 @@ public class EquipGrade
     public int cost_id;
     public int cost_count;
     public float stat_rate;
+    public string grade_name;
+    public string grade_sprite;
 }

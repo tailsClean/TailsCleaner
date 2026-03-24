@@ -1,8 +1,9 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 
-public class EquipmentBase : ItemBase, IEnhancement
+public class EquipmentBase : ItemBase
 {
     public DefaultEquipData Data { get; private set; }
     public override void Init(int id)
@@ -13,12 +14,22 @@ public class EquipmentBase : ItemBase, IEnhancement
 
 
     // 강화 데이터
-    public int EnhanceLevel { get; private set; } = 1;
-    public EquipEnhance EnhanceData => Data.Enhances[EnhanceLevel - 1];
+    public int CurrentEnhanceLevel { get; private set; } = 0;
+    public EquipEnhance CurrentEnhanceData => Data.GetEnhance(CurrentEnhanceLevel);
+    //{
+    //    get
+    //    {
+    //        if (CurrentEnhanceLevel <= 0)
+    //            CurrentEnhanceLevel = 1;
+
+    //        return Data.GetEnhance(CurrentEnhanceLevel);
+    //    }
+    //}
+
 
     // 등급 데이터
-    public GRADE Grade { get; private set; }
-    public EquipGrade GradeData => Data.Grades[(int)Grade];
+    public GRADE CurrentGrade { get; private set; }
+    public EquipGrade CurrentGradeData => Data.Grades[(int)CurrentGrade];
 
 
 
@@ -29,13 +40,13 @@ public class EquipmentBase : ItemBase, IEnhancement
     {
         
         float statValue = Data.Stat.TryGetValue(stat, out var data) ? data.value : 0;
-        float enhanceValue = EnhanceData.add_value;
-        float gradeValue = GradeData.stat_rate;
+        float enhanceValue = CurrentEnhanceData != null ? CurrentEnhanceData.add_value : 0;
+        float gradeValue = CurrentGradeData.stat_rate;
         float result = statValue * (1 + enhanceValue) * gradeValue;
         return result;
     }
 
-    public void OnEnhance(EnhancingInfo result) => EnhanceLevel = result.EnhanceLevel;
-    public void OnUpgrade() => Grade++;
+    public void OnEnhance(EnhancingInfo result) => CurrentEnhanceLevel = result.CurrentEnhanceLevel;
+    public void OnUpgrade() => CurrentGrade++;
 
 }

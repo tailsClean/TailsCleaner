@@ -1,5 +1,10 @@
-﻿using UnityEngine;
+﻿#if UNITY_EDITOR
+using UnityEngine;
 
+
+/// <summary>
+/// 플레이어 스탯 실시간 확인용 코드
+/// </summary>
 public class CheckingPlayerStat : MonoBehaviour
 {
     public PlayerBase Player;
@@ -86,3 +91,4 @@ public class CheckingPlayerStat : MonoBehaviour
 
 
 }
+#endif

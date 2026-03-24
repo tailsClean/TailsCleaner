@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using UnityEngine;
 
 public static class RewardDB
 {
@@ -10,7 +11,11 @@ public static class RewardDB
         if (_rewardDicts == null)
             Init();
 
-        return _rewardDicts[groupID];
+        if (_rewardDicts.TryGetValue(groupID, out var dataBundle))
+            return dataBundle;
+
+        Debug.LogError($"{groupID}에 해당하는 스테이지 보상 데이터를 찾을 수 없습니다.");
+        return null;
     }
 
     private static void Init()
