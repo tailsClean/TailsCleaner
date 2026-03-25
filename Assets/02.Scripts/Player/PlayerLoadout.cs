@@ -127,7 +127,7 @@ public class PlayerLoadout
             if(checkRelic.Data.UniqueID == item.ID)
             {
                 WarningText.ShowText("착용 중인 유물입니다.");
-                Debug.Log("<color=yellow>착용 중인 유물입니다.</color>"); return; 
+                Debug.Log("<color=yellow>착용 중인 유물입니다.</color>"); return;
             }
         }
 
@@ -139,6 +139,9 @@ public class PlayerLoadout
             {
                 _myRelics[i] = relic;
                 _outputRelics.Add(relic);
+
+                WarningText.ShowText($"<color=yellow>{relic.Data.Name} 장착</color>");
+                Debug.Log(relic.Data.Name + " 장착!");
                 _onChangeLoadout.OnStartEvent();
                 return;
             }
