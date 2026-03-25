@@ -15,13 +15,11 @@ public class StageRewardUI : MonoBehaviour
         _checkDuplications = new();
     }
 
-    private void OnEnable()
+    // 해당 보상그룹ID를 넣어서 슬롯을 UI출력
+    public void SetSlots(int rewardGroupID)
     {
-        SetSlots();
-    }
+        _rewardGroupID = rewardGroupID;
 
-    private void SetSlots()
-    {
         _checkDuplications.Clear();
         var dataBundle = RewardDB.GetRewardTable(_rewardGroupID);
 
