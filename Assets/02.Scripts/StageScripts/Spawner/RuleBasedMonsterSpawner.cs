@@ -34,29 +34,28 @@ public class RuleBasedMonsterSpawner : MonoBehaviour, IMonsterSpawnSystem
 
     private WavePlan _currentWave;
 
-    private bool _isSpawningEnabled = true; //스폰 활성화 여부
-    private float _spawnAccmulator; //스폰 타이밍 누적값
+    private bool _isSpawningEnabled = true;
+    private float _spawnAccmulator;
 
     private List<SpecialMonsterRow> _specialRows;
     private int _currentMainSeconds;
     private int _lastSpecialTickSeconds = -1;
 
-    // periodic 중복 방지용(각 row별로 마지막 소환 초 기록)
     private Dictionary<int, int> _lastPeriodicSpawnSecondBySpecialId = new Dictionary<int, int>();
     private HashSet<int> _onceSpawnedSpecialIds = new HashSet<int>();
 
-    // 중간보스 및 보스의 경우, 스폰 시점에 참조할 수 있도록 마지막으로 소환된 객체 저장
     public GameObject LastSpawnedBoss { get; private set; }
     public GameObject LastSpawnedMidBoss { get; private set; }
 
-    //패턴 캐시
-    private Vector2 _squadCenter; //스쿼드 중심 위치
-    private int _circleIndex; //원형 스폰 슬롯 인덱스
+    private Vector2 _squadCenter;
+    private int _circleIndex;
 
-    //경험치 Multiply 캐시
     private bool _expCacheReady;
     private Dictionary<int, int> _monsterIdToType;
     private Dictionary<int, float> _typeToBaseExp;
+
+    private Bounds _spawnBounds;
+    private bool _hasBounds = false;
 
     private const string MONSTER_TABLE_FILE = "monster/monster";
     private const string MONSTER_TYPE_TABLE_FILE = "monster/monster_type";
