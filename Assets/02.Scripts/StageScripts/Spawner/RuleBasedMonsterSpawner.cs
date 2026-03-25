@@ -15,6 +15,10 @@ public class RuleBasedMonsterSpawner : MonoBehaviour, IMonsterSpawnSystem
     [Header("References")]
     [SerializeField] private Transform _playerTransform; //플레이어 위치 참조
     [SerializeField] private MonsterRegistry _registry;
+    
+    [Header("Spawn Bounds")]
+    [SerializeField] private float _wallMargin = 1.5f; // 벽에서 떨어질 거리
+    [SerializeField] private int _maxPositionTry = 10; // 위치 재시도 횟수
 
     [Header("Prefabs")]
     [SerializeField] private MonsterBase _normalMonsterPrefab;
@@ -57,6 +61,14 @@ public class RuleBasedMonsterSpawner : MonoBehaviour, IMonsterSpawnSystem
     private const string MONSTER_TABLE_FILE = "monster/monster";
     private const string MONSTER_TYPE_TABLE_FILE = "monster/monster_type";
 
+    public void SetSpawnBounds(Bounds bounds)
+    {
+        _spawnBounds = bounds;
+        _hasBounds = true;
+
+        Debug.Log($"[Spawner] Bounds set: min={bounds.min}, max={bounds.max}");
+    }
+
     public void SetSpawningEnabled(bool _isenabled)
     {
         _isSpawningEnabled = _isenabled;
@@ -77,26 +89,11 @@ public class RuleBasedMonsterSpawner : MonoBehaviour, IMonsterSpawnSystem
 
     private void Update()
     {
-        if (!_isSpawningEnabled)
-        {
-            return;
-        }
-        if (_playerTransform == null || _registry == null)
-        {
-            return;
-        }
-        if (_normalMonsterPrefab == null)
-        {
-            return;
-        }
-        if (_currentWave == null)
-        {
-            return;
-        }
-        if (!_registry.CanSpawnMore())
-        {
-            return;
-        }
+        if (!_isSpawningEnabled) return;
+        if (_playerTransform == null || _registry == null) return;
+        if (_normalMonsterPrefab == null) return;
+        if (_currentWave == null) return;
+        if (!_registry.CanSpawnMore()) return;
 
         _spawnAccmulator += Time.deltaTime;
         float _interval = 1f / SPAWN_PER_SECOND;
@@ -123,15 +120,8 @@ public class RuleBasedMonsterSpawner : MonoBehaviour, IMonsterSpawnSystem
 
     public void SpawnMidBoss(int _midBossId)
     {
-        if (_midBossId == NO_BOSS_ID)
-        {
-            return;
-        }
-
-        if (_midBossPrefab == null)
-        {
-            return;
-        }
+        if (_midBossId == NO_BOSS_ID) return;
+        if (_midBossPrefab == null) return;
 
         MonsterBase mid = SpawnPrefab(_midBossPrefab, $"MidBoss_{_midBossId}", _isBoss: true, _midBossId);
         LastSpawnedMidBoss = mid != null ? mid.gameObject : null;
@@ -155,7 +145,7 @@ public class RuleBasedMonsterSpawner : MonoBehaviour, IMonsterSpawnSystem
         if (monsterRows == null || typeRows == null)
         {
             Debug.LogError($"[ExpCache] Parse failed. monsterRowsNull={monsterRows == null}, typeRowsNull={typeRows == null}");
-            return; // ✅ 여기서 잠그면 안됨
+            return;
         }
 
         _monsterIdToType = new Dictionary<int, int>(monsterRows.Count);
@@ -200,18 +190,22 @@ public class RuleBasedMonsterSpawner : MonoBehaviour, IMonsterSpawnSystem
         else
             _monster = Instantiate(_prefab, _spawnPos, Quaternion.identity);
 
+        if (_monster == null)
+        {
+            Debug.LogError($"[Spawner] Spawn failed. name={_name}, monsterId={_monsterId}");
+            return null;
+        }
+
         Debug.Log($"[Spawner] SpawnPrefab / name={_name}, monsterId={_monsterId}, type={_monster.GetType().Name}");
 
         _monster.name = _name;
         _monster.SetMonsterId(_monsterId);
         _monster.target = _playerTransform;
-    
+
         float waveHp = _currentWave != null ? _currentWave.waveHpModifier : 0f;
         float wavePower = _currentWave != null ? _currentWave.wavePowerModifier : 0f;
 
         float hpScale = 1f + _towerHpMod + _stageHpMod + waveHp;
-        
-
         float powerScale = 1f + _towerPowerMod + _stagePowerMod + wavePower;
 
         hpScale = Mathf.Max(0.1f, hpScale);
@@ -221,13 +215,8 @@ public class RuleBasedMonsterSpawner : MonoBehaviour, IMonsterSpawnSystem
 
         int exp = CalcExp(_monsterId);
         _monster.SetExpReward(exp);
-        
 
-        // 보스/특수보스 여부를 상속 타입으로 제한하지 않고,
-        // 실제로 TriggerRunner가 붙어 있으면 바인딩한다.
         BossTriggerPatternRunner runner = _monster.GetComponent<BossTriggerPatternRunner>();
-       
-
         if (runner != null)
         {
             runner.Bind(_monster);
@@ -249,8 +238,7 @@ public class RuleBasedMonsterSpawner : MonoBehaviour, IMonsterSpawnSystem
     {
         if (_isBoss)
         {
-            // 보스는 플레이어 기준 가까운 곳(연출 포인트 생기면 교체)
-            return (Vector2)_playerTransform.position + Vector2.up * 8f;
+            return ClampToBounds((Vector2)_playerTransform.position + Vector2.up * 8f);
         }
 
         if (_currentWave == null)
@@ -272,29 +260,79 @@ public class RuleBasedMonsterSpawner : MonoBehaviour, IMonsterSpawnSystem
         }
     }
 
+    private Vector2 ClampToBounds(Vector2 pos)
+    {
+        if (!_hasBounds) return pos;
+
+        return new Vector2(
+            Mathf.Clamp(pos.x, _spawnBounds.min.x + _wallMargin, _spawnBounds.max.x - _wallMargin),
+            Mathf.Clamp(pos.y, _spawnBounds.min.y + _wallMargin, _spawnBounds.max.y - _wallMargin)
+        );
+    }
+
+    private bool IsInsideBounds(Vector2 pos)
+    {
+        if (!_hasBounds) return true;
+
+        return pos.x >= _spawnBounds.min.x + _wallMargin &&
+               pos.x <= _spawnBounds.max.x - _wallMargin &&
+               pos.y >= _spawnBounds.min.y + _wallMargin &&
+               pos.y <= _spawnBounds.max.y - _wallMargin;
+    }
+
     private Vector2 GetRandomRingPosition()
     {
-        Vector2 _dir = Random.insideUnitCircle.normalized;
-        float _dist = Random.Range(MIN_SPAWN_DISTANCE, MAX_SPAWN_DISTANCE);
-        return (Vector2)_playerTransform.position + _dir * _dist;
+        for (int i = 0; i < _maxPositionTry; i++)
+        {
+            Vector2 _dir = Random.insideUnitCircle.normalized;
+            float _dist = Random.Range(MIN_SPAWN_DISTANCE, MAX_SPAWN_DISTANCE);
+            Vector2 candidate = (Vector2)_playerTransform.position + _dir * _dist;
+
+            if (!IsInsideBounds(candidate))
+                continue;
+
+            return ClampToBounds(candidate);
+        }
+
+        return ClampToBounds((Vector2)_playerTransform.position + Vector2.right * MIN_SPAWN_DISTANCE);
     }
 
     private Vector2 GetSquadPosition()
     {
-        Vector2 _offset = Random.insideUnitCircle * SQUAD_RADIUS;
-        return _squadCenter + _offset;
+        for (int i = 0; i < _maxPositionTry; i++)
+        {
+            Vector2 _offset = Random.insideUnitCircle * SQUAD_RADIUS;
+            Vector2 candidate = _squadCenter + _offset;
+
+            if (!IsInsideBounds(candidate))
+                continue;
+
+            return ClampToBounds(candidate);
+        }
+
+        return ClampToBounds(_squadCenter);
     }
 
     private Vector2 GetCirclePosition()
     {
-        float _angle = (360f / CIRCLE_SLOTS) * (_circleIndex % CIRCLE_SLOTS);
-        _circleIndex++;
+        for (int tryCount = 0; tryCount < _maxPositionTry; tryCount++)
+        {
+            float _angle = (360f / CIRCLE_SLOTS) * (_circleIndex % CIRCLE_SLOTS);
+            _circleIndex++;
 
-        float _rad = _angle * Mathf.Deg2Rad;
-        float _dist = Random.Range(MIN_SPAWN_DISTANCE, MAX_SPAWN_DISTANCE);
+            float _rad = _angle * Mathf.Deg2Rad;
+            float _dist = Random.Range(MIN_SPAWN_DISTANCE, MAX_SPAWN_DISTANCE);
 
-        Vector2 _offset = new Vector2(Mathf.Cos(_rad), Mathf.Sin(_rad)) * _dist;
-        return (Vector2)_playerTransform.position + _offset;
+            Vector2 _offset = new Vector2(Mathf.Cos(_rad), Mathf.Sin(_rad)) * _dist;
+            Vector2 candidate = (Vector2)_playerTransform.position + _offset;
+
+            if (!IsInsideBounds(candidate))
+                continue;
+
+            return ClampToBounds(candidate);
+        }
+
+        return ClampToBounds((Vector2)_playerTransform.position + Vector2.up * MIN_SPAWN_DISTANCE);
     }
 
     private int PickMonsterIdBySpawnAmount(WavePlan _wave)
@@ -354,7 +392,6 @@ public class RuleBasedMonsterSpawner : MonoBehaviour, IMonsterSpawnSystem
 
             if (row.monster_id < 0) continue;
 
-            // Once: start_time 딱 1회
             if (row.spawn_type == (int)SpecialSpawnType.Once)
             {
                 if (_currentMainSeconds != row.start_time) continue;
@@ -366,7 +403,6 @@ public class RuleBasedMonsterSpawner : MonoBehaviour, IMonsterSpawnSystem
                 continue;
             }
 
-            // Periodic: start~end 구간 동안 generation_time 주기
             if (row.spawn_type == (int)SpecialSpawnType.Periodic)
             {
                 if (_currentMainSeconds < row.start_time || _currentMainSeconds > row.end_time) continue;
@@ -376,7 +412,6 @@ public class RuleBasedMonsterSpawner : MonoBehaviour, IMonsterSpawnSystem
                 int lastSec;
                 bool hasLast = _lastPeriodicSpawnSecondBySpecialId.TryGetValue(row.special_id, out lastSec);
 
-                // start_time에 첫 스폰 (원하면 제거 가능)
                 if (!hasLast)
                 {
                     _lastPeriodicSpawnSecondBySpecialId[row.special_id] = _currentMainSeconds;
