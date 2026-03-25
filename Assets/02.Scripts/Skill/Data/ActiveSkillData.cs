@@ -5,6 +5,8 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "ActiveData", menuName = "Skill/ActiveData")]
 public class ActiveSkillData : ScriptableObject
 {
+    public enum PlayerSkillAni { None, Skill1, Skill2, Skill3 }
+
     [Header("기본 정보")]
     public int MainTag;                   // 메인태그
     public string SkillName;              // 에디터 확인용 이름
@@ -23,6 +25,9 @@ public class ActiveSkillData : ScriptableObject
 
     [Header("사운드 데이터")]
     public SkillSoundData SoundData;
+
+    [Header("애니메이션 타입")]
+    public PlayerSkillAni PlayerAniType;
 
     [Header("업그레이드별 모디파이어 설정")]
     public List<UpgradeModifierData> UpgradeModifierDatas = new();
