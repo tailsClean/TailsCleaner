@@ -210,6 +210,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 64991d57e37b05b478ef46fa9b862737, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ItemManager
+  <Inventory>k__BackingField: {fileID: 0}
+  <Currency>k__BackingField: {fileID: 0}
   _onChangeLoadout: {fileID: 0}
   _uiGroupList: []
 --- !u!4 &256161564
@@ -256,9 +258,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b4c54993eecb37345b4db26cc57ce16a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::TestSpawner
-  prefab: {fileID: 2741787303902298619, guid: acc2cb04c052a1c4b84292ad2d3ab5d2, type: 3}
+  prefab: {fileID: 8674726135315812162, guid: f1d7566061b437642929eb0d55f61230, type: 3}
   defaultSize: 20
-  monsterId: 203061
+  monsterId: 203064
   autoSpawn: 0
   spawnInterval: 0.5
 --- !u!4 &321566576
@@ -623,67 +625,6 @@ MonoBehaviour:
     damagePerTick: 10
     damageInterval: 0.5
     isCooldown: 0
---- !u!1001 &925627621
-PrefabInstance:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    serializedVersion: 3
-    m_TransformParent: {fileID: 0}
-    m_Modifications:
-    - target: {fileID: 421771617911109242, guid: f1d7566061b437642929eb0d55f61230, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: -4.67063
-      objectReference: {fileID: 0}
-    - target: {fileID: 421771617911109242, guid: f1d7566061b437642929eb0d55f61230, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: -6.67123
-      objectReference: {fileID: 0}
-    - target: {fileID: 421771617911109242, guid: f1d7566061b437642929eb0d55f61230, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 421771617911109242, guid: f1d7566061b437642929eb0d55f61230, type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 421771617911109242, guid: f1d7566061b437642929eb0d55f61230, type: 3}
-      propertyPath: m_LocalRotation.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 421771617911109242, guid: f1d7566061b437642929eb0d55f61230, type: 3}
-      propertyPath: m_LocalRotation.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 421771617911109242, guid: f1d7566061b437642929eb0d55f61230, type: 3}
-      propertyPath: m_LocalRotation.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 421771617911109242, guid: f1d7566061b437642929eb0d55f61230, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 421771617911109242, guid: f1d7566061b437642929eb0d55f61230, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 421771617911109242, guid: f1d7566061b437642929eb0d55f61230, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5939852413248465278, guid: f1d7566061b437642929eb0d55f61230, type: 3}
-      propertyPath: m_Name
-      value: Test_Monster
-      objectReference: {fileID: 0}
-    - target: {fileID: 8674726135315812162, guid: f1d7566061b437642929eb0d55f61230, type: 3}
-      propertyPath: avoidanceRadius
-      value: 0.5
-      objectReference: {fileID: 0}
-    m_RemovedComponents: []
-    m_RemovedGameObjects: []
-    m_AddedGameObjects: []
-    m_AddedComponents: []
-  m_SourcePrefab: {fileID: 100100000, guid: f1d7566061b437642929eb0d55f61230, type: 3}
 --- !u!1 &927556343
 GameObject:
   m_ObjectHideFlags: 0
@@ -919,7 +860,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8060241405893911967, guid: 1d22e24c33ab46e4386a4162918e7702, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8060241405893911967, guid: 1d22e24c33ab46e4386a4162918e7702, type: 3}
       propertyPath: m_TagString
@@ -1142,7 +1083,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!212 &2089975078
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -1382,4 +1323,3 @@ SceneRoots:
   - {fileID: 321566576}
   - {fileID: 2089975079}
   - {fileID: 37330066}
-  - {fileID: 925627621}
