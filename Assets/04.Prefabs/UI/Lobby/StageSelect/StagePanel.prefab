@@ -52,9 +52,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::StageSelectPanel
   _unlockedRoot: {fileID: 5280351168590040811}
   _txtUnlockedStage: {fileID: 4740044695244935790}
-  _imgReward1: {fileID: 5822200379424208864}
-  _imgReward2: {fileID: 3678082493532232993}
-  _imgReward3: {fileID: 3596329329738820896}
+  _rewardPreviewUI: {fileID: 7967173544529377539}
   _btnStageEnter: {fileID: 460753097530079115}
   _lockedRoot: {fileID: 4246305335303411050}
   _txtLockedStage: {fileID: 5743377151542987695}
@@ -153,12 +151,24 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7340561490086548988, guid: b8ff255ca2082fd49b6cfd7cb380da60, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 5246324939581776653, guid: b8ff255ca2082fd49b6cfd7cb380da60, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 7967173544529377539}
+    - targetCorrespondingSourceObject: {fileID: 3902007008724931119, guid: b8ff255ca2082fd49b6cfd7cb380da60, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1524425833297555152}
+    - targetCorrespondingSourceObject: {fileID: 8862375162837360953, guid: b8ff255ca2082fd49b6cfd7cb380da60, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 3464764658905069799}
+    - targetCorrespondingSourceObject: {fileID: 4359159781378094369, guid: b8ff255ca2082fd49b6cfd7cb380da60, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1377946336384634717}
   m_SourcePrefab: {fileID: 100100000, guid: b8ff255ca2082fd49b6cfd7cb380da60, type: 3}
 --- !u!114 &460753097530079115 stripped
 MonoBehaviour:
@@ -171,28 +181,42 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
   m_Name: 
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Button
---- !u!114 &3596329329738820896 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 2121688939516606007, guid: b8ff255ca2082fd49b6cfd7cb380da60, type: 3}
+--- !u!1 &1218120450229431862 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 4359159781378094369, guid: b8ff255ca2082fd49b6cfd7cb380da60, type: 3}
   m_PrefabInstance: {fileID: 3213734644396956439}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
+--- !u!114 &1377946336384634717
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1218120450229431862}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Script: {fileID: 11500000, guid: 2430af02565869a4892d927c88b1ddf7, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
---- !u!114 &3678082493532232993 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 2274975507281331766, guid: b8ff255ca2082fd49b6cfd7cb380da60, type: 3}
+  m_EditorClassIdentifier: Assembly-CSharp::UISlot
+  _amountText: {fileID: 0}
+--- !u!1 &1927483546097142072 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 3902007008724931119, guid: b8ff255ca2082fd49b6cfd7cb380da60, type: 3}
   m_PrefabInstance: {fileID: 3213734644396956439}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
+--- !u!114 &1524425833297555152
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1927483546097142072}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Script: {fileID: 11500000, guid: 2430af02565869a4892d927c88b1ddf7, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
+  m_EditorClassIdentifier: Assembly-CSharp::UISlot
+  _amountText: {fileID: 0}
 --- !u!224 &3701047119601537040 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 2289438427888782087, guid: b8ff255ca2082fd49b6cfd7cb380da60, type: 3}
@@ -214,17 +238,46 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 7340561490086548988, guid: b8ff255ca2082fd49b6cfd7cb380da60, type: 3}
   m_PrefabInstance: {fileID: 3213734644396956439}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &5822200379424208864 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 8959320763666328823, guid: b8ff255ca2082fd49b6cfd7cb380da60, type: 3}
+--- !u!1 &6225102649714276910 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 8862375162837360953, guid: b8ff255ca2082fd49b6cfd7cb380da60, type: 3}
   m_PrefabInstance: {fileID: 3213734644396956439}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
+--- !u!114 &3464764658905069799
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6225102649714276910}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Script: {fileID: 11500000, guid: 2430af02565869a4892d927c88b1ddf7, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
+  m_EditorClassIdentifier: Assembly-CSharp::UISlot
+  _amountText: {fileID: 0}
+--- !u!1 &7230469953905686554 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 5246324939581776653, guid: b8ff255ca2082fd49b6cfd7cb380da60, type: 3}
+  m_PrefabInstance: {fileID: 3213734644396956439}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &7967173544529377539
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7230469953905686554}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0e414d08b554b904688848517b12d07a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::StageRewardUI
+  _rewardGroupID: 0
+  _rewardSlots:
+  - {fileID: 1524425833297555152}
+  - {fileID: 3464764658905069799}
+  - {fileID: 1377946336384634717}
 --- !u!1001 &9216236214781944366
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -247,7 +300,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4975156205764753220, guid: be0a9248eaaf7df4ca7562ea1319e911, type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6750188689031957109, guid: be0a9248eaaf7df4ca7562ea1319e911, type: 3}
       propertyPath: m_Pivot.x
