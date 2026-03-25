@@ -56,7 +56,7 @@ public class InventorySlotHandler : UIGroup
             {
                 _slots[i].Init();
                 _slots[i].AddListener(() => _onItemPopup.OnStartEvent(item));
-                _slots[i++].SetSlot(item.ID, item.Amount);
+                _slots[i++].SetSlot(item, item.Amount);
             }
         }
         for(;i < _slots.Count; i++)

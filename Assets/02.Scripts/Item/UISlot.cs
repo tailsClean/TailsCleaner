@@ -3,149 +3,130 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-/// <summary>
-/// 수정 필요
-/// </summary>
+
 public class UISlot : MonoBehaviour
 {
     [SerializeField] private TextMeshProUGUI _amountText;
 
-
-
-    public ItemBase Item { get; private set; }
-
     private Image _image;
     private Button _button;
     private Sprite _baseSprite;
+
+
 
     private void Awake()
     {
         _image = GetComponent<Image>();
         _button = GetComponent<Button>();
         _baseSprite = _image.sprite;
+        InitializedSlot();
+    }
+
+
+
+    // 슬롯에 아이템(ID)과 벨류(갯수, 강화수치등)를 표시
+    public void SetSlot(int id, int value)
+    {
+        ShowSprite(id, out var item);
+        ShowText(value);
     }
 
     // 슬롯에 아이템(ID)과 벨류(갯수, 강화수치등)를 표시
-    public void SetSlot(int id, int? value = null)
+    public void SetSlot(int id, string value = null)
     {
-        var a = ItemDB.GetData(id);
-        if (a != null)
-        {
-            _image.sprite = a.SpriteImg;
-            _amountText.text = value.ToString();
-        }
-        else
-        {
-            Debug.Log("값을 찾을 수 없다.");
-            _image.sprite = _baseSprite;
-            _amountText.text = string.Empty;
-        }
-
-        if (value == null)
-            _amountText.text = string.Empty;
+        ShowSprite(id, out var item);
+        ShowText(value);
     }
 
-    // 슬롯에 아이템(ID)과 벨류(갯수, 강화수치등)를 표시
-    public void SetSlot(int id, string value)
+    // 슬롯에 특정 아이템을 넣으면 자동으로 아이템의 정보를 UI로 출력
+    public void SetSlot(ItemInstance item, string value = null)
     {
-        var a = ItemDB.GetData(id);
-        if (a != null)
-        {
-            _image.sprite = a.SpriteImg;
-            _amountText.text = value;
-        }
-        else
-        {
-            Debug.Log("값을 찾을 수 없다.");
-            _image.sprite = _baseSprite;
-            _amountText.text = string.Empty;
-        }
-    }
-
-    public void SetSlot(ItemInstance item, TEXT_TYPE textType = TEXT_TYPE.Amount)
-    {
-        var itemData = ItemDB.GetData(item.ID);
+        ShowSprite(item.ID, out var itemData);
         if (itemData == null)
         {
-            Debug.Log("값을 찾을 수 없다.");
-            _image.sprite = _baseSprite;
-            _amountText.text = string.Empty;
+            InitializedSlot();
             return;
         }
+
         if (itemData.TryGetData<DefaultEquipData>(out var equipData))
-        {
             _image.sprite = equipData.GetEquipSprite(item.Grade);
-            return;
-        }
-
-        //if(itemData.TryGetData<MaterialEquipData>(out var materData))
-            //_image.sprite = materData
-
-
-        _image.sprite = itemData.SpriteImg;
 
         if (_amountText == null)
             return;
 
-        switch(textType)
-        {
-            case TEXT_TYPE.Amount:
-                _amountText.text = item.Amount.ToString();
-                break;
-            case TEXT_TYPE.Name:
-                _amountText.text = item.Name;
-                break;
-            case TEXT_TYPE.None:
-                _amountText.text = string.Empty;
-                break;
-        }
+        if (value != null)
+            ShowText(value);
+        else
+            ShowText();
+            
     }
 
-    public void SetSlot(ItemInstance item, string value)
+    // int를 통해서도 값을 출력할 수 있도록 오버로딩
+    public void SetSlot(ItemInstance item, int value)
     {
-        var itemData = ItemDB.GetData(item.ID);
-        if (itemData == null)
-        {
-            Debug.Log("값을 찾을 수 없다.");
-            _image.sprite = _baseSprite;
-            _amountText.text = string.Empty;
-            return;
-        }
-        if (itemData.TryGetData<DefaultEquipData>(out var equipData))
-        {
-            _image.sprite = equipData.GetEquipSprite(item.Grade);
-            return;
-        }
-
-        _image.sprite = itemData.SpriteImg;
-
-        if (_amountText == null)
-            return;
-
-        _amountText.text = value;
+        string text = value.ToString();
+        SetSlot(item.ID, text);
     }
 
 
+    // 버튼에 메서드 등록하기
     public void AddListener(Action action)
     {
         if (_button == null)
             return;
-            //{ Debug.LogWarning("UI슬롯에 버튼이 없어서 이벤트 등록X", this); return; }
+        //{ Debug.LogWarning("UI슬롯에 버튼이 없어서 이벤트 등록X", this); return; }
 
         _button.onClick.AddListener(() => action());
     }
 
+    // 외부 초기화
     public void Init()
     {
-        _image.sprite = _baseSprite;
-        _amountText.text = string.Empty;
+        InitializedSlot();
 
-        if(_button != null)
+        if (_button != null)
             _button.onClick.RemoveAllListeners();
     }
 
-    public enum TEXT_TYPE
+
+
+    #region 내부 동작 메서드
+
+    // 스프라이트 출력
+    private void ShowSprite(int id, out ItemDataBase item)
     {
-        Amount, Name, None
+        item = ItemDB.GetData(id);
+        if(item != null)
+            _image.sprite = item.SpriteImg;
     }
+
+    // 텍스트 출력(string)
+    private void ShowText(string value = null)
+    {
+        if (_amountText == null)
+            return;
+
+        if (value != null)
+            _amountText.text = value.ToString();
+        else
+            _amountText.text = string.Empty;
+    }
+
+    // 텍스트 출력(int)
+    private void ShowText(int value)
+    {
+        string text = value.ToString();
+        ShowText(text);
+    }
+
+    // 슬롯의 스프라이트, 텍스트 초기화
+    private void InitializedSlot()
+    {
+        _image.sprite = _baseSprite;
+
+        if (_amountText != null)
+            _amountText.text = string.Empty;
+    }
+
+    #endregion
 }

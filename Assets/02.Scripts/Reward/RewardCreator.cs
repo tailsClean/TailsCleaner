@@ -1,10 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using Unity.Mathematics;
 using UnityEngine;
 
 public class RewardCreator
 {
-    [field: SerializeField] public int StageGroupID { get; private set; }
+    public int StageGroupID { get; private set; }
     public RewardDTO CurrentReward { get; private set; }
 
 
@@ -46,27 +47,8 @@ public class RewardCreator
     private void SetCurrentReward(RewardTable rewardData)
     {
         int random = UnityEngine.Random.Range(rewardData.min_count, rewardData.max_count + 1);
-        switch (rewardData.reward_type)
-        {
-            case REWARD_TYPE.Gold:
-                random = UnityEngine.Random.Range(rewardData.min_count, rewardData.max_count + 100);
-                random /= 100;
-                CurrentReward.GoldAmount = random * 100;
-                break;
 
-            case REWARD_TYPE.Equipment:
-                var equip = new ItemInstance(rewardData.item_id, ItemInstance.NoneEnhanceLevel, GRADE.Dirty);
-                equip.SetAmount(random);
-                CurrentReward.Items.Add(equip);
-                break;
-
-            case REWARD_TYPE.BluePrint:
-                var item = new ItemInstance(rewardData.item_id);
-                item.SetAmount(random);
-                CurrentReward.Items.Add(item);
-                break;
-
-        }
+        CurrentReward.SetDTO(rewardData, random);
     }
 }
 
@@ -79,6 +61,30 @@ public class RewardDTO
     public RewardDTO()
     {
         Items = new List<ItemInstance>();
+    }
+
+    public void SetDTO(RewardTable rewardData, int amount)
+    {
+        switch (rewardData.reward_type)
+        {
+            case REWARD_TYPE.Gold:
+                amount = UnityEngine.Random.Range(rewardData.min_count, rewardData.max_count + 100);
+                amount /= 100;
+                GoldAmount = amount * 100;
+                break;
+
+            case REWARD_TYPE.Equipment:
+                var equip = new ItemInstance(rewardData.item_id, ItemInstance.NoneEnhanceLevel, GRADE.Dirty);
+                equip.SetAmount(amount);
+                Items.Add(equip);
+                break;
+
+            case REWARD_TYPE.BluePrint:
+                var item = new ItemInstance(rewardData.item_id);
+                item.SetAmount(amount);
+                Items.Add(item);
+                break;
+        }
     }
 
 

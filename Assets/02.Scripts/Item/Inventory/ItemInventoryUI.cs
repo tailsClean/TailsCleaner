@@ -93,8 +93,6 @@ public class ItemInventoryUI : UIGroup
                 _currentShowUI = slotHandler.Value;
             }
         }
-
-        //SetInventoryEvent();
     }
 
 
@@ -147,7 +145,6 @@ public class ItemInventoryUI : UIGroup
 
         _currentShowUI = _slotHandlerList[0];
         _currentShowUI.gameObject.SetActive(true);
-        //SetInventoryEvent();
     }
 
     #region 아이템 팜업
@@ -168,12 +165,4 @@ public class ItemInventoryUI : UIGroup
 
 
     #endregion
-
-    //// 인벤토리 추가, 삭제 시에 이벤트를 현재 출력 중인 슬롯 핸들러가 메서드 구독
-    //private void SetInventoryEvent()
-    //{
-    //    _inventory.InitEvent();
-    //    _inventory.OnAddItem += _currentShowUI.AddItemFromSlot;
-    //    _inventory.OnRemoveItem += _currentShowUI.RemoveItemFromSlot;
-    //}
 }

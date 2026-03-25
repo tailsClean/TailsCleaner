@@ -33,7 +33,6 @@ public class EquipedPopup : ItemPopup
     private void SetRelic()
     {
         _playerLoadout.SetRelic(_currentItem);
-        Debug.Log(_currentItem.Name + " 장착!");
     }
 
     private void EquipedNext() => transform.gameObject.SetActive(false);

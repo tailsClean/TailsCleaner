@@ -56,7 +56,8 @@ public class RewardSystem
         {
             // 얻는 System 인게임 보상은 골드뿐
             case ITEM_TYPE.Equipment:
-                _inventory.GainEquipment(item.ID, item.Grade, item.Amount);
+                _inventory.GainEquipment(item.ID, item.Amount);
+                //_inventory.GainEquipment(item.ID, item.Grade, item.Amount);
                 break;
 
             case ITEM_TYPE.Reinforcement:

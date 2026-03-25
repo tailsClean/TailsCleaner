@@ -66,9 +66,9 @@ public class CheckingLoadout : MonoBehaviour
             id = data.UniqueID;
             name = data.Name;
             part = data.Equipmnet.part;
-            enhanceLvl = equip.CurrentEnhanceLevel;
-            if (equip.CurrentEnhanceData != null)
-                maxlvl = equip.CurrentEnhanceData.is_max_level;
+            enhanceLvl = equip.EnhanceLevel;
+            if (equip.EnhanceData != null)
+                maxlvl = equip.EnhanceData.is_max_level;
             else
                 maxlvl = false;
             grade = equip.CurrentGrade;

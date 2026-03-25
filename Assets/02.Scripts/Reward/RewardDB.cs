@@ -35,6 +35,7 @@ public static class RewardDB
     }
 }
 
+// 각 스테이지ID별 보상 데이터 묶음
 public class RewardDataBundle
 {
     public List<RewardData> datas = new List<RewardData>();
