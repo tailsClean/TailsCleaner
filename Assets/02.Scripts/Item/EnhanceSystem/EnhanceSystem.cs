@@ -63,7 +63,7 @@ public class EnhanceSystem : MonoBehaviour
             _currency.UseGold(_enhanceInfo.NextEnhanceData.CostGold);
             _inventory.UseStackItem(_bluePrintID, _bluePrintCost);
 
-            _enhanceInfo.CurrentEnhanceLevel++;
+            _enhanceInfo.EnhanceLevel++;
             switch (_enhanceInfo.ItemType)
             {
                 case ITEM_TYPE.Equipment:
@@ -153,7 +153,7 @@ public class EnhancingInfo
 
     public readonly ItemInstance InventoryKey;
     public readonly int ItemID;
-    public int CurrentEnhanceLevel;
+    public int EnhanceLevel;
     public ITEM_TYPE ItemType;
 
     public bool IsCurrentMaxLevel
@@ -163,11 +163,11 @@ public class EnhancingInfo
             switch (ItemType)
             {
                 case ITEM_TYPE.Equipment:
-                    var equipEnhance = _equipData.GetEnhance(CurrentEnhanceLevel);
+                    var equipEnhance = _equipData.GetEnhance(EnhanceLevel);
                     return equipEnhance != null ? equipEnhance.is_max_level : false;
 
                 case ITEM_TYPE.Relic:
-                    var relicEnhance = _relicData.GetEnhance(CurrentEnhanceLevel);
+                    var relicEnhance = _relicData.GetEnhance(EnhanceLevel);
                     return relicEnhance != null ? relicEnhance.is_max_level : false;
             }
             return default;
@@ -182,12 +182,12 @@ public class EnhancingInfo
             {
                 case ITEM_TYPE.Equipment:
                     if (!IsCurrentMaxLevel)
-                        return new ItemEnhanceData(_equipData, CurrentEnhanceLevel + 1);
+                        return new ItemEnhanceData(_equipData, EnhanceLevel + 1);
                     break;
 
                 case ITEM_TYPE.Relic:
                     if (!IsCurrentMaxLevel)
-                        return new ItemEnhanceData(_relicData, CurrentEnhanceLevel + 1);
+                        return new ItemEnhanceData(_relicData, EnhanceLevel + 1);
 
                     break;
             }
@@ -210,7 +210,7 @@ public class EnhancingInfo
         ItemDB.TryGetData(itemData, out _relicData);
 
         ItemID = itemID;
-        CurrentEnhanceLevel = enhanceLevel;
+        EnhanceLevel = enhanceLevel;
         ItemType = itemData.Type;
     }
 
@@ -221,14 +221,14 @@ public class EnhancingInfo
     /// <param name="enhanceLevel"></param>
     public EnhancingInfo(EquipmentBase equipment)
     {
-        InventoryKey = new ItemInstance(equipment.Data.UniqueID, equipment.CurrentEnhanceLevel, equipment.CurrentGrade);
+        InventoryKey = new ItemInstance(equipment.Data.UniqueID, equipment.EnhanceLevel, equipment.CurrentGrade);
 
         var itemData = ItemDB.GetData(equipment.Data.UniqueID);
         ItemDB.TryGetData(itemData, out _equipData);
         ItemDB.TryGetData(itemData, out _relicData);
 
         ItemID = equipment.Data.UniqueID;
-        CurrentEnhanceLevel = equipment.CurrentEnhanceLevel;
+        EnhanceLevel = equipment.EnhanceLevel;
         ItemType = itemData.Type;
     }
 

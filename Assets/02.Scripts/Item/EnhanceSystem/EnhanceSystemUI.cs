@@ -64,7 +64,7 @@ public abstract class EnhanceSystemUI : UIGroup
 
         if (equipment.IsCurrentMaxLevel)
         {
-            _enhanceEquipment.SetSlot(equipment.ItemID, "Max");
+            _enhanceEquipment.SetSlot(equipment.InventoryKey, "Max");
             _resourceCostText.text = "Max";
             _costGoldText.text = "Max";
         }
@@ -72,7 +72,8 @@ public abstract class EnhanceSystemUI : UIGroup
         {
             var resourceItem = ItemDB.GetData(equipment.NextEnhanceData.BluePrintID);
             var goldData = ItemDB.GetData(ItemID.Gold);
-            _enhanceEquipment.SetSlot(equipment.ItemID, equipment.CurrentEnhanceLevel);
+            string outputText = $"+{equipment.EnhanceLevel}";
+            _enhanceEquipment.SetSlot(equipment.InventoryKey, outputText);
             _resourceCostText.text = equipment.NextEnhanceData.CostBluePrint.ToString();
             _costGoldText.text = equipment.NextEnhanceData.CostGold.ToString();
             _resourceCostImage.sprite = resourceItem.SpriteImg;

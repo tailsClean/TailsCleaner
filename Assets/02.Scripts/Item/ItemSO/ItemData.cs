@@ -45,6 +45,7 @@ public class MaterialEquipData : ItemDataBase
 {
     public int EquipID;
     public EquipMatter EquipMatter;
+    public GRADE Grade;
 
     public override ITEM_TYPE Type => ITEM_TYPE.Equipment;
 }

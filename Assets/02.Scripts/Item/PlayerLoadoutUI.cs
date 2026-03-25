@@ -67,10 +67,10 @@ public class PlayerLoadoutUI : UIGroup
             int i = 0;
             foreach (var equip in _loadout.MyEquipments.Values)
             {
-                if(equip.CurrentEnhanceLevel == 0)
+                if(equip.EnhanceLevel == 0)
                     _loadoutSlots[i++].SetSlot(equip.Data.Equipmnet.id);
                 else
-                    _loadoutSlots[i++].SetSlot(equip.Data.Equipmnet.id, $"+{equip.CurrentEnhanceLevel}");
+                    _loadoutSlots[i++].SetSlot(equip.Data.Equipmnet.id, $"+{equip.EnhanceLevel}");
             }
         }
     }
@@ -114,7 +114,7 @@ public class PlayerLoadoutUI : UIGroup
             foreach (var equip in _loadout.MyEquipments.Values)
             {
                 _popUpButtons[i].onClick.AddListener(() => _popUp.gameObject.SetActive(true));
-                _popUpButtons[i++].onClick.AddListener(() => _popUp.SetSlot(new ItemInstance(equip.Data.UniqueID, equip.CurrentEnhanceLevel, equip.CurrentGrade)));
+                _popUpButtons[i++].onClick.AddListener(() => _popUp.SetSlot(new ItemInstance(equip.Data.UniqueID, equip.EnhanceLevel, equip.CurrentGrade)));
             }
         }
     }

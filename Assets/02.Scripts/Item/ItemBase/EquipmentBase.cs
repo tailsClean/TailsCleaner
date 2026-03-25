@@ -14,17 +14,8 @@ public class EquipmentBase : ItemBase
 
 
     // 강화 데이터
-    public int CurrentEnhanceLevel { get; private set; } = 0;
-    public EquipEnhance CurrentEnhanceData => Data.GetEnhance(CurrentEnhanceLevel);
-    //{
-    //    get
-    //    {
-    //        if (CurrentEnhanceLevel <= 0)
-    //            CurrentEnhanceLevel = 1;
-
-    //        return Data.GetEnhance(CurrentEnhanceLevel);
-    //    }
-    //}
+    public int EnhanceLevel { get; private set; } = 0;
+    public EquipEnhance EnhanceData => Data.GetEnhance(EnhanceLevel);
 
 
     // 등급 데이터
@@ -40,13 +31,13 @@ public class EquipmentBase : ItemBase
     {
         
         float statValue = Data.Stat.TryGetValue(stat, out var data) ? data.value : 0;
-        float enhanceValue = CurrentEnhanceData != null ? CurrentEnhanceData.add_value : 0;
+        float enhanceValue = EnhanceData != null ? EnhanceData.add_value : 0;
         float gradeValue = CurrentGradeData.stat_rate;
         float result = statValue * (1 + enhanceValue) * gradeValue;
         return result;
     }
 
-    public void OnEnhance(EnhancingInfo result) => CurrentEnhanceLevel = result.CurrentEnhanceLevel;
+    public void OnEnhance(EnhancingInfo result) => EnhanceLevel = result.EnhanceLevel;
     public void OnUpgrade() => CurrentGrade++;
 
 }

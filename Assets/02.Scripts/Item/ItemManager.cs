@@ -10,12 +10,15 @@ public partial class ItemManager : MonoBehaviour
     [field: SerializeField] public ItemInventory Inventory { get; private set; }
     [field: SerializeField] public ItemCurrency Currency { get; private set; }      // 재화 가방
 
+    [Header("UI그룹 출력 관리")]
+    [SerializeField] private List<UIGroup> _uiGroupList;
+
     [Header("이벤트 채널")]
     [SerializeField] private VoidEventChannelSO _onChangeLoadout;
 
+
     public static ItemManager Instance { get; private set; }
 
-    [SerializeField] private List<UIGroup> _uiGroupList;
 
     private Dictionary<UI_GROUP, UIGroup> _uiGroups;
 
@@ -46,25 +49,12 @@ public partial class ItemManager : MonoBehaviour
     {
         foreach (var uiGroup in _uiGroupList)
         {
-            if (uiGroup.Group != group)
-                uiGroup.gameObject.SetActive(false);
+            if (uiGroup.Group == group)
+                uiGroup.gameObject.SetActive(true);
 
             else
-                uiGroup.gameObject.SetActive(true);
+                uiGroup.gameObject.SetActive(false);
         }
-    }
-
-    [ContextMenu("UI 그룹 매핑")]
-    public void asd()
-    {
-        foreach (var equip in Loadout.MyEquipments.Values)
-        {
-            Debug.Log("========");
-            Debug.Log(equip.Data.Equipmnet.id);
-            Debug.Log(equip.Data.Equipmnet.part);
-            Debug.Log("========");
-        }
-        
     }
 }
 
