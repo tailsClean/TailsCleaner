@@ -80,12 +80,22 @@ public class KISTest : MonoBehaviour
     [ContextMenu("재료 장비 확인")]
     public void SDFE()
     {
-        inventory.GainEquipment(39001, GRADE.Dirty, 15);
-        inventory.GainEquipment(39002, GRADE.Normal, 15);
-        inventory.GainEquipment(39101, GRADE.Dirty, 15);
-        inventory.GainEquipment(39102, GRADE.Normal, 15);
-        inventory.GainEquipment(39201, GRADE.Dirty, 15);
-        inventory.GainEquipment(39202, GRADE.Dirty, 15);
+        inventory.GainEquipment(32001, 15);
+        inventory.GainEquipment(32002, 15);
+        inventory.GainEquipment(32003, 15);
+        inventory.GainEquipment(32004, 15);
+        //inventory.GainEquipment(39001, GRADE.Dirty, 15);
+        //inventory.GainEquipment(39002, GRADE.Normal, 15);
+        //inventory.GainEquipment(39101, GRADE.Dirty, 15);
+        //inventory.GainEquipment(39102, GRADE.Normal, 15);
+        //inventory.GainEquipment(39201, GRADE.Dirty, 15);
+        //inventory.GainEquipment(39202, GRADE.Dirty, 15);
+        //inventory.GainEquipment(39001, GRADE.Clean, 15);
+        //inventory.GainEquipment(39102, GRADE.Clean, 15);
+        //inventory.GainEquipment(39101, GRADE.Aromatic, 15);
+        //inventory.GainEquipment(39002, GRADE.Aromatic, 15);
+        //inventory.GainEquipment(39201, GRADE.Shiny, 15);
+        //inventory.GainEquipment(39202, GRADE.Shiny, 15);
     }
 
 

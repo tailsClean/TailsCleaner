@@ -117,8 +117,8 @@ public class ItemDBSO : ScriptableObject
             _materialEquipDict.Add(equip.id, new MaterialEquipData());
             _materialEquipDict[equip.id].UniqueID = equip.id;
             _materialEquipDict[equip.id].EquipMatter = equip;
+            _materialEquipDict[equip.id].Grade = (GRADE)(equip.id % 100 - 1);
             _materialEquipDict[equip.id].Name = equip.desc;
-            //_materialEquipDict[equip.id].Name = nameData.GetById(equip.name).kr;
             _materialEquipDict[equip.id].SpriteImg = Resources.Load<Sprite>($"Total_Item_Image/{equip.sprite}");
         }
     }

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Mono.Cecil;
+using System;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
@@ -13,7 +14,7 @@ public class CraftingSystemUI : UIGroup
     private ItemInventory _inventory;
 
 
-    [Header("선택 합성 장비")]
+    [Header("선택된 합성 장비")]
     [SerializeField] private UISlot _mainEquipSlot;
     [SerializeField] private List<UISlot> _resourceCostSlots;
 
@@ -44,7 +45,7 @@ public class CraftingSystemUI : UIGroup
         SetInventoryEquipUI();
     }
 
-    #region 선택 장비창
+    #region 선택된 장비창
 
     // 등급업 장비UI 세팅
     private void SetMainEquipUI()
@@ -57,8 +58,9 @@ public class CraftingSystemUI : UIGroup
 
         var mainEquip = _craftingSystem.MainEquip;
         _mainEquipSlot.Init();
-        _mainEquipSlot.SetSlot(mainEquip.ItemID, mainEquip.Grade.ToString());
-        _mainEquipSlot.AddListener(() => _craftingSystem.RemoveMainEquip(mainEquip));
+        _mainEquipSlot.SetSlot(mainEquip.InventoryKey, mainEquip.Grade.ToString());
+        //_mainEquipSlot.SetSlot(mainEquip.ItemID, mainEquip.Grade.ToString());
+        _mainEquipSlot.AddListener(() => _craftingSystem.RemoveMainEquip());
     }
 
     // 재료 장비UI 세팅
@@ -67,7 +69,8 @@ public class CraftingSystemUI : UIGroup
         if (CheckResourceEquips())
             return;
 
-        for (int i = 0; i < _craftingSystem.ResourceEquips.Length; i++)
+        int i = 0;
+        for (; i < _craftingSystem.ResourceEquips.Length; i++)
         {
             if (_craftingSystem == null || _craftingSystem.ResourceEquips[i] == null)
             {
@@ -76,9 +79,15 @@ public class CraftingSystemUI : UIGroup
             }
             var resource = _craftingSystem.ResourceEquips[i];
             _resourceCostSlots[i].Init();
-            _resourceCostSlots[i].SetSlot(resource.ItemID, resource.Grade.ToString());
+            _resourceCostSlots[i].SetSlot(resource.InventoryKey, resource.Grade.ToString());
+            //_resourceCostSlots[i].SetSlot(resource.ItemID, resource.Grade.ToString());
             _resourceCostSlots[i].AddListener(() => _craftingSystem.RemoveResourceEquip(resource));
         }
+        for(; i < _resourceCostSlots.Count; i++)
+        {
+            _resourceCostSlots[i].Init();
+        }
+
     }
 
     private bool CheckResourceEquips()
@@ -92,7 +101,7 @@ public class CraftingSystemUI : UIGroup
             }
         }
 
-        return _craftingSystem.ResourceEquips == null;
+        return isNull;
     }
     #endregion
 
@@ -105,7 +114,7 @@ public class CraftingSystemUI : UIGroup
         {
             var craftingInfo = new CraftingInfo(equip);
             _loadoutSlots[i].Init();
-            _loadoutSlots[i].SetSlot(craftingInfo.ItemID, craftingInfo.Grade.ToString());
+            _loadoutSlots[i].SetSlot(craftingInfo.InventoryKey);
             _loadoutSlots[i++].AddListener(() => _craftingSystem.SetCraftSlot(craftingInfo));
         }
     }
@@ -117,16 +126,15 @@ public class CraftingSystemUI : UIGroup
     private void SetInventoryEquipUI()
     {
         int i = 0;
-        foreach(var item in _inventory.Inventory.Keys)
+        foreach(var item in _inventory.Inventory)
         {
-            var type = ItemDB.GetData(item.ID).Type;
-            //var type = ItemDB.GetData<ItemManageData>(item.ID).Type;
+            var type = ItemDB.GetData(item.Key.ID).Type;
             if (type != ITEM_TYPE.Equipment)
                 continue;
 
             _resourceEquipSlots[i].Init();
-            _resourceEquipSlots[i].SetSlot(item.ID, item.Grade.ToString());
-            var craftInfo = new CraftingInfo(item);
+            _resourceEquipSlots[i].SetSlot(item.Key, item.Value);
+            var craftInfo = new CraftingInfo(item.Key);
             _resourceEquipSlots[i++].AddListener(() => _craftingSystem.SetCraftSlot(craftInfo));
         }
         for(; i < _resourceEquipSlots.Count; i++)

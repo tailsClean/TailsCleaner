@@ -51,8 +51,21 @@ public class UISlot : MonoBehaviour
         if (itemData.TryGetData<DefaultEquipData>(out var equipData))
             _image.sprite = equipData.GetEquipSprite(item.Grade);
 
+        if (_amountText == null)
+            return;
 
-        ShowText(value);
+        if (value != null)
+            ShowText(value);
+        else
+            ShowText();
+            
+    }
+
+    // int를 통해서도 값을 출력할 수 있도록 오버로딩
+    public void SetSlot(ItemInstance item, int value)
+    {
+        string text = value.ToString();
+        SetSlot(item.ID, text);
     }
 
 

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using UnityEngine;
+using static CheckingLoadout;
 
 
 public class ItemInventory : MonoBehaviour
@@ -65,13 +66,13 @@ public class ItemInventory : MonoBehaviour
 
 
     // 장비 아이템 획득
-    public void GainEquipment(int id, GRADE grade, int amount = 1) =>
-        GainItem(id, ItemInstance.NoneEnhanceLevel, grade, amount);
+    public void GainEquipment(int id, int amount = 1) => 
+        GainItem(id, ItemInstance.NoneEnhanceLevel, (GRADE)(id % 100 - 1), amount);
 
 
     /// 장비 아이템 제거
-    public bool RemoveEquipment(int id, GRADE grade, int amount = 1) =>
-        UseItem(id, ItemInstance.NoneEnhanceLevel, grade, amount);
+    public bool RemoveEquipment(int id, int amount = 1) =>
+        UseItem(id, ItemInstance.NoneEnhanceLevel, (GRADE)(id % 100 - 1), amount);
 
 
     public bool RemoveEquipment(ItemInstance item, int amount = 1) => 
