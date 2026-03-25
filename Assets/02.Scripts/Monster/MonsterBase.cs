@@ -3,6 +3,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using static UnityEngine.RuleTile.TilingRuleOutput;
+using UnityEngine.AddressableAssets;
+using UnityEngine.ResourceManagement.AsyncOperations;
 
 [RequireComponent(typeof(Rigidbody2D), typeof(Collider2D))]
 public abstract class MonsterBase : PoolObject, IDamageable, IMonsterStatus, IPullable
@@ -88,7 +90,18 @@ public abstract class MonsterBase : PoolObject, IDamageable, IMonsterStatus, IPu
 
     [Header("---몬스터 스프라이트---")]
     [SerializeField] public SpriteRenderer _monsterSprite;
-    
+
+    [Header("--- 리소스 관련 ---")]
+    [SerializeField] protected Animator _animator;
+    protected AsyncOperationHandle<Sprite>? _spriteHandle;
+
+    protected MonsterResource currentResourceData;
+    protected string moveAnimationName;
+    protected string castAnimationName;
+    protected string attackAnimationName;
+    protected string deathAnimationName;
+    protected string attackEffectName;
+
     [Header("--- 넉백 설정 ---")]
     [SerializeField] float _knockbackDuration = 0.1f;                                           // 넉백 시간
     [SerializeField] LayerMask _wallLayerMask;                                                  // 벽 레이어
@@ -102,11 +115,188 @@ public abstract class MonsterBase : PoolObject, IDamageable, IMonsterStatus, IPu
     public void SetMonsterId(int id)
     {
         MonsterId = id;
+        Debug.Log($"[{name}] SetMonsterId 호출 / MonsterId:{MonsterId}");
+        TryApplyMonsterResource();
+    }
+
+    private void TryApplyMonsterResource()
+    {
+        Debug.Log($"[{name}] TryApplyMonsterResource 호출 / MonsterId:{MonsterId}");
+        if (MonsterId <= 0)
+        {
+            Debug.LogWarning($"[{name}] TryApplyMonsterResource 실패: MonsterId invalid = {MonsterId}");
+            return;
+        }
+
+        MonsterSO monsterSO = DataManager.Instance.GetSOData<MonsterSO>();
+        if (monsterSO == null)
+        {
+            Debug.LogError($"[{name}] MonsterSO를 찾을 수 없습니다.");
+            return;
+        }
+
+        Monster monsterData = monsterSO.GetById(MonsterId);
+        if (monsterData == null)
+        {
+            Debug.LogError($"[{name}] 몬스터 데이터 없음. MonsterId:{MonsterId}");
+            return;
+        }
+
+        MonsterResourceSO monsterResourceSO = DataManager.Instance.GetSOData<MonsterResourceSO>();
+        if (monsterResourceSO == null)
+        {
+            Debug.LogError($"[{name}] MonsterResourceSO를 찾을 수 없습니다.");
+            return;
+        }
+
+        MonsterResource resourceData = monsterResourceSO.GetById(monsterData.resource_id);
+        if (resourceData == null)
+        {
+            Debug.LogError($"[{name}] 몬스터 리소스 데이터 없음. resource_id:{monsterData.resource_id}");
+            return;
+        }
+
+        ApplyMonsterResource(resourceData);
+    }
+
+    protected virtual string GetSpriteAddress(MonsterResource resourceData)
+    {
+        if (!string.IsNullOrEmpty(resourceData.cast_animation))
+            return resourceData.cast_animation;
+
+        if (!string.IsNullOrEmpty(resourceData.move_animation))
+            return resourceData.move_animation;
+
+        return resourceData.index;
+    }
+
+    protected void ReleaseSpriteHandle()
+    {
+        if (_spriteHandle.HasValue)
+        {
+            Addressables.Release(_spriteHandle.Value);
+        }
+
+        _spriteHandle = null;
+    }
+
+    protected virtual void ResetResourceState()
+    {
+        currentResourceData = null;
+        moveAnimationName = null;
+        castAnimationName = null;
+        attackAnimationName = null;
+        deathAnimationName = null;
+        attackEffectName = null;
+    }
+
+    public virtual void ApplyMonsterResource(MonsterResource resourceData)
+    {
+        if (resourceData == null)
+        {
+            Debug.LogWarning($"[{name}] ApplyMonsterResource 실패: resourceData null");
+            return;
+        }
+
+        currentResourceData = resourceData;
+
+        moveAnimationName = resourceData.move_animation;
+        castAnimationName = resourceData.cast_animation;
+        attackAnimationName = resourceData.attack_animation;
+        deathAnimationName = resourceData.death_animation;
+        attackEffectName = resourceData.attack_effect;
+
+        ApplySprite(resourceData);
+        ApplyAnimatorResource(resourceData);
+
+        Debug.Log(
+            $"[{name}] Resource Applied / " +
+            $"resource_id:{resourceData.resource_id}, " +
+            $"index:{resourceData.index}, " +
+            $"move:{moveAnimationName}, attack:{attackAnimationName}, death:{deathAnimationName}"
+        );
+    }
+
+    protected virtual void ApplySprite(MonsterResource resourceData)
+    {
+        if (_monsterSprite == null)
+        {
+            Debug.LogWarning($"[{name}] _monsterSprite is null");
+            return;
+        }
+
+        string spriteAddress = GetSpriteAddress(resourceData);
+
+        if (string.IsNullOrEmpty(spriteAddress))
+        {
+            Debug.LogWarning($"[{name}] spriteAddress is null or empty / resource_id:{resourceData.resource_id}");
+            return;
+        }
+
+        ReleaseSpriteHandle();
+
+        // 현재 요청 시점의 resource_id / 주소를 캡처
+        int requestedResourceId = resourceData.resource_id;
+        string requestedAddress = spriteAddress;
+
+        var handle = Addressables.LoadAssetAsync<Sprite>(requestedAddress);
+        _spriteHandle = handle;
+
+        handle.Completed += op =>
+        {
+            if (op.Status != AsyncOperationStatus.Succeeded)
+            {
+                Debug.LogWarning($"[{name}] Addressables Sprite Load Failed: {requestedAddress}");
+                return;
+            }
+
+            // 로드가 끝났을 때 이미 다른 몬스터 데이터로 바뀌었으면 적용하지 않음
+            if (currentResourceData == null || currentResourceData.resource_id != requestedResourceId)
+            {
+                Debug.Log($"[{name}] Sprite load completed but resource changed. Skip apply: {requestedAddress}");
+                return;
+            }
+
+            _monsterSprite.sprite = op.Result;
+            Debug.Log($"[{name}] Addressables Sprite Apply Success: {requestedAddress}");
+        };
+    }
+
+    protected virtual void ApplyAnimatorResource(MonsterResource resourceData)
+    {
+        if (_animator == null)
+            return;
+    }
+
+    protected virtual void ClearMonsterResource()
+    {
+        ReleaseSpriteHandle();
+
+        currentResourceData = null;
+
+        moveAnimationName = null;
+        castAnimationName = null;
+        attackAnimationName = null;
+        deathAnimationName = null;
+        attackEffectName = null;
+
+        if (_monsterSprite != null)
+        {
+            _monsterSprite.sprite = null;
+        }
     }
 
     protected virtual void Awake()
     {
         rb2D = GetComponent<Rigidbody2D>();
+
+        if (_monsterSprite == null)
+            _monsterSprite = GetComponentInChildren<SpriteRenderer>();
+
+        if (_animator == null)
+            _animator = GetComponentInChildren<Animator>();
+
+
         rb2D.bodyType = RigidbodyType2D.Kinematic;
         rb2D.gravityScale = 0f;
         rb2D.constraints = RigidbodyConstraints2D.FreezeRotation;
@@ -164,6 +354,11 @@ public abstract class MonsterBase : PoolObject, IDamageable, IMonsterStatus, IPu
 
         FindTarget();
 
+        if (MonsterId > 0)
+        {
+            TryApplyMonsterResource();
+        }
+
         if (MonsterManager.Instance != null)
         {
             MonsterManager.Instance.RegisterMonster(this);
@@ -176,6 +371,9 @@ public abstract class MonsterBase : PoolObject, IDamageable, IMonsterStatus, IPu
         {
             MonsterManager.Instance.UnregisterMonster(this);
         }
+
+        ClearMonsterResource();
+
         base.OnDespawn();
     }
 
