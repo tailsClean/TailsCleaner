@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public enum BGMName
 {
@@ -111,6 +112,20 @@ public class SoundManager : MonoBehaviour
     {
         if (!_bgmPlayer.isPlaying && _bgmClips.Length > 0)
             PlayNext();
+    }
+    private void OnEnable()
+    {
+        SceneManager.sceneLoaded += OnSceneLoaded;
+    }
+
+    private void OnDisable()
+    {
+        SceneManager.sceneLoaded -= OnSceneLoaded;
+    }
+    private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+    {
+        // 씬 전환 시 스킬 효과음 관련 전부 중지, 제거
+        ClearAllSkillLoopSFX();
     }
 
     public void PlayBGMFromStart()
@@ -343,4 +358,26 @@ public class SoundManager : MonoBehaviour
     }
 
     public void SetMonsterSFXVolume(float volume) => _monsterSfxPlayer.volume = Mathf.Clamp01(volume);
+
+
+    // 스킬 효과음 관련 전부 제거, 중지
+    private void ClearAllSkillLoopSFX()
+    {
+        // 재생 중인 채널 전부 정지
+        foreach (var entry in _loopChannels.Values)
+        {
+            if (entry.source != null)
+                entry.source.Stop();
+        }
+
+        _loopChannels.Clear();
+
+        // AudioSource 컴포넌트 전부 제거
+        foreach (var source in _loopPool)
+        {
+            if (source != null)
+                Destroy(source);
+        }
+        _loopPool.Clear();
+    }
 }
