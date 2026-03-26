@@ -31,7 +31,7 @@ public class StageEntry : MonoBehaviour
         }
     }
 
-    void Start()
+    async void Start()
     {
         if (!TrySpendEntryEnergy(_stageId))
         { 
@@ -51,7 +51,7 @@ public class StageEntry : MonoBehaviour
 
         if (_mapLoader != null)
         {
-            _mapLoader.LoadMap(_plan.mapResource);
+            await _mapLoader.LoadMap(_plan.mapResource);
         }
         else
         {

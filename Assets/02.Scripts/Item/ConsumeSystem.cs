@@ -3,13 +3,12 @@
 
 public class ConsumeSystem
 {
-    private EnergySystem _energySystem;             // 에너지 회복용도
+    private EnergySystem _energySystem => GameManager.Instance._energySystem;             // 에너지 회복용도
     private OutGameLevelSystem _levelSystem;        // 게임레벨(경험치) 증가 용도
     private ItemInventory _inventory;
 
     public ConsumeSystem(ItemInventory inventory)
     {
-        _energySystem = EnergySystem.Instance;
         _levelSystem = OutGameLevelSystem.Instance;
         _inventory = inventory;
     }
