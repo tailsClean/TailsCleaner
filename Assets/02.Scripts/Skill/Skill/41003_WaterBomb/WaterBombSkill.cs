@@ -82,7 +82,7 @@ public class WaterBombSkill : ActiveSkill<WaterBombArea, WaterBombModifierData>
 
             // 물바다 투사체 생성
             //WaterBombSplashProjectile projectile = Instantiate(_splashProjectilePrefab, spawnPos, Quaternion.Euler(0f, 0f, angleDeg));
-            WaterBombSplashProjectile projectile = SpawnFromPool<WaterBombSplashProjectile>(_splashProjectilePrefab, spawnPos, Quaternion.Euler(0f, 0f, angleDeg));
+            WaterBombSplashProjectile projectile = SpawnFromPool(_splashProjectilePrefab, spawnPos, Quaternion.Euler(0f, 0f, angleDeg));
 
             // 물폭탄 스탯 사용
             if(projectile != null) projectile.Init(this, _modifierData, dir);
@@ -103,7 +103,7 @@ public class WaterBombSkill : ActiveSkill<WaterBombArea, WaterBombModifierData>
 
         // 소용돌이 생성
         //WaterBombVortexArea vortex = Instantiate(_vortexAreaPrefab, spawnPos, Quaternion.identity);
-        WaterBombVortexArea vortex = SpawnFromPool<WaterBombVortexArea>(_vortexAreaPrefab, spawnPos, Quaternion.identity);
+        WaterBombVortexArea vortex = SpawnFromPool(_vortexAreaPrefab, spawnPos, Quaternion.identity);
 
         Debug.Log($"소용돌이 틱 수 : {modifierData.VortexPullCount}");
 

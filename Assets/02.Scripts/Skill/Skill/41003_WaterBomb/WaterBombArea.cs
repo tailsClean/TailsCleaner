@@ -121,12 +121,12 @@ public class WaterBombArea : SkillArea<WaterBombModifierData>
         // 물바다
         // 8방향 추가 투사체 발사
         if (_modifierData.Splash)
-            if(_waterBombSkill != null) _waterBombSkill.SpawnSplash(transform.position, _runtimeFinalStat);
+            if(_waterBombSkill != null) _waterBombSkill.SpawnSplash(_rigidbody.position, _runtimeFinalStat);
 
         // 소용돌이
         // WaterBombSkill에서 생성
         if (_modifierData.Vortex)
-            if (_waterBombSkill != null) _waterBombSkill.SpawnVortexArea(transform.position, _runtimeFinalStat, _modifierData, _passiveModifiers);
+            if (_waterBombSkill != null) _waterBombSkill.SpawnVortexArea(_rigidbody.position, _runtimeFinalStat, _modifierData, _passiveModifiers);
     }
 
 

@@ -65,6 +65,8 @@ public abstract class ActiveSkill : MonoBehaviour
     // 사운드 데이터
     protected SkillSoundData _soundData;
 
+    // 애니메이션 이름
+    private string _aniName;
 
 
     private void Awake()
@@ -97,6 +99,15 @@ public abstract class ActiveSkill : MonoBehaviour
         
         // 사운드 데이터
         _soundData = skillData.SoundData;
+        
+        // 애니메이션 타입
+        _aniName = skillData.PlayerAniType switch
+        {
+            PLAYERSKILLANI_TYPE.Skill1 => PlayerAnimation.Skill1,
+            PLAYERSKILLANI_TYPE.Skill2 => PlayerAnimation.Skill2,
+            PLAYERSKILLANI_TYPE.Skill3 => PlayerAnimation.Skill3,
+            _ => null
+        };
 
         Debug.Log($"[ActiveSkill] {upgradeData.Name} 생성 완료.");
     }
@@ -106,10 +117,17 @@ public abstract class ActiveSkill : MonoBehaviour
         // 쿨타임이 됐고 발동 조건도 맞으면 발동
         if (IsCooldownReady() && CanFire())
         {
+            // 시전 애니메이션
+            if (_aniName != null) SkillManager.Instance.Player.PlayAni(_aniName);
+            
+            // 스킬 시전
             Active();
+
+            // 시전 시간 갱신
             _lastActiveTime = Time.time;
         }
     }
+
 
     private bool IsCooldownReady()
     {
