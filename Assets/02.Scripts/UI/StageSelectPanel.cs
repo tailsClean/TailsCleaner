@@ -8,9 +8,7 @@ public class StageSelectPanel : MonoBehaviour
     [Header("Unlocked Panel")]
     [SerializeField] private GameObject _unlockedRoot;
     [SerializeField] private TextMeshProUGUI _txtUnlockedStage;
-    [SerializeField] private Image _imgReward1;
-    [SerializeField] private Image _imgReward2;
-    [SerializeField] private Image _imgReward3;
+    [SerializeField] private StageRewardUI _rewardPreviewUI;
     [SerializeField] private Button _btnStageEnter;
 
     [Header("Locked Panel")]
@@ -28,7 +26,7 @@ public class StageSelectPanel : MonoBehaviour
 
         SetState(unlocked);
         SetTexts(stage);
-        BindRewards(stage.reward_preview);
+        BindRewards(stage);
         BindButton(unlocked);
     }
 
@@ -52,17 +50,24 @@ public class StageSelectPanel : MonoBehaviour
             _txtLockedStage.text = stageText;
     }
 
-    private void BindRewards(int rewardPreviewId)
+    private void BindRewards(StageTable stage)
     {
-        // 아직 reward_preview와 실제 아이콘 연결 전이므로,
-        // 현재는 오브젝트만 유지하고 sprite는 비워둠.
-        if (_imgReward1 != null) _imgReward1.gameObject.SetActive(true);
-        if (_imgReward2 != null) _imgReward2.gameObject.SetActive(true);
-        if (_imgReward3 != null) _imgReward3.gameObject.SetActive(true);
+        if (_rewardPreviewUI == null)
+        {
+            Debug.LogWarning($"[StageSelectPanel] StageRewardUI is not assigned. stage={stage.stage_index}");
+            return;
+        }
 
-        if (_imgReward1 != null) _imgReward1.sprite = null;
-        if (_imgReward2 != null) _imgReward2.sprite = null;
-        if (_imgReward3 != null) _imgReward3.sprite = null;
+        int rewardGroupId = stage.reward_group_id;
+
+        if (rewardGroupId <= 0)
+        {
+            Debug.LogWarning($"[StageSelectPanel] Invalid reward_group_id={rewardGroupId}, stage={stage.stage_index}");
+            return;
+        }
+
+        Debug.Log($"[StageSelectPanel] BindRewards stage={stage.stage_index}, reward_group_id={rewardGroupId}");
+        _rewardPreviewUI.SetSlots(rewardGroupId);
     }
 
     private void BindButton(bool unlocked)
