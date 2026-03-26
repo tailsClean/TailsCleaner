@@ -2,6 +2,8 @@
 
 public static class ItemID
 {
+    public const int Gold = 30001;
+
     // 기본 장비
     public const int DefaultWeapon = 31001;
     public const int DefaultHat = 31101;
@@ -14,5 +16,4 @@ public static class ItemID
     public const int ShoseReinforceResource = 34004;
     public const int RelicReinforceResource = 34005;
 
-    public const int Gold = 30001;
 }

@@ -1,0 +1,66 @@
+﻿using UnityEngine;
+
+
+public class ConsumeSystem
+{
+    private EnergySystem _energySystem;             // 에너지 회복용도
+    private OutGameLevelSystem _levelSystem;        // 게임레벨(경험치) 증가 용도
+    private ItemInventory _inventory;
+
+    public ConsumeSystem(ItemInventory inventory)
+    {
+        _energySystem = EnergySystem.Instance;
+        _levelSystem = OutGameLevelSystem.Instance;
+        _inventory = inventory;
+    }
+
+    public void UseItem(ItemInstance item, int amount, out bool isConsume)
+    {
+        isConsume = false;
+
+        // DB접근없이 소비탬이 아니면 사용 제한
+        if (item.ItemType != ITEM_TYPE.Consume)
+        { Debug.LogWarning("소비탬이 아닌 것을 소모하려 했습니다."); return; }
+
+        // DB접근으로 아이템 확인
+        if (!ItemDB.TryGetData<ItemManageData>(item.ID, out var consumItem))
+            return;
+
+        if (consumItem.Consume == null)
+            return;
+
+        var inventoryItem = _inventory.GetStackItem(item.ID);
+        if (inventoryItem.Amount < amount)
+        { WarningText.ShowText("인벤토리의 아이템 갯수가 부족합니다."); return; }
+
+        for(int i = 0; i < amount; i++)
+        {
+            UseItem(consumItem, item);
+        }
+
+        isConsume = true;
+    }
+
+    // 소비탬의 용법에 맞춰서 소비처 나누기
+    private void UseItem(ItemManageData consumItem, ItemInstance item)
+    {
+        var consum = consumItem.Consume;
+        switch (consum.item_stat_type)
+        {
+            // 에너지 증가
+            case ITEM_CONSUME_TYPE.EnergyUp:
+                _energySystem.IncreaseEnergy(consum.item_opt);
+                break;
+
+            // 아웃게임 경험치 증가
+            case ITEM_CONSUME_TYPE.Exp:
+                _levelSystem.GainExp(consum.item_opt);
+                break;
+
+            default:
+                return;
+        }
+
+        _inventory.UseStackItem(item.ID, 1);
+    }
+}

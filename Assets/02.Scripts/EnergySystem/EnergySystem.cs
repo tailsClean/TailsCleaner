@@ -6,6 +6,8 @@ using UnityEngine.UIElements;
 
 public class EnergySystem : MonoBehaviour
 {
+    public static EnergySystem Instance;
+
     [SerializeField] private int _maxEnergy = 5;
     public int MaxEnergy => _maxEnergy;
     [SerializeField] private float _increaseEnergyTime = 30;
@@ -151,7 +153,7 @@ public class EnergySystem : MonoBehaviour
 
         }
         Debug.Log($"{_currentEnergy} 현재 에너지");
-        
+
         GameManager.Instance.UpdateEnergyCount(_currentEnergy);
     }
 

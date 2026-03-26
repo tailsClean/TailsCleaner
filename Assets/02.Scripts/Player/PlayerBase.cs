@@ -145,15 +145,17 @@ public class PlayerBase : MonoBehaviour, IDamageable, ISkillable, ISkillStat, IP
         if (isLevelUp)
             _onInGameLevelUp.OnStartEvent(_levelSystem.InGameLevel);
     }
-    // 아웃게임 경험치 획득 로직
-    public void GainOutGameExp(float exp)
-    {
-        bool isLevelUp = _levelSystem.GainExp(PlayerLevelSystem.GAME_MODE.OutGame, exp);
-        _onGainOutGameExp.OnStartEvent(_levelSystem.OutGameCurrentExp);
 
-        if (isLevelUp)
-            _onOutGameLevelUp.OnStartEvent(_levelSystem.OutGameLevel);
-    }
+
+    //// 아웃게임 경험치 획득 로직
+    //public void GainOutGameExp(float exp)
+    //{
+    //    bool isLevelUp = _levelSystem.GainExp(PlayerLevelSystem.GAME_MODE.OutGame, exp);
+    //    _onGainOutGameExp.OnStartEvent(_levelSystem.OutGameCurrentExp);
+
+    //    if (isLevelUp)
+    //        _onOutGameLevelUp.OnStartEvent(_levelSystem.OutGameLevel);
+    //}
 
 
     // 주위 아이템(경험치) 끌어모으는 메서드
@@ -205,9 +207,6 @@ public class PlayerBase : MonoBehaviour, IDamageable, ISkillable, ISkillStat, IP
         Debug.Log(CurrentHp);
         Heal(10);
     }
-
-    [ContextMenu("아웃경험치10증가")]
-    public void OutGameExp() => GainOutGameExp(10);
 
     [ContextMenu("인경험치10증가")]
     public void InGameExp() => GainInGameExp(10);

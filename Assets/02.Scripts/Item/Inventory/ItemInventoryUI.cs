@@ -108,7 +108,10 @@ public class ItemInventoryUI : UIGroup
             ItemInstance itemKey = itemInstance.Key;
             itemKey.SetAmount(itemInstance.Value);
 
-            ITEM_TYPE type = ItemDB.GetData(itemInstance.Key.ID).Type;
+            if (!ItemDB.TryGetData<ItemDataBase>(itemInstance.Key.ID, out var itemData))
+                continue;
+            
+            ITEM_TYPE type = itemData.Type;
             switch (type)
             {
                 case ITEM_TYPE.Equipment:
