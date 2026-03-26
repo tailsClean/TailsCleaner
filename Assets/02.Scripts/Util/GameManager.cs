@@ -1,10 +1,9 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using UnityEngine;
 using Firebase;
 using Firebase.Database;
 using Firebase.Auth;
-using UnityEditor.AddressableAssets.Build.Layout;
 
 public class GameManager : MonoBehaviour
 {
@@ -13,8 +12,7 @@ public class GameManager : MonoBehaviour
 
     
     public EnergySystem _energySystem;
-
-    public static int EnergyCount = 125;
+    public int EnergyCount;
     public const int SPEND_ENERGY = 1;
     public int _maxEnergy;
 
@@ -32,8 +30,6 @@ public class GameManager : MonoBehaviour
     [SerializeField] private VoidEventChannelSO OnEnergyChange;
     private Dictionary<int, int> _maxClearStageIndexByTower = new Dictionary<int, int>();
 
-    private const string CLEAR_STAGE_KEY_PREFIX = "TowerClear_";
-
     private async void Awake()
     {
         if (instance != null && instance != this)
@@ -48,7 +44,6 @@ public class GameManager : MonoBehaviour
 
         DontDestroyOnLoad(gameObject);
         _maxEnergy = _energySystem.MaxEnergy;
-        // EnergyCount = _maxEnergy;
         db = FirebaseDatabase.DefaultInstance.RootReference;
     }
 
@@ -65,6 +60,7 @@ public class GameManager : MonoBehaviour
         EnergyCount = energy;
         OnEnergyChange.OnStartEvent();
     }
+
     public async Task SaveEnergyCount()
     {
          await db.Child("users").Child(UID)
@@ -145,6 +141,7 @@ public class GameManager : MonoBehaviour
 
             }
         }
+        
     }
 
     public async Task ClearStageProgress()
