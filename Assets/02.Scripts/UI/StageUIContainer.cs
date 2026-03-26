@@ -17,6 +17,8 @@ public class StageUIContainer : MonoBehaviour, UIContainer // stageUI에서 연�
     public GameObject BossHP => _bossHP;
     [SerializeField] private StageWaveBannerUI _waveBannerUI;
     public StageWaveBannerUI WaveBannerUI => _waveBannerUI;
+    [SerializeField] private RewardSystemUI _clearRewardUI;
+    public RewardSystemUI ClearRewardUI => _clearRewardUI;
 
 
     [SerializeField] private List<UIGroup> _uiGroupList;
