@@ -103,9 +103,9 @@ public abstract class ActiveSkill : MonoBehaviour
         // 애니메이션 타입
         _aniName = skillData.PlayerAniType switch
         {
-            PlayerSkillAni.Skill1 => PlayerAnimation.Skill1,
-            PlayerSkillAni.Skill2 => PlayerAnimation.Skill2,
-            PlayerSkillAni.Skill3 => PlayerAnimation.Skill3,
+            PLAYERSKILLANI_TYPE.Skill1 => PlayerAnimation.Skill1,
+            PLAYERSKILLANI_TYPE.Skill2 => PlayerAnimation.Skill2,
+            PLAYERSKILLANI_TYPE.Skill3 => PlayerAnimation.Skill3,
             _ => null
         };
 
