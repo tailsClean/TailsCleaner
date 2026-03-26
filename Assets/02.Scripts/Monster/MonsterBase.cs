@@ -544,15 +544,15 @@ public abstract class MonsterBase : PoolObject, IDamageable, IMonsterStatus, IPu
     }
 
     public void Knockback(Vector2 direction, float force)
-    { 
+    {
         // 죽은 상태면 패스
         if (hp <= 0) return;
         // 넉백 힘 없으면 패스
         if (force <= 0f) return;
 
         float distance = force * _knockbackUnitToPx;    // 넉백 거리
-        Vector2 startPos = rb2D.position;              // 넉백 시작 위치
-        Vector2 dir = direction.normalized;       // 넉백 방향
+        Vector2 startPos = rb2D.position;               // 넉백 시작 위치
+        Vector2 dir = direction.normalized;             // 넉백 방향
         Vector2 targetPos = startPos + dir * distance;  // 넉백 목표 위치
 
         // 넉백 중이면 중단
@@ -568,14 +568,14 @@ public abstract class MonsterBase : PoolObject, IDamageable, IMonsterStatus, IPu
         IsKnockbacked = true;
         OnCC();
 
-        float pauseWaitElapsed = 0f;
-        while (pauseWaitElapsed < 0.3f)
-        {
-            if (!isPaused)
-                pauseWaitElapsed += Time.deltaTime;
-
-            yield return null;
-        }
+        //float pauseWaitElapsed = 0f;
+        //while (pauseWaitElapsed < 0.3f)
+        //{
+        //    if (!isPaused)
+        //        pauseWaitElapsed += Time.deltaTime;
+        //
+        //    yield return null;
+        //}
 
         bool hasCatLaundry = TryGetCatLaundry(startPos, out var catLaundry);
         bool catLaundryTriggered = false;
@@ -583,23 +583,8 @@ public abstract class MonsterBase : PoolObject, IDamageable, IMonsterStatus, IPu
         float duration = _knockbackDuration;
         KnockBackOffset(startPos, dir, totalDistance, ref targetPos, ref duration);
 
-        float elapsed = 0f;
-
-        while (elapsed < duration)
+        yield return MoveCoroutine(startPos, targetPos, duration, (nextPos) =>
         {
-            if (isPaused)
-            {
-                yield return _waitForFixedUpdate;
-                continue;
-            }
-
-            elapsed += Time.fixedDeltaTime;
-            float normalizedTime = Mathf.Clamp01(elapsed / duration);
-            float curvedT = _knockbackCurve.Evaluate(normalizedTime);
-
-            Vector2 nextPos = Vector2.LerpUnclamped(startPos, targetPos, curvedT);
-            rb2D.MovePosition(nextPos);
-
             if (hasCatLaundry && !catLaundryTriggered && !IsInsideScreen(nextPos))
             {
                 catLaundryTriggered = true;
@@ -607,14 +592,35 @@ public abstract class MonsterBase : PoolObject, IDamageable, IMonsterStatus, IPu
                 float damage = maxHp * catLaundry.OffScreenDamageRatio;
                 TakeDamage(damage);
             }
+        });
+
+        IsKnockbacked = false;
+        _knockbackCoroutine = null;
+    }
+
+    private IEnumerator MoveCoroutine(Vector2 startPos, Vector2 targetPos, float duration, System.Action<Vector2> onMove)
+    {
+        float time = 0f;
+
+        while (time < duration)
+        {
+            if (isPaused)
+            {
+                yield return _waitForFixedUpdate;
+                continue;
+            }
+
+            time += Time.fixedDeltaTime;
+            float t = Mathf.Clamp01(time / duration);
+            Vector2 nextPos = Vector2.Lerp(startPos, targetPos, t);
+
+            rb2D.MovePosition(nextPos);
+            onMove?.Invoke(nextPos);        // 넉백 냥빨래 체크용
 
             yield return _waitForFixedUpdate;
         }
 
         rb2D.MovePosition(targetPos);
-
-        IsKnockbacked = false;
-        _knockbackCoroutine = null;
     }
 
     // 넉백 벽 충돌 보정
@@ -660,9 +666,6 @@ public abstract class MonsterBase : PoolObject, IDamageable, IMonsterStatus, IPu
         return viewPoint.x >= 0f && viewPoint.x <= 1f &&
                viewPoint.y >= 0f && viewPoint.y <= 1f;
     }
-
-
-
     public void TryReduceMaxHp(float ratio)
     {
         if (HasReducedMaxHp) return;
@@ -700,10 +703,31 @@ public abstract class MonsterBase : PoolObject, IDamageable, IMonsterStatus, IPu
 
     public void ResetStunAreaTime() => StunAreaTime = 0;
 
-    public void Pull(Vector2 targetPosition, float force)
+    public void Pull(Vector2 targetPosition)
     {
-        Vector2 dir = (targetPosition - rb2D.position).normalized;
-        rb2D.MovePosition(rb2D.position + dir * force * Time.fixedDeltaTime);
+        if (hp <= 0) return;
+
+        Vector2 startPos = rb2D.position;                           // 시작 위치
+        Vector2 randomOffset = Random.insideUnitCircle * 0.05f;     // 랜덤 옵셋
+        Vector2 finalTargetPos = targetPosition + randomOffset;     // 목표지점에 옵셋
+        Vector2 diff = finalTargetPos - startPos;                   // 차이
+
+        if (diff.sqrMagnitude <= 0.001f) return;
+
+        if (_knockbackCoroutine != null)
+            StopCoroutine(_knockbackCoroutine);
+
+        _knockbackCoroutine = StartCoroutine(PullCoroutine(startPos, finalTargetPos));
+    }
+
+    private IEnumerator PullCoroutine(Vector2 startPos, Vector2 targetPos)
+    {
+        IsKnockbacked = true;
+
+        yield return MoveCoroutine(startPos, targetPos, _knockbackDuration, null);
+
+        IsKnockbacked = false;
+        _knockbackCoroutine = null;
     }
 
     // ==========================================================

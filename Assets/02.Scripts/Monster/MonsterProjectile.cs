@@ -1,8 +1,9 @@
-﻿using UnityEngine;
+﻿using System.Collections;
+using UnityEngine;
 
 public enum PierceType { DISAPPEAR, PIERCE, REFLECT }
 
-public class MonsterProjectile : PoolObject
+public class MonsterProjectile : PoolObject, IPullable
 {
     private Rigidbody2D rb2D;
     private Transform target;
@@ -23,6 +24,12 @@ public class MonsterProjectile : PoolObject
     [Tooltip("충돌 모드: 파괴, 관통, 벽 반사")] public PierceType pierce_type;
     [Tooltip("벽 반사 최대 횟수")] public int reflect_count = 3;
     [Tooltip("0보다 크면 포물선 발사 (높이)")] public float arc_height = 0f;
+
+
+    [Header("--- 끌어당기기 설정 ---")]
+    [SerializeField] float _pullDuration = 0.1f;                              // 이동 시간
+    private Coroutine _pullCoroutine;                                         // 코루틴
+    private static readonly WaitForFixedUpdate _waitForFixedUpdate = new();   // 대기시간
 
     void Awake()
     {
@@ -199,5 +206,44 @@ public class MonsterProjectile : PoolObject
         float vx = diff.x / time;
 
         rb2D.linearVelocity = new Vector2(vx, vy);
+    }
+
+    public void Pull(Vector2 targetPosition)
+    {
+        Vector2 startPos = rb2D.position;                           // 시작 위치
+        Vector2 randomOffset = Random.insideUnitCircle * 0.05f;     // 랜덤 옵셋
+        Vector2 finalTargetPos = targetPosition + randomOffset;     // 목표지점에 옵셋
+        Vector2 diff = finalTargetPos - startPos;                   // 차이
+
+        if (diff.sqrMagnitude <= 0.001f) return;
+
+        if (_pullCoroutine != null)
+            StopCoroutine(_pullCoroutine);
+
+        _pullCoroutine = StartCoroutine(PullCoroutine(startPos, finalTargetPos));
+    }
+
+    private IEnumerator PullCoroutine(Vector2 startPos, Vector2 targetPos)
+    {
+        yield return MoveCoroutine(startPos, targetPos, _pullDuration, null);
+        _pullCoroutine = null;
+    }
+    private IEnumerator MoveCoroutine(Vector2 startPos, Vector2 targetPos, float duration, System.Action<Vector2> onMove)
+    {
+        float time = 0f;
+
+        while (time < duration)
+        {
+            time += Time.fixedDeltaTime;
+            float t = Mathf.Clamp01(time / duration);
+            Vector2 nextPos = Vector2.Lerp(startPos, targetPos, t);
+
+            rb2D.MovePosition(nextPos);
+            onMove?.Invoke(nextPos);        // 넉백 냥빨래 체크용
+
+            yield return _waitForFixedUpdate;
+        }
+
+        rb2D.MovePosition(targetPos);
     }
 }
