@@ -1,5 +1,9 @@
 ﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using UnityEngine;
+using Firebase;
+using Firebase.Database;
+using Firebase.Auth;
 
 public class GameManager : MonoBehaviour
 {
@@ -19,12 +23,16 @@ public class GameManager : MonoBehaviour
     public int _currentStageId;
     public int _currentStageIndex;
 
+    //파이어베이스
+    private DatabaseReference db;
+    private string UID => FirebaseAuth.DefaultInstance.CurrentUser?.UserId;
+
     [SerializeField] private VoidEventChannelSO OnEnergyChange;
     private Dictionary<int, int> _maxClearStageIndexByTower = new Dictionary<int, int>();
 
     private const string CLEAR_STAGE_KEY_PREFIX = "TowerClear_";
 
-    private void Awake()
+    private async void Awake()
     {
         if (instance != null && instance != this)
         {
@@ -39,8 +47,7 @@ public class GameManager : MonoBehaviour
         DontDestroyOnLoad(gameObject);
         _maxEnergy = _energySystem.MaxEnergy;
         // EnergyCount = _maxEnergy;
-
-        LoadStageProgress();
+        db = FirebaseDatabase.DefaultInstance.RootReference;
     }
 
     public void EnterStage()
@@ -81,49 +88,62 @@ public class GameManager : MonoBehaviour
         return 0;
     }
 
-    public void MarkStageCleared(int towerId, int stageIndex)
+    public async Task MarkStageCleared(int towerId, int stageIndex)
     {
         int current = GetMaxClearStageIndex(towerId);
 
         if (stageIndex > current)
         {
             _maxClearStageIndexByTower[towerId] = stageIndex;
-            SaveTowerProgress(towerId, stageIndex);
+            await SaveTowerProgress(towerId, stageIndex);
 
             Debug.Log($"[GameManager] Save Clear / towerId={towerId}, stageIndex={stageIndex}");
         }
     }
 
-    private void SaveTowerProgress(int towerId, int stageIndex)
+    public async Task SaveTowerProgress(int towerId, int stageIndex)
     {
-        PlayerPrefs.SetInt(CLEAR_STAGE_KEY_PREFIX + towerId, stageIndex);
-        PlayerPrefs.Save();
+        if(UID != null)
+        {
+            await db.Child("users").Child(UID)
+                    .Child("dungeon")
+                    .Child(towerId.ToString())
+                    .SetValueAsync(stageIndex);
+        }
     }
 
-    private void LoadStageProgress()
+    public async Task LoadStageProgress()
     {
         _maxClearStageIndexByTower.Clear();
 
-        // 임시: 현재 타워 범위만 하드코딩
+        var snapshot = await db.Child("users").Child(UID)
+                               .Child("dungeon").GetValueAsync();
+
+        if(!snapshot.Exists)
+        {
+            Debug.Log("snapshot don`t exists");
+            return;
+        }
+        
         for (int towerId = 5001; towerId <= 5007; towerId++)
         {
-            int clearedIndex = PlayerPrefs.GetInt(CLEAR_STAGE_KEY_PREFIX + towerId, 0);
+            var child = snapshot.Child(towerId.ToString());
+            if(child.Exists)
+            {
+                int clearedIndex = int.Parse(child.Value.ToString());
+            
+                if (clearedIndex > 0)
+                    _maxClearStageIndexByTower[towerId] = clearedIndex;
 
-            if (clearedIndex > 0)
-                _maxClearStageIndexByTower[towerId] = clearedIndex;
-
-            Debug.Log($"[GameManager] Load Clear / towerId={towerId}, stageIndex={clearedIndex}");
+                Debug.Log($"[GameManager] Load Clear / towerId={towerId}, stageIndex={clearedIndex}");
+            }
         }
     }
 
-    public void ClearStageProgress()
+    public async Task ClearStageProgress()
     {
-        for (int towerId = 5001; towerId <= 5007; towerId++)
-        {
-            PlayerPrefs.DeleteKey(CLEAR_STAGE_KEY_PREFIX + towerId);
-        }
+        await db.Child("users").Child(UID).Child("dungeon").RemoveValueAsync();
 
-        PlayerPrefs.Save();
         _maxClearStageIndexByTower.Clear();
 
         Debug.Log("[GameManager] Stage progress cleared.");

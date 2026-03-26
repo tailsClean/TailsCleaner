@@ -167,14 +167,10 @@ public class LoginSystem : MonoBehaviour
         }
     }
 
-    private void OnEnterBtn()
+    private async void OnEnterBtn()
     {
-#if UNITY_EDITOR
-        UIManager.Instance.GoToLobby();
-        return;
-#endif
         if (_isLoggedIn)
-            UIManager.Instance.GoToLobby();
+            await UIManager.Instance.LoadDataAndGoToLobby();
         else
            _login1.SetActive(true);
     }

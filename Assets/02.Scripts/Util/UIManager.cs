@@ -3,6 +3,7 @@ using DG.Tweening;
 using TMPro;
 using System;
 using UnityEngine.SceneManagement;
+using System.Threading.Tasks;
 public interface UIContainer {}
 
 public class UIManager : MonoBehaviour
@@ -89,10 +90,16 @@ public class UIManager : MonoBehaviour
     #endregion
     [SerializeField]private VoidEventChannelSO _onStartInGame;
 
-    public void GoToLobby()
+    public async Task LoadDataAndGoToLobby()
     {
+        await GameManager.Instance.LoadStageProgress();
         SceneManager.LoadScene("LobbyScene");
     }
+    public void GoToLobby()
+    {
+        SceneManager.LoadScene("LobbyScene");    
+    }
+    
 
     public void GoToStage()
     {

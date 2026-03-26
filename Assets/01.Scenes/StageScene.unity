@@ -500,8 +500,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::StageEntry
   _stageId: 50201
   _towerId: 0
-  _useTimeOverride: 1
-  _overrideMainTimeSeconds: 300
+  _useTimeOverride: 0
+  _overrideMainTimeSeconds: 10
   _overrideBossTimeSeconds: 180
   _stageController: {fileID: 1499286055}
   _spawner: {fileID: 1493428061}
@@ -816,6 +816,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::RuleBasedMonsterSpawner
   _playerTransform: {fileID: 394270937}
   _registry: {fileID: 504285889}
+  _wallMargin: 1.5
+  _maxPositionTry: 10
   _normalMonsterPrefab: {fileID: 8674726135315812162, guid: f1d7566061b437642929eb0d55f61230, type: 3}
   _specialMonsterPrefab: {fileID: 2261082994107232443, guid: a0245534b2c600e41a31b6d02418dda9, type: 3}
   _midBossPrefab: {fileID: -9015206204577113263, guid: 0ae18229a096ed141a0886a3033b8970, type: 3}
@@ -1127,6 +1129,7 @@ MonoBehaviour:
   _confiner: {fileID: 679197708}
   cinemachineCamera: {fileID: 679197706}
   player: {fileID: 394270937}
+  _spawner: {fileID: 0}
 --- !u!1 &1757556135
 GameObject:
   m_ObjectHideFlags: 0
