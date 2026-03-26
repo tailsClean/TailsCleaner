@@ -62,6 +62,13 @@ public class BossMonster : MonsterBase
     public ZoneSpawner zoneSpawner;
     private readonly List<BossAreaPatternRuntime> areaPatterns = new List<BossAreaPatternRuntime>();
 
+    [Header("--- 겹침 방지 설정 ---")]
+    [Tooltip("몬스터끼리 서로 밀어내기 시작하는 거리")]
+    [SerializeField] private float avoidanceRadius = 0.5f; // 몬스터끼리 띄울 거리
+    [Tooltip("몬스터끼리 서로 밀어내는 힘의 세기")]
+    [SerializeField] private float avoidanceForce = 1.5f;  // 밀어내는 힘의 세기
+    [SerializeField] private LayerMask monsterLayer;       // 몬스터 전용 레이어 
+
     private class BossAreaPatternRuntime
     {
         public bool isSafeZone;
@@ -903,6 +910,40 @@ public class BossMonster : MonsterBase
         }
     }
 
+    private Vector2 GetSeparationDir(Vector2 myPos)
+    {
+        Vector2 separationDir = Vector2.zero;
+        Collider2D[] neighbors = Physics2D.OverlapCircleAll(myPos, avoidanceRadius, monsterLayer);
+
+        foreach (var neighbor in neighbors)
+        {
+            if (neighbor.gameObject == gameObject) continue;
+
+            Vector2 avoidDiff = myPos - (Vector2)neighbor.transform.position;
+            float dist = avoidDiff.magnitude;
+
+            if (dist > 0f && dist < avoidanceRadius)
+            {
+                separationDir += avoidDiff.normalized / dist;
+            }
+        }
+
+        return separationDir;
+    }
+
+    private Vector2 ApplyAvoidance(Vector2 myPos, Vector2 moveDir)
+    {
+        if (moveDir.sqrMagnitude <= 0.0001f)
+            return Vector2.zero;
+
+        Vector2 separationDir = GetSeparationDir(myPos);
+        Vector2 finalDir = moveDir + separationDir * avoidanceForce;
+
+        if (finalDir.sqrMagnitude <= 0.0001f)
+            return moveDir.normalized;
+
+        return finalDir.normalized;
+    }
     private void MoveProcess()
     {
         Vector2 myPos = rb2D.position;
@@ -930,7 +971,8 @@ public class BossMonster : MonsterBase
             float zigzagSpeed = move_speed * pattern_multiply;
             Vector2 movement = (forward * zigzagSpeed) + (side * sideOffset * zigzagFrequency * damping);
 
-            rb2D.linearVelocity = movement;
+            Vector2 finalDir = ApplyAvoidance(myPos, movement.normalized);
+            rb2D.linearVelocity = finalDir * zigzagSpeed;
             return;
         }
 
@@ -945,6 +987,7 @@ public class BossMonster : MonsterBase
         if (isFleeing)
         {
             dir = (currentFleeTarget - myPos).normalized;
+
             if (Vector2.Distance(myPos, currentFleeTarget) < 0.5f)
             {
                 isFleeing = false;
@@ -954,11 +997,14 @@ public class BossMonster : MonsterBase
         else
         {
             dir = ((Vector2)target.position - myPos).normalized;
+
             if (fleeCooldownTimer > 0f)
                 fleeCooldownTimer -= Time.fixedDeltaTime;
         }
 
-        rb2D.linearVelocity = dir * (isFleeing ? move_speed * pattern_multiply : move_speed);
+        float finalSpeed = isFleeing ? move_speed * pattern_multiply : move_speed;
+        Vector2 finalDir2 = ApplyAvoidance(myPos, dir);
+        rb2D.linearVelocity = finalDir2 * finalSpeed;
     }
 
     public override void TakeDamage(float damage)
