@@ -4397,7 +4397,7 @@ GameObject:
   - component: {fileID: 5536971506979304423}
   - component: {fileID: 1714977267436387720}
   m_Layer: 5
-  m_Name: SpendableItemUI
+  m_Name: ConsumeItemUI
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -4435,7 +4435,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5d739a6b86be8d246a96bab145a7110f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::InventorySlotHandler
-  Group: 3
+  <Group>k__BackingField: 0
+  _exitButton:
+    <PushButton>k__BackingField: {fileID: 0}
+    <OpenGroup>k__BackingField: 0
   _slots:
   - {fileID: 2462055593691639722}
   - {fileID: 8014723435439053828}
@@ -4469,7 +4472,9 @@ MonoBehaviour:
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
+  _selectedSprite: {fileID: 0}
   _handlerButton: {fileID: 0}
+  _onItemPopup: {fileID: 0}
 --- !u!222 &5536971506979304423
 CanvasRenderer:
   m_ObjectHideFlags: 0

@@ -4,6 +4,8 @@ using UnityEngine.UI;
 
 public class EnergySystem : MonoBehaviour
 {
+    public static EnergySystem Instance;
+
     [SerializeField] private int _maxEnergy = 5;
     public int MaxEnergy => _maxEnergy;
     [SerializeField] private float _increaseEnergyTime = 30;
@@ -18,6 +20,8 @@ public class EnergySystem : MonoBehaviour
     public bool IsStartInGame => _currentEnergy > 0;
     void Awake()
     {
+        Instance = this;
+
         _currentEnergy = 125;
     }
     private void OnEnable()
