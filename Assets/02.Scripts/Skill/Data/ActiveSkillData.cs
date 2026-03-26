@@ -24,6 +24,9 @@ public class ActiveSkillData : ScriptableObject
     [Header("사운드 데이터")]
     public SkillSoundData SoundData;
 
+    [Header("애니메이션 타입")]
+    public PLAYERSKILLANI_TYPE PlayerAniType;
+
     [Header("업그레이드별 모디파이어 설정")]
     public List<UpgradeModifierData> UpgradeModifierDatas = new();
 
@@ -42,6 +45,13 @@ public class ActiveSkillData : ScriptableObject
         Closest = 4202,     // 조준형     (공격 방향 가장 가까운 적)
         Barrier = 4203,     // 배리어형   (플레이어 기준)
         Directional = 4204, // 이동방향형 (이동 방향)
+    }
+    public enum PLAYERSKILLANI_TYPE // 플레이어 스킬 시전 애니메이션 타입
+    {
+        None,
+        Skill1,
+        Skill2,
+        Skill3
     }
 }
 

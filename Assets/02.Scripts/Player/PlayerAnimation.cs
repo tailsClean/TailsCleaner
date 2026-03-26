@@ -65,8 +65,8 @@ public class PlayerAnimation
 
     private void OnSkill(int skillNum)
     {
-        _animator.SetInteger(Attack, skillNum);
-        _animator.SetTrigger(SkillCount);
+        _animator.SetTrigger(Attack); 
+        _animator.SetInteger(SkillCount, skillNum);
     }
 }
 

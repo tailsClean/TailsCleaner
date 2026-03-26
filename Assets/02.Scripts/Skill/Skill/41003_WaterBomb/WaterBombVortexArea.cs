@@ -18,10 +18,12 @@ public class WaterBombVortexArea : PoolObject
     // 범위 내 적 투사체
     private HashSet<MonsterProjectile> _bulletsInArea = new();
 
+    private Rigidbody2D _rigidbody;
     private PoolObject _poolObject;
 
     private void Awake()
     {
+        _rigidbody = GetComponent<Rigidbody2D>();
         _poolObject = GetComponent<PoolObject>();
     }
 
@@ -80,14 +82,13 @@ public class WaterBombVortexArea : PoolObject
         _monstersInArea.RemoveWhere(monster => monster == null || monster.gameObject.activeInHierarchy == false);
         _bulletsInArea.RemoveWhere(bullet => bullet == null || bullet.gameObject.activeInHierarchy == false);
 
+        // 범위 내 적, 투사체 끌어당기기
         foreach (var monster in _monstersInArea)
-        {
-            // 범위 내 적 투사체 끌어당기기
-            // monster.Pull(transform.position)
+            monster.Pull(_rigidbody.position);
 
-            // 집중공략 패시브
-            // 끌어당겨진 적 약화상태면 최대 체력 5% 감소
-        }
+        // 범위 내 적, 투사체 끌어당기기
+        foreach (var bullet in _bulletsInArea)
+            bullet.Pull(_rigidbody.position);
     }
 
     // 폭발은 예술이다
@@ -98,7 +99,7 @@ public class WaterBombVortexArea : PoolObject
         if (col.CompareTag("Monster"))
         {
             // 컴포넌트
-            if (col.TryGetComponent<MonsterBase>(out var monster))
+            if (col.TryGetComponent(out MonsterBase monster))
             {
                 // 해시셋에 등록
                 _monstersInArea.Add(monster);
@@ -108,7 +109,7 @@ public class WaterBombVortexArea : PoolObject
         else if (col.CompareTag("MonsterBullet"))
         {
             // 컴포넌트
-            if (col.TryGetComponent<MonsterProjectile>(out var projectile))
+            if (col.TryGetComponent(out MonsterProjectile projectile))
             {
                 // 폭발은 예술이다
                 if(_bulletClear == true)
@@ -119,7 +120,6 @@ public class WaterBombVortexArea : PoolObject
 
                     // 플레이어 방어막 획득
                     SkillManager.Instance.SkillStatHandler.TryAddShield(1);
-                    Debug.Log("[WaterBombVortex] 폭발은 예술이다 - 투사체 삭제");
                     // 해시셋 추가는 스킵
                     return;
                 }
@@ -137,7 +137,7 @@ public class WaterBombVortexArea : PoolObject
         if (col.CompareTag("Monster"))
         {
             // 컴포넌트
-            if (col.TryGetComponent<MonsterBase>(out var monster))
+            if (col.TryGetComponent(out MonsterBase monster))
             {
                 // 해시셋에서 삭제
                 _monstersInArea.Remove(monster);
@@ -147,7 +147,7 @@ public class WaterBombVortexArea : PoolObject
         else if (col.CompareTag("MonsterBullet"))
         {
             // 컴포넌트
-            if (col.TryGetComponent<MonsterProjectile>(out var projectile))
+            if (col.TryGetComponent(out MonsterProjectile projectile))
             {
                 // 해시셋에서 삭제
                 _bulletsInArea.Remove(projectile);

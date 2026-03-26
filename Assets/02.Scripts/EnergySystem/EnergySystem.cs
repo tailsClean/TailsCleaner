@@ -6,6 +6,8 @@ using UnityEngine.UIElements;
 
 public class EnergySystem : MonoBehaviour
 {
+    public static EnergySystem Instance;
+
     [SerializeField] private int _maxEnergy = 5;
     public int MaxEnergy => _maxEnergy;
     [SerializeField] private float _increaseEnergyTime = 30;
@@ -149,7 +151,8 @@ public class EnergySystem : MonoBehaviour
 
         if (timeChild.Exists)
         {
-            long cancelTime = long.Parse(timeChild.Value.ToString());
+            
+            long cancelTime = ParseCancelTime(timeChild.Value.ToString());
             long now = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
             long elapsedSeconds = now - cancelTime;
 
@@ -157,16 +160,29 @@ public class EnergySystem : MonoBehaviour
             _currentEnergy = Mathf.Min(_currentEnergy + recharged, _maxEnergy);
 
             _timer += (int)(elapsedSeconds % (double)_increaseEnergyTime);
+             
 
         }
+        Debug.Log($"{_currentEnergy} 현재 에너지");
+
         GameManager.Instance.UpdateEnergyCount(_currentEnergy);
     }
 
+    private long ParseCancelTime(string value)
+    {
+        if (long.TryParse(value, out long cancelTime))
+            return cancelTime;
+        
+        if (DateTimeOffset.TryParse(value, out DateTimeOffset dt))
+            return dt.ToUnixTimeSeconds();
+        
+        return DateTimeOffset.UtcNow.ToUnixTimeSeconds();
+    }
     private async void OnApplicationPause(bool pause)
     {
         if(pause && GameManager.Instance.UID != null)
         {
-            string cancelTime = DateTime.UtcNow.ToString("O");
+            long cancelTime = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
             await GameManager.Instance.DB.Child("users")
                                          .Child(GameManager.Instance.UID)
                                          .Child("System")

@@ -31,7 +31,7 @@ public class StageEntry : MonoBehaviour
         }
     }
 
-    void Start()
+    async void Start()
     {
         if (!TrySpendEntryEnergy(_stageId))
         { 
@@ -51,7 +51,7 @@ public class StageEntry : MonoBehaviour
 
         if (_mapLoader != null)
         {
-            _mapLoader.LoadMap(_plan.mapResource);
+            await _mapLoader.LoadMap(_plan.mapResource);
         }
         else
         {
@@ -162,9 +162,9 @@ public class StageEntry : MonoBehaviour
         if (cost <= 0) return true;
 
         // 현재 에너지 확인
-        if (GameManager.EnergyCount < cost)
+        if (GameManager.Instance.EnergyCount < cost)
         {
-            Debug.Log($"에너지가 부족합니다. 현재={GameManager.EnergyCount}, 필요={cost}");
+            Debug.Log($"에너지가 부족합니다. 현재={GameManager.Instance.EnergyCount}, 필요={cost}");
             return false;
         }
         return true;

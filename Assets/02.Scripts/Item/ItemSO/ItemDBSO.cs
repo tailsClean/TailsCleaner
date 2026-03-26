@@ -229,6 +229,8 @@ public class ItemDBSO : ScriptableObject
             _itemDict[manage.item_id].Name = manage.desc;
             _itemDict[manage.item_id].SpriteImg = Resources.Load<Sprite>($"Total_Item_Image/{manage.item_img}");
         }
+
+        // 소비템의 데이터 읽어오기
         foreach (var consume in itemConsumeData.dataList)
         {
             if (_itemDict.TryGetValue(consume.item_id, out var item))
