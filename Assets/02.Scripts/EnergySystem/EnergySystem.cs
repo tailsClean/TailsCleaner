@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.UIElements;
 
 public class EnergySystem : MonoBehaviour
 {
@@ -16,9 +18,10 @@ public class EnergySystem : MonoBehaviour
 
     public int Timer => (int)_timer;
     public bool IsStartInGame => _currentEnergy > 0;
-    void Awake()
-    {
-        _currentEnergy = 125;
+     private async void Start()
+     {
+       await LoadEnergy();
+
     }
     private void OnEnable()
     {
@@ -36,7 +39,7 @@ public class EnergySystem : MonoBehaviour
 
     private void Update()
     {
-        IncreaseTimer();
+         IncreaseTimer();
     }
 
     // 타이머 증가 메서드
@@ -47,12 +50,12 @@ public class EnergySystem : MonoBehaviour
             _timer = 0;
             return;
         }
+        
 
         if(_timer >= _increaseEnergyTime)
         {
             _currentEnergy++;
             GameManager.Instance.UpdateEnergyCount(_currentEnergy);
-
             _timer = 0;
         }
 
@@ -77,14 +80,14 @@ public class EnergySystem : MonoBehaviour
     // }
 
 
-    public void IncreaseEnergy(int count) 
+    public async void IncreaseEnergy(int count) 
     {
         _currentEnergy += count;
         GameManager.Instance.UpdateEnergyCount(_currentEnergy);
     }
     
     // 에너지 감소(사용) 메서드
-    public void SpendEnergy()
+    public async void SpendEnergy()
     {
         if(_currentEnergy <= 0)
         {
@@ -93,7 +96,6 @@ public class EnergySystem : MonoBehaviour
         }    
         _currentEnergy -= GameManager.SPEND_ENERGY;
         GameManager.Instance.UpdateEnergyCount(_currentEnergy);
-
     }
 
     [ContextMenu("에너지 초기화")]
@@ -109,4 +111,57 @@ public class EnergySystem : MonoBehaviour
         _timer = 0;
     }
     
+    public async Task LoadEnergy()
+    {
+        var snapshot = await GameManager.Instance.DB.Child("users").Child(GameManager.Instance.UID)
+                            .Child("System").GetValueAsync();
+
+        if(!snapshot.Exists)
+        {
+            Debug.Log("snapshot don`t exists");
+            return;
+        }
+        var energyChild = snapshot.Child("Energy");
+        
+        if(energyChild.Exists)
+        {
+            _currentEnergy = int.Parse(energyChild.Value.ToString());
+            
+        }
+        else
+        {
+            _currentEnergy = 125;
+        }
+
+        var timeChild = snapshot.Child("CancelTime");
+
+        if (timeChild.Exists)
+        {
+            long cancelTime = long.Parse(timeChild.Value.ToString());
+            long now = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
+            long elapsedSeconds = now - cancelTime;
+
+            int recharged = (int)(elapsedSeconds / (double)_increaseEnergyTime);
+            _currentEnergy = Mathf.Min(_currentEnergy + recharged, _maxEnergy);
+
+            _timer += (int)(elapsedSeconds % (double)_increaseEnergyTime);
+
+        }
+        GameManager.Instance.UpdateEnergyCount(_currentEnergy);
+    }
+
+    private async void OnApplicationPause(bool pause)
+    {
+        if(pause && GameManager.Instance.UID != null)
+        {
+            string cancelTime = DateTime.UtcNow.ToString("O");
+            await GameManager.Instance.DB.Child("users")
+                                         .Child(GameManager.Instance.UID)
+                                         .Child("System")
+                                         .Child("CancelTime")
+                                         .SetValueAsync(cancelTime);   
+        }  
+    }
 }
+    
+

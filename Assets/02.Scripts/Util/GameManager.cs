@@ -4,6 +4,7 @@ using UnityEngine;
 using Firebase;
 using Firebase.Database;
 using Firebase.Auth;
+using UnityEditor.AddressableAssets.Build.Layout;
 
 public class GameManager : MonoBehaviour
 {
@@ -25,8 +26,9 @@ public class GameManager : MonoBehaviour
 
     //파이어베이스
     private DatabaseReference db;
-    private string UID => FirebaseAuth.DefaultInstance.CurrentUser?.UserId;
-
+    public DatabaseReference DB => db;
+    public string UID => FirebaseAuth.DefaultInstance.CurrentUser?.UserId;
+    
     [SerializeField] private VoidEventChannelSO OnEnergyChange;
     private Dictionary<int, int> _maxClearStageIndexByTower = new Dictionary<int, int>();
 
@@ -63,7 +65,13 @@ public class GameManager : MonoBehaviour
         EnergyCount = energy;
         OnEnergyChange.OnStartEvent();
     }
-
+    public async Task SaveEnergyCount()
+    {
+         await db.Child("users").Child(UID)
+                .Child("System").Child("Energy")
+                .SetValueAsync(EnergyCount);
+    }
+   
     public void SetCurrentStage(StageTable stage)
     {
         _currentStage = stage;
@@ -111,7 +119,7 @@ public class GameManager : MonoBehaviour
                     .SetValueAsync(stageIndex);
         }
     }
-
+    
     public async Task LoadStageProgress()
     {
         _maxClearStageIndexByTower.Clear();
@@ -135,7 +143,6 @@ public class GameManager : MonoBehaviour
                 if (clearedIndex > 0)
                     _maxClearStageIndexByTower[towerId] = clearedIndex;
 
-                Debug.Log($"[GameManager] Load Clear / towerId={towerId}, stageIndex={clearedIndex}");
             }
         }
     }
@@ -147,5 +154,13 @@ public class GameManager : MonoBehaviour
         _maxClearStageIndexByTower.Clear();
 
         Debug.Log("[GameManager] Stage progress cleared.");
+    }
+
+    private async void OnApplicationPause(bool pause) 
+    {
+        if(pause)
+        {
+            await SaveEnergyCount();
+        }   
     }
 }
