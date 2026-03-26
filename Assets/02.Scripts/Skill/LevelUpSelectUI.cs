@@ -68,6 +68,9 @@ public class LevelUpSelectUI : MonoBehaviour
         // 선택지 버튼 갱신
         UpdateOptionButtons();
 
+        if (StageController.Instance != null)
+            StageController.Instance.NotifySkillSelectOpened();
+
         // 게임 일시정지
         Time.timeScale = 0f;
     }

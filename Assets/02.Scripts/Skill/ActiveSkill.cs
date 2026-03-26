@@ -103,6 +103,10 @@ public abstract class ActiveSkill : MonoBehaviour
 
     protected virtual void Update()
     {
+        // 스킬 선택창 / 보스 연출 / 기타 gameplay block 상태에서는 자동 발동 금지
+        if (StageController.Instance != null && StageController.Instance.IsGameplayTemporarilyBlocked)
+            return;
+
         // 쿨타임이 됐고 발동 조건도 맞으면 발동
         if (IsCooldownReady() && CanFire())
         {

@@ -530,4 +530,33 @@ public class BossTriggerPatternRunner : MonoBehaviour
             yield return new WaitForSecondsRealtime(warningDuration);
         }
     }
+
+    public void TryRunImmediateExpAbsorbPreview()
+    {
+        if (_boss == null) return;
+        if (_triggerRows == null || _triggerRows.Count == 0) return;
+
+        for (int i = 0; i < _triggerRows.Count; i++)
+        {
+            PatternTableRow row = _triggerRows[i];
+            string logicType = row.pattern_logic_type?.Trim().ToLower();
+
+            if (logicType == "trigger_exp_absorb")
+            {
+                // 이미 실행된 패턴이면 스킵
+                if (_triggeredOncePatternIds.Contains(row.pattern_id))
+                    continue;
+
+                Debug.Log("[BossTriggerPatternRunner] Immediate ExpAbsorb Trigger");
+
+                _triggeredOncePatternIds.Add(row.pattern_id);
+
+                if (_runningRoutine != null)
+                    StopCoroutine(_runningRoutine);
+
+                _runningRoutine = StartCoroutine(CoExpAbsorb(row));
+                return;
+            }
+        }
+    }
 }

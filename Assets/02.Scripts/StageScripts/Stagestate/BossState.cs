@@ -52,8 +52,6 @@ public class BossState : IStageState
     private IEnumerator CoEnterBossWave()
     {
         Debug.Log("[BossState] CoEnterBossWave START");
-        Debug.Log($"[BossState] banner ref null? {UIManager.Instance == null || UIManager.Instance.StageWaveBanner == null}");
-        Debug.Log("[BossState] before PlayBossIntro");
 
         if (_registry == null)
         {
@@ -75,10 +73,13 @@ public class BossState : IStageState
 
         _spawner.SetSpawningEnabled(false);
 
+        // 보스 등장 연출 중 게임플레이 차단 시작
+        _controller.SetBossIntroPlaying(true);
+        _controller.SetGameplayBlocked(true);
+
         MonsterRegistry registryImpl = _registry as MonsterRegistry;
         if (registryImpl != null)
         {
-            // 현재 필드 몬스터들 정지
             registryImpl.SetAllMonstersPaused(true, includeBoss: true);
         }
 
@@ -86,34 +87,35 @@ public class BossState : IStageState
 
         if (UIManager.Instance != null && UIManager.Instance.StageWaveBanner != null)
         {
+            // 여기서는 "보스 소환"까지만 하고 exp absorb 즉시 실행은 하지 않음
             yield return _controller.StartCoroutine(
-    UIManager.Instance.StageWaveBanner.PlayBossIntro(
-        "엄청 꼬질한 녀석이 나타났어요!",
-        () =>
-        {
-            if (registryImpl != null)
-            {
-                registryImpl.KillAllMonsters(includeBoss: false);
-            }
-            else
-            {
-                _registry.KillAllMonsters();
-            }
+                UIManager.Instance.StageWaveBanner.PlayBossIntro(
+                    "보스 등장!!!",
+                    () =>
+                    {
+                        if (registryImpl != null)
+                        {
+                            registryImpl.KillAllMonsters(includeBoss: false);
+                        }
+                        else
+                        {
+                            _registry.KillAllMonsters();
+                        }
 
-            _spawner.SpawnBoss(_bossId);
+                        _spawner.SpawnBoss(_bossId);
 
-            if (_registry is MonsterRegistry mr && _spawner is RuleBasedMonsterSpawner rb)
-            {
-                spawnedBoss = rb.LastSpawnedBoss;
-                mr.MarkBoss(spawnedBoss);
+                        if (_registry is MonsterRegistry mr && _spawner is RuleBasedMonsterSpawner rb)
+                        {
+                            spawnedBoss = rb.LastSpawnedBoss;
+                            mr.MarkBoss(spawnedBoss);
 
-                if (spawnedBoss != null && spawnedBoss.TryGetComponent<MonsterBase>(out var bossBase))
-                {
-                    bossBase.SetPaused(true);
-                }
-            }
-        })
-);
+                            if (spawnedBoss != null && spawnedBoss.TryGetComponent<MonsterBase>(out var bossBase))
+                            {
+                                bossBase.SetPaused(true);
+                            }
+                        }
+                    })
+            );
         }
         else
         {
@@ -145,10 +147,24 @@ public class BossState : IStageState
             UIManager.Instance.ChangeStateBossHP();
         }
 
-        // 연출 종료 후 보스만 해제
+        // 연출 종료 후 보스 해제
         if (spawnedBoss != null && spawnedBoss.TryGetComponent<MonsterBase>(out var spawnedBossBase))
         {
             spawnedBossBase.SetPaused(false);
+        }
+
+        // 보스 등장 연출은 끝났으므로 Intro 상태 해제
+        _controller.SetBossIntroPlaying(false);
+        _controller.SetGameplayBlocked(false);
+
+        // exp absorb 즉시 예고는 "보스 인트로가 완전히 끝난 뒤" 실행
+        if (spawnedBoss != null)
+        {
+            var runner = spawnedBoss.GetComponent<BossTriggerPatternRunner>();
+            if (runner != null)
+            {
+                runner.TryRunImmediateExpAbsorbPreview();
+            }
         }
 
         _timer.StartBoss();

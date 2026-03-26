@@ -28,6 +28,14 @@ public class StageController : MonoBehaviour
 
     private StagePlan _plan;
 
+    public bool IsSkillSelectOpen { get; private set; }
+    public bool IsBossIntroPending { get; private set; }
+    public bool IsBossIntroPlaying { get; private set; }
+    public bool IsGameplayBlocked { get; private set; }
+
+    public bool IsGameplayTemporarilyBlocked =>
+    IsSkillSelectOpen || IsBossIntroPlaying || IsGameplayBlocked;
+
     private bool _isPaused;
     private bool _ended;
 
@@ -168,7 +176,7 @@ public class StageController : MonoBehaviour
         _stateMachine.ChangeState(new CombatState(_timer, _waveScheduler));
         _spawner.SetSpawningEnabled(true);
 
-        if(UIManager.Instance != null && UIManager.Instance.StageWaveBanner != null)
+        if (UIManager.Instance != null && UIManager.Instance.StageWaveBanner != null)
         {
             Debug.Log("[StageController] PlayStageStart 호출");
             StartCoroutine(UIManager.Instance.StageWaveBanner.PlayStageStart());
@@ -186,13 +194,28 @@ public class StageController : MonoBehaviour
 
     private void HandleMainTimerReachedLimit()
     {
-        Debug.Log("[Stage] Main timer reached limit -> BossState");
-        // 메인타이머 15분 도달 → 보스 상태로 전환
-        Debug.Log($"[Stage] Main timer reached. planNull={_plan == null}, bossId={(_plan != null ? _plan.bossId : -999)}");
-        Debug.Log($"[Stage] spawnerNull={_spawner == null}, registryNull={_registry == null}, timerNull={_timer == null}");
+        Debug.Log("[Stage] Main timer reached limit");
 
-        IStageState _bossState = new BossState(this, _timer, _registry, _spawner, _plan.bossId);
-        _stateMachine.ChangeState(_bossState);
+        if (IsSkillSelectOpen)
+        {
+            Debug.Log("[Stage] SkillSelect is open -> BossIntro pending");
+            IsBossIntroPending = true;
+            return;
+        }
+
+        EnterBossState();
+    }
+
+    private void EnterBossState()
+    {
+        if (_plan == null || _spawner == null || _registry == null || _timer == null)
+        {
+            Debug.LogError("[Stage] Cannot enter BossState. Required refs are null.");
+            return;
+        }
+
+        IStageState bossState = new BossState(this, _timer, _registry, _spawner, _plan.bossId);
+        _stateMachine.ChangeState(bossState);
     }
 
     private void HandleBossTimerExpired()
@@ -257,13 +280,61 @@ public class StageController : MonoBehaviour
         _timer?.StopBoss();
 
         // 결과 상태로 전환 (보상/플로우는 상태에서 처리)
+        // Abandon 분기 추가
         if (result == StageResult.Clear)
+        {
             _stateMachine.ChangeState(new SuccessState(this));
+        }
+        else if (result == StageResult.Abandon)
+        {
+            _stateMachine.ChangeState(new AbandonState(this)); // [추가]
+        }
         else
+        {
             _stateMachine.ChangeState(new FailState(this, reason));
+        }
+
 
         // UI/로그용 단일 이벤트
         _events.RaiseStageResult(result, reason);
     }
 
+    // 보스 연출 때 플레이어 정지 및 스킬 선택UI가 선행이 되도록 하기 위한 작업
+    // 보스 연출 중 gameplay block on/off
+    public void SetGameplayBlocked(bool blocked)
+    {
+        IsGameplayBlocked = blocked;
+    }
+
+    // BossState가 직접 private set 필드를 건드리지 않고 메서드로만 요청하게 함
+    public void SetBossIntroPlaying(bool value)
+    {
+        IsBossIntroPlaying = value;
+    }
+
+    // 스킬 선택창 오픈 시 호출
+    public void NotifySkillSelectOpened()
+    {
+        IsSkillSelectOpen = true;
+        SetPaused(true);
+
+        Debug.Log("[Stage] SkillSelect opened -> game paused");
+    }
+
+    // 스킬 선택창 종료 시 호출
+    public void NotifySkillSelectClosed()
+    {
+        IsSkillSelectOpen = false;
+        SetPaused(false);
+
+        Debug.Log("[Stage] SkillSelect closed -> game resumed");
+
+        // 스킬 선택 때문에 미뤄둔 보스 진입이 있으면 여기서 실행
+        if (IsBossIntroPending)
+        {
+            Debug.Log("[Stage] BossIntroPending detected -> enter BossState");
+            IsBossIntroPending = false;
+            EnterBossState();
+        }
+    }
 }

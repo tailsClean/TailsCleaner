@@ -86,6 +86,10 @@ public class PlayerBase : MonoBehaviour, IDamageable, ISkillable, ISkillStat, IP
 
     private void Update()
     {
+        if (StageController.Instance != null &&
+        StageController.Instance.IsGameplayTemporarilyBlocked)
+            return;
+
         _stateMachine.Update();
     }
 
@@ -94,6 +98,10 @@ public class PlayerBase : MonoBehaviour, IDamageable, ISkillable, ISkillStat, IP
     // 이동 기능
     public void OnMove(InputAction.CallbackContext ctx)
     {
+        if (StageController.Instance != null &&
+        StageController.Instance.IsGameplayTemporarilyBlocked)
+            return;
+
         _stateMachine.MoveInput(ctx.ReadValue<Vector2>().normalized);
     }
 
