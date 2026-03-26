@@ -27,14 +27,14 @@ public class EnergySystem : MonoBehaviour
     }
     private void OnEnable()
     {
-        // OnUpdateUI += UpdateTimerUI;
+        Debug.Log($"[EnergySystem] OnEnable instance={GetInstanceID()}");
         _onIncreaseEnergy.AddListener(IncreaseEnergy);
         _onStartStage.AddPriorityListener(SpendEnergy, 0);
     }
 
     private void OnDisable()
     {
-        // OnUpdateUI -= UpdateTimerUI;
+        Debug.Log($"[EnergySystem] OnDisable instance={GetInstanceID()}");
         _onIncreaseEnergy.RemoveListener(IncreaseEnergy);
         _onStartStage.RemovePriorityListener(SpendEnergy, 0);
     }
@@ -87,18 +87,29 @@ public class EnergySystem : MonoBehaviour
         _currentEnergy += count;
         GameManager.Instance.UpdateEnergyCount(_currentEnergy);
     }
-    
+
     // 에너지 감소(사용) 메서드
+    public bool CanSpendEnergy()
+    {
+        return _currentEnergy >= GameManager.SPEND_ENERGY;
+    }
+
     public void SpendEnergy()
     {
-        if(_currentEnergy <= 0)
+        Debug.Log($"[EnergySystem] SpendEnergy called. instance={GetInstanceID()}, before={_currentEnergy}");
+
+        if (!CanSpendEnergy())
         {
-            _currentEnergy = 0;
+            _currentEnergy = Mathf.Max(0, _currentEnergy);
+            GameManager.Instance.UpdateEnergyCount(_currentEnergy);
+            Debug.Log("[EnergySystem] Not enough energy to start stage.");
             return;
-        }    
+        }
+
         _currentEnergy -= GameManager.SPEND_ENERGY;
         GameManager.Instance.UpdateEnergyCount(_currentEnergy);
-        
+
+        Debug.Log($"[EnergySystem] SpendEnergy finished. after={_currentEnergy}");
     }
 
     [ContextMenu("에너지 초기화")]
