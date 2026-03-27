@@ -192,4 +192,9 @@ public class PlayerBase : MonoBehaviour, IDamageable, ISkillable, ISkillStat, IP
         _itemPickupSystem.OnEnterPickupRange -= OnItemPickup;
         _onPickupExp.RemoveListener(GainInGameExp);
     }
+
+    public void ForceStopMovement()
+    {
+        _stateMachine.MoveInput(Vector2.zero);
+    }
 }
