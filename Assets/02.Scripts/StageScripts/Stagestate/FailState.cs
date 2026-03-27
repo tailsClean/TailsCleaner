@@ -2,7 +2,7 @@
 
 public class FailState : IStageState
 {
-     private readonly StageController _controller;
+    private readonly StageController _controller;
     public StageFailReason Reason { get; }
 
     public FailState(StageController controller, StageFailReason reason)
@@ -13,9 +13,9 @@ public class FailState : IStageState
 
     public void Enter()
     {
-        Debug.Log($"[Stage] Enter FailState reason={Reason} -> FinalizeReward(Defeat)");
+        Debug.Log($"[Stage] Enter FailState reason={Reason}");
         UIManager.Instance.OpenGameOver();
-        _controller?.RewardHandler?.FinalizeReward(GameResult.Defeat);
+
     }
 
     public void Tick(float _deltaTime) { }

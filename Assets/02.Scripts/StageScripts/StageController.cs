@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
+using static CheckingLoadout;
 
 public class StageController : MonoBehaviour
 {
@@ -10,8 +11,6 @@ public class StageController : MonoBehaviour
     [SerializeField] private StageTimerTextUI _timerUI;
 
     [SerializeField] private VoidEventChannelSO _onPlayerDead;
-
-    public PlayerRewardHandler RewardHandler => _playerRewardHandler;
     public StagePlan CurrentPlan => _plan;
     public StageEvents Events => _events;
     public StageTimer Timer => _timer;
@@ -34,7 +33,7 @@ public class StageController : MonoBehaviour
     public bool IsGameplayBlocked { get; private set; }
 
     public bool IsGameplayTemporarilyBlocked =>
-    IsSkillSelectOpen || IsBossIntroPlaying || IsGameplayBlocked;
+        IsSkillSelectOpen || IsBossIntroPlaying || IsGameplayBlocked;
 
     private bool _isPaused;
     private bool _ended;
@@ -85,12 +84,10 @@ public class StageController : MonoBehaviour
 
         if (_onPlayerDead != null)
             _onPlayerDead.RemoveListener(HandlePlayerDead);
-
     }
 
     private void Update()
     {
-        // 타이머 일시정지(컷신/팝업/백그라운드 등)
         _timer.SetPaused(_isPaused);
 
         if (_ended) return;
@@ -98,7 +95,6 @@ public class StageController : MonoBehaviour
 
         float _deltaTime = Time.deltaTime;
 
-        // Tick은 반드시 “단일 지점”에서만 호출
         _timer.Tick(_deltaTime);
         _stateMachine.Tick(_deltaTime);
     }
@@ -112,26 +108,28 @@ public class StageController : MonoBehaviour
         _ended = false;
         _isPaused = false;
 
+        IsSkillSelectOpen = false;
+        IsBossIntroPending = false;
+        IsBossIntroPlaying = false;
+        IsGameplayBlocked = false;
+
         _timer.Configure(_plan.mainLimitSeconds, _plan.bossLimitSeconds);
 
-        Time.timeScale = 1;
+        Time.timeScale = 1f;
 
         _timeline = new WaveTimeline(_plan.wavePlans);
         _waveScheduler = new WaveScheduler(_events, _timeline, _spawner);
 
-        // 타이머/보스 타임아웃 트리거
         _events.OnMainTimerReachedLimit -= HandleMainTimerReachedLimit;
         _events.OnBossTimerExpired -= HandleBossTimerExpired;
         _events.OnMainTimerReachedLimit += HandleMainTimerReachedLimit;
         _events.OnBossTimerExpired += HandleBossTimerExpired;
 
-        //  종료 신호를 EndStage로 수렴
         _events.OnStageCleared -= HandleStageClearedSignal;
         _events.OnStageFailed -= HandleStageFailedSignal;
         _events.OnStageCleared += HandleStageClearedSignal;
         _events.OnStageFailed += HandleStageFailedSignal;
 
-        // Registry 이벤트(보스 죽음 감지)
         if (_registry is MonsterRegistry mr)
         {
             mr.OnUnregistered -= HandleMonsterUnregistered;
@@ -141,7 +139,7 @@ public class StageController : MonoBehaviour
         if (spawner is RuleBasedMonsterSpawner rb)
         {
             rb.SetStageModifiers(plan.stageHpModifier, plan.stagePowerModifier,
-        plan.towerHpModifier, plan.towerPowerModifier);
+                plan.towerHpModifier, plan.towerPowerModifier);
 
             _events.OnMainSecondTick -= rb.SetMainSeconds;
             _events.OnMainSecondTick += rb.SetMainSeconds;
@@ -151,14 +149,15 @@ public class StageController : MonoBehaviour
 
         if (_resultHandler != null)
         {
-            // Handler는 UI/입력만 하도록 바뀔 예정이라 controller도 넘기는게 좋음
             _resultHandler.Bind(_events, this);
         }
+
         if (_onPlayerDead != null)
         {
             _onPlayerDead.RemoveListener(HandlePlayerDead);
             _onPlayerDead.AddListener(HandlePlayerDead);
         }
+
         if (_timerUI == null)
         {
             _timerUI = UIManager.Instance != null ? UIManager.Instance.StageTimer : null;
@@ -189,7 +188,7 @@ public class StageController : MonoBehaviour
 
     public void SetPaused(bool isPaused)
     {
-        this._isPaused = isPaused;
+        _isPaused = isPaused;
     }
 
     private void HandleMainTimerReachedLimit()
@@ -224,7 +223,6 @@ public class StageController : MonoBehaviour
         _events.RaiseStageFailed(StageFailReason.BossTimeout);
     }
 
-    // 보스 사망 판정
     private void HandleMonsterUnregistered(GameObject obj)
     {
         if (_ended) return;
@@ -261,58 +259,47 @@ public class StageController : MonoBehaviour
         if (_ended) return;
         _ended = true;
 
-        Time.timeScale = 0;
+        Time.timeScale = 0f;
 
-        // 스폰 정지
         _spawner?.SetSpawningEnabled(false);
 
         if (_registry is MonsterRegistry mr)
         {
             mr.OnUnregistered -= HandleMonsterUnregistered;
-            mr.MarkBoss(null); // 보스 마킹 제거 (null 허용)
+            mr.MarkBoss(null);
         }
 
-        // 몬스터 정리
         _registry?.KillAllMonsters();
 
-        // 타이머 정지
         _timer?.StopMain();
         _timer?.StopBoss();
 
-        // 결과 상태로 전환 (보상/플로우는 상태에서 처리)
-        // Abandon 분기 추가
         if (result == StageResult.Clear)
         {
             _stateMachine.ChangeState(new SuccessState(this));
         }
         else if (result == StageResult.Abandon)
         {
-            _stateMachine.ChangeState(new AbandonState(this)); // [추가]
+            _stateMachine.ChangeState(new AbandonState(this));
         }
         else
         {
             _stateMachine.ChangeState(new FailState(this, reason));
         }
 
-
-        // UI/로그용 단일 이벤트
         _events.RaiseStageResult(result, reason);
     }
 
-    // 보스 연출 때 플레이어 정지 및 스킬 선택UI가 선행이 되도록 하기 위한 작업
-    // 보스 연출 중 gameplay block on/off
     public void SetGameplayBlocked(bool blocked)
     {
         IsGameplayBlocked = blocked;
     }
 
-    // BossState가 직접 private set 필드를 건드리지 않고 메서드로만 요청하게 함
     public void SetBossIntroPlaying(bool value)
     {
         IsBossIntroPlaying = value;
     }
 
-    // 스킬 선택창 오픈 시 호출
     public void NotifySkillSelectOpened()
     {
         IsSkillSelectOpen = true;
@@ -321,7 +308,6 @@ public class StageController : MonoBehaviour
         Debug.Log("[Stage] SkillSelect opened -> game paused");
     }
 
-    // 스킬 선택창 종료 시 호출
     public void NotifySkillSelectClosed()
     {
         IsSkillSelectOpen = false;
@@ -329,7 +315,6 @@ public class StageController : MonoBehaviour
 
         Debug.Log("[Stage] SkillSelect closed -> game resumed");
 
-        // 스킬 선택 때문에 미뤄둔 보스 진입이 있으면 여기서 실행
         if (IsBossIntroPending)
         {
             Debug.Log("[Stage] BossIntroPending detected -> enter BossState");

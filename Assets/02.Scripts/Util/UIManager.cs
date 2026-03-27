@@ -4,16 +4,17 @@ using TMPro;
 using System;
 using UnityEngine.SceneManagement;
 using System.Threading.Tasks;
-public interface UIContainer {}
+
+public interface UIContainer { }
 
 public class UIManager : MonoBehaviour
 {
     private static UIManager instance;
-    public static UIManager Instance { get => instance; private set => instance = value;}
-    
+    public static UIManager Instance { get => instance; private set => instance = value; }
+
     private void Awake()
     {
-        if(instance != null && instance != this)
+        if (instance != null && instance != this)
         {
             Destroy(gameObject);
             return;
@@ -22,6 +23,7 @@ public class UIManager : MonoBehaviour
         {
             instance = this;
         }
+
         transform.SetParent(null);
         DontDestroyOnLoad(gameObject);
 
@@ -29,80 +31,84 @@ public class UIManager : MonoBehaviour
     }
 
     #region Scene 초기 설정
-    //▼ UI 설정 오브젝트 
     [SerializeField] private GameObject _currentSceneUI;
     public Transform _stageTrans;
 
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
-        if(_currentSceneUI != null)
+        if (_currentSceneUI != null)
         {
             Destroy(_currentSceneUI);
         }
-        if(_settingPanel != null)
+
+        if (_settingPanel != null)
         {
             Destroy(_settingPanel);
         }
+
         _currentSceneUI = OpenSceneUI($"{scene.name}");
-        
     }
 
     private GameObject OpenSceneUI(string sceneName)
     {
-       GameObject sceneUI = null;
-       GameObject prefab = Resources.Load<GameObject>($"Prefabs/UI/{sceneName}UI");
+        GameObject sceneUI = null;
+        GameObject prefab = Resources.Load<GameObject>($"Prefabs/UI/{sceneName}UI");
 
-       if(prefab != null)
-       {
-           sceneUI = Instantiate(prefab, transform);
-           sceneUI.transform.SetAsFirstSibling();
-           SetUpReference(sceneUI); //todo: 참조를 하고나서 저장해두는 방식으로 바꿔야할듯
-       }
-       else
+        if (prefab != null)
         {
-             Debug.Log("없음");
+            sceneUI = Instantiate(prefab, transform);
+            sceneUI.transform.SetAsFirstSibling();
+            SetUpReference(sceneUI);
         }
-       return sceneUI;
+        else
+        {
+            Debug.Log("없음");
+        }
+
+        return sceneUI;
     }
+
     private void SetUpReference(GameObject sceneUI)
     {
-        if(sceneUI.TryGetComponent(out UIContainer container))
+        if (sceneUI.TryGetComponent(out UIContainer container))
         {
-            if(container is StageUIContainer stageUI) // UI 참조 연경
+            if (container is StageUIContainer stageUI)
             {
-                // StageUIContainer 참조로 들고 있기
                 this._stageTimer = stageUI.TimerUI.GetComponent<StageTimerTextUI>();
                 this._gameOverPanel = stageUI.GameOverPanel;
                 this._stageClearPanel = stageUI.StageClearPanel;
                 this._BossHP = stageUI.BossHP;
                 this._stageWaveBanner = stageUI.WaveBannerUI;
+
+                // [추가] 결과 보상 UI 참조 연결
+                this._clearRewardUI = stageUI.ClearRewardUI;
             }
+
             if (container is LobbyUIContainer lobbyUI)
             {
-                // LobbyUIContainer 참조로 들고 있기
                 this._dungeonSelect = lobbyUI.DungeonSelect;
                 this._stageSelect = lobbyUI.StageSelect;
             }
         }
-        
     }
-
     #endregion
-    [SerializeField]private VoidEventChannelSO _onStartInGame;
+
+    [SerializeField] private VoidEventChannelSO _onStartInGame;
 
     public async Task LoadDataAndGoToLobby()
     {
         await GameManager.Instance.LoadStageProgress();
         SceneManager.LoadScene("LobbyScene");
     }
+
     public void GoToLobby()
     {
-        SceneManager.LoadScene("LobbyScene");    
+        SceneManager.LoadScene("LobbyScene");
     }
-    
 
     public void GoToStage()
     {
+        SceneManager.sceneLoaded -= OnStageLoaded; // [추가] 중복 등록 방지
         SceneManager.sceneLoaded += OnStageLoaded;
         SceneManager.LoadScene("StageScene");
     }
@@ -120,15 +126,16 @@ public class UIManager : MonoBehaviour
     public void ExitGame()
     {
 #if UNITY_EDITOR
-        UnityEditor.EditorApplication.isPlaying = false;// 에디터에서 실행 중인 게임을 종료
+        UnityEditor.EditorApplication.isPlaying = false;
 #else
-        Application.Quit(); // 빌드된 게임을 종료
-#endif    
+        Application.Quit();
+#endif
     }
 
     #region SettingPanel
     private GameObject _settingPanel;
     [SerializeField] private GameObject _settingPrefab;
+
     public void ChangeStateSettingPanel()
     {
         if (_settingPanel == null)
@@ -138,42 +145,41 @@ public class UIManager : MonoBehaviour
                 Debug.LogError("_settingPrefab이 할당되지 않았습니다!");
                 return;
             }
+
             _settingPanel = Instantiate(_settingPrefab, this.transform);
             _settingPanel.transform.SetAsLastSibling();
-            _settingPanel.SetActive(true);   
+            _settingPanel.SetActive(true);
         }
         else
         {
             _settingPanel.SetActive(!_settingPanel.activeSelf);
         }
     }
-
     #endregion
 
     #region StageClearPanel
-     private GameObject _stageClearPanel;
+    private GameObject _stageClearPanel;
+
     public void OpenClear()
     {
         _stageClearPanel.SetActive(true);
         StageTimer.gameObject.SetActive(false);
     }
-    
     #endregion
 
     #region GameOverPanel
     private GameObject _gameOverPanel;
-     public void OpenGameOver()
+
+    public void OpenGameOver()
     {
         _gameOverPanel.SetActive(true);
         StageTimer.gameObject.SetActive(false);
     }
-    
     #endregion
-    
-    #region StageTimer
-     private StageTimerTextUI _stageTimer;
-    public StageTimerTextUI StageTimer => _stageTimer;
 
+    #region StageTimer
+    private StageTimerTextUI _stageTimer;
+    public StageTimerTextUI StageTimer => _stageTimer;
     #endregion
 
     #region EnergyUI
@@ -184,22 +190,23 @@ public class UIManager : MonoBehaviour
     {
         _energyPanel = energyPanel;
     }
-
     #endregion
 
     #region LobbyUI
     private GameObject _dungeonSelect;
     private GameObject _stageSelect;
+
     public void ChangeStateDungeonSelect()
     {
-        if(_dungeonSelect != null)
+        if (_dungeonSelect != null)
         {
             _dungeonSelect.SetActive(!_dungeonSelect.activeSelf);
         }
     }
+
     public void ChangeStateStageSelect()
     {
-        if(_stageSelect != null)
+        if (_stageSelect != null)
         {
             _stageSelect.SetActive(!_stageSelect.activeSelf);
         }
@@ -208,9 +215,10 @@ public class UIManager : MonoBehaviour
 
     #region BossUI
     private GameObject _BossHP;
+
     public void ChangeStateBossHP()
     {
-        if(_BossHP != null)
+        if (_BossHP != null)
         {
             _BossHP.SetActive(!_BossHP.activeSelf);
         }
@@ -222,30 +230,29 @@ public class UIManager : MonoBehaviour
     [SerializeField] public GameObject _relicUI;
     [SerializeField] public GameObject _equipUI;
 
-     public void ChangeStateInventory()
+    public void ChangeStateInventory()
     {
-        if(_inventoryUI != null)
+        if (_inventoryUI != null)
         {
             _inventoryUI.SetActive(!_inventoryUI.activeSelf);
         }
     }
 
-     public void ChangeStateRelic()
+    public void ChangeStateRelic()
     {
-        if(_relicUI != null)
+        if (_relicUI != null)
         {
             _relicUI.SetActive(!_relicUI.activeSelf);
         }
     }
-     public void ChangeStateEquipUI()
+
+    public void ChangeStateEquipUI()
     {
-        if(_equipUI != null)
+        if (_equipUI != null)
         {
             _equipUI.SetActive(!_equipUI.activeSelf);
         }
     }
-
-
     #endregion
 
     #region StageWaveBanner
@@ -253,4 +260,12 @@ public class UIManager : MonoBehaviour
     public StageWaveBannerUI StageWaveBanner => _stageWaveBanner;
     #endregion
 
+    #region RewardUI
+    // [추가] 결과 보상 UI 외부 접근용
+    private RewardSystemUI _clearRewardUI;
+    public RewardSystemUI ClearRewardUI => _clearRewardUI;
+
+    private RewardSystemUI _failRewardUI;
+    public RewardSystemUI FailRewardUI => _failRewardUI;
+    #endregion
 }

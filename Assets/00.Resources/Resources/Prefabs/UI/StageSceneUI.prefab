@@ -2253,6 +2253,7 @@ MonoBehaviour:
   _stageClearPanel: {fileID: 6899338133259334769}
   _bossHP: {fileID: 7798271974586325569}
   _waveBannerUI: {fileID: 7188499335729081782}
+  _clearRewardUI: {fileID: 1421267594188284441}
   _uiGroupList:
   - {fileID: 222940194342566266}
 --- !u!1001 &1837743805007795346
@@ -2447,6 +2448,10 @@ PrefabInstance:
       propertyPath: m_Sprite
       value: 
       objectReference: {fileID: 4141440575192581318, guid: d3c7f46d02d712f4db5de3ed3c6df05b, type: 3}
+    - target: {fileID: 736797139576288907, guid: 5892ddf38c9e01f40b93dbe1858123d8, type: 3}
+      propertyPath: _currentReward.Items.Array.size
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 838128228616317591, guid: 5892ddf38c9e01f40b93dbe1858123d8, type: 3}
       propertyPath: m_fontColor.b
       value: 1
@@ -3459,6 +3464,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b6f0f81e5f9ef994a9794fe6e54bba16, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::UIGroup
+--- !u!114 &1421267594188284441 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 736797139576288907, guid: 5892ddf38c9e01f40b93dbe1858123d8, type: 3}
+  m_PrefabInstance: {fileID: 1837743805007795346}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6899338133259334769}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4228064976ed2d5468e7a96f76b8555f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::TestReward
 --- !u!224 &4842790869197525797 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 6536401892600973239, guid: 5892ddf38c9e01f40b93dbe1858123d8, type: 3}
