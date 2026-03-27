@@ -32,32 +32,36 @@ public class RewardSystem
     {
         _rewardSystem.OnGainReward(stageGroupID);
 
+        // RewardCreator에서 만든 최신 보상으로 갱신
+        _currentReward = _rewardSystem.CurrentReward;
+
         OnReward?.Invoke();
     }
 
     // 현재 보상목록을 인벤토리에 추가하는 메서드
     public void SetRewardToInventory()
     {
-        if(_currentReward == null ) 
-        { Debug.LogError("인벤토리에 추가할 보상 목록이 없습니다."); return; }
+        if (_currentReward == null)
+        {
+            Debug.LogError("인벤토리에 추가할 보상 목록이 없습니다.");
+            return;
+        }
 
         _currency.GainGold(_currentReward.GoldAmount);
 
-        foreach(var reward in _currentReward.Items)
+        foreach (var reward in _currentReward.Items)
         {
             GainItem(reward);
         }
     }
 
-    // 아이템의 타입을 선별해서 인벤토라에 넣기
+    // 아이템 타입 구분 후 인벤토리에 지급
     private void GainItem(ItemInstance item)
     {
-        switch(item.ItemType)
+        switch (item.ItemType)
         {
-            // 얻는 System 인게임 보상은 골드뿐
             case ITEM_TYPE.Equipment:
                 _inventory.GainEquipment(item.ID, item.Amount);
-                //_inventory.GainEquipment(item.ID, item.Grade, item.Amount);
                 break;
 
             case ITEM_TYPE.Reinforcement:

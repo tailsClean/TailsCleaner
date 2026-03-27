@@ -7,9 +7,8 @@ public class EnergyPanel : MonoBehaviour
     [SerializeField] private VoidEventChannelSO _OnEnergyChange;
     private void Start()
     {
-        UpdateEnergyText();
         _OnEnergyChange.AddListener(UpdateEnergyText);
-    
+        UpdateEnergyText();
     }
     private void OnDestroy()
     {
@@ -18,13 +17,6 @@ public class EnergyPanel : MonoBehaviour
    
     public void UpdateEnergyText()
     {
-        _energyText.text = $"{GameManager.EnergyCount}/{GameManager.Instance._energySystem.MaxEnergy}";
+        _energyText.text = $"{GameManager.Instance.EnergyCount}/{GameManager.Instance._energySystem.MaxEnergy}";
     } 
-
-
-
-
-
-
-
 }

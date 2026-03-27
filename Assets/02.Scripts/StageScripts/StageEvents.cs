@@ -38,7 +38,8 @@ public class StageEvents
 public enum StageResult
 {
     Clear,
-    Fail
+    Fail,
+    Abandon // 탈주
 }
 
 public enum StageFailReason

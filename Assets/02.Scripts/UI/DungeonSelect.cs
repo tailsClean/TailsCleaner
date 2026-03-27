@@ -7,9 +7,9 @@ using TMPro;
 /// 탑 선택 캐러셀 UI
 ///
 /// 레이아웃 (앵커 정중앙 기준):
-///   이전 탑 : 300×480, anchoredPosition (-620, 0)
-///   선택 탑 : 380×600, anchoredPosition (-245, 0)
-///   다음 탑 : 300×480, anchoredPosition ( 130, 0)
+///   이전 탑 : 300×480, anchoredPosition (-375, 0)
+///   선택 탑 : 380×600, anchoredPosition (0, 0)
+///   다음 탑 : 300×480, anchoredPosition ( 375, 0)
 ///
 /// 예외
 ///   - 0번째 선택 시 이전 슬롯 비움
@@ -45,9 +45,9 @@ public class DungeonSelect : MonoBehaviour
     [SerializeField] private float    _moveDuration = 0.25f;
     [SerializeField] private Ease     _moveEase     = Ease.OutCubic;
     
-    private static readonly Vector2 POS_PREV     = new Vector2(-620, 0);
-    private static readonly Vector2 POS_SELECTED = new Vector2(-245, 0);
-    private static readonly Vector2 POS_NEXT     = new Vector2( 130, 0);
+    private static readonly Vector2 POS_PREV     = new Vector2(-375, 0);
+    private static readonly Vector2 POS_SELECTED = new Vector2(0, 0);
+    private static readonly Vector2 POS_NEXT     = new Vector2(375, 0);
     private static readonly Vector2 SIZE_SMALL   = new Vector2(300, 480);
     private static readonly Vector2 SIZE_LARGE   = new Vector2(380, 600);
  

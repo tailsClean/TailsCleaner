@@ -17,55 +17,139 @@ public class RewardSystemUI: MonoBehaviour
     public int _stageGroupID;
     public RewardDTO _currentReward;
 
-    
+    private bool _initialized;
 
     private void Awake()
     {
-        _rewardSystem = new RewardSystem();
-        _currentReward = _rewardSystem.CurrentReward;
-        _gainButton.onClick.AddListener(SetRewardToInventory);
+        EnsureInitialized();
     }
 
     private void OnEnable()
     {
-        _rewardSystem.OnReward += SetGoldText;
-        _rewardSystem.OnReward += SetItems;
+        EnsureInitialized();
+
+        _rewardSystem.OnReward -= RefreshUI;
+        _rewardSystem.OnReward += RefreshUI;
+
+        if (_gainButton != null)
+        {
+            _gainButton.onClick.RemoveListener(SetRewardToInventory);
+            _gainButton.onClick.AddListener(SetRewardToInventory);
+        }
     }
 
     private void OnDisable()
     {
-        _rewardSystem.OnReward -= SetGoldText;
-        _rewardSystem.OnReward -= SetItems;
-        _gainButton.onClick.RemoveListener(SetRewardToInventory);
+        if (_rewardSystem != null)
+            _rewardSystem.OnReward -= RefreshUI;
+
+        if (_gainButton != null)
+            _gainButton.onClick.RemoveListener(SetRewardToInventory);
     }
 
+    // [추가] RewardSystem 보장 초기화
+    private void EnsureInitialized()
+    {
+        if (_initialized && _rewardSystem != null)
+            return;
 
-    private void SetGoldText() => _goldAmountText.text = $"{_currentReward.GoldAmount} 골드";
+        _rewardSystem = new RewardSystem();
+        _currentReward = _rewardSystem.CurrentReward;
+        _initialized = true;
+    }
+
+    public void ShowReward(int stageGroupID)
+    {
+        EnsureInitialized(); // 비활성 패널이었다가 바로 호출돼도 안전
+
+        _stageGroupID = stageGroupID;
+        _rewardSystem.OnGainReward(_stageGroupID);
+        _currentReward = _rewardSystem.CurrentReward;
+
+        if (_currentReward == null)
+        {
+            Debug.LogError($"[RewardSystemUI] CurrentReward is null. stageGroupID={_stageGroupID}");
+            InitAllSlots();
+            SetGoldText();
+            return;
+        }
+
+        RefreshUI();
+    }
+
+    private void RefreshUI()
+    {
+        if (_rewardSystem == null)
+        {
+            Debug.LogError("[RewardSystemUI] _rewardSystem is null in RefreshUI.");
+            return;
+        }
+
+        _currentReward = _rewardSystem.CurrentReward;
+        SetGoldText();
+        SetItems();
+    }
+
+    private void SetGoldText()
+    {
+        if (_goldAmountText == null)
+        {
+            Debug.LogError("[RewardSystemUI] _goldAmountText is null.");
+            return;
+        }
+
+        int gold = _currentReward != null ? _currentReward.GoldAmount : 0;
+        _goldAmountText.text = $"{gold} 골드";
+    }
 
     private void SetItems()
     {
+        if (_itemSlots == null) return;
+
         if (_currentReward == null || _currentReward.Items == null)
+        {
+            InitAllSlots();
             return;
+        }
 
         int i = 0;
-        foreach(var item in _currentReward.Items)
+        foreach (var item in _currentReward.Items)
         {
-            _itemSlots?[i++].SetSlot(item);
+            if (i >= _itemSlots.Count)
+                break;
+
+            _itemSlots[i++].SetSlot(item);
         }
+
         for (; i < _itemSlots.Count; i++)
         {
             _itemSlots[i].Init();
         }
     }
 
-
     [ContextMenu("리워드 보상 호출")]
     public void OnGainReward()
     {
-        //_stageGroupID = _rewardSystem.StageGroupID;
+        EnsureInitialized();
+
         _rewardSystem.OnGainReward(_stageGroupID);
+        _currentReward = _rewardSystem.CurrentReward;
+        RefreshUI();
     }
 
+    public void SetRewardToInventory()
+    {
+        EnsureInitialized();
+        _rewardSystem.SetRewardToInventory();
+    }
 
-    public void SetRewardToInventory() => _rewardSystem.SetRewardToInventory();
+    private void InitAllSlots()
+    {
+        if (_itemSlots == null) return;
+
+        for (int i = 0; i < _itemSlots.Count; i++)
+        {
+            _itemSlots[i].Init();
+        }
+    }
 }

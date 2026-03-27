@@ -6,6 +6,8 @@ using UnityEngine.UIElements;
 
 public class EnergySystem : MonoBehaviour
 {
+    public static EnergySystem Instance;
+
     [SerializeField] private int _maxEnergy = 5;
     public int MaxEnergy => _maxEnergy;
     [SerializeField] private float _increaseEnergyTime = 30;
@@ -25,14 +27,14 @@ public class EnergySystem : MonoBehaviour
     }
     private void OnEnable()
     {
-        // OnUpdateUI += UpdateTimerUI;
+        Debug.Log($"[EnergySystem] OnEnable instance={GetInstanceID()}");
         _onIncreaseEnergy.AddListener(IncreaseEnergy);
         _onStartStage.AddPriorityListener(SpendEnergy, 0);
     }
 
     private void OnDisable()
     {
-        // OnUpdateUI -= UpdateTimerUI;
+        Debug.Log($"[EnergySystem] OnDisable instance={GetInstanceID()}");
         _onIncreaseEnergy.RemoveListener(IncreaseEnergy);
         _onStartStage.RemovePriorityListener(SpendEnergy, 0);
     }
@@ -85,17 +87,29 @@ public class EnergySystem : MonoBehaviour
         _currentEnergy += count;
         GameManager.Instance.UpdateEnergyCount(_currentEnergy);
     }
-    
+
     // 에너지 감소(사용) 메서드
-    public async void SpendEnergy()
+    public bool CanSpendEnergy()
     {
-        if(_currentEnergy <= 0)
+        return _currentEnergy >= GameManager.SPEND_ENERGY;
+    }
+
+    public void SpendEnergy()
+    {
+        Debug.Log($"[EnergySystem] SpendEnergy called. instance={GetInstanceID()}, before={_currentEnergy}");
+
+        if (!CanSpendEnergy())
         {
-            _currentEnergy = 0;
+            _currentEnergy = Mathf.Max(0, _currentEnergy);
+            GameManager.Instance.UpdateEnergyCount(_currentEnergy);
+            Debug.Log("[EnergySystem] Not enough energy to start stage.");
             return;
-        }    
+        }
+
         _currentEnergy -= GameManager.SPEND_ENERGY;
         GameManager.Instance.UpdateEnergyCount(_currentEnergy);
+
+        Debug.Log($"[EnergySystem] SpendEnergy finished. after={_currentEnergy}");
     }
 
     [ContextMenu("에너지 초기화")]
@@ -137,7 +151,8 @@ public class EnergySystem : MonoBehaviour
 
         if (timeChild.Exists)
         {
-            long cancelTime = long.Parse(timeChild.Value.ToString());
+            
+            long cancelTime = ParseCancelTime(timeChild.Value.ToString());
             long now = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
             long elapsedSeconds = now - cancelTime;
 
@@ -145,16 +160,29 @@ public class EnergySystem : MonoBehaviour
             _currentEnergy = Mathf.Min(_currentEnergy + recharged, _maxEnergy);
 
             _timer += (int)(elapsedSeconds % (double)_increaseEnergyTime);
+             
 
         }
+        Debug.Log($"{_currentEnergy} 현재 에너지");
+
         GameManager.Instance.UpdateEnergyCount(_currentEnergy);
     }
 
+    private long ParseCancelTime(string value)
+    {
+        if (long.TryParse(value, out long cancelTime))
+            return cancelTime;
+        
+        if (DateTimeOffset.TryParse(value, out DateTimeOffset dt))
+            return dt.ToUnixTimeSeconds();
+        
+        return DateTimeOffset.UtcNow.ToUnixTimeSeconds();
+    }
     private async void OnApplicationPause(bool pause)
     {
         if(pause && GameManager.Instance.UID != null)
         {
-            string cancelTime = DateTime.UtcNow.ToString("O");
+            long cancelTime = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
             await GameManager.Instance.DB.Child("users")
                                          .Child(GameManager.Instance.UID)
                                          .Child("System")

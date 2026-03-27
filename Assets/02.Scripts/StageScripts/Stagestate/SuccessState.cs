@@ -13,16 +13,33 @@ public class SuccessState : IStageState
     {
         SaveStageClearProgress();
 
-        Debug.Log("[Stage] Enter SuccessState -> FinalizeReward(Victory)");
+        Debug.Log("[Stage] Enter SuccessState");
+
+        // [수정] stage_id가 아니라 reward_group_id 전달
         UIManager.Instance.OpenClear();
-        _controller?.RewardHandler?.FinalizeReward(GameResult.Victory);
+
+        if (GameManager.Instance != null && GameManager.Instance._currentStage != null)
+        {
+            int rewardGroupId = GameManager.Instance._currentStage.reward_group_id;
+
+            if (UIManager.Instance != null && UIManager.Instance.ClearRewardUI != null)
+            {
+                UIManager.Instance.ClearRewardUI.ShowReward(rewardGroupId);
+            }
+            else
+            {
+                Debug.LogWarning("[SuccessState] ClearRewardUI is null.");
+            }
+        }
     }
 
     public void Exit()
-    { }
+    {
+    }
 
     public void Tick(float _deltaTime)
-    { }
+    {
+    }
 
     private void SaveStageClearProgress()
     {
@@ -30,7 +47,6 @@ public class SuccessState : IStageState
         if (GameManager.Instance._currentStage == null) return;
 
         StageTable currentStage = GameManager.Instance._currentStage;
-        // RewardManager.Instance.SendToInventory(); 대충 이런거 보내야함.
         GameManager.Instance.MarkStageCleared(currentStage.tower_id, currentStage.stage_index);
     }
 }

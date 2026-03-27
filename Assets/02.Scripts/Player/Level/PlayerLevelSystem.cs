@@ -3,6 +3,7 @@
 public class PlayerLevelSystem : ILevelStat
 {
     private PlayerDataSO _playerData;
+    private OutGameLevelSystem _outGameLevelSystem;
 
     // 인게임 레벨 데이터
     public int InGameLevel { get; private set; }
@@ -10,9 +11,9 @@ public class PlayerLevelSystem : ILevelStat
     public float InGameMaxExp => _playerData.GetInLevelData(InGameLevel).MaxExp;
 
     // 아웃게임 레벨 데이터
-    public int OutGameLevel { get; private set; }
-    public float OutGameCurrentExp { get; private set; }
-    public float OutGameMaxExp => _playerData.GetOutLevelData(OutGameLevel).MaxExp;
+    public int OutGameLevel => _outGameLevelSystem.CurrentLevel;
+    public float OutGameCurrentExp => _outGameLevelSystem.CurrentExp;
+    public float OutGameMaxExp => _outGameLevelSystem.MaxExp;
 
 
     // 레벨에 따른 스탯 증가 배율
@@ -22,8 +23,8 @@ public class PlayerLevelSystem : ILevelStat
     public PlayerLevelSystem(PlayerBase player)
     {
         _playerData = player.Data;
+        _outGameLevelSystem = OutGameLevelSystem.Instance;
         InGameLevel = 1;
-        OutGameLevel = 1;
     }
 
 
@@ -44,11 +45,7 @@ public class PlayerLevelSystem : ILevelStat
 
 
             case GAME_MODE.OutGame:
-                OutGameCurrentExp += gainExp;
-                isLevelUp = OutGameCurrentExp > OutGameMaxExp ? true : false;
-
-                if(isLevelUp)
-                    LevelUp(gameMode);
+                _outGameLevelSystem.GainExp(gainExp);
                 break;
         }
 
@@ -56,7 +53,7 @@ public class PlayerLevelSystem : ILevelStat
     }
 
     // 외부 게임모드에 따른 레벨업 메서드
-    public void LevelUp(GAME_MODE gameMode)
+    private void LevelUp(GAME_MODE gameMode)
     {
         switch (gameMode)
         {
@@ -65,10 +62,10 @@ public class PlayerLevelSystem : ILevelStat
                 InGameLevel++;
                 break;
 
-            case GAME_MODE.OutGame:
-                OutGameCurrentExp -= OutGameMaxExp;
-                OutGameLevel++;
-                break;
+            //case GAME_MODE.OutGame:
+            //    OutGameCurrentExp -= OutGameMaxExp;
+            //    OutGameLevel++;
+            //    break;
         }
     }
 
