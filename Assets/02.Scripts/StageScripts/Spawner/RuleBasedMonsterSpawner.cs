@@ -306,9 +306,11 @@ public class RuleBasedMonsterSpawner : MonoBehaviour, IMonsterSpawnSystem
             if (!IsInsideBounds(candidate))
                 continue;
 
+            Debug.Log($"[SquadSpawn] squadCenter={_squadCenter}, candidate={candidate}, try={i}");
             return ClampToBounds(candidate);
         }
 
+        Debug.LogWarning($"[SquadSpawn] fallback squadCenter used. squadCenter={_squadCenter}");
         return ClampToBounds(_squadCenter);
     }
 

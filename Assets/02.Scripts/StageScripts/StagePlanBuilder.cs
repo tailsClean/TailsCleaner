@@ -77,7 +77,8 @@ public class StagePlanBuilder
             towerHpModifier = 0f,
             towerPowerModifier = 0f,
 
-            mapResource = _stage.map_resource
+            mapResource = _stage.map_resource,
+            expGain = Mathf.Max(0, _stage.exp_gain),
         };
     }
 }
