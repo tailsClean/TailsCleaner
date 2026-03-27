@@ -33,11 +33,6 @@ public class StageEntry : MonoBehaviour
 
     async void Start()
     {
-        if (!TrySpendEntryEnergy(_stageId))
-        { 
-            return;
-        }
-
         StagePlan _plan = _planProvider.GetStagePlan(_stageId);
         if (_plan == null)
         {
@@ -138,32 +133,5 @@ public class StageEntry : MonoBehaviour
 
         plan.towerHpModifier = selected.hp_modifier;
         plan.towerPowerModifier = selected.power_modifier;
-    }
-
-    private bool TrySpendEntryEnergy(int stageId)
-    {
-        List<StageTableRow> stages = DataParser.Parse<StageTableRow>("stage/stage_table");
-        if (stages == null || stages.Count == 0)
-        {
-            Debug.LogWarning("[StageEntry] stage_table load failed. Fallback: allow entry.");
-            return true; // 테이블 없으면 막지 않기
-        }
-
-        StageTableRow row = null;
-        for (int i = 0; i < stages.Count; i++)
-        {
-            if (stages[i].stage_id == stageId) { row = stages[i]; break; }
-        }
-
-        int cost = (row != null) ? Mathf.Max(0, row.entry_energy) : GameManager.SPEND_ENERGY;
-        if (cost <= 0) return true;
-
-        // 현재 에너지 확인
-        if (GameManager.Instance.EnergyCount < cost)
-        {
-            Debug.Log($"에너지가 부족합니다. 현재={GameManager.Instance.EnergyCount}, 필요={cost}");
-            return false;
-        }
-        return true;
     }
 }
