@@ -14,6 +14,9 @@ public class LoginSystem : MonoBehaviour
     [SerializeField] private GameObject _login1;
     [SerializeField] private GameObject _login2;
 
+    [Header("로딩 화면")]
+    [SerializeField] private GameObject _loadingScreen;
+
     [Header("------------------------------------------------------")]
 
     [Header("체크박스")]
@@ -167,10 +170,10 @@ public class LoginSystem : MonoBehaviour
         }
     }
 
-    private async void OnEnterBtn()
+    private void OnEnterBtn()
     {
         if (_isLoggedIn)
-            await UIManager.Instance.LoadDataAndGoToLobby();
+            _loadingScreen.SetActive(true);
         else
            _login1.SetActive(true);
     }
