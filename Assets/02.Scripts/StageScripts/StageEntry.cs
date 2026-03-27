@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
-using UnityEngine.SceneManagement;
 using UnityEngine;
+using System.Threading.Tasks;
 
 public class StageEntry : MonoBehaviour
 {
@@ -17,6 +17,12 @@ public class StageEntry : MonoBehaviour
 
     [SerializeField] private StageMapLoader _mapLoader;
 
+    [Header("Loading")]
+    [SerializeField] private GameObject _loadingPanelPrefab;
+    [SerializeField] private float _minimumLoadingSeconds = 3f;
+    [SerializeField] private PlayerBase _player;
+
+    private GameObject _loadingPanelInstance;
     private IStagePlanProvider _planProvider;
 
     private void Awake()
@@ -31,19 +37,39 @@ public class StageEntry : MonoBehaviour
         }
     }
 
-    async void Start()
+    private async void Start()
     {
-        StagePlan _plan = _planProvider.GetStagePlan(_stageId);
-        if (_plan == null)
+        if (_stageController != null)
         {
+            _stageController.SetGameplayBlocked(true);
+        }
+
+        if (_player != null)
+        {
+            _player.ForceStopMovement();
+        }
+
+        ShowLoadingPanel();
+
+        float startTime = Time.unscaledTime;
+
+        StagePlan plan = _planProvider.GetStagePlan(_stageId);
+        if (plan == null)
+        {
+            HideLoadingPanel();
+
+            if (_stageController != null)
+                _stageController.SetGameplayBlocked(false);
+
+            Debug.LogError($"[StageEntry] StagePlan load failed. stageId={_stageId}");
             return;
         }
 
-        Debug.Log($"[StageEntry] mapResource={_plan.mapResource}");
+        Debug.Log($"[StageEntry] mapResource={plan.mapResource}");
 
         if (_mapLoader != null)
         {
-            await _mapLoader.LoadMap(_plan.mapResource);
+            await _mapLoader.LoadMap(plan.mapResource);
         }
         else
         {
@@ -52,12 +78,56 @@ public class StageEntry : MonoBehaviour
 
         if (_useTimeOverride)
         {
-            _plan.mainLimitSeconds = _overrideMainTimeSeconds;
-            _plan.bossLimitSeconds = _overrideBossTimeSeconds;
+            plan.mainLimitSeconds = _overrideMainTimeSeconds;
+            plan.bossLimitSeconds = _overrideBossTimeSeconds;
         }
 
-        ApplyTowerModifier(_plan, _stageId);
-        _stageController.StartStage(_plan, _spawner, _register);
+        ApplyTowerModifier(plan, _stageId);
+
+        float elapsed = Time.unscaledTime - startTime;
+        float remain = _minimumLoadingSeconds - elapsed;
+
+        if (remain > 0f)
+        {
+            await Task.Delay(Mathf.CeilToInt(remain * 1000f));
+        }
+
+        HideLoadingPanel();
+
+        if (_stageController == null)
+        {
+            Debug.LogError("[StageEntry] StageController is null.");
+            return;
+        }
+
+        _stageController.StartStage(plan, _spawner, _register);
+    }
+
+    private void ShowLoadingPanel()
+    {
+        if (_loadingPanelPrefab == null)
+        {
+            Debug.LogWarning("[StageEntry] Loading panel prefab is null.");
+            return;
+        }
+
+        if (_loadingPanelInstance != null)
+            return;
+
+        _loadingPanelInstance = Instantiate(_loadingPanelPrefab);
+        _loadingPanelInstance.name = $"{_loadingPanelPrefab.name}_Instance";
+
+        Debug.Log("[StageEntry] Loading panel shown.");
+    }
+
+    private void HideLoadingPanel()
+    {
+        if (_loadingPanelInstance != null)
+        {
+            Destroy(_loadingPanelInstance);
+            _loadingPanelInstance = null;
+            Debug.Log("[StageEntry] Loading panel hidden.");
+        }
     }
 
     private void ApplyStageFromGameManager()
@@ -70,13 +140,11 @@ public class StageEntry : MonoBehaviour
 
         var gm = GameManager.Instance;
 
-        // tower
         if (gm._currentTower != null)
         {
             _towerId = gm._currentTower.tower_id;
         }
 
-        // stageId (핵심)
         if (gm._currentStage != null)
         {
             _stageId = gm._currentStage.stage_id;
@@ -108,11 +176,16 @@ public class StageEntry : MonoBehaviour
         if (_towerId > 0)
         {
             for (int i = 0; i < towers.Count; i++)
-                if (towers[i].tower_id == _towerId) { selected = towers[i]; break; }
+            {
+                if (towers[i].tower_id == _towerId)
+                {
+                    selected = towers[i];
+                    break;
+                }
+            }
         }
         else
         {
-            // 자동: need_stage_id <= stageId 중 가장 큰 need_stage_id를 가진 tower
             for (int i = 0; i < towers.Count; i++)
             {
                 var t = towers[i];

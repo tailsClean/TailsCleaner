@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 
-
 public class StageController : MonoBehaviour
 {
     public static StageController Instance { get; private set; }
