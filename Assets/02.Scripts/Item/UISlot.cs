@@ -6,6 +6,7 @@ using UnityEngine.UI;
 
 public class UISlot : MonoBehaviour
 {
+    [Header("기본 텍스트(null이어도 동작함)")]
     [SerializeField] private TextMeshProUGUI _amountText;
 
     private Image _image;
@@ -25,21 +26,21 @@ public class UISlot : MonoBehaviour
 
 
     // 슬롯에 아이템(ID)과 벨류(갯수, 강화수치등)를 표시
-    public void SetSlot(int id, int value)
+    public virtual void SetSlot(int id, int value)
     {
         ShowSprite(id, out var item);
         ShowText(value);
     }
 
     // 슬롯에 아이템(ID)과 벨류(갯수, 강화수치등)를 표시
-    public void SetSlot(int id, string value = null)
+    public virtual void SetSlot(int id, string value = null)
     {
         ShowSprite(id, out var item);
         ShowText(value);
     }
 
     // 슬롯에 특정 아이템을 넣으면 자동으로 아이템의 정보를 UI로 출력
-    public void SetSlot(ItemInstance item, string value = null)
+    public virtual void SetSlot(ItemInstance item, string value = null)
     {
         ShowSprite(item.ID, out var itemData);
         if (itemData == null)
@@ -62,7 +63,7 @@ public class UISlot : MonoBehaviour
     }
 
     // int를 통해서도 값을 출력할 수 있도록 오버로딩
-    public void SetSlot(ItemInstance item, int value)
+    public virtual void SetSlot(ItemInstance item, int value)
     {
         string text = value.ToString();
         SetSlot(item.ID, text);
@@ -93,7 +94,7 @@ public class UISlot : MonoBehaviour
     #region 내부 동작 메서드
 
     // 스프라이트 출력
-    private void ShowSprite(int id, out ItemDataBase item)
+    protected void ShowSprite(int id, out ItemDataBase item)
     {
         item = ItemDB.GetData(id);
         if(item != null)
@@ -101,7 +102,7 @@ public class UISlot : MonoBehaviour
     }
 
     // 텍스트 출력(string)
-    private void ShowText(string value = null)
+    protected void ShowText(string value = null)
     {
         if (_amountText == null)
             return;
@@ -113,14 +114,14 @@ public class UISlot : MonoBehaviour
     }
 
     // 텍스트 출력(int)
-    private void ShowText(int value)
+    protected void ShowText(int value)
     {
         string text = value.ToString();
         ShowText(text);
     }
 
     // 슬롯의 스프라이트, 텍스트 초기화
-    private void InitializedSlot()
+    protected void InitializedSlot()
     {
         _image.sprite = _baseSprite;
 
