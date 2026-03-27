@@ -35,11 +35,8 @@ public class StageEntry : MonoBehaviour
     {
         if (!TrySpendEntryEnergy(_stageId))
         { 
-            // 에너지가 부족하면 타워씬으로 이동
-            SceneManager.LoadScene("TowerScene");
             return;
         }
-
 
         StagePlan _plan = _planProvider.GetStagePlan(_stageId);
         if (_plan == null)
