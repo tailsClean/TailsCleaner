@@ -22,6 +22,7 @@ public sealed class StageTableRow
 
     public int reward_preview;
     public string map_resource;
+    public int exp_gain;
 }
 
 public sealed class MonsterWaveRow

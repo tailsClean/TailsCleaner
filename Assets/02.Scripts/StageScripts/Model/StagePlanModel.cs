@@ -24,6 +24,7 @@ public class StagePlan
     public float towerPowerModifier;
 
     public string mapResource; // 추가
+    public int expGain;
 }
 
 // 웨이브의 특정 시간 구간에 어떤 스폰 구성이 활성인지 정의
