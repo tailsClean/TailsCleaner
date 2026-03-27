@@ -10,10 +10,15 @@ public static class WarningText
     public static async void ShowText(string warnigText)
     {
         var handle = Addressables.InstantiateAsync("WarningText");
+        Debug.Log(handle);
         await handle.Task;
 
         var parent = ItemManager.Instance;
         var obj = handle.Result;
+
+        if (obj == null)
+            return;
+
         obj.transform.SetParent(parent.gameObject.transform, false);
         obj.transform.SetAsLastSibling();
 

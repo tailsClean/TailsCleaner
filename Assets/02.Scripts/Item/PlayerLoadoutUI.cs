@@ -15,7 +15,7 @@ public class PlayerLoadoutUI : UIGroup
 
     [Header("팝업 출력을 위한 버튼")]
     [SerializeField] private List<Button> _popUpButtons;
-    [SerializeField] private ItemPopup _popUp;
+    [SerializeField] private ItemPopupBase _popUp;
 
     [Header("이벤트 채널")]
     [SerializeField] private VoidEventChannelSO _onChangeLoadout;
