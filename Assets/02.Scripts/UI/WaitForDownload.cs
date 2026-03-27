@@ -8,12 +8,15 @@ using TMPro;
 
 public class LoadingScreen : MonoBehaviour
 {
-    [SerializeField] private TextMeshProUGUI progressText;
-    [SerializeField] private string nextSceneName = "GameScene";
+    [SerializeField] private TextMeshProUGUI _progressText;
+    private const float _atLeastTime = 5;
+    private float _currentTime = 0;
 
     void OnEnable()
     {
         StartCoroutine(DownloadAllAddressables());
+        _currentTime = 0;
+        
     }
 
     IEnumerator DownloadAllAddressables()
@@ -46,15 +49,23 @@ public class LoadingScreen : MonoBehaviour
         {
             float progress = downloadHandle.GetDownloadStatus().Percent;
 
-            if (progressText != null)
-                progressText.text = $"{(int)(progress * 100)}%";
-
+            if (_progressText != null)
+                _progressText.text = $"{(int)(progress * 100)}%";
+            _currentTime += Time.deltaTime;
             yield return null;
         }
 
         if (downloadHandle.Status == AsyncOperationStatus.Succeeded)
         {
-            LoadNextScene();
+            if(_currentTime >= _atLeastTime )
+            {
+                LoadNextScene();
+            }
+            else
+            {
+                _currentTime += Time.deltaTime;
+                yield return null;
+            }
         }
         else
         {

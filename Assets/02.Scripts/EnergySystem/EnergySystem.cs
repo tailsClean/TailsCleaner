@@ -190,6 +190,16 @@ public class EnergySystem : MonoBehaviour
                                          .SetValueAsync(cancelTime);   
         }  
     }
+
+    private async void OnApplicationQuit() 
+    {
+         long cancelTime = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
+            await GameManager.Instance.DB.Child("users")
+                                         .Child(GameManager.Instance.UID)
+                                         .Child("System")
+                                         .Child("CancelTime")
+                                         .SetValueAsync(cancelTime); 
+    }
 }
     
 

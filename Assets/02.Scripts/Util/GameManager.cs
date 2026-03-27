@@ -155,9 +155,10 @@ public class GameManager : MonoBehaviour
 
     private async void OnApplicationPause(bool pause) 
     {
-        if(pause)
-        {
-            await SaveEnergyCount();
-        }   
+        await SaveEnergyCount();   
+    }
+    private async void OnApplicationQuit() 
+    {
+        await SaveEnergyCount();  
     }
 }
