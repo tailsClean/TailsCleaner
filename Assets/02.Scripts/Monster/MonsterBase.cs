@@ -28,10 +28,10 @@ public abstract class MonsterBase : PoolObject, IDamageable, IMonsterStatus, IPu
 
     [Header("--- 겹침 방지 설정 ---")]
     [Tooltip("몬스터끼리 서로 밀어내기 시작하는 거리")]
-    [SerializeField] private float avoidanceRadius = 0.5f; // 몬스터끼리 띄울 거리
+    [SerializeField] protected float avoidanceRadius = 0.5f; // 몬스터끼리 띄울 거리
     [Tooltip("몬스터끼리 서로 밀어내는 힘의 세기")]
-    [SerializeField] private float avoidanceForce = 1.5f;  // 밀어내는 힘의 세기
-    [SerializeField] private LayerMask monsterLayer;       // 몬스터 전용 레이어 
+    [SerializeField] protected float avoidanceForce = 1.5f;  // 밀어내는 힘의 세기
+    [SerializeField] protected LayerMask monsterLayer;       // 몬스터 전용 레이어 
 
     private float originHp;
     private float originPower;

@@ -36,7 +36,7 @@ public class StageUIContainer : MonoBehaviour, UIContainer // stageUI에서 연�
 
     void Start()
     {
-        Debug.Log($"[StageUIContainer] WaveBannerUI ref = {_waveBannerUI != null}");
+        
         _settingButton.onClick.AddListener(() => {
         UIManager.Instance.ChangeStateSettingPanel();
     });
