@@ -50,7 +50,12 @@ public class SkillStatHandler : MonoBehaviour
 
         // 액티브 스킬 영구 보너스 (기차, 달, 상어, 해적선, 세탁파도 등)
         foreach (var skill in skillManager.MyActiveSkills)
+        {
             skill.ModifyPlayerBonus(_permanentFlat, _permanentMul);
+
+            // 더러움 제거 범위
+            _permanentFlat.PickupRange += skill.PickupRangeBonus;
+        }
 
         // 패시브 영구 보너스
         foreach (var passive in skillManager.MyPassiveSkills)
