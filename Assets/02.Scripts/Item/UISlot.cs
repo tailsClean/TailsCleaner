@@ -97,6 +97,7 @@ public class UISlot : MonoBehaviour
     protected void ShowSprite(int id, out ItemDataBase item)
     {
         item = ItemDB.GetData(id);
+
         if(item != null)
             _image.sprite = item.SpriteImg;
     }
