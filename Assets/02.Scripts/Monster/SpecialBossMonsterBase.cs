@@ -6,6 +6,11 @@ public abstract class SpecialBossMonsterBase : MonsterBase
 {
     protected static List<SpecialBossMonsterBase> activeMonsters = new List<SpecialBossMonsterBase>();
 
+    [Header("--- 몬스터 겹침 방지 설정 ---")]
+    [SerializeField] private float avoidanceRadius = 0.5f;
+    [SerializeField] private float avoidanceForce = 1.5f;
+    [SerializeField] private LayerMask monsterLayer;
+
     protected enum MonsterState { MOVE, PATTERN }
     protected MonsterState currentState = MonsterState.MOVE;
 
@@ -31,6 +36,8 @@ public abstract class SpecialBossMonsterBase : MonsterBase
     [Header("--- 점프 전용 상세 설정 ---")]
     public float jump_height = 2.0f;
     public Transform visualChild;
+
+    
 
     protected float patternTimer = 0f;
     protected float stateTimer = 0f;
@@ -373,6 +380,41 @@ public abstract class SpecialBossMonsterBase : MonsterBase
         SetMonsterId(0);
     }
 
+    protected Vector2 GetSeparationDir(Vector2 myPos)
+    {
+        Vector2 separationDir = Vector2.zero;
+        Collider2D[] neighbors = Physics2D.OverlapCircleAll(myPos, avoidanceRadius, monsterLayer);
+
+        foreach (var neighbor in neighbors)
+        {
+            if (neighbor.gameObject == gameObject) continue;
+
+            Vector2 avoidDiff = myPos - (Vector2)neighbor.transform.position;
+            float dist = avoidDiff.magnitude;
+
+            if (dist > 0f && dist < avoidanceRadius)
+            {
+                separationDir += avoidDiff.normalized / dist;
+            }
+        }
+
+        return separationDir;
+    }
+
+    protected Vector2 ApplyAvoidance(Vector2 myPos, Vector2 moveDir)
+    {
+        if (moveDir.sqrMagnitude <= 0.0001f)
+            return Vector2.zero;
+
+        Vector2 separationDir = GetSeparationDir(myPos);
+        Vector2 finalDir = moveDir + separationDir * avoidanceForce;
+
+        if (finalDir.sqrMagnitude <= 0.0001f)
+            return moveDir.normalized;
+
+        return finalDir.normalized;
+    }
+
     protected override void MoveToTarget()
     {
         patternTimer += Time.fixedDeltaTime;
@@ -385,9 +427,14 @@ public abstract class SpecialBossMonsterBase : MonsterBase
             float dist = Vector2.Distance(target.position, rb2D.position);
 
             if (dist > 0.1f)
-                rb2D.linearVelocity = dir * suicideSpeed;
+            {
+                Vector2 finalDir = ApplyAvoidance(rb2D.position, dir);
+                rb2D.linearVelocity = finalDir * suicideSpeed;
+            }
             else
+            {
                 rb2D.linearVelocity = Vector2.zero;
+            }
 
             return;
         }
@@ -442,9 +489,14 @@ public abstract class SpecialBossMonsterBase : MonsterBase
         Vector2 movement = (baselineDir * zigzagSpeed) + (sideDir * sideOffset * patternFrequency * damping);
 
         if (dist < 0.1f)
+        {
             rb2D.linearVelocity = Vector2.zero;
+        }
         else
-            rb2D.linearVelocity = movement;
+        {
+            Vector2 finalDir = ApplyAvoidance(myPos, movement.normalized);
+            rb2D.linearVelocity = finalDir * zigzagSpeed;
+        }
     }
 
     protected virtual void OnTriggerEnter2D(Collider2D collision)
@@ -601,7 +653,8 @@ public abstract class SpecialBossMonsterBase : MonsterBase
             Vector2 dir = (currentFleeTargetPos - rb2D.position).normalized;
             float distToTarget = Vector2.Distance(rb2D.position, currentFleeTargetPos);
 
-            rb2D.linearVelocity = dir * (moveSpeed * pattern_multiply);
+            Vector2 finalDir = ApplyAvoidance(rb2D.position, dir);
+            rb2D.linearVelocity = finalDir * (moveSpeed * pattern_multiply);
 
             if (distToTarget < 0.5f || Vector2.Distance(target.position, currentFleeTargetPos) < 2f)
             {
@@ -753,7 +806,8 @@ public abstract class SpecialBossMonsterBase : MonsterBase
 
         if (distance > 0.1f)
         {
-            rb2D.linearVelocity = dir * moveSpeed;
+            Vector2 finalDir = ApplyAvoidance(rb2D.position, dir);
+            rb2D.linearVelocity = finalDir * moveSpeed;
         }
         else
         {
