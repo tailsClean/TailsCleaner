@@ -1,4 +1,5 @@
 ﻿using System.IO;
+using System.Linq;
 using UnityEditor;
 using UnityEngine;
 using UnityEditor.AddressableAssets;
@@ -19,7 +20,6 @@ public class AddressableAutoSetup
             return;
         }
 
-        // MonsterResources 그룹 찾기
         var group = settings.FindGroup(groupName);
         if (group == null)
         {
@@ -27,26 +27,75 @@ public class AddressableAutoSetup
             return;
         }
 
-        // Monster 폴더 아래 Sprite 전부 검색
-        string[] guids = AssetDatabase.FindAssets("t:Sprite", new[] { rootFolder });
+        int removedCount = 0;
+        int registeredCount = 0;
+        int skippedMultipleCount = 0;
+
+        // 1. 기존 그룹 엔트리 중 Monster 폴더 아래 Multiple 스프라이트는 먼저 제거
+        var oldEntries = group.entries.ToList();
+        foreach (var entry in oldEntries)
+        {
+            string assetPath = AssetDatabase.GUIDToAssetPath(entry.guid);
+            if (string.IsNullOrEmpty(assetPath))
+                continue;
+
+            if (!assetPath.StartsWith(rootFolder))
+                continue;
+
+            TextureImporter importer = AssetImporter.GetAtPath(assetPath) as TextureImporter;
+            if (importer == null)
+                continue;
+
+            if (importer.textureType == TextureImporterType.Sprite &&
+                importer.spriteImportMode == SpriteImportMode.Multiple)
+            {
+                settings.RemoveAssetEntry(entry.guid);
+                removedCount++;
+                Debug.Log($"[기존 엔트리 제거] Multiple Sprite: {assetPath}");
+            }
+        }
+
+        // 2. Monster 폴더 아래 Texture2D 다시 스캔
+        string[] guids = AssetDatabase.FindAssets("t:Texture2D", new[] { rootFolder });
 
         foreach (string guid in guids)
         {
             string assetPath = AssetDatabase.GUIDToAssetPath(guid);
 
-            // 파일명만 추출하고 확장자 제거
+            TextureImporter importer = AssetImporter.GetAtPath(assetPath) as TextureImporter;
+            if (importer == null)
+                continue;
+
+            // Sprite 아닌 건 무시
+            if (importer.textureType != TextureImporterType.Sprite)
+                continue;
+
+            // Multiple이면 Addressables 등록 안 함
+            if (importer.spriteImportMode == SpriteImportMode.Multiple)
+            {
+                skippedMultipleCount++;
+                Debug.Log($"[제외] Multiple Sprite: {assetPath}");
+                continue;
+            }
+
+            // Single만 등록
             string addressName = Path.GetFileNameWithoutExtension(assetPath);
 
-            // 그룹에 추가 또는 이동
             var entry = settings.CreateOrMoveEntry(guid, group);
             entry.address = addressName;
 
-            Debug.Log($"등록 완료: {assetPath} -> {addressName}");
+            registeredCount++;
+            Debug.Log($"[등록 완료] {assetPath} -> {addressName}");
         }
 
         AssetDatabase.SaveAssets();
         AssetDatabase.Refresh();
 
-        Debug.Log($"몬스터 스프라이트 Addressables 자동 설정 완료 / Group: {groupName}");
+        Debug.Log(
+            $"몬스터 스프라이트 Addressables 자동 설정 완료 / Group: {groupName}\n" +
+            $"- 기존 Multiple 제거: {removedCount}\n" +
+            $"- 등록된 Single Sprite: {registeredCount}\n" +
+            $"- 제외된 Multiple Sprite: {skippedMultipleCount}"
+        );
     }
 }
