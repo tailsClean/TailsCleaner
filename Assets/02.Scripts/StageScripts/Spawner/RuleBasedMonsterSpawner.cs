@@ -7,7 +7,8 @@ public class RuleBasedMonsterSpawner : MonoBehaviour, IMonsterSpawnSystem
     private const float MAX_SPAWN_DISTANCE = 20f; //플레이어로부터 최대한의 스폰 거리
 
     private const int SPAWN_PER_SECOND = 5; //초당 스폰할 몬스터 수
-    private const float SQUAD_RADIUS = 3f; //스쿼드 내 몬스터들이 모이는 반경
+    private const float SQUAD_RADIUS = 10f; //스쿼드 내 몬스터들이 모이는 반경
+    private const float MIN_SQUAD_RADIUS = 2.0f;
     private const int CIRCLE_SLOTS = 12; //원형 스폰 시 슬롯 수
 
     private const int NO_BOSS_ID = -1; // 보스가 없는 경우의 ID
@@ -298,20 +299,43 @@ public class RuleBasedMonsterSpawner : MonoBehaviour, IMonsterSpawnSystem
 
     private Vector2 GetSquadPosition()
     {
+        float usableRadius = GetUsableSquadRadius(_squadCenter);
+
         for (int i = 0; i < _maxPositionTry; i++)
         {
-            Vector2 _offset = Random.insideUnitCircle * SQUAD_RADIUS;
-            Vector2 candidate = _squadCenter + _offset;
+            Vector2 offset = Random.insideUnitCircle * usableRadius;
+            Vector2 candidate = _squadCenter + offset;
 
             if (!IsInsideBounds(candidate))
                 continue;
 
-            Debug.Log($"[SquadSpawn] squadCenter={_squadCenter}, candidate={candidate}, try={i}");
-            return ClampToBounds(candidate);
+            return candidate;
         }
 
-        Debug.LogWarning($"[SquadSpawn] fallback squadCenter used. squadCenter={_squadCenter}");
         return ClampToBounds(_squadCenter);
+    }
+
+    private float GetUsableSquadRadius(Vector2 center)
+    {
+        if (!_hasBounds)
+            return SQUAD_RADIUS;
+
+        float minX = _spawnBounds.min.x + _wallMargin;
+        float maxX = _spawnBounds.max.x - _wallMargin;
+        float minY = _spawnBounds.min.y + _wallMargin;
+        float maxY = _spawnBounds.max.y - _wallMargin;
+
+        float left = Mathf.Abs(center.x - minX);
+        float right = Mathf.Abs(maxX - center.x);
+        float down = Mathf.Abs(center.y - minY);
+        float up = Mathf.Abs(maxY - center.y);
+
+        float safeRadius = Mathf.Min(left, right, down, up);
+
+        safeRadius = Mathf.Min(safeRadius, SQUAD_RADIUS);
+        safeRadius = Mathf.Max(safeRadius, MIN_SQUAD_RADIUS);
+
+        return safeRadius;
     }
 
     private Vector2 GetCirclePosition()
