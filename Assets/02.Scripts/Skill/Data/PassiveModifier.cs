@@ -239,23 +239,19 @@ public class GoldCrownModifier : PassiveModifier
 // 원딜의 정석 (공격 시전 속도에 비례해 치명타 확률 증가)
 public class ADCarryModifier : PassiveModifier
 {
-    [Header("쿨타임 1초당 치명타확률")]
+    [Header("공격속도 1당 증가 치명타확률")]
     [SerializeField] float _criticalPerCooldown = 1f;
 
     public override void ModifyPlayerPermanent(PlayerStatFlat flat, PlayerStatMul multi, SkillManager skillManager, int subTag)
     {
-        float total = 0f;
+        // 100에서 얼마나 줄었는지
+        float reduction = 100f - skillManager.Player.AttackSpeed;
 
-        // 보유 스킬 별 쿨타임 합산
-        foreach (var skill in skillManager.MyActiveSkills)
-            total += skill.FinalStat.Cooldown;
+        // 감소량 없으면 패스
+        if (reduction <= 0f) return;
 
-        // 합산한 쿨타임 치명타확률
-        flat.CriticalChance += total * _criticalPerCooldown;
-
-        // 이부분 나중에 변경되어야함. 쿨타임이 계수로 바뀐다고 하는데
-        // 플레이어 쿨타임 1당 증가라는데 플레이어 쿨타임은 100% 시작에서 빠지는 형태임
-        // 아직 정확한 답변 받지 못함
+        // 감소 1당 치명타 확률 증가
+        flat.CriticalChance += reduction * _criticalPerCooldown;
     }
 }
 
