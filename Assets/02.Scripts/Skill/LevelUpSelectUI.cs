@@ -48,6 +48,15 @@ public class LevelUpSelectUI : MonoBehaviour
     // 레벨 업 시 호출
     public void LevelUp(int level)
     {
+        if (StageController.Instance != null)
+        {
+            if (StageController.Instance.IsBossIntroPlaying ||
+                StageController.Instance.IsGameplayBlocked)
+            {
+                return;
+            }
+        }
+
         // 새로운 선택지 생성
         _levelUpSelect.GenerateOptions(level);
 
@@ -190,6 +199,10 @@ public class LevelUpSelectUI : MonoBehaviour
     {
         // ui 끄고
         gameObject.SetActive(false);
+
+        if(StageController.Instance != null)
+            StageController.Instance.NotifySkillSelectClosed();
+
         // 게임 다시 시작
         Time.timeScale = 1f;
     }

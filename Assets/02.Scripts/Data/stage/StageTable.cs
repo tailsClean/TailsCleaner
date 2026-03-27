@@ -19,4 +19,5 @@ public class StageTable
     public float power_modifier;
     public int reward_preview;
     public string map_resource;
+    public int exp_gain;
 }
