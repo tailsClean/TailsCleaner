@@ -105,6 +105,7 @@ public abstract class MonsterBase : PoolObject, IDamageable, IMonsterStatus, IPu
     protected string attackAnimationName;
     protected string deathAnimationName;
     protected string attackEffectName;
+    
 
     [Header("--- 넉백 설정 ---")]
     [SerializeField] float _knockbackDuration = 0.1f;
@@ -165,14 +166,23 @@ public abstract class MonsterBase : PoolObject, IDamageable, IMonsterStatus, IPu
 
     protected virtual string GetSpriteAddress(MonsterResource resourceData)
     {
-        if (!string.IsNullOrEmpty(resourceData.cast_animation))
-            return resourceData.cast_animation;
-
+        // 노말 몬스터는 move_animation 기준으로 스프라이트 주소를 유도
         if (!string.IsNullOrEmpty(resourceData.move_animation))
-            return resourceData.move_animation;
+        {
+            string moveAddress = resourceData.move_animation;
 
+            // 예: monster_1-1_threadball_move -> monster_1-1_threadball
+            if (moveAddress.EndsWith("_move"))
+                return moveAddress.Replace("_move", "");
+
+            return moveAddress;
+        }
+
+        // move_animation도 없으면 마지막 fallback
         return resourceData.index;
     }
+
+
 
     protected void ReleaseSpriteHandle()
     {
@@ -332,27 +342,24 @@ public abstract class MonsterBase : PoolObject, IDamageable, IMonsterStatus, IPu
 
     protected virtual void ApplyAnimatorResource(MonsterResource resourceData)
     {
-        if (_animator == null)
-        {
-            Debug.LogWarning($"[{name}] _animator is null");
-            return;
-        }
+        Debug.Log($"[ANIM CHECK] monsterId:{MonsterId}, resourceId:{resourceData.resource_id}, move_animation:{resourceData.move_animation}");
 
-        if (_baseAnimatorController == null)
-        {
-            Debug.LogWarning($"[{name}] runtimeAnimatorController is null");
+        if (_animator == null || _baseAnimatorController == null)
             return;
-        }
 
         ReleaseAnimationHandles();
 
         _overrideController = new AnimatorOverrideController(_baseAnimatorController);
         _animator.runtimeAnimatorController = _overrideController;
 
-        LoadAndApplyAnimationClip(resourceData.cast_animation, "Cast_Base", clipHandle => _castClipHandle = clipHandle);
-        LoadAndApplyAnimationClip(resourceData.move_animation, "Move_Base", clipHandle => _moveClipHandle = clipHandle);
-        LoadAndApplyAnimationClip(resourceData.attack_animation, "Attack_Base", clipHandle => _attackClipHandle = clipHandle);
-        LoadAndApplyAnimationClip(resourceData.death_animation, "Death_Base", clipHandle => _deathClipHandle = clipHandle);
+        // 노말 기준: move만
+        if (!string.IsNullOrEmpty(resourceData.move_animation))
+        {
+            Debug.Log($"[체크] 로드 시도 주소: {resourceData.move_animation}");
+
+            LoadAndApplyAnimationClip(resourceData.move_animation, "Move_Base",
+                clipHandle => _moveClipHandle = clipHandle);
+        }
 
         _animator.Rebind();
         _animator.Update(0f);
