@@ -44,6 +44,6 @@ public class UISlotAddedText : UISlot
 
     public enum TEXT_TYPE
     {
-        Name, Desc
+        Name, Desc, Value
     }
 }

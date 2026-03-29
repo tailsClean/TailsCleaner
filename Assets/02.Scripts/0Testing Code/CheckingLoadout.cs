@@ -43,7 +43,7 @@ public class CheckingLoadout : MonoBehaviour
         yield return null;
 
         if (playerLoadout == null)
-            playerLoadout = ItemManager.Instance.Loadout;
+            playerLoadout = PlayerStatManager.Instance.Loadout;
 
         equips = new();
         relics = new();

@@ -120,7 +120,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 7579788335498963643}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 4194086853346137650}
+        m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
+        m_MethodName: SetActive
+        m_Mode: 6
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1 &1888387942847027842
 GameObject:
   m_ObjectHideFlags: 0
@@ -173,6 +185,7 @@ GameObject:
   - component: {fileID: 1076228935245612196}
   - component: {fileID: 6996818574830367457}
   - component: {fileID: 5037936420447752770}
+  - component: {fileID: 3573875428867568799}
   m_Layer: 5
   m_Name: Stat Panel (1)
   m_TagString: Untagged
@@ -268,6 +281,29 @@ MonoBehaviour:
   m_ChildScaleWidth: 0
   m_ChildScaleHeight: 0
   m_ReverseArrangement: 0
+--- !u!114 &3573875428867568799
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2270365126331809087}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7ac21c461742a444790d003073883838, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PlayerStatUI
+  _uiSlots:
+  - uiSlot: {fileID: 8364617577281705994}
+    playerStat: 0
+  - uiSlot: {fileID: 2498998225660658901}
+    playerStat: 1
+  - uiSlot: {fileID: 674729004348156373}
+    playerStat: 2
+  - uiSlot: {fileID: 5636809097638891033}
+    playerStat: 3
+  - uiSlot: {fileID: 1232877908807398128}
+    playerStat: 4
 --- !u!1 &4194086853346137650
 GameObject:
   m_ObjectHideFlags: 0
@@ -356,6 +392,7 @@ GameObject:
   - component: {fileID: 7183099073549818129}
   - component: {fileID: 4442492235655791094}
   - component: {fileID: 3312204823742962581}
+  - component: {fileID: 3998671887011453833}
   m_Layer: 5
   m_Name: Stat Panel (2)
   m_TagString: Untagged
@@ -451,6 +488,29 @@ MonoBehaviour:
   m_ChildScaleWidth: 0
   m_ChildScaleHeight: 0
   m_ReverseArrangement: 0
+--- !u!114 &3998671887011453833
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4379539675072027129}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7ac21c461742a444790d003073883838, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PlayerStatUI
+  _uiSlots:
+  - uiSlot: {fileID: 6044114814914587344}
+    playerStat: 5
+  - uiSlot: {fileID: 569629918892689935}
+    playerStat: 6
+  - uiSlot: {fileID: 2113808321863895975}
+    playerStat: 7
+  - uiSlot: {fileID: 8336550791739180524}
+    playerStat: 8
+  - uiSlot: {fileID: 8296780943342415641}
+    playerStat: 9
 --- !u!1 &4542415479070292153
 GameObject:
   m_ObjectHideFlags: 0
@@ -599,6 +659,7 @@ GameObject:
   - component: {fileID: 8105682175187009148}
   - component: {fileID: 5798211057477679037}
   - component: {fileID: 1276333709889350217}
+  - component: {fileID: 7809264095639042817}
   m_Layer: 5
   m_Name: Stat Panel (3)
   m_TagString: Untagged
@@ -694,6 +755,29 @@ MonoBehaviour:
   m_ChildScaleWidth: 0
   m_ChildScaleHeight: 0
   m_ReverseArrangement: 0
+--- !u!114 &7809264095639042817
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4571875530498003260}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7ac21c461742a444790d003073883838, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PlayerStatUI
+  _uiSlots:
+  - uiSlot: {fileID: 4587060504288161869}
+    playerStat: 10
+  - uiSlot: {fileID: 7576165338956231918}
+    playerStat: 11
+  - uiSlot: {fileID: 1797313337532003181}
+    playerStat: 12
+  - uiSlot: {fileID: 4961189813905706783}
+    playerStat: 13
+  - uiSlot: {fileID: 5507585183293426404}
+    playerStat: 14
 --- !u!1 &6291022548551601805
 GameObject:
   m_ObjectHideFlags: 0
@@ -759,7 +843,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Button
+  m_text: "\uB098\uAC00\uAE30"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 482d9ad1fc6b8114485d440c5344f4db, type: 2}
   m_sharedMaterial: {fileID: -7673194443907936742, guid: 482d9ad1fc6b8114485d440c5344f4db, type: 2}
@@ -1019,6 +1103,17 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 8c2d220902eccd7419526e8b423f416d, type: 3}
+--- !u!114 &2498998225660658901 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 3071388992165322943, guid: 8c2d220902eccd7419526e8b423f416d, type: 3}
+  m_PrefabInstance: {fileID: 590531918451893354}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: eb4dfaa08f55cc4459536368d41bccb5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::UISlotAddedText
 --- !u!224 &3305404186006596785 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 2733361985861830875, guid: 8c2d220902eccd7419526e8b423f416d, type: 3}
@@ -1142,6 +1237,17 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 2733361985861830875, guid: 8c2d220902eccd7419526e8b423f416d, type: 3}
   m_PrefabInstance: {fileID: 1528768914096312562}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &4587060504288161869 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 3071388992165322943, guid: 8c2d220902eccd7419526e8b423f416d, type: 3}
+  m_PrefabInstance: {fileID: 1528768914096312562}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: eb4dfaa08f55cc4459536368d41bccb5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::UISlotAddedText
 --- !u!1001 &2576862144311855466
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1260,6 +1366,17 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 2733361985861830875, guid: 8c2d220902eccd7419526e8b423f416d, type: 3}
   m_PrefabInstance: {fileID: 2576862144311855466}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &674729004348156373 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 3071388992165322943, guid: 8c2d220902eccd7419526e8b423f416d, type: 3}
+  m_PrefabInstance: {fileID: 2576862144311855466}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: eb4dfaa08f55cc4459536368d41bccb5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::UISlotAddedText
 --- !u!1001 &3276508810814401200
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1373,6 +1490,17 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 8c2d220902eccd7419526e8b423f416d, type: 3}
+--- !u!114 &569629918892689935 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 3071388992165322943, guid: 8c2d220902eccd7419526e8b423f416d, type: 3}
+  m_PrefabInstance: {fileID: 3276508810814401200}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: eb4dfaa08f55cc4459536368d41bccb5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::UISlotAddedText
 --- !u!224 &618863804203033195 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 2733361985861830875, guid: 8c2d220902eccd7419526e8b423f416d, type: 3}
@@ -1496,6 +1624,17 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 2733361985861830875, guid: 8c2d220902eccd7419526e8b423f416d, type: 3}
   m_PrefabInstance: {fileID: 3634003538027582418}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &1797313337532003181 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 3071388992165322943, guid: 8c2d220902eccd7419526e8b423f416d, type: 3}
+  m_PrefabInstance: {fileID: 3634003538027582418}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: eb4dfaa08f55cc4459536368d41bccb5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::UISlotAddedText
 --- !u!1001 &4020031646827375384
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1614,6 +1753,17 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 2733361985861830875, guid: 8c2d220902eccd7419526e8b423f416d, type: 3}
   m_PrefabInstance: {fileID: 4020031646827375384}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &2113808321863895975 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 3071388992165322943, guid: 8c2d220902eccd7419526e8b423f416d, type: 3}
+  m_PrefabInstance: {fileID: 4020031646827375384}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: eb4dfaa08f55cc4459536368d41bccb5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::UISlotAddedText
 --- !u!1001 &4288495497425654351
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1727,6 +1877,17 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 8c2d220902eccd7419526e8b423f416d, type: 3}
+--- !u!114 &1232877908807398128 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 3071388992165322943, guid: 8c2d220902eccd7419526e8b423f416d, type: 3}
+  m_PrefabInstance: {fileID: 4288495497425654351}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: eb4dfaa08f55cc4459536368d41bccb5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::UISlotAddedText
 --- !u!224 &2192428180683545236 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 2733361985861830875, guid: 8c2d220902eccd7419526e8b423f416d, type: 3}
@@ -1850,6 +2011,17 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 2733361985861830875, guid: 8c2d220902eccd7419526e8b423f416d, type: 3}
   m_PrefabInstance: {fileID: 4880835743478699089}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &7576165338956231918 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 3071388992165322943, guid: 8c2d220902eccd7419526e8b423f416d, type: 3}
+  m_PrefabInstance: {fileID: 4880835743478699089}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: eb4dfaa08f55cc4459536368d41bccb5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::UISlotAddedText
 --- !u!1001 &6426254885470250323
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1963,6 +2135,17 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 8c2d220902eccd7419526e8b423f416d, type: 3}
+--- !u!114 &8336550791739180524 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 3071388992165322943, guid: 8c2d220902eccd7419526e8b423f416d, type: 3}
+  m_PrefabInstance: {fileID: 6426254885470250323}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: eb4dfaa08f55cc4459536368d41bccb5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::UISlotAddedText
 --- !u!224 &8989324476043455880 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 2733361985861830875, guid: 8c2d220902eccd7419526e8b423f416d, type: 3}
@@ -2081,6 +2264,17 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 8c2d220902eccd7419526e8b423f416d, type: 3}
+--- !u!114 &8296780943342415641 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 3071388992165322943, guid: 8c2d220902eccd7419526e8b423f416d, type: 3}
+  m_PrefabInstance: {fileID: 6465992917070155686}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: eb4dfaa08f55cc4459536368d41bccb5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::UISlotAddedText
 --- !u!224 &8959076320515540861 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 2733361985861830875, guid: 8c2d220902eccd7419526e8b423f416d, type: 3}
@@ -2199,6 +2393,17 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 8c2d220902eccd7419526e8b423f416d, type: 3}
+--- !u!114 &8364617577281705994 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 3071388992165322943, guid: 8c2d220902eccd7419526e8b423f416d, type: 3}
+  m_PrefabInstance: {fileID: 6812489785334200501}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: eb4dfaa08f55cc4459536368d41bccb5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::UISlotAddedText
 --- !u!224 &8891241885596364910 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 2733361985861830875, guid: 8c2d220902eccd7419526e8b423f416d, type: 3}
@@ -2322,6 +2527,17 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 2733361985861830875, guid: 8c2d220902eccd7419526e8b423f416d, type: 3}
   m_PrefabInstance: {fileID: 7252550227846753958}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &5636809097638891033 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 3071388992165322943, guid: 8c2d220902eccd7419526e8b423f416d, type: 3}
+  m_PrefabInstance: {fileID: 7252550227846753958}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: eb4dfaa08f55cc4459536368d41bccb5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::UISlotAddedText
 --- !u!1001 &7417740335430232667
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2440,6 +2656,17 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 2733361985861830875, guid: 8c2d220902eccd7419526e8b423f416d, type: 3}
   m_PrefabInstance: {fileID: 7417740335430232667}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &5507585183293426404 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 3071388992165322943, guid: 8c2d220902eccd7419526e8b423f416d, type: 3}
+  m_PrefabInstance: {fileID: 7417740335430232667}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: eb4dfaa08f55cc4459536368d41bccb5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::UISlotAddedText
 --- !u!1001 &7946157178135375776
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2553,6 +2780,17 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 8c2d220902eccd7419526e8b423f416d, type: 3}
+--- !u!114 &4961189813905706783 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 3071388992165322943, guid: 8c2d220902eccd7419526e8b423f416d, type: 3}
+  m_PrefabInstance: {fileID: 7946157178135375776}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: eb4dfaa08f55cc4459536368d41bccb5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::UISlotAddedText
 --- !u!224 &5451802945466410875 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 2733361985861830875, guid: 8c2d220902eccd7419526e8b423f416d, type: 3}
@@ -2671,6 +2909,17 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 8c2d220902eccd7419526e8b423f416d, type: 3}
+--- !u!114 &6044114814914587344 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 3071388992165322943, guid: 8c2d220902eccd7419526e8b423f416d, type: 3}
+  m_PrefabInstance: {fileID: 8754652864252988015}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: eb4dfaa08f55cc4459536368d41bccb5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::UISlotAddedText
 --- !u!224 &6669862228935443124 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 2733361985861830875, guid: 8c2d220902eccd7419526e8b423f416d, type: 3}

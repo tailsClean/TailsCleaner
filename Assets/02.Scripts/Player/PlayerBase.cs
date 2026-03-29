@@ -3,7 +3,7 @@ using UnityEngine.InputSystem;
 
 public class PlayerBase : MonoBehaviour, IDamageable, ISkillable, ISkillStat, IPlayerAni
 {
-    [field: SerializeField] public PlayerDataSO Data { get; private set; }
+    public IPlayerData Data { get; private set; }
 
     [Header("아이템 픽업 기능을 위한 콜라이더")]
     [SerializeField] private ItemPickupSystem _itemPickupSystem;        // 아이템 줍는 범위 콜라이더
@@ -56,11 +56,10 @@ public class PlayerBase : MonoBehaviour, IDamageable, ISkillable, ISkillStat, IP
 
     private void Awake()
     {
-
-        Data.Init(PlayerDataSO.PlayerID);
-        _levelSystem = new PlayerLevelSystem(this);
-        _myEnhancement = ItemManager.Instance.Loadout;
-        _statCalculator = new PlayerStatCalculator(_myEnhancement, _levelSystem);
+        Data = PlayerStatManager.Instance.StatTransfer;
+        _levelSystem = new PlayerLevelSystem();
+        _myEnhancement = PlayerStatManager.Instance.Loadout;
+        _statCalculator = new PlayerStatCalculator(_myEnhancement);
         _playerAni = new PlayerAnimation(GetComponent<Animator>());
         _hpSystem = new PlayerHpSystem(this, _statCalculator);
 

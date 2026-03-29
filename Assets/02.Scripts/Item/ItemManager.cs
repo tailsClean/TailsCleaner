@@ -20,11 +20,6 @@ public partial class ItemManager : MonoBehaviour
     public static ItemManager Instance { get; private set; }
 
 
-    private Dictionary<UI_GROUP, UIGroup> _uiGroups;
-
-    public PlayerLoadout Loadout { get; private set; }
-
-
     private void Awake()
     {
         #region 싱글톤
@@ -39,10 +34,6 @@ public partial class ItemManager : MonoBehaviour
         #endregion
 
 
-    }
-    private void Start()
-    {
-        Loadout = new PlayerLoadout(_onChangeLoadout);
     }
 
     public void OpenUI(UI_GROUP group)

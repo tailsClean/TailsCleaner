@@ -17,9 +17,7 @@ public class OutGameLevelSystem : MonoBehaviour
         {
             // 데이터 테이블에서 값을 읽어오기
             if (_levelData == null)
-            {
                 _levelData = DataManager.Instance.GetSOData<CharLevelTableSO>();
-            }
 
             return _levelData.GetById(CurrentLevel).char_exp_limit;
         }

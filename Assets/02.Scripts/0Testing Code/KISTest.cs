@@ -115,7 +115,7 @@ public class KISTest : MonoBehaviour
     [ContextMenu("장착 유물 확인")]
     public void GetRelic()
     {
-        var relics = ItemManager.Instance.Loadout.MyRelics;
+        var relics = PlayerStatManager.Instance.Loadout.MyRelics;
         if(relics.Count == 0)
         {
             Debug.Log("장착된 유물이 없습니다.");
