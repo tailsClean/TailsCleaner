@@ -152,6 +152,38 @@ public class BossMonster : MonsterBase
         }
     }
 
+    protected override void ApplyAnimatorResource(MonsterResource resourceData)
+    {
+        Debug.Log($"<color=cyan>[Step 1]</color> 보스 데이터 수신: {resourceData.resource_id} / Cast: {resourceData.cast_animation}");
+
+        // 1. 부모(MonsterBase)가 move_animation을 처리하도록 먼저 실행
+        base.ApplyAnimatorResource(resourceData);
+
+        // 2. 보스 전용: 캐스팅(Cast) 애니메이션 로드
+        if (!string.IsNullOrEmpty(resourceData.cast_animation))
+        {
+            Debug.Log($"<color=yellow>[Step 2]</color> 애니메이션 로드 시도 주소: {resourceData.cast_animation}");
+            // "CastBase"는 Animator Override Controller에 설정된 원본 클립 이름과 같아야 합니다.
+            LoadAndApplyAnimationClip(resourceData.cast_animation, "Cast_Base",
+                handle => _castClipHandle = handle);
+        }
+
+        // 3. 보스 전용: 공격(Attack) 애니메이션 로드
+        if (!string.IsNullOrEmpty(resourceData.attack_animation))
+        {
+            // "AttackBase" 역시 애니메이터에 설정된 이름 확인 필요
+            LoadAndApplyAnimationClip(resourceData.attack_animation, "Attack_Base",
+                handle => _attackClipHandle = handle);
+        }
+
+        // 4. 사망(Death) 애니메이션도 필요하다면 추가
+        if (!string.IsNullOrEmpty(resourceData.death_animation))
+        {
+            LoadAndApplyAnimationClip(resourceData.death_animation, "Death_Base",
+                handle => _deathClipHandle = handle);
+        }
+    }
+
     protected override void Start()
     {
         base.Start();
