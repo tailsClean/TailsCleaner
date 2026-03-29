@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6844339646822135683}
   - component: {fileID: 8175160231973099806}
+  - component: {fileID: 3400774660501628416}
   m_Layer: 7
   m_Name: BossMonster_Visual
   m_TagString: Untagged
@@ -90,6 +91,28 @@ SpriteRenderer:
   m_WasSpriteAssigned: 0
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!95 &3400774660501628416
+Animator:
+  serializedVersion: 7
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4256490024980198056}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: cab5c01020a767741a91cd608e005b63, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_AnimatePhysics: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!1 &6242823153721604330
 GameObject:
   m_ObjectHideFlags: 0
@@ -108,7 +131,6 @@ GameObject:
   - component: {fileID: -6858085959018721776}
   - component: {fileID: -5357901628026673190}
   - component: {fileID: -3921241016024252799}
-  - component: {fileID: 3302310811385536493}
   m_Layer: 7
   m_Name: Boss
   m_TagString: Monster
@@ -237,7 +259,7 @@ MonoBehaviour:
   scoreReward: 1000
   goldReward: 500
   _monsterSprite: {fileID: 0}
-  _animator: {fileID: 3302310811385536493}
+  _animator: {fileID: 3400774660501628416}
   _knockbackDuration: 0.1
   _wallLayerMask:
     serializedVersion: 2
@@ -299,11 +321,6 @@ MonoBehaviour:
   barDuration: 3
   barInteraction: 0
   zoneSpawner: {fileID: 0}
-  avoidanceRadius: 1.5
-  avoidanceForce: 2
-  monsterLayer:
-    serializedVersion: 2
-    m_Bits: 128
   orbitPrefab: {fileID: 179680022358413590, guid: 309667af28148ca4f88af1a3c18bf838, type: 3}
   explosionEffect: {fileID: 0}
   defaultOrbitCount: 5
@@ -517,25 +534,3 @@ MonoBehaviour:
   maxSpawnAttempts: 15
   defaultDangerZonePrefab: {fileID: 4390429074119119411, guid: dc2bdaea26fb6614585309b317c18da2, type: 3}
   defaultSafeZonePrefab: {fileID: 5294524223138943813, guid: 62f82999df4327745bdd859bd4800a1f, type: 3}
---- !u!95 &3302310811385536493
-Animator:
-  serializedVersion: 7
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6242823153721604330}
-  m_Enabled: 1
-  m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: cab5c01020a767741a91cd608e005b63, type: 2}
-  m_CullingMode: 0
-  m_UpdateMode: 0
-  m_ApplyRootMotion: 0
-  m_LinearVelocityBlending: 0
-  m_StabilizeFeet: 0
-  m_AnimatePhysics: 0
-  m_WarningMessage: 
-  m_HasTransformHierarchy: 1
-  m_AllowConstantClipSamplingOptimization: 1
-  m_KeepAnimatorStateOnDisable: 0
-  m_WriteDefaultValuesOnDisable: 0
