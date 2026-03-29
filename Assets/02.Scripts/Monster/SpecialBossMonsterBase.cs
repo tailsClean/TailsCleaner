@@ -66,6 +66,73 @@ public abstract class SpecialBossMonsterBase : MonsterBase
         base.Start();
     }
 
+    protected override void ApplyAnimatorResource(MonsterResource resourceData)
+    {
+        if (_animator == null)
+        {
+            Debug.LogWarning($"[{name}] _animator is null");
+            return;
+        }
+
+        if (_baseAnimatorController == null)
+        {
+            Debug.LogWarning($"[{name}] _baseAnimatorController is null");
+            return;
+        }
+
+        ReleaseAnimationHandles();
+
+        _overrideController = new AnimatorOverrideController(_baseAnimatorController);
+        _animator.runtimeAnimatorController = _overrideController;
+
+        if (!string.IsNullOrEmpty(resourceData.cast_animation))
+        {
+            LoadAndApplyAnimationClip(
+                resourceData.cast_animation,
+                "Cast_Base",
+                clipHandle => _castClipHandle = clipHandle
+            );
+        }
+
+        if (!string.IsNullOrEmpty(resourceData.move_animation))
+        {
+            LoadAndApplyAnimationClip(
+                resourceData.move_animation,
+                "Move_Base",
+                clipHandle => _moveClipHandle = clipHandle
+            );
+        }
+
+        if (!string.IsNullOrEmpty(resourceData.attack_animation))
+        {
+            LoadAndApplyAnimationClip(
+                resourceData.attack_animation,
+                "Attack_Base",
+                clipHandle => _attackClipHandle = clipHandle
+            );
+        }
+
+        if (!string.IsNullOrEmpty(resourceData.death_animation))
+        {
+            LoadAndApplyAnimationClip(
+                resourceData.death_animation,
+                "Death_Base",
+                clipHandle => _deathClipHandle = clipHandle
+            );
+        }
+
+        _animator.Rebind();
+        _animator.Update(0f);
+
+        Debug.Log(
+            $"[{name}] SpecialBoss ApplyAnimatorResource / " +
+            $"cast:{resourceData.cast_animation}, " +
+            $"move:{resourceData.move_animation}, " +
+            $"attack:{resourceData.attack_animation}, " +
+            $"death:{resourceData.death_animation}"
+        );
+    }
+
     protected override void FixedUpdate()
     {
         if (!isDataInitialized)
