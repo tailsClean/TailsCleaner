@@ -28,10 +28,10 @@ public abstract class MonsterBase : PoolObject, IDamageable, IMonsterStatus, IPu
 
     [Header("--- 겹침 방지 설정 ---")]
     [Tooltip("몬스터끼리 서로 밀어내기 시작하는 거리")]
-    [SerializeField] private float avoidanceRadius = 0.5f;
+    [SerializeField] protected float avoidanceRadius = 0.5f;
     [Tooltip("몬스터끼리 서로 밀어내는 힘의 세기")]
-    [SerializeField] private float avoidanceForce = 1.5f;
-    [SerializeField] private LayerMask monsterLayer;
+    [SerializeField] protected float avoidanceForce = 1.5f;
+    [SerializeField] protected LayerMask monsterLayer;
 
     private float originHp;
     private float originPower;
@@ -525,6 +525,11 @@ public abstract class MonsterBase : PoolObject, IDamageable, IMonsterStatus, IPu
 
         Vector2 targetPos = target.position;
         Vector2 diff = targetPos - myPos;
+
+        if (Mathf.Abs(diff.x) > 0.01f)
+        {
+            _monsterSprite.flipX = (diff.x < 0);
+        }
 
         if (diff.magnitude <= stoppingDistance)
         {

@@ -87,7 +87,7 @@ SpriteRenderer:
   m_Size: {x: 9.78, y: 7.5}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
-  m_WasSpriteAssigned: 1
+  m_WasSpriteAssigned: 0
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
 --- !u!1 &6242823153721604330
@@ -108,6 +108,7 @@ GameObject:
   - component: {fileID: -6858085959018721776}
   - component: {fileID: -5357901628026673190}
   - component: {fileID: -3921241016024252799}
+  - component: {fileID: 3302310811385536493}
   m_Layer: 7
   m_Name: Boss
   m_TagString: Monster
@@ -236,6 +237,35 @@ MonoBehaviour:
   scoreReward: 1000
   goldReward: 500
   _monsterSprite: {fileID: 0}
+  _animator: {fileID: 3302310811385536493}
+  _knockbackDuration: 0.1
+  _wallLayerMask:
+    serializedVersion: 2
+    m_Bits: 0
+  _knockbackCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 1
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 1
+      value: 1
+      inSlope: 1
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
   pattern_group_id: 0
   useZigzag: 0
   useJump: 0
@@ -269,6 +299,11 @@ MonoBehaviour:
   barDuration: 3
   barInteraction: 0
   zoneSpawner: {fileID: 0}
+  avoidanceRadius: 1.5
+  avoidanceForce: 2
+  monsterLayer:
+    serializedVersion: 2
+    m_Bits: 128
   orbitPrefab: {fileID: 179680022358413590, guid: 309667af28148ca4f88af1a3c18bf838, type: 3}
   explosionEffect: {fileID: 0}
   defaultOrbitCount: 5
@@ -482,3 +517,25 @@ MonoBehaviour:
   maxSpawnAttempts: 15
   defaultDangerZonePrefab: {fileID: 4390429074119119411, guid: dc2bdaea26fb6614585309b317c18da2, type: 3}
   defaultSafeZonePrefab: {fileID: 5294524223138943813, guid: 62f82999df4327745bdd859bd4800a1f, type: 3}
+--- !u!95 &3302310811385536493
+Animator:
+  serializedVersion: 7
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6242823153721604330}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: cab5c01020a767741a91cd608e005b63, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_AnimatePhysics: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0

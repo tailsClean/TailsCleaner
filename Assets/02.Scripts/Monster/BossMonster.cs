@@ -62,13 +62,6 @@ public class BossMonster : MonsterBase
     public ZoneSpawner zoneSpawner;
     private readonly List<BossAreaPatternRuntime> areaPatterns = new List<BossAreaPatternRuntime>();
 
-    [Header("--- 겹침 방지 설정 ---")]
-    [Tooltip("몬스터끼리 서로 밀어내기 시작하는 거리")]
-    [SerializeField] private float avoidanceRadius = 0.5f; // 몬스터끼리 띄울 거리
-    [Tooltip("몬스터끼리 서로 밀어내는 힘의 세기")]
-    [SerializeField] private float avoidanceForce = 1.5f;  // 밀어내는 힘의 세기
-    [SerializeField] private LayerMask monsterLayer;       // 몬스터 전용 레이어 
-
     private class BossAreaPatternRuntime
     {
         public bool isSafeZone;
@@ -135,6 +128,28 @@ public class BossMonster : MonsterBase
         float estimatedDiameter = Mathf.Max(0.1f, orbitProjectileScale);
         float circumference = estimatedDiameter * orbitCount * 1.2f;
         return circumference / (2f * Mathf.PI);
+    }
+
+    public override void ApplyMonsterResource(MonsterResource resourceData)
+    {
+        // 1. 애니메이션 로드 등 부모의 기본 기능을 먼저 실행
+        base.ApplyMonsterResource(resourceData);
+
+        if (visualChild != null)
+        {
+            var sr = visualChild.GetComponent<SpriteRenderer>();
+            if (sr != null)
+            {
+                if (sr.sprite == null)
+                {
+                    Debug.LogWarning("보스 스프라이트가 비어있습니다! 프리팹의 SpriteRenderer에 이미지를 넣어주세요.");
+                }
+                else
+                {
+                    Debug.Log($"보스 이미지 확인됨: {sr.sprite.name} (데이터 테이블 대신 프리팹 설정을 사용합니다)");
+                }
+            }
+        }
     }
 
     protected override void Start()
@@ -944,6 +959,7 @@ public class BossMonster : MonsterBase
 
         return finalDir.normalized;
     }
+
     private void MoveProcess()
     {
         Vector2 myPos = rb2D.position;
@@ -1072,7 +1088,7 @@ public class BossMonster : MonsterBase
 
             rb2D.MovePosition(Vector2.Lerp(start, dest, p));
             if (visualChild != null)
-                visualChild.localPosition = new Vector2(0f, Mathf.Sin(p * Mathf.PI) * jump_height);
+                visualChild.localPosition = new Vector3(0f, Mathf.Sin(p * Mathf.PI) * jump_height, visualChild.localPosition.z);
 
             yield return new WaitForFixedUpdate();
         }
