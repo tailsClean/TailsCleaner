@@ -286,7 +286,6 @@ public abstract class MonsterBase : PoolObject, IDamageable, IMonsterStatus, IPu
         deathAnimationName = resourceData.death_animation;
         attackEffectName = resourceData.attack_effect;
 
-        ApplySprite(resourceData);
         ApplyAnimatorResource(resourceData);
 
         Debug.Log(
