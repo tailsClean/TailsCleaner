@@ -1063,7 +1063,6 @@ GameObject:
   - component: {fileID: 2501371865263109421}
   - component: {fileID: 6320381923501562722}
   - component: {fileID: 5808270747863898824}
-  - component: {fileID: 5673284065638302905}
   m_Layer: 5
   m_Name: PlayerRelicUI
   m_TagString: Untagged
@@ -1158,38 +1157,13 @@ MonoBehaviour:
   - {fileID: 4271689776141834648}
   - {fileID: 1833708373605073904}
   - {fileID: 2155528582858695983}
-  _relicDivisionSlot: {fileID: 0}
+  _relicDivisionSlot: {fileID: 5465043932429395897}
   _popUpButtons:
   - {fileID: 543777098158429385}
   - {fileID: 7930904535989787503}
   - {fileID: 573331613310611899}
-  _popUp: {fileID: 976537949849923968}
+  _popUp: {fileID: 7252132667334425664}
   _onChangeLoadout: {fileID: 11400000, guid: 65741d46afe83434f8e50560a43fcc55, type: 2}
---- !u!114 &5673284065638302905
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5656920318152907906}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: bfcd0e22a6b11024ab00eb654f4ba437, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::PlayerLoadoutUI
-  <Group>k__BackingField: 10
-  _exitButton:
-    <PushButton>k__BackingField: {fileID: 0}
-    <OpenGroup>k__BackingField: 0
-  _loadoutSlots: []
-  _loadoutRelicSlots:
-  - {fileID: 7001723938549215993}
-  - {fileID: 6833090152971694245}
-  - {fileID: 5763663264175968975}
-  _relicDivisionSlot: {fileID: 0}
-  _popUpButtons: []
-  _popUp: {fileID: 0}
-  _onChangeLoadout: {fileID: 0}
 --- !u!1 &5892176004958502801
 GameObject:
   m_ObjectHideFlags: 0
@@ -1982,41 +1956,9 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 6227679690911020693}
     m_Modifications:
-    - target: {fileID: 4272912008032087043, guid: eb44d5013af03244bacb6a125218981f, type: 3}
-      propertyPath: _itemSlot
-      value: 
-      objectReference: {fileID: 4112678366656198943}
-    - target: {fileID: 4272912008032087043, guid: eb44d5013af03244bacb6a125218981f, type: 3}
-      propertyPath: _background
-      value: 
-      objectReference: {fileID: 7080695056840506983}
-    - target: {fileID: 4272912008032087043, guid: eb44d5013af03244bacb6a125218981f, type: 3}
-      propertyPath: _releaseRelic
-      value: 
-      objectReference: {fileID: 6111899588331776351}
-    - target: {fileID: 4272912008032087043, guid: eb44d5013af03244bacb6a125218981f, type: 3}
-      propertyPath: _openButton.Array.size
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 4272912008032087043, guid: eb44d5013af03244bacb6a125218981f, type: 3}
-      propertyPath: _openButton.Array.data[0].<OpenGroup>k__BackingField
-      value: 6
-      objectReference: {fileID: 0}
-    - target: {fileID: 4272912008032087043, guid: eb44d5013af03244bacb6a125218981f, type: 3}
-      propertyPath: _openButton.Array.data[0].<PushButton>k__BackingField
-      value: 
-      objectReference: {fileID: 7486008822524706881}
     - target: {fileID: 5082642868205707332, guid: eb44d5013af03244bacb6a125218981f, type: 3}
       propertyPath: m_Name
-      value: RelicEquiped StatusUI
-      objectReference: {fileID: 0}
-    - target: {fileID: 5082642868205707332, guid: eb44d5013af03244bacb6a125218981f, type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5846401975389281730, guid: eb44d5013af03244bacb6a125218981f, type: 3}
-      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.size
-      value: 0
+      value: RelicLoadout StatusPopup
       objectReference: {fileID: 0}
     - target: {fileID: 7829583263780720097, guid: eb44d5013af03244bacb6a125218981f, type: 3}
       propertyPath: m_Pivot.x
@@ -2101,138 +2043,21 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 8446394309014504036, guid: eb44d5013af03244bacb6a125218981f, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 7080695056840506983}
-    - targetCorrespondingSourceObject: {fileID: 1217542237440795834, guid: eb44d5013af03244bacb6a125218981f, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 4112678366656198943}
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: eb44d5013af03244bacb6a125218981f, type: 3}
---- !u!114 &976537949849923968 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 4272912008032087043, guid: eb44d5013af03244bacb6a125218981f, type: 3}
-  m_PrefabInstance: {fileID: 3945490559258254723}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1b5d98c099cd5a140988aafdf2866f8c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::ItemPopup
---- !u!114 &1297786848828853782 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 2649128686307038101, guid: eb44d5013af03244bacb6a125218981f, type: 3}
-  m_PrefabInstance: {fileID: 3945490559258254723}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4897290889468977127}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
---- !u!1 &2748505242198849849 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 1217542237440795834, guid: eb44d5013af03244bacb6a125218981f, type: 3}
-  m_PrefabInstance: {fileID: 3945490559258254723}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &4112678366656198943
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2748505242198849849}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2430af02565869a4892d927c88b1ddf7, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::UISlot
-  _amountText: {fileID: 5479165281430523510}
---- !u!1 &4897290889468977127 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 8446394309014504036, guid: eb44d5013af03244bacb6a125218981f, type: 3}
-  m_PrefabInstance: {fileID: 3945490559258254723}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &7080695056840506983
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4897290889468977127}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Button
-  m_Navigation:
-    m_Mode: 3
-    m_WrapAround: 0
-    m_SelectOnUp: {fileID: 0}
-    m_SelectOnDown: {fileID: 0}
-    m_SelectOnLeft: {fileID: 0}
-    m_SelectOnRight: {fileID: 0}
-  m_Transition: 1
-  m_Colors:
-    m_NormalColor: {r: 1, g: 1, b: 1, a: 1}
-    m_HighlightedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
-    m_PressedColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 1}
-    m_SelectedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
-    m_DisabledColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 0.5019608}
-    m_ColorMultiplier: 1
-    m_FadeDuration: 0.1
-  m_SpriteState:
-    m_HighlightedSprite: {fileID: 0}
-    m_PressedSprite: {fileID: 0}
-    m_SelectedSprite: {fileID: 0}
-    m_DisabledSprite: {fileID: 0}
-  m_AnimationTriggers:
-    m_NormalTrigger: Normal
-    m_HighlightedTrigger: Highlighted
-    m_PressedTrigger: Pressed
-    m_SelectedTrigger: Selected
-    m_DisabledTrigger: Disabled
-  m_Interactable: 1
-  m_TargetGraphic: {fileID: 1297786848828853782}
-  m_OnClick:
-    m_PersistentCalls:
-      m_Calls: []
---- !u!114 &5479165281430523510 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 8847555704084435957, guid: eb44d5013af03244bacb6a125218981f, type: 3}
-  m_PrefabInstance: {fileID: 3945490559258254723}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Unity.TextMeshPro::TMPro.TextMeshProUGUI
---- !u!114 &6111899588331776351 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 7066401293180466396, guid: eb44d5013af03244bacb6a125218981f, type: 3}
-  m_PrefabInstance: {fileID: 3945490559258254723}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Button
 --- !u!224 &6514868888642031714 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 7829583263780720097, guid: eb44d5013af03244bacb6a125218981f, type: 3}
   m_PrefabInstance: {fileID: 3945490559258254723}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &7486008822524706881 stripped
+--- !u!114 &7252132667334425664 stripped
 MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 5846401975389281730, guid: eb44d5013af03244bacb6a125218981f, type: 3}
+  m_CorrespondingSourceObject: {fileID: 5937418859669070275, guid: eb44d5013af03244bacb6a125218981f, type: 3}
   m_PrefabInstance: {fileID: 3945490559258254723}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
+  m_Script: {fileID: 11500000, guid: 34ecca3d8f94f85418f2dcb8c4813c4a, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Button
+  m_EditorClassIdentifier: Assembly-CSharp::RelicLoadoutPopup

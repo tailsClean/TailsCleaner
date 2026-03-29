@@ -71,8 +71,8 @@ public class KISTest : MonoBehaviour
 
     public void Consume()
     {
-        inventory.GainStackItem(34005, 10);
-        inventory.GainStackItem(35004, 10);
+        inventory.GainStackItem(34005, 100);
+        inventory.GainStackItem(35001, 10);
         //inventory.GainStackItem(35002, 10);
         inventory.GainStackItem(35003, 10);
     }

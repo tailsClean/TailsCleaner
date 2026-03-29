@@ -5,68 +5,76 @@ using static ActiveSkillData;
 
 public abstract class ActiveSkill : MonoBehaviour
 {
+    // --- 상수 ---
     public const int MAX_SKILL_LEVEL = 10;                  // 스킬 최대 레벨
     public const float MIN_SKILL_COOLDOWN = 0.1f;           // 스킬 최소 쿨타임
 
+    // --- 인스펙터 ---
+    [Header("발사 설정")]
+    [Tooltip("스킬 실행 간격")]
+    [SerializeField] protected float _fireInterval = 0.1f;  // 여러 투사체 발사 시 텀
+    [Tooltip("발동 범위 설정")]
+    [SerializeField] protected float _distance = 50f;       // 타겟 탐색 거리
+
+
+    // --- 식별 정보 ---
     public int MainTag { get; private set; }                // 메인 태그
     public int CurrentLevel { get; private set; } = 0;      // 현재 레벨
     public int CurrentSubTag { get; private set; } = 0;     // 적용 중인 서브 태그
 
     protected GameObject _skillPrefab;  // 스킬 장판,투사체
 
-    // 스킬 타입
+    // --- 스킬 타입 ---
     protected ATTACK_TYPE _attackType;
     protected TARGETING_TYPE _targetingType;
 
+    // --- 스탯 ---
     // 외부 참조용 (패시브 모디파이어, 스킬 투사체, 타겟)
+    // ((baseStat + 패시브 깡 스탯) * commonStat + upgradeStat) * passiveMulStat * 최종 배율
+    // ((baseStat + 깡 추가 패시브 스탯) * 공용 스탯 + (업그레이드 스탯 * 추가추가피해 패시브)) * 패시브 스탯 배율 합 * 최종 배율 (황금왕관, 양손잡이, 냥빨래)
     public SkillStat BaseStat => _baseStat;
     public SkillStat CommonStat => _commonStat;
     public SkillStat UpgradeStat => _upgradeStat;
     public SkillStat PassiveMulStat => _passiveMulStat;
     public SkillStat FinalStat => _finalStat;
-    public MonsterBase CurrentTarget => _currentTarget;
+
+    protected SkillStat _baseStat = new();                                  // 기본 스탯
+    protected SkillStat _commonStat = SkillStat.CreateMultiplier();         // 공용 스탯    
+    protected SkillStat _upgradeStat = new();                               // 업그레이드 스탯
+    protected SkillStat _passiveMulStat = SkillStat.CreateMultiplier();     // 패시브 배율 합
+    protected SkillStat _finalStat = new();                                 // 최종 스탯
+
+    // 공용 업그레이드 더러움 제거 범위
+    private float _pickupRangeBonus = 0f;
+    public float PickupRangeBonus => _pickupRangeBonus;
 
 
-    protected SkillStat _baseStat = new();                              // 기본 스탯
-    protected SkillStat _commonStat = SkillStat.CreateMultiplier();     // 공용 스탯    
-    protected SkillStat _upgradeStat = new();                           // 업그레이드 스탯
-    protected SkillStat _passiveMulStat = SkillStat.CreateMultiplier(); // 패시브 배율 합
-    protected SkillStat _finalStat = new();                             // 최종 스탯
-    // ((baseStat + 깡 추가 패시브 스탯) * 공용 스탯 + (업그레이드 스탯 * 추가추가피해 패시브)) * 패시브 스탯 배율 합 * 최종 배율 (황금왕관, 양손잡이, 냥빨래)
-
-
-    // 전용 모디파이어 목록
-    protected List<(ActiveModifier modifier, ActiveUpgradeData upgradeData)> _skillModifiers = new();
-    // 패시브 모디파이어 목록
-    public List<PassiveModifier> PassiveModifiers { get; private set; } = new();
+    // --- 모디파이어 목록 ---
+    protected List<(ActiveModifier modifier, ActiveUpgradeData upgradeData)> _skillModifiers = new();   // 스킬 전용
+    public List<PassiveModifier> PassiveModifiers { get; private set; } = new();                        // 패시브
 
 
 
-    // 업그레이드 별 레벨 (Key: active_skill_id, Value: UpgradeLevel)
+    // --- 업그레이드 별 레벨 ---
+    // Key: active_skill_id, Value: UpgradeLevel
     protected Dictionary<int, int> _upgradeLevels = new();
 
-    protected float _lastActiveTime = 0f; // 최근 스킬 실행 시간
-    protected WaitForSeconds _fireDelay;    // 순차 발사 딜레이
+    // --- 시전 타겟 / 쿨타임 ---
+    public MonsterBase CurrentTarget => _currentTarget;
+    protected MonsterBase _currentTarget = null;        // 타겟
+    protected Coroutine _searchCoroutine = null;        // 탐색 코루틴
+    protected float _lastActiveTime = 0f;               // 최근 스킬 실행 시간
+    protected WaitForSeconds _fireDelay;                // 순차 발사 딜레이
 
-    protected MonsterBase _currentTarget = null;    // 타겟
-    protected Coroutine _searchCoroutine = null;    // 탐색 코루틴
+    // --- 사운드 / 애니메이션 ---
+    protected SkillSoundData _soundData;                // 사운드 데이터
+    private string _aniName;                            // 애니메이션 이름
 
 
-    [Header("스킬 실행 간격")]
-    [SerializeField] protected float _fireInterval = 0.1f;      // 여러 투사체 발사 시 텀
-    [Header("발동 범위 설정")]
-    [SerializeField] protected float _distance = 50f;           // 타겟 탐색 거리
-
-
+    // --- 투사체 런타임 계산용 ---
     protected SkillStatHandler SkillStatHandler => SkillManager.Instance.SkillStatHandler;  // 플레이어 스킬 스탯
-    protected Vector2 PlayerPos => SkillManager.Instance.CurrentPlayerPos;  // 현재 위치
-    protected Vector2 AttackDir => GetAttackDir();  // 공격 방향
-
-    // 사운드 데이터
-    protected SkillSoundData _soundData;
-
-    // 애니메이션 이름
-    private string _aniName;
+    protected Vector2 PlayerPos => SkillManager.Instance.CurrentPlayerPos;                  // 현재 위치
+    protected Vector2 AttackDir => GetAttackDir();                                          // 공격 방향
 
 
     private void Awake()
@@ -135,7 +143,6 @@ public abstract class ActiveSkill : MonoBehaviour
 
     private bool IsCooldownReady()
     {
-        // 플레이어 공격속도에 최종 계수 곱하는데 정확한 계산이 아직...
         float cooldown = (SkillManager.Instance.Player.AttackSpeed / 100f) * _finalStat.Cooldown;
         
         float actualCooldown = Mathf.Max(MIN_SKILL_COOLDOWN, _finalStat.Cooldown);
@@ -254,6 +261,10 @@ public abstract class ActiveSkill : MonoBehaviour
         LevelUp(upgradeData);           // 스킬 레벨, 업그레이드 레벨 증가
         AddStat(upgradeData);           // 공용, 업그레이드 스탯 누적
         AddModifier(upgradeData);       // 전용 모디파이어 추가
+
+        // 더러움 제거 범위
+        if (upgradeData.PickupRange != 0f)
+            _pickupRangeBonus += upgradeData.PickupRange;
 
         // 자식인 GenericActiveSkill에서
         // 전용 모디파이어 다 설정하고
