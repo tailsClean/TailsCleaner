@@ -7,8 +7,9 @@ public class RuleBasedMonsterSpawner : MonoBehaviour, IMonsterSpawnSystem
     private const float MAX_SPAWN_DISTANCE = 20f; //플레이어로부터 최대한의 스폰 거리
 
     private const int SPAWN_PER_SECOND = 5; //초당 스폰할 몬스터 수
-    private const float SQUAD_RADIUS = 10f; //스쿼드 내 몬스터들이 모이는 반경
+    private const float SQUAD_RADIUS = 4.5f; //스쿼드 내 몬스터들이 모이는 반경
     private const float MIN_SQUAD_RADIUS = 2.0f;
+    private const int SQUAD_CENTER_REFRESH_COUNT = 3; // 스쿼드로 소환 시 한 곳에서 소환되는 모습을 막기 위해, 이 수치마다 스쿼드 중심 위치를 새로 뽑는다
     private const int CIRCLE_SLOTS = 12; //원형 스폰 시 슬롯 수
 
     private const int NO_BOSS_ID = -1; // 보스가 없는 경우의 ID
@@ -49,6 +50,7 @@ public class RuleBasedMonsterSpawner : MonoBehaviour, IMonsterSpawnSystem
     public GameObject LastSpawnedMidBoss { get; private set; }
 
     private Vector2 _squadCenter;
+    private int _squadSpawnCount;
     private int _circleIndex;
 
     private bool _expCacheReady;
@@ -80,6 +82,7 @@ public class RuleBasedMonsterSpawner : MonoBehaviour, IMonsterSpawnSystem
 
         _spawnAccmulator = 0f;
         _circleIndex = 0;
+        _squadSpawnCount = 0;
 
         if (_currentWave != null && _currentWave.spawnPattern == SpawnPattern.Squad)
         {
@@ -299,6 +302,14 @@ public class RuleBasedMonsterSpawner : MonoBehaviour, IMonsterSpawnSystem
 
     private Vector2 GetSquadPosition()
     {
+        if (_squadSpawnCount <= 0 || _squadSpawnCount >= SQUAD_CENTER_REFRESH_COUNT)
+        {
+            _squadCenter = GetRandomRingPosition();
+            _squadSpawnCount = 0;
+
+            Debug.Log($"[Spawner] Refresh squad center: {_squadCenter}");
+        }
+
         float usableRadius = GetUsableSquadRadius(_squadCenter);
 
         for (int i = 0; i < _maxPositionTry; i++)
@@ -309,9 +320,11 @@ public class RuleBasedMonsterSpawner : MonoBehaviour, IMonsterSpawnSystem
             if (!IsInsideBounds(candidate))
                 continue;
 
+            _squadSpawnCount++;
             return candidate;
         }
 
+        _squadSpawnCount++;
         return ClampToBounds(_squadCenter);
     }
 
