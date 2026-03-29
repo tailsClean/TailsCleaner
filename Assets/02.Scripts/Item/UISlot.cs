@@ -6,6 +6,7 @@ using UnityEngine.UI;
 
 public class UISlot : MonoBehaviour
 {
+    [Header("기본 텍스트(null이어도 동작함)")]
     [SerializeField] private TextMeshProUGUI _amountText;
 
     private Image _image;
@@ -93,15 +94,16 @@ public class UISlot : MonoBehaviour
     #region 내부 동작 메서드
 
     // 스프라이트 출력
-    private void ShowSprite(int id, out ItemDataBase item)
+    protected void ShowSprite(int id, out ItemDataBase item)
     {
         item = ItemDB.GetData(id);
+
         if(item != null)
             _image.sprite = item.SpriteImg;
     }
 
     // 텍스트 출력(string)
-    private void ShowText(string value = null)
+    protected void ShowText(string value = null)
     {
         if (_amountText == null)
             return;
@@ -113,14 +115,14 @@ public class UISlot : MonoBehaviour
     }
 
     // 텍스트 출력(int)
-    private void ShowText(int value)
+    protected void ShowText(int value)
     {
         string text = value.ToString();
         ShowText(text);
     }
 
     // 슬롯의 스프라이트, 텍스트 초기화
-    private void InitializedSlot()
+    protected void InitializedSlot()
     {
         _image.sprite = _baseSprite;
 

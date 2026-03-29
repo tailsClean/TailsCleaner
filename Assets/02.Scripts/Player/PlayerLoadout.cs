@@ -163,6 +163,7 @@ public class PlayerLoadout
                 _outputRelics.Remove(relic);
                 _myRelics.Add(_relicZero);
                 _onChangeLoadout.OnStartEvent();
+                WarningText.ShowText($"<color=yellow>{relic.Data.Name}이 착용해제 돠었습니다.</color>");
                 return;
             }
         }

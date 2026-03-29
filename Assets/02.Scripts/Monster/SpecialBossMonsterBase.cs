@@ -6,11 +6,6 @@ public abstract class SpecialBossMonsterBase : MonsterBase
 {
     protected static List<SpecialBossMonsterBase> activeMonsters = new List<SpecialBossMonsterBase>();
 
-    [Header("--- 몬스터 겹침 방지 설정 ---")]
-    [SerializeField] private float avoidanceRadius = 0.5f;
-    [SerializeField] private float avoidanceForce = 1.5f;
-    [SerializeField] private LayerMask monsterLayer;
-
     protected enum MonsterState { MOVE, PATTERN }
     protected MonsterState currentState = MonsterState.MOVE;
 

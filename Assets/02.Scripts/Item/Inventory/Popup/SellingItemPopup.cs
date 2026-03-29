@@ -5,8 +5,9 @@ using UnityEngine;
 using UnityEngine.UI;
 
 
-public class SellingItemPopup : ItemPopup
+public class SellingItemPopup : ItemPopupBase
 {
+    [Header("=============== 판매 팝업 전용 ==================================")]
     [SerializeField] ItemInventory _inventory;
 
     [Header("갯수 관련")]
@@ -19,7 +20,7 @@ public class SellingItemPopup : ItemPopup
     [SerializeField] private TextMeshProUGUI _priceText;
 
     [Header("취소 판매 버튼 관련")]
-    [SerializeField] private ItemPopup _equipStatusPopup;
+    [SerializeField] private MatterEquipPopup _equipStatusPopup;
     [SerializeField] private Image _sellingPopupImg;
 
 
@@ -33,7 +34,7 @@ public class SellingItemPopup : ItemPopup
 
     protected override void Start()
     {
-
+        // 부모 클래스의 스타트 메서드 실행을 하지 않기 위함
     }    
 
 

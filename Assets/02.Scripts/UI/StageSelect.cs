@@ -224,7 +224,7 @@ public class StageSelect : MonoBehaviour
         if (stage == null) return;
         if (!IsStageUnlocked(stage)) return;
         if (GameManager.Instance == null) return;
-
+        if(GameManager.Instance.EnergyCount < GameManager.SPEND_ENERGY) return;
         GameManager.Instance.SetCurrentStage(stage);
         UIManager.Instance.GoToStage();
     }

@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
-using static CheckingLoadout;
 
 public class StageController : MonoBehaviour
 {

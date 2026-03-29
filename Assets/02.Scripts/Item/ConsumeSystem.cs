@@ -25,6 +25,7 @@ public class ConsumeSystem
         if (!ItemDB.TryGetData<ItemManageData>(item.ID, out var consumItem))
             return;
 
+        Debug.Log("콘슘 체크" + consumItem.Consume);
         if (consumItem.Consume == null)
             return;
 
@@ -37,6 +38,7 @@ public class ConsumeSystem
             UseItem(consumItem, item);
         }
 
+        UsedText(consumItem);
         isConsume = true;
     }
 
@@ -61,5 +63,26 @@ public class ConsumeSystem
         }
 
         _inventory.UseStackItem(item.ID, 1);
+    }
+
+    private void UsedText(ItemManageData consumItem)
+    {
+        var consum = consumItem.Consume;
+        switch (consum.item_stat_type)
+        {
+            // 에너지 증가
+            case ITEM_CONSUME_TYPE.EnergyUp:
+                WarningText.ShowText("<color=green>에너지 아이템을 사용했습니다.</color>");
+                break;
+
+            // 아웃게임 경험치 증가
+            case ITEM_CONSUME_TYPE.Exp:
+                _levelSystem.GainExp(consum.item_opt);
+                //WarningText.ShowText("<color=green>경험치 아이템을 사용했습니다.</color>");
+                break;
+
+            default:
+                return;
+        }
     }
 }

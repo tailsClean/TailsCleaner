@@ -8,8 +8,7 @@ public class ItemInventoryUI : UIGroup
     [SerializeField] private ItemInventory _inventory;
 
     [Header("아이템 팝업UI")]
-    [SerializeField] private List<ItemPopup> _itemPopupUI;
-    [SerializeField] private UISlot _popupUISlot;
+    [SerializeField] private List<ItemPopupBase> _itemPopupUI;
 
     [Header("인벤토리 패널리스트")]
     [SerializeField] private List<Button> _InventorySelectButtons;
