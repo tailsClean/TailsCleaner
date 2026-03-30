@@ -120,7 +120,6 @@ public class SoundManager : MonoBehaviour
     private float _uiBgmVolume = 1.0f;
     private float _uiSfxVolume = 1.0f;
     
-    public float UIMasterVolume => _uiMasterVolume;
     public float UIBGMVolume => _uiBgmVolume;
     public float UISFXVolume => _uiSfxVolume;
 
@@ -486,7 +485,6 @@ public class SoundManager : MonoBehaviour
 
     private void LoadVolumes()
     {
-        _uiMasterVolume = PlayerPrefs.GetFloat(MASTER_VOLUME_PARAM, 1.0f);
         _uiBgmVolume = PlayerPrefs.GetFloat(BGM_VOLUME_PARAM, 1.0f);
         _uiSfxVolume = PlayerPrefs.GetFloat(SFX_VOLUME_PARAM, 1.0f);
     }
@@ -522,13 +520,6 @@ public class SoundManager : MonoBehaviour
         UpdateMixerVolumes();
     }
 
-    // UI 슬라이더에서 조작 시 즉시 반영 및 저장
-    public void SetMasterVolume(float vol)
-    {
-        _uiMasterVolume = Mathf.Clamp01(vol);
-        PlayerPrefs.SetFloat(MASTER_VOLUME_PARAM, _uiMasterVolume);
-        UpdateMixerVolumes();
-    }
     public void SetBGMVolume(float vol)
     {
         _uiBgmVolume = Mathf.Clamp01(vol);
