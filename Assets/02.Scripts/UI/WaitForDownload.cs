@@ -4,6 +4,7 @@ using UnityEngine.AddressableAssets;
 using UnityEngine.ResourceManagement.AsyncOperations;
 using UnityEngine.UI;
 using TMPro;
+using System.Threading.Tasks;
 
 
 public class LoadingScreen : MonoBehaviour
@@ -75,7 +76,7 @@ public class LoadingScreen : MonoBehaviour
         Addressables.Release(downloadHandle);
     }
 
-    async void LoadNextScene()
+    async Task LoadNextScene()
     {
         await UIManager.Instance.LoadDataAndGoToLobby();
         gameObject.SetActive(false);

@@ -24,9 +24,13 @@ public class ItemCurrency : MonoBehaviour
     private void Awake()
     {
         _onSellingItem.AddListener(GainGold);
+        
+        
+    }
+    private void Start()
+    {
         FirebaseManager.Instance.AddLoadData(LoadGold);
         FirebaseManager.Instance.AddSaveData(SaveGold);
-        
     }
 
     private void OnDestroy()

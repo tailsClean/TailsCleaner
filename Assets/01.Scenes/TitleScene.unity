@@ -577,6 +577,52 @@ MonoBehaviour:
     m_VarianceClampScale: 0.9
     m_ContrastAdaptiveSharpening: 0
   m_Version: 2
+--- !u!1 &1032681841
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1032681843}
+  - component: {fileID: 1032681842}
+  m_Layer: 0
+  m_Name: FirebaseManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1032681842
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1032681841}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1bb5f916a080b1643b93dca059712f55, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::FirebaseManager
+  _onGameStart: {fileID: 11400000, guid: c0bc22d4a33ecc24c9f2a322d498d31b, type: 2}
+  _onGameEnd: {fileID: 11400000, guid: ff5fb30e2bdf2e545b0bda45b534f79c, type: 2}
+--- !u!4 &1032681843
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1032681841}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1058407870
 GameObject:
   m_ObjectHideFlags: 0
@@ -656,6 +702,11 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1112641077 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 2648268034772857580, guid: d4ea12e617ff6da40a91645cfee22035, type: 3}
+  m_PrefabInstance: {fileID: 2008231787}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1231615604
 GameObject:
   m_ObjectHideFlags: 0
@@ -800,6 +851,18 @@ PrefabInstance:
     - target: {fileID: 3337194189212659789, guid: d4ea12e617ff6da40a91645cfee22035, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4805740166642567106, guid: d4ea12e617ff6da40a91645cfee22035, type: 3}
+      propertyPath: _myStatsUI
+      value: 
+      objectReference: {fileID: 1112641077}
+    - target: {fileID: 5045420631564150358, guid: d4ea12e617ff6da40a91645cfee22035, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 12.386719
+      objectReference: {fileID: 0}
+    - target: {fileID: 5045420631564150358, guid: d4ea12e617ff6da40a91645cfee22035, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 22.30542
       objectReference: {fileID: 0}
     - target: {fileID: 8702882813186177104, guid: d4ea12e617ff6da40a91645cfee22035, type: 3}
       propertyPath: m_Name
@@ -1123,3 +1186,4 @@ SceneRoots:
   - {fileID: 2032584821}
   - {fileID: 1231615606}
   - {fileID: 563667683}
+  - {fileID: 1032681843}

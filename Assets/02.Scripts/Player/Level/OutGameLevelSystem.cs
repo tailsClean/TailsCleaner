@@ -40,7 +40,7 @@ public class OutGameLevelSystem : MonoBehaviour
         #endregion
 
         Init();
-        await LoadLevel();
+    
     }
     private void Start()
     {
