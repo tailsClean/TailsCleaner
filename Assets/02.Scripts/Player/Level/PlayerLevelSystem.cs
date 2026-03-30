@@ -1,14 +1,24 @@
 ﻿using UnityEngine;
 
-public class PlayerLevelSystem : ILevelStat
+public class PlayerLevelSystem
 {
-    private PlayerDataSO _playerData;
     private OutGameLevelSystem _outGameLevelSystem;
+
+    private CharIngameTableSO _ingameExpData;
 
     // 인게임 레벨 데이터
     public int InGameLevel { get; private set; }
     public float InGameCurrentExp { get; private set; }
-    public float InGameMaxExp => _playerData.GetInLevelData(InGameLevel).MaxExp;
+    public float InGameMaxExp
+    {
+        get
+        {
+            if (_ingameExpData == null)
+                _ingameExpData = DataManager.Instance.GetSOData<CharIngameTableSO>();
+
+            return _ingameExpData.GetById(InGameLevel).char_ingame_exp;
+        }
+    }
 
     // 아웃게임 레벨 데이터
     public int OutGameLevel => _outGameLevelSystem.CurrentLevel;
@@ -16,13 +26,8 @@ public class PlayerLevelSystem : ILevelStat
     public float OutGameMaxExp => _outGameLevelSystem.MaxExp;
 
 
-    // 레벨에 따른 스탯 증가 배율
-    public float StatGrowth => _playerData.GetOutLevelData(OutGameLevel).StatGrowth;
-
-
-    public PlayerLevelSystem(PlayerBase player)
+    public PlayerLevelSystem()
     {
-        _playerData = player.Data;
         _outGameLevelSystem = OutGameLevelSystem.Instance;
         InGameLevel = 1;
     }
@@ -33,13 +38,13 @@ public class PlayerLevelSystem : ILevelStat
     {
         bool isLevelUp = false;
 
-        switch(gameMode)
+        switch (gameMode)
         {
             case GAME_MODE.InGame:
                 InGameCurrentExp += gainExp;
                 isLevelUp = InGameCurrentExp >= InGameMaxExp ? true : false;
 
-                if(isLevelUp)
+                if (isLevelUp)
                     LevelUp(gameMode);
                 break;
 
@@ -62,19 +67,14 @@ public class PlayerLevelSystem : ILevelStat
                 InGameLevel++;
                 break;
 
-            //case GAME_MODE.OutGame:
-            //    OutGameCurrentExp -= OutGameMaxExp;
-            //    OutGameLevel++;
-            //    break;
+                //case GAME_MODE.OutGame:
+                //    OutGameCurrentExp -= OutGameMaxExp;
+                //    OutGameLevel++;
+                //    break;
         }
     }
 
 
 
-    public enum GAME_MODE { InGame,  OutGame }
-}
-
-public interface ILevelStat
-{
-    public float StatGrowth { get; }
+    public enum GAME_MODE { InGame, OutGame }
 }

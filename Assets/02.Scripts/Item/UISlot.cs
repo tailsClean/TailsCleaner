@@ -19,7 +19,9 @@ public class UISlot : MonoBehaviour
     {
         _image = GetComponent<Image>();
         _button = GetComponent<Button>();
-        _baseSprite = _image.sprite;
+        if(_image != null )
+            _baseSprite = _image.sprite;
+
         InitializedSlot();
     }
 
@@ -124,7 +126,8 @@ public class UISlot : MonoBehaviour
     // 슬롯의 스프라이트, 텍스트 초기화
     protected void InitializedSlot()
     {
-        _image.sprite = _baseSprite;
+        if(_image != null)
+            _image.sprite = _baseSprite;
 
         if (_amountText != null)
             _amountText.text = string.Empty;
