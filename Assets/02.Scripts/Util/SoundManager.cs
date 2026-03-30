@@ -319,18 +319,18 @@ public class SoundManager : MonoBehaviour
         }
     }
 
-    public void PlayUISFX(UISFXName sfxName)
+    public void PlayUISFX(UISFXName sfxName, float volume = 1f)
     {
         if (_uiSfxDict.TryGetValue(sfxName, out AudioClip clip))
         {
             if (CanPlayClip(clip) == false) return;
 
-            _uiSfxPlayer.PlayOneShot(clip);
+            _uiSfxPlayer.PlayOneShot(clip, volume);
             StartCoroutine(TrackSFXDuration(clip.length));
         }
     }
 
-    public void PlayPlayerSFX(PlayerSFXName sfxName)
+    public void PlayPlayerSFX(PlayerSFXName sfxName, float volume = 1f)
     {
         if (_playerSfxDict.TryGetValue(sfxName, out AudioClip clip))
         {
@@ -338,7 +338,7 @@ public class SoundManager : MonoBehaviour
             StopPlayerSFXInternal();
 
             _playerSfxPlayer.clip = clip;
-            _playerSfxPlayer.loop = false;
+            _playerSfxPlayer.volume = volume;
             _playerSfxPlayer.Play();
 
             _playerSFXCoroutine = StartCoroutine(TrackPlayerSFX(clip.length));
