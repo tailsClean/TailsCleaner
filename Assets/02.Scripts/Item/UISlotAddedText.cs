@@ -1,5 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿﻿using System;
+﻿using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 
@@ -7,6 +7,7 @@ using UnityEngine;
 public class UISlotAddedText : UISlot
 {
     [Header("추가 텍스트")]
+
     [SerializeField] private List<TextTypeBundle> _textList;
 
 
@@ -38,6 +39,7 @@ public class UISlotAddedText : UISlot
         public TEXT_TYPE textType;
 
         public void SetText(string value) => text.text = value;
+
     }
 
 
