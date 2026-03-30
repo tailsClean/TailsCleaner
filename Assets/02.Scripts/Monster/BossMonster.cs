@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class BossMonster : MonsterBase
+public class BossMonster : MonsterBase, ILaserable
 {
     public override MonsterEnum.MONSTERTYPE monsterType => MonsterEnum.MONSTERTYPE.Boss;
 
@@ -61,6 +61,13 @@ public class BossMonster : MonsterBase
     [Header("--- 영역 패턴 설정 ---")]
     public ZoneSpawner zoneSpawner;
     private readonly List<BossAreaPatternRuntime> areaPatterns = new List<BossAreaPatternRuntime>();
+
+    [Header("--- 레이저 패턴 설정 ---")]
+    // 레이저 패턴 인터페이스
+    public Transform MyTransform => transform;
+    private LaserPattern _laserPattern;
+    
+
 
     private class BossAreaPatternRuntime
     {
@@ -187,6 +194,8 @@ public class BossMonster : MonsterBase
     protected override void Start()
     {
         base.Start();
+
+        _laserPattern = new LaserPattern(this);
 
         if (move_speed == 0f)
             move_speed = base.moveSpeed;
@@ -326,6 +335,13 @@ public class BossMonster : MonsterBase
                     break;
 
                 case PATTERN_TYPE.Layser:
+                    float finalDmg = this.power * (patternData.damage_multiply > 0 ? patternData.damage_multiply : 1.0f);
+                    float duration = patternData.duration; // 레이저 지속시간
+                    float castTime = patternData.cast_time; // 예고 시간
+                    float size = patternData.projectile_size; // 레이저 굵기
+                    int count = patternData.projectile_count; // 레이저 개수
+
+                    _laserPattern.OnLaserPattern(finalDmg, duration, castTime, size, count);
                     Debug.Log($"[BossMonster] Laser 패턴 감지: {patternData.pattern_logic_type} (아직 미연동)");
                     break;
 
