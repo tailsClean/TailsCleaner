@@ -1,8 +1,6 @@
-﻿using UnityEngine;
+using UnityEngine;
+using System.Threading.Tasks;
 
-/// <summary>
-/// 추가 수정 필요
-/// </summary>
 public class ItemCurrency : MonoBehaviour
 {
     [Header("이벤트 채널")]
@@ -10,6 +8,8 @@ public class ItemCurrency : MonoBehaviour
     [SerializeField] private IntEventChannelSO _onSellingItem;
 
     [SerializeField] private int _goldAmount = 1000;
+
+    [SerializeField] private const int _defaultGoldAmount = 10000;
 
     public int GoldAmount
     {
@@ -24,11 +24,19 @@ public class ItemCurrency : MonoBehaviour
     private void Awake()
     {
         _onSellingItem.AddListener(GainGold);
+        FirebaseManager.Instance.AddLoadData(LoadGold);
+        FirebaseManager.Instance.AddSaveData(SaveGold);
+        
     }
 
     private void OnDestroy()
     {
         _onSellingItem.RemoveListener(GainGold);
+        if (FirebaseManager.Instance != null)
+        {
+            FirebaseManager.Instance.RemoveLoadData(LoadGold); 
+            FirebaseManager.Instance.RemoveSaveData(SaveGold);
+        }
     }
 
 
@@ -43,6 +51,8 @@ public class ItemCurrency : MonoBehaviour
     {
         _goldAmount += amount;
         _onChangeGold.OnStartEvent();
+        _ = SaveGold();
+        
     }
 
     public void UseGold(int amount)
@@ -57,6 +67,8 @@ public class ItemCurrency : MonoBehaviour
         }
         _goldAmount -= amount;
         _onChangeGold.OnStartEvent();
+        _ = SaveGold(); 
+        
     }
     public bool TryUseGold(int amount)
     {
@@ -71,4 +83,31 @@ public class ItemCurrency : MonoBehaviour
 
         return true;
     }
+
+   
+    #region Firebase 저장/로드
+
+    public async Task SaveGold()
+    {
+        await FirebaseManager.Instance.DB
+            .Child("users")
+            .Child(FirebaseManager.Instance.UID)
+            .Child("Gold")
+            .SetValueAsync(_goldAmount);
+    }
+
+    public async Task LoadGold()
+    {
+        var snapshot = await FirebaseManager.Instance.DB
+            .Child("users")
+            .Child(FirebaseManager.Instance.UID)
+            .Child("Gold")
+            .GetValueAsync();
+
+        _goldAmount = snapshot.Exists
+            ? int.Parse(snapshot.Value.ToString())
+            : _defaultGoldAmount; // 신규 유저 기본값
+    }
+
+    #endregion
 }

@@ -1,6 +1,6 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using UnityEngine;
-
+using System.Threading.Tasks;
 
 /// <summary>
 /// 플레이어의 장비, 유물 인벤토리
@@ -49,6 +49,9 @@ public class PlayerLoadout
             {PART.Cloak, ItemDB.CreateItem<EquipmentBase>(ItemID.DefaultCloak)},
             {PART.Shoes, ItemDB.CreateItem<EquipmentBase>(ItemID.DefaultShose)}
         };
+
+        FirebaseManager.Instance.AddLoadData(LoadEquipment);
+        FirebaseManager.Instance.AddSaveData(SaveEquipment);
     }
 
 
@@ -143,6 +146,7 @@ public class PlayerLoadout
                 WarningText.ShowText($"<color=yellow>{relic.Data.Name} 장착</color>");
                 Debug.Log(relic.Data.Name + " 장착!");
                 _onChangeLoadout.OnStartEvent();
+                _ = SaveEquipment();
                 return;
             }
         }
@@ -181,6 +185,92 @@ public class PlayerLoadout
 
         return isDivision;
     }
+
+    #endregion
+
+    #region Firebase 저장/로드
+    public async Task SaveEquipment()
+    {
+        var data = new Dictionary<string, object>();
+
+        // 장비 저장 (id + enhanceLevel + grade만)
+        foreach (var kvp in _myEquipments)
+        {
+            data[$"Equipments/{kvp.Key}"] = new Dictionary<string, object>
+            {
+                { "id", kvp.Value.Data.UniqueID },
+                { "enhanceLevel", kvp.Value.EnhanceLevel },
+                { "grade", (int)kvp.Value.CurrentGrade }
+            };
+        }
+
+        // 유물 저장 (빈 슬롯 제외)
+        for (int i = 0; i < _myRelics.Count; i++)
+        {
+            if (_myRelics[i] == _relicZero) continue;
+
+            data[$"Relics/{i}"] = new Dictionary<string, object>
+            {
+                { "id", _myRelics[i].Data.UniqueID },
+                { "enhanceLevel", _myRelics[i].CurrentEnhanceLevel }
+            };
+        }
+
+        await FirebaseManager.Instance.DB
+            .Child("users")
+            .Child(FirebaseManager.Instance.UID)
+            .Child("Equipment")
+            .UpdateChildrenAsync(data);
+    }
+
+    public async Task LoadEquipment()
+    {
+        var snapshot = await FirebaseManager.Instance.DB
+            .Child("users")
+            .Child(FirebaseManager.Instance.UID)
+            .Child("Equipment")
+            .GetValueAsync();
+
+        if (!snapshot.Exists) return;
+
+        // 장비 로드
+        var equipSnapshot = snapshot.Child("Equipments");
+        foreach (PART part in System.Enum.GetValues(typeof(PART)))
+        {
+            var child = equipSnapshot.Child(part.ToString());
+            if (!child.Exists) continue;
+
+            int id = int.Parse(child.Child("id").Value.ToString());
+            int enhanceLevel = int.Parse(child.Child("enhanceLevel").Value.ToString());
+            GRADE grade = (GRADE)int.Parse(child.Child("grade").Value.ToString());
+
+            // SO에서 데이터 가져와서 아이템 생성
+            var equipment = ItemDB.CreateItem<EquipmentBase>(id);
+            equipment.SetEnhanceLevel(enhanceLevel);
+            equipment.SetGrade(grade);               
+
+            _myEquipments[part] = equipment;
+        }
+
+        // 유물 로드
+        var relicSnapshot = snapshot.Child("Relics");
+        for (int i = 0; i < _relicSlotLength; i++)
+        {
+            var child = relicSnapshot.Child(i.ToString());
+            if (!child.Exists) continue;
+
+            int id = int.Parse(child.Child("id").Value.ToString());
+            int enhanceLevel = int.Parse(child.Child("enhanceLevel").Value.ToString());
+
+            var relic = ItemDB.CreateItem<RelicBase>(id);
+            relic.SetEnhanceLevel(enhanceLevel); 
+            _myRelics[i] = relic;
+            _outputRelics.Add(relic);
+        }
+
+        _onChangeLoadout.OnStartEvent();
+    }
+
 
     #endregion
 }

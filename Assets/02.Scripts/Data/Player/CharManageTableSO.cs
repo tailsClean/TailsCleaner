@@ -8,5 +8,5 @@ public class CharManageTableSO : ScriptableObject
     public List<CharManageTable> dataList = new List<CharManageTable>();
 
     public CharManageTable GetById(int id)
-        => dataList.Find(x => x.char_id == id);
+        => dataList.Find(x => x.char_level == id);
 }

@@ -21,7 +21,7 @@ public class EnhanceSystem : MonoBehaviour
 
     private void Start()
     {
-        _playerLoadout = ItemManager.Instance.Loadout;
+        _playerLoadout = PlayerStatManager.Instance.Loadout;
     }
 
 

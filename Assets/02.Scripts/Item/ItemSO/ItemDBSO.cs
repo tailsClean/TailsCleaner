@@ -39,7 +39,6 @@ public class ItemDBSO : ScriptableObject
             _defaultEquipDict[equip.id].GroupID = equip.group_id;
             _defaultEquipDict[equip.id].Equipmnet = equip;
             _defaultEquipDict[equip.id].Name = nameData.GetById(equip.name).kr;
-            //_equipDict[equip.id].SpriteImg = Resources.Load<Sprite>($"All_Resource/image/Total_Item_Image/{equip.sprite}");
             _defaultEquipDict[equip.id].SpriteImg = Resources.Load<Sprite>($"Total_Item_Image/{equip.sprite}");
         }
 

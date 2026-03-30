@@ -4,6 +4,7 @@
 public class CharManageTable
 {
     public int char_id;
+    public int char_level;
     public float char_hp_max;
     public float char_atk;
     public float char_def;

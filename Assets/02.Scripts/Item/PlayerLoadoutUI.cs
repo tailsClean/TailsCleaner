@@ -47,7 +47,7 @@ public class PlayerLoadoutUI : UIGroup
     protected override void Start()
     {
         base.Start();
-        _loadout = ItemManager.Instance.Loadout;
+        _loadout = PlayerStatManager.Instance.Loadout;
 
         UpdateLoadoutSlot();
 

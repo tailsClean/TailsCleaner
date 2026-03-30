@@ -1,8 +1,8 @@
-﻿using System;
+using System;
 using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.UI;
-using UnityEngine.UIElements;
+
 
 public class EnergySystem : MonoBehaviour
 {
@@ -20,10 +20,10 @@ public class EnergySystem : MonoBehaviour
 
     public int Timer => (int)_timer;
     public bool IsStartInGame => _currentEnergy > 0;
-     private async void Start()
-     {
-       await LoadEnergy();
-
+    private async void Start()
+    {
+        FirebaseManager.Instance.AddLoadData(LoadEnergy);
+        FirebaseManager.Instance.AddSaveData(SaveEnergyCancelTime);
     }
     private void OnEnable()
     {
@@ -37,6 +37,14 @@ public class EnergySystem : MonoBehaviour
         Debug.Log($"[EnergySystem] OnDisable instance={GetInstanceID()}");
         _onIncreaseEnergy.RemoveListener(IncreaseEnergy);
         _onStartStage.RemovePriorityListener(SpendEnergy, 0);
+    }
+    private void OnDestroy()
+    {
+        if (FirebaseManager.Instance != null)
+        {
+            FirebaseManager.Instance.RemoveLoadData(LoadEnergy);
+            FirebaseManager.Instance.RemoveSaveData(SaveEnergyCancelTime);
+        }
     }
 
     private void Update()
@@ -82,7 +90,7 @@ public class EnergySystem : MonoBehaviour
     // }
 
 
-    public async void IncreaseEnergy(int count) 
+    public void IncreaseEnergy(int count) 
     {
         _currentEnergy += count;
         GameManager.Instance.UpdateEnergyCount(_currentEnergy);
@@ -152,7 +160,7 @@ public class EnergySystem : MonoBehaviour
         if (timeChild.Exists)
         {
             
-            long cancelTime = ParseCancelTime(timeChild.Value.ToString());
+            long cancelTime = EnergyCancelTimeCalculate(timeChild.Value.ToString());
             long now = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
             long elapsedSeconds = now - cancelTime;
 
@@ -168,7 +176,7 @@ public class EnergySystem : MonoBehaviour
         GameManager.Instance.UpdateEnergyCount(_currentEnergy);
     }
 
-    private long ParseCancelTime(string value)
+    private long EnergyCancelTimeCalculate(string value)
     {
         if (long.TryParse(value, out long cancelTime))
             return cancelTime;
@@ -178,20 +186,7 @@ public class EnergySystem : MonoBehaviour
         
         return DateTimeOffset.UtcNow.ToUnixTimeSeconds();
     }
-    private async void OnApplicationPause(bool pause)
-    {
-        if(pause && GameManager.Instance.UID != null)
-        {
-            long cancelTime = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
-            await GameManager.Instance.DB.Child("users")
-                                         .Child(GameManager.Instance.UID)
-                                         .Child("System")
-                                         .Child("CancelTime")
-                                         .SetValueAsync(cancelTime);   
-        }  
-    }
-
-    private async void OnApplicationQuit() 
+    private async Task SaveEnergyCancelTime() 
     {
          long cancelTime = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
             await GameManager.Instance.DB.Child("users")

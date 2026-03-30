@@ -46,6 +46,21 @@ public class GameManager : MonoBehaviour
         _maxEnergy = _energySystem.MaxEnergy;
         db = FirebaseDatabase.DefaultInstance.RootReference;
     }
+    
+    private void Start()
+    {
+        FirebaseManager.Instance.AddLoadData(LoadStageProgress);
+        FirebaseManager.Instance.AddSaveData(SaveEnergyCount);
+    }
+    private void OnDestroy()
+    {
+        if (FirebaseManager.Instance != null)
+        {
+            FirebaseManager.Instance.RemoveLoadData(LoadStageProgress);
+            FirebaseManager.Instance.RemoveSaveData(SaveEnergyCount);
+        }
+    }
+
 
     public void EnterStage()
     {
@@ -153,12 +168,4 @@ public class GameManager : MonoBehaviour
         Debug.Log("[GameManager] Stage progress cleared.");
     }
 
-    private async void OnApplicationPause(bool pause) 
-    {
-        await SaveEnergyCount();   
-    }
-    private async void OnApplicationQuit() 
-    {
-        await SaveEnergyCount();  
-    }
 }

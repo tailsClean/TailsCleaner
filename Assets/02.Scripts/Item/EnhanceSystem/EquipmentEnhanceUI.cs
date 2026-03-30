@@ -30,7 +30,7 @@ public class EquipmentEnhanceUI : EnhanceSystemUI
 
     protected override void Start()
     {
-        _playerLoadout = ItemManager.Instance.Loadout;
+        _playerLoadout = PlayerStatManager.Instance.Loadout;
         base.Start();
         UpdateLoadout();
     }
