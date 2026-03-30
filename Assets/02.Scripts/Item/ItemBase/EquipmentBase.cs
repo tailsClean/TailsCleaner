@@ -12,19 +12,17 @@ public class EquipmentBase : ItemBase
             Data = data;
     }
 
-
     // 강화 데이터
     public int EnhanceLevel { get; private set; } = 0;
     public EquipEnhance EnhanceData => Data.GetEnhance(EnhanceLevel);
-
 
     // 등급 데이터
     public GRADE CurrentGrade { get; private set; }
     public EquipGrade CurrentGradeData => Data.Grades[(int)CurrentGrade];
 
-
-
-
+    //데이터 세팅 
+    public void SetEnhanceLevel(int level) => EnhanceLevel = level;
+    public void SetGrade(GRADE grade) => CurrentGrade = grade;
 
     // 특정 스텟 최종 증가량 제공 메서드(장비 증가량, 강화 증가량, 등급 증가량)
     public float GetIncreaseStat(EQUIP_STAT_TYPE stat)

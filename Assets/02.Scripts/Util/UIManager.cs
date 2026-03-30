@@ -99,6 +99,8 @@ public class UIManager : MonoBehaviour
     {
         await GameManager.Instance.LoadStageProgress();
         SceneManager.LoadScene("LobbyScene");
+
+        await FirebaseManager.Instance.Load();
     }
 
     public void GoToLobby()
@@ -268,4 +270,5 @@ public class UIManager : MonoBehaviour
     private RewardSystemUI _failRewardUI;
     public RewardSystemUI FailRewardUI => _failRewardUI;
     #endregion
+
 }
