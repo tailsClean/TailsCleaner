@@ -17,7 +17,7 @@ public class LaserHandler : MonoBehaviour
     [SerializeField] private float _laserDuration;      // 레이저 지속시간
     [SerializeField] private float _laserCastTime;      // 레이저 시전 전 경로 표시 시간
     
-    private SpriteRenderer _laserSprite;                // 깜빡임 효과를 위한 레이저 스프라이트렌더러
+    private SpriteRenderer _castLaserSprite;                // 깜빡임 효과를 위한 레이저 스프라이트렌더러
 
 
 
@@ -29,7 +29,7 @@ public class LaserHandler : MonoBehaviour
         if (!_laser.TryGetComponent<Collider2D>(out var collider))
             Debug.LogWarning("레이저에 콜라이더가 없습니다.", this);
 
-        _laserSprite = _castLaser.GetComponent<SpriteRenderer>();
+        _castLaserSprite = _castLaser.GetComponent<SpriteRenderer>();
 
         ChangeLaser(isCasting: true);
     }
@@ -68,8 +68,8 @@ public class LaserHandler : MonoBehaviour
         PlayBlink();
         yield return new WaitForSeconds(_laserCastTime);
 
-        if (_laserSprite != null)
-            _laserSprite.DOKill();
+        if (_castLaserSprite != null)
+            _castLaserSprite.DOKill();
 
         // 캐스팅 종료 후 레이저 발사
         ChangeLaser(isCasting: false);
@@ -80,10 +80,10 @@ public class LaserHandler : MonoBehaviour
     // 깜빡임 효과
     private void PlayBlink()
     {
-        if (_laserSprite == null)
+        if (_castLaserSprite == null)
             return;
 
-        _laserSprite.DOFade(_blinkColorAlpha, _blinkCycle)
+        _castLaserSprite.DOFade(_blinkColorAlpha, _blinkCycle)
             .SetLoops(-1, LoopType.Yoyo)
             .SetLink(gameObject);
     }
@@ -91,7 +91,7 @@ public class LaserHandler : MonoBehaviour
     // 캐스팅중인지에 따라 레이저 활성화를 변경
     private void ChangeLaser(bool isCasting)
     {
-        if(isCasting)
+        if (isCasting)
         {
             _castLaser.gameObject.SetActive(true);
             _laser.gameObject.SetActive(false);
