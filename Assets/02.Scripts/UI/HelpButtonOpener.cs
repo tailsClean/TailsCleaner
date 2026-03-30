@@ -3,26 +3,23 @@ using UnityEngine.UI;
 
 public class HelpButtonOpener : MonoBehaviour
 {
-    [SerializeField] private Button _helpButton;
-    [SerializeField] private HelpPopupUI _helpPopupUI;
+    [SerializeField] private Button _button;
+    [SerializeField] private HelpPopupUI _popup;
 
     private void Awake()
     {
-        if (_helpButton != null)
+        if (_button != null)
         {
-            _helpButton.onClick.RemoveAllListeners();
-            _helpButton.onClick.AddListener(OpenHelp);
+            _button.onClick.RemoveAllListeners();
+            _button.onClick.AddListener(TogglePopup);
         }
     }
 
-    private void OpenHelp()
+    private void TogglePopup()
     {
-        if (_helpPopupUI == null)
-        {
-            Debug.LogWarning("[HelpButtonOpener] HelpPopupUI is null.");
-            return;
-        }
-
-        _helpPopupUI.Open();
+        if (_popup != null)
+            _popup.Toggle();
+        else
+            Debug.LogWarning("[HelpButtonOpener] HelpPopupUI 연결 안됨");
     }
 }
