@@ -8,7 +8,7 @@ public class EnergySystem : MonoBehaviour
 {
     public static EnergySystem Instance;
 
-    [SerializeField] private int _maxEnergy = 5;
+    [SerializeField] private int _maxEnergy = 999;
     public int MaxEnergy => _maxEnergy;
     [SerializeField] private float _increaseEnergyTime = 30;
     [SerializeField] private IntEventChannelSO _onIncreaseEnergy;
@@ -16,6 +16,7 @@ public class EnergySystem : MonoBehaviour
 
     private int _currentEnergy;
     public int CurrentEnergy => _currentEnergy;
+    private const int _defaultEnergy = 125;
     private float _timer;
 
     public int Timer => (int)_timer;
@@ -141,6 +142,8 @@ public class EnergySystem : MonoBehaviour
         if(!snapshot.Exists)
         {
             Debug.Log("snapshot don`t exists");
+            _currentEnergy = _defaultEnergy;
+            GameManager.Instance.UpdateEnergyCount(_currentEnergy);
             return;
         }
         var energyChild = snapshot.Child("Energy");
@@ -152,7 +155,7 @@ public class EnergySystem : MonoBehaviour
         }
         else
         {
-            _currentEnergy = 125;
+            _currentEnergy = _defaultEnergy;
         }
 
         var timeChild = snapshot.Child("CancelTime");
