@@ -61,6 +61,7 @@ public class BossMonster : MonsterBase, ILaserable
     [Header("--- 영역 패턴 설정 ---")]
     public ZoneSpawner zoneSpawner;
     private readonly List<BossAreaPatternRuntime> areaPatterns = new List<BossAreaPatternRuntime>();
+    private bool isAreaPatternRunning = false;
 
     [Header("--- 레이저 패턴 설정 ---")]
     // 레이저 패턴 인터페이스
@@ -564,60 +565,65 @@ public class BossMonster : MonsterBase, ILaserable
 
     private void HandleAreaPatternLogic()
     {
-        if (zoneSpawner == null) return;
-        if (target == null) return;
-        if (areaPatterns.Count == 0) return;
+        if (zoneSpawner == null || target == null || areaPatterns.Count == 0) return;
+
+        // 핵심: 어떤 장판 패턴이라도 "실행 중"이라면 다른 패턴의 쿨타임을 계산하지 않음
+        if (isAreaPatternRunning) return;
 
         for (int i = 0; i < areaPatterns.Count; i++)
         {
             BossAreaPatternRuntime pattern = areaPatterns[i];
             pattern.currentCooldown -= Time.fixedDeltaTime;
 
-            if (pattern.currentCooldown > 0f)
-                continue;
-
-            Transform spawnTarget = pattern.targetType == ZoneTestCaller.SpawnTarget.Player
-                ? target
-                : transform;
-
-            if (pattern.isSafeZone)
+            if (pattern.currentCooldown <= 0f)
             {
-                SafeZonePatternController.Instance?.StartPattern(
-                    pattern.previewTime,
-                    pattern.activeTime,
-                    pattern.damagePerTick,
-                    pattern.damageInterval
-                );
-
-                zoneSpawner.SpawnSafeZones(
-                    null,
-                    spawnTarget,
-                    pattern.count,
-                    pattern.range,
-                    pattern.radius,
-                    pattern.previewTime,
-                    pattern.activeTime
-                );
+                // 코루틴을 통해 패턴 실행 및 대기 처리
+                StartCoroutine(AreaPatternSequenceCoroutine(pattern));
+                break;
             }
-            else
-            {
-                zoneSpawner.SpawnDangerZones(
-                    null,
-                    spawnTarget,
-                    pattern.count,
-                    pattern.range,
-                    pattern.radius,
-                    pattern.previewTime,
-                    pattern.activeTime,
-                    pattern.damagePerTick,
-                    pattern.damageInterval
-                );
-            }
-
-            pattern.currentCooldown = pattern.cooldown;
         }
     }
 
+    private IEnumerator AreaPatternSequenceCoroutine(BossAreaPatternRuntime pattern)
+    {
+        isAreaPatternRunning = true; // 다른 장판 패턴이 시작되지 못하게 잠금
+
+        // 패턴 실행
+        ExecuteAreaPattern(pattern);
+
+        // 실행 후 즉시 쿨타임 초기화
+        pattern.currentCooldown = pattern.cooldown;
+
+        // [중요] 다음 패턴이 나올 때까지 최소 대기 시간 부여
+        // 예를 들어 장판이 깔리고 1~2초 정도는 여유를 주고 싶다면:
+        yield return new WaitForSeconds(pattern.previewTime + 1.0f);
+
+        isAreaPatternRunning = false; // 잠금 해제
+    }
+
+    private void ExecuteAreaPattern(BossAreaPatternRuntime pattern)
+    {
+        // 스폰 위치 결정 (플레이어 타겟이면 target, 보스 타겟이면 보스 자신)
+        Transform spawnTarget = (pattern.targetType == ZoneTestCaller.SpawnTarget.Player) ? target : transform;
+
+        if (pattern.isSafeZone)
+        {
+            // 안전지대 패턴 실행 (SafeZonePatternController가 있는 경우)
+            SafeZonePatternController.Instance?.StartPattern(
+                pattern.previewTime, pattern.activeTime, pattern.damagePerTick, pattern.damageInterval);
+
+            // 실제 안전지대 오브젝트 생성
+            zoneSpawner.SpawnSafeZones(
+                null, spawnTarget, pattern.count, pattern.range, pattern.radius, pattern.previewTime, pattern.activeTime);
+        }
+        else
+        {
+            // 위험지대(데미지 존) 오브젝트 생성
+            zoneSpawner.SpawnDangerZones(
+                null, spawnTarget, pattern.count, pattern.range, pattern.radius, pattern.previewTime, pattern.activeTime,
+                pattern.damagePerTick, pattern.damageInterval);
+        }
+    }
 
     private void ApplyBossProjectilePattern(Pattern patternData, float compositionCooldown = -1f)
     {

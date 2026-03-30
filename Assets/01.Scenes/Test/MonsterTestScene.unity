@@ -562,17 +562,17 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 879120633}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 1e55ce0cc40cdb64c90eff0f7f9c80a5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ZoneSpawner
   safeZoneLayer:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 2048
   maxSpawnAttempts: 10
-  defaultDangerZonePrefab: {fileID: 0}
-  defaultSafeZonePrefab: {fileID: 0}
+  defaultDangerZonePrefab: {fileID: 5294524223138943813, guid: 62f82999df4327745bdd859bd4800a1f, type: 3}
+  defaultSafeZonePrefab: {fileID: 4390429074119119411, guid: dc2bdaea26fb6614585309b317c18da2, type: 3}
 --- !u!114 &879120636
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -580,7 +580,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 879120633}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 40b98f3fa49156348baf55a9f05fb90a, type: 3}
   m_Name: 
@@ -610,7 +610,7 @@ MonoBehaviour:
     damageInterval: 0.5
     isCooldown: 0
   - patternName: DangerZone
-    onlyUseThis: 1
+    onlyUseThis: 0
     triggerPattern: 0
     patternType: 0
     zonePrefab: {fileID: 5294524223138943813, guid: 62f82999df4327745bdd859bd4800a1f, type: 3}
