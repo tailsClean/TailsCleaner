@@ -6,36 +6,39 @@ public class HelpPopupUI : MonoBehaviour
 {
     [Header("Data")]
     [SerializeField] private StringSO _stringSO;
-    [SerializeField] private int _startStringId = 257;
-
-    [Header("Root")]
-    [SerializeField] private GameObject _popupRoot;
 
     [Header("UI")]
     [SerializeField] private TMP_Text _titleText;
     [SerializeField] private TMP_Text _bodyText;
-    [SerializeField] private Button _closeButton;
 
-    [Header("Tab Buttons (257 ~ 260 순서대로)")]
+    [Header("Tab Buttons")]
     [SerializeField] private Button[] _tabButtons;
+    [SerializeField] private Button _backgroundCloseButton;
 
-    [Header("Tab Titles (257 ~ 260 순서대로)")]
+    [Header("Tab Titles")]
     [SerializeField] private string[] _tabTitles;
+
+    [Header("Tab String IDs")]
+    [SerializeField] private string[] _tabStringIds;
+
+    [Header("Tab Button Images")]
+    [SerializeField] private Image[] _tabButtonImages;
+    [SerializeField] private Sprite _selectedSprite;
+    [SerializeField] private Sprite _unselectedSprite;
+
+    private int _currentIndex = 0;
 
     private void Awake()
     {
         BindButtons();
-
-        if (_popupRoot != null)
-            _popupRoot.SetActive(false);
     }
 
     private void BindButtons()
     {
-        if (_closeButton != null)
+        if (_backgroundCloseButton != null)
         {
-            _closeButton.onClick.RemoveAllListeners();
-            _closeButton.onClick.AddListener(Close);
+            _backgroundCloseButton.onClick.RemoveAllListeners();
+            _backgroundCloseButton.onClick.AddListener(Close);
         }
 
         if (_tabButtons == null)
@@ -43,11 +46,10 @@ public class HelpPopupUI : MonoBehaviour
 
         for (int i = 0; i < _tabButtons.Length; i++)
         {
-            int capturedIndex = i;
-
             if (_tabButtons[i] == null)
                 continue;
 
+            int capturedIndex = i;
             _tabButtons[i].onClick.RemoveAllListeners();
             _tabButtons[i].onClick.AddListener(() => ShowTab(capturedIndex));
         }
@@ -55,67 +57,111 @@ public class HelpPopupUI : MonoBehaviour
 
     public void Open()
     {
-        if (_popupRoot != null)
-            _popupRoot.SetActive(true);
-
-        ShowTab(0);
+        gameObject.SetActive(true);
+        ShowTab(_currentIndex);
+        Debug.Log("[HelpPopupUI] Open");
     }
 
     public void Close()
     {
-        if (_popupRoot != null)
-            _popupRoot.SetActive(false);
+        gameObject.SetActive(false);
+        Debug.Log("[HelpPopupUI] Close");
     }
 
-    public void ShowTab(int tabIndex)
+    public void Toggle()
     {
-        if (tabIndex < 0 || tabIndex > 3)
+        bool nextActive = !gameObject.activeSelf;
+        gameObject.SetActive(nextActive);
+
+        if (nextActive)
         {
-            Debug.LogWarning($"[HelpPopupUI] Invalid tab index: {tabIndex}");
+            ShowTab(_currentIndex);
+            Debug.Log("[HelpPopupUI] Toggle -> Open");
+        }
+        else
+        {
+            Debug.Log("[HelpPopupUI] Toggle -> Close");
+        }
+    }
+
+    public void ShowTab(int index)
+    {
+        if (_tabStringIds == null || index < 0 || index >= _tabStringIds.Length)
+        {
+            Debug.LogWarning($"[HelpPopupUI] Invalid tab index: {index}");
             return;
         }
 
-        int stringId = _startStringId + tabIndex;
-        string stringIdText = stringId.ToString();
-
-        string title = GetTitle(tabIndex);
-        string body = GetBody(stringIdText);
+        _currentIndex = index;
+        string stringId = _tabStringIds[index];
 
         if (_titleText != null)
-            _titleText.text = title;
-
-        if (_bodyText != null)
-            _bodyText.text = body;
-
-        Debug.Log($"[HelpPopupUI] ShowTab index={tabIndex}, stringId={stringIdText}");
-    }
-
-    private string GetTitle(int tabIndex)
-    {
-        if (_tabTitles != null && tabIndex >= 0 && tabIndex < _tabTitles.Length)
         {
-            if (!string.IsNullOrEmpty(_tabTitles[tabIndex]))
-                return _tabTitles[tabIndex];
+            if (_tabTitles != null && index < _tabTitles.Length)
+                _titleText.text = _tabTitles[index];
+            else
+                _titleText.text = stringId;
         }
 
-        return $"도움말 {_startStringId + tabIndex}";
+        if (_bodyText != null)
+        {
+            _bodyText.text = GetBodyText(stringId);
+        }
+
+        RefreshTabVisual(index);
+
+        Debug.Log($"[HelpPopupUI] ShowTab {index}, stringId={stringId}");
     }
 
-    private string GetBody(string stringId)
+    private string GetBodyText(string stringId)
     {
         if (_stringSO == null)
         {
             Debug.LogWarning("[HelpPopupUI] StringSO is null.");
-            return $"StringSO가 연결되지 않았습니다. (id={stringId})";
+            return "StringSO가 연결되지 않았습니다.";
         }
 
         var data = _stringSO.GetById(stringId);
         if (data == null)
         {
             Debug.LogWarning($"[HelpPopupUI] String data not found. id={stringId}");
-            return $"해당 도움말 데이터를 찾을 수 없습니다. (id={stringId})";
+            return $"데이터 없음 ({stringId})";
         }
 
-        return data.kr;
+        string raw = data.kr;
+
+        if (string.IsNullOrEmpty(raw))
+            return string.Empty;
+
+        // 기획 데이터의 '\'를 줄바꿈으로 처리
+        raw = raw.Replace("\\n", "\n");
+        raw = raw.Replace("\\", "\n");
+
+        return raw;
+    }
+
+    private void RefreshTabVisual(int selectedIndex)
+    {
+        if (_tabButtonImages == null || _tabButtonImages.Length == 0)
+            return;
+
+        for (int i = 0; i < _tabButtonImages.Length; i++)
+        {
+            if (_tabButtonImages[i] == null)
+                continue;
+
+            if (_selectedSprite != null && _unselectedSprite != null)
+            {
+                _tabButtonImages[i].sprite = (i == selectedIndex)
+                    ? _selectedSprite
+                    : _unselectedSprite;
+            }
+            else
+            {
+                _tabButtonImages[i].color = (i == selectedIndex)
+                    ? new Color(1f, 1f, 1f, 1f)
+                    : new Color(0.75f, 0.75f, 0.75f, 1f);
+            }
+        }
     }
 }

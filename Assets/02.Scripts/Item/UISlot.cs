@@ -19,28 +19,30 @@ public class UISlot : MonoBehaviour
     {
         _image = GetComponent<Image>();
         _button = GetComponent<Button>();
-        _baseSprite = _image.sprite;
+        if(_image != null )
+            _baseSprite = _image.sprite;
+
         InitializedSlot();
     }
 
 
 
     // 슬롯에 아이템(ID)과 벨류(갯수, 강화수치등)를 표시
-    public void SetSlot(int id, int value)
+    public virtual void SetSlot(int id, int value)
     {
         ShowSprite(id, out var item);
         ShowText(value);
     }
 
     // 슬롯에 아이템(ID)과 벨류(갯수, 강화수치등)를 표시
-    public void SetSlot(int id, string value = null)
+    public virtual void SetSlot(int id, string value = null)
     {
         ShowSprite(id, out var item);
         ShowText(value);
     }
 
     // 슬롯에 특정 아이템을 넣으면 자동으로 아이템의 정보를 UI로 출력
-    public void SetSlot(ItemInstance item, string value = null)
+    public virtual void SetSlot(ItemInstance item, string value = null)
     {
         ShowSprite(item.ID, out var itemData);
         if (itemData == null)
@@ -63,7 +65,7 @@ public class UISlot : MonoBehaviour
     }
 
     // int를 통해서도 값을 출력할 수 있도록 오버로딩
-    public void SetSlot(ItemInstance item, int value)
+    public virtual void SetSlot(ItemInstance item, int value)
     {
         string text = value.ToString();
         SetSlot(item.ID, text);
@@ -124,7 +126,8 @@ public class UISlot : MonoBehaviour
     // 슬롯의 스프라이트, 텍스트 초기화
     protected void InitializedSlot()
     {
-        _image.sprite = _baseSprite;
+        if(_image != null)
+            _image.sprite = _baseSprite;
 
         if (_amountText != null)
             _amountText.text = string.Empty;

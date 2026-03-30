@@ -4,6 +4,7 @@ using UnityEngine.AddressableAssets;
 using UnityEngine.ResourceManagement.AsyncOperations;
 using UnityEngine.UI;
 using TMPro;
+using System.Threading.Tasks;
 
 
 public class LoadingScreen : MonoBehaviour
@@ -12,6 +13,10 @@ public class LoadingScreen : MonoBehaviour
     private const float _atLeastTime = 5;
     private float _currentTime = 0;
 
+    void Awake()
+    {
+        DontDestroyOnLoad(gameObject);
+    }
     void OnEnable()
     {
         StartCoroutine(DownloadAllAddressables());
@@ -34,7 +39,7 @@ public class LoadingScreen : MonoBehaviour
         if (totalSize == 0)
         {
             // 이미 모두 캐시됨
-            LoadNextScene();
+            _ = LoadNextScene();
             yield break;
         }
 
@@ -59,7 +64,7 @@ public class LoadingScreen : MonoBehaviour
         {
             if(_currentTime >= _atLeastTime )
             {
-                LoadNextScene();
+                _ = LoadNextScene();
             }
             else
             {
@@ -75,7 +80,7 @@ public class LoadingScreen : MonoBehaviour
         Addressables.Release(downloadHandle);
     }
 
-    async void LoadNextScene()
+    async Task LoadNextScene()
     {
         await UIManager.Instance.LoadDataAndGoToLobby();
         gameObject.SetActive(false);

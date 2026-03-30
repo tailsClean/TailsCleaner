@@ -11,7 +11,7 @@ public class InventorySlotHandler : UIGroup
     [SerializeField] private Button _handlerButton;
 
     [Header("이벤트 채널")]
-    [SerializeField] private ItemInstanceEventChannelSO _onItemPopup;
+    [SerializeField] protected ItemInstanceEventChannelSO _onItemPopup;
 
     private Dictionary<int, int> _inventory;
     private List<int> _itemOrder = new();                    // 무작위로 들고 있는 _inventory의 값들에 순서를 부여
@@ -22,7 +22,7 @@ public class InventorySlotHandler : UIGroup
     protected List<ItemInstance> _items = new();
 
 
-    private void Awake()
+    protected virtual void Awake()
     {
 
         _itemOrder = new List<int>();

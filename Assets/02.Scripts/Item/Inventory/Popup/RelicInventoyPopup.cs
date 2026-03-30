@@ -16,7 +16,7 @@ public class RelicInventoyPopup : ItemPopupBase
     protected override void Start()
     {
         base.Start();
-        _playerLoadout = ItemManager.Instance.Loadout;
+        _playerLoadout = PlayerStatManager.Instance.Loadout;
     }
 
     public override void SetSlot(ItemInstance item)

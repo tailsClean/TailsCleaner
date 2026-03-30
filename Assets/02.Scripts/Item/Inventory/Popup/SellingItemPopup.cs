@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using static UISlotAddedText;
 
 
 public class SellingItemPopup : ItemPopupBase
@@ -41,6 +42,7 @@ public class SellingItemPopup : ItemPopupBase
     public override void SetSlot(ItemInstance item)
     {
         base.SetSlot(item);
+        _itemSlot.SetAddedText(TEXT_TYPE.Name, item.Name);
         SetButton();
         SetCount(-_count);
     }

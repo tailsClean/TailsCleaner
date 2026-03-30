@@ -12,7 +12,7 @@ public class LobbyUIContainer : MonoBehaviour, UIContainer
     [SerializeField] private Button _relicButton;
     [SerializeField] private Button _equipmentButton;
     [SerializeField] private Button _inventoryButton;
-     
+    [SerializeField] private Button _myStatsButton; 
      
     
     void Start()
@@ -22,6 +22,8 @@ public class LobbyUIContainer : MonoBehaviour, UIContainer
         _relicButton.onClick.AddListener(UIManager.Instance.ChangeStateRelic);
         _equipmentButton.onClick.AddListener(UIManager.Instance.ChangeStateEquipUI);
         _inventoryButton.onClick.AddListener(UIManager.Instance.ChangeStateInventory);
+        _myStatsButton.onClick.AddListener(UIManager.Instance.ChangeStateMyStatsUI);
+
     }
 
 }

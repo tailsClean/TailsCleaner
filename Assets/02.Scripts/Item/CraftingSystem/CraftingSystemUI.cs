@@ -32,7 +32,7 @@ public class CraftingSystemUI : UIGroup
     {
         base.Start();
         _inventory = _craftingSystem.UsingInventory;
-        _loadout = ItemManager.Instance.Loadout;
+        _loadout = PlayerStatManager.Instance.Loadout;
     }
 
     private void Update()

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using UnityEngine;
+using System.Threading.Tasks;
 
 public class ItemInventory : MonoBehaviour
 {
@@ -27,6 +28,19 @@ public class ItemInventory : MonoBehaviour
     private void Awake()
     {
         _inventory = new Dictionary<ItemInstance, int>();
+    }
+    private void Start()
+    {
+        FirebaseManager.Instance.AddLoadData(LoadInventory);
+        FirebaseManager.Instance.AddSaveData(SaveInventory);
+    }
+    private void OnDestroy()
+    {
+        if (FirebaseManager.Instance != null)
+        {
+            FirebaseManager.Instance.RemoveLoadData(LoadInventory);
+            FirebaseManager.Instance.RemoveSaveData(SaveInventory);
+        }
     }
 
 
@@ -106,6 +120,7 @@ public class ItemInventory : MonoBehaviour
         }
 
         _onChangeInventory.OnStartEvent();
+        _ = SaveInventory();
     }
 
 
@@ -119,8 +134,10 @@ public class ItemInventory : MonoBehaviour
 
         _inventory.Remove(item);
         _onChangeInventory.OnStartEvent();
+        _ = SaveInventory();
 
         return true;
+        
     }
 
 
@@ -136,8 +153,10 @@ public class ItemInventory : MonoBehaviour
 
 
     // 스택형 아이템 획득
-    public void GainStackItem(int id, int amount = 1) =>
+    public void GainStackItem(int id, int amount = 1)
+    {
         GainItem(id, ItemInstance.NoneEnhanceLevel, GRADE.None, amount);
+    }
 
 
     // 스택형 아이템 사용
@@ -151,7 +170,7 @@ public class ItemInventory : MonoBehaviour
 
     #region 인벤토리 내부전용 메서드
 
-
+    
     private bool TryGetItem(int id, int enhanceLevel, GRADE grad, out ItemInstance item)
     {
         item = SearchItem(id, enhanceLevel, grad);
@@ -192,6 +211,7 @@ public class ItemInventory : MonoBehaviour
             _inventory.Add(new ItemInstance(id, enhanceLevel, grad), amount);
 
         _onChangeInventory.OnStartEvent();
+         _ = SaveInventory();
     }
 
     // 인벤토리 내부전용 아이템 사용 메서드
@@ -212,7 +232,7 @@ public class ItemInventory : MonoBehaviour
         if (_inventory[item] == 0)
             _inventory.Remove(item);
         _onChangeInventory.OnStartEvent();
-
+        _ = SaveInventory();
         return true;
     }
 
@@ -241,4 +261,112 @@ public class ItemInventory : MonoBehaviour
 
 
     #endregion
+
+    #region  firebase 저장/로드
+    public async Task SaveInventory()
+    {
+        var data = new Dictionary<string, object>();
+
+        int equipIndex = 0;
+        int relicIndex = 0;
+        int stackIndex = 0;
+
+        foreach (var kvp in _inventory)
+        {
+            var item = kvp.Key;
+            var amount = kvp.Value;
+
+            switch (item.ItemType)
+            {
+                case ITEM_TYPE.Equipment:
+                    data[$"Equipments/{equipIndex}"] = new Dictionary<string, object>
+                    {
+                        { "id", item.ID },
+                        { "enhanceLevel", item.EnhanceLevel },
+                        { "grade", (int)item.Grade },
+                        { "amount", amount }
+                    };
+                    equipIndex++;
+                    break;
+
+                case ITEM_TYPE.Relic:
+                    data[$"Relics/{relicIndex}"] = new Dictionary<string, object>
+                    {
+                        { "id", item.ID },
+                        { "enhanceLevel", item.EnhanceLevel }
+                    };
+                    relicIndex++;
+                    break;
+
+                default:
+                    data[$"Stacks/{stackIndex}"] = new Dictionary<string, object>
+                    {
+                        { "id", item.ID },
+                        { "amount", amount }
+                    };
+                    stackIndex++;
+                    break;
+            }
+        }
+
+        // 기존 데이터 초기화 후 저장
+        await FirebaseManager.Instance.DB
+            .Child("users")
+            .Child(FirebaseManager.Instance.UID)
+            .Child("Inventory")
+            .RemoveValueAsync();
+
+        await FirebaseManager.Instance.DB
+            .Child("users")
+            .Child(FirebaseManager.Instance.UID)
+            .Child("Inventory")
+            .UpdateChildrenAsync(data);
+    }
+
+    public async Task LoadInventory()
+    {
+        var snapshot = await FirebaseManager.Instance.DB
+            .Child("users")
+            .Child(FirebaseManager.Instance.UID)
+            .Child("Inventory")
+            .GetValueAsync();
+
+        if (!snapshot.Exists) return;
+
+        // 장비 로드
+        var equipSnapshot = snapshot.Child("Equipments");
+        foreach (var child in equipSnapshot.Children)
+        {
+            int id = int.Parse(child.Child("id").Value.ToString());
+            int enhanceLevel = int.Parse(child.Child("enhanceLevel").Value.ToString());
+            GRADE grade = (GRADE)int.Parse(child.Child("grade").Value.ToString());
+            int amount = int.Parse(child.Child("amount").Value.ToString());
+
+            GainItem(id, enhanceLevel, grade, amount);
+        }
+
+        // 유물 로드
+        var relicSnapshot = snapshot.Child("Relics");
+        foreach (var child in relicSnapshot.Children)
+        {
+            int id = int.Parse(child.Child("id").Value.ToString());
+            int enhanceLevel = int.Parse(child.Child("enhanceLevel").Value.ToString());
+
+            GainRelic(id, enhanceLevel);
+        }
+
+        // 스택형 아이템 로드
+        var stackSnapshot = snapshot.Child("Stacks");
+        foreach (var child in stackSnapshot.Children)
+        {
+            int id = int.Parse(child.Child("id").Value.ToString());
+            int amount = int.Parse(child.Child("amount").Value.ToString());
+
+            GainStackItem(id, amount);
+        }
+
+        _onChangeInventory.OnStartEvent();
+    }
+
+#endregion
 }
