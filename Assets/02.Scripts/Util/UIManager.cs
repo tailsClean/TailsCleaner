@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using DG.Tweening;
 using TMPro;
 using System;
@@ -103,7 +103,7 @@ public class UIManager : MonoBehaviour
         await FirebaseManager.Instance.Load();
     }
 
-    public void GoToLobby()
+    public void GoToLobby() 
     {
         SceneManager.LoadScene("LobbyScene");
     }
@@ -231,6 +231,7 @@ public class UIManager : MonoBehaviour
     [SerializeField] public GameObject _inventoryUI;
     [SerializeField] public GameObject _relicUI;
     [SerializeField] public GameObject _equipUI;
+    [SerializeField] public GameObject _myStatsUI;
 
     public void ChangeStateInventory()
     {
@@ -253,6 +254,13 @@ public class UIManager : MonoBehaviour
         if (_equipUI != null)
         {
             _equipUI.SetActive(!_equipUI.activeSelf);
+        }
+    }
+    public void ChangeStateMyStatsUI()
+    {
+        if (_myStatsUI != null)
+        {
+            _myStatsUI.SetActive(!_myStatsUI.activeSelf);
         }
     }
     #endregion
