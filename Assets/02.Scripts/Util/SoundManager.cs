@@ -107,12 +107,12 @@ public class SoundManager : MonoBehaviour
     [SerializeField] private float _debounceInterval = 0.1f;
 
     [Header("볼륨 설정 비율")]
-    [Range(0f, 1f)][Tooltip("3개 이상 겹칠 때 마스터 볼륨")]
-    [SerializeField] private float _overlapMasterRatio = 0.7f;
-    [Range(0f, 1f)][Tooltip("로비 효과음 재생 시 배경음 볼륨")]
-    [SerializeField] private float _lobbyBgmDuckRatio = 0.8f;
-    [Range(0f, 1f)][Tooltip("인게임 효과음 재생 시 배경음 볼륨")]
-    [SerializeField] private float _ingameBgmDuckRatio = 0.5f;
+    [SerializeField, Range(0f, 1f), Tooltip("3개 이상 겹칠 때 마스터 볼륨")]
+    private float _overlapMasterRatio = 0.7f;
+    [SerializeField, Range(0f, 1f), Tooltip("로비 효과음 재생 시 배경음 볼륨")]
+    private float _lobbyBgmDuckRatio = 0.8f;
+    [SerializeField, Range(0f, 1f), Tooltip("인게임 효과음 재생 시 배경음 볼륨")]
+    private float _ingameBgmDuckRatio = 0.5f;
     private float _currentDuckRatio = 1.0f; // 현재 씬 배경음 감소 비율 저장
 
     // 환경설정 볼륨
