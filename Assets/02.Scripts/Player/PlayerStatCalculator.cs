@@ -7,14 +7,12 @@ using UnityEngine;
 public class PlayerStatCalculator
 {
     private PlayerLoadout _playerLoadout;
-    private ILevelStat _levelStat;
     private PlayerStatFlat _plusStat;
     private PlayerStatMul _multipleStat;
 
-    public PlayerStatCalculator(PlayerLoadout enhanceInventory, ILevelStat levelStat)
+    public PlayerStatCalculator(PlayerLoadout enhanceInventory)
     {
         _playerLoadout = enhanceInventory;
-        _levelStat = levelStat;
 
         if (_plusStat == null)
             _plusStat = new PlayerStatFlat();
@@ -32,62 +30,20 @@ public class PlayerStatCalculator
     // 최종 스탯 계산값
     public float GetFinalSat(float initialStat, PLAYER_STAT stat)
     {
-        float baseStat = initialStat + _levelStat.Get(stat);
-        float itemStat = GetItemStat(stat);
+        float baseStat = initialStat;
         float plusStat = _plusStat.Get(stat);
         float multipleStat = _multipleStat.Get(stat);
         float divisionStat = _playerLoadout.GetRelicDivisionValue(stat);
 
-        //Debug.Log("기본: " + stat + " / " + initialStat);
-        //Debug.Log("레벨로 증가하는 스텟: " + _levelStat.Get(stat));
-        //Debug.Log("아이템: " + stat + " / " + itemStat);
 
-        return baseStat + itemStat + plusStat + multipleStat + divisionStat;
+        return baseStat + plusStat + multipleStat + divisionStat;
     }
-
-
-
-    // 아이템으로 인한 스텟 증가값
-    private float GetItemStat(PLAYER_STAT stat)
-    {
-        return stat switch
-        {
-            // 장비로 상승하는 값
-            PLAYER_STAT.MaxHp => _playerLoadout.GetIncreaseStat(EQUIP_STAT_TYPE.MaxHP),
-            PLAYER_STAT.AttackPower => _playerLoadout.GetIncreaseStat(EQUIP_STAT_TYPE.Attack),
-            PLAYER_STAT.DefensePower => _playerLoadout.GetIncreaseStat(EQUIP_STAT_TYPE.Defense),
-            PLAYER_STAT.CriticalChance => _playerLoadout.GetIncreaseStat(EQUIP_STAT_TYPE.CriticalRate),
-            PLAYER_STAT.EvasionChance => _playerLoadout.GetIncreaseStat(EQUIP_STAT_TYPE.Dodge),
-            PLAYER_STAT.MoveSpeed => _playerLoadout.GetIncreaseStat(EQUIP_STAT_TYPE.MoveSpeed),
-            
-            // 유물로 상승하는 값
-            PLAYER_STAT.GoldGainRate => _playerLoadout.GetIncreaseStat(STAT_TYPE.Gold),
-            PLAYER_STAT.ItemDropRate => _playerLoadout.GetIncreaseStat(STAT_TYPE.ItemRange),
-            PLAYER_STAT.ExpGainRate => _playerLoadout.GetIncreaseStat(STAT_TYPE.Exp),
-            _ => 0f
-        };
-    }
-
-
 }
 
-# region 확장 메서드
+# region 스킬 부여 스탯 확장 메서드
 
 public static class PlayerStatFlatExtension
 {
-    // 레벨에 따른 스탯증가량
-    public static float Get(this ILevelStat stat, PLAYER_STAT type)
-    {
-        return type switch
-        {
-            PLAYER_STAT.MaxHp or
-            PLAYER_STAT.AttackPower or
-            PLAYER_STAT.DefensePower or
-            PLAYER_STAT.HealthRegen => stat.StatGrowth,
-            _ => 0f
-        };
-    }
-
     // 스킬에서 더해지는 스탯값
     public static float Get(this PlayerStatFlat stat, PLAYER_STAT type)
     {

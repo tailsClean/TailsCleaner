@@ -23,7 +23,7 @@ public partial class CraftingSystem : MonoBehaviour
 
     private void Start()
     {
-        _loadout = ItemManager.Instance.Loadout;
+        _loadout = PlayerStatManager.Instance.Loadout;
     }
 
 
