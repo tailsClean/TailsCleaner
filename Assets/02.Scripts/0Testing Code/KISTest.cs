@@ -85,18 +85,21 @@ public class KISTest : MonoBehaviour
         inventory.GainEquipment(32002, 15);
         inventory.GainEquipment(32003, 15);
         inventory.GainEquipment(32004, 15);
-        //inventory.GainEquipment(39001, GRADE.Dirty, 15);
-        //inventory.GainEquipment(39002, GRADE.Normal, 15);
-        //inventory.GainEquipment(39101, GRADE.Dirty, 15);
-        //inventory.GainEquipment(39102, GRADE.Normal, 15);
-        //inventory.GainEquipment(39201, GRADE.Dirty, 15);
-        //inventory.GainEquipment(39202, GRADE.Dirty, 15);
-        //inventory.GainEquipment(39001, GRADE.Clean, 15);
-        //inventory.GainEquipment(39102, GRADE.Clean, 15);
-        //inventory.GainEquipment(39101, GRADE.Aromatic, 15);
-        //inventory.GainEquipment(39002, GRADE.Aromatic, 15);
-        //inventory.GainEquipment(39201, GRADE.Shiny, 15);
-        //inventory.GainEquipment(39202, GRADE.Shiny, 15);
+
+        inventory.GainEquipment(32101, 15);
+        inventory.GainEquipment(32102, 15);
+        inventory.GainEquipment(32103, 15);
+        inventory.GainEquipment(32104, 15);
+
+        inventory.GainEquipment(32201, 15);
+        inventory.GainEquipment(32202, 15);
+        inventory.GainEquipment(32203, 15);
+        inventory.GainEquipment(32204, 15);
+
+        inventory.GainEquipment(32301, 15);
+        inventory.GainEquipment(32302, 15);
+        inventory.GainEquipment(32303, 15);
+        inventory.GainEquipment(32304, 15);
     }
 
 
