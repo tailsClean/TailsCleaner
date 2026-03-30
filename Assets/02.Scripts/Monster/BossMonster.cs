@@ -122,6 +122,7 @@ public class BossMonster : MonsterBase, ILaserable
     private bool isFleeing = false;
     private bool isBlinking = false;
     private bool isWaitingBlink = false;
+    private bool isWaitingBarricade = false; 
 
     private bool isDataInitialized = false;
     private bool isWaitingForMonsterId = false;
@@ -929,23 +930,17 @@ public class BossMonster : MonsterBase, ILaserable
 
     private void HandleBarricadeLogic()
     {
-        barricadeTimer -= Time.fixedDeltaTime;
-        if (barricadeTimer <= 0f)
-        {
-            if (barricadeSpawner != null)
-            {
-                barricadeSpawner.SpawnBarricade(
-                    GetSpawnPosition(spawnLoc),
-                    barShape,
-                    barSize,
-                    barDuration,
-                    barInteraction,
-                    this.power
-                );
-            }
+        // 이미 소환 대기 중이거나 일시정지 상태면 스킵
+        if (isWaitingBarricade || isPaused) return;
 
-            barricadeTimer = barricadeInterval;
+        if (barricadeTimer > 0f)
+        {
+            barricadeTimer -= Time.fixedDeltaTime;
+            return;
         }
+
+        // 타이머가 다 되면 코루틴 실행
+        StartCoroutine(BarricadePatternRoutine());
     }
 
     private Vector2 GetSpawnPosition(BarricadeSpawner.SpawnLocation loc)
@@ -1114,6 +1109,42 @@ public class BossMonster : MonsterBase, ILaserable
         {
             StartCoroutine(JumpRoutine());
         }
+    }
+
+    private IEnumerator BarricadePatternRoutine()
+    {
+        isWaitingBarricade = true; // 소환 프로세스 시작
+
+        // cast_time만큼 대기 (이 시간 동안 보스는 MoveProcess에 의해 계속 이동함)
+        float elapsed = 0f;
+        while (elapsed < cast_time)
+        {
+            if (!isPaused) // 일시정지 체크
+            {
+                elapsed += Time.deltaTime;
+            }
+            yield return null;
+        }
+
+        // 예고 시간이 끝난 '지금' 위치를 확정 
+        Vector2 spawnPosition = GetSpawnPosition(spawnLoc);
+
+        // 실제 소환
+        if (barricadeSpawner != null)
+        {
+            barricadeSpawner.SpawnBarricade(
+                spawnPosition,
+                barShape,
+                barSize,
+                barDuration,
+                barInteraction,
+                this.power
+            );
+        }
+
+        // 상태 초기화 및 쿨타임 설정
+        isWaitingBarricade = false;
+        barricadeTimer = barricadeInterval;
     }
 
     private IEnumerator JumpRoutine()
