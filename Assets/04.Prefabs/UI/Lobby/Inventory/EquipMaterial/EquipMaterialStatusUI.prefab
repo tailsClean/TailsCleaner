@@ -501,7 +501,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1b5d98c099cd5a140988aafdf2866f8c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ItemPopup
-  <ItemType>k__BackingField: 0
   _background: {fileID: 6854652626554664906}
   _itemSlot: {fileID: 0}
   _openButton:
@@ -509,6 +508,9 @@ MonoBehaviour:
     <OpenGroup>k__BackingField: 8
   - <PushButton>k__BackingField: {fileID: 462263469557573911}
     <OpenGroup>k__BackingField: 7
+  <ItemType>k__BackingField: 0
+  _sellingButton: {fileID: 0}
+  _sellingPopup: {fileID: 0}
 --- !u!1 &3766537215351882398
 GameObject:
   m_ObjectHideFlags: 0
@@ -852,8 +854,8 @@ MonoBehaviour:
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4281479730
-  m_fontColor: {r: 0.19607843, g: 0.19607843, b: 0.19607843, a: 1}
+    rgba: 4294967295
+  m_fontColor: {r: 1, g: 1, b: 1, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
   m_fontColorGradient:
