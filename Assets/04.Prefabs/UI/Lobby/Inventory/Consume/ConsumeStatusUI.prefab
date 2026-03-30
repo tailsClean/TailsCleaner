@@ -959,7 +959,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 1920, y: 1080}
+  m_SizeDelta: {x: 1080, y: 1}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &6215605568012130289
 CanvasRenderer:
@@ -1114,12 +1114,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1b5d98c099cd5a140988aafdf2866f8c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ItemPopup
-  <ItemType>k__BackingField: 1
   _background: {fileID: 6746051993017072854}
-  _itemSlot: {fileID: 9079102559334908602}
+  _itemSlot: {fileID: 0}
   _openButton:
   - <PushButton>k__BackingField: {fileID: 5132775711095976089}
     <OpenGroup>k__BackingField: 3
+  <ItemType>k__BackingField: 1
+  _sellingButton: {fileID: 0}
+  _sellingPopup: {fileID: 0}
 --- !u!1 &8098338820195153951
 GameObject:
   m_ObjectHideFlags: 0
