@@ -13,6 +13,7 @@ public class HelpPopupUI : MonoBehaviour
 
     [Header("Tab Buttons")]
     [SerializeField] private Button[] _tabButtons;
+    [SerializeField] private Button _backgroundCloseButton;
 
     [Header("Tab Titles")]
     [SerializeField] private string[] _tabTitles;
@@ -25,23 +26,30 @@ public class HelpPopupUI : MonoBehaviour
     [SerializeField] private Sprite _selectedSprite;
     [SerializeField] private Sprite _unselectedSprite;
 
+    private int _currentIndex = 0;
+
     private void Awake()
     {
-        BindTabButtons();
+        BindButtons();
     }
 
-    private void BindTabButtons()
+    private void BindButtons()
     {
+        if (_backgroundCloseButton != null)
+        {
+            _backgroundCloseButton.onClick.RemoveAllListeners();
+            _backgroundCloseButton.onClick.AddListener(Close);
+        }
+
         if (_tabButtons == null)
             return;
 
         for (int i = 0; i < _tabButtons.Length; i++)
         {
-            int capturedIndex = i;
-
             if (_tabButtons[i] == null)
                 continue;
 
+            int capturedIndex = i;
             _tabButtons[i].onClick.RemoveAllListeners();
             _tabButtons[i].onClick.AddListener(() => ShowTab(capturedIndex));
         }
@@ -50,7 +58,7 @@ public class HelpPopupUI : MonoBehaviour
     public void Open()
     {
         gameObject.SetActive(true);
-        ShowTab(0);
+        ShowTab(_currentIndex);
         Debug.Log("[HelpPopupUI] Open");
     }
 
@@ -67,7 +75,7 @@ public class HelpPopupUI : MonoBehaviour
 
         if (nextActive)
         {
-            ShowTab(0);
+            ShowTab(_currentIndex);
             Debug.Log("[HelpPopupUI] Toggle -> Open");
         }
         else
@@ -84,6 +92,7 @@ public class HelpPopupUI : MonoBehaviour
             return;
         }
 
+        _currentIndex = index;
         string stringId = _tabStringIds[index];
 
         if (_titleText != null)
@@ -119,8 +128,16 @@ public class HelpPopupUI : MonoBehaviour
             return $"데이터 없음 ({stringId})";
         }
 
-        // 현재 StringSO.asset 구조 기준으로는 kr 필드가 맞을 가능성이 높음
-        return data.kr;
+        string raw = data.kr;
+
+        if (string.IsNullOrEmpty(raw))
+            return string.Empty;
+
+        // 기획 데이터의 '\'를 줄바꿈으로 처리
+        raw = raw.Replace("\\n", "\n");
+        raw = raw.Replace("\\", "\n");
+
+        return raw;
     }
 
     private void RefreshTabVisual(int selectedIndex)

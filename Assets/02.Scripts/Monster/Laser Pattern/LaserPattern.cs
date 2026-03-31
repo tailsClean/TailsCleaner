@@ -55,7 +55,7 @@ public class LaserPattern
         {
             var handle = Addressables.InstantiateAsync(LaserPrefab);
             LaserHandler laserObj = handle.Result.GetComponent<LaserHandler>();
-
+            laserObj.transform.localScale = new Vector3(1, _laserSize * 0.5f, 0);
             laserObj.SetLaser(_attackPower, _laserDuration, _laserCastTime);
             SetLaserCast(laserObj, angle * i);
         }
@@ -66,7 +66,6 @@ public class LaserPattern
     {
         // 위치 세팅
         Transform laserCastTr = LaserObj.transform;
-        laserCastTr.localScale = new Vector3(100, _laserSize * 0.5f, 0);
         laserCastTr.position = _startPos;
         laserCastTr.rotation = Quaternion.Euler(0, 0, rotateAngle);
     }

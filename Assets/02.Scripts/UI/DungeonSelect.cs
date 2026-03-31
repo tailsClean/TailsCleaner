@@ -44,6 +44,9 @@ public class DungeonSelect : MonoBehaviour
     [Header("애니메이션")]
     [SerializeField] private float    _moveDuration = 0.25f;
     [SerializeField] private Ease     _moveEase     = Ease.OutCubic;
+
+    [Header("세로방향여부")]
+    [SerializeField] private bool _isVertical = false; 
     
     private static readonly Vector2 POS_PREV     = new Vector2(-375, 0);
     private static readonly Vector2 POS_SELECTED = new Vector2(0, 0);
