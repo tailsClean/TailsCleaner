@@ -2285,12 +2285,20 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::StageUIContainer
   _settingButton: {fileID: 2909823174975905087}
   _exitPanel: {fileID: 0}
-  _timerUI: {fileID: 7057693997994891566}
-  _gameOverPanel: {fileID: 7752616583717103425}
-  _stageClearPanel: {fileID: 6899338133259334769}
-  _bossHP: {fileID: 7798271974586325569}
-  _waveBannerUI: {fileID: 7188499335729081782}
-  _clearRewardUI: {fileID: 1421267594188284441}
+  _horizontal:
+    TimerUI: {fileID: 0}
+    GameOverPanel: {fileID: 0}
+    StageClearPanel: {fileID: 0}
+    BossHP: {fileID: 0}
+    WaveBannerUI: {fileID: 0}
+    ClearRewardUI: {fileID: 0}
+  _vertical:
+    TimerUI: {fileID: 0}
+    GameOverPanel: {fileID: 0}
+    StageClearPanel: {fileID: 0}
+    BossHP: {fileID: 0}
+    WaveBannerUI: {fileID: 0}
+    ClearRewardUI: {fileID: 0}
   _uiGroupList:
   - {fileID: 222940194342566266}
 --- !u!1001 &1837743805007795346
@@ -3755,31 +3763,15 @@ MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: -7306825773676237336, guid: 5892ddf38c9e01f40b93dbe1858123d8, type: 3}
   m_PrefabInstance: {fileID: 1837743805007795346}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6899338133259334769}
+  m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: b6f0f81e5f9ef994a9794fe6e54bba16, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::UIGroup
---- !u!114 &1421267594188284441 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 736797139576288907, guid: 5892ddf38c9e01f40b93dbe1858123d8, type: 3}
-  m_PrefabInstance: {fileID: 1837743805007795346}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6899338133259334769}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4228064976ed2d5468e7a96f76b8555f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::TestReward
 --- !u!224 &4842790869197525797 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 6536401892600973239, guid: 5892ddf38c9e01f40b93dbe1858123d8, type: 3}
-  m_PrefabInstance: {fileID: 1837743805007795346}
-  m_PrefabAsset: {fileID: 0}
---- !u!1 &6899338133259334769 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 5061946177525686499, guid: 5892ddf38c9e01f40b93dbe1858123d8, type: 3}
   m_PrefabInstance: {fileID: 1837743805007795346}
   m_PrefabAsset: {fileID: 0}
 --- !u!1001 &2119189575790102472
@@ -4078,11 +4070,6 @@ PrefabInstance:
 --- !u!224 &6237295101421311050 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 5469495758521521026, guid: 7916a282a324b2c4ea89ed595ba75396, type: 3}
-  m_PrefabInstance: {fileID: 2119189575790102472}
-  m_PrefabAsset: {fileID: 0}
---- !u!1 &7752616583717103425 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 8574303959478214793, guid: 7916a282a324b2c4ea89ed595ba75396, type: 3}
   m_PrefabInstance: {fileID: 2119189575790102472}
   m_PrefabAsset: {fileID: 0}
 --- !u!1001 &2798523264498986636
@@ -4591,17 +4578,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
---- !u!114 &7188499335729081782 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 5512242700013331353, guid: 2aba43e709e365c4bb74b22085fb5067, type: 3}
-  m_PrefabInstance: {fileID: 3440122882251525679}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b0b97de3118cac34998e64b1e0ea1732, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::StageWaveBannerUI
 --- !u!224 &7377352745582661342 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 5322228592468197617, guid: 2aba43e709e365c4bb74b22085fb5067, type: 3}
@@ -5957,14 +5933,3 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 6355111621066859760, guid: bc4506106a7c42149addebd22a3cf565, type: 3}
   m_PrefabInstance: {fileID: 9188723086925680702}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &7057693997994891566 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 2194679887938619664, guid: bc4506106a7c42149addebd22a3cf565, type: 3}
-  m_PrefabInstance: {fileID: 9188723086925680702}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: caf8be5dd9206ce49afae91e38c0721a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::StageTimerTextUI

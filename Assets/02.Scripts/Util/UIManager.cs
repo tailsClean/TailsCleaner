@@ -4,13 +4,33 @@ using TMPro;
 using System;
 using UnityEngine.SceneManagement;
 using System.Threading.Tasks;
+using UnityEngine.UI;
+using UnityEditor.Experimental.GraphView;
+using NUnit.Framework;
 
-public interface UIContainer { }
+public interface IUIContainer { }
+public interface IOrientationHandler
+{
+    void OnOrientationChanged(bool isVertical);
+}
 
 public class UIManager : MonoBehaviour
 {
     private static UIManager instance;
     public static UIManager Instance { get => instance; private set => instance = value; }
+    
+    public event Action<bool> OnOrientationChanged; // 가로/세로 변경 이벤트
+    private bool _isVertical;
+    public bool IsVertical
+    {
+        get => _isVertical;
+        set
+        {
+            if( _isVertical == value ) return; // 값이 변경되지 않았으면 이벤트 발생 안함
+            _isVertical = value;
+            OnOrientationChanged?.Invoke(_isVertical); // 이벤트 발생
+        }
+    }
 
     private void Awake()
     {
@@ -70,18 +90,12 @@ public class UIManager : MonoBehaviour
 
     private void SetUpReference(GameObject sceneUI)
     {
-        if (sceneUI.TryGetComponent(out UIContainer container))
+        if (sceneUI.TryGetComponent(out IUIContainer container))
         {
             if (container is StageUIContainer stageUI)
             {
-                this._stageTimer = stageUI.TimerUI.GetComponent<StageTimerTextUI>();
-                this._gameOverPanel = stageUI.GameOverPanel;
-                this._stageClearPanel = stageUI.StageClearPanel;
-                this._BossHP = stageUI.BossHP;
-                this._stageWaveBanner = stageUI.WaveBannerUI;
-
-                // [추가] 결과 보상 UI 참조 연결
-                this._clearRewardUI = stageUI.ClearRewardUI;
+                UpdateStageUIReference(stageUI);
+                OnOrientationChanged += _ => UpdateStageUIReference(stageUI);
             }
 
             if (container is LobbyUIContainer lobbyUI)
@@ -95,6 +109,16 @@ public class UIManager : MonoBehaviour
 
     [SerializeField] private VoidEventChannelSO _onStartInGame;
 
+    public void UpdateStageUIReference(StageUIContainer stageUI)
+    {
+        var reference = stageUI.Current;
+        this._stageTimer = reference.TimerUI;
+        this._gameOverPanel = reference.GameOverPanel;
+        this._stageClearPanel = reference.StageClearPanel;
+        this._BossHP = reference.BossHP;
+        this._stageWaveBanner = reference.WaveBannerUI;
+        this._clearRewardUI = reference.ClearRewardUI;
+    }
     public async Task LoadDataAndGoToLobby()
     {
         await GameManager.Instance.LoadStageProgress();
@@ -133,6 +157,36 @@ public class UIManager : MonoBehaviour
         Application.Quit();
 #endif
     }
+
+    #region Orientation
+    [SerializeField] private CanvasScaler _canvasScaler;
+    private void Start()
+    {
+        // 초기 화면 방향 설정
+        bool isVertical = PlayerPrefs.GetInt("Orientation", 0) == 1;
+        SetOrientation(isVertical); 
+        OnOrientationChanged += SetOrientation;
+    }
+
+    public void SetOrientation(bool isVertical)
+    {
+        Screen.orientation = isVertical
+            ? ScreenOrientation.Portrait
+            : ScreenOrientation.LandscapeLeft;
+
+        if (_canvasScaler != null)
+        {
+            _canvasScaler.referenceResolution = isVertical
+                ? new Vector2(1080, 1920)
+                : new Vector2(1920, 1080);
+        }
+
+        PlayerPrefs.SetInt("Orientation", isVertical ? 1 : 0);
+
+        IsVertical = isVertical;
+    }
+
+    #endregion
 
     #region SettingPanel
     private GameObject _settingPanel;

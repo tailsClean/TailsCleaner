@@ -1,18 +1,37 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
-using UnityEngine.UIElements.Experimental;
 
 public class ExitPanel : MonoBehaviour
 {
-    [SerializeField] private Button _exitButton;
+    [SerializeField] private Button _dungeonExitButton;
     [SerializeField] private Button _settingExitBtn;
     [SerializeField] private Button _saveSetting;
     [SerializeField] private Slider _bgmSlider;
     [SerializeField] private Slider _sfxSlider;
+    [SerializeField] private Button _horizontalBtn;
+    [SerializeField] private Button _verticalBtn;
+
+    private float _prevBgmVolume;
+    private float _prevSfxVolume;
 
     public void Start()
     {
-        if (_exitButton != null) _exitButton.onClick.AddListener(OnClickExit);
+        if (_dungeonExitButton != null) _dungeonExitButton.onClick.AddListener(OnClickExit);
+        if (_settingExitBtn != null) _settingExitBtn.onClick.AddListener(OnClickExitSetting);
+        UpdateButton();
+
+        _horizontalBtn.onClick.AddListener(() =>
+        {
+            UIManager.Instance.IsVertical = false; // 가로
+            UpdateButton();
+        });
+
+        _verticalBtn.onClick.AddListener(() =>
+        {
+            UIManager.Instance.IsVertical = true; // 세로
+            UpdateButton();
+        });
+
     }
 
     private void OnEnable()
@@ -51,5 +70,15 @@ public class ExitPanel : MonoBehaviour
         }
 
         UIManager.Instance.GoToLobby();
+    }
+    private void UpdateButton()
+    {
+        bool isVertical = UIManager.Instance.IsVertical;
+        _horizontalBtn.interactable = isVertical;   // 세로일 때 가로버튼 활성
+        _verticalBtn.interactable = !isVertical; 
+    }
+    private void OnClickExitSetting()
+    {
+       gameObject.SetActive(false);
     }
 }

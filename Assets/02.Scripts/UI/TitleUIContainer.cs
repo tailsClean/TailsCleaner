@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 
-public class TitleUIContainer : MonoBehaviour, UIContainer
+public class TitleUIContainer : MonoBehaviour, IUIContainer
 {
 
     [SerializeField] private Button _settingButton;
