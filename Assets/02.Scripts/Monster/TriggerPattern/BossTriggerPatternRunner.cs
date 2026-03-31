@@ -35,6 +35,12 @@ public class BossTriggerPatternRunner : MonoBehaviour
 
     private Coroutine _runningRoutine;
 
+    private enum DirtySpawnPositionType
+    {
+        Player = 0,
+        Boss = 1
+    }
+
     public void Bind(MonsterBase boss)
     {
         Unbind();
@@ -437,7 +443,13 @@ public class BossTriggerPatternRunner : MonoBehaviour
 
     private void SpawnDirtyItems(PatternTableRow row)
     {
-        if (_bossDirtyItemPrefab == null || ObjectPoolManager.Instance == null)
+        if (_bossDirtyItemPrefab == null)
+            return;
+
+        if (ObjectPoolManager.Instance == null)
+            return;
+
+        if (_boss == null)
             return;
 
         Transform player = _boss.target;
@@ -448,15 +460,39 @@ public class BossTriggerPatternRunner : MonoBehaviour
 
         for (int i = 0; i < spawnCount; i++)
         {
-            bool spawnNearBoss = row.summon_position_type == 1 || (row.summon_position_type != 0 && i % 2 == 0);
+            Vector3 center;
+            Vector3 spawnPos;
 
-            Vector3 center = spawnNearBoss
-                ? _boss.transform.position
-                : (player != null ? player.position : _boss.transform.position);
+            if (row.summon_position_type == (int)DirtySpawnPositionType.Player)
+            {
+                center = player != null ? player.position : _boss.transform.position;
+                spawnPos = FindNonOverlappingPosition(center, radius, usedPositions);
+            }
+            else if (row.summon_position_type == (int)DirtySpawnPositionType.Boss)
+            {
+                center = _boss.transform.position;
 
-            Vector3 spawnPos = FindNonOverlappingPosition(center, radius, usedPositions);
+                // 보스 몸체 위에 바로 생기지 않게 최소 거리 보장
+                float minBossRadius = 6f;
+                float maxBossRadius = Mathf.Max(radius, 10f);
 
-            PoolObject spawned = ObjectPoolManager.Instance.Spawn(_bossDirtyItemPrefab, spawnPos, Quaternion.identity);
+                spawnPos = FindNonOverlappingPositionInRing(center, minBossRadius, maxBossRadius, usedPositions);
+            }
+            else
+            {
+                center = _boss.transform.position;
+
+                float minBossRadius = 6f;
+                float maxBossRadius = Mathf.Max(radius, 10f);
+
+                spawnPos = FindNonOverlappingPositionInRing(center, minBossRadius, maxBossRadius, usedPositions);
+            }
+
+            PoolObject spawned = ObjectPoolManager.Instance.Spawn(
+                _bossDirtyItemPrefab,
+                spawnPos,
+                Quaternion.identity
+            );
 
             if (spawned != null && spawned.TryGetComponent<InGameExpItem>(out var expItem))
             {
@@ -489,8 +525,11 @@ public class BossTriggerPatternRunner : MonoBehaviour
             }
 
             if (!overlapped)
+            {
                 return candidate;
+            }
         }
+
 
         return center;
     }
@@ -543,7 +582,6 @@ public class BossTriggerPatternRunner : MonoBehaviour
 
             if (logicType == "trigger_exp_absorb")
             {
-                // 이미 실행된 패턴이면 스킵
                 if (_triggeredOncePatternIds.Contains(row.pattern_id))
                     continue;
 
@@ -558,5 +596,45 @@ public class BossTriggerPatternRunner : MonoBehaviour
                 return;
             }
         }
+    }
+
+    private Vector3 FindNonOverlappingPositionInRing(
+    Vector3 center,
+    float minRadius,
+    float maxRadius,
+    List<Vector3> usedPositions)
+    {
+        const int maxTry = 20;
+        const float minDistance = 0.75f;
+
+        minRadius = Mathf.Max(0f, minRadius);
+        maxRadius = Mathf.Max(minRadius + 0.1f, maxRadius);
+
+        for (int i = 0; i < maxTry; i++)
+        {
+            Vector2 dir = Random.insideUnitCircle.normalized;
+            if (dir == Vector2.zero)
+                dir = Vector2.right;
+
+            float distance = Random.Range(minRadius, maxRadius);
+            Vector3 candidate = center + new Vector3(dir.x, dir.y, 0f) * distance;
+
+            bool overlapped = false;
+            for (int j = 0; j < usedPositions.Count; j++)
+            {
+                if (Vector3.Distance(candidate, usedPositions[j]) < minDistance)
+                {
+                    overlapped = true;
+                    break;
+                }
+            }
+
+            if (!overlapped)
+                return candidate;
+        }
+
+        // 실패하면 최소 반경 위치로라도 보내기
+        Vector3 fallback = center + new Vector3(1f, 0f, 0f) * minRadius;
+        return fallback;
     }
 }
