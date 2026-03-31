@@ -1,6 +1,6 @@
 using UnityEngine;
 using TMPro;
-using UnityEditor;
+
 public class VersionText : MonoBehaviour
 {
     [SerializeField] TextMeshProUGUI tmp;
@@ -8,6 +8,6 @@ public class VersionText : MonoBehaviour
     void Awake()
     {
         string version = Application.version;
-        tmp.text = "ver" + version + ": " ;    
+        tmp.text = "ver " + version;    
     }
 }
