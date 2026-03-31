@@ -16,6 +16,7 @@ GameObject:
   - component: {fileID: 5514830495199837496}
   - component: {fileID: 6612712607612896099}
   - component: {fileID: 3178603656011100005}
+  - component: {fileID: -6309030999690592268}
   m_Layer: 7
   m_Name: Test_Boss
   m_TagString: Monster
@@ -94,7 +95,7 @@ SpriteRenderer:
   m_Size: {x: 0.5439453, y: 0.5654297}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
-  m_WasSpriteAssigned: 1
+  m_WasSpriteAssigned: 0
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
 --- !u!50 &7069551867210678986
@@ -202,6 +203,7 @@ MonoBehaviour:
   scoreReward: 1000
   goldReward: 500
   _monsterSprite: {fileID: 0}
+  _animator: {fileID: -6309030999690592268}
   _knockbackDuration: 0.1
   _wallLayerMask:
     serializedVersion: 2
@@ -230,6 +232,11 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+  avoidanceRadius: 1.5
+  avoidanceForce: 2
+  monsterLayer:
+    serializedVersion: 2
+    m_Bits: 128
   pattern_group_id: 0
   detect_range: 0
   pattern_cooldown: 0
@@ -298,6 +305,28 @@ MonoBehaviour:
   warningDuration: 1.5
   minRandomRadius: 5
   maxRandomRadius: 10
+--- !u!95 &-6309030999690592268
+Animator:
+  serializedVersion: 7
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 899191179583652646}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: cab5c01020a767741a91cd608e005b63, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_AnimatePhysics: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!1 &3649750411503255337
 GameObject:
   m_ObjectHideFlags: 0
