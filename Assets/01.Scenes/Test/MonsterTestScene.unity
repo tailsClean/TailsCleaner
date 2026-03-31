@@ -258,9 +258,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b4c54993eecb37345b4db26cc57ce16a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::TestSpawner
-  prefab: {fileID: 8674726135315812162, guid: f1d7566061b437642929eb0d55f61230, type: 3}
+  prefab: {fileID: 2741787303902298619, guid: acc2cb04c052a1c4b84292ad2d3ab5d2, type: 3}
   defaultSize: 20
-  monsterId: 203064
+  monsterId: 203027
   autoSpawn: 0
   spawnInterval: 0.5
 --- !u!4 &321566576
@@ -569,10 +569,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::ZoneSpawner
   safeZoneLayer:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 2048
   maxSpawnAttempts: 10
-  defaultDangerZonePrefab: {fileID: 0}
-  defaultSafeZonePrefab: {fileID: 0}
+  defaultDangerZonePrefab: {fileID: 5294524223138943813, guid: 62f82999df4327745bdd859bd4800a1f, type: 3}
+  defaultSafeZonePrefab: {fileID: 4390429074119119411, guid: dc2bdaea26fb6614585309b317c18da2, type: 3}
 --- !u!114 &879120636
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -610,7 +610,7 @@ MonoBehaviour:
     damageInterval: 0.5
     isCooldown: 0
   - patternName: DangerZone
-    onlyUseThis: 1
+    onlyUseThis: 0
     triggerPattern: 0
     patternType: 0
     zonePrefab: {fileID: 5294524223138943813, guid: 62f82999df4327745bdd859bd4800a1f, type: 3}

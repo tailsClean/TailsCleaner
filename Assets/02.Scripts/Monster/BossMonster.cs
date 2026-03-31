@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class BossMonster : MonsterBase
+public class BossMonster : MonsterBase, ILaserable
 {
     public override MonsterEnum.MONSTERTYPE monsterType => MonsterEnum.MONSTERTYPE.Boss;
 
@@ -61,7 +61,13 @@ public class BossMonster : MonsterBase
     [Header("--- 영역 패턴 설정 ---")]
     public ZoneSpawner zoneSpawner;
     private readonly List<BossAreaPatternRuntime> areaPatterns = new List<BossAreaPatternRuntime>();
+    private bool isAreaPatternRunning = false;
 
+    [Header("--- 레이저 패턴 설정 ---")]
+    // 레이저 패턴 인터페이스
+    public Transform MyTransform => transform;
+    private LaserPattern _laserPattern;
+    
 
 
     private class BossAreaPatternRuntime
@@ -116,6 +122,7 @@ public class BossMonster : MonsterBase
     private bool isFleeing = false;
     private bool isBlinking = false;
     private bool isWaitingBlink = false;
+    private bool isWaitingBarricade = false; 
 
     private bool isDataInitialized = false;
     private bool isWaitingForMonsterId = false;
@@ -132,9 +139,65 @@ public class BossMonster : MonsterBase
         return circumference / (2f * Mathf.PI);
     }
 
+    public override void ApplyMonsterResource(MonsterResource resourceData)
+    {
+        // 1. 애니메이션 로드 등 부모의 기본 기능을 먼저 실행
+        base.ApplyMonsterResource(resourceData);
+
+        if (visualChild != null)
+        {
+            var sr = visualChild.GetComponent<SpriteRenderer>();
+            if (sr != null)
+            {
+                if (sr.sprite == null)
+                {
+                    Debug.LogWarning("보스 스프라이트가 비어있습니다! 프리팹의 SpriteRenderer에 이미지를 넣어주세요.");
+                }
+                else
+                {
+                    Debug.Log($"보스 이미지 확인됨: {sr.sprite.name} (데이터 테이블 대신 프리팹 설정을 사용합니다)");
+                }
+            }
+        }
+    }
+
+    protected override void ApplyAnimatorResource(MonsterResource resourceData)
+    {
+        Debug.Log($"<color=cyan>[Step 1]</color> 보스 데이터 수신: {resourceData.resource_id} / Cast: {resourceData.cast_animation}");
+
+        // 1. 부모(MonsterBase)가 move_animation을 처리하도록 먼저 실행
+        base.ApplyAnimatorResource(resourceData);
+
+        // 2. 보스 전용: 캐스팅(Cast) 애니메이션 로드
+        if (!string.IsNullOrEmpty(resourceData.cast_animation))
+        {
+            Debug.Log($"<color=yellow>[Step 2]</color> 애니메이션 로드 시도 주소: {resourceData.cast_animation}");
+            // "CastBase"는 Animator Override Controller에 설정된 원본 클립 이름과 같아야 합니다.
+            LoadAndApplyAnimationClip(resourceData.cast_animation, "Cast_Base",
+                handle => _castClipHandle = handle);
+        }
+
+        // 3. 보스 전용: 공격(Attack) 애니메이션 로드
+        if (!string.IsNullOrEmpty(resourceData.attack_animation))
+        {
+            // "AttackBase" 역시 애니메이터에 설정된 이름 확인 필요
+            LoadAndApplyAnimationClip(resourceData.attack_animation, "Attack_Base",
+                handle => _attackClipHandle = handle);
+        }
+
+        // 4. 사망(Death) 애니메이션도 필요하다면 추가
+        if (!string.IsNullOrEmpty(resourceData.death_animation))
+        {
+            LoadAndApplyAnimationClip(resourceData.death_animation, "Death_Base",
+                handle => _deathClipHandle = handle);
+        }
+    }
+
     protected override void Start()
     {
         base.Start();
+
+        _laserPattern = new LaserPattern(this);
 
         if (move_speed == 0f)
             move_speed = base.moveSpeed;
@@ -274,6 +337,13 @@ public class BossMonster : MonsterBase
                     break;
 
                 case PATTERN_TYPE.Layser:
+                    float finalDmg = this.power * (patternData.damage_multiply > 0 ? patternData.damage_multiply : 1.0f);
+                    float duration = patternData.duration; // 레이저 지속시간
+                    float castTime = patternData.cast_time; // 예고 시간
+                    float size = patternData.projectile_size; // 레이저 굵기
+                    int count = patternData.projectile_count; // 레이저 개수
+
+                    _laserPattern.OnLaserPattern(finalDmg, duration, castTime, size, count);
                     Debug.Log($"[BossMonster] Laser 패턴 감지: {patternData.pattern_logic_type} (아직 미연동)");
                     break;
 
@@ -496,60 +566,65 @@ public class BossMonster : MonsterBase
 
     private void HandleAreaPatternLogic()
     {
-        if (zoneSpawner == null) return;
-        if (target == null) return;
-        if (areaPatterns.Count == 0) return;
+        if (zoneSpawner == null || target == null || areaPatterns.Count == 0) return;
+
+        // 핵심: 어떤 장판 패턴이라도 "실행 중"이라면 다른 패턴의 쿨타임을 계산하지 않음
+        if (isAreaPatternRunning) return;
 
         for (int i = 0; i < areaPatterns.Count; i++)
         {
             BossAreaPatternRuntime pattern = areaPatterns[i];
             pattern.currentCooldown -= Time.fixedDeltaTime;
 
-            if (pattern.currentCooldown > 0f)
-                continue;
-
-            Transform spawnTarget = pattern.targetType == ZoneTestCaller.SpawnTarget.Player
-                ? target
-                : transform;
-
-            if (pattern.isSafeZone)
+            if (pattern.currentCooldown <= 0f)
             {
-                SafeZonePatternController.Instance?.StartPattern(
-                    pattern.previewTime,
-                    pattern.activeTime,
-                    pattern.damagePerTick,
-                    pattern.damageInterval
-                );
-
-                zoneSpawner.SpawnSafeZones(
-                    null,
-                    spawnTarget,
-                    pattern.count,
-                    pattern.range,
-                    pattern.radius,
-                    pattern.previewTime,
-                    pattern.activeTime
-                );
+                // 코루틴을 통해 패턴 실행 및 대기 처리
+                StartCoroutine(AreaPatternSequenceCoroutine(pattern));
+                break;
             }
-            else
-            {
-                zoneSpawner.SpawnDangerZones(
-                    null,
-                    spawnTarget,
-                    pattern.count,
-                    pattern.range,
-                    pattern.radius,
-                    pattern.previewTime,
-                    pattern.activeTime,
-                    pattern.damagePerTick,
-                    pattern.damageInterval
-                );
-            }
-
-            pattern.currentCooldown = pattern.cooldown;
         }
     }
 
+    private IEnumerator AreaPatternSequenceCoroutine(BossAreaPatternRuntime pattern)
+    {
+        isAreaPatternRunning = true; // 다른 장판 패턴이 시작되지 못하게 잠금
+
+        // 패턴 실행
+        ExecuteAreaPattern(pattern);
+
+        // 실행 후 즉시 쿨타임 초기화
+        pattern.currentCooldown = pattern.cooldown;
+
+        // [중요] 다음 패턴이 나올 때까지 최소 대기 시간 부여
+        // 예를 들어 장판이 깔리고 1~2초 정도는 여유를 주고 싶다면:
+        yield return new WaitForSeconds(pattern.previewTime + 1.0f);
+
+        isAreaPatternRunning = false; // 잠금 해제
+    }
+
+    private void ExecuteAreaPattern(BossAreaPatternRuntime pattern)
+    {
+        // 스폰 위치 결정 (플레이어 타겟이면 target, 보스 타겟이면 보스 자신)
+        Transform spawnTarget = (pattern.targetType == ZoneTestCaller.SpawnTarget.Player) ? target : transform;
+
+        if (pattern.isSafeZone)
+        {
+            // 안전지대 패턴 실행 (SafeZonePatternController가 있는 경우)
+            SafeZonePatternController.Instance?.StartPattern(
+                pattern.previewTime, pattern.activeTime, pattern.damagePerTick, pattern.damageInterval);
+
+            // 실제 안전지대 오브젝트 생성
+            zoneSpawner.SpawnSafeZones(
+                null, spawnTarget, pattern.count, pattern.range, pattern.radius, pattern.previewTime, pattern.activeTime);
+        }
+        else
+        {
+            // 위험지대(데미지 존) 오브젝트 생성
+            zoneSpawner.SpawnDangerZones(
+                null, spawnTarget, pattern.count, pattern.range, pattern.radius, pattern.previewTime, pattern.activeTime,
+                pattern.damagePerTick, pattern.damageInterval);
+        }
+    }
 
     private void ApplyBossProjectilePattern(Pattern patternData, float compositionCooldown = -1f)
     {
@@ -855,23 +930,17 @@ public class BossMonster : MonsterBase
 
     private void HandleBarricadeLogic()
     {
-        barricadeTimer -= Time.fixedDeltaTime;
-        if (barricadeTimer <= 0f)
-        {
-            if (barricadeSpawner != null)
-            {
-                barricadeSpawner.SpawnBarricade(
-                    GetSpawnPosition(spawnLoc),
-                    barShape,
-                    barSize,
-                    barDuration,
-                    barInteraction,
-                    this.power
-                );
-            }
+        // 이미 소환 대기 중이거나 일시정지 상태면 스킵
+        if (isWaitingBarricade || isPaused) return;
 
-            barricadeTimer = barricadeInterval;
+        if (barricadeTimer > 0f)
+        {
+            barricadeTimer -= Time.fixedDeltaTime;
+            return;
         }
+
+        // 타이머가 다 되면 코루틴 실행
+        StartCoroutine(BarricadePatternRoutine());
     }
 
     private Vector2 GetSpawnPosition(BarricadeSpawner.SpawnLocation loc)
@@ -939,6 +1008,7 @@ public class BossMonster : MonsterBase
 
         return finalDir.normalized;
     }
+
     private void MoveProcess()
     {
         Vector2 myPos = rb2D.position;
@@ -1041,6 +1111,42 @@ public class BossMonster : MonsterBase
         }
     }
 
+    private IEnumerator BarricadePatternRoutine()
+    {
+        isWaitingBarricade = true; // 소환 프로세스 시작
+
+        // cast_time만큼 대기 (이 시간 동안 보스는 MoveProcess에 의해 계속 이동함)
+        float elapsed = 0f;
+        while (elapsed < cast_time)
+        {
+            if (!isPaused) // 일시정지 체크
+            {
+                elapsed += Time.deltaTime;
+            }
+            yield return null;
+        }
+
+        // 예고 시간이 끝난 '지금' 위치를 확정 
+        Vector2 spawnPosition = GetSpawnPosition(spawnLoc);
+
+        // 실제 소환
+        if (barricadeSpawner != null)
+        {
+            barricadeSpawner.SpawnBarricade(
+                spawnPosition,
+                barShape,
+                barSize,
+                barDuration,
+                barInteraction,
+                this.power
+            );
+        }
+
+        // 상태 초기화 및 쿨타임 설정
+        isWaitingBarricade = false;
+        barricadeTimer = barricadeInterval;
+    }
+
     private IEnumerator JumpRoutine()
     {
         isWaitingJump = true;
@@ -1067,7 +1173,7 @@ public class BossMonster : MonsterBase
 
             rb2D.MovePosition(Vector2.Lerp(start, dest, p));
             if (visualChild != null)
-                visualChild.localPosition = new Vector2(0f, Mathf.Sin(p * Mathf.PI) * jump_height);
+                visualChild.localPosition = new Vector3(0f, Mathf.Sin(p * Mathf.PI) * jump_height, visualChild.localPosition.z);
 
             yield return new WaitForFixedUpdate();
         }

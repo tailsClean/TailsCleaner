@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6844339646822135683}
   - component: {fileID: 8175160231973099806}
+  - component: {fileID: 3400774660501628416}
   m_Layer: 7
   m_Name: BossMonster_Visual
   m_TagString: Untagged
@@ -87,9 +88,31 @@ SpriteRenderer:
   m_Size: {x: 9.78, y: 7.5}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
-  m_WasSpriteAssigned: 1
+  m_WasSpriteAssigned: 0
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!95 &3400774660501628416
+Animator:
+  serializedVersion: 7
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4256490024980198056}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: cab5c01020a767741a91cd608e005b63, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_AnimatePhysics: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!1 &6242823153721604330
 GameObject:
   m_ObjectHideFlags: 0
@@ -236,6 +259,35 @@ MonoBehaviour:
   scoreReward: 1000
   goldReward: 500
   _monsterSprite: {fileID: 0}
+  _animator: {fileID: 3400774660501628416}
+  _knockbackDuration: 0.1
+  _wallLayerMask:
+    serializedVersion: 2
+    m_Bits: 0
+  _knockbackCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 1
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 1
+      value: 1
+      inSlope: 1
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
   pattern_group_id: 0
   useZigzag: 0
   useJump: 0
