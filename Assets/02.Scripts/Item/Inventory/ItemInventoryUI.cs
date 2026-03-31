@@ -36,7 +36,6 @@ public class ItemInventoryUI : UIGroup
             popup.gameObject.SetActive(false);
         }
         
-        SetSlotHandler();
         SetSelectButtons();
     }
 
@@ -44,6 +43,7 @@ public class ItemInventoryUI : UIGroup
     {
         _onChangeInventory.AddListener(SetSlotHandler);
         _onItemPopUp.AddListener(ShowPopup);
+        SetSlotHandler();
     }
 
     private void OnDisable()

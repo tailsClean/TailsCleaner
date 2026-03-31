@@ -41,11 +41,3 @@ public class InventoryUIManager : MonoBehaviour
         }
     }
 }
-
-
-//[Serializable]
-//public class InventoryUIOpenSet
-//{
-//    [field: SerializeField] public Button OpenButton { get; private set; }
-//    [field: SerializeField] public UI_GROUP Group { get; private set; }
-//}
