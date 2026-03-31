@@ -22,13 +22,13 @@ public class ExitPanel : MonoBehaviour
 
         _horizontalBtn.onClick.AddListener(() =>
         {
-            UIManager.Instance.IsVertical = false; // 가로
+            UIManager.Instance.SetOrientation(false); // 가로
             UpdateButton();
         });
 
         _verticalBtn.onClick.AddListener(() =>
         {
-            UIManager.Instance.IsVertical = true; // 세로
+            UIManager.Instance.SetOrientation(true); // 세로
             UpdateButton();
         });
 

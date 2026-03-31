@@ -44,15 +44,12 @@ public class DungeonSelect : MonoBehaviour
     [Header("애니메이션")]
     [SerializeField] private float    _moveDuration = 0.25f;
     [SerializeField] private Ease     _moveEase     = Ease.OutCubic;
-
-    [Header("세로방향여부")]
-    [SerializeField] private bool _isVertical = false; 
     
-    private static readonly Vector2 POS_PREV     = new Vector2(-375, 0);
-    private static readonly Vector2 POS_SELECTED = new Vector2(0, 0);
-    private static readonly Vector2 POS_NEXT     = new Vector2(375, 0);
-    private static readonly Vector2 SIZE_SMALL   = new Vector2(300, 480);
-    private static readonly Vector2 SIZE_LARGE   = new Vector2(380, 600);
+    private static readonly Vector2 Hor_POS_PREV     = new Vector2(-375, 0);
+    private static readonly Vector2 Hor_POS_SELECTED = new Vector2(0, 0);
+    private static readonly Vector2 Hor_POS_NEXT     = new Vector2(375, 0);
+    private static readonly Vector2 Hor_SIZE_SMALL   = new Vector2(300, 480);
+    private static readonly Vector2 Hor_SIZE_LARGE   = new Vector2(380, 600);
  
     private int _currentIndex = 0;
     private int TowerCount => _towerData != null ? _towerData.dataList.Count : 0;
@@ -116,9 +113,9 @@ public class DungeonSelect : MonoBehaviour
         if (hasPrev) BindSlot(_slotPrev, _ImgPrev, _currentIndex - 1, false);
         if (hasNext) BindSlot(_slotNext, _ImgNext, _currentIndex + 1, false);
  
-        AnimateSlot(_slotSelected, POS_SELECTED, SIZE_LARGE,  animate);
-        if (hasPrev) AnimateSlot(_slotPrev,  POS_PREV,  SIZE_SMALL, animate);
-        if (hasNext) AnimateSlot(_slotNext,  POS_NEXT,  SIZE_SMALL, animate);
+        AnimateSlot(_slotSelected, Hor_POS_SELECTED, Hor_SIZE_LARGE,  animate);
+        if (hasPrev) AnimateSlot(_slotPrev,  Hor_POS_PREV,  Hor_SIZE_SMALL, animate);
+        if (hasNext) AnimateSlot(_slotNext,  Hor_POS_NEXT,  Hor_SIZE_SMALL, animate);
     }
  
     private void BindSlot(RectTransform slot, Image image, int index, bool isSelect)

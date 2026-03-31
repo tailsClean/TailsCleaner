@@ -16,6 +16,7 @@ public class LobbyUIContainer : MonoBehaviour, IUIContainer
     [SerializeField] private LobbyUIReference _vertical;
 
     public LobbyUIReference Current => UIManager.Instance.IsVertical ? _vertical : _horizontal;
+    public GameObject Root => Current.Root;
     public GameObject DungeonSelect => Current.DungeonSelect;
     public GameObject StageSelect => Current.StageSelect;
     public Button DungeonButton => Current.DungeonButton;
@@ -27,7 +28,8 @@ public class LobbyUIContainer : MonoBehaviour, IUIContainer
 
     void Start()
     {
-        BindButtons(Current);
+        BindButtons(_horizontal);
+        BindButtons(_vertical);
 
         OnOrientationChanged(UIManager.Instance.IsVertical);
         UIManager.Instance.OnOrientationChanged += OnOrientationChanged;
@@ -41,7 +43,27 @@ public class LobbyUIContainer : MonoBehaviour, IUIContainer
 
     private void OnOrientationChanged(bool isVertical)
     {
+        GameObject previous = isVertical ? _horizontal.Root : _vertical.Root;
+        GameObject current = isVertical ? _vertical.Root : _horizontal.Root;
+
+        // previous의 자식 상태를 current의 자식에 동기화
+        SyncActiveState(previous, current);
+
+        previous.SetActive(false);
+        current.SetActive(true);
+
         UIManager.Instance.UpdateLobbyUIReference(this);
+        
+    }
+
+    private void SyncActiveState(GameObject previous, GameObject current)
+    {
+        foreach (Transform fromChild in previous.transform)
+        {
+            Transform toChild = current.transform.Find(fromChild.name);
+            if (toChild != null)
+                toChild.gameObject.SetActive(fromChild.gameObject.activeSelf);
+        }
     }
 
     private void BindButtons(LobbyUIReference reference)
@@ -58,6 +80,7 @@ public class LobbyUIContainer : MonoBehaviour, IUIContainer
 [Serializable]
 public class LobbyUIReference
 {
+    public GameObject Root;
     public GameObject DungeonSelect;
     public GameObject StageSelect;
     public Button DungeonButton;

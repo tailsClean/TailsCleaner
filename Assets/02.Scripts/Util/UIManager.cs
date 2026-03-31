@@ -5,8 +5,7 @@ using System;
 using UnityEngine.SceneManagement;
 using System.Threading.Tasks;
 using UnityEngine.UI;
-using UnityEditor.Experimental.GraphView;
-using NUnit.Framework;
+
 
 public interface IUIContainer { }
 public interface IOrientationHandler
@@ -95,13 +94,13 @@ public class UIManager : MonoBehaviour
             if (container is StageUIContainer stageUI)
             {
                 UpdateStageUIReference(stageUI);
-                OnOrientationChanged += _ => UpdateStageUIReference(stageUI);
+                OnOrientationChanged += _=> UpdateStageUIReference(stageUI);
             }
 
             if (container is LobbyUIContainer lobbyUI)
             {
-                this._dungeonSelect = lobbyUI.DungeonSelect;
-                this._stageSelect = lobbyUI.StageSelect;
+                UpdateLobbyUIReference(lobbyUI);
+                OnOrientationChanged += _ => UpdateLobbyUIReference(lobbyUI);
             }
         }
     }
@@ -119,6 +118,14 @@ public class UIManager : MonoBehaviour
         this._stageWaveBanner = reference.WaveBannerUI;
         this._clearRewardUI = reference.ClearRewardUI;
     }
+
+    public void UpdateLobbyUIReference(LobbyUIContainer lobbyUI)
+    {
+        var reference = lobbyUI.Current;
+        this._dungeonSelect = lobbyUI.DungeonSelect;
+        this._stageSelect = lobbyUI.StageSelect;
+    }
+
     public async Task LoadDataAndGoToLobby()
     {
         await GameManager.Instance.LoadStageProgress();
@@ -165,7 +172,7 @@ public class UIManager : MonoBehaviour
         // 초기 화면 방향 설정
         bool isVertical = PlayerPrefs.GetInt("Orientation", 0) == 1;
         SetOrientation(isVertical); 
-        OnOrientationChanged += SetOrientation;
+        
     }
 
     public void SetOrientation(bool isVertical)
@@ -180,8 +187,6 @@ public class UIManager : MonoBehaviour
                 ? new Vector2(1080, 1920)
                 : new Vector2(1920, 1080);
         }
-
-        PlayerPrefs.SetInt("Orientation", isVertical ? 1 : 0);
 
         IsVertical = isVertical;
     }

@@ -13,7 +13,7 @@ public class GameManager : MonoBehaviour
     
     public EnergySystem _energySystem;
     public int EnergyCount;
-    public const int SPEND_ENERGY = 1;
+    public const int SPEND_ENERGY = 10;
     public int _maxEnergy;
 
     public TowerTable _currentTower;
