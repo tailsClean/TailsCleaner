@@ -632,7 +632,7 @@ public abstract class MonsterBase : PoolObject, IDamageable, IMonsterStatus, IPu
         OnCC();
     }
 
-    public void Knockback(Vector2 direction, float force)
+    public virtual void Knockback(Vector2 direction, float force)
     {
         if (hp <= 0) return;
         if (force <= 0f) return;
