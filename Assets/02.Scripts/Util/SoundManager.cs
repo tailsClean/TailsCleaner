@@ -70,6 +70,12 @@ public struct PlayerSFXClipInfo
     public PlayerSFXName name;
     public AudioClip clip;
 }
+[System.Serializable]
+public struct TowerMoveSFXClipInfo
+{
+    public TowerMoveSFXType type;
+    public AudioClip clip;
+}
 
 public class SoundManager : MonoBehaviour
 {
@@ -104,6 +110,7 @@ public class SoundManager : MonoBehaviour
     [Header("Footstep SFX")]
     [SerializeField, Tooltip("발소리 재생 간격")]
     private float _footstepInterval = 0.5f;
+    [SerializeField] private TowerMoveSFXClipInfo[] _towerMoveSfxClips;
     private TowerMoveSFXType _currentTowerMoveType = TowerMoveSFXType.Type1;    // 현재 타워 발소리 타입
     private WaitForSeconds _footstepDelay;   // 발소리 대기 간격
 
@@ -147,6 +154,7 @@ public class SoundManager : MonoBehaviour
     private Dictionary<UISFXName, AudioClip> _uiSfxDict = new();
     private Dictionary<PlayerSFXName, AudioClip> _playerSfxDict = new();
     private Dictionary<MonsterSFXName, AudioClip> _monsterSfxDict = new();
+    private Dictionary<TowerMoveSFXType, AudioClip> _towerMoveSfxDict = new();
 
     // 스킬 관련
     private List<AudioSource> _loopPool = new();                                     // 루프 
@@ -168,10 +176,11 @@ public class SoundManager : MonoBehaviour
         _instance = this;
         DontDestroyOnLoad(gameObject);
 
-        foreach (var info in _bgmClips) _bgmDict[info.name] = info.clip;
-        foreach (var info in _uiSfxClips) _uiSfxDict[info.name] = info.clip;
-        foreach (var info in _playerSfxClips) _playerSfxDict[info.name] = info.clip;
-        foreach (var info in _monsterSfxClips) _monsterSfxDict[info.name] = info.clip;
+        foreach (var info in _bgmClips)          _bgmDict[info.name]          = info.clip;
+        foreach (var info in _uiSfxClips)        _uiSfxDict[info.name]        = info.clip;
+        foreach (var info in _playerSfxClips)    _playerSfxDict[info.name]    = info.clip;
+        foreach (var info in _monsterSfxClips)   _monsterSfxDict[info.name]   = info.clip;
+        foreach (var info in _towerMoveSfxClips) _towerMoveSfxDict[info.type] = info.clip;
 
         LoadVolumes();
     }
@@ -202,8 +211,8 @@ public class SoundManager : MonoBehaviour
     }
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
-        // 스킬 효과음 관련 전부 중지, 제거
-        ClearAllSkillLoopSFX();
+        // 모든 효과음 강제로 종료
+        StopAllSFX();
         // 씬 전환 시 카운트 초기화
         _activeSFXCount = 0;
         // 씬 BGM
@@ -387,7 +396,13 @@ public class SoundManager : MonoBehaviour
     // 걷기
     private void PlayMoveLoopSFX(float volume)
     {
-        // 잠시 보류
+        if (!_towerMoveSfxDict.TryGetValue(_currentTowerMoveType, out AudioClip clip)) return;
+
+        // 이미 걷는 소리가 재생 중이면 무시
+        if (_playerActionCoroutine != null && _playerActionSfxPlayer.clip == clip) return;
+
+        StopTrackedCoroutine(ref _playerActionCoroutine);
+        _playerActionCoroutine = StartCoroutine(TrackFootstepLoop(clip, volume));
     }
 
     // 청소
@@ -622,6 +637,37 @@ public class SoundManager : MonoBehaviour
 
     #endregion
 
+
+    // 스테이지 결과용
+    public void PlayStageResult(BGMName bgmName)
+    {
+        PlayBGM(bgmName, false);
+        StopAllSFX();
+    }
+
+
+    // 모든 SFX 강제 종료
+    public void StopAllSFX()
+    {
+        // 플레이어
+        if (_playerActionSfxPlayer != null) _playerActionSfxPlayer.Stop();
+        if (_playerEventSfxPlayer != null) _playerEventSfxPlayer.Stop();
+        StopTrackedCoroutine(ref _playerActionCoroutine);
+        StopTrackedCoroutine(ref _playerEventCoroutine);
+
+        // UI
+        if (_uiClickPlayer != null) _uiClickPlayer.Stop();
+        if (_uiEventPlayer != null) _uiEventPlayer.Stop();
+        StopTrackedCoroutine(ref _uiClickCoroutine);
+
+        // 몬스터
+        if (_monsterSfxPlayer != null) _monsterSfxPlayer.Stop();
+
+        // 스킬
+        if (_skillSfxPlayer != null) _skillSfxPlayer.Stop();
+        // 스킬 루프 사운드
+        ClearAllSkillLoopSFX();
+    }
 
     // 발소리 설정
     public void SetTowerMoveSFX(TowerMoveSFXType type)

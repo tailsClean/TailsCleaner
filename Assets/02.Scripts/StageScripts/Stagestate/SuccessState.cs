@@ -16,6 +16,8 @@ public class SuccessState : IStageState
         SaveStageClearProgress();
         GrantOutGameExp();
         ShowClearRewardUI();
+
+        if (SoundManager.Instance) SoundManager.Instance.PlayStageResult(BGMName.Stage_Clear);
     }
 
     public void Exit()
