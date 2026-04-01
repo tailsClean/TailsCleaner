@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class ExitPanel : MonoBehaviour
@@ -10,9 +11,6 @@ public class ExitPanel : MonoBehaviour
     [SerializeField] private Slider _sfxSlider;
     [SerializeField] private Button _horizontalBtn;
     [SerializeField] private Button _verticalBtn;
-
-    private float _prevBgmVolume;
-    private float _prevSfxVolume;
 
     public void Start()
     {
@@ -34,7 +32,6 @@ public class ExitPanel : MonoBehaviour
         });
 
        LoadSettings();
-
     }
 
     private void OnEnable()
@@ -67,12 +64,25 @@ public class ExitPanel : MonoBehaviour
 
     private void OnClickExit()
     {
-        if (StageController.Instance != null)
+        if(SceneManager.GetActiveScene().name != "StageScene")
         {
-            StageController.Instance.EndStage(StageResult.Abandon, StageFailReason.기타);
+            UIManager.Instance.ImpossiblePanel.SetText("나갏 수 있는 공간이 아니에요!");
+            UIManager.Instance.ImpossiblePanel.SetListeners(() => UIManager.Instance.ChangeStateImpossiblePanel());
+            return;
         }
+        else
+        {
+            UIManager.Instance.ConfirmPanel.SetText("던전을 나가시겠습니까?");
+            UIManager.Instance.ConfirmPanel.SetListeners(() =>
+            {
+                 if (StageController.Instance != null)
+                {
+                    StageController.Instance.EndStage(StageResult.Abandon, StageFailReason.기타);
+                }
 
-        UIManager.Instance.GoToLobby();
+                UIManager.Instance.GoToLobby();
+            }, () => UIManager.Instance.ChangeStateConfirmPanel());
+        } 
     }
     private void UpdateButton()
     {

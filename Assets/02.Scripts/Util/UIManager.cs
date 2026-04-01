@@ -338,4 +338,54 @@ public class UIManager : MonoBehaviour
     public RewardSystemUI FailRewardUI => _failRewardUI;
     #endregion
 
+    #region ImpossiblePanel
+    private ImpossibelPannel _impossiblePanel;
+    public ImpossibelPannel ImpossiblePanel => _impossiblePanel;
+    [SerializeField] private GameObject _impossiblePrefab;
+
+    public void ChangeStateImpossiblePanel()
+    {
+        if (_impossiblePanel == null)
+        {
+            if (_impossiblePrefab == null)
+            {
+                Debug.LogError("_impossiblePrefab이 할당되지 않았습니다!");
+                return;
+            }
+
+            _impossiblePanel = Instantiate(_impossiblePrefab, this.transform).GetComponent<ImpossibelPannel>();
+            _impossiblePanel.transform.SetAsLastSibling();
+            _impossiblePanel.gameObject.SetActive(true);
+        }
+        else
+        {
+            _impossiblePanel.gameObject.SetActive(!_impossiblePanel.gameObject.activeSelf);
+        }
+    }
+    #endregion
+
+    #region ConfirmPanel
+    private ConfirmPannel _confirmPanel;
+    public ConfirmPannel ConfirmPanel => _confirmPanel;
+    [SerializeField] private GameObject _confirmPrefab;
+
+    public void ChangeStateConfirmPanel()
+    {
+        if (_confirmPanel == null)
+        {
+            if (_confirmPrefab == null)
+            {
+                Debug.LogError("_confirmPrefab 이 할당되지 않았습니다!");
+                return;
+            }
+            _confirmPanel = Instantiate(_confirmPrefab, this.transform).GetComponent<ConfirmPannel>();
+            _confirmPanel.transform.SetAsLastSibling();
+            _confirmPanel.gameObject.SetActive(true);
+        }
+        else
+        {
+            _confirmPanel.gameObject.SetActive(!_confirmPanel.gameObject.activeSelf);
+        }
+    }
+    #endregion    
 }
