@@ -76,11 +76,11 @@ public sealed class DataParserStagePlanProvider : IStagePlanProvider
             return null;
         }
 
-        Debug.Log(
-            $"[StagePlanProvider] StagePlan built. " +
-            $"stageId={builtPlan.stageId}, waves={builtPlan.wavePlans?.Count ?? 0}, " +
-            $"specialRows={builtPlan.specialRows?.Count ?? 0}, bossId={builtPlan.bossId}"
-        );
+        // //Debug.Log(
+        //     $"[StagePlanProvider] StagePlan built. " +
+        //     $"stageId={builtPlan.stageId}, waves={builtPlan.wavePlans?.Count ?? 0}, " +
+        //     $"specialRows={builtPlan.specialRows?.Count ?? 0}, bossId={builtPlan.bossId}"
+        // );
 
         return builtPlan;
     }

@@ -117,7 +117,7 @@ public abstract class ActiveSkill : MonoBehaviour
             _ => null
         };
 
-        Debug.Log($"[ActiveSkill] {upgradeData.Name} 생성 완료.");
+        //Debug.Log($"[ActiveSkill] {upgradeData.Name} 생성 완료.");
     }
 
     protected virtual void Update()

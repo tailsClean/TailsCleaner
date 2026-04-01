@@ -45,11 +45,13 @@ public class ExitPanel : MonoBehaviour
         if (_sfxSlider != null) _sfxSlider.onValueChanged.AddListener(OnSfxVolumeChanged);
 
         LoadSettings();
+        Time.timeScale = 0f; 
     }
     private void OnDisable()
     {
         if (_bgmSlider != null) _bgmSlider.onValueChanged.RemoveListener(OnBgmVolumeChanged);
         if (_sfxSlider != null) _sfxSlider.onValueChanged.RemoveListener(OnSfxVolumeChanged);
+        Time.timeScale = 1f; 
     }
 
     private void OnBgmVolumeChanged(float value)

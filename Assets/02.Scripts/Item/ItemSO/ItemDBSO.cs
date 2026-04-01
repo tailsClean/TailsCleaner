@@ -275,7 +275,7 @@ public static class ItemDB
         if(_itemDB == null)
         {
             _itemDB = Resources.Load<ItemDBSO>("Data/ScriptableObjects/Item/ItemDB");
-            Debug.Log("<color=green>ItemDB 초기화</color>");
+            //Debug.Log("<color=green>ItemDB 초기화</color>");
         }
 
         return _itemDB.GetData(id);

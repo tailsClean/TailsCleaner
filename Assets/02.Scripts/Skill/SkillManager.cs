@@ -301,7 +301,7 @@ public class SkillManager : MonoBehaviour
 
         if (defualtSkillData != null)
         {
-            Debug.Log($"기본 스킬 {defualtSkillData.Name} ({DEFAULT_ACTIVE_MAIN_TAG}) 지급");
+            //Debug.Log($"기본 스킬 {defualtSkillData.Name} ({DEFAULT_ACTIVE_MAIN_TAG}) 지급");
             ApplyActiveOption(DEFAULT_ACTIVE_MAIN_TAG, defualtSkillData);
         }
         else
