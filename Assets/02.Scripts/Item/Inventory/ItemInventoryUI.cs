@@ -39,13 +39,18 @@ public class ItemInventoryUI : UIGroup
         }
         
         SetSelectButtons();
+        SetSlotHandler();
     }
 
     private void OnEnable()
     {
         _onChangeInventory.AddListener(SetSlotHandler);
         _onItemPopUp.AddListener(ShowPopup);
-        SetSlotHandler();
+        
+        if(_inventory!= null)
+        {
+            SetSlotHandler();
+        }
     }
 
     private void OnDisable()

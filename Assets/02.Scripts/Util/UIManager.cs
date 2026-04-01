@@ -290,40 +290,33 @@ public class UIManager : MonoBehaviour
     #endregion
 
     #region ItemManager
-    [SerializeField] public GameObject _inventoryUI;
-    [SerializeField] public GameObject _relicUI;
-    [SerializeField] public GameObject _equipUI;
-    [SerializeField] public GameObject _myStatsUI;
+    [SerializeField] private GameObject _myStatsUI;
+    [SerializeField] private GameObject _verticalmyStatsUI; 
 
     public void ChangeStateInventory()
     {
-        if (_inventoryUI != null)
-        {
-            _currentItemUI._inventoryUI.SetActive(!_inventoryUI.activeSelf);
-        }
+        _currentItemUI._inventoryUI.SetActive(!_currentItemUI._inventoryUI.activeSelf); 
     }
 
     public void ChangeStateRelic()
     {
-        if (_relicUI != null)
-        {
-            _currentItemUI._playerRelicUI.SetActive(!_relicUI.activeSelf);
-        }
+        _currentItemUI._playerRelicUI.SetActive(!_currentItemUI._playerRelicUI  .activeSelf); 
     }
 
     public void ChangeStateEquipUI()
     {
-        if (_equipUI != null)
-        {
-            _currentItemUI._playerEquipUI.SetActive(!_equipUI.activeSelf);
-        }
+       _currentItemUI._playerEquipUI.SetActive(!_currentItemUI._playerEquipUI.activeSelf);
     }
     public void ChangeStateMyStatsUI()
     {
-        if (_myStatsUI != null)
+        if (_myStatsUI != null && !IsVertical)
         {
             _myStatsUI.SetActive(!_myStatsUI.activeSelf);
         }
+        else if(_verticalmyStatsUI != null && IsVertical)
+        {
+            _verticalmyStatsUI.SetActive(!_verticalmyStatsUI.activeSelf);
+        }  
     }
     #endregion
 
