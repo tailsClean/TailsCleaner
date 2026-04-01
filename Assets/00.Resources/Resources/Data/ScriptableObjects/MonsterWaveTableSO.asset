@@ -1,0 +1,8166 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 075c25850b7c17b46b00e36fb9f50c17, type: 3}
+  m_Name: MonsterWaveTableSO
+  m_EditorClassIdentifier: Assembly-CSharp::MonsterWaveTableSO
+  dataList:
+  - wave_id: 599901
+    _description: "\uC77C\uC77C\uACE8\uB4DC\uB358\uC804"
+    group_id: 99
+    wave_index: 1
+    start_time: 0
+    end_time: 60
+    monster_id: 0
+    spawn_amount: 5
+    spawn_pattern: 0
+    mid_boss_id: 0
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 599902
+    _description: "\uC77C\uC77C\uB3C4\uBA74\uB358\uC804"
+    group_id: 98
+    wave_index: 1
+    start_time: 0
+    end_time: 120
+    monster_id: 203066
+    spawn_amount: 5
+    spawn_pattern: 0
+    mid_boss_id: 0
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 599801
+    _description: "\uC8FC\uAC04\uC720\uBB3C\uB358\uC804"
+    group_id: 10
+    wave_index: 1
+    start_time: 0
+    end_time: 300
+    monster_id: 0
+    spawn_amount: 0
+    spawn_pattern: 0
+    mid_boss_id: 0
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 510101
+    _description: "1\uBC88 \uD0D1 1\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 101
+    wave_index: 1
+    start_time: 0
+    end_time: 180
+    monster_id: 200001
+    spawn_amount: 5
+    spawn_pattern: 0
+    mid_boss_id: 0
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 510201
+    _description: "1\uBC88 \uD0D1 2\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 102
+    wave_index: 1
+    start_time: 0
+    end_time: 180
+    monster_id: 200001
+    spawn_amount: 5
+    spawn_pattern: 0
+    mid_boss_id: 202001
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 510202
+    _description: "1\uBC88 \uD0D1 2\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 102
+    wave_index: 2
+    start_time: 180
+    end_time: 300
+    monster_id: 200002
+    spawn_amount: 5
+    spawn_pattern: 0
+    mid_boss_id: 0
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 510301
+    _description: "1\uBC88 \uD0D1 3\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 103
+    wave_index: 1
+    start_time: 0
+    end_time: 180
+    monster_id: 200002
+    spawn_amount: 5
+    spawn_pattern: 0
+    mid_boss_id: 202002
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 510302
+    _description: "1\uBC88 \uD0D1 3\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 103
+    wave_index: 2
+    start_time: 180
+    end_time: 300
+    monster_id: 200003
+    spawn_amount: 5
+    spawn_pattern: 0
+    mid_boss_id: 0
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 510401
+    _description: "1\uBC88 \uD0D1 4\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 104
+    wave_index: 1
+    start_time: 0
+    end_time: 180
+    monster_id: 200001
+    spawn_amount: 5
+    spawn_pattern: 0
+    mid_boss_id: 202001
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 510402
+    _description: "1\uBC88 \uD0D1 4\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 104
+    wave_index: 2
+    start_time: 180
+    end_time: 360
+    monster_id: 200002
+    spawn_amount: 5
+    spawn_pattern: 0
+    mid_boss_id: 202002
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 510403
+    _description: "1\uBC88 \uD0D1 4\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 104
+    wave_index: 3
+    start_time: 360
+    end_time: 480
+    monster_id: 200003
+    spawn_amount: 5
+    spawn_pattern: 0
+    mid_boss_id: 202003
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 510404
+    _description: "1\uBC88 \uD0D1 4\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 104
+    wave_index: 4
+    start_time: 480
+    end_time: 600
+    monster_id: 200004
+    spawn_amount: 5
+    spawn_pattern: 0
+    mid_boss_id: 0
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 510501
+    _description: "1\uBC88 \uD0D1 5\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 105
+    wave_index: 1
+    start_time: 0
+    end_time: 180
+    monster_id: 200002
+    spawn_amount: 5
+    spawn_pattern: 0
+    mid_boss_id: 202002
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 510502
+    _description: "1\uBC88 \uD0D1 5\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 105
+    wave_index: 2
+    start_time: 180
+    end_time: 360
+    monster_id: 200003
+    spawn_amount: 5
+    spawn_pattern: 0
+    mid_boss_id: 202003
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 510503
+    _description: "1\uBC88 \uD0D1 5\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 105
+    wave_index: 3
+    start_time: 360
+    end_time: 480
+    monster_id: 200004
+    spawn_amount: 5
+    spawn_pattern: 0
+    mid_boss_id: 202004
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 510504
+    _description: "1\uBC88 \uD0D1 5\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 105
+    wave_index: 4
+    start_time: 480
+    end_time: 600
+    monster_id: 200005
+    spawn_amount: 5
+    spawn_pattern: 0
+    mid_boss_id: 0
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 520101
+    _description: "2\uBC88 \uD0D1 1\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 201
+    wave_index: 1
+    start_time: 0
+    end_time: 180
+    monster_id: 200001
+    spawn_amount: 5
+    spawn_pattern: 0
+    mid_boss_id: 202001
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 520102
+    _description: "2\uBC88 \uD0D1 1\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 201
+    wave_index: 2
+    start_time: 180
+    end_time: 360
+    monster_id: 200002
+    spawn_amount: 5
+    spawn_pattern: 0
+    mid_boss_id: 202002
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 520103
+    _description: "2\uBC88 \uD0D1 1\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 201
+    wave_index: 3
+    start_time: 360
+    end_time: 540
+    monster_id: 200003
+    spawn_amount: 5
+    spawn_pattern: 0
+    mid_boss_id: 202003
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 520104
+    _description: "2\uBC88 \uD0D1 1\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 201
+    wave_index: 4
+    start_time: 540
+    end_time: 660
+    monster_id: 200001
+    spawn_amount: 3
+    spawn_pattern: 0
+    mid_boss_id: 0
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 520105
+    _description: "2\uBC88 \uD0D1 1\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 201
+    wave_index: 4
+    start_time: 540
+    end_time: 660
+    monster_id: 200002
+    spawn_amount: 2
+    spawn_pattern: 0
+    mid_boss_id: 202002
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 520106
+    _description: "2\uBC88 \uD0D1 1\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 201
+    wave_index: 5
+    start_time: 660
+    end_time: 840
+    monster_id: 200003
+    spawn_amount: 4
+    spawn_pattern: 0
+    mid_boss_id: 0
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 520107
+    _description: "2\uBC88 \uD0D1 1\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 201
+    wave_index: 5
+    start_time: 660
+    end_time: 840
+    monster_id: 200004
+    spawn_amount: 1
+    spawn_pattern: 0
+    mid_boss_id: 202004
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 520108
+    _description: "2\uBC88 \uD0D1 1\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 201
+    wave_index: 6
+    start_time: 840
+    end_time: 900
+    monster_id: 200004
+    spawn_amount: 5
+    spawn_pattern: 0
+    mid_boss_id: 0
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 520201
+    _description: "2\uBC88 \uD0D1 2\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 202
+    wave_index: 1
+    start_time: 0
+    end_time: 180
+    monster_id: 200003
+    spawn_amount: 4
+    spawn_pattern: 0
+    mid_boss_id: 0
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 520202
+    _description: "2\uBC88 \uD0D1 2\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 202
+    wave_index: 1
+    start_time: 0
+    end_time: 180
+    monster_id: 200001
+    spawn_amount: 2
+    spawn_pattern: 0
+    mid_boss_id: 202001
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 520203
+    _description: "2\uBC88 \uD0D1 2\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 202
+    wave_index: 2
+    start_time: 180
+    end_time: 360
+    monster_id: 200004
+    spawn_amount: 5
+    spawn_pattern: 0
+    mid_boss_id: 202003
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 520204
+    _description: "2\uBC88 \uD0D1 2\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 202
+    wave_index: 3
+    start_time: 360
+    end_time: 540
+    monster_id: 200005
+    spawn_amount: 5
+    spawn_pattern: 0
+    mid_boss_id: 202002
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 520205
+    _description: "2\uBC88 \uD0D1 2\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 202
+    wave_index: 4
+    start_time: 540
+    end_time: 660
+    monster_id: 200006
+    spawn_amount: 3
+    spawn_pattern: 0
+    mid_boss_id: 0
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 520206
+    _description: "2\uBC88 \uD0D1 2\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 202
+    wave_index: 4
+    start_time: 540
+    end_time: 660
+    monster_id: 200003
+    spawn_amount: 2
+    spawn_pattern: 0
+    mid_boss_id: 202004
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 520207
+    _description: "2\uBC88 \uD0D1 2\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 202
+    wave_index: 5
+    start_time: 660
+    end_time: 840
+    monster_id: 200007
+    spawn_amount: 4
+    spawn_pattern: 0
+    mid_boss_id: 0
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 520208
+    _description: "2\uBC88 \uD0D1 2\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 202
+    wave_index: 5
+    start_time: 660
+    end_time: 840
+    monster_id: 200002
+    spawn_amount: 2
+    spawn_pattern: 0
+    mid_boss_id: 202001
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 520209
+    _description: "2\uBC88 \uD0D1 2\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 202
+    wave_index: 6
+    start_time: 840
+    end_time: 900
+    monster_id: 200006
+    spawn_amount: 5
+    spawn_pattern: 0
+    mid_boss_id: 0
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 520301
+    _description: "2\uBC88 \uD0D1 3\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 203
+    wave_index: 1
+    start_time: 0
+    end_time: 180
+    monster_id: 200002
+    spawn_amount: 4
+    spawn_pattern: 0
+    mid_boss_id: 0
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 520302
+    _description: "2\uBC88 \uD0D1 3\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 203
+    wave_index: 1
+    start_time: 0
+    end_time: 180
+    monster_id: 200004
+    spawn_amount: 2
+    spawn_pattern: 0
+    mid_boss_id: 202002
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 520303
+    _description: "2\uBC88 \uD0D1 3\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 203
+    wave_index: 2
+    start_time: 180
+    end_time: 360
+    monster_id: 200005
+    spawn_amount: 5
+    spawn_pattern: 0
+    mid_boss_id: 202004
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 520304
+    _description: "2\uBC88 \uD0D1 3\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 203
+    wave_index: 3
+    start_time: 360
+    end_time: 540
+    monster_id: 200001
+    spawn_amount: 3
+    spawn_pattern: 0
+    mid_boss_id: 0
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 520305
+    _description: "2\uBC88 \uD0D1 3\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 203
+    wave_index: 3
+    start_time: 360
+    end_time: 540
+    monster_id: 200006
+    spawn_amount: 2
+    spawn_pattern: 0
+    mid_boss_id: 202001
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 520306
+    _description: "2\uBC88 \uD0D1 3\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 203
+    wave_index: 4
+    start_time: 540
+    end_time: 660
+    monster_id: 200007
+    spawn_amount: 5
+    spawn_pattern: 0
+    mid_boss_id: 202003
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 520307
+    _description: "2\uBC88 \uD0D1 3\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 203
+    wave_index: 5
+    start_time: 660
+    end_time: 840
+    monster_id: 200003
+    spawn_amount: 3
+    spawn_pattern: 0
+    mid_boss_id: 0
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 520308
+    _description: "2\uBC88 \uD0D1 3\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 203
+    wave_index: 5
+    start_time: 660
+    end_time: 840
+    monster_id: 200005
+    spawn_amount: 2
+    spawn_pattern: 0
+    mid_boss_id: 202005
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 520309
+    _description: "2\uBC88 \uD0D1 3\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 203
+    wave_index: 6
+    start_time: 840
+    end_time: 900
+    monster_id: 200006
+    spawn_amount: 4
+    spawn_pattern: 0
+    mid_boss_id: 0
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 520310
+    _description: "2\uBC88 \uD0D1 3\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 203
+    wave_index: 6
+    start_time: 840
+    end_time: 900
+    monster_id: 200007
+    spawn_amount: 2
+    spawn_pattern: 0
+    mid_boss_id: 0
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 520401
+    _description: "2\uBC88 \uD0D1 4\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 204
+    wave_index: 1
+    start_time: 0
+    end_time: 180
+    monster_id: 200004
+    spawn_amount: 4
+    spawn_pattern: 0
+    mid_boss_id: 0
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 520402
+    _description: "2\uBC88 \uD0D1 4\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 204
+    wave_index: 1
+    start_time: 0
+    end_time: 180
+    monster_id: 200001
+    spawn_amount: 2
+    spawn_pattern: 0
+    mid_boss_id: 202003
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 520403
+    _description: "2\uBC88 \uD0D1 4\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 204
+    wave_index: 2
+    start_time: 180
+    end_time: 360
+    monster_id: 200006
+    spawn_amount: 5
+    spawn_pattern: 0
+    mid_boss_id: 202005
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 520404
+    _description: "2\uBC88 \uD0D1 4\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 204
+    wave_index: 3
+    start_time: 360
+    end_time: 540
+    monster_id: 200002
+    spawn_amount: 3
+    spawn_pattern: 0
+    mid_boss_id: 0
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 520405
+    _description: "2\uBC88 \uD0D1 4\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 204
+    wave_index: 3
+    start_time: 360
+    end_time: 540
+    monster_id: 200007
+    spawn_amount: 2
+    spawn_pattern: 0
+    mid_boss_id: 202002
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 520406
+    _description: "2\uBC88 \uD0D1 4\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 204
+    wave_index: 4
+    start_time: 540
+    end_time: 660
+    monster_id: 200005
+    spawn_amount: 5
+    spawn_pattern: 0
+    mid_boss_id: 202004
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 520407
+    _description: "2\uBC88 \uD0D1 4\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 204
+    wave_index: 5
+    start_time: 660
+    end_time: 840
+    monster_id: 200001
+    spawn_amount: 3
+    spawn_pattern: 0
+    mid_boss_id: 0
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 520408
+    _description: "2\uBC88 \uD0D1 4\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 204
+    wave_index: 5
+    start_time: 660
+    end_time: 840
+    monster_id: 200003
+    spawn_amount: 2
+    spawn_pattern: 0
+    mid_boss_id: 202001
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 520409
+    _description: "2\uBC88 \uD0D1 4\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 204
+    wave_index: 6
+    start_time: 840
+    end_time: 900
+    monster_id: 200007
+    spawn_amount: 4
+    spawn_pattern: 0
+    mid_boss_id: 0
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 520410
+    _description: "2\uBC88 \uD0D1 4\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 204
+    wave_index: 6
+    start_time: 840
+    end_time: 900
+    monster_id: 200006
+    spawn_amount: 2
+    spawn_pattern: 0
+    mid_boss_id: 0
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 520501
+    _description: "2\uBC88 \uD0D1 5\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 205
+    wave_index: 1
+    start_time: 0
+    end_time: 180
+    monster_id: 200005
+    spawn_amount: 4
+    spawn_pattern: 0
+    mid_boss_id: 0
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 520502
+    _description: "2\uBC88 \uD0D1 5\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 205
+    wave_index: 1
+    start_time: 0
+    end_time: 180
+    monster_id: 200002
+    spawn_amount: 2
+    spawn_pattern: 0
+    mid_boss_id: 202004
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 520503
+    _description: "2\uBC88 \uD0D1 5\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 205
+    wave_index: 2
+    start_time: 180
+    end_time: 360
+    monster_id: 200007
+    spawn_amount: 5
+    spawn_pattern: 0
+    mid_boss_id: 202001
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 520504
+    _description: "2\uBC88 \uD0D1 5\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 205
+    wave_index: 3
+    start_time: 360
+    end_time: 540
+    monster_id: 200003
+    spawn_amount: 3
+    spawn_pattern: 0
+    mid_boss_id: 0
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 520505
+    _description: "2\uBC88 \uD0D1 5\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 205
+    wave_index: 3
+    start_time: 360
+    end_time: 540
+    monster_id: 200004
+    spawn_amount: 2
+    spawn_pattern: 0
+    mid_boss_id: 202005
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 520506
+    _description: "2\uBC88 \uD0D1 5\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 205
+    wave_index: 4
+    start_time: 540
+    end_time: 660
+    monster_id: 200006
+    spawn_amount: 5
+    spawn_pattern: 0
+    mid_boss_id: 202002
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 520507
+    _description: "2\uBC88 \uD0D1 5\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 205
+    wave_index: 5
+    start_time: 660
+    end_time: 840
+    monster_id: 200001
+    spawn_amount: 3
+    spawn_pattern: 0
+    mid_boss_id: 0
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 520508
+    _description: "2\uBC88 \uD0D1 5\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 205
+    wave_index: 5
+    start_time: 660
+    end_time: 840
+    monster_id: 200007
+    spawn_amount: 2
+    spawn_pattern: 0
+    mid_boss_id: 202003
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 520601
+    _description: "2\uBC88 \uD0D1 6\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 206
+    wave_index: 1
+    start_time: 0
+    end_time: 180
+    monster_id: 200006
+    spawn_amount: 5
+    spawn_pattern: 0
+    mid_boss_id: 202001
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 520602
+    _description: "2\uBC88 \uD0D1 6\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 206
+    wave_index: 1
+    start_time: 60
+    end_time: 90
+    monster_id: 200001
+    spawn_amount: 3
+    spawn_pattern: 0
+    mid_boss_id: 0
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 520603
+    _description: "2\uBC88 \uD0D1 6\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 206
+    wave_index: 2
+    start_time: 180
+    end_time: 300
+    monster_id: 200004
+    spawn_amount: 4
+    spawn_pattern: 0
+    mid_boss_id: 0
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 520604
+    _description: "2\uBC88 \uD0D1 6\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 206
+    wave_index: 2
+    start_time: 180
+    end_time: 300
+    monster_id: 200005
+    spawn_amount: 3
+    spawn_pattern: 0
+    mid_boss_id: 0
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 520605
+    _description: "2\uBC88 \uD0D1 6\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 206
+    wave_index: 2
+    start_time: 180
+    end_time: 300
+    monster_id: 200002
+    spawn_amount: 3
+    spawn_pattern: 0
+    mid_boss_id: 202003
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 520606
+    _description: "2\uBC88 \uD0D1 6\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 206
+    wave_index: 3
+    start_time: 300
+    end_time: 400
+    monster_id: 200001
+    spawn_amount: 2
+    spawn_pattern: 0
+    mid_boss_id: 202002
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 520607
+    _description: "2\uBC88 \uD0D1 6\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 206
+    wave_index: 4
+    start_time: 400
+    end_time: 550
+    monster_id: 200005
+    spawn_amount: 4
+    spawn_pattern: 0
+    mid_boss_id: 0
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 520608
+    _description: "2\uBC88 \uD0D1 6\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 206
+    wave_index: 4
+    start_time: 500
+    end_time: 650
+    monster_id: 200006
+    spawn_amount: 4
+    spawn_pattern: 0
+    mid_boss_id: 202004
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 520609
+    _description: "2\uBC88 \uD0D1 6\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 206
+    wave_index: 5
+    start_time: 600
+    end_time: 750
+    monster_id: 200007
+    spawn_amount: 4
+    spawn_pattern: 0
+    mid_boss_id: 202005
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 520610
+    _description: "2\uBC88 \uD0D1 6\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 206
+    wave_index: 6
+    start_time: 750
+    end_time: 900
+    monster_id: 200003
+    spawn_amount: 4
+    spawn_pattern: 0
+    mid_boss_id: 0
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 520611
+    _description: "2\uBC88 \uD0D1 6\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 206
+    wave_index: 6
+    start_time: 800
+    end_time: 900
+    monster_id: 200005
+    spawn_amount: 5
+    spawn_pattern: 0
+    mid_boss_id: 0
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 520612
+    _description: "2\uBC88 \uD0D1 6\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 206
+    wave_index: 6
+    start_time: 850
+    end_time: 900
+    monster_id: 200007
+    spawn_amount: 6
+    spawn_pattern: 0
+    mid_boss_id: 0
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 520701
+    _description: "2\uBC88 \uD0D1 7\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 207
+    wave_index: 1
+    start_time: 0
+    end_time: 180
+    monster_id: 200003
+    spawn_amount: 4
+    spawn_pattern: 0
+    mid_boss_id: 0
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 520702
+    _description: "2\uBC88 \uD0D1 7\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 207
+    wave_index: 1
+    start_time: 30
+    end_time: 150
+    monster_id: 200002
+    spawn_amount: 3
+    spawn_pattern: 0
+    mid_boss_id: 202002
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 520703
+    _description: "2\uBC88 \uD0D1 7\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 207
+    wave_index: 2
+    start_time: 180
+    end_time: 300
+    monster_id: 200006
+    spawn_amount: 5
+    spawn_pattern: 0
+    mid_boss_id: 0
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 520704
+    _description: "2\uBC88 \uD0D1 7\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 207
+    wave_index: 2
+    start_time: 200
+    end_time: 300
+    monster_id: 200007
+    spawn_amount: 3
+    spawn_pattern: 0
+    mid_boss_id: 202004
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 520705
+    _description: "2\uBC88 \uD0D1 7\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 207
+    wave_index: 3
+    start_time: 300
+    end_time: 450
+    monster_id: 200004
+    spawn_amount: 5
+    spawn_pattern: 0
+    mid_boss_id: 0
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 520706
+    _description: "2\uBC88 \uD0D1 7\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 207
+    wave_index: 3
+    start_time: 300
+    end_time: 450
+    monster_id: 200005
+    spawn_amount: 5
+    spawn_pattern: 0
+    mid_boss_id: 202001
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 520707
+    _description: "2\uBC88 \uD0D1 7\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 207
+    wave_index: 4
+    start_time: 450
+    end_time: 500
+    monster_id: 200001
+    spawn_amount: 4
+    spawn_pattern: 0
+    mid_boss_id: 0
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 520708
+    _description: "2\uBC88 \uD0D1 7\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 207
+    wave_index: 4
+    start_time: 550
+    end_time: 600
+    monster_id: 200003
+    spawn_amount: 4
+    spawn_pattern: 0
+    mid_boss_id: 202003
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 520709
+    _description: "2\uBC88 \uD0D1 7\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 207
+    wave_index: 5
+    start_time: 600
+    end_time: 750
+    monster_id: 200005
+    spawn_amount: 4
+    spawn_pattern: 0
+    mid_boss_id: 0
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 520710
+    _description: "2\uBC88 \uD0D1 7\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 207
+    wave_index: 5
+    start_time: 650
+    end_time: 750
+    monster_id: 200007
+    spawn_amount: 4
+    spawn_pattern: 0
+    mid_boss_id: 202005
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 520711
+    _description: "2\uBC88 \uD0D1 7\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 207
+    wave_index: 6
+    start_time: 750
+    end_time: 900
+    monster_id: 200006
+    spawn_amount: 5
+    spawn_pattern: 0
+    mid_boss_id: 0
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 520712
+    _description: "2\uBC88 \uD0D1 7\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 207
+    wave_index: 6
+    start_time: 800
+    end_time: 900
+    monster_id: 200004
+    spawn_amount: 4
+    spawn_pattern: 0
+    mid_boss_id: 0
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 520713
+    _description: "2\uBC88 \uD0D1 7\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 207
+    wave_index: 6
+    start_time: 850
+    end_time: 900
+    monster_id: 200002
+    spawn_amount: 3
+    spawn_pattern: 0
+    mid_boss_id: 0
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 520801
+    _description: "2\uBC88 \uD0D1 8\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 208
+    wave_index: 1
+    start_time: 0
+    end_time: 120
+    monster_id: 200004
+    spawn_amount: 5
+    spawn_pattern: 0
+    mid_boss_id: 202003
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 520802
+    _description: "2\uBC88 \uD0D1 8\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 208
+    wave_index: 2
+    start_time: 100
+    end_time: 250
+    monster_id: 200005
+    spawn_amount: 5
+    spawn_pattern: 0
+    mid_boss_id: 202005
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 520803
+    _description: "2\uBC88 \uD0D1 8\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 208
+    wave_index: 3
+    start_time: 200
+    end_time: 400
+    monster_id: 200006
+    spawn_amount: 4
+    spawn_pattern: 0
+    mid_boss_id: 0
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 520804
+    _description: "2\uBC88 \uD0D1 8\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 208
+    wave_index: 3
+    start_time: 250
+    end_time: 350
+    monster_id: 200001
+    spawn_amount: 3
+    spawn_pattern: 0
+    mid_boss_id: 202002
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 520805
+    _description: "2\uBC88 \uD0D1 8\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 208
+    wave_index: 4
+    start_time: 350
+    end_time: 550
+    monster_id: 200007
+    spawn_amount: 4
+    spawn_pattern: 0
+    mid_boss_id: 0
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 520806
+    _description: "2\uBC88 \uD0D1 8\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 208
+    wave_index: 4
+    start_time: 400
+    end_time: 500
+    monster_id: 200003
+    spawn_amount: 3
+    spawn_pattern: 0
+    mid_boss_id: 202004
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 520807
+    _description: "2\uBC88 \uD0D1 8\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 208
+    wave_index: 5
+    start_time: 500
+    end_time: 700
+    monster_id: 200005
+    spawn_amount: 4
+    spawn_pattern: 0
+    mid_boss_id: 0
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 520808
+    _description: "2\uBC88 \uD0D1 8\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 208
+    wave_index: 5
+    start_time: 600
+    end_time: 700
+    monster_id: 200006
+    spawn_amount: 4
+    spawn_pattern: 0
+    mid_boss_id: 202001
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 520809
+    _description: "2\uBC88 \uD0D1 8\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 208
+    wave_index: 6
+    start_time: 700
+    end_time: 900
+    monster_id: 200004
+    spawn_amount: 5
+    spawn_pattern: 0
+    mid_boss_id: 0
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 520810
+    _description: "2\uBC88 \uD0D1 8\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 208
+    wave_index: 6
+    start_time: 750
+    end_time: 900
+    monster_id: 200007
+    spawn_amount: 4
+    spawn_pattern: 0
+    mid_boss_id: 0
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 520811
+    _description: "2\uBC88 \uD0D1 8\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 208
+    wave_index: 6
+    start_time: 800
+    end_time: 900
+    monster_id: 200006
+    spawn_amount: 4
+    spawn_pattern: 0
+    mid_boss_id: 0
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 520901
+    _description: "2\uBC88 \uD0D1 9\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 209
+    wave_index: 1
+    start_time: 0
+    end_time: 200
+    monster_id: 200001
+    spawn_amount: 4
+    spawn_pattern: 0
+    mid_boss_id: 202001
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 520902
+    _description: "2\uBC88 \uD0D1 9\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 209
+    wave_index: 2
+    start_time: 200
+    end_time: 250
+    monster_id: 200005
+    spawn_amount: 6
+    spawn_pattern: 0
+    mid_boss_id: 0
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 520903
+    _description: "2\uBC88 \uD0D1 9\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 209
+    wave_index: 2
+    start_time: 200
+    end_time: 250
+    monster_id: 200006
+    spawn_amount: 6
+    spawn_pattern: 0
+    mid_boss_id: 202004
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 520904
+    _description: "2\uBC88 \uD0D1 9\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 209
+    wave_index: 3
+    start_time: 250
+    end_time: 450
+    monster_id: 200002
+    spawn_amount: 4
+    spawn_pattern: 0
+    mid_boss_id: 202002
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 520905
+    _description: "2\uBC88 \uD0D1 9\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 209
+    wave_index: 4
+    start_time: 450
+    end_time: 500
+    monster_id: 200004
+    spawn_amount: 6
+    spawn_pattern: 0
+    mid_boss_id: 0
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 520906
+    _description: "2\uBC88 \uD0D1 9\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 209
+    wave_index: 4
+    start_time: 450
+    end_time: 500
+    monster_id: 200007
+    spawn_amount: 6
+    spawn_pattern: 0
+    mid_boss_id: 202005
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 520907
+    _description: "2\uBC88 \uD0D1 9\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 209
+    wave_index: 5
+    start_time: 500
+    end_time: 750
+    monster_id: 200003
+    spawn_amount: 4
+    spawn_pattern: 0
+    mid_boss_id: 0
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 520908
+    _description: "2\uBC88 \uD0D1 9\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 209
+    wave_index: 5
+    start_time: 600
+    end_time: 750
+    monster_id: 200005
+    spawn_amount: 5
+    spawn_pattern: 0
+    mid_boss_id: 202003
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 520909
+    _description: "2\uBC88 \uD0D1 9\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 209
+    wave_index: 6
+    start_time: 750
+    end_time: 800
+    monster_id: 200006
+    spawn_amount: 5
+    spawn_pattern: 0
+    mid_boss_id: 0
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 520910
+    _description: "2\uBC88 \uD0D1 9\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 209
+    wave_index: 6
+    start_time: 800
+    end_time: 850
+    monster_id: 200007
+    spawn_amount: 5
+    spawn_pattern: 0
+    mid_boss_id: 0
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 520911
+    _description: "2\uBC88 \uD0D1 9\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 209
+    wave_index: 6
+    start_time: 850
+    end_time: 900
+    monster_id: 200005
+    spawn_amount: 6
+    spawn_pattern: 0
+    mid_boss_id: 0
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 521001
+    _description: "2\uBC88 \uD0D1 10\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 210
+    wave_index: 1
+    start_time: 0
+    end_time: 150
+    monster_id: 200005
+    spawn_amount: 4
+    spawn_pattern: 0
+    mid_boss_id: 0
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 521002
+    _description: "2\uBC88 \uD0D1 10\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 210
+    wave_index: 1
+    start_time: 0
+    end_time: 150
+    monster_id: 200001
+    spawn_amount: 3
+    spawn_pattern: 0
+    mid_boss_id: 202003
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 521003
+    _description: "2\uBC88 \uD0D1 10\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 210
+    wave_index: 2
+    start_time: 150
+    end_time: 280
+    monster_id: 200002
+    spawn_amount: 4
+    spawn_pattern: 0
+    mid_boss_id: 0
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 521004
+    _description: "2\uBC88 \uD0D1 10\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 210
+    wave_index: 2
+    start_time: 150
+    end_time: 300
+    monster_id: 200003
+    spawn_amount: 3
+    spawn_pattern: 0
+    mid_boss_id: 202001
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 521005
+    _description: "2\uBC88 \uD0D1 10\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 210
+    wave_index: 3
+    start_time: 300
+    end_time: 350
+    monster_id: 200001
+    spawn_amount: 4
+    spawn_pattern: 0
+    mid_boss_id: 0
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 521006
+    _description: "2\uBC88 \uD0D1 10\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 210
+    wave_index: 3
+    start_time: 350
+    end_time: 450
+    monster_id: 200004
+    spawn_amount: 5
+    spawn_pattern: 0
+    mid_boss_id: 0
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 521007
+    _description: "2\uBC88 \uD0D1 10\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 210
+    wave_index: 3
+    start_time: 350
+    end_time: 450
+    monster_id: 200005
+    spawn_amount: 4
+    spawn_pattern: 0
+    mid_boss_id: 202005
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 521008
+    _description: "2\uBC88 \uD0D1 10\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 210
+    wave_index: 4
+    start_time: 450
+    end_time: 500
+    monster_id: 200002
+    spawn_amount: 4
+    spawn_pattern: 0
+    mid_boss_id: 0
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 521009
+    _description: "2\uBC88 \uD0D1 10\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 210
+    wave_index: 4
+    start_time: 500
+    end_time: 600
+    monster_id: 200003
+    spawn_amount: 4
+    spawn_pattern: 0
+    mid_boss_id: 0
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 521010
+    _description: "2\uBC88 \uD0D1 10\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 210
+    wave_index: 4
+    start_time: 500
+    end_time: 600
+    monster_id: 200006
+    spawn_amount: 5
+    spawn_pattern: 0
+    mid_boss_id: 0
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 521011
+    _description: "2\uBC88 \uD0D1 10\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 210
+    wave_index: 4
+    start_time: 550
+    end_time: 600
+    monster_id: 200007
+    spawn_amount: 3
+    spawn_pattern: 0
+    mid_boss_id: 202002
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 521012
+    _description: "2\uBC88 \uD0D1 10\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 210
+    wave_index: 5
+    start_time: 600
+    end_time: 750
+    monster_id: 200006
+    spawn_amount: 5
+    spawn_pattern: 0
+    mid_boss_id: 0
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 521013
+    _description: "2\uBC88 \uD0D1 10\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 210
+    wave_index: 5
+    start_time: 650
+    end_time: 750
+    monster_id: 200007
+    spawn_amount: 5
+    spawn_pattern: 0
+    mid_boss_id: 202004
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 521014
+    _description: "2\uBC88 \uD0D1 10\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 210
+    wave_index: 6
+    start_time: 750
+    end_time: 900
+    monster_id: 200003
+    spawn_amount: 5
+    spawn_pattern: 0
+    mid_boss_id: 0
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 521015
+    _description: "2\uBC88 \uD0D1 10\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 210
+    wave_index: 6
+    start_time: 780
+    end_time: 900
+    monster_id: 200004
+    spawn_amount: 5
+    spawn_pattern: 0
+    mid_boss_id: 0
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 521016
+    _description: "2\uBC88 \uD0D1 10\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 210
+    wave_index: 6
+    start_time: 810
+    end_time: 900
+    monster_id: 200005
+    spawn_amount: 6
+    spawn_pattern: 0
+    mid_boss_id: 0
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 521017
+    _description: "2\uBC88 \uD0D1 10\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 210
+    wave_index: 6
+    start_time: 840
+    end_time: 900
+    monster_id: 200006
+    spawn_amount: 6
+    spawn_pattern: 0
+    mid_boss_id: 0
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 521018
+    _description: "2\uBC88 \uD0D1 10\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 210
+    wave_index: 6
+    start_time: 870
+    end_time: 900
+    monster_id: 200007
+    spawn_amount: 6
+    spawn_pattern: 0
+    mid_boss_id: 0
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 530101
+    _description: "3\uBC88 \uD0D1 1\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 301
+    wave_index: 1
+    start_time: 0
+    end_time: 180
+    monster_id: 200008
+    spawn_amount: 4
+    spawn_pattern: 0
+    mid_boss_id: 0
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 530102
+    _description: "3\uBC88 \uD0D1 1\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 301
+    wave_index: 1
+    start_time: 0
+    end_time: 180
+    monster_id: 200009
+    spawn_amount: 2
+    spawn_pattern: 0
+    mid_boss_id: 202008
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 530103
+    _description: "3\uBC88 \uD0D1 1\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 301
+    wave_index: 2
+    start_time: 180
+    end_time: 360
+    monster_id: 200010
+    spawn_amount: 5
+    spawn_pattern: 0
+    mid_boss_id: 202006
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 530104
+    _description: "3\uBC88 \uD0D1 1\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 301
+    wave_index: 3
+    start_time: 360
+    end_time: 540
+    monster_id: 200011
+    spawn_amount: 3
+    spawn_pattern: 0
+    mid_boss_id: 0
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 530105
+    _description: "3\uBC88 \uD0D1 1\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 301
+    wave_index: 3
+    start_time: 360
+    end_time: 540
+    monster_id: 200012
+    spawn_amount: 2
+    spawn_pattern: 0
+    mid_boss_id: 202010
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 530106
+    _description: "3\uBC88 \uD0D1 1\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 301
+    wave_index: 4
+    start_time: 540
+    end_time: 660
+    monster_id: 200013
+    spawn_amount: 4
+    spawn_pattern: 0
+    mid_boss_id: 0
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 530107
+    _description: "3\uBC88 \uD0D1 1\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 301
+    wave_index: 4
+    start_time: 540
+    end_time: 660
+    monster_id: 200008
+    spawn_amount: 2
+    spawn_pattern: 0
+    mid_boss_id: 202007
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 530108
+    _description: "3\uBC88 \uD0D1 1\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 301
+    wave_index: 5
+    start_time: 660
+    end_time: 840
+    monster_id: 200014
+    spawn_amount: 3
+    spawn_pattern: 0
+    mid_boss_id: 0
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 530109
+    _description: "3\uBC88 \uD0D1 1\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 301
+    wave_index: 5
+    start_time: 660
+    end_time: 840
+    monster_id: 200010
+    spawn_amount: 2
+    spawn_pattern: 0
+    mid_boss_id: 202009
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 530110
+    _description: "3\uBC88 \uD0D1 1\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 301
+    wave_index: 6
+    start_time: 840
+    end_time: 900
+    monster_id: 200011
+    spawn_amount: 2
+    spawn_pattern: 0
+    mid_boss_id: 0
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 530111
+    _description: "3\uBC88 \uD0D1 1\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 301
+    wave_index: 6
+    start_time: 840
+    end_time: 900
+    monster_id: 200012
+    spawn_amount: 2
+    spawn_pattern: 0
+    mid_boss_id: 0
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 530112
+    _description: "3\uBC88 \uD0D1 1\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 301
+    wave_index: 6
+    start_time: 840
+    end_time: 900
+    monster_id: 200013
+    spawn_amount: 2
+    spawn_pattern: 0
+    mid_boss_id: 0
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 530201
+    _description: "3\uBC88 \uD0D1 2\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 302
+    wave_index: 1
+    start_time: 0
+    end_time: 180
+    monster_id: 200008
+    spawn_amount: 6
+    spawn_pattern: 1
+    mid_boss_id: 202009
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 530202
+    _description: "3\uBC88 \uD0D1 2\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 302
+    wave_index: 2
+    start_time: 180
+    end_time: 360
+    monster_id: 200009
+    spawn_amount: 5
+    spawn_pattern: 1
+    mid_boss_id: 202010
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 530203
+    _description: "3\uBC88 \uD0D1 2\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 302
+    wave_index: 3
+    start_time: 360
+    end_time: 540
+    monster_id: 200010
+    spawn_amount: 4
+    spawn_pattern: 0
+    mid_boss_id: 202006
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 530204
+    _description: "3\uBC88 \uD0D1 2\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 302
+    wave_index: 4
+    start_time: 540
+    end_time: 700
+    monster_id: 200011
+    spawn_amount: 5
+    spawn_pattern: 1
+    mid_boss_id: 202008
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 530205
+    _description: "3\uBC88 \uD0D1 2\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 302
+    wave_index: 5
+    start_time: 700
+    end_time: 850
+    monster_id: 200012
+    spawn_amount: 4
+    spawn_pattern: 1
+    mid_boss_id: 202007
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 530206
+    _description: "3\uBC88 \uD0D1 2\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 302
+    wave_index: 6
+    start_time: 850
+    end_time: 900
+    monster_id: 200008
+    spawn_amount: 8
+    spawn_pattern: 1
+    mid_boss_id: 0
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 530301
+    _description: "3\uBC88 \uD0D1 3\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 303
+    wave_index: 1
+    start_time: 0
+    end_time: 150
+    monster_id: 200009
+    spawn_amount: 5
+    spawn_pattern: 0
+    mid_boss_id: 202007
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 530302
+    _description: "3\uBC88 \uD0D1 3\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 303
+    wave_index: 2
+    start_time: 150
+    end_time: 200
+    monster_id: 200008
+    spawn_amount: 8
+    spawn_pattern: 2
+    mid_boss_id: 0
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 530303
+    _description: "3\uBC88 \uD0D1 3\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 303
+    wave_index: 2
+    start_time: 200
+    end_time: 350
+    monster_id: 200010
+    spawn_amount: 5
+    spawn_pattern: 0
+    mid_boss_id: 202009
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 530304
+    _description: "3\uBC88 \uD0D1 3\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 303
+    wave_index: 3
+    start_time: 350
+    end_time: 540
+    monster_id: 200011
+    spawn_amount: 5
+    spawn_pattern: 1
+    mid_boss_id: 202008
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 530305
+    _description: "3\uBC88 \uD0D1 3\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 303
+    wave_index: 4
+    start_time: 540
+    end_time: 700
+    monster_id: 200012
+    spawn_amount: 4
+    spawn_pattern: 0
+    mid_boss_id: 202010
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 530306
+    _description: "3\uBC88 \uD0D1 3\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 303
+    wave_index: 5
+    start_time: 700
+    end_time: 750
+    monster_id: 200009
+    spawn_amount: 8
+    spawn_pattern: 2
+    mid_boss_id: 0
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 530307
+    _description: "3\uBC88 \uD0D1 3\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 303
+    wave_index: 5
+    start_time: 750
+    end_time: 850
+    monster_id: 200014
+    spawn_amount: 3
+    spawn_pattern: 0
+    mid_boss_id: 202006
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 530308
+    _description: "3\uBC88 \uD0D1 3\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 303
+    wave_index: 6
+    start_time: 850
+    end_time: 900
+    monster_id: 200010
+    spawn_amount: 8
+    spawn_pattern: 1
+    mid_boss_id: 0
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 530401
+    _description: "3\uBC88 \uD0D1 4\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 304
+    wave_index: 1
+    start_time: 0
+    end_time: 180
+    monster_id: 200008
+    spawn_amount: 7
+    spawn_pattern: 0
+    mid_boss_id: 202010
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 530402
+    _description: "3\uBC88 \uD0D1 4\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 304
+    wave_index: 2
+    start_time: 180
+    end_time: 360
+    monster_id: 200011
+    spawn_amount: 6
+    spawn_pattern: 0
+    mid_boss_id: 202006
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 530403
+    _description: "3\uBC88 \uD0D1 4\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 304
+    wave_index: 3
+    start_time: 360
+    end_time: 540
+    monster_id: 200013
+    spawn_amount: 5
+    spawn_pattern: 0
+    mid_boss_id: 202009
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 530404
+    _description: "3\uBC88 \uD0D1 4\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 304
+    wave_index: 4
+    start_time: 540
+    end_time: 700
+    monster_id: 200009
+    spawn_amount: 6
+    spawn_pattern: 0
+    mid_boss_id: 202007
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 530405
+    _description: "3\uBC88 \uD0D1 4\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 304
+    wave_index: 5
+    start_time: 700
+    end_time: 850
+    monster_id: 200014
+    spawn_amount: 4
+    spawn_pattern: 0
+    mid_boss_id: 202008
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 530406
+    _description: "3\uBC88 \uD0D1 4\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 304
+    wave_index: 6
+    start_time: 850
+    end_time: 900
+    monster_id: 200012
+    spawn_amount: 10
+    spawn_pattern: 0
+    mid_boss_id: 0
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 530501
+    _description: "3\uBC88 \uD0D1 5\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 305
+    wave_index: 1
+    start_time: 0
+    end_time: 180
+    monster_id: 200010
+    spawn_amount: 6
+    spawn_pattern: 1
+    mid_boss_id: 202006
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 530502
+    _description: "3\uBC88 \uD0D1 5\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 305
+    wave_index: 2
+    start_time: 180
+    end_time: 250
+    monster_id: 200008
+    spawn_amount: 10
+    spawn_pattern: 2
+    mid_boss_id: 0
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 530503
+    _description: "3\uBC88 \uD0D1 5\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 305
+    wave_index: 2
+    start_time: 250
+    end_time: 400
+    monster_id: 200011
+    spawn_amount: 6
+    spawn_pattern: 1
+    mid_boss_id: 202008
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 530504
+    _description: "3\uBC88 \uD0D1 5\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 305
+    wave_index: 3
+    start_time: 400
+    end_time: 550
+    monster_id: 200012
+    spawn_amount: 5
+    spawn_pattern: 0
+    mid_boss_id: 202007
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 530505
+    _description: "3\uBC88 \uD0D1 5\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 305
+    wave_index: 4
+    start_time: 550
+    end_time: 700
+    monster_id: 200013
+    spawn_amount: 6
+    spawn_pattern: 1
+    mid_boss_id: 202010
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 530506
+    _description: "3\uBC88 \uD0D1 5\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 305
+    wave_index: 5
+    start_time: 700
+    end_time: 750
+    monster_id: 200011
+    spawn_amount: 10
+    spawn_pattern: 2
+    mid_boss_id: 0
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 530507
+    _description: "3\uBC88 \uD0D1 5\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 305
+    wave_index: 5
+    start_time: 750
+    end_time: 850
+    monster_id: 200014
+    spawn_amount: 5
+    spawn_pattern: 0
+    mid_boss_id: 202009
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 530508
+    _description: "3\uBC88 \uD0D1 5\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 305
+    wave_index: 6
+    start_time: 850
+    end_time: 900
+    monster_id: 200010
+    spawn_amount: 12
+    spawn_pattern: 1
+    mid_boss_id: 0
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 530601
+    _description: "3\uBC88 \uD0D1 6\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 306
+    wave_index: 1
+    start_time: 0
+    end_time: 150
+    monster_id: 200008
+    spawn_amount: 6
+    spawn_pattern: 1
+    mid_boss_id: 202008
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 530602
+    _description: "3\uBC88 \uD0D1 6\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 306
+    wave_index: 2
+    start_time: 150
+    end_time: 200
+    monster_id: 200010
+    spawn_amount: 10
+    spawn_pattern: 2
+    mid_boss_id: 0
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 530603
+    _description: "3\uBC88 \uD0D1 6\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 306
+    wave_index: 2
+    start_time: 200
+    end_time: 350
+    monster_id: 200011
+    spawn_amount: 5
+    spawn_pattern: 1
+    mid_boss_id: 202010
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 530604
+    _description: "3\uBC88 \uD0D1 6\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 306
+    wave_index: 3
+    start_time: 350
+    end_time: 540
+    monster_id: 200013
+    spawn_amount: 6
+    spawn_pattern: 0
+    mid_boss_id: 202007
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 530605
+    _description: "3\uBC88 \uD0D1 6\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 306
+    wave_index: 4
+    start_time: 540
+    end_time: 700
+    monster_id: 200014
+    spawn_amount: 5
+    spawn_pattern: 1
+    mid_boss_id: 202006
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 530606
+    _description: "3\uBC88 \uD0D1 6\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 306
+    wave_index: 5
+    start_time: 700
+    end_time: 750
+    monster_id: 200012
+    spawn_amount: 12
+    spawn_pattern: 2
+    mid_boss_id: 0
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 530607
+    _description: "3\uBC88 \uD0D1 6\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 306
+    wave_index: 5
+    start_time: 750
+    end_time: 850
+    monster_id: 200009
+    spawn_amount: 8
+    spawn_pattern: 0
+    mid_boss_id: 202009
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 530608
+    _description: "3\uBC88 \uD0D1 6\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 306
+    wave_index: 6
+    start_time: 850
+    end_time: 900
+    monster_id: 200013
+    spawn_amount: 10
+    spawn_pattern: 1
+    mid_boss_id: 0
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 530701
+    _description: "3\uBC88 \uD0D1 7\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 307
+    wave_index: 1
+    start_time: 0
+    end_time: 180
+    monster_id: 200011
+    spawn_amount: 7
+    spawn_pattern: 1
+    mid_boss_id: 202009
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 530702
+    _description: "3\uBC88 \uD0D1 7\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 307
+    wave_index: 2
+    start_time: 180
+    end_time: 360
+    monster_id: 200013
+    spawn_amount: 6
+    spawn_pattern: 0
+    mid_boss_id: 202007
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 530703
+    _description: "3\uBC88 \uD0D1 7\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 307
+    wave_index: 3
+    start_time: 360
+    end_time: 540
+    monster_id: 200008
+    spawn_amount: 10
+    spawn_pattern: 2
+    mid_boss_id: 202010
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 530704
+    _description: "3\uBC88 \uD0D1 7\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 307
+    wave_index: 4
+    start_time: 540
+    end_time: 700
+    monster_id: 200010
+    spawn_amount: 8
+    spawn_pattern: 1
+    mid_boss_id: 202008
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 530705
+    _description: "3\uBC88 \uD0D1 7\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 307
+    wave_index: 5
+    start_time: 700
+    end_time: 850
+    monster_id: 200014
+    spawn_amount: 6
+    spawn_pattern: 0
+    mid_boss_id: 202006
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 530706
+    _description: "3\uBC88 \uD0D1 7\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 307
+    wave_index: 6
+    start_time: 850
+    end_time: 900
+    monster_id: 200012
+    spawn_amount: 12
+    spawn_pattern: 2
+    mid_boss_id: 0
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 530801
+    _description: "3\uBC88 \uD0D1 8\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 308
+    wave_index: 1
+    start_time: 0
+    end_time: 180
+    monster_id: 200009
+    spawn_amount: 8
+    spawn_pattern: 1
+    mid_boss_id: 202010
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 530802
+    _description: "3\uBC88 \uD0D1 8\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 308
+    wave_index: 2
+    start_time: 180
+    end_time: 360
+    monster_id: 200012
+    spawn_amount: 7
+    spawn_pattern: 1
+    mid_boss_id: 202008
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 530803
+    _description: "3\uBC88 \uD0D1 8\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 308
+    wave_index: 3
+    start_time: 360
+    end_time: 540
+    monster_id: 200014
+    spawn_amount: 6
+    spawn_pattern: 0
+    mid_boss_id: 202006
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 530804
+    _description: "3\uBC88 \uD0D1 8\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 308
+    wave_index: 4
+    start_time: 540
+    end_time: 700
+    monster_id: 200013
+    spawn_amount: 8
+    spawn_pattern: 2
+    mid_boss_id: 202009
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 530805
+    _description: "3\uBC88 \uD0D1 8\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 308
+    wave_index: 5
+    start_time: 700
+    end_time: 850
+    monster_id: 200011
+    spawn_amount: 8
+    spawn_pattern: 1
+    mid_boss_id: 202007
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 530806
+    _description: "3\uBC88 \uD0D1 8\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 308
+    wave_index: 6
+    start_time: 850
+    end_time: 900
+    monster_id: 200008
+    spawn_amount: 12
+    spawn_pattern: 2
+    mid_boss_id: 0
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 530901
+    _description: "3\uBC88 \uD0D1 9\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 309
+    wave_index: 1
+    start_time: 0
+    end_time: 180
+    monster_id: 200014
+    spawn_amount: 7
+    spawn_pattern: 1
+    mid_boss_id: 202007
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 530902
+    _description: "3\uBC88 \uD0D1 9\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 309
+    wave_index: 2
+    start_time: 180
+    end_time: 360
+    monster_id: 200010
+    spawn_amount: 8
+    spawn_pattern: 2
+    mid_boss_id: 202006
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 530903
+    _description: "3\uBC88 \uD0D1 9\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 309
+    wave_index: 3
+    start_time: 360
+    end_time: 540
+    monster_id: 200013
+    spawn_amount: 8
+    spawn_pattern: 1
+    mid_boss_id: 202009
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 530904
+    _description: "3\uBC88 \uD0D1 9\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 309
+    wave_index: 4
+    start_time: 540
+    end_time: 700
+    monster_id: 200012
+    spawn_amount: 10
+    spawn_pattern: 2
+    mid_boss_id: 202010
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 530905
+    _description: "3\uBC88 \uD0D1 9\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 309
+    wave_index: 5
+    start_time: 700
+    end_time: 850
+    monster_id: 200011
+    spawn_amount: 8
+    spawn_pattern: 1
+    mid_boss_id: 202008
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 530906
+    _description: "3\uBC88 \uD0D1 9\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 309
+    wave_index: 6
+    start_time: 850
+    end_time: 900
+    monster_id: 200014
+    spawn_amount: 8
+    spawn_pattern: 1
+    mid_boss_id: 0
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 531001
+    _description: "3\uBC88 \uD0D1 10\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 310
+    wave_index: 1
+    start_time: 0
+    end_time: 150
+    monster_id: 200008
+    spawn_amount: 10
+    spawn_pattern: 1
+    mid_boss_id: 202008
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 531002
+    _description: "3\uBC88 \uD0D1 10\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 310
+    wave_index: 2
+    start_time: 150
+    end_time: 300
+    monster_id: 200011
+    spawn_amount: 8
+    spawn_pattern: 2
+    mid_boss_id: 202006
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 531003
+    _description: "3\uBC88 \uD0D1 10\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 310
+    wave_index: 3
+    start_time: 300
+    end_time: 450
+    monster_id: 200013
+    spawn_amount: 8
+    spawn_pattern: 1
+    mid_boss_id: 202010
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 531004
+    _description: "3\uBC88 \uD0D1 10\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 310
+    wave_index: 4
+    start_time: 450
+    end_time: 600
+    monster_id: 200014
+    spawn_amount: 8
+    spawn_pattern: 1
+    mid_boss_id: 202007
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 531005
+    _description: "3\uBC88 \uD0D1 10\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 310
+    wave_index: 5
+    start_time: 600
+    end_time: 750
+    monster_id: 200012
+    spawn_amount: 12
+    spawn_pattern: 2
+    mid_boss_id: 202009
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 531006
+    _description: "3\uBC88 \uD0D1 10\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 310
+    wave_index: 6
+    start_time: 750
+    end_time: 900
+    monster_id: 200014
+    spawn_amount: 12
+    spawn_pattern: 1
+    mid_boss_id: 0
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 540101
+    _description: "4\uBC88 \uD0D1 1\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 401
+    wave_index: 1
+    start_time: 0
+    end_time: 180
+    monster_id: 200015
+    spawn_amount: 5
+    spawn_pattern: 0
+    mid_boss_id: 0
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 540102
+    _description: "4\uBC88 \uD0D1 1\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 401
+    wave_index: 1
+    start_time: 40
+    end_time: 180
+    monster_id: 200015
+    spawn_amount: 3
+    spawn_pattern: 1
+    mid_boss_id: 202013
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 540103
+    _description: "4\uBC88 \uD0D1 1\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 401
+    wave_index: 2
+    start_time: 180
+    end_time: 360
+    monster_id: 200016
+    spawn_amount: 5
+    spawn_pattern: 1
+    mid_boss_id: 0
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 540104
+    _description: "4\uBC88 \uD0D1 1\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 401
+    wave_index: 2
+    start_time: 250
+    end_time: 340
+    monster_id: 200017
+    spawn_amount: 6
+    spawn_pattern: 2
+    mid_boss_id: 202011
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 540105
+    _description: "4\uBC88 \uD0D1 1\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 401
+    wave_index: 3
+    start_time: 360
+    end_time: 540
+    monster_id: 200018
+    spawn_amount: 4
+    spawn_pattern: 0
+    mid_boss_id: 0
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 540106
+    _description: "4\uBC88 \uD0D1 1\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 401
+    wave_index: 3
+    start_time: 400
+    end_time: 540
+    monster_id: 200019
+    spawn_amount: 4
+    spawn_pattern: 1
+    mid_boss_id: 202015
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 540107
+    _description: "4\uBC88 \uD0D1 1\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 401
+    wave_index: 4
+    start_time: 540
+    end_time: 660
+    monster_id: 200020
+    spawn_amount: 5
+    spawn_pattern: 0
+    mid_boss_id: 0
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 540108
+    _description: "4\uBC88 \uD0D1 1\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 401
+    wave_index: 4
+    start_time: 580
+    end_time: 640
+    monster_id: 200015
+    spawn_amount: 8
+    spawn_pattern: 2
+    mid_boss_id: 202012
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 540109
+    _description: "4\uBC88 \uD0D1 1\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 401
+    wave_index: 5
+    start_time: 660
+    end_time: 840
+    monster_id: 200021
+    spawn_amount: 4
+    spawn_pattern: 1
+    mid_boss_id: 0
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 540110
+    _description: "4\uBC88 \uD0D1 1\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 401
+    wave_index: 5
+    start_time: 700
+    end_time: 840
+    monster_id: 200016
+    spawn_amount: 4
+    spawn_pattern: 1
+    mid_boss_id: 202014
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 540111
+    _description: "4\uBC88 \uD0D1 1\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 401
+    wave_index: 6
+    start_time: 840
+    end_time: 900
+    monster_id: 200020
+    spawn_amount: 4
+    spawn_pattern: 1
+    mid_boss_id: 0
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 540112
+    _description: "4\uBC88 \uD0D1 1\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 401
+    wave_index: 6
+    start_time: 850
+    end_time: 900
+    monster_id: 200021
+    spawn_amount: 4
+    spawn_pattern: 0
+    mid_boss_id: 0
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 540201
+    _description: "4\uBC88 \uD0D1 2\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 402
+    wave_index: 1
+    start_time: 0
+    end_time: 180
+    monster_id: 200015
+    spawn_amount: 5
+    spawn_pattern: 0
+    mid_boss_id: 0
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 540202
+    _description: "4\uBC88 \uD0D1 2\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 402
+    wave_index: 1
+    start_time: 20
+    end_time: 160
+    monster_id: 200016
+    spawn_amount: 4
+    spawn_pattern: 2
+    mid_boss_id: 202014
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 540203
+    _description: "4\uBC88 \uD0D1 2\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 402
+    wave_index: 2
+    start_time: 180
+    end_time: 360
+    monster_id: 200017
+    spawn_amount: 6
+    spawn_pattern: 1
+    mid_boss_id: 0
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 540204
+    _description: "4\uBC88 \uD0D1 2\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 402
+    wave_index: 2
+    start_time: 210
+    end_time: 360
+    monster_id: 200018
+    spawn_amount: 4
+    spawn_pattern: 1
+    mid_boss_id: 0
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 540301
+    _description: "4\uBC88 \uD0D1 3\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 403
+    wave_index: 1
+    start_time: 0
+    end_time: 180
+    monster_id: 200019
+    spawn_amount: 5
+    spawn_pattern: 1
+    mid_boss_id: 0
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 540302
+    _description: "4\uBC88 \uD0D1 3\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 403
+    wave_index: 1
+    start_time: 30
+    end_time: 150
+    monster_id: 200015
+    spawn_amount: 8
+    spawn_pattern: 2
+    mid_boss_id: 202012
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 540303
+    _description: "4\uBC88 \uD0D1 3\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 403
+    wave_index: 2
+    start_time: 180
+    end_time: 360
+    monster_id: 200020
+    spawn_amount: 6
+    spawn_pattern: 0
+    mid_boss_id: 0
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 540304
+    _description: "4\uBC88 \uD0D1 3\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 403
+    wave_index: 2
+    start_time: 220
+    end_time: 340
+    monster_id: 200021
+    spawn_amount: 5
+    spawn_pattern: 1
+    mid_boss_id: 202014
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 540305
+    _description: "4\uBC88 \uD0D1 3\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 403
+    wave_index: 3
+    start_time: 360
+    end_time: 540
+    monster_id: 200016
+    spawn_amount: 6
+    spawn_pattern: 1
+    mid_boss_id: 0
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 540401
+    _description: "4\uBC88 \uD0D1 4\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 404
+    wave_index: 1
+    start_time: 10
+    end_time: 180
+    monster_id: 200017
+    spawn_amount: 5
+    spawn_pattern: 0
+    mid_boss_id: 0
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 540402
+    _description: "4\uBC88 \uD0D1 4\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 404
+    wave_index: 1
+    start_time: 40
+    end_time: 160
+    monster_id: 200018
+    spawn_amount: 6
+    spawn_pattern: 2
+    mid_boss_id: 202015
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 540403
+    _description: "4\uBC88 \uD0D1 4\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 404
+    wave_index: 2
+    start_time: 190
+    end_time: 360
+    monster_id: 200015
+    spawn_amount: 7
+    spawn_pattern: 1
+    mid_boss_id: 202011
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 540404
+    _description: "4\uBC88 \uD0D1 4\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 404
+    wave_index: 3
+    start_time: 370
+    end_time: 540
+    monster_id: 200021
+    spawn_amount: 6
+    spawn_pattern: 1
+    mid_boss_id: 202014
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 540405
+    _description: "4\uBC88 \uD0D1 4\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 404
+    wave_index: 4
+    start_time: 550
+    end_time: 660
+    monster_id: 200019
+    spawn_amount: 8
+    spawn_pattern: 2
+    mid_boss_id: 0
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 540501
+    _description: "4\uBC88 \uD0D1 5\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 405
+    wave_index: 1
+    start_time: 0
+    end_time: 180
+    monster_id: 200020
+    spawn_amount: 6
+    spawn_pattern: 1
+    mid_boss_id: 202011
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 540502
+    _description: "4\uBC88 \uD0D1 5\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 405
+    wave_index: 2
+    start_time: 180
+    end_time: 300
+    monster_id: 200016
+    spawn_amount: 10
+    spawn_pattern: 2
+    mid_boss_id: 0
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 540503
+    _description: "4\uBC88 \uD0D1 5\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 405
+    wave_index: 2
+    start_time: 220
+    end_time: 360
+    monster_id: 200017
+    spawn_amount: 8
+    spawn_pattern: 1
+    mid_boss_id: 202013
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 540504
+    _description: "4\uBC88 \uD0D1 5\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 405
+    wave_index: 3
+    start_time: 360
+    end_time: 540
+    monster_id: 200018
+    spawn_amount: 7
+    spawn_pattern: 0
+    mid_boss_id: 202012
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 540505
+    _description: "4\uBC88 \uD0D1 5\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 405
+    wave_index: 4
+    start_time: 540
+    end_time: 660
+    monster_id: 200021
+    spawn_amount: 8
+    spawn_pattern: 1
+    mid_boss_id: 202015
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 540506
+    _description: "4\uBC88 \uD0D1 5\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 405
+    wave_index: 5
+    start_time: 660
+    end_time: 750
+    monster_id: 200019
+    spawn_amount: 12
+    spawn_pattern: 2
+    mid_boss_id: 0
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 540507
+    _description: "4\uBC88 \uD0D1 5\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 405
+    wave_index: 5
+    start_time: 700
+    end_time: 840
+    monster_id: 200015
+    spawn_amount: 10
+    spawn_pattern: 1
+    mid_boss_id: 202014
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 540508
+    _description: "4\uBC88 \uD0D1 5\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 405
+    wave_index: 6
+    start_time: 840
+    end_time: 900
+    monster_id: 200020
+    spawn_amount: 15
+    spawn_pattern: 1
+    mid_boss_id: 0
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 540601
+    _description: "4\uBC88 \uD0D1 6\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 406
+    wave_index: 1
+    start_time: 0
+    end_time: 150
+    monster_id: 200015
+    spawn_amount: 10
+    spawn_pattern: 0
+    mid_boss_id: 0
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 540602
+    _description: "4\uBC88 \uD0D1 6\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 406
+    wave_index: 1
+    start_time: 30
+    end_time: 180
+    monster_id: 200016
+    spawn_amount: 12
+    spawn_pattern: 2
+    mid_boss_id: 202013
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 540603
+    _description: "4\uBC88 \uD0D1 6\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 406
+    wave_index: 2
+    start_time: 150
+    end_time: 300
+    monster_id: 200017
+    spawn_amount: 10
+    spawn_pattern: 1
+    mid_boss_id: 0
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 540604
+    _description: "4\uBC88 \uD0D1 6\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 406
+    wave_index: 2
+    start_time: 180
+    end_time: 330
+    monster_id: 200018
+    spawn_amount: 12
+    spawn_pattern: 2
+    mid_boss_id: 202015
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 540605
+    _description: "4\uBC88 \uD0D1 6\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 406
+    wave_index: 3
+    start_time: 300
+    end_time: 450
+    monster_id: 200019
+    spawn_amount: 10
+    spawn_pattern: 1
+    mid_boss_id: 202012
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 540606
+    _description: "4\uBC88 \uD0D1 6\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 406
+    wave_index: 4
+    start_time: 450
+    end_time: 600
+    monster_id: 200020
+    spawn_amount: 10
+    spawn_pattern: 0
+    mid_boss_id: 202011
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 540607
+    _description: "4\uBC88 \uD0D1 6\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 406
+    wave_index: 5
+    start_time: 600
+    end_time: 750
+    monster_id: 200021
+    spawn_amount: 12
+    spawn_pattern: 1
+    mid_boss_id: 202014
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 540608
+    _description: "4\uBC88 \uD0D1 6\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 406
+    wave_index: 6
+    start_time: 750
+    end_time: 900
+    monster_id: 200015
+    spawn_amount: 12
+    spawn_pattern: 0
+    mid_boss_id: 0
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 540701
+    _description: "4\uBC88 \uD0D1 7\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 407
+    wave_index: 1
+    start_time: 0
+    end_time: 150
+    monster_id: 200017
+    spawn_amount: 4
+    spawn_pattern: 0
+    mid_boss_id: 0
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 540702
+    _description: "4\uBC88 \uD0D1 7\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 407
+    wave_index: 1
+    start_time: 0
+    end_time: 150
+    monster_id: 200018
+    spawn_amount: 3
+    spawn_pattern: 1
+    mid_boss_id: 202012
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 540703
+    _description: "4\uBC88 \uD0D1 7\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 407
+    wave_index: 2
+    start_time: 150
+    end_time: 300
+    monster_id: 200018
+    spawn_amount: 4
+    spawn_pattern: 0
+    mid_boss_id: 0
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 540704
+    _description: "4\uBC88 \uD0D1 7\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 407
+    wave_index: 2
+    start_time: 150
+    end_time: 300
+    monster_id: 200019
+    spawn_amount: 4
+    spawn_pattern: 1
+    mid_boss_id: 202014
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 540705
+    _description: "4\uBC88 \uD0D1 7\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 407
+    wave_index: 3
+    start_time: 300
+    end_time: 450
+    monster_id: 200019
+    spawn_amount: 4
+    spawn_pattern: 1
+    mid_boss_id: 0
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 540706
+    _description: "4\uBC88 \uD0D1 7\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 407
+    wave_index: 3
+    start_time: 300
+    end_time: 450
+    monster_id: 200015
+    spawn_amount: 6
+    spawn_pattern: 2
+    mid_boss_id: 202011
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 540707
+    _description: "4\uBC88 \uD0D1 7\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 407
+    wave_index: 4
+    start_time: 450
+    end_time: 600
+    monster_id: 200020
+    spawn_amount: 4
+    spawn_pattern: 1
+    mid_boss_id: 0
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 540708
+    _description: "4\uBC88 \uD0D1 7\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 407
+    wave_index: 4
+    start_time: 450
+    end_time: 600
+    monster_id: 200016
+    spawn_amount: 5
+    spawn_pattern: 0
+    mid_boss_id: 202015
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 540709
+    _description: "4\uBC88 \uD0D1 7\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 407
+    wave_index: 5
+    start_time: 600
+    end_time: 750
+    monster_id: 200020
+    spawn_amount: 5
+    spawn_pattern: 1
+    mid_boss_id: 0
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 540710
+    _description: "4\uBC88 \uD0D1 7\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 407
+    wave_index: 5
+    start_time: 600
+    end_time: 750
+    monster_id: 200021
+    spawn_amount: 4
+    spawn_pattern: 2
+    mid_boss_id: 202013
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 540711
+    _description: "4\uBC88 \uD0D1 7\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 407
+    wave_index: 6
+    start_time: 750
+    end_time: 900
+    monster_id: 200021
+    spawn_amount: 6
+    spawn_pattern: 2
+    mid_boss_id: 0
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 540712
+    _description: "4\uBC88 \uD0D1 7\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 407
+    wave_index: 6
+    start_time: 750
+    end_time: 900
+    monster_id: 200015
+    spawn_amount: 8
+    spawn_pattern: 2
+    mid_boss_id: 0
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 540801
+    _description: "4\uBC88 \uD0D1 8\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 408
+    wave_index: 1
+    start_time: 0
+    end_time: 150
+    monster_id: 200018
+    spawn_amount: 5
+    spawn_pattern: 0
+    mid_boss_id: 202013
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 540802
+    _description: "4\uBC88 \uD0D1 8\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 408
+    wave_index: 2
+    start_time: 150
+    end_time: 300
+    monster_id: 200019
+    spawn_amount: 4
+    spawn_pattern: 0
+    mid_boss_id: 0
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 540803
+    _description: "4\uBC88 \uD0D1 8\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 408
+    wave_index: 2
+    start_time: 150
+    end_time: 300
+    monster_id: 200015
+    spawn_amount: 5
+    spawn_pattern: 1
+    mid_boss_id: 202011
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 540804
+    _description: "4\uBC88 \uD0D1 8\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 408
+    wave_index: 3
+    start_time: 300
+    end_time: 450
+    monster_id: 200020
+    spawn_amount: 4
+    spawn_pattern: 1
+    mid_boss_id: 0
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 540805
+    _description: "4\uBC88 \uD0D1 8\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 408
+    wave_index: 3
+    start_time: 300
+    end_time: 450
+    monster_id: 200016
+    spawn_amount: 4
+    spawn_pattern: 0
+    mid_boss_id: 202015
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 540806
+    _description: "4\uBC88 \uD0D1 8\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 408
+    wave_index: 4
+    start_time: 450
+    end_time: 600
+    monster_id: 200020
+    spawn_amount: 5
+    spawn_pattern: 1
+    mid_boss_id: 0
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 540807
+    _description: "4\uBC88 \uD0D1 8\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 408
+    wave_index: 4
+    start_time: 450
+    end_time: 600
+    monster_id: 200021
+    spawn_amount: 4
+    spawn_pattern: 1
+    mid_boss_id: 202012
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 540808
+    _description: "4\uBC88 \uD0D1 8\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 408
+    wave_index: 5
+    start_time: 600
+    end_time: 750
+    monster_id: 200021
+    spawn_amount: 5
+    spawn_pattern: 2
+    mid_boss_id: 0
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 540809
+    _description: "4\uBC88 \uD0D1 8\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 408
+    wave_index: 5
+    start_time: 600
+    end_time: 750
+    monster_id: 200017
+    spawn_amount: 5
+    spawn_pattern: 1
+    mid_boss_id: 202014
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 540810
+    _description: "4\uBC88 \uD0D1 8\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 408
+    wave_index: 6
+    start_time: 750
+    end_time: 900
+    monster_id: 200021
+    spawn_amount: 6
+    spawn_pattern: 2
+    mid_boss_id: 0
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 540811
+    _description: "4\uBC88 \uD0D1 8\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 408
+    wave_index: 6
+    start_time: 750
+    end_time: 900
+    monster_id: 200018
+    spawn_amount: 6
+    spawn_pattern: 1
+    mid_boss_id: 0
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 540901
+    _description: "4\uBC88 \uD0D1 9\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 409
+    wave_index: 1
+    start_time: 0
+    end_time: 150
+    monster_id: 200019
+    spawn_amount: 5
+    spawn_pattern: 0
+    mid_boss_id: 202015
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 540902
+    _description: "4\uBC88 \uD0D1 9\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 409
+    wave_index: 2
+    start_time: 150
+    end_time: 300
+    monster_id: 200020
+    spawn_amount: 5
+    spawn_pattern: 1
+    mid_boss_id: 202013
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 540903
+    _description: "4\uBC88 \uD0D1 9\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 409
+    wave_index: 3
+    start_time: 300
+    end_time: 450
+    monster_id: 200021
+    spawn_amount: 4
+    spawn_pattern: 1
+    mid_boss_id: 0
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 540904
+    _description: "4\uBC88 \uD0D1 9\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 409
+    wave_index: 3
+    start_time: 300
+    end_time: 450
+    monster_id: 200015
+    spawn_amount: 6
+    spawn_pattern: 2
+    mid_boss_id: 202014
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 540905
+    _description: "4\uBC88 \uD0D1 9\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 409
+    wave_index: 4
+    start_time: 450
+    end_time: 600
+    monster_id: 200021
+    spawn_amount: 5
+    spawn_pattern: 2
+    mid_boss_id: 0
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 540906
+    _description: "4\uBC88 \uD0D1 9\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 409
+    wave_index: 4
+    start_time: 450
+    end_time: 600
+    monster_id: 200016
+    spawn_amount: 5
+    spawn_pattern: 0
+    mid_boss_id: 202011
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 540907
+    _description: "4\uBC88 \uD0D1 9\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 409
+    wave_index: 5
+    start_time: 600
+    end_time: 750
+    monster_id: 200021
+    spawn_amount: 6
+    spawn_pattern: 1
+    mid_boss_id: 0
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 540908
+    _description: "4\uBC88 \uD0D1 9\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 409
+    wave_index: 5
+    start_time: 600
+    end_time: 750
+    monster_id: 200019
+    spawn_amount: 5
+    spawn_pattern: 1
+    mid_boss_id: 202012
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 540909
+    _description: "4\uBC88 \uD0D1 9\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 409
+    wave_index: 6
+    start_time: 750
+    end_time: 900
+    monster_id: 200021
+    spawn_amount: 8
+    spawn_pattern: 2
+    mid_boss_id: 0
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 540910
+    _description: "4\uBC88 \uD0D1 9\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 409
+    wave_index: 6
+    start_time: 750
+    end_time: 900
+    monster_id: 200020
+    spawn_amount: 6
+    spawn_pattern: 1
+    mid_boss_id: 0
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 541001
+    _description: "4\uBC88 \uD0D1 10\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 410
+    wave_index: 1
+    start_time: 0
+    end_time: 120
+    monster_id: 200020
+    spawn_amount: 4
+    spawn_pattern: 0
+    mid_boss_id: 0
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 541002
+    _description: "4\uBC88 \uD0D1 10\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 410
+    wave_index: 1
+    start_time: 0
+    end_time: 120
+    monster_id: 200016
+    spawn_amount: 3
+    spawn_pattern: 0
+    mid_boss_id: 202014
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 541003
+    _description: "4\uBC88 \uD0D1 10\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 410
+    wave_index: 2
+    start_time: 120
+    end_time: 250
+    monster_id: 200021
+    spawn_amount: 4
+    spawn_pattern: 1
+    mid_boss_id: 0
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 541004
+    _description: "4\uBC88 \uD0D1 10\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 410
+    wave_index: 2
+    start_time: 120
+    end_time: 250
+    monster_id: 200017
+    spawn_amount: 4
+    spawn_pattern: 1
+    mid_boss_id: 202012
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 541005
+    _description: "4\uBC88 \uD0D1 10\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 410
+    wave_index: 3
+    start_time: 250
+    end_time: 400
+    monster_id: 200015
+    spawn_amount: 8
+    spawn_pattern: 2
+    mid_boss_id: 0
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 541006
+    _description: "4\uBC88 \uD0D1 10\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 410
+    wave_index: 3
+    start_time: 250
+    end_time: 400
+    monster_id: 200021
+    spawn_amount: 5
+    spawn_pattern: 2
+    mid_boss_id: 202015
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 541007
+    _description: "4\uBC88 \uD0D1 10\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 410
+    wave_index: 4
+    start_time: 400
+    end_time: 550
+    monster_id: 200021
+    spawn_amount: 5
+    spawn_pattern: 1
+    mid_boss_id: 0
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 541008
+    _description: "4\uBC88 \uD0D1 10\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 410
+    wave_index: 4
+    start_time: 400
+    end_time: 550
+    monster_id: 200019
+    spawn_amount: 5
+    spawn_pattern: 0
+    mid_boss_id: 202011
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 541009
+    _description: "4\uBC88 \uD0D1 10\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 410
+    wave_index: 5
+    start_time: 550
+    end_time: 700
+    monster_id: 200020
+    spawn_amount: 6
+    spawn_pattern: 1
+    mid_boss_id: 0
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 541010
+    _description: "4\uBC88 \uD0D1 10\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 410
+    wave_index: 5
+    start_time: 550
+    end_time: 700
+    monster_id: 200021
+    spawn_amount: 5
+    spawn_pattern: 2
+    mid_boss_id: 202013
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 541011
+    _description: "4\uBC88 \uD0D1 10\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 410
+    wave_index: 6
+    start_time: 700
+    end_time: 900
+    monster_id: 200021
+    spawn_amount: 8
+    spawn_pattern: 2
+    mid_boss_id: 0
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 541012
+    _description: "4\uBC88 \uD0D1 10\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 410
+    wave_index: 6
+    start_time: 700
+    end_time: 900
+    monster_id: 200015
+    spawn_amount: 10
+    spawn_pattern: 2
+    mid_boss_id: 0
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 550101
+    _description: "5\uBC88 \uD0D1 1\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 501
+    wave_index: 1
+    start_time: 0
+    end_time: 180
+    monster_id: 200022
+    spawn_amount: 5
+    spawn_pattern: 0
+    mid_boss_id: 0
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 550102
+    _description: "5\uBC88 \uD0D1 1\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 501
+    wave_index: 1
+    start_time: 40
+    end_time: 180
+    monster_id: 200022
+    spawn_amount: 4
+    spawn_pattern: 1
+    mid_boss_id: 202018
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 550103
+    _description: "5\uBC88 \uD0D1 1\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 501
+    wave_index: 2
+    start_time: 180
+    end_time: 360
+    monster_id: 200023
+    spawn_amount: 6
+    spawn_pattern: 1
+    mid_boss_id: 0
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 550104
+    _description: "5\uBC88 \uD0D1 1\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 501
+    wave_index: 2
+    start_time: 250
+    end_time: 340
+    monster_id: 200024
+    spawn_amount: 6
+    spawn_pattern: 2
+    mid_boss_id: 202016
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 550105
+    _description: "5\uBC88 \uD0D1 1\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 501
+    wave_index: 3
+    start_time: 360
+    end_time: 540
+    monster_id: 200025
+    spawn_amount: 5
+    spawn_pattern: 0
+    mid_boss_id: 0
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 550106
+    _description: "5\uBC88 \uD0D1 1\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 501
+    wave_index: 3
+    start_time: 400
+    end_time: 540
+    monster_id: 200026
+    spawn_amount: 5
+    spawn_pattern: 1
+    mid_boss_id: 202020
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 550107
+    _description: "5\uBC88 \uD0D1 1\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 501
+    wave_index: 4
+    start_time: 540
+    end_time: 660
+    monster_id: 200027
+    spawn_amount: 6
+    spawn_pattern: 0
+    mid_boss_id: 0
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 550108
+    _description: "5\uBC88 \uD0D1 1\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 501
+    wave_index: 4
+    start_time: 580
+    end_time: 640
+    monster_id: 200022
+    spawn_amount: 8
+    spawn_pattern: 2
+    mid_boss_id: 202017
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 550109
+    _description: "5\uBC88 \uD0D1 1\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 501
+    wave_index: 5
+    start_time: 660
+    end_time: 840
+    monster_id: 200028
+    spawn_amount: 5
+    spawn_pattern: 1
+    mid_boss_id: 0
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 550110
+    _description: "5\uBC88 \uD0D1 1\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 501
+    wave_index: 5
+    start_time: 700
+    end_time: 840
+    monster_id: 200023
+    spawn_amount: 5
+    spawn_pattern: 1
+    mid_boss_id: 202019
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 550111
+    _description: "5\uBC88 \uD0D1 1\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 501
+    wave_index: 6
+    start_time: 840
+    end_time: 900
+    monster_id: 200027
+    spawn_amount: 6
+    spawn_pattern: 1
+    mid_boss_id: 0
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 550112
+    _description: "5\uBC88 \uD0D1 1\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 501
+    wave_index: 6
+    start_time: 850
+    end_time: 900
+    monster_id: 200028
+    spawn_amount: 5
+    spawn_pattern: 0
+    mid_boss_id: 0
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 550201
+    _description: "5\uBC88 \uD0D1 2\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 502
+    wave_index: 1
+    start_time: 0
+    end_time: 180
+    monster_id: 200023
+    spawn_amount: 6
+    spawn_pattern: 1
+    mid_boss_id: 0
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 550202
+    _description: "5\uBC88 \uD0D1 2\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 502
+    wave_index: 1
+    start_time: 60
+    end_time: 180
+    monster_id: 200024
+    spawn_amount: 5
+    spawn_pattern: 0
+    mid_boss_id: 202019
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 550203
+    _description: "5\uBC88 \uD0D1 2\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 502
+    wave_index: 2
+    start_time: 180
+    end_time: 360
+    monster_id: 200024
+    spawn_amount: 5
+    spawn_pattern: 1
+    mid_boss_id: 0
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 550204
+    _description: "5\uBC88 \uD0D1 2\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 502
+    wave_index: 2
+    start_time: 200
+    end_time: 360
+    monster_id: 200025
+    spawn_amount: 6
+    spawn_pattern: 2
+    mid_boss_id: 202020
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 550205
+    _description: "5\uBC88 \uD0D1 2\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 502
+    wave_index: 3
+    start_time: 360
+    end_time: 540
+    monster_id: 200025
+    spawn_amount: 5
+    spawn_pattern: 0
+    mid_boss_id: 0
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 550206
+    _description: "5\uBC88 \uD0D1 2\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 502
+    wave_index: 3
+    start_time: 400
+    end_time: 540
+    monster_id: 200026
+    spawn_amount: 6
+    spawn_pattern: 1
+    mid_boss_id: 202016
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 550207
+    _description: "5\uBC88 \uD0D1 2\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 502
+    wave_index: 4
+    start_time: 540
+    end_time: 660
+    monster_id: 200026
+    spawn_amount: 5
+    spawn_pattern: 1
+    mid_boss_id: 0
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 550208
+    _description: "5\uBC88 \uD0D1 2\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 502
+    wave_index: 4
+    start_time: 580
+    end_time: 640
+    monster_id: 200027
+    spawn_amount: 4
+    spawn_pattern: 2
+    mid_boss_id: 202018
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 550209
+    _description: "5\uBC88 \uD0D1 2\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 502
+    wave_index: 5
+    start_time: 660
+    end_time: 840
+    monster_id: 200027
+    spawn_amount: 6
+    spawn_pattern: 0
+    mid_boss_id: 0
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 550210
+    _description: "5\uBC88 \uD0D1 2\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 502
+    wave_index: 5
+    start_time: 700
+    end_time: 840
+    monster_id: 200028
+    spawn_amount: 5
+    spawn_pattern: 1
+    mid_boss_id: 202017
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 550211
+    _description: "5\uBC88 \uD0D1 2\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 502
+    wave_index: 6
+    start_time: 840
+    end_time: 900
+    monster_id: 200028
+    spawn_amount: 8
+    spawn_pattern: 2
+    mid_boss_id: 0
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 550212
+    _description: "5\uBC88 \uD0D1 2\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 502
+    wave_index: 6
+    start_time: 850
+    end_time: 900
+    monster_id: 200023
+    spawn_amount: 5
+    spawn_pattern: 1
+    mid_boss_id: 0
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 550301
+    _description: "5\uBC88 \uD0D1 3\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 503
+    wave_index: 1
+    start_time: 0
+    end_time: 150
+    monster_id: 200023
+    spawn_amount: 5
+    spawn_pattern: 0
+    mid_boss_id: 0
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 550302
+    _description: "5\uBC88 \uD0D1 3\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 503
+    wave_index: 1
+    start_time: 40
+    end_time: 150
+    monster_id: 200024
+    spawn_amount: 4
+    spawn_pattern: 1
+    mid_boss_id: 202017
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 550303
+    _description: "5\uBC88 \uD0D1 3\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 503
+    wave_index: 2
+    start_time: 150
+    end_time: 300
+    monster_id: 200024
+    spawn_amount: 6
+    spawn_pattern: 0
+    mid_boss_id: 0
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 550304
+    _description: "5\uBC88 \uD0D1 3\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 503
+    wave_index: 2
+    start_time: 200
+    end_time: 300
+    monster_id: 200025
+    spawn_amount: 5
+    spawn_pattern: 2
+    mid_boss_id: 202019
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 550305
+    _description: "5\uBC88 \uD0D1 3\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 503
+    wave_index: 3
+    start_time: 300
+    end_time: 500
+    monster_id: 200025
+    spawn_amount: 5
+    spawn_pattern: 1
+    mid_boss_id: 0
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 550306
+    _description: "5\uBC88 \uD0D1 3\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 503
+    wave_index: 3
+    start_time: 350
+    end_time: 500
+    monster_id: 200026
+    spawn_amount: 5
+    spawn_pattern: 1
+    mid_boss_id: 202020
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 550307
+    _description: "5\uBC88 \uD0D1 3\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 503
+    wave_index: 4
+    start_time: 500
+    end_time: 650
+    monster_id: 200026
+    spawn_amount: 6
+    spawn_pattern: 2
+    mid_boss_id: 0
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 550308
+    _description: "5\uBC88 \uD0D1 3\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 503
+    wave_index: 4
+    start_time: 550
+    end_time: 650
+    monster_id: 200027
+    spawn_amount: 4
+    spawn_pattern: 1
+    mid_boss_id: 202016
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 550309
+    _description: "5\uBC88 \uD0D1 3\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 503
+    wave_index: 5
+    start_time: 650
+    end_time: 800
+    monster_id: 200027
+    spawn_amount: 6
+    spawn_pattern: 0
+    mid_boss_id: 0
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 550310
+    _description: "5\uBC88 \uD0D1 3\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 503
+    wave_index: 5
+    start_time: 700
+    end_time: 800
+    monster_id: 200028
+    spawn_amount: 5
+    spawn_pattern: 2
+    mid_boss_id: 202018
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 550311
+    _description: "5\uBC88 \uD0D1 3\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 503
+    wave_index: 6
+    start_time: 800
+    end_time: 900
+    monster_id: 200028
+    spawn_amount: 6
+    spawn_pattern: 2
+    mid_boss_id: 0
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 550312
+    _description: "5\uBC88 \uD0D1 3\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 503
+    wave_index: 6
+    start_time: 820
+    end_time: 900
+    monster_id: 200022
+    spawn_amount: 8
+    spawn_pattern: 2
+    mid_boss_id: 0
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 550401
+    _description: "5\uBC88 \uD0D1 4\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 504
+    wave_index: 1
+    start_time: 0
+    end_time: 150
+    monster_id: 200024
+    spawn_amount: 5
+    spawn_pattern: 1
+    mid_boss_id: 202020
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 550402
+    _description: "5\uBC88 \uD0D1 4\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 504
+    wave_index: 2
+    start_time: 150
+    end_time: 300
+    monster_id: 200024
+    spawn_amount: 4
+    spawn_pattern: 1
+    mid_boss_id: 0
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 550403
+    _description: "5\uBC88 \uD0D1 4\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 504
+    wave_index: 2
+    start_time: 180
+    end_time: 300
+    monster_id: 200025
+    spawn_amount: 4
+    spawn_pattern: 1
+    mid_boss_id: 202018
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 550404
+    _description: "5\uBC88 \uD0D1 4\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 504
+    wave_index: 3
+    start_time: 300
+    end_time: 450
+    monster_id: 200025
+    spawn_amount: 8
+    spawn_pattern: 1
+    mid_boss_id: 202017
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 550405
+    _description: "5\uBC88 \uD0D1 4\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 504
+    wave_index: 4
+    start_time: 450
+    end_time: 650
+    monster_id: 200024
+    spawn_amount: 3
+    spawn_pattern: 1
+    mid_boss_id: 0
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 550406
+    _description: "5\uBC88 \uD0D1 4\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 504
+    wave_index: 4
+    start_time: 480
+    end_time: 650
+    monster_id: 200025
+    spawn_amount: 3
+    spawn_pattern: 1
+    mid_boss_id: 0
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 550407
+    _description: "5\uBC88 \uD0D1 4\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 504
+    wave_index: 4
+    start_time: 500
+    end_time: 650
+    monster_id: 200026
+    spawn_amount: 3
+    spawn_pattern: 1
+    mid_boss_id: 202019
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 550408
+    _description: "5\uBC88 \uD0D1 4\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 504
+    wave_index: 5
+    start_time: 650
+    end_time: 750
+    monster_id: 200026
+    spawn_amount: 5
+    spawn_pattern: 1
+    mid_boss_id: 0
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 550409
+    _description: "5\uBC88 \uD0D1 4\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 504
+    wave_index: 5
+    start_time: 680
+    end_time: 750
+    monster_id: 200027
+    spawn_amount: 4
+    spawn_pattern: 2
+    mid_boss_id: 202016
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 550410
+    _description: "5\uBC88 \uD0D1 4\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 504
+    wave_index: 6
+    start_time: 750
+    end_time: 900
+    monster_id: 200025
+    spawn_amount: 4
+    spawn_pattern: 1
+    mid_boss_id: 0
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 550411
+    _description: "5\uBC88 \uD0D1 4\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 504
+    wave_index: 6
+    start_time: 780
+    end_time: 900
+    monster_id: 200026
+    spawn_amount: 4
+    spawn_pattern: 1
+    mid_boss_id: 0
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 550412
+    _description: "5\uBC88 \uD0D1 4\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 504
+    wave_index: 6
+    start_time: 800
+    end_time: 900
+    monster_id: 200027
+    spawn_amount: 4
+    spawn_pattern: 2
+    mid_boss_id: 0
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 550501
+    _description: "5\uBC88 \uD0D1 5\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 505
+    wave_index: 1
+    start_time: 0
+    end_time: 150
+    monster_id: 200024
+    spawn_amount: 4
+    spawn_pattern: 1
+    mid_boss_id: 0
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 550502
+    _description: "5\uBC88 \uD0D1 5\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 505
+    wave_index: 1
+    start_time: 30
+    end_time: 150
+    monster_id: 200025
+    spawn_amount: 4
+    spawn_pattern: 1
+    mid_boss_id: 202016
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 550503
+    _description: "5\uBC88 \uD0D1 5\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 505
+    wave_index: 2
+    start_time: 150
+    end_time: 300
+    monster_id: 200025
+    spawn_amount: 5
+    spawn_pattern: 1
+    mid_boss_id: 0
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 550504
+    _description: "5\uBC88 \uD0D1 5\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 505
+    wave_index: 2
+    start_time: 180
+    end_time: 300
+    monster_id: 200026
+    spawn_amount: 4
+    spawn_pattern: 1
+    mid_boss_id: 202017
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 550505
+    _description: "5\uBC88 \uD0D1 5\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 505
+    wave_index: 3
+    start_time: 300
+    end_time: 450
+    monster_id: 200024
+    spawn_amount: 3
+    spawn_pattern: 1
+    mid_boss_id: 0
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 550506
+    _description: "5\uBC88 \uD0D1 5\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 505
+    wave_index: 3
+    start_time: 300
+    end_time: 450
+    monster_id: 200025
+    spawn_amount: 3
+    spawn_pattern: 1
+    mid_boss_id: 0
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 550507
+    _description: "5\uBC88 \uD0D1 5\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 505
+    wave_index: 3
+    start_time: 330
+    end_time: 450
+    monster_id: 200026
+    spawn_amount: 4
+    spawn_pattern: 1
+    mid_boss_id: 202018
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 550508
+    _description: "5\uBC88 \uD0D1 5\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 505
+    wave_index: 4
+    start_time: 450
+    end_time: 600
+    monster_id: 200026
+    spawn_amount: 8
+    spawn_pattern: 1
+    mid_boss_id: 202020
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 550509
+    _description: "5\uBC88 \uD0D1 5\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 505
+    wave_index: 5
+    start_time: 600
+    end_time: 750
+    monster_id: 200026
+    spawn_amount: 4
+    spawn_pattern: 1
+    mid_boss_id: 0
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 550510
+    _description: "5\uBC88 \uD0D1 5\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 505
+    wave_index: 5
+    start_time: 630
+    end_time: 750
+    monster_id: 200027
+    spawn_amount: 5
+    spawn_pattern: 1
+    mid_boss_id: 202019
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 550511
+    _description: "5\uBC88 \uD0D1 5\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 505
+    wave_index: 6
+    start_time: 750
+    end_time: 900
+    monster_id: 200026
+    spawn_amount: 4
+    spawn_pattern: 1
+    mid_boss_id: 0
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 550512
+    _description: "5\uBC88 \uD0D1 5\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 505
+    wave_index: 6
+    start_time: 750
+    end_time: 900
+    monster_id: 200027
+    spawn_amount: 4
+    spawn_pattern: 1
+    mid_boss_id: 0
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 550513
+    _description: "5\uBC88 \uD0D1 5\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 505
+    wave_index: 6
+    start_time: 780
+    end_time: 900
+    monster_id: 200028
+    spawn_amount: 4
+    spawn_pattern: 1
+    mid_boss_id: 0
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 550601
+    _description: "5\uBC88 \uD0D1 6\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 506
+    wave_index: 1
+    start_time: 0
+    end_time: 150
+    monster_id: 200025
+    spawn_amount: 4
+    spawn_pattern: 0
+    mid_boss_id: 0
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 550602
+    _description: "5\uBC88 \uD0D1 6\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 506
+    wave_index: 1
+    start_time: 0
+    end_time: 150
+    monster_id: 200026
+    spawn_amount: 3
+    spawn_pattern: 1
+    mid_boss_id: 202018
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 550603
+    _description: "5\uBC88 \uD0D1 6\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 506
+    wave_index: 2
+    start_time: 150
+    end_time: 300
+    monster_id: 200026
+    spawn_amount: 4
+    spawn_pattern: 1
+    mid_boss_id: 0
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 550604
+    _description: "5\uBC88 \uD0D1 6\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 506
+    wave_index: 2
+    start_time: 150
+    end_time: 300
+    monster_id: 200027
+    spawn_amount: 4
+    spawn_pattern: 1
+    mid_boss_id: 202016
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 550605
+    _description: "5\uBC88 \uD0D1 6\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 506
+    wave_index: 3
+    start_time: 300
+    end_time: 450
+    monster_id: 200027
+    spawn_amount: 5
+    spawn_pattern: 1
+    mid_boss_id: 202019
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 550606
+    _description: "5\uBC88 \uD0D1 6\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 506
+    wave_index: 4
+    start_time: 450
+    end_time: 600
+    monster_id: 200025
+    spawn_amount: 5
+    spawn_pattern: 1
+    mid_boss_id: 0
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 550607
+    _description: "5\uBC88 \uD0D1 6\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 506
+    wave_index: 4
+    start_time: 450
+    end_time: 600
+    monster_id: 200026
+    spawn_amount: 5
+    spawn_pattern: 1
+    mid_boss_id: 0
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 550608
+    _description: "5\uBC88 \uD0D1 6\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 506
+    wave_index: 4
+    start_time: 450
+    end_time: 600
+    monster_id: 200027
+    spawn_amount: 3
+    spawn_pattern: 1
+    mid_boss_id: 202017
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 550609
+    _description: "5\uBC88 \uD0D1 6\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 506
+    wave_index: 5
+    start_time: 600
+    end_time: 750
+    monster_id: 200026
+    spawn_amount: 5
+    spawn_pattern: 1
+    mid_boss_id: 0
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 550610
+    _description: "5\uBC88 \uD0D1 6\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 506
+    wave_index: 5
+    start_time: 600
+    end_time: 750
+    monster_id: 200028
+    spawn_amount: 4
+    spawn_pattern: 1
+    mid_boss_id: 202020
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 550611
+    _description: "5\uBC88 \uD0D1 6\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 506
+    wave_index: 6
+    start_time: 750
+    end_time: 900
+    monster_id: 200027
+    spawn_amount: 6
+    spawn_pattern: 1
+    mid_boss_id: 0
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 550612
+    _description: "5\uBC88 \uD0D1 6\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 506
+    wave_index: 6
+    start_time: 750
+    end_time: 900
+    monster_id: 200028
+    spawn_amount: 6
+    spawn_pattern: 1
+    mid_boss_id: 0
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 550701
+    _description: "5\uBC88 \uD0D1 7\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 507
+    wave_index: 1
+    start_time: 0
+    end_time: 150
+    monster_id: 200022
+    spawn_amount: 10
+    spawn_pattern: 2
+    mid_boss_id: 202017
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 550702
+    _description: "5\uBC88 \uD0D1 7\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 507
+    wave_index: 2
+    start_time: 150
+    end_time: 300
+    monster_id: 200022
+    spawn_amount: 8
+    spawn_pattern: 2
+    mid_boss_id: 0
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 550703
+    _description: "5\uBC88 \uD0D1 7\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 507
+    wave_index: 2
+    start_time: 150
+    end_time: 300
+    monster_id: 200027
+    spawn_amount: 3
+    spawn_pattern: 1
+    mid_boss_id: 202020
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 550704
+    _description: "5\uBC88 \uD0D1 7\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 507
+    wave_index: 3
+    start_time: 300
+    end_time: 450
+    monster_id: 200022
+    spawn_amount: 12
+    spawn_pattern: 2
+    mid_boss_id: 202016
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 550705
+    _description: "5\uBC88 \uD0D1 7\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 507
+    wave_index: 4
+    start_time: 450
+    end_time: 600
+    monster_id: 200022
+    spawn_amount: 10
+    spawn_pattern: 2
+    mid_boss_id: 0
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 550706
+    _description: "5\uBC88 \uD0D1 7\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 507
+    wave_index: 4
+    start_time: 450
+    end_time: 600
+    monster_id: 200028
+    spawn_amount: 3
+    spawn_pattern: 0
+    mid_boss_id: 202019
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 550707
+    _description: "5\uBC88 \uD0D1 7\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 507
+    wave_index: 5
+    start_time: 600
+    end_time: 750
+    monster_id: 200023
+    spawn_amount: 10
+    spawn_pattern: 2
+    mid_boss_id: 0
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 550708
+    _description: "5\uBC88 \uD0D1 7\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 507
+    wave_index: 5
+    start_time: 600
+    end_time: 750
+    monster_id: 200027
+    spawn_amount: 4
+    spawn_pattern: 1
+    mid_boss_id: 202018
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 550709
+    _description: "5\uBC88 \uD0D1 7\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 507
+    wave_index: 6
+    start_time: 750
+    end_time: 900
+    monster_id: 200022
+    spawn_amount: 15
+    spawn_pattern: 2
+    mid_boss_id: 0
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 550710
+    _description: "5\uBC88 \uD0D1 7\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 507
+    wave_index: 6
+    start_time: 750
+    end_time: 900
+    monster_id: 200028
+    spawn_amount: 4
+    spawn_pattern: 0
+    mid_boss_id: 0
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 550801
+    _description: "5\uBC88 \uD0D1 8\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 508
+    wave_index: 1
+    start_time: 0
+    end_time: 150
+    monster_id: 200023
+    spawn_amount: 8
+    spawn_pattern: 2
+    mid_boss_id: 0
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 550802
+    _description: "5\uBC88 \uD0D1 8\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 508
+    wave_index: 1
+    start_time: 0
+    end_time: 150
+    monster_id: 200027
+    spawn_amount: 4
+    spawn_pattern: 1
+    mid_boss_id: 202020
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 550803
+    _description: "5\uBC88 \uD0D1 8\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 508
+    wave_index: 2
+    start_time: 150
+    end_time: 300
+    monster_id: 200022
+    spawn_amount: 10
+    spawn_pattern: 2
+    mid_boss_id: 0
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 550804
+    _description: "5\uBC88 \uD0D1 8\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 508
+    wave_index: 2
+    start_time: 150
+    end_time: 300
+    monster_id: 200028
+    spawn_amount: 3
+    spawn_pattern: 0
+    mid_boss_id: 202019
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 550805
+    _description: "5\uBC88 \uD0D1 8\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 508
+    wave_index: 3
+    start_time: 300
+    end_time: 450
+    monster_id: 200023
+    spawn_amount: 12
+    spawn_pattern: 2
+    mid_boss_id: 0
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 550806
+    _description: "5\uBC88 \uD0D1 8\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 508
+    wave_index: 3
+    start_time: 300
+    end_time: 450
+    monster_id: 200027
+    spawn_amount: 5
+    spawn_pattern: 1
+    mid_boss_id: 202017
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 550807
+    _description: "5\uBC88 \uD0D1 8\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 508
+    wave_index: 4
+    start_time: 450
+    end_time: 600
+    monster_id: 200024
+    spawn_amount: 10
+    spawn_pattern: 2
+    mid_boss_id: 0
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 550808
+    _description: "5\uBC88 \uD0D1 8\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 508
+    wave_index: 4
+    start_time: 450
+    end_time: 600
+    monster_id: 200028
+    spawn_amount: 4
+    spawn_pattern: 0
+    mid_boss_id: 202018
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 550809
+    _description: "5\uBC88 \uD0D1 8\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 508
+    wave_index: 5
+    start_time: 600
+    end_time: 750
+    monster_id: 200023
+    spawn_amount: 10
+    spawn_pattern: 2
+    mid_boss_id: 0
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 550810
+    _description: "5\uBC88 \uD0D1 8\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 508
+    wave_index: 5
+    start_time: 600
+    end_time: 750
+    monster_id: 200022
+    spawn_amount: 10
+    spawn_pattern: 2
+    mid_boss_id: 202016
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 550811
+    _description: "5\uBC88 \uD0D1 8\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 508
+    wave_index: 6
+    start_time: 750
+    end_time: 900
+    monster_id: 200022
+    spawn_amount: 20
+    spawn_pattern: 2
+    mid_boss_id: 0
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 550812
+    _description: "5\uBC88 \uD0D1 8\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 508
+    wave_index: 6
+    start_time: 750
+    end_time: 900
+    monster_id: 200028
+    spawn_amount: 5
+    spawn_pattern: 0
+    mid_boss_id: 0
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 550901
+    _description: "5\uBC88 \uD0D1 9\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 509
+    wave_index: 1
+    start_time: 0
+    end_time: 120
+    monster_id: 200025
+    spawn_amount: 5
+    spawn_pattern: 0
+    mid_boss_id: 0
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 550902
+    _description: "5\uBC88 \uD0D1 9\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 509
+    wave_index: 1
+    start_time: 0
+    end_time: 120
+    monster_id: 200026
+    spawn_amount: 4
+    spawn_pattern: 1
+    mid_boss_id: 202019
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 550903
+    _description: "5\uBC88 \uD0D1 9\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 509
+    wave_index: 2
+    start_time: 120
+    end_time: 240
+    monster_id: 200026
+    spawn_amount: 6
+    spawn_pattern: 1
+    mid_boss_id: 202016
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 550904
+    _description: "5\uBC88 \uD0D1 9\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 509
+    wave_index: 3
+    start_time: 240
+    end_time: 390
+    monster_id: 200027
+    spawn_amount: 4
+    spawn_pattern: 1
+    mid_boss_id: 0
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 550905
+    _description: "5\uBC88 \uD0D1 9\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 509
+    wave_index: 3
+    start_time: 240
+    end_time: 390
+    monster_id: 200022
+    spawn_amount: 8
+    spawn_pattern: 2
+    mid_boss_id: 202018
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 550906
+    _description: "5\uBC88 \uD0D1 9\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 509
+    wave_index: 4
+    start_time: 390
+    end_time: 540
+    monster_id: 200028
+    spawn_amount: 4
+    spawn_pattern: 0
+    mid_boss_id: 0
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 550907
+    _description: "5\uBC88 \uD0D1 9\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 509
+    wave_index: 4
+    start_time: 390
+    end_time: 540
+    monster_id: 200025
+    spawn_amount: 6
+    spawn_pattern: 1
+    mid_boss_id: 202020
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 550908
+    _description: "5\uBC88 \uD0D1 9\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 509
+    wave_index: 5
+    start_time: 540
+    end_time: 690
+    monster_id: 200028
+    spawn_amount: 5
+    spawn_pattern: 1
+    mid_boss_id: 0
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 550909
+    _description: "5\uBC88 \uD0D1 9\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 509
+    wave_index: 5
+    start_time: 540
+    end_time: 690
+    monster_id: 200026
+    spawn_amount: 5
+    spawn_pattern: 2
+    mid_boss_id: 202017
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 550910
+    _description: "5\uBC88 \uD0D1 9\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 509
+    wave_index: 6
+    start_time: 690
+    end_time: 900
+    monster_id: 200027
+    spawn_amount: 8
+    spawn_pattern: 1
+    mid_boss_id: 0
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 550911
+    _description: "5\uBC88 \uD0D1 9\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 509
+    wave_index: 6
+    start_time: 690
+    end_time: 900
+    monster_id: 200028
+    spawn_amount: 6
+    spawn_pattern: 1
+    mid_boss_id: 0
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 551001
+    _description: "5\uBC88 \uD0D1 10\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 510
+    wave_index: 1
+    start_time: 0
+    end_time: 100
+    monster_id: 200026
+    spawn_amount: 5
+    spawn_pattern: 1
+    mid_boss_id: 0
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 551002
+    _description: "5\uBC88 \uD0D1 10\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 510
+    wave_index: 1
+    start_time: 0
+    end_time: 100
+    monster_id: 200027
+    spawn_amount: 3
+    spawn_pattern: 0
+    mid_boss_id: 202016
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 551003
+    _description: "5\uBC88 \uD0D1 10\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 510
+    wave_index: 2
+    start_time: 100
+    end_time: 220
+    monster_id: 200027
+    spawn_amount: 5
+    spawn_pattern: 1
+    mid_boss_id: 0
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 551004
+    _description: "5\uBC88 \uD0D1 10\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 510
+    wave_index: 2
+    start_time: 100
+    end_time: 220
+    monster_id: 200023
+    spawn_amount: 8
+    spawn_pattern: 2
+    mid_boss_id: 202018
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 551005
+    _description: "5\uBC88 \uD0D1 10\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 510
+    wave_index: 3
+    start_time: 220
+    end_time: 350
+    monster_id: 200028
+    spawn_amount: 4
+    spawn_pattern: 0
+    mid_boss_id: 0
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 551006
+    _description: "5\uBC88 \uD0D1 10\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 510
+    wave_index: 3
+    start_time: 220
+    end_time: 350
+    monster_id: 200022
+    spawn_amount: 10
+    spawn_pattern: 2
+    mid_boss_id: 202020
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 551007
+    _description: "5\uBC88 \uD0D1 10\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 510
+    wave_index: 4
+    start_time: 350
+    end_time: 500
+    monster_id: 200028
+    spawn_amount: 6
+    spawn_pattern: 1
+    mid_boss_id: 202019
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 551008
+    _description: "5\uBC88 \uD0D1 10\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 510
+    wave_index: 5
+    start_time: 500
+    end_time: 700
+    monster_id: 200027
+    spawn_amount: 6
+    spawn_pattern: 1
+    mid_boss_id: 0
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 551009
+    _description: "5\uBC88 \uD0D1 10\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 510
+    wave_index: 5
+    start_time: 500
+    end_time: 700
+    monster_id: 200028
+    spawn_amount: 6
+    spawn_pattern: 1
+    mid_boss_id: 202017
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 551010
+    _description: "5\uBC88 \uD0D1 10\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 510
+    wave_index: 6
+    start_time: 700
+    end_time: 900
+    monster_id: 200022
+    spawn_amount: 15
+    spawn_pattern: 2
+    mid_boss_id: 0
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 551011
+    _description: "5\uBC88 \uD0D1 10\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 510
+    wave_index: 6
+    start_time: 700
+    end_time: 900
+    monster_id: 200028
+    spawn_amount: 10
+    spawn_pattern: 1
+    mid_boss_id: 0
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 560101
+    _description: "6\uBC88 \uD0D1 1\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 601
+    wave_index: 1
+    start_time: 0
+    end_time: 150
+    monster_id: 200029
+    spawn_amount: 5
+    spawn_pattern: 2
+    mid_boss_id: 0
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 560102
+    _description: "6\uBC88 \uD0D1 1\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 601
+    wave_index: 1
+    start_time: 30
+    end_time: 150
+    monster_id: 200033
+    spawn_amount: 2
+    spawn_pattern: 1
+    mid_boss_id: 202023
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 560103
+    _description: "6\uBC88 \uD0D1 1\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 601
+    wave_index: 2
+    start_time: 150
+    end_time: 300
+    monster_id: 200030
+    spawn_amount: 6
+    spawn_pattern: 0
+    mid_boss_id: 0
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 560104
+    _description: "6\uBC88 \uD0D1 1\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 601
+    wave_index: 2
+    start_time: 180
+    end_time: 300
+    monster_id: 200034
+    spawn_amount: 3
+    spawn_pattern: 1
+    mid_boss_id: 202021
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 560105
+    _description: "6\uBC88 \uD0D1 1\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 601
+    wave_index: 3
+    start_time: 300
+    end_time: 450
+    monster_id: 200029
+    spawn_amount: 4
+    spawn_pattern: 2
+    mid_boss_id: 0
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 560106
+    _description: "6\uBC88 \uD0D1 1\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 601
+    wave_index: 3
+    start_time: 300
+    end_time: 450
+    monster_id: 200031
+    spawn_amount: 4
+    spawn_pattern: 1
+    mid_boss_id: 0
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 560107
+    _description: "6\uBC88 \uD0D1 1\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 601
+    wave_index: 3
+    start_time: 330
+    end_time: 450
+    monster_id: 200035
+    spawn_amount: 2
+    spawn_pattern: 1
+    mid_boss_id: 202025
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 560108
+    _description: "6\uBC88 \uD0D1 1\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 601
+    wave_index: 4
+    start_time: 450
+    end_time: 600
+    monster_id: 200032
+    spawn_amount: 8
+    spawn_pattern: 1
+    mid_boss_id: 202022
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 560109
+    _description: "6\uBC88 \uD0D1 1\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 601
+    wave_index: 5
+    start_time: 600
+    end_time: 750
+    monster_id: 200033
+    spawn_amount: 4
+    spawn_pattern: 1
+    mid_boss_id: 0
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 560110
+    _description: "6\uBC88 \uD0D1 1\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 601
+    wave_index: 5
+    start_time: 630
+    end_time: 750
+    monster_id: 200030
+    spawn_amount: 5
+    spawn_pattern: 2
+    mid_boss_id: 202024
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 560111
+    _description: "6\uBC88 \uD0D1 1\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 601
+    wave_index: 6
+    start_time: 750
+    end_time: 900
+    monster_id: 200035
+    spawn_amount: 4
+    spawn_pattern: 2
+    mid_boss_id: 0
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 560112
+    _description: "6\uBC88 \uD0D1 1\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 601
+    wave_index: 6
+    start_time: 750
+    end_time: 900
+    monster_id: 200034
+    spawn_amount: 4
+    spawn_pattern: 1
+    mid_boss_id: 0
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 560113
+    _description: "6\uBC88 \uD0D1 1\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 601
+    wave_index: 6
+    start_time: 780
+    end_time: 900
+    monster_id: 200032
+    spawn_amount: 4
+    spawn_pattern: 0
+    mid_boss_id: 0
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 560201
+    _description: "6\uBC88 \uD0D1 2\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 602
+    wave_index: 1
+    start_time: 0
+    end_time: 180
+    monster_id: 200031
+    spawn_amount: 6
+    spawn_pattern: 1
+    mid_boss_id: 0
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 560202
+    _description: "6\uBC88 \uD0D1 2\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 602
+    wave_index: 1
+    start_time: 40
+    end_time: 180
+    monster_id: 200035
+    spawn_amount: 2
+    spawn_pattern: 2
+    mid_boss_id: 202024
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 560203
+    _description: "6\uBC88 \uD0D1 2\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 602
+    wave_index: 2
+    start_time: 180
+    end_time: 360
+    monster_id: 200032
+    spawn_amount: 5
+    spawn_pattern: 1
+    mid_boss_id: 202022
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 560204
+    _description: "6\uBC88 \uD0D1 2\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 602
+    wave_index: 3
+    start_time: 360
+    end_time: 540
+    monster_id: 200029
+    spawn_amount: 10
+    spawn_pattern: 2
+    mid_boss_id: 0
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 560205
+    _description: "6\uBC88 \uD0D1 2\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 602
+    wave_index: 3
+    start_time: 400
+    end_time: 540
+    monster_id: 200034
+    spawn_amount: 4
+    spawn_pattern: 1
+    mid_boss_id: 202025
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 560206
+    _description: "6\uBC88 \uD0D1 2\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 602
+    wave_index: 4
+    start_time: 540
+    end_time: 720
+    monster_id: 200033
+    spawn_amount: 5
+    spawn_pattern: 1
+    mid_boss_id: 0
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 560207
+    _description: "6\uBC88 \uD0D1 2\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 602
+    wave_index: 4
+    start_time: 540
+    end_time: 720
+    monster_id: 200030
+    spawn_amount: 5
+    spawn_pattern: 0
+    mid_boss_id: 202021
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 560208
+    _description: "6\uBC88 \uD0D1 2\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 602
+    wave_index: 5
+    start_time: 720
+    end_time: 840
+    monster_id: 200035
+    spawn_amount: 4
+    spawn_pattern: 2
+    mid_boss_id: 0
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 560209
+    _description: "6\uBC88 \uD0D1 2\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 602
+    wave_index: 5
+    start_time: 750
+    end_time: 840
+    monster_id: 200032
+    spawn_amount: 5
+    spawn_pattern: 1
+    mid_boss_id: 202023
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 560210
+    _description: "6\uBC88 \uD0D1 2\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 602
+    wave_index: 6
+    start_time: 840
+    end_time: 900
+    monster_id: 200035
+    spawn_amount: 12
+    spawn_pattern: 2
+    mid_boss_id: 0
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 560301
+    _description: "6\uBC88 \uD0D1 3\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 603
+    wave_index: 1
+    start_time: 0
+    end_time: 150
+    monster_id: 200034
+    spawn_amount: 4
+    spawn_pattern: 1
+    mid_boss_id: 202022
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 560302
+    _description: "6\uBC88 \uD0D1 3\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 603
+    wave_index: 2
+    start_time: 150
+    end_time: 300
+    monster_id: 200030
+    spawn_amount: 8
+    spawn_pattern: 2
+    mid_boss_id: 0
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 560303
+    _description: "6\uBC88 \uD0D1 3\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 603
+    wave_index: 2
+    start_time: 180
+    end_time: 300
+    monster_id: 200035
+    spawn_amount: 3
+    spawn_pattern: 0
+    mid_boss_id: 202025
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 560304
+    _description: "6\uBC88 \uD0D1 3\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 603
+    wave_index: 3
+    start_time: 300
+    end_time: 450
+    monster_id: 200032
+    spawn_amount: 4
+    spawn_pattern: 1
+    mid_boss_id: 0
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 560305
+    _description: "6\uBC88 \uD0D1 3\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 603
+    wave_index: 3
+    start_time: 300
+    end_time: 450
+    monster_id: 200033
+    spawn_amount: 4
+    spawn_pattern: 1
+    mid_boss_id: 0
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 560306
+    _description: "6\uBC88 \uD0D1 3\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 603
+    wave_index: 3
+    start_time: 330
+    end_time: 450
+    monster_id: 200029
+    spawn_amount: 6
+    spawn_pattern: 2
+    mid_boss_id: 202021
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 560307
+    _description: "6\uBC88 \uD0D1 3\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 603
+    wave_index: 4
+    start_time: 450
+    end_time: 600
+    monster_id: 200031
+    spawn_amount: 6
+    spawn_pattern: 1
+    mid_boss_id: 202024
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 560308
+    _description: "6\uBC88 \uD0D1 3\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 603
+    wave_index: 5
+    start_time: 600
+    end_time: 750
+    monster_id: 200035
+    spawn_amount: 5
+    spawn_pattern: 2
+    mid_boss_id: 0
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 560309
+    _description: "6\uBC88 \uD0D1 3\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 603
+    wave_index: 5
+    start_time: 630
+    end_time: 750
+    monster_id: 200032
+    spawn_amount: 5
+    spawn_pattern: 0
+    mid_boss_id: 202023
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 560310
+    _description: "6\uBC88 \uD0D1 3\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 603
+    wave_index: 6
+    start_time: 750
+    end_time: 900
+    monster_id: 200034
+    spawn_amount: 15
+    spawn_pattern: 1
+    mid_boss_id: 0
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 560401
+    _description: "6\uBC88 \uD0D1 4\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 604
+    wave_index: 1
+    start_time: 0
+    end_time: 150
+    monster_id: 200033
+    spawn_amount: 5
+    spawn_pattern: 1
+    mid_boss_id: 202025
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 560402
+    _description: "6\uBC88 \uD0D1 4\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 604
+    wave_index: 2
+    start_time: 150
+    end_time: 300
+    monster_id: 200029
+    spawn_amount: 10
+    spawn_pattern: 2
+    mid_boss_id: 0
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 560403
+    _description: "6\uBC88 \uD0D1 4\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 604
+    wave_index: 2
+    start_time: 180
+    end_time: 300
+    monster_id: 200035
+    spawn_amount: 3
+    spawn_pattern: 1
+    mid_boss_id: 202021
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 560404
+    _description: "6\uBC88 \uD0D1 4\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 604
+    wave_index: 3
+    start_time: 300
+    end_time: 450
+    monster_id: 200032
+    spawn_amount: 4
+    spawn_pattern: 1
+    mid_boss_id: 0
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 560405
+    _description: "6\uBC88 \uD0D1 4\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 604
+    wave_index: 3
+    start_time: 300
+    end_time: 450
+    monster_id: 200030
+    spawn_amount: 4
+    spawn_pattern: 0
+    mid_boss_id: 0
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 560406
+    _description: "6\uBC88 \uD0D1 4\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 604
+    wave_index: 3
+    start_time: 330
+    end_time: 450
+    monster_id: 200034
+    spawn_amount: 4
+    spawn_pattern: 2
+    mid_boss_id: 202023
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 560407
+    _description: "6\uBC88 \uD0D1 4\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 604
+    wave_index: 4
+    start_time: 450
+    end_time: 600
+    monster_id: 200031
+    spawn_amount: 8
+    spawn_pattern: 1
+    mid_boss_id: 202022
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 560408
+    _description: "6\uBC88 \uD0D1 4\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 604
+    wave_index: 5
+    start_time: 600
+    end_time: 750
+    monster_id: 200035
+    spawn_amount: 6
+    spawn_pattern: 2
+    mid_boss_id: 0
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 560409
+    _description: "6\uBC88 \uD0D1 4\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 604
+    wave_index: 5
+    start_time: 650
+    end_time: 750
+    monster_id: 200033
+    spawn_amount: 5
+    spawn_pattern: 1
+    mid_boss_id: 202024
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 560410
+    _description: "6\uBC88 \uD0D1 4\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 604
+    wave_index: 6
+    start_time: 750
+    end_time: 900
+    monster_id: 200035
+    spawn_amount: 20
+    spawn_pattern: 2
+    mid_boss_id: 0
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 560501
+    _description: "6\uBC88 \uD0D1 5\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 605
+    wave_index: 1
+    start_time: 0
+    end_time: 180
+    monster_id: 200035
+    spawn_amount: 4
+    spawn_pattern: 2
+    mid_boss_id: 202021
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 560502
+    _description: "6\uBC88 \uD0D1 5\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 605
+    wave_index: 2
+    start_time: 180
+    end_time: 360
+    monster_id: 200031
+    spawn_amount: 5
+    spawn_pattern: 1
+    mid_boss_id: 0
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 560503
+    _description: "6\uBC88 \uD0D1 5\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 605
+    wave_index: 2
+    start_time: 200
+    end_time: 360
+    monster_id: 200033
+    spawn_amount: 4
+    spawn_pattern: 1
+    mid_boss_id: 202023
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 560504
+    _description: "6\uBC88 \uD0D1 5\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 605
+    wave_index: 3
+    start_time: 360
+    end_time: 540
+    monster_id: 200030
+    spawn_amount: 12
+    spawn_pattern: 2
+    mid_boss_id: 202025
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 560505
+    _description: "6\uBC88 \uD0D1 5\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 605
+    wave_index: 4
+    start_time: 540
+    end_time: 700
+    monster_id: 200034
+    spawn_amount: 6
+    spawn_pattern: 1
+    mid_boss_id: 0
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 560506
+    _description: "6\uBC88 \uD0D1 5\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 605
+    wave_index: 4
+    start_time: 580
+    end_time: 700
+    monster_id: 200032
+    spawn_amount: 6
+    spawn_pattern: 0
+    mid_boss_id: 202022
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 560507
+    _description: "6\uBC88 \uD0D1 5\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 605
+    wave_index: 5
+    start_time: 700
+    end_time: 850
+    monster_id: 200035
+    spawn_amount: 8
+    spawn_pattern: 2
+    mid_boss_id: 202024
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 560508
+    _description: "6\uBC88 \uD0D1 5\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 605
+    wave_index: 6
+    start_time: 850
+    end_time: 900
+    monster_id: 200035
+    spawn_amount: 15
+    spawn_pattern: 2
+    mid_boss_id: 0
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 560601
+    _description: "6\uBC88 \uD0D1 6\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 606
+    wave_index: 1
+    start_time: 0
+    end_time: 80
+    monster_id: 200035
+    spawn_amount: 5
+    spawn_pattern: 2
+    mid_boss_id: 202024
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 560602
+    _description: "6\uBC88 \uD0D1 6\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 606
+    wave_index: 2
+    start_time: 80
+    end_time: 320
+    monster_id: 200029
+    spawn_amount: 6
+    spawn_pattern: 2
+    mid_boss_id: 0
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 560603
+    _description: "6\uBC88 \uD0D1 6\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 606
+    wave_index: 2
+    start_time: 100
+    end_time: 320
+    monster_id: 200032
+    spawn_amount: 4
+    spawn_pattern: 1
+    mid_boss_id: 0
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 560604
+    _description: "6\uBC88 \uD0D1 6\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 606
+    wave_index: 2
+    start_time: 120
+    end_time: 320
+    monster_id: 200033
+    spawn_amount: 4
+    spawn_pattern: 0
+    mid_boss_id: 202021
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 560605
+    _description: "6\uBC88 \uD0D1 6\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 606
+    wave_index: 3
+    start_time: 320
+    end_time: 420
+    monster_id: 200034
+    spawn_amount: 10
+    spawn_pattern: 2
+    mid_boss_id: 202023
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 560606
+    _description: "6\uBC88 \uD0D1 6\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 606
+    wave_index: 4
+    start_time: 420
+    end_time: 650
+    monster_id: 200031
+    spawn_amount: 5
+    spawn_pattern: 1
+    mid_boss_id: 0
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 560607
+    _description: "6\uBC88 \uD0D1 6\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 606
+    wave_index: 4
+    start_time: 450
+    end_time: 650
+    monster_id: 200035
+    spawn_amount: 6
+    spawn_pattern: 1
+    mid_boss_id: 202025
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 560608
+    _description: "6\uBC88 \uD0D1 6\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 606
+    wave_index: 5
+    start_time: 650
+    end_time: 800
+    monster_id: 200035
+    spawn_amount: 10
+    spawn_pattern: 2
+    mid_boss_id: 202022
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 560609
+    _description: "6\uBC88 \uD0D1 6\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 606
+    wave_index: 6
+    start_time: 800
+    end_time: 900
+    monster_id: 200035
+    spawn_amount: 25
+    spawn_pattern: 2
+    mid_boss_id: 0
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 560701
+    _description: "6\uBC88 \uD0D1 7\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 607
+    wave_index: 1
+    start_time: 0
+    end_time: 90
+    monster_id: 200032
+    spawn_amount: 6
+    spawn_pattern: 1
+    mid_boss_id: 0
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 560702
+    _description: "6\uBC88 \uD0D1 7\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 607
+    wave_index: 1
+    start_time: 30
+    end_time: 90
+    monster_id: 200035
+    spawn_amount: 3
+    spawn_pattern: 2
+    mid_boss_id: 202022
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 560703
+    _description: "6\uBC88 \uD0D1 7\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 607
+    wave_index: 2
+    start_time: 90
+    end_time: 350
+    monster_id: 200029
+    spawn_amount: 12
+    spawn_pattern: 2
+    mid_boss_id: 0
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 560704
+    _description: "6\uBC88 \uD0D1 7\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 607
+    wave_index: 2
+    start_time: 150
+    end_time: 350
+    monster_id: 200034
+    spawn_amount: 5
+    spawn_pattern: 1
+    mid_boss_id: 202024
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 560705
+    _description: "6\uBC88 \uD0D1 7\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 607
+    wave_index: 3
+    start_time: 350
+    end_time: 450
+    monster_id: 200035
+    spawn_amount: 10
+    spawn_pattern: 2
+    mid_boss_id: 202021
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 560706
+    _description: "6\uBC88 \uD0D1 7\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 607
+    wave_index: 4
+    start_time: 450
+    end_time: 700
+    monster_id: 200033
+    spawn_amount: 5
+    spawn_pattern: 1
+    mid_boss_id: 0
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 560707
+    _description: "6\uBC88 \uD0D1 7\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 607
+    wave_index: 4
+    start_time: 480
+    end_time: 700
+    monster_id: 200031
+    spawn_amount: 5
+    spawn_pattern: 1
+    mid_boss_id: 0
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 560708
+    _description: "6\uBC88 \uD0D1 7\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 607
+    wave_index: 4
+    start_time: 500
+    end_time: 700
+    monster_id: 200030
+    spawn_amount: 5
+    spawn_pattern: 2
+    mid_boss_id: 202025
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 560709
+    _description: "6\uBC88 \uD0D1 7\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 607
+    wave_index: 5
+    start_time: 700
+    end_time: 840
+    monster_id: 200035
+    spawn_amount: 8
+    spawn_pattern: 2
+    mid_boss_id: 202023
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 560710
+    _description: "6\uBC88 \uD0D1 7\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 607
+    wave_index: 6
+    start_time: 840
+    end_time: 900
+    monster_id: 200035
+    spawn_amount: 30
+    spawn_pattern: 2
+    mid_boss_id: 0
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 560801
+    _description: "6\uBC88 \uD0D1 8\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 608
+    wave_index: 1
+    start_time: 0
+    end_time: 70
+    monster_id: 200034
+    spawn_amount: 8
+    spawn_pattern: 1
+    mid_boss_id: 202025
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 560802
+    _description: "6\uBC88 \uD0D1 8\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 608
+    wave_index: 2
+    start_time: 70
+    end_time: 300
+    monster_id: 200031
+    spawn_amount: 4
+    spawn_pattern: 1
+    mid_boss_id: 0
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 560803
+    _description: "6\uBC88 \uD0D1 8\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 608
+    wave_index: 2
+    start_time: 100
+    end_time: 300
+    monster_id: 200032
+    spawn_amount: 4
+    spawn_pattern: 2
+    mid_boss_id: 0
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 560804
+    _description: "6\uBC88 \uD0D1 8\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 608
+    wave_index: 2
+    start_time: 120
+    end_time: 300
+    monster_id: 200035
+    spawn_amount: 4
+    spawn_pattern: 1
+    mid_boss_id: 202022
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 560805
+    _description: "6\uBC88 \uD0D1 8\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 608
+    wave_index: 3
+    start_time: 300
+    end_time: 450
+    monster_id: 200033
+    spawn_amount: 12
+    spawn_pattern: 2
+    mid_boss_id: 202024
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 560806
+    _description: "6\uBC88 \uD0D1 8\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 608
+    wave_index: 4
+    start_time: 450
+    end_time: 650
+    monster_id: 200030
+    spawn_amount: 10
+    spawn_pattern: 0
+    mid_boss_id: 0
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 560807
+    _description: "6\uBC88 \uD0D1 8\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 608
+    wave_index: 5
+    start_time: 650
+    end_time: 820
+    monster_id: 200035
+    spawn_amount: 12
+    spawn_pattern: 2
+    mid_boss_id: 202021
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 560808
+    _description: "6\uBC88 \uD0D1 8\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 608
+    wave_index: 6
+    start_time: 820
+    end_time: 900
+    monster_id: 200034
+    spawn_amount: 25
+    spawn_pattern: 2
+    mid_boss_id: 0
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 560901
+    _description: "6\uBC88 \uD0D1 9\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 609
+    wave_index: 1
+    start_time: 0
+    end_time: 100
+    monster_id: 200035
+    spawn_amount: 8
+    spawn_pattern: 2
+    mid_boss_id: 202023
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 560902
+    _description: "6\uBC88 \uD0D1 9\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 609
+    wave_index: 2
+    start_time: 100
+    end_time: 200
+    monster_id: 200031
+    spawn_amount: 6
+    spawn_pattern: 1
+    mid_boss_id: 0
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 560903
+    _description: "6\uBC88 \uD0D1 9\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 609
+    wave_index: 2
+    start_time: 120
+    end_time: 200
+    monster_id: 200032
+    spawn_amount: 6
+    spawn_pattern: 2
+    mid_boss_id: 202021
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 560904
+    _description: "6\uBC88 \uD0D1 9\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 609
+    wave_index: 3
+    start_time: 200
+    end_time: 350
+    monster_id: 200033
+    spawn_amount: 12
+    spawn_pattern: 2
+    mid_boss_id: 202024
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 560905
+    _description: "6\uBC88 \uD0D1 9\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 609
+    wave_index: 4
+    start_time: 350
+    end_time: 500
+    monster_id: 200034
+    spawn_amount: 8
+    spawn_pattern: 1
+    mid_boss_id: 0
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 560906
+    _description: "6\uBC88 \uD0D1 9\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 609
+    wave_index: 4
+    start_time: 380
+    end_time: 500
+    monster_id: 200035
+    spawn_amount: 8
+    spawn_pattern: 2
+    mid_boss_id: 202022
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 560907
+    _description: "6\uBC88 \uD0D1 9\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 609
+    wave_index: 5
+    start_time: 500
+    end_time: 700
+    monster_id: 200035
+    spawn_amount: 10
+    spawn_pattern: 2
+    mid_boss_id: 202025
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 560908
+    _description: "6\uBC88 \uD0D1 9\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 609
+    wave_index: 6
+    start_time: 700
+    end_time: 900
+    monster_id: 200035
+    spawn_amount: 35
+    spawn_pattern: 2
+    mid_boss_id: 0
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 561001
+    _description: "6\uBC88 \uD0D1 10\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 610
+    wave_index: 1
+    start_time: 0
+    end_time: 80
+    monster_id: 200034
+    spawn_amount: 6
+    spawn_pattern: 1
+    mid_boss_id: 0
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 561002
+    _description: "6\uBC88 \uD0D1 10\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 610
+    wave_index: 1
+    start_time: 20
+    end_time: 80
+    monster_id: 200035
+    spawn_amount: 5
+    spawn_pattern: 2
+    mid_boss_id: 202025
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 561003
+    _description: "6\uBC88 \uD0D1 10\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 610
+    wave_index: 2
+    start_time: 80
+    end_time: 180
+    monster_id: 200029
+    spawn_amount: 15
+    spawn_pattern: 2
+    mid_boss_id: 202022
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 561004
+    _description: "6\uBC88 \uD0D1 10\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 610
+    wave_index: 3
+    start_time: 180
+    end_time: 300
+    monster_id: 200031
+    spawn_amount: 8
+    spawn_pattern: 2
+    mid_boss_id: 0
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 561005
+    _description: "6\uBC88 \uD0D1 10\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 610
+    wave_index: 3
+    start_time: 200
+    end_time: 300
+    monster_id: 200035
+    spawn_amount: 8
+    spawn_pattern: 1
+    mid_boss_id: 202021
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 561006
+    _description: "6\uBC88 \uD0D1 10\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 610
+    wave_index: 4
+    start_time: 300
+    end_time: 450
+    monster_id: 200033
+    spawn_amount: 12
+    spawn_pattern: 1
+    mid_boss_id: 202024
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 561007
+    _description: "6\uBC88 \uD0D1 10\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 610
+    wave_index: 5
+    start_time: 450
+    end_time: 650
+    monster_id: 200032
+    spawn_amount: 8
+    spawn_pattern: 0
+    mid_boss_id: 0
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 561008
+    _description: "6\uBC88 \uD0D1 10\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 610
+    wave_index: 5
+    start_time: 450
+    end_time: 650
+    monster_id: 200034
+    spawn_amount: 8
+    spawn_pattern: 1
+    mid_boss_id: 0
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 561009
+    _description: "6\uBC88 \uD0D1 10\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 610
+    wave_index: 5
+    start_time: 480
+    end_time: 650
+    monster_id: 200030
+    spawn_amount: 8
+    spawn_pattern: 2
+    mid_boss_id: 202023
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 561010
+    _description: "6\uBC88 \uD0D1 10\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 610
+    wave_index: 6
+    start_time: 650
+    end_time: 900
+    monster_id: 200035
+    spawn_amount: 45
+    spawn_pattern: 2
+    mid_boss_id: 0
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 570101
+    _description: "7\uBC88 \uD0D1 1\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 701
+    wave_index: 1
+    start_time: 0
+    end_time: 150
+    monster_id: 200038
+    spawn_amount: 4
+    spawn_pattern: 0
+    mid_boss_id: 202026
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 570102
+    _description: "7\uBC88 \uD0D1 1\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 701
+    wave_index: 2
+    start_time: 150
+    end_time: 300
+    monster_id: 200041
+    spawn_amount: 6
+    spawn_pattern: 1
+    mid_boss_id: 202028
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 570103
+    _description: "7\uBC88 \uD0D1 1\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 701
+    wave_index: 3
+    start_time: 300
+    end_time: 450
+    monster_id: 200036
+    spawn_amount: 4
+    spawn_pattern: 0
+    mid_boss_id: 0
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 570104
+    _description: "7\uBC88 \uD0D1 1\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 701
+    wave_index: 3
+    start_time: 300
+    end_time: 450
+    monster_id: 200040
+    spawn_amount: 4
+    spawn_pattern: 2
+    mid_boss_id: 202027
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 570105
+    _description: "7\uBC88 \uD0D1 1\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 701
+    wave_index: 4
+    start_time: 450
+    end_time: 600
+    monster_id: 200039
+    spawn_amount: 8
+    spawn_pattern: 1
+    mid_boss_id: 202029
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 570106
+    _description: "7\uBC88 \uD0D1 1\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 701
+    wave_index: 5
+    start_time: 600
+    end_time: 750
+    monster_id: 200042
+    spawn_amount: 5
+    spawn_pattern: 2
+    mid_boss_id: 0
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 570107
+    _description: "7\uBC88 \uD0D1 1\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 701
+    wave_index: 5
+    start_time: 600
+    end_time: 750
+    monster_id: 200037
+    spawn_amount: 7
+    spawn_pattern: 0
+    mid_boss_id: 202030
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 570108
+    _description: "7\uBC88 \uD0D1 1\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 701
+    wave_index: 6
+    start_time: 750
+    end_time: 900
+    monster_id: 200036
+    spawn_amount: 20
+    spawn_pattern: 0
+    mid_boss_id: 0
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 570201
+    _description: "7\uBC88 \uD0D1 2\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 702
+    wave_index: 1
+    start_time: 0
+    end_time: 150
+    monster_id: 200040
+    spawn_amount: 5
+    spawn_pattern: 0
+    mid_boss_id: 202029
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 570202
+    _description: "7\uBC88 \uD0D1 2\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 702
+    wave_index: 2
+    start_time: 150
+    end_time: 300
+    monster_id: 200037
+    spawn_amount: 6
+    spawn_pattern: 2
+    mid_boss_id: 202027
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 570203
+    _description: "7\uBC88 \uD0D1 2\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 702
+    wave_index: 3
+    start_time: 300
+    end_time: 450
+    monster_id: 200042
+    spawn_amount: 4
+    spawn_pattern: 0
+    mid_boss_id: 0
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 570204
+    _description: "7\uBC88 \uD0D1 2\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 702
+    wave_index: 3
+    start_time: 300
+    end_time: 450
+    monster_id: 200039
+    spawn_amount: 4
+    spawn_pattern: 1
+    mid_boss_id: 202026
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 570205
+    _description: "7\uBC88 \uD0D1 2\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 702
+    wave_index: 4
+    start_time: 450
+    end_time: 600
+    monster_id: 200041
+    spawn_amount: 10
+    spawn_pattern: 1
+    mid_boss_id: 202028
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 570206
+    _description: "7\uBC88 \uD0D1 2\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 702
+    wave_index: 5
+    start_time: 600
+    end_time: 750
+    monster_id: 200038
+    spawn_amount: 5
+    spawn_pattern: 2
+    mid_boss_id: 0
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 570207
+    _description: "7\uBC88 \uD0D1 2\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 702
+    wave_index: 5
+    start_time: 600
+    end_time: 750
+    monster_id: 200036
+    spawn_amount: 7
+    spawn_pattern: 0
+    mid_boss_id: 202030
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 570208
+    _description: "7\uBC88 \uD0D1 2\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 702
+    wave_index: 6
+    start_time: 750
+    end_time: 900
+    monster_id: 200042
+    spawn_amount: 25
+    spawn_pattern: 0
+    mid_boss_id: 0
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 570301
+    _description: "7\uBC88 \uD0D1 3\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 703
+    wave_index: 1
+    start_time: 0
+    end_time: 120
+    monster_id: 200041
+    spawn_amount: 5
+    spawn_pattern: 0
+    mid_boss_id: 202026
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 570302
+    _description: "7\uBC88 \uD0D1 3\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 703
+    wave_index: 2
+    start_time: 120
+    end_time: 280
+    monster_id: 200038
+    spawn_amount: 6
+    spawn_pattern: 1
+    mid_boss_id: 202028
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 570303
+    _description: "7\uBC88 \uD0D1 3\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 703
+    wave_index: 3
+    start_time: 280
+    end_time: 400
+    monster_id: 200042
+    spawn_amount: 8
+    spawn_pattern: 2
+    mid_boss_id: 0
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 570304
+    _description: "7\uBC88 \uD0D1 3\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 703
+    wave_index: 3
+    start_time: 280
+    end_time: 400
+    monster_id: 200036
+    spawn_amount: 3
+    spawn_pattern: 0
+    mid_boss_id: 202027
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 570305
+    _description: "7\uBC88 \uD0D1 3\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 703
+    wave_index: 4
+    start_time: 400
+    end_time: 650
+    monster_id: 200037
+    spawn_amount: 6
+    spawn_pattern: 0
+    mid_boss_id: 0
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 570306
+    _description: "7\uBC88 \uD0D1 3\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 703
+    wave_index: 4
+    start_time: 500
+    end_time: 650
+    monster_id: 200039
+    spawn_amount: 5
+    spawn_pattern: 1
+    mid_boss_id: 202030
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 570307
+    _description: "7\uBC88 \uD0D1 3\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 703
+    wave_index: 5
+    start_time: 650
+    end_time: 780
+    monster_id: 200040
+    spawn_amount: 12
+    spawn_pattern: 2
+    mid_boss_id: 202029
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 570308
+    _description: "7\uBC88 \uD0D1 3\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 703
+    wave_index: 6
+    start_time: 780
+    end_time: 900
+    monster_id: 200041
+    spawn_amount: 25
+    spawn_pattern: 0
+    mid_boss_id: 0
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 570401
+    _description: "7\uBC88 \uD0D1 4\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 704
+    wave_index: 1
+    start_time: 0
+    end_time: 180
+    monster_id: 200042
+    spawn_amount: 6
+    spawn_pattern: 0
+    mid_boss_id: 202028
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 570402
+    _description: "7\uBC88 \uD0D1 4\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 704
+    wave_index: 2
+    start_time: 150
+    end_time: 300
+    monster_id: 200037
+    spawn_amount: 8
+    spawn_pattern: 1
+    mid_boss_id: 202026
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 570403
+    _description: "7\uBC88 \uD0D1 4\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 704
+    wave_index: 3
+    start_time: 300
+    end_time: 450
+    monster_id: 200039
+    spawn_amount: 6
+    spawn_pattern: 2
+    mid_boss_id: 0
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 570404
+    _description: "7\uBC88 \uD0D1 4\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 704
+    wave_index: 3
+    start_time: 350
+    end_time: 450
+    monster_id: 200036
+    spawn_amount: 8
+    spawn_pattern: 0
+    mid_boss_id: 202030
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 570405
+    _description: "7\uBC88 \uD0D1 4\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 704
+    wave_index: 4
+    start_time: 450
+    end_time: 650
+    monster_id: 200041
+    spawn_amount: 10
+    spawn_pattern: 1
+    mid_boss_id: 202027
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 570406
+    _description: "7\uBC88 \uD0D1 4\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 704
+    wave_index: 5
+    start_time: 600
+    end_time: 780
+    monster_id: 200040
+    spawn_amount: 12
+    spawn_pattern: 2
+    mid_boss_id: 202029
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 570407
+    _description: "7\uBC88 \uD0D1 4\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 704
+    wave_index: 6
+    start_time: 780
+    end_time: 900
+    monster_id: 200038
+    spawn_amount: 30
+    spawn_pattern: 0
+    mid_boss_id: 0
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 570501
+    _description: "7\uBC88 \uD0D1 5\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 705
+    wave_index: 1
+    start_time: 0
+    end_time: 100
+    monster_id: 200038
+    spawn_amount: 6
+    spawn_pattern: 0
+    mid_boss_id: 202027
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 570502
+    _description: "7\uBC88 \uD0D1 5\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 705
+    wave_index: 2
+    start_time: 100
+    end_time: 220
+    monster_id: 200042
+    spawn_amount: 8
+    spawn_pattern: 1
+    mid_boss_id: 202029
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 570503
+    _description: "7\uBC88 \uD0D1 5\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 705
+    wave_index: 3
+    start_time: 220
+    end_time: 350
+    monster_id: 200036
+    spawn_amount: 10
+    spawn_pattern: 2
+    mid_boss_id: 202026
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 570504
+    _description: "7\uBC88 \uD0D1 5\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 705
+    wave_index: 4
+    start_time: 350
+    end_time: 550
+    monster_id: 200040
+    spawn_amount: 8
+    spawn_pattern: 0
+    mid_boss_id: 0
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 570505
+    _description: "7\uBC88 \uD0D1 5\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 705
+    wave_index: 4
+    start_time: 400
+    end_time: 550
+    monster_id: 200037
+    spawn_amount: 10
+    spawn_pattern: 1
+    mid_boss_id: 202030
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 570506
+    _description: "7\uBC88 \uD0D1 5\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 705
+    wave_index: 5
+    start_time: 550
+    end_time: 800
+    monster_id: 200041
+    spawn_amount: 12
+    spawn_pattern: 2
+    mid_boss_id: 0
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 570507
+    _description: "7\uBC88 \uD0D1 5\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 705
+    wave_index: 5
+    start_time: 650
+    end_time: 800
+    monster_id: 200039
+    spawn_amount: 15
+    spawn_pattern: 0
+    mid_boss_id: 202028
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 570508
+    _description: "7\uBC88 \uD0D1 5\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 705
+    wave_index: 6
+    start_time: 800
+    end_time: 900
+    monster_id: 200042
+    spawn_amount: 35
+    spawn_pattern: 0
+    mid_boss_id: 0
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 570601
+    _description: "7\uBC88 \uD0D1 6\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 706
+    wave_index: 1
+    start_time: 0
+    end_time: 150
+    monster_id: 200036
+    spawn_amount: 4
+    spawn_pattern: 0
+    mid_boss_id: 202028
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 570602
+    _description: "7\uBC88 \uD0D1 6\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 706
+    wave_index: 1
+    start_time: 0
+    end_time: 150
+    monster_id: 200037
+    spawn_amount: 4
+    spawn_pattern: 1
+    mid_boss_id: 0
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 570603
+    _description: "7\uBC88 \uD0D1 6\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 706
+    wave_index: 2
+    start_time: 150
+    end_time: 300
+    monster_id: 200038
+    spawn_amount: 5
+    spawn_pattern: 0
+    mid_boss_id: 202026
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 570604
+    _description: "7\uBC88 \uD0D1 6\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 706
+    wave_index: 2
+    start_time: 150
+    end_time: 300
+    monster_id: 200039
+    spawn_amount: 4
+    spawn_pattern: 2
+    mid_boss_id: 0
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 570605
+    _description: "7\uBC88 \uD0D1 6\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 706
+    wave_index: 3
+    start_time: 300
+    end_time: 450
+    monster_id: 200040
+    spawn_amount: 5
+    spawn_pattern: 1
+    mid_boss_id: 202030
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 570606
+    _description: "7\uBC88 \uD0D1 6\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 706
+    wave_index: 3
+    start_time: 300
+    end_time: 450
+    monster_id: 200041
+    spawn_amount: 5
+    spawn_pattern: 0
+    mid_boss_id: 0
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 570607
+    _description: "7\uBC88 \uD0D1 6\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 706
+    wave_index: 4
+    start_time: 450
+    end_time: 600
+    monster_id: 200042
+    spawn_amount: 6
+    spawn_pattern: 2
+    mid_boss_id: 202027
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 570608
+    _description: "7\uBC88 \uD0D1 6\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 706
+    wave_index: 4
+    start_time: 450
+    end_time: 600
+    monster_id: 200036
+    spawn_amount: 6
+    spawn_pattern: 1
+    mid_boss_id: 0
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 570609
+    _description: "7\uBC88 \uD0D1 6\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 706
+    wave_index: 5
+    start_time: 600
+    end_time: 750
+    monster_id: 200037
+    spawn_amount: 5
+    spawn_pattern: 0
+    mid_boss_id: 202029
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 570610
+    _description: "7\uBC88 \uD0D1 6\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 706
+    wave_index: 5
+    start_time: 600
+    end_time: 750
+    monster_id: 200038
+    spawn_amount: 5
+    spawn_pattern: 1
+    mid_boss_id: 0
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 570611
+    _description: "7\uBC88 \uD0D1 6\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 706
+    wave_index: 5
+    start_time: 600
+    end_time: 750
+    monster_id: 200039
+    spawn_amount: 5
+    spawn_pattern: 2
+    mid_boss_id: 0
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 570612
+    _description: "7\uBC88 \uD0D1 6\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 706
+    wave_index: 6
+    start_time: 750
+    end_time: 900
+    monster_id: 200040
+    spawn_amount: 12
+    spawn_pattern: 0
+    mid_boss_id: 0
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 570613
+    _description: "7\uBC88 \uD0D1 6\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 706
+    wave_index: 6
+    start_time: 750
+    end_time: 900
+    monster_id: 200041
+    spawn_amount: 12
+    spawn_pattern: 1
+    mid_boss_id: 0
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 570614
+    _description: "7\uBC88 \uD0D1 6\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 706
+    wave_index: 6
+    start_time: 750
+    end_time: 900
+    monster_id: 200042
+    spawn_amount: 15
+    spawn_pattern: 2
+    mid_boss_id: 0
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 570701
+    _description: "7\uBC88 \uD0D1 7\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 707
+    wave_index: 1
+    start_time: 0
+    end_time: 100
+    monster_id: 200041
+    spawn_amount: 5
+    spawn_pattern: 0
+    mid_boss_id: 202026
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 570702
+    _description: "7\uBC88 \uD0D1 7\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 707
+    wave_index: 1
+    start_time: 0
+    end_time: 100
+    monster_id: 200038
+    spawn_amount: 5
+    spawn_pattern: 1
+    mid_boss_id: 0
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 570703
+    _description: "7\uBC88 \uD0D1 7\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 707
+    wave_index: 2
+    start_time: 80
+    end_time: 250
+    monster_id: 200042
+    spawn_amount: 6
+    spawn_pattern: 2
+    mid_boss_id: 202028
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 570704
+    _description: "7\uBC88 \uD0D1 7\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 707
+    wave_index: 2
+    start_time: 100
+    end_time: 250
+    monster_id: 200039
+    spawn_amount: 6
+    spawn_pattern: 0
+    mid_boss_id: 0
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 570705
+    _description: "7\uBC88 \uD0D1 7\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 707
+    wave_index: 3
+    start_time: 200
+    end_time: 400
+    monster_id: 200037
+    spawn_amount: 6
+    spawn_pattern: 1
+    mid_boss_id: 202027
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 570706
+    _description: "7\uBC88 \uD0D1 7\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 707
+    wave_index: 3
+    start_time: 250
+    end_time: 400
+    monster_id: 200036
+    spawn_amount: 6
+    spawn_pattern: 0
+    mid_boss_id: 0
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 570707
+    _description: "7\uBC88 \uD0D1 7\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 707
+    wave_index: 4
+    start_time: 350
+    end_time: 550
+    monster_id: 200040
+    spawn_amount: 7
+    spawn_pattern: 2
+    mid_boss_id: 202030
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 570708
+    _description: "7\uBC88 \uD0D1 7\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 707
+    wave_index: 4
+    start_time: 350
+    end_time: 550
+    monster_id: 200041
+    spawn_amount: 6
+    spawn_pattern: 1
+    mid_boss_id: 0
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 570709
+    _description: "7\uBC88 \uD0D1 7\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 707
+    wave_index: 4
+    start_time: 400
+    end_time: 550
+    monster_id: 200038
+    spawn_amount: 6
+    spawn_pattern: 0
+    mid_boss_id: 0
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 570710
+    _description: "7\uBC88 \uD0D1 7\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 707
+    wave_index: 5
+    start_time: 500
+    end_time: 700
+    monster_id: 200042
+    spawn_amount: 7
+    spawn_pattern: 0
+    mid_boss_id: 202029
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 570711
+    _description: "7\uBC88 \uD0D1 7\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 707
+    wave_index: 5
+    start_time: 500
+    end_time: 700
+    monster_id: 200039
+    spawn_amount: 7
+    spawn_pattern: 2
+    mid_boss_id: 0
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 570712
+    _description: "7\uBC88 \uD0D1 7\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 707
+    wave_index: 5
+    start_time: 550
+    end_time: 700
+    monster_id: 200037
+    spawn_amount: 7
+    spawn_pattern: 1
+    mid_boss_id: 0
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 570713
+    _description: "7\uBC88 \uD0D1 7\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 707
+    wave_index: 6
+    start_time: 700
+    end_time: 900
+    monster_id: 200036
+    spawn_amount: 20
+    spawn_pattern: 0
+    mid_boss_id: 0
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 570714
+    _description: "7\uBC88 \uD0D1 7\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 707
+    wave_index: 6
+    start_time: 700
+    end_time: 900
+    monster_id: 200040
+    spawn_amount: 15
+    spawn_pattern: 1
+    mid_boss_id: 0
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 570801
+    _description: "7\uBC88 \uD0D1 8\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 708
+    wave_index: 1
+    start_time: 0
+    end_time: 150
+    monster_id: 200037
+    spawn_amount: 5
+    spawn_pattern: 1
+    mid_boss_id: 202029
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 570802
+    _description: "7\uBC88 \uD0D1 8\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 708
+    wave_index: 1
+    start_time: 0
+    end_time: 150
+    monster_id: 200038
+    spawn_amount: 5
+    spawn_pattern: 2
+    mid_boss_id: 0
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 570803
+    _description: "7\uBC88 \uD0D1 8\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 708
+    wave_index: 2
+    start_time: 150
+    end_time: 300
+    monster_id: 200039
+    spawn_amount: 6
+    spawn_pattern: 1
+    mid_boss_id: 202026
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 570804
+    _description: "7\uBC88 \uD0D1 8\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 708
+    wave_index: 2
+    start_time: 150
+    end_time: 300
+    monster_id: 200040
+    spawn_amount: 6
+    spawn_pattern: 2
+    mid_boss_id: 0
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 570805
+    _description: "7\uBC88 \uD0D1 8\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 708
+    wave_index: 3
+    start_time: 300
+    end_time: 450
+    monster_id: 200041
+    spawn_amount: 7
+    spawn_pattern: 1
+    mid_boss_id: 202028
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 570806
+    _description: "7\uBC88 \uD0D1 8\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 708
+    wave_index: 3
+    start_time: 300
+    end_time: 450
+    monster_id: 200042
+    spawn_amount: 7
+    spawn_pattern: 2
+    mid_boss_id: 0
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 570807
+    _description: "7\uBC88 \uD0D1 8\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 708
+    wave_index: 4
+    start_time: 450
+    end_time: 600
+    monster_id: 200036
+    spawn_amount: 5
+    spawn_pattern: 0
+    mid_boss_id: 202027
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 570808
+    _description: "7\uBC88 \uD0D1 8\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 708
+    wave_index: 4
+    start_time: 450
+    end_time: 600
+    monster_id: 200037
+    spawn_amount: 5
+    spawn_pattern: 0
+    mid_boss_id: 0
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 570809
+    _description: "7\uBC88 \uD0D1 8\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 708
+    wave_index: 4
+    start_time: 450
+    end_time: 600
+    monster_id: 200038
+    spawn_amount: 5
+    spawn_pattern: 1
+    mid_boss_id: 0
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 570810
+    _description: "7\uBC88 \uD0D1 8\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 708
+    wave_index: 4
+    start_time: 450
+    end_time: 600
+    monster_id: 200039
+    spawn_amount: 5
+    spawn_pattern: 2
+    mid_boss_id: 0
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 570811
+    _description: "7\uBC88 \uD0D1 8\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 708
+    wave_index: 5
+    start_time: 600
+    end_time: 750
+    monster_id: 200040
+    spawn_amount: 6
+    spawn_pattern: 0
+    mid_boss_id: 202030
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 570812
+    _description: "7\uBC88 \uD0D1 8\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 708
+    wave_index: 5
+    start_time: 600
+    end_time: 750
+    monster_id: 200041
+    spawn_amount: 6
+    spawn_pattern: 1
+    mid_boss_id: 0
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 570813
+    _description: "7\uBC88 \uD0D1 8\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 708
+    wave_index: 5
+    start_time: 600
+    end_time: 750
+    monster_id: 200042
+    spawn_amount: 6
+    spawn_pattern: 2
+    mid_boss_id: 0
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 570814
+    _description: "7\uBC88 \uD0D1 8\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 708
+    wave_index: 6
+    start_time: 750
+    end_time: 900
+    monster_id: 200036
+    spawn_amount: 12
+    spawn_pattern: 0
+    mid_boss_id: 0
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 570815
+    _description: "7\uBC88 \uD0D1 8\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 708
+    wave_index: 6
+    start_time: 750
+    end_time: 900
+    monster_id: 200037
+    spawn_amount: 12
+    spawn_pattern: 0
+    mid_boss_id: 0
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 570816
+    _description: "7\uBC88 \uD0D1 8\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 708
+    wave_index: 6
+    start_time: 750
+    end_time: 900
+    monster_id: 200038
+    spawn_amount: 12
+    spawn_pattern: 0
+    mid_boss_id: 0
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 570817
+    _description: "7\uBC88 \uD0D1 8\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 708
+    wave_index: 6
+    start_time: 750
+    end_time: 900
+    monster_id: 200039
+    spawn_amount: 12
+    spawn_pattern: 0
+    mid_boss_id: 0
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 570901
+    _description: "7\uBC88 \uD0D1 9\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 709
+    wave_index: 1
+    start_time: 0
+    end_time: 120
+    monster_id: 200042
+    spawn_amount: 5
+    spawn_pattern: 0
+    mid_boss_id: 202030
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 570902
+    _description: "7\uBC88 \uD0D1 9\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 709
+    wave_index: 1
+    start_time: 0
+    end_time: 120
+    monster_id: 200041
+    spawn_amount: 5
+    spawn_pattern: 1
+    mid_boss_id: 0
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 570903
+    _description: "7\uBC88 \uD0D1 9\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 709
+    wave_index: 2
+    start_time: 100
+    end_time: 250
+    monster_id: 200040
+    spawn_amount: 4
+    spawn_pattern: 0
+    mid_boss_id: 202028
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 570904
+    _description: "7\uBC88 \uD0D1 9\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 709
+    wave_index: 2
+    start_time: 100
+    end_time: 250
+    monster_id: 200039
+    spawn_amount: 4
+    spawn_pattern: 2
+    mid_boss_id: 0
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 570905
+    _description: "7\uBC88 \uD0D1 9\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 709
+    wave_index: 2
+    start_time: 120
+    end_time: 250
+    monster_id: 200038
+    spawn_amount: 4
+    spawn_pattern: 1
+    mid_boss_id: 0
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 570906
+    _description: "7\uBC88 \uD0D1 9\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 709
+    wave_index: 3
+    start_time: 200
+    end_time: 400
+    monster_id: 200037
+    spawn_amount: 4
+    spawn_pattern: 0
+    mid_boss_id: 202026
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 570907
+    _description: "7\uBC88 \uD0D1 9\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 709
+    wave_index: 3
+    start_time: 200
+    end_time: 400
+    monster_id: 200036
+    spawn_amount: 4
+    spawn_pattern: 1
+    mid_boss_id: 0
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 570908
+    _description: "7\uBC88 \uD0D1 9\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 709
+    wave_index: 3
+    start_time: 250
+    end_time: 400
+    monster_id: 200042
+    spawn_amount: 4
+    spawn_pattern: 2
+    mid_boss_id: 0
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 570909
+    _description: "7\uBC88 \uD0D1 9\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 709
+    wave_index: 3
+    start_time: 250
+    end_time: 400
+    monster_id: 200041
+    spawn_amount: 4
+    spawn_pattern: 0
+    mid_boss_id: 0
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 570910
+    _description: "7\uBC88 \uD0D1 9\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 709
+    wave_index: 4
+    start_time: 350
+    end_time: 550
+    monster_id: 200040
+    spawn_amount: 5
+    spawn_pattern: 1
+    mid_boss_id: 202027
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 570911
+    _description: "7\uBC88 \uD0D1 9\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 709
+    wave_index: 4
+    start_time: 350
+    end_time: 550
+    monster_id: 200039
+    spawn_amount: 5
+    spawn_pattern: 2
+    mid_boss_id: 0
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 570912
+    _description: "7\uBC88 \uD0D1 9\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 709
+    wave_index: 4
+    start_time: 400
+    end_time: 550
+    monster_id: 200038
+    spawn_amount: 5
+    spawn_pattern: 0
+    mid_boss_id: 0
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 570913
+    _description: "7\uBC88 \uD0D1 9\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 709
+    wave_index: 4
+    start_time: 400
+    end_time: 550
+    monster_id: 200037
+    spawn_amount: 5
+    spawn_pattern: 0
+    mid_boss_id: 0
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 570914
+    _description: "7\uBC88 \uD0D1 9\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 709
+    wave_index: 5
+    start_time: 500
+    end_time: 700
+    monster_id: 200036
+    spawn_amount: 6
+    spawn_pattern: 1
+    mid_boss_id: 202029
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 570915
+    _description: "7\uBC88 \uD0D1 9\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 709
+    wave_index: 5
+    start_time: 500
+    end_time: 700
+    monster_id: 200042
+    spawn_amount: 6
+    spawn_pattern: 2
+    mid_boss_id: 0
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 570916
+    _description: "7\uBC88 \uD0D1 9\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 709
+    wave_index: 5
+    start_time: 550
+    end_time: 700
+    monster_id: 200041
+    spawn_amount: 6
+    spawn_pattern: 0
+    mid_boss_id: 0
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 570917
+    _description: "7\uBC88 \uD0D1 9\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 709
+    wave_index: 5
+    start_time: 550
+    end_time: 700
+    monster_id: 200040
+    spawn_amount: 6
+    spawn_pattern: 0
+    mid_boss_id: 0
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 570918
+    _description: "7\uBC88 \uD0D1 9\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 709
+    wave_index: 6
+    start_time: 650
+    end_time: 900
+    monster_id: 200039
+    spawn_amount: 10
+    spawn_pattern: 0
+    mid_boss_id: 0
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 570919
+    _description: "7\uBC88 \uD0D1 9\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 709
+    wave_index: 6
+    start_time: 650
+    end_time: 900
+    monster_id: 200038
+    spawn_amount: 10
+    spawn_pattern: 1
+    mid_boss_id: 0
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 570920
+    _description: "7\uBC88 \uD0D1 9\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 709
+    wave_index: 6
+    start_time: 700
+    end_time: 900
+    monster_id: 200037
+    spawn_amount: 10
+    spawn_pattern: 2
+    mid_boss_id: 0
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 570921
+    _description: "7\uBC88 \uD0D1 9\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 709
+    wave_index: 6
+    start_time: 700
+    end_time: 900
+    monster_id: 200036
+    spawn_amount: 15
+    spawn_pattern: 0
+    mid_boss_id: 0
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 571001
+    _description: "7\uBC88 \uD0D1 10\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 710
+    wave_index: 1
+    start_time: 0
+    end_time: 150
+    monster_id: 200042
+    spawn_amount: 6
+    spawn_pattern: 0
+    mid_boss_id: 202028
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 571002
+    _description: "7\uBC88 \uD0D1 10\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 710
+    wave_index: 1
+    start_time: 0
+    end_time: 150
+    monster_id: 200038
+    spawn_amount: 6
+    spawn_pattern: 1
+    mid_boss_id: 0
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 571003
+    _description: "7\uBC88 \uD0D1 10\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 710
+    wave_index: 1
+    start_time: 50
+    end_time: 150
+    monster_id: 200040
+    spawn_amount: 5
+    spawn_pattern: 2
+    mid_boss_id: 0
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 571004
+    _description: "7\uBC88 \uD0D1 10\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 710
+    wave_index: 2
+    start_time: 120
+    end_time: 300
+    monster_id: 200037
+    spawn_amount: 8
+    spawn_pattern: 1
+    mid_boss_id: 202026
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 571005
+    _description: "7\uBC88 \uD0D1 10\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 710
+    wave_index: 2
+    start_time: 120
+    end_time: 300
+    monster_id: 200041
+    spawn_amount: 6
+    spawn_pattern: 0
+    mid_boss_id: 0
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 571006
+    _description: "7\uBC88 \uD0D1 10\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 710
+    wave_index: 2
+    start_time: 200
+    end_time: 300
+    monster_id: 200039
+    spawn_amount: 8
+    spawn_pattern: 2
+    mid_boss_id: 0
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 571007
+    _description: "7\uBC88 \uD0D1 10\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 710
+    wave_index: 3
+    start_time: 250
+    end_time: 450
+    monster_id: 200036
+    spawn_amount: 10
+    spawn_pattern: 0
+    mid_boss_id: 202030
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 571008
+    _description: "7\uBC88 \uD0D1 10\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 710
+    wave_index: 3
+    start_time: 250
+    end_time: 450
+    monster_id: 200042
+    spawn_amount: 8
+    spawn_pattern: 1
+    mid_boss_id: 0
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 571009
+    _description: "7\uBC88 \uD0D1 10\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 710
+    wave_index: 3
+    start_time: 300
+    end_time: 450
+    monster_id: 200038
+    spawn_amount: 8
+    spawn_pattern: 2
+    mid_boss_id: 0
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 571010
+    _description: "7\uBC88 \uD0D1 10\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 710
+    wave_index: 4
+    start_time: 400
+    end_time: 600
+    monster_id: 200040
+    spawn_amount: 10
+    spawn_pattern: 1
+    mid_boss_id: 202027
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 571011
+    _description: "7\uBC88 \uD0D1 10\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 710
+    wave_index: 4
+    start_time: 400
+    end_time: 600
+    monster_id: 200041
+    spawn_amount: 10
+    spawn_pattern: 0
+    mid_boss_id: 0
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 571012
+    _description: "7\uBC88 \uD0D1 10\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 710
+    wave_index: 4
+    start_time: 450
+    end_time: 600
+    monster_id: 200037
+    spawn_amount: 10
+    spawn_pattern: 2
+    mid_boss_id: 0
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 571013
+    _description: "7\uBC88 \uD0D1 10\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 710
+    wave_index: 4
+    start_time: 500
+    end_time: 600
+    monster_id: 200039
+    spawn_amount: 10
+    spawn_pattern: 0
+    mid_boss_id: 0
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 571014
+    _description: "7\uBC88 \uD0D1 10\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 710
+    wave_index: 5
+    start_time: 550
+    end_time: 750
+    monster_id: 200042
+    spawn_amount: 12
+    spawn_pattern: 2
+    mid_boss_id: 202029
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 571015
+    _description: "7\uBC88 \uD0D1 10\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 710
+    wave_index: 5
+    start_time: 550
+    end_time: 750
+    monster_id: 200038
+    spawn_amount: 12
+    spawn_pattern: 1
+    mid_boss_id: 0
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 571016
+    _description: "7\uBC88 \uD0D1 10\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 710
+    wave_index: 5
+    start_time: 600
+    end_time: 750
+    monster_id: 200036
+    spawn_amount: 12
+    spawn_pattern: 0
+    mid_boss_id: 0
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 571017
+    _description: "7\uBC88 \uD0D1 10\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 710
+    wave_index: 5
+    start_time: 650
+    end_time: 750
+    monster_id: 200040
+    spawn_amount: 12
+    spawn_pattern: 1
+    mid_boss_id: 0
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 571018
+    _description: "7\uBC88 \uD0D1 10\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 710
+    wave_index: 6
+    start_time: 700
+    end_time: 900
+    monster_id: 200036
+    spawn_amount: 15
+    spawn_pattern: 0
+    mid_boss_id: 0
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 571019
+    _description: "7\uBC88 \uD0D1 10\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 710
+    wave_index: 6
+    start_time: 700
+    end_time: 900
+    monster_id: 200037
+    spawn_amount: 15
+    spawn_pattern: 1
+    mid_boss_id: 0
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 571020
+    _description: "7\uBC88 \uD0D1 10\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 710
+    wave_index: 6
+    start_time: 750
+    end_time: 900
+    monster_id: 200038
+    spawn_amount: 15
+    spawn_pattern: 2
+    mid_boss_id: 0
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 571021
+    _description: "7\uBC88 \uD0D1 10\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 710
+    wave_index: 6
+    start_time: 750
+    end_time: 900
+    monster_id: 200039
+    spawn_amount: 15
+    spawn_pattern: 0
+    mid_boss_id: 0
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 571022
+    _description: "7\uBC88 \uD0D1 10\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 710
+    wave_index: 6
+    start_time: 800
+    end_time: 900
+    monster_id: 200040
+    spawn_amount: 15
+    spawn_pattern: 1
+    mid_boss_id: 0
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 571023
+    _description: "7\uBC88 \uD0D1 10\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 710
+    wave_index: 6
+    start_time: 800
+    end_time: 900
+    monster_id: 200041
+    spawn_amount: 15
+    spawn_pattern: 2
+    mid_boss_id: 0
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0
+  - wave_id: 571024
+    _description: "7\uBC88 \uD0D1 10\uC2A4\uD14C\uC774\uC9C0"
+    group_id: 710
+    wave_index: 6
+    start_time: 800
+    end_time: 900
+    monster_id: 200042
+    spawn_amount: 20
+    spawn_pattern: 0
+    mid_boss_id: 0
+    hp_modifier: 1
+    power_modifier: 1
+    exp_multiply: 0

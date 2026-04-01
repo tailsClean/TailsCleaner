@@ -1,0 +1,3336 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aff5665f2fb57f94fa90beb469e98ec2, type: 3}
+  m_Name: RewardTableSO
+  m_EditorClassIdentifier: Assembly-CSharp::RewardTableSO
+  dataList:
+  - reward_id: 599901
+    _description: 0
+    reward_group_id: 599901
+    reward_category: 1
+    reward_type: 0
+    item_id: 30001
+    min_count: 1000
+    max_count: 1000
+    drop_rate: 1
+  - reward_id: 599801
+    _description: 0
+    reward_group_id: 599801
+    reward_category: 1
+    reward_type: 2
+    item_id: 34001
+    min_count: 1
+    max_count: 1
+    drop_rate: 0.5
+  - reward_id: 599802
+    _description: 0
+    reward_group_id: 599801
+    reward_category: 1
+    reward_type: 2
+    item_id: 34002
+    min_count: 1
+    max_count: 1
+    drop_rate: 0.5
+  - reward_id: 599803
+    _description: 0
+    reward_group_id: 599801
+    reward_category: 1
+    reward_type: 2
+    item_id: 34003
+    min_count: 1
+    max_count: 1
+    drop_rate: 0.5
+  - reward_id: 599804
+    _description: 0
+    reward_group_id: 599801
+    reward_category: 1
+    reward_type: 2
+    item_id: 34004
+    min_count: 1
+    max_count: 1
+    drop_rate: 0.5
+  - reward_id: 599811
+    _description: 0
+    reward_group_id: 599811
+    reward_category: 1
+    reward_type: 2
+    item_id: 34001
+    min_count: 1
+    max_count: 2
+    drop_rate: 1
+  - reward_id: 599812
+    _description: 0
+    reward_group_id: 599811
+    reward_category: 1
+    reward_type: 2
+    item_id: 34002
+    min_count: 1
+    max_count: 2
+    drop_rate: 1
+  - reward_id: 599813
+    _description: 0
+    reward_group_id: 599811
+    reward_category: 1
+    reward_type: 2
+    item_id: 34003
+    min_count: 1
+    max_count: 2
+    drop_rate: 1
+  - reward_id: 599814
+    _description: 0
+    reward_group_id: 599811
+    reward_category: 1
+    reward_type: 2
+    item_id: 34004
+    min_count: 1
+    max_count: 2
+    drop_rate: 1
+  - reward_id: 599821
+    _description: 0
+    reward_group_id: 599821
+    reward_category: 1
+    reward_type: 2
+    item_id: 34001
+    min_count: 2
+    max_count: 3
+    drop_rate: 1
+  - reward_id: 599822
+    _description: 0
+    reward_group_id: 599821
+    reward_category: 1
+    reward_type: 2
+    item_id: 34002
+    min_count: 2
+    max_count: 3
+    drop_rate: 1
+  - reward_id: 599823
+    _description: 0
+    reward_group_id: 599821
+    reward_category: 1
+    reward_type: 2
+    item_id: 34003
+    min_count: 2
+    max_count: 3
+    drop_rate: 1
+  - reward_id: 599824
+    _description: 0
+    reward_group_id: 599821
+    reward_category: 1
+    reward_type: 2
+    item_id: 34004
+    min_count: 2
+    max_count: 3
+    drop_rate: 1
+  - reward_id: 598901
+    _description: 0
+    reward_group_id: 59801
+    reward_category: 1
+    reward_type: 2
+    item_id: 34005
+    min_count: 0
+    max_count: 0
+    drop_rate: 1
+  - reward_id: 598902
+    _description: 0
+    reward_group_id: 59802
+    reward_category: 1
+    reward_type: 2
+    item_id: 34005
+    min_count: 10
+    max_count: 10
+    drop_rate: 1
+  - reward_id: 598903
+    _description: 0
+    reward_group_id: 59803
+    reward_category: 1
+    reward_type: 2
+    item_id: 34005
+    min_count: 30
+    max_count: 30
+    drop_rate: 1
+  - reward_id: 510101
+    _description: 0
+    reward_group_id: 101
+    reward_category: 1
+    reward_type: 2
+    item_id: 34003
+    min_count: 100
+    max_count: 500
+    drop_rate: 1
+  - reward_id: 510201
+    _description: 0
+    reward_group_id: 102
+    reward_category: 0
+    reward_type: 1
+    item_id: 32101
+    min_count: 1
+    max_count: 1
+    drop_rate: 1
+  - reward_id: 510202
+    _description: 0
+    reward_group_id: 102
+    reward_category: 0
+    reward_type: 1
+    item_id: 32201
+    min_count: 1
+    max_count: 1
+    drop_rate: 1
+  - reward_id: 510203
+    _description: 0
+    reward_group_id: 102
+    reward_category: 0
+    reward_type: 1
+    item_id: 32301
+    min_count: 1
+    max_count: 1
+    drop_rate: 1
+  - reward_id: 510204
+    _description: 0
+    reward_group_id: 102
+    reward_category: 1
+    reward_type: 0
+    item_id: 30001
+    min_count: 100
+    max_count: 500
+    drop_rate: 1
+  - reward_id: 510301
+    _description: 0
+    reward_group_id: 103
+    reward_category: 1
+    reward_type: 0
+    item_id: 30001
+    min_count: 100
+    max_count: 500
+    drop_rate: 1
+  - reward_id: 510302
+    _description: 0
+    reward_group_id: 103
+    reward_category: 0
+    reward_type: 2
+    item_id: 34003
+    min_count: 10
+    max_count: 10
+    drop_rate: 1
+  - reward_id: 510401
+    _description: 0
+    reward_group_id: 104
+    reward_category: 0
+    reward_type: 1
+    item_id: 33201
+    min_count: 1
+    max_count: 1
+    drop_rate: 1
+  - reward_id: 510402
+    _description: 0
+    reward_group_id: 104
+    reward_category: 1
+    reward_type: 0
+    item_id: 30001
+    min_count: 100
+    max_count: 500
+    drop_rate: 1
+  - reward_id: 510501
+    _description: 0
+    reward_group_id: 105
+    reward_category: 1
+    reward_type: 0
+    item_id: 30001
+    min_count: 100
+    max_count: 500
+    drop_rate: 1
+  - reward_id: 510502
+    _description: 0
+    reward_group_id: 105
+    reward_category: 1
+    reward_type: 1
+    item_id: 32001
+    min_count: 1
+    max_count: 1
+    drop_rate: 0.1
+  - reward_id: 520101
+    _description: 0
+    reward_group_id: 201
+    reward_category: 1
+    reward_type: 0
+    item_id: 30001
+    min_count: 900
+    max_count: 1000
+    drop_rate: 1
+  - reward_id: 520102
+    _description: 0
+    reward_group_id: 201
+    reward_category: 0
+    reward_type: 2
+    item_id: 34002
+    min_count: 1
+    max_count: 2
+    drop_rate: 1
+  - reward_id: 520103
+    _description: 0
+    reward_group_id: 201
+    reward_category: 1
+    reward_type: 2
+    item_id: 34002
+    min_count: 1
+    max_count: 1
+    drop_rate: 0.1
+  - reward_id: 520201
+    _description: 0
+    reward_group_id: 202
+    reward_category: 1
+    reward_type: 0
+    item_id: 30001
+    min_count: 900
+    max_count: 1000
+    drop_rate: 1
+  - reward_id: 520202
+    _description: 0
+    reward_group_id: 202
+    reward_category: 0
+    reward_type: 2
+    item_id: 34001
+    min_count: 1
+    max_count: 2
+    drop_rate: 1
+  - reward_id: 520203
+    _description: 0
+    reward_group_id: 202
+    reward_category: 1
+    reward_type: 2
+    item_id: 34001
+    min_count: 1
+    max_count: 1
+    drop_rate: 0.1
+  - reward_id: 520301
+    _description: 0
+    reward_group_id: 203
+    reward_category: 1
+    reward_type: 0
+    item_id: 30001
+    min_count: 900
+    max_count: 1000
+    drop_rate: 1
+  - reward_id: 520302
+    _description: 0
+    reward_group_id: 203
+    reward_category: 0
+    reward_type: 2
+    item_id: 34004
+    min_count: 1
+    max_count: 2
+    drop_rate: 1
+  - reward_id: 520303
+    _description: 0
+    reward_group_id: 203
+    reward_category: 1
+    reward_type: 2
+    item_id: 34004
+    min_count: 1
+    max_count: 1
+    drop_rate: 0.1
+  - reward_id: 520401
+    _description: 0
+    reward_group_id: 204
+    reward_category: 1
+    reward_type: 0
+    item_id: 30001
+    min_count: 900
+    max_count: 1000
+    drop_rate: 1
+  - reward_id: 520402
+    _description: 0
+    reward_group_id: 204
+    reward_category: 0
+    reward_type: 2
+    item_id: 34001
+    min_count: 1
+    max_count: 2
+    drop_rate: 1
+  - reward_id: 520403
+    _description: 0
+    reward_group_id: 204
+    reward_category: 1
+    reward_type: 2
+    item_id: 34001
+    min_count: 1
+    max_count: 1
+    drop_rate: 0.1
+  - reward_id: 520501
+    _description: 0
+    reward_group_id: 205
+    reward_category: 1
+    reward_type: 0
+    item_id: 30001
+    min_count: 1080
+    max_count: 1200
+    drop_rate: 1
+  - reward_id: 520502
+    _description: 0
+    reward_group_id: 205
+    reward_category: 0
+    reward_type: 2
+    item_id: 34003
+    min_count: 1
+    max_count: 2
+    drop_rate: 1
+  - reward_id: 520503
+    _description: 0
+    reward_group_id: 205
+    reward_category: 1
+    reward_type: 2
+    item_id: 34003
+    min_count: 1
+    max_count: 1
+    drop_rate: 0.15
+  - reward_id: 520601
+    _description: 0
+    reward_group_id: 206
+    reward_category: 1
+    reward_type: 0
+    item_id: 30001
+    min_count: 1000
+    max_count: 1100
+    drop_rate: 1
+  - reward_id: 520602
+    _description: 0
+    reward_group_id: 206
+    reward_category: 0
+    reward_type: 2
+    item_id: 34002
+    min_count: 1
+    max_count: 2
+    drop_rate: 1
+  - reward_id: 520603
+    _description: 0
+    reward_group_id: 206
+    reward_category: 1
+    reward_type: 2
+    item_id: 34002
+    min_count: 1
+    max_count: 1
+    drop_rate: 0.1
+  - reward_id: 520701
+    _description: 0
+    reward_group_id: 207
+    reward_category: 1
+    reward_type: 0
+    item_id: 30001
+    min_count: 1000
+    max_count: 1100
+    drop_rate: 1
+  - reward_id: 520702
+    _description: 0
+    reward_group_id: 207
+    reward_category: 0
+    reward_type: 2
+    item_id: 34004
+    min_count: 1
+    max_count: 2
+    drop_rate: 1
+  - reward_id: 520703
+    _description: 0
+    reward_group_id: 207
+    reward_category: 1
+    reward_type: 2
+    item_id: 34004
+    min_count: 1
+    max_count: 1
+    drop_rate: 0.1
+  - reward_id: 520801
+    _description: 0
+    reward_group_id: 208
+    reward_category: 1
+    reward_type: 0
+    item_id: 30001
+    min_count: 1000
+    max_count: 1100
+    drop_rate: 1
+  - reward_id: 520802
+    _description: 0
+    reward_group_id: 208
+    reward_category: 0
+    reward_type: 2
+    item_id: 34001
+    min_count: 1
+    max_count: 2
+    drop_rate: 1
+  - reward_id: 520803
+    _description: 0
+    reward_group_id: 208
+    reward_category: 1
+    reward_type: 2
+    item_id: 34001
+    min_count: 1
+    max_count: 1
+    drop_rate: 0.1
+  - reward_id: 520901
+    _description: 0
+    reward_group_id: 209
+    reward_category: 1
+    reward_type: 0
+    item_id: 30001
+    min_count: 1000
+    max_count: 1100
+    drop_rate: 1
+  - reward_id: 520902
+    _description: 0
+    reward_group_id: 209
+    reward_category: 0
+    reward_type: 2
+    item_id: 34003
+    min_count: 2
+    max_count: 3
+    drop_rate: 1
+  - reward_id: 520903
+    _description: 0
+    reward_group_id: 209
+    reward_category: 1
+    reward_type: 2
+    item_id: 34003
+    min_count: 1
+    max_count: 1
+    drop_rate: 0.15
+  - reward_id: 521001
+    _description: 0
+    reward_group_id: 210
+    reward_category: 1
+    reward_type: 0
+    item_id: 30001
+    min_count: 1350
+    max_count: 1500
+    drop_rate: 1
+  - reward_id: 521002
+    _description: 0
+    reward_group_id: 210
+    reward_category: 0
+    reward_type: 1
+    item_id: 32301
+    min_count: 1
+    max_count: 1
+    drop_rate: 1
+  - reward_id: 521003
+    _description: 0
+    reward_group_id: 210
+    reward_category: 1
+    reward_type: 1
+    item_id: 32301
+    min_count: 1
+    max_count: 1
+    drop_rate: 0.05
+  - reward_id: 530101
+    _description: 0
+    reward_group_id: 301
+    reward_category: 1
+    reward_type: 0
+    item_id: 30001
+    min_count: 1100
+    max_count: 1200
+    drop_rate: 1
+  - reward_id: 530102
+    _description: 0
+    reward_group_id: 301
+    reward_category: 0
+    reward_type: 2
+    item_id: 34001
+    min_count: 2
+    max_count: 3
+    drop_rate: 1
+  - reward_id: 530103
+    _description: 0
+    reward_group_id: 301
+    reward_category: 1
+    reward_type: 2
+    item_id: 34001
+    min_count: 1
+    max_count: 1
+    drop_rate: 0.15
+  - reward_id: 530201
+    _description: 0
+    reward_group_id: 302
+    reward_category: 1
+    reward_type: 0
+    item_id: 30001
+    min_count: 1100
+    max_count: 1200
+    drop_rate: 1
+  - reward_id: 530202
+    _description: 0
+    reward_group_id: 302
+    reward_category: 0
+    reward_type: 2
+    item_id: 34001
+    min_count: 2
+    max_count: 3
+    drop_rate: 1
+  - reward_id: 530203
+    _description: 0
+    reward_group_id: 302
+    reward_category: 1
+    reward_type: 2
+    item_id: 34001
+    min_count: 1
+    max_count: 1
+    drop_rate: 0.15
+  - reward_id: 530301
+    _description: 0
+    reward_group_id: 303
+    reward_category: 1
+    reward_type: 0
+    item_id: 30001
+    min_count: 1100
+    max_count: 1200
+    drop_rate: 1
+  - reward_id: 530302
+    _description: 0
+    reward_group_id: 303
+    reward_category: 0
+    reward_type: 2
+    item_id: 34001
+    min_count: 2
+    max_count: 3
+    drop_rate: 1
+  - reward_id: 530303
+    _description: 0
+    reward_group_id: 303
+    reward_category: 1
+    reward_type: 2
+    item_id: 34001
+    min_count: 1
+    max_count: 1
+    drop_rate: 0.15
+  - reward_id: 530401
+    _description: 0
+    reward_group_id: 304
+    reward_category: 1
+    reward_type: 0
+    item_id: 30001
+    min_count: 1100
+    max_count: 1200
+    drop_rate: 1
+  - reward_id: 530402
+    _description: 0
+    reward_group_id: 304
+    reward_category: 0
+    reward_type: 2
+    item_id: 34001
+    min_count: 2
+    max_count: 3
+    drop_rate: 1
+  - reward_id: 530403
+    _description: 0
+    reward_group_id: 304
+    reward_category: 1
+    reward_type: 2
+    item_id: 34001
+    min_count: 1
+    max_count: 1
+    drop_rate: 0.15
+  - reward_id: 530501
+    _description: 0
+    reward_group_id: 305
+    reward_category: 1
+    reward_type: 0
+    item_id: 30001
+    min_count: 1300
+    max_count: 1450
+    drop_rate: 1
+  - reward_id: 530601
+    _description: 0
+    reward_group_id: 306
+    reward_category: 1
+    reward_type: 0
+    item_id: 30001
+    min_count: 1200
+    max_count: 1300
+    drop_rate: 1
+  - reward_id: 530602
+    _description: 0
+    reward_group_id: 306
+    reward_category: 0
+    reward_type: 2
+    item_id: 34001
+    min_count: 2
+    max_count: 4
+    drop_rate: 1
+  - reward_id: 530603
+    _description: 0
+    reward_group_id: 306
+    reward_category: 1
+    reward_type: 2
+    item_id: 34001
+    min_count: 1
+    max_count: 2
+    drop_rate: 0.15
+  - reward_id: 530701
+    _description: 0
+    reward_group_id: 307
+    reward_category: 1
+    reward_type: 0
+    item_id: 30001
+    min_count: 1200
+    max_count: 1300
+    drop_rate: 1
+  - reward_id: 530702
+    _description: 0
+    reward_group_id: 307
+    reward_category: 0
+    reward_type: 2
+    item_id: 34001
+    min_count: 2
+    max_count: 4
+    drop_rate: 1
+  - reward_id: 530703
+    _description: 0
+    reward_group_id: 307
+    reward_category: 1
+    reward_type: 2
+    item_id: 34001
+    min_count: 1
+    max_count: 2
+    drop_rate: 0.15
+  - reward_id: 530801
+    _description: 0
+    reward_group_id: 308
+    reward_category: 1
+    reward_type: 0
+    item_id: 30001
+    min_count: 1200
+    max_count: 1300
+    drop_rate: 1
+  - reward_id: 530802
+    _description: 0
+    reward_group_id: 308
+    reward_category: 0
+    reward_type: 2
+    item_id: 34001
+    min_count: 3
+    max_count: 4
+    drop_rate: 1
+  - reward_id: 530803
+    _description: 0
+    reward_group_id: 308
+    reward_category: 1
+    reward_type: 2
+    item_id: 34001
+    min_count: 1
+    max_count: 2
+    drop_rate: 0.15
+  - reward_id: 530901
+    _description: 0
+    reward_group_id: 309
+    reward_category: 1
+    reward_type: 0
+    item_id: 30001
+    min_count: 1200
+    max_count: 1300
+    drop_rate: 1
+  - reward_id: 530902
+    _description: 0
+    reward_group_id: 309
+    reward_category: 0
+    reward_type: 2
+    item_id: 34001
+    min_count: 3
+    max_count: 4
+    drop_rate: 1
+  - reward_id: 530903
+    _description: 0
+    reward_group_id: 309
+    reward_category: 1
+    reward_type: 2
+    item_id: 34001
+    min_count: 1
+    max_count: 2
+    drop_rate: 0.15
+  - reward_id: 531001
+    _description: 0
+    reward_group_id: 310
+    reward_category: 1
+    reward_type: 0
+    item_id: 30001
+    min_count: 1600
+    max_count: 1800
+    drop_rate: 1
+  - reward_id: 531002
+    _description: 0
+    reward_group_id: 310
+    reward_category: 0
+    reward_type: 2
+    item_id: 34001
+    min_count: 5
+    max_count: 5
+    drop_rate: 1
+  - reward_id: 531003
+    _description: 0
+    reward_group_id: 310
+    reward_category: 0
+    reward_type: 1
+    item_id: 32101
+    min_count: 1
+    max_count: 1
+    drop_rate: 1
+  - reward_id: 531004
+    _description: 0
+    reward_group_id: 310
+    reward_category: 1
+    reward_type: 2
+    item_id: 34001
+    min_count: 3
+    max_count: 4
+    drop_rate: 0.15
+  - reward_id: 531005
+    _description: 0
+    reward_group_id: 310
+    reward_category: 1
+    reward_type: 1
+    item_id: 32101
+    min_count: 1
+    max_count: 1
+    drop_rate: 0.05
+  - reward_id: 540101
+    _description: 0
+    reward_group_id: 401
+    reward_category: 1
+    reward_type: 0
+    item_id: 30001
+    min_count: 1300
+    max_count: 1400
+    drop_rate: 1
+  - reward_id: 540102
+    _description: 0
+    reward_group_id: 401
+    reward_category: 0
+    reward_type: 2
+    item_id: 34002
+    min_count: 2
+    max_count: 3
+    drop_rate: 1
+  - reward_id: 540103
+    _description: 0
+    reward_group_id: 401
+    reward_category: 1
+    reward_type: 2
+    item_id: 34002
+    min_count: 1
+    max_count: 1
+    drop_rate: 0.15
+  - reward_id: 540201
+    _description: 0
+    reward_group_id: 402
+    reward_category: 1
+    reward_type: 0
+    item_id: 30001
+    min_count: 1300
+    max_count: 1400
+    drop_rate: 1
+  - reward_id: 540202
+    _description: 0
+    reward_group_id: 402
+    reward_category: 0
+    reward_type: 2
+    item_id: 34002
+    min_count: 2
+    max_count: 3
+    drop_rate: 1
+  - reward_id: 540203
+    _description: 0
+    reward_group_id: 402
+    reward_category: 1
+    reward_type: 2
+    item_id: 34002
+    min_count: 1
+    max_count: 1
+    drop_rate: 0.15
+  - reward_id: 540301
+    _description: 0
+    reward_group_id: 403
+    reward_category: 1
+    reward_type: 0
+    item_id: 30001
+    min_count: 1300
+    max_count: 1400
+    drop_rate: 1
+  - reward_id: 540302
+    _description: 0
+    reward_group_id: 403
+    reward_category: 0
+    reward_type: 2
+    item_id: 34002
+    min_count: 2
+    max_count: 3
+    drop_rate: 1
+  - reward_id: 540303
+    _description: 0
+    reward_group_id: 403
+    reward_category: 1
+    reward_type: 2
+    item_id: 34002
+    min_count: 1
+    max_count: 1
+    drop_rate: 0.15
+  - reward_id: 540401
+    _description: 0
+    reward_group_id: 404
+    reward_category: 1
+    reward_type: 0
+    item_id: 30001
+    min_count: 1300
+    max_count: 1400
+    drop_rate: 1
+  - reward_id: 540402
+    _description: 0
+    reward_group_id: 404
+    reward_category: 0
+    reward_type: 2
+    item_id: 34002
+    min_count: 2
+    max_count: 3
+    drop_rate: 1
+  - reward_id: 540403
+    _description: 0
+    reward_group_id: 404
+    reward_category: 1
+    reward_type: 2
+    item_id: 34002
+    min_count: 1
+    max_count: 1
+    drop_rate: 0.15
+  - reward_id: 540501
+    _description: 0
+    reward_group_id: 405
+    reward_category: 1
+    reward_type: 0
+    item_id: 30001
+    min_count: 1850
+    max_count: 2000
+    drop_rate: 1
+  - reward_id: 540601
+    _description: 0
+    reward_group_id: 406
+    reward_category: 1
+    reward_type: 0
+    item_id: 30001
+    min_count: 1400
+    max_count: 1500
+    drop_rate: 1
+  - reward_id: 540602
+    _description: 0
+    reward_group_id: 406
+    reward_category: 0
+    reward_type: 2
+    item_id: 34002
+    min_count: 2
+    max_count: 4
+    drop_rate: 1
+  - reward_id: 540603
+    _description: 0
+    reward_group_id: 406
+    reward_category: 1
+    reward_type: 2
+    item_id: 34002
+    min_count: 1
+    max_count: 2
+    drop_rate: 0.15
+  - reward_id: 540701
+    _description: 0
+    reward_group_id: 407
+    reward_category: 1
+    reward_type: 0
+    item_id: 30001
+    min_count: 1400
+    max_count: 1500
+    drop_rate: 1
+  - reward_id: 540702
+    _description: 0
+    reward_group_id: 407
+    reward_category: 0
+    reward_type: 2
+    item_id: 34002
+    min_count: 2
+    max_count: 4
+    drop_rate: 1
+  - reward_id: 540703
+    _description: 0
+    reward_group_id: 407
+    reward_category: 1
+    reward_type: 2
+    item_id: 34002
+    min_count: 1
+    max_count: 2
+    drop_rate: 0.15
+  - reward_id: 540801
+    _description: 0
+    reward_group_id: 408
+    reward_category: 1
+    reward_type: 0
+    item_id: 30001
+    min_count: 1400
+    max_count: 1500
+    drop_rate: 1
+  - reward_id: 540802
+    _description: 0
+    reward_group_id: 408
+    reward_category: 0
+    reward_type: 2
+    item_id: 34002
+    min_count: 3
+    max_count: 4
+    drop_rate: 1
+  - reward_id: 540803
+    _description: 0
+    reward_group_id: 408
+    reward_category: 1
+    reward_type: 2
+    item_id: 34002
+    min_count: 1
+    max_count: 2
+    drop_rate: 0.15
+  - reward_id: 540901
+    _description: 0
+    reward_group_id: 409
+    reward_category: 1
+    reward_type: 0
+    item_id: 30001
+    min_count: 1400
+    max_count: 1500
+    drop_rate: 1
+  - reward_id: 540902
+    _description: 0
+    reward_group_id: 409
+    reward_category: 0
+    reward_type: 2
+    item_id: 34002
+    min_count: 3
+    max_count: 4
+    drop_rate: 1
+  - reward_id: 540903
+    _description: 0
+    reward_group_id: 409
+    reward_category: 1
+    reward_type: 2
+    item_id: 34002
+    min_count: 1
+    max_count: 2
+    drop_rate: 0.15
+  - reward_id: 541001
+    _description: 0
+    reward_group_id: 410
+    reward_category: 1
+    reward_type: 0
+    item_id: 30001
+    min_count: 1850
+    max_count: 2000
+    drop_rate: 1
+  - reward_id: 541002
+    _description: 0
+    reward_group_id: 410
+    reward_category: 0
+    reward_type: 2
+    item_id: 34002
+    min_count: 5
+    max_count: 5
+    drop_rate: 1
+  - reward_id: 541003
+    _description: 0
+    reward_group_id: 410
+    reward_category: 0
+    reward_type: 1
+    item_id: 32201
+    min_count: 1
+    max_count: 1
+    drop_rate: 1
+  - reward_id: 541004
+    _description: 0
+    reward_group_id: 410
+    reward_category: 1
+    reward_type: 2
+    item_id: 34002
+    min_count: 3
+    max_count: 4
+    drop_rate: 0.15
+  - reward_id: 541005
+    _description: 0
+    reward_group_id: 410
+    reward_category: 1
+    reward_type: 1
+    item_id: 32201
+    min_count: 1
+    max_count: 1
+    drop_rate: 0.05
+  - reward_id: 550101
+    _description: 0
+    reward_group_id: 501
+    reward_category: 1
+    reward_type: 0
+    item_id: 30001
+    min_count: 1500
+    max_count: 1600
+    drop_rate: 1
+  - reward_id: 550102
+    _description: 0
+    reward_group_id: 501
+    reward_category: 0
+    reward_type: 2
+    item_id: 34004
+    min_count: 2
+    max_count: 3
+    drop_rate: 1
+  - reward_id: 550103
+    _description: 0
+    reward_group_id: 501
+    reward_category: 1
+    reward_type: 2
+    item_id: 34004
+    min_count: 1
+    max_count: 1
+    drop_rate: 0.15
+  - reward_id: 550201
+    _description: 0
+    reward_group_id: 502
+    reward_category: 1
+    reward_type: 0
+    item_id: 30001
+    min_count: 1500
+    max_count: 1600
+    drop_rate: 1
+  - reward_id: 550202
+    _description: 0
+    reward_group_id: 502
+    reward_category: 0
+    reward_type: 2
+    item_id: 34004
+    min_count: 2
+    max_count: 3
+    drop_rate: 1
+  - reward_id: 550203
+    _description: 0
+    reward_group_id: 502
+    reward_category: 1
+    reward_type: 2
+    item_id: 34004
+    min_count: 1
+    max_count: 1
+    drop_rate: 0.15
+  - reward_id: 550301
+    _description: 0
+    reward_group_id: 503
+    reward_category: 1
+    reward_type: 0
+    item_id: 30001
+    min_count: 1500
+    max_count: 1600
+    drop_rate: 1
+  - reward_id: 550302
+    _description: 0
+    reward_group_id: 503
+    reward_category: 0
+    reward_type: 2
+    item_id: 34004
+    min_count: 2
+    max_count: 3
+    drop_rate: 1
+  - reward_id: 550303
+    _description: 0
+    reward_group_id: 503
+    reward_category: 1
+    reward_type: 2
+    item_id: 34004
+    min_count: 1
+    max_count: 1
+    drop_rate: 0.15
+  - reward_id: 550401
+    _description: 0
+    reward_group_id: 504
+    reward_category: 1
+    reward_type: 0
+    item_id: 30001
+    min_count: 1500
+    max_count: 1600
+    drop_rate: 1
+  - reward_id: 550402
+    _description: 0
+    reward_group_id: 504
+    reward_category: 0
+    reward_type: 2
+    item_id: 34004
+    min_count: 2
+    max_count: 3
+    drop_rate: 1
+  - reward_id: 550403
+    _description: 0
+    reward_group_id: 504
+    reward_category: 1
+    reward_type: 2
+    item_id: 34004
+    min_count: 1
+    max_count: 1
+    drop_rate: 0.15
+  - reward_id: 550501
+    _description: 0
+    reward_group_id: 505
+    reward_category: 1
+    reward_type: 0
+    item_id: 30001
+    min_count: 1900
+    max_count: 2050
+    drop_rate: 1
+  - reward_id: 550601
+    _description: 0
+    reward_group_id: 506
+    reward_category: 1
+    reward_type: 0
+    item_id: 30001
+    min_count: 1600
+    max_count: 1700
+    drop_rate: 1
+  - reward_id: 550602
+    _description: 0
+    reward_group_id: 506
+    reward_category: 0
+    reward_type: 2
+    item_id: 34004
+    min_count: 2
+    max_count: 4
+    drop_rate: 1
+  - reward_id: 550603
+    _description: 0
+    reward_group_id: 506
+    reward_category: 1
+    reward_type: 2
+    item_id: 34004
+    min_count: 1
+    max_count: 2
+    drop_rate: 0.15
+  - reward_id: 550701
+    _description: 0
+    reward_group_id: 507
+    reward_category: 1
+    reward_type: 0
+    item_id: 30001
+    min_count: 1600
+    max_count: 1700
+    drop_rate: 1
+  - reward_id: 550702
+    _description: 0
+    reward_group_id: 507
+    reward_category: 0
+    reward_type: 2
+    item_id: 34004
+    min_count: 2
+    max_count: 4
+    drop_rate: 1
+  - reward_id: 550703
+    _description: 0
+    reward_group_id: 507
+    reward_category: 1
+    reward_type: 2
+    item_id: 34004
+    min_count: 1
+    max_count: 2
+    drop_rate: 0.15
+  - reward_id: 550801
+    _description: 0
+    reward_group_id: 508
+    reward_category: 1
+    reward_type: 0
+    item_id: 30001
+    min_count: 1600
+    max_count: 1700
+    drop_rate: 1
+  - reward_id: 550802
+    _description: 0
+    reward_group_id: 508
+    reward_category: 0
+    reward_type: 2
+    item_id: 34004
+    min_count: 3
+    max_count: 4
+    drop_rate: 1
+  - reward_id: 550803
+    _description: 0
+    reward_group_id: 508
+    reward_category: 1
+    reward_type: 2
+    item_id: 34004
+    min_count: 1
+    max_count: 2
+    drop_rate: 0.15
+  - reward_id: 550901
+    _description: 0
+    reward_group_id: 509
+    reward_category: 1
+    reward_type: 0
+    item_id: 30001
+    min_count: 1600
+    max_count: 1700
+    drop_rate: 1
+  - reward_id: 550902
+    _description: 0
+    reward_group_id: 509
+    reward_category: 0
+    reward_type: 2
+    item_id: 34004
+    min_count: 3
+    max_count: 4
+    drop_rate: 1
+  - reward_id: 550903
+    _description: 0
+    reward_group_id: 509
+    reward_category: 1
+    reward_type: 2
+    item_id: 34004
+    min_count: 1
+    max_count: 2
+    drop_rate: 0.15
+  - reward_id: 551001
+    _description: 0
+    reward_group_id: 510
+    reward_category: 1
+    reward_type: 0
+    item_id: 30001
+    min_count: 2100
+    max_count: 2300
+    drop_rate: 1
+  - reward_id: 551002
+    _description: 0
+    reward_group_id: 510
+    reward_category: 0
+    reward_type: 2
+    item_id: 34004
+    min_count: 5
+    max_count: 5
+    drop_rate: 1
+  - reward_id: 551003
+    _description: 0
+    reward_group_id: 510
+    reward_category: 0
+    reward_type: 1
+    item_id: 32001
+    min_count: 1
+    max_count: 1
+    drop_rate: 1
+  - reward_id: 551004
+    _description: 0
+    reward_group_id: 510
+    reward_category: 1
+    reward_type: 2
+    item_id: 34004
+    min_count: 3
+    max_count: 4
+    drop_rate: 0.15
+  - reward_id: 551005
+    _description: 0
+    reward_group_id: 510
+    reward_category: 1
+    reward_type: 1
+    item_id: 32001
+    min_count: 1
+    max_count: 1
+    drop_rate: 0.05
+  - reward_id: 560101
+    _description: 0
+    reward_group_id: 601
+    reward_category: 1
+    reward_type: 0
+    item_id: 30001
+    min_count: 1700
+    max_count: 1800
+    drop_rate: 1
+  - reward_id: 560102
+    _description: 0
+    reward_group_id: 601
+    reward_category: 0
+    reward_type: 2
+    item_id: 34001
+    min_count: 1
+    max_count: 1
+    drop_rate: 1
+  - reward_id: 560103
+    _description: 0
+    reward_group_id: 601
+    reward_category: 0
+    reward_type: 2
+    item_id: 34002
+    min_count: 1
+    max_count: 1
+    drop_rate: 1
+  - reward_id: 560104
+    _description: 0
+    reward_group_id: 601
+    reward_category: 0
+    reward_type: 2
+    item_id: 34003
+    min_count: 1
+    max_count: 1
+    drop_rate: 1
+  - reward_id: 560105
+    _description: 0
+    reward_group_id: 601
+    reward_category: 0
+    reward_type: 2
+    item_id: 34004
+    min_count: 1
+    max_count: 1
+    drop_rate: 1
+  - reward_id: 560106
+    _description: 0
+    reward_group_id: 601
+    reward_category: 1
+    reward_type: 2
+    item_id: 34001
+    min_count: 1
+    max_count: 1
+    drop_rate: 0.05
+  - reward_id: 560107
+    _description: 0
+    reward_group_id: 601
+    reward_category: 1
+    reward_type: 2
+    item_id: 34002
+    min_count: 1
+    max_count: 1
+    drop_rate: 0.05
+  - reward_id: 560108
+    _description: 0
+    reward_group_id: 601
+    reward_category: 1
+    reward_type: 2
+    item_id: 34003
+    min_count: 1
+    max_count: 1
+    drop_rate: 0.05
+  - reward_id: 560109
+    _description: 0
+    reward_group_id: 601
+    reward_category: 1
+    reward_type: 2
+    item_id: 34004
+    min_count: 1
+    max_count: 1
+    drop_rate: 0.05
+  - reward_id: 560201
+    _description: 0
+    reward_group_id: 602
+    reward_category: 1
+    reward_type: 0
+    item_id: 30001
+    min_count: 1700
+    max_count: 1800
+    drop_rate: 1
+  - reward_id: 560202
+    _description: 0
+    reward_group_id: 602
+    reward_category: 0
+    reward_type: 2
+    item_id: 34001
+    min_count: 1
+    max_count: 1
+    drop_rate: 1
+  - reward_id: 560203
+    _description: 0
+    reward_group_id: 602
+    reward_category: 0
+    reward_type: 2
+    item_id: 34002
+    min_count: 1
+    max_count: 1
+    drop_rate: 1
+  - reward_id: 560204
+    _description: 0
+    reward_group_id: 602
+    reward_category: 0
+    reward_type: 2
+    item_id: 34003
+    min_count: 1
+    max_count: 1
+    drop_rate: 1
+  - reward_id: 560205
+    _description: 0
+    reward_group_id: 602
+    reward_category: 0
+    reward_type: 2
+    item_id: 34004
+    min_count: 1
+    max_count: 1
+    drop_rate: 1
+  - reward_id: 560206
+    _description: 0
+    reward_group_id: 602
+    reward_category: 1
+    reward_type: 2
+    item_id: 34001
+    min_count: 1
+    max_count: 1
+    drop_rate: 0.05
+  - reward_id: 560207
+    _description: 0
+    reward_group_id: 602
+    reward_category: 1
+    reward_type: 2
+    item_id: 34002
+    min_count: 1
+    max_count: 1
+    drop_rate: 0.05
+  - reward_id: 560208
+    _description: 0
+    reward_group_id: 602
+    reward_category: 1
+    reward_type: 2
+    item_id: 34003
+    min_count: 1
+    max_count: 1
+    drop_rate: 0.05
+  - reward_id: 560209
+    _description: 0
+    reward_group_id: 602
+    reward_category: 1
+    reward_type: 2
+    item_id: 34004
+    min_count: 1
+    max_count: 1
+    drop_rate: 0.05
+  - reward_id: 560301
+    _description: 0
+    reward_group_id: 603
+    reward_category: 1
+    reward_type: 0
+    item_id: 30001
+    min_count: 1700
+    max_count: 1800
+    drop_rate: 1
+  - reward_id: 560302
+    _description: 0
+    reward_group_id: 603
+    reward_category: 0
+    reward_type: 2
+    item_id: 34001
+    min_count: 1
+    max_count: 1
+    drop_rate: 1
+  - reward_id: 560303
+    _description: 0
+    reward_group_id: 603
+    reward_category: 0
+    reward_type: 2
+    item_id: 34002
+    min_count: 1
+    max_count: 1
+    drop_rate: 1
+  - reward_id: 560304
+    _description: 0
+    reward_group_id: 603
+    reward_category: 0
+    reward_type: 2
+    item_id: 34003
+    min_count: 1
+    max_count: 1
+    drop_rate: 1
+  - reward_id: 560305
+    _description: 0
+    reward_group_id: 603
+    reward_category: 0
+    reward_type: 2
+    item_id: 34004
+    min_count: 1
+    max_count: 1
+    drop_rate: 1
+  - reward_id: 560306
+    _description: 0
+    reward_group_id: 603
+    reward_category: 1
+    reward_type: 2
+    item_id: 34001
+    min_count: 1
+    max_count: 1
+    drop_rate: 0.05
+  - reward_id: 560307
+    _description: 0
+    reward_group_id: 603
+    reward_category: 1
+    reward_type: 2
+    item_id: 34002
+    min_count: 1
+    max_count: 1
+    drop_rate: 0.05
+  - reward_id: 560308
+    _description: 0
+    reward_group_id: 603
+    reward_category: 1
+    reward_type: 2
+    item_id: 34003
+    min_count: 1
+    max_count: 1
+    drop_rate: 0.05
+  - reward_id: 560309
+    _description: 0
+    reward_group_id: 603
+    reward_category: 1
+    reward_type: 2
+    item_id: 34004
+    min_count: 1
+    max_count: 1
+    drop_rate: 0.05
+  - reward_id: 560401
+    _description: 0
+    reward_group_id: 604
+    reward_category: 1
+    reward_type: 0
+    item_id: 30001
+    min_count: 1700
+    max_count: 1800
+    drop_rate: 1
+  - reward_id: 560402
+    _description: 0
+    reward_group_id: 604
+    reward_category: 0
+    reward_type: 2
+    item_id: 34001
+    min_count: 1
+    max_count: 1
+    drop_rate: 1
+  - reward_id: 560403
+    _description: 0
+    reward_group_id: 604
+    reward_category: 0
+    reward_type: 2
+    item_id: 34002
+    min_count: 1
+    max_count: 1
+    drop_rate: 1
+  - reward_id: 560404
+    _description: 0
+    reward_group_id: 604
+    reward_category: 0
+    reward_type: 2
+    item_id: 34003
+    min_count: 1
+    max_count: 1
+    drop_rate: 1
+  - reward_id: 560405
+    _description: 0
+    reward_group_id: 604
+    reward_category: 0
+    reward_type: 2
+    item_id: 34004
+    min_count: 1
+    max_count: 1
+    drop_rate: 1
+  - reward_id: 560406
+    _description: 0
+    reward_group_id: 604
+    reward_category: 1
+    reward_type: 2
+    item_id: 34001
+    min_count: 1
+    max_count: 1
+    drop_rate: 0.05
+  - reward_id: 560407
+    _description: 0
+    reward_group_id: 604
+    reward_category: 1
+    reward_type: 2
+    item_id: 34002
+    min_count: 1
+    max_count: 1
+    drop_rate: 0.05
+  - reward_id: 560408
+    _description: 0
+    reward_group_id: 604
+    reward_category: 1
+    reward_type: 2
+    item_id: 34003
+    min_count: 1
+    max_count: 1
+    drop_rate: 0.05
+  - reward_id: 560409
+    _description: 0
+    reward_group_id: 604
+    reward_category: 1
+    reward_type: 2
+    item_id: 34004
+    min_count: 1
+    max_count: 1
+    drop_rate: 0.05
+  - reward_id: 560501
+    _description: 0
+    reward_group_id: 605
+    reward_category: 1
+    reward_type: 0
+    item_id: 30001
+    min_count: 2700
+    max_count: 2900
+    drop_rate: 1
+  - reward_id: 560601
+    _description: 0
+    reward_group_id: 606
+    reward_category: 1
+    reward_type: 0
+    item_id: 30001
+    min_count: 1800
+    max_count: 1900
+    drop_rate: 1
+  - reward_id: 560602
+    _description: 0
+    reward_group_id: 606
+    reward_category: 0
+    reward_type: 2
+    item_id: 34001
+    min_count: 1
+    max_count: 2
+    drop_rate: 1
+  - reward_id: 560603
+    _description: 0
+    reward_group_id: 606
+    reward_category: 0
+    reward_type: 2
+    item_id: 34002
+    min_count: 1
+    max_count: 2
+    drop_rate: 1
+  - reward_id: 560604
+    _description: 0
+    reward_group_id: 606
+    reward_category: 0
+    reward_type: 2
+    item_id: 34003
+    min_count: 1
+    max_count: 2
+    drop_rate: 1
+  - reward_id: 560605
+    _description: 0
+    reward_group_id: 606
+    reward_category: 0
+    reward_type: 2
+    item_id: 34004
+    min_count: 1
+    max_count: 2
+    drop_rate: 1
+  - reward_id: 560606
+    _description: 0
+    reward_group_id: 606
+    reward_category: 1
+    reward_type: 2
+    item_id: 34001
+    min_count: 1
+    max_count: 1
+    drop_rate: 0.05
+  - reward_id: 560607
+    _description: 0
+    reward_group_id: 606
+    reward_category: 1
+    reward_type: 2
+    item_id: 34002
+    min_count: 1
+    max_count: 1
+    drop_rate: 0.05
+  - reward_id: 560608
+    _description: 0
+    reward_group_id: 606
+    reward_category: 1
+    reward_type: 2
+    item_id: 34003
+    min_count: 1
+    max_count: 1
+    drop_rate: 0.05
+  - reward_id: 560609
+    _description: 0
+    reward_group_id: 606
+    reward_category: 1
+    reward_type: 2
+    item_id: 34004
+    min_count: 1
+    max_count: 1
+    drop_rate: 0.05
+  - reward_id: 560701
+    _description: 0
+    reward_group_id: 607
+    reward_category: 1
+    reward_type: 0
+    item_id: 30001
+    min_count: 1800
+    max_count: 1900
+    drop_rate: 1
+  - reward_id: 560702
+    _description: 0
+    reward_group_id: 607
+    reward_category: 0
+    reward_type: 2
+    item_id: 34001
+    min_count: 1
+    max_count: 2
+    drop_rate: 1
+  - reward_id: 560703
+    _description: 0
+    reward_group_id: 607
+    reward_category: 0
+    reward_type: 2
+    item_id: 34002
+    min_count: 1
+    max_count: 2
+    drop_rate: 1
+  - reward_id: 560704
+    _description: 0
+    reward_group_id: 607
+    reward_category: 0
+    reward_type: 2
+    item_id: 34003
+    min_count: 1
+    max_count: 2
+    drop_rate: 1
+  - reward_id: 560705
+    _description: 0
+    reward_group_id: 607
+    reward_category: 0
+    reward_type: 2
+    item_id: 34004
+    min_count: 1
+    max_count: 2
+    drop_rate: 1
+  - reward_id: 560706
+    _description: 0
+    reward_group_id: 607
+    reward_category: 1
+    reward_type: 2
+    item_id: 34001
+    min_count: 1
+    max_count: 1
+    drop_rate: 0.05
+  - reward_id: 560707
+    _description: 0
+    reward_group_id: 607
+    reward_category: 1
+    reward_type: 2
+    item_id: 34002
+    min_count: 1
+    max_count: 1
+    drop_rate: 0.05
+  - reward_id: 560708
+    _description: 0
+    reward_group_id: 607
+    reward_category: 1
+    reward_type: 2
+    item_id: 34003
+    min_count: 1
+    max_count: 1
+    drop_rate: 0.05
+  - reward_id: 560709
+    _description: 0
+    reward_group_id: 607
+    reward_category: 1
+    reward_type: 2
+    item_id: 34004
+    min_count: 1
+    max_count: 1
+    drop_rate: 0.05
+  - reward_id: 560801
+    _description: 0
+    reward_group_id: 608
+    reward_category: 1
+    reward_type: 0
+    item_id: 30001
+    min_count: 1800
+    max_count: 1900
+    drop_rate: 1
+  - reward_id: 560802
+    _description: 0
+    reward_group_id: 608
+    reward_category: 0
+    reward_type: 2
+    item_id: 34001
+    min_count: 1
+    max_count: 2
+    drop_rate: 1
+  - reward_id: 560803
+    _description: 0
+    reward_group_id: 608
+    reward_category: 0
+    reward_type: 2
+    item_id: 34002
+    min_count: 1
+    max_count: 2
+    drop_rate: 1
+  - reward_id: 560804
+    _description: 0
+    reward_group_id: 608
+    reward_category: 0
+    reward_type: 2
+    item_id: 34003
+    min_count: 1
+    max_count: 2
+    drop_rate: 1
+  - reward_id: 560805
+    _description: 0
+    reward_group_id: 608
+    reward_category: 0
+    reward_type: 2
+    item_id: 34004
+    min_count: 1
+    max_count: 2
+    drop_rate: 1
+  - reward_id: 560806
+    _description: 0
+    reward_group_id: 608
+    reward_category: 1
+    reward_type: 2
+    item_id: 34001
+    min_count: 1
+    max_count: 1
+    drop_rate: 0.05
+  - reward_id: 560807
+    _description: 0
+    reward_group_id: 608
+    reward_category: 1
+    reward_type: 2
+    item_id: 34002
+    min_count: 1
+    max_count: 1
+    drop_rate: 0.05
+  - reward_id: 560808
+    _description: 0
+    reward_group_id: 608
+    reward_category: 1
+    reward_type: 2
+    item_id: 34003
+    min_count: 1
+    max_count: 1
+    drop_rate: 0.05
+  - reward_id: 560809
+    _description: 0
+    reward_group_id: 608
+    reward_category: 1
+    reward_type: 2
+    item_id: 34004
+    min_count: 1
+    max_count: 1
+    drop_rate: 0.05
+  - reward_id: 560901
+    _description: 0
+    reward_group_id: 609
+    reward_category: 1
+    reward_type: 0
+    item_id: 30001
+    min_count: 1800
+    max_count: 1900
+    drop_rate: 1
+  - reward_id: 560902
+    _description: 0
+    reward_group_id: 609
+    reward_category: 0
+    reward_type: 2
+    item_id: 34001
+    min_count: 2
+    max_count: 2
+    drop_rate: 1
+  - reward_id: 560903
+    _description: 0
+    reward_group_id: 609
+    reward_category: 0
+    reward_type: 2
+    item_id: 34002
+    min_count: 2
+    max_count: 2
+    drop_rate: 1
+  - reward_id: 560904
+    _description: 0
+    reward_group_id: 609
+    reward_category: 0
+    reward_type: 2
+    item_id: 34003
+    min_count: 2
+    max_count: 2
+    drop_rate: 1
+  - reward_id: 560905
+    _description: 0
+    reward_group_id: 609
+    reward_category: 0
+    reward_type: 2
+    item_id: 34004
+    min_count: 2
+    max_count: 2
+    drop_rate: 1
+  - reward_id: 560906
+    _description: 0
+    reward_group_id: 609
+    reward_category: 1
+    reward_type: 2
+    item_id: 34001
+    min_count: 1
+    max_count: 1
+    drop_rate: 0.05
+  - reward_id: 560907
+    _description: 0
+    reward_group_id: 609
+    reward_category: 1
+    reward_type: 2
+    item_id: 34002
+    min_count: 1
+    max_count: 1
+    drop_rate: 0.05
+  - reward_id: 560908
+    _description: 0
+    reward_group_id: 609
+    reward_category: 1
+    reward_type: 2
+    item_id: 34003
+    min_count: 1
+    max_count: 1
+    drop_rate: 0.05
+  - reward_id: 560909
+    _description: 0
+    reward_group_id: 609
+    reward_category: 1
+    reward_type: 2
+    item_id: 34004
+    min_count: 1
+    max_count: 1
+    drop_rate: 0.05
+  - reward_id: 561001
+    _description: 0
+    reward_group_id: 610
+    reward_category: 1
+    reward_type: 0
+    item_id: 30001
+    min_count: 2900
+    max_count: 3200
+    drop_rate: 1
+  - reward_id: 561002
+    _description: 0
+    reward_group_id: 610
+    reward_category: 0
+    reward_type: 2
+    item_id: 34001
+    min_count: 3
+    max_count: 3
+    drop_rate: 1
+  - reward_id: 561003
+    _description: 0
+    reward_group_id: 610
+    reward_category: 0
+    reward_type: 2
+    item_id: 34002
+    min_count: 3
+    max_count: 3
+    drop_rate: 1
+  - reward_id: 561004
+    _description: 0
+    reward_group_id: 610
+    reward_category: 0
+    reward_type: 2
+    item_id: 34003
+    min_count: 3
+    max_count: 3
+    drop_rate: 1
+  - reward_id: 561005
+    _description: 0
+    reward_group_id: 610
+    reward_category: 0
+    reward_type: 2
+    item_id: 34004
+    min_count: 3
+    max_count: 3
+    drop_rate: 1
+  - reward_id: 561006
+    _description: 0
+    reward_group_id: 610
+    reward_category: 1
+    reward_type: 2
+    item_id: 34001
+    min_count: 1
+    max_count: 2
+    drop_rate: 0.15
+  - reward_id: 561007
+    _description: 0
+    reward_group_id: 610
+    reward_category: 1
+    reward_type: 2
+    item_id: 34002
+    min_count: 1
+    max_count: 2
+    drop_rate: 0.15
+  - reward_id: 561008
+    _description: 0
+    reward_group_id: 610
+    reward_category: 1
+    reward_type: 2
+    item_id: 34003
+    min_count: 1
+    max_count: 2
+    drop_rate: 0.15
+  - reward_id: 561009
+    _description: 0
+    reward_group_id: 610
+    reward_category: 1
+    reward_type: 2
+    item_id: 34004
+    min_count: 1
+    max_count: 2
+    drop_rate: 0.15
+  - reward_id: 561010
+    _description: 0
+    reward_group_id: 610
+    reward_category: 1
+    reward_type: 1
+    item_id: 32102
+    min_count: 1
+    max_count: 1
+    drop_rate: 0.05
+  - reward_id: 561011
+    _description: 0
+    reward_group_id: 610
+    reward_category: 1
+    reward_type: 1
+    item_id: 32202
+    min_count: 1
+    max_count: 1
+    drop_rate: 0.05
+  - reward_id: 561012
+    _description: 0
+    reward_group_id: 610
+    reward_category: 1
+    reward_type: 1
+    item_id: 32002
+    min_count: 1
+    max_count: 1
+    drop_rate: 0.05
+  - reward_id: 561013
+    _description: 0
+    reward_group_id: 610
+    reward_category: 1
+    reward_type: 1
+    item_id: 32402
+    min_count: 1
+    max_count: 1
+    drop_rate: 0.05
+  - reward_id: 570101
+    _description: 0
+    reward_group_id: 701
+    reward_category: 1
+    reward_type: 0
+    item_id: 30001
+    min_count: 1900
+    max_count: 2000
+    drop_rate: 1
+  - reward_id: 570102
+    _description: 0
+    reward_group_id: 701
+    reward_category: 0
+    reward_type: 2
+    item_id: 34001
+    min_count: 1
+    max_count: 1
+    drop_rate: 1
+  - reward_id: 570103
+    _description: 0
+    reward_group_id: 701
+    reward_category: 0
+    reward_type: 2
+    item_id: 34002
+    min_count: 1
+    max_count: 1
+    drop_rate: 1
+  - reward_id: 570104
+    _description: 0
+    reward_group_id: 701
+    reward_category: 0
+    reward_type: 2
+    item_id: 34003
+    min_count: 1
+    max_count: 1
+    drop_rate: 1
+  - reward_id: 570105
+    _description: 0
+    reward_group_id: 701
+    reward_category: 0
+    reward_type: 2
+    item_id: 34004
+    min_count: 1
+    max_count: 1
+    drop_rate: 1
+  - reward_id: 570106
+    _description: 0
+    reward_group_id: 701
+    reward_category: 1
+    reward_type: 2
+    item_id: 34001
+    min_count: 1
+    max_count: 1
+    drop_rate: 0.05
+  - reward_id: 570107
+    _description: 0
+    reward_group_id: 701
+    reward_category: 1
+    reward_type: 2
+    item_id: 34002
+    min_count: 1
+    max_count: 1
+    drop_rate: 0.05
+  - reward_id: 570108
+    _description: 0
+    reward_group_id: 701
+    reward_category: 1
+    reward_type: 2
+    item_id: 34003
+    min_count: 1
+    max_count: 1
+    drop_rate: 0.05
+  - reward_id: 570109
+    _description: 0
+    reward_group_id: 701
+    reward_category: 1
+    reward_type: 2
+    item_id: 34004
+    min_count: 1
+    max_count: 1
+    drop_rate: 0.05
+  - reward_id: 570201
+    _description: 0
+    reward_group_id: 702
+    reward_category: 1
+    reward_type: 0
+    item_id: 30001
+    min_count: 1900
+    max_count: 2000
+    drop_rate: 1
+  - reward_id: 570202
+    _description: 0
+    reward_group_id: 702
+    reward_category: 0
+    reward_type: 2
+    item_id: 34001
+    min_count: 1
+    max_count: 1
+    drop_rate: 1
+  - reward_id: 570203
+    _description: 0
+    reward_group_id: 702
+    reward_category: 0
+    reward_type: 2
+    item_id: 34002
+    min_count: 1
+    max_count: 1
+    drop_rate: 1
+  - reward_id: 570204
+    _description: 0
+    reward_group_id: 702
+    reward_category: 0
+    reward_type: 2
+    item_id: 34003
+    min_count: 1
+    max_count: 1
+    drop_rate: 1
+  - reward_id: 570205
+    _description: 0
+    reward_group_id: 702
+    reward_category: 0
+    reward_type: 2
+    item_id: 34004
+    min_count: 1
+    max_count: 1
+    drop_rate: 1
+  - reward_id: 570206
+    _description: 0
+    reward_group_id: 702
+    reward_category: 1
+    reward_type: 2
+    item_id: 34001
+    min_count: 1
+    max_count: 1
+    drop_rate: 0.05
+  - reward_id: 570207
+    _description: 0
+    reward_group_id: 702
+    reward_category: 1
+    reward_type: 2
+    item_id: 34002
+    min_count: 1
+    max_count: 1
+    drop_rate: 0.05
+  - reward_id: 570208
+    _description: 0
+    reward_group_id: 702
+    reward_category: 1
+    reward_type: 2
+    item_id: 34003
+    min_count: 1
+    max_count: 1
+    drop_rate: 0.05
+  - reward_id: 570209
+    _description: 0
+    reward_group_id: 702
+    reward_category: 1
+    reward_type: 2
+    item_id: 34004
+    min_count: 1
+    max_count: 1
+    drop_rate: 0.05
+  - reward_id: 570301
+    _description: 0
+    reward_group_id: 703
+    reward_category: 1
+    reward_type: 0
+    item_id: 30001
+    min_count: 1900
+    max_count: 2000
+    drop_rate: 1
+  - reward_id: 570302
+    _description: 0
+    reward_group_id: 703
+    reward_category: 0
+    reward_type: 2
+    item_id: 34001
+    min_count: 1
+    max_count: 1
+    drop_rate: 1
+  - reward_id: 570303
+    _description: 0
+    reward_group_id: 703
+    reward_category: 0
+    reward_type: 2
+    item_id: 34002
+    min_count: 1
+    max_count: 1
+    drop_rate: 1
+  - reward_id: 570304
+    _description: 0
+    reward_group_id: 703
+    reward_category: 0
+    reward_type: 2
+    item_id: 34003
+    min_count: 1
+    max_count: 1
+    drop_rate: 1
+  - reward_id: 570305
+    _description: 0
+    reward_group_id: 703
+    reward_category: 0
+    reward_type: 2
+    item_id: 34004
+    min_count: 1
+    max_count: 1
+    drop_rate: 1
+  - reward_id: 570306
+    _description: 0
+    reward_group_id: 703
+    reward_category: 1
+    reward_type: 2
+    item_id: 34001
+    min_count: 1
+    max_count: 1
+    drop_rate: 0.05
+  - reward_id: 570307
+    _description: 0
+    reward_group_id: 703
+    reward_category: 1
+    reward_type: 2
+    item_id: 34002
+    min_count: 1
+    max_count: 1
+    drop_rate: 0.05
+  - reward_id: 570308
+    _description: 0
+    reward_group_id: 703
+    reward_category: 1
+    reward_type: 2
+    item_id: 34003
+    min_count: 1
+    max_count: 1
+    drop_rate: 0.05
+  - reward_id: 570309
+    _description: 0
+    reward_group_id: 703
+    reward_category: 1
+    reward_type: 2
+    item_id: 34004
+    min_count: 1
+    max_count: 1
+    drop_rate: 0.05
+  - reward_id: 570401
+    _description: 0
+    reward_group_id: 704
+    reward_category: 1
+    reward_type: 0
+    item_id: 30001
+    min_count: 1900
+    max_count: 2000
+    drop_rate: 1
+  - reward_id: 570402
+    _description: 0
+    reward_group_id: 704
+    reward_category: 0
+    reward_type: 2
+    item_id: 34001
+    min_count: 1
+    max_count: 1
+    drop_rate: 1
+  - reward_id: 570403
+    _description: 0
+    reward_group_id: 704
+    reward_category: 0
+    reward_type: 2
+    item_id: 34002
+    min_count: 1
+    max_count: 1
+    drop_rate: 1
+  - reward_id: 570404
+    _description: 0
+    reward_group_id: 704
+    reward_category: 0
+    reward_type: 2
+    item_id: 34003
+    min_count: 1
+    max_count: 1
+    drop_rate: 1
+  - reward_id: 570405
+    _description: 0
+    reward_group_id: 704
+    reward_category: 0
+    reward_type: 2
+    item_id: 34004
+    min_count: 1
+    max_count: 1
+    drop_rate: 1
+  - reward_id: 570406
+    _description: 0
+    reward_group_id: 704
+    reward_category: 1
+    reward_type: 2
+    item_id: 34001
+    min_count: 1
+    max_count: 1
+    drop_rate: 0.05
+  - reward_id: 570407
+    _description: 0
+    reward_group_id: 704
+    reward_category: 1
+    reward_type: 2
+    item_id: 34002
+    min_count: 1
+    max_count: 1
+    drop_rate: 0.05
+  - reward_id: 570408
+    _description: 0
+    reward_group_id: 704
+    reward_category: 1
+    reward_type: 2
+    item_id: 34003
+    min_count: 1
+    max_count: 1
+    drop_rate: 0.05
+  - reward_id: 570409
+    _description: 0
+    reward_group_id: 704
+    reward_category: 1
+    reward_type: 2
+    item_id: 34004
+    min_count: 1
+    max_count: 1
+    drop_rate: 0.05
+  - reward_id: 570501
+    _description: 0
+    reward_group_id: 705
+    reward_category: 1
+    reward_type: 0
+    item_id: 30001
+    min_count: 3000
+    max_count: 3200
+    drop_rate: 1
+  - reward_id: 570601
+    _description: 0
+    reward_group_id: 706
+    reward_category: 1
+    reward_type: 0
+    item_id: 30001
+    min_count: 2000
+    max_count: 2200
+    drop_rate: 1
+  - reward_id: 570602
+    _description: 0
+    reward_group_id: 706
+    reward_category: 0
+    reward_type: 2
+    item_id: 34001
+    min_count: 1
+    max_count: 2
+    drop_rate: 1
+  - reward_id: 570603
+    _description: 0
+    reward_group_id: 706
+    reward_category: 0
+    reward_type: 2
+    item_id: 34002
+    min_count: 1
+    max_count: 2
+    drop_rate: 1
+  - reward_id: 570604
+    _description: 0
+    reward_group_id: 706
+    reward_category: 0
+    reward_type: 2
+    item_id: 34003
+    min_count: 1
+    max_count: 2
+    drop_rate: 1
+  - reward_id: 570605
+    _description: 0
+    reward_group_id: 706
+    reward_category: 0
+    reward_type: 2
+    item_id: 34004
+    min_count: 1
+    max_count: 2
+    drop_rate: 1
+  - reward_id: 570606
+    _description: 0
+    reward_group_id: 706
+    reward_category: 1
+    reward_type: 2
+    item_id: 34001
+    min_count: 1
+    max_count: 1
+    drop_rate: 0.05
+  - reward_id: 570607
+    _description: 0
+    reward_group_id: 706
+    reward_category: 1
+    reward_type: 2
+    item_id: 34002
+    min_count: 1
+    max_count: 1
+    drop_rate: 0.05
+  - reward_id: 570608
+    _description: 0
+    reward_group_id: 706
+    reward_category: 1
+    reward_type: 2
+    item_id: 34003
+    min_count: 1
+    max_count: 1
+    drop_rate: 0.05
+  - reward_id: 570609
+    _description: 0
+    reward_group_id: 706
+    reward_category: 1
+    reward_type: 2
+    item_id: 34004
+    min_count: 1
+    max_count: 1
+    drop_rate: 0.05
+  - reward_id: 570701
+    _description: 0
+    reward_group_id: 707
+    reward_category: 1
+    reward_type: 0
+    item_id: 30001
+    min_count: 2000
+    max_count: 2200
+    drop_rate: 1
+  - reward_id: 570702
+    _description: 0
+    reward_group_id: 707
+    reward_category: 0
+    reward_type: 2
+    item_id: 34001
+    min_count: 1
+    max_count: 2
+    drop_rate: 1
+  - reward_id: 570703
+    _description: 0
+    reward_group_id: 707
+    reward_category: 0
+    reward_type: 2
+    item_id: 34002
+    min_count: 1
+    max_count: 2
+    drop_rate: 1
+  - reward_id: 570704
+    _description: 0
+    reward_group_id: 707
+    reward_category: 0
+    reward_type: 2
+    item_id: 34003
+    min_count: 1
+    max_count: 2
+    drop_rate: 1
+  - reward_id: 570705
+    _description: 0
+    reward_group_id: 707
+    reward_category: 0
+    reward_type: 2
+    item_id: 34004
+    min_count: 1
+    max_count: 2
+    drop_rate: 1
+  - reward_id: 570706
+    _description: 0
+    reward_group_id: 707
+    reward_category: 1
+    reward_type: 2
+    item_id: 34001
+    min_count: 1
+    max_count: 1
+    drop_rate: 0.05
+  - reward_id: 570707
+    _description: 0
+    reward_group_id: 707
+    reward_category: 1
+    reward_type: 2
+    item_id: 34002
+    min_count: 1
+    max_count: 1
+    drop_rate: 0.05
+  - reward_id: 570708
+    _description: 0
+    reward_group_id: 707
+    reward_category: 1
+    reward_type: 2
+    item_id: 34003
+    min_count: 1
+    max_count: 1
+    drop_rate: 0.05
+  - reward_id: 570709
+    _description: 0
+    reward_group_id: 707
+    reward_category: 1
+    reward_type: 2
+    item_id: 34004
+    min_count: 1
+    max_count: 1
+    drop_rate: 0.05
+  - reward_id: 570801
+    _description: 0
+    reward_group_id: 708
+    reward_category: 1
+    reward_type: 0
+    item_id: 30001
+    min_count: 2000
+    max_count: 2200
+    drop_rate: 1
+  - reward_id: 570802
+    _description: 0
+    reward_group_id: 708
+    reward_category: 0
+    reward_type: 2
+    item_id: 34001
+    min_count: 1
+    max_count: 2
+    drop_rate: 1
+  - reward_id: 570803
+    _description: 0
+    reward_group_id: 708
+    reward_category: 0
+    reward_type: 2
+    item_id: 34002
+    min_count: 1
+    max_count: 2
+    drop_rate: 1
+  - reward_id: 570804
+    _description: 0
+    reward_group_id: 708
+    reward_category: 0
+    reward_type: 2
+    item_id: 34003
+    min_count: 1
+    max_count: 2
+    drop_rate: 1
+  - reward_id: 570805
+    _description: 0
+    reward_group_id: 708
+    reward_category: 0
+    reward_type: 2
+    item_id: 34004
+    min_count: 1
+    max_count: 2
+    drop_rate: 1
+  - reward_id: 570806
+    _description: 0
+    reward_group_id: 708
+    reward_category: 1
+    reward_type: 2
+    item_id: 34001
+    min_count: 1
+    max_count: 1
+    drop_rate: 0.05
+  - reward_id: 570807
+    _description: 0
+    reward_group_id: 708
+    reward_category: 1
+    reward_type: 2
+    item_id: 34002
+    min_count: 1
+    max_count: 1
+    drop_rate: 0.05
+  - reward_id: 570808
+    _description: 0
+    reward_group_id: 708
+    reward_category: 1
+    reward_type: 2
+    item_id: 34003
+    min_count: 1
+    max_count: 1
+    drop_rate: 0.05
+  - reward_id: 570809
+    _description: 0
+    reward_group_id: 708
+    reward_category: 1
+    reward_type: 2
+    item_id: 34004
+    min_count: 1
+    max_count: 1
+    drop_rate: 0.05
+  - reward_id: 570901
+    _description: 0
+    reward_group_id: 709
+    reward_category: 1
+    reward_type: 0
+    item_id: 30001
+    min_count: 2000
+    max_count: 2200
+    drop_rate: 1
+  - reward_id: 570902
+    _description: 0
+    reward_group_id: 709
+    reward_category: 0
+    reward_type: 2
+    item_id: 34001
+    min_count: 2
+    max_count: 2
+    drop_rate: 1
+  - reward_id: 570903
+    _description: 0
+    reward_group_id: 709
+    reward_category: 0
+    reward_type: 2
+    item_id: 34002
+    min_count: 2
+    max_count: 2
+    drop_rate: 1
+  - reward_id: 570904
+    _description: 0
+    reward_group_id: 709
+    reward_category: 0
+    reward_type: 2
+    item_id: 34003
+    min_count: 2
+    max_count: 2
+    drop_rate: 1
+  - reward_id: 570905
+    _description: 0
+    reward_group_id: 709
+    reward_category: 0
+    reward_type: 2
+    item_id: 34004
+    min_count: 2
+    max_count: 2
+    drop_rate: 1
+  - reward_id: 570906
+    _description: 0
+    reward_group_id: 709
+    reward_category: 1
+    reward_type: 2
+    item_id: 34001
+    min_count: 1
+    max_count: 1
+    drop_rate: 0.05
+  - reward_id: 570907
+    _description: 0
+    reward_group_id: 709
+    reward_category: 1
+    reward_type: 2
+    item_id: 34002
+    min_count: 1
+    max_count: 1
+    drop_rate: 0.05
+  - reward_id: 570908
+    _description: 0
+    reward_group_id: 709
+    reward_category: 1
+    reward_type: 2
+    item_id: 34003
+    min_count: 1
+    max_count: 1
+    drop_rate: 0.05
+  - reward_id: 570909
+    _description: 0
+    reward_group_id: 709
+    reward_category: 1
+    reward_type: 2
+    item_id: 34004
+    min_count: 1
+    max_count: 1
+    drop_rate: 0.05
+  - reward_id: 571001
+    _description: 0
+    reward_group_id: 710
+    reward_category: 1
+    reward_type: 0
+    item_id: 30001
+    min_count: 3200
+    max_count: 3500
+    drop_rate: 1
+  - reward_id: 571002
+    _description: 0
+    reward_group_id: 710
+    reward_category: 0
+    reward_type: 2
+    item_id: 34001
+    min_count: 4
+    max_count: 4
+    drop_rate: 1
+  - reward_id: 571003
+    _description: 0
+    reward_group_id: 710
+    reward_category: 0
+    reward_type: 2
+    item_id: 34002
+    min_count: 4
+    max_count: 4
+    drop_rate: 1
+  - reward_id: 571004
+    _description: 0
+    reward_group_id: 710
+    reward_category: 0
+    reward_type: 2
+    item_id: 34003
+    min_count: 4
+    max_count: 4
+    drop_rate: 1
+  - reward_id: 571005
+    _description: 0
+    reward_group_id: 710
+    reward_category: 0
+    reward_type: 2
+    item_id: 34004
+    min_count: 4
+    max_count: 4
+    drop_rate: 1
+  - reward_id: 571006
+    _description: 0
+    reward_group_id: 710
+    reward_category: 1
+    reward_type: 2
+    item_id: 34001
+    min_count: 1
+    max_count: 2
+    drop_rate: 0.15
+  - reward_id: 571007
+    _description: 0
+    reward_group_id: 710
+    reward_category: 1
+    reward_type: 2
+    item_id: 34002
+    min_count: 1
+    max_count: 2
+    drop_rate: 0.15
+  - reward_id: 571008
+    _description: 0
+    reward_group_id: 710
+    reward_category: 1
+    reward_type: 2
+    item_id: 34003
+    min_count: 1
+    max_count: 2
+    drop_rate: 0.15
+  - reward_id: 571009
+    _description: 0
+    reward_group_id: 710
+    reward_category: 0
+    reward_type: 1
+    item_id: 32003
+    min_count: 1
+    max_count: 1
+    drop_rate: 1
+  - reward_id: 571010
+    _description: 0
+    reward_group_id: 710
+    reward_category: 1
+    reward_type: 2
+    item_id: 34001
+    min_count: 1
+    max_count: 2
+    drop_rate: 0.05
+  - reward_id: 571011
+    _description: 0
+    reward_group_id: 710
+    reward_category: 1
+    reward_type: 2
+    item_id: 34002
+    min_count: 1
+    max_count: 2
+    drop_rate: 0.05
+  - reward_id: 571012
+    _description: 0
+    reward_group_id: 710
+    reward_category: 1
+    reward_type: 2
+    item_id: 34003
+    min_count: 1
+    max_count: 2
+    drop_rate: 0.05
+  - reward_id: 571013
+    _description: 0
+    reward_group_id: 710
+    reward_category: 1
+    reward_type: 2
+    item_id: 34004
+    min_count: 1
+    max_count: 2
+    drop_rate: 0.05
+  - reward_id: 571014
+    _description: 0
+    reward_group_id: 710
+    reward_category: 1
+    reward_type: 1
+    item_id: 32003
+    min_count: 1
+    max_count: 1
+    drop_rate: 0.05
+  - reward_id: 571015
+    _description: 0
+    reward_group_id: 710
+    reward_category: 1
+    reward_type: 1
+    item_id: 32103
+    min_count: 1
+    max_count: 1
+    drop_rate: 0.05
+  - reward_id: 571016
+    _description: 0
+    reward_group_id: 710
+    reward_category: 1
+    reward_type: 1
+    item_id: 32203
+    min_count: 1
+    max_count: 1
+    drop_rate: 0.05
+  - reward_id: 571017
+    _description: 0
+    reward_group_id: 710
+    reward_category: 1
+    reward_type: 1
+    item_id: 32303
+    min_count: 1
+    max_count: 1
+    drop_rate: 0.05
+  - reward_id: 570501
+    _description: 0
+    reward_group_id: 705
+    reward_category: 1
+    reward_type: 0
+    item_id: 30001
+    min_count: 2300
+    max_count: 2500
+    drop_rate: 1
+  - reward_id: 570601
+    _description: 0
+    reward_group_id: 706
+    reward_category: 1
+    reward_type: 0
+    item_id: 30001
+    min_count: 2000
+    max_count: 2200
+    drop_rate: 1
+  - reward_id: 570602
+    _description: 0
+    reward_group_id: 706
+    reward_category: 0
+    reward_type: 2
+    item_id: 34001
+    min_count: 1
+    max_count: 2
+    drop_rate: 1
+  - reward_id: 570603
+    _description: 0
+    reward_group_id: 706
+    reward_category: 0
+    reward_type: 2
+    item_id: 34002
+    min_count: 1
+    max_count: 2
+    drop_rate: 1
+  - reward_id: 570604
+    _description: 0
+    reward_group_id: 706
+    reward_category: 0
+    reward_type: 2
+    item_id: 34003
+    min_count: 1
+    max_count: 2
+    drop_rate: 1
+  - reward_id: 570605
+    _description: 0
+    reward_group_id: 706
+    reward_category: 0
+    reward_type: 2
+    item_id: 34004
+    min_count: 1
+    max_count: 2
+    drop_rate: 1
+  - reward_id: 570606
+    _description: 0
+    reward_group_id: 706
+    reward_category: 1
+    reward_type: 2
+    item_id: 34001
+    min_count: 1
+    max_count: 1
+    drop_rate: 0.05
+  - reward_id: 570607
+    _description: 0
+    reward_group_id: 706
+    reward_category: 1
+    reward_type: 2
+    item_id: 34002
+    min_count: 1
+    max_count: 1
+    drop_rate: 0.05
+  - reward_id: 570608
+    _description: 0
+    reward_group_id: 706
+    reward_category: 1
+    reward_type: 2
+    item_id: 34003
+    min_count: 1
+    max_count: 1
+    drop_rate: 0.05
+  - reward_id: 570609
+    _description: 0
+    reward_group_id: 706
+    reward_category: 1
+    reward_type: 2
+    item_id: 34004
+    min_count: 1
+    max_count: 1
+    drop_rate: 0.05
+  - reward_id: 570701
+    _description: 0
+    reward_group_id: 707
+    reward_category: 1
+    reward_type: 0
+    item_id: 30001
+    min_count: 2000
+    max_count: 2200
+    drop_rate: 1
+  - reward_id: 570702
+    _description: 0
+    reward_group_id: 707
+    reward_category: 0
+    reward_type: 2
+    item_id: 34001
+    min_count: 1
+    max_count: 2
+    drop_rate: 1
+  - reward_id: 570703
+    _description: 0
+    reward_group_id: 707
+    reward_category: 0
+    reward_type: 2
+    item_id: 34002
+    min_count: 1
+    max_count: 2
+    drop_rate: 1
+  - reward_id: 570704
+    _description: 0
+    reward_group_id: 707
+    reward_category: 0
+    reward_type: 2
+    item_id: 34003
+    min_count: 1
+    max_count: 2
+    drop_rate: 1
+  - reward_id: 570705
+    _description: 0
+    reward_group_id: 707
+    reward_category: 0
+    reward_type: 2
+    item_id: 34004
+    min_count: 1
+    max_count: 2
+    drop_rate: 1
+  - reward_id: 570706
+    _description: 0
+    reward_group_id: 707
+    reward_category: 1
+    reward_type: 2
+    item_id: 34001
+    min_count: 1
+    max_count: 1
+    drop_rate: 0.05
+  - reward_id: 570707
+    _description: 0
+    reward_group_id: 707
+    reward_category: 1
+    reward_type: 2
+    item_id: 34002
+    min_count: 1
+    max_count: 1
+    drop_rate: 0.05
+  - reward_id: 570708
+    _description: 0
+    reward_group_id: 707
+    reward_category: 1
+    reward_type: 2
+    item_id: 34003
+    min_count: 1
+    max_count: 1
+    drop_rate: 0.05
+  - reward_id: 570709
+    _description: 0
+    reward_group_id: 707
+    reward_category: 1
+    reward_type: 2
+    item_id: 34004
+    min_count: 1
+    max_count: 1
+    drop_rate: 0.05
+  - reward_id: 570801
+    _description: 0
+    reward_group_id: 708
+    reward_category: 1
+    reward_type: 0
+    item_id: 30001
+    min_count: 2000
+    max_count: 2200
+    drop_rate: 1
+  - reward_id: 570802
+    _description: 0
+    reward_group_id: 708
+    reward_category: 0
+    reward_type: 2
+    item_id: 34001
+    min_count: 1
+    max_count: 2
+    drop_rate: 1
+  - reward_id: 570803
+    _description: 0
+    reward_group_id: 708
+    reward_category: 0
+    reward_type: 2
+    item_id: 34002
+    min_count: 1
+    max_count: 2
+    drop_rate: 1
+  - reward_id: 570804
+    _description: 0
+    reward_group_id: 708
+    reward_category: 0
+    reward_type: 2
+    item_id: 34003
+    min_count: 1
+    max_count: 2
+    drop_rate: 1
+  - reward_id: 570805
+    _description: 0
+    reward_group_id: 708
+    reward_category: 0
+    reward_type: 2
+    item_id: 34004
+    min_count: 1
+    max_count: 2
+    drop_rate: 1
+  - reward_id: 570806
+    _description: 0
+    reward_group_id: 708
+    reward_category: 1
+    reward_type: 2
+    item_id: 34001
+    min_count: 1
+    max_count: 1
+    drop_rate: 0.05
+  - reward_id: 570807
+    _description: 0
+    reward_group_id: 708
+    reward_category: 1
+    reward_type: 2
+    item_id: 34002
+    min_count: 1
+    max_count: 1
+    drop_rate: 0.05
+  - reward_id: 570808
+    _description: 0
+    reward_group_id: 708
+    reward_category: 1
+    reward_type: 2
+    item_id: 34003
+    min_count: 1
+    max_count: 1
+    drop_rate: 0.05
+  - reward_id: 570809
+    _description: 0
+    reward_group_id: 708
+    reward_category: 1
+    reward_type: 2
+    item_id: 34004
+    min_count: 1
+    max_count: 1
+    drop_rate: 0.05
+  - reward_id: 570901
+    _description: 0
+    reward_group_id: 709
+    reward_category: 1
+    reward_type: 0
+    item_id: 30001
+    min_count: 2000
+    max_count: 2200
+    drop_rate: 1
+  - reward_id: 570902
+    _description: 0
+    reward_group_id: 709
+    reward_category: 0
+    reward_type: 2
+    item_id: 34001
+    min_count: 2
+    max_count: 2
+    drop_rate: 1
+  - reward_id: 570903
+    _description: 0
+    reward_group_id: 709
+    reward_category: 0
+    reward_type: 2
+    item_id: 34002
+    min_count: 2
+    max_count: 2
+    drop_rate: 1
+  - reward_id: 570904
+    _description: 0
+    reward_group_id: 709
+    reward_category: 0
+    reward_type: 2
+    item_id: 34003
+    min_count: 2
+    max_count: 2
+    drop_rate: 1
+  - reward_id: 570905
+    _description: 0
+    reward_group_id: 709
+    reward_category: 0
+    reward_type: 2
+    item_id: 34004
+    min_count: 2
+    max_count: 2
+    drop_rate: 1
+  - reward_id: 570906
+    _description: 0
+    reward_group_id: 709
+    reward_category: 1
+    reward_type: 2
+    item_id: 34001
+    min_count: 1
+    max_count: 1
+    drop_rate: 0.05
+  - reward_id: 570907
+    _description: 0
+    reward_group_id: 709
+    reward_category: 1
+    reward_type: 2
+    item_id: 34002
+    min_count: 1
+    max_count: 1
+    drop_rate: 0.05
+  - reward_id: 570908
+    _description: 0
+    reward_group_id: 709
+    reward_category: 1
+    reward_type: 2
+    item_id: 34003
+    min_count: 1
+    max_count: 1
+    drop_rate: 0.05
+  - reward_id: 570909
+    _description: 0
+    reward_group_id: 709
+    reward_category: 1
+    reward_type: 2
+    item_id: 34004
+    min_count: 1
+    max_count: 1
+    drop_rate: 0.05
+  - reward_id: 571001
+    _description: 0
+    reward_group_id: 710
+    reward_category: 1
+    reward_type: 0
+    item_id: 30001
+    min_count: 2800
+    max_count: 3200
+    drop_rate: 1
+  - reward_id: 571002
+    _description: 0
+    reward_group_id: 710
+    reward_category: 0
+    reward_type: 2
+    item_id: 34001
+    min_count: 4
+    max_count: 4
+    drop_rate: 1
+  - reward_id: 571003
+    _description: 0
+    reward_group_id: 710
+    reward_category: 0
+    reward_type: 2
+    item_id: 34002
+    min_count: 4
+    max_count: 4
+    drop_rate: 1
+  - reward_id: 571004
+    _description: 0
+    reward_group_id: 710
+    reward_category: 0
+    reward_type: 2
+    item_id: 34003
+    min_count: 4
+    max_count: 4
+    drop_rate: 1
+  - reward_id: 571005
+    _description: 0
+    reward_group_id: 710
+    reward_category: 0
+    reward_type: 2
+    item_id: 34004
+    min_count: 4
+    max_count: 4
+    drop_rate: 1
+  - reward_id: 571006
+    _description: 0
+    reward_group_id: 710
+    reward_category: 0
+    reward_type: 1
+    item_id: 32002
+    min_count: 1
+    max_count: 1
+    drop_rate: 1
+  - reward_id: 571007
+    _description: 0
+    reward_group_id: 710
+    reward_category: 0
+    reward_type: 1
+    item_id: 32102
+    min_count: 1
+    max_count: 1
+    drop_rate: 1
+  - reward_id: 571008
+    _description: 0
+    reward_group_id: 710
+    reward_category: 0
+    reward_type: 1
+    item_id: 32202
+    min_count: 1
+    max_count: 1
+    drop_rate: 1
+  - reward_id: 571009
+    _description: 0
+    reward_group_id: 710
+    reward_category: 0
+    reward_type: 1
+    item_id: 32302
+    min_count: 1
+    max_count: 1
+    drop_rate: 1
