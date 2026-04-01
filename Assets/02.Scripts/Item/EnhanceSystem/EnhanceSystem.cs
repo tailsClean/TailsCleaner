@@ -3,24 +3,21 @@ using UnityEngine;
 
 public class EnhanceSystem : MonoBehaviour
 {
-    [SerializeField] private ItemCurrency _currency;            // 필요 금화를 읽어올 재화 가방
-    [SerializeField] private ItemInventory _inventory;
-
-
+    private ItemCurrency _currency;                             // 필요 금화를 읽어올 재화 가방
+    private ItemInventory _inventory;
     private PlayerLoadout _playerLoadout;                       // 장착 장비 확인을 위함
     private EnhancingInfo _enhanceInfo;
     private int _bluePrintID;
     private int _bluePrintCost;
     private bool _isEnhancable;                                 // 강화 가능 여부 판단
 
-    public ItemInventory UsingInventory => _inventory;
-    public ItemCurrency UsingCurrency => _currency;
-
     public event Action<EnhancingInfo> OnSetEquipment;
     public event Action<EnhancingInfo> OnEnhance;
 
     private void Start()
     {
+        _currency = ItemManager.Instance.Currency;
+        _inventory = ItemManager.Instance.Inventory;
         _playerLoadout = PlayerStatManager.Instance.Loadout;
     }
 
@@ -34,8 +31,6 @@ public class EnhanceSystem : MonoBehaviour
 
         _bluePrintID = _enhanceInfo.NextEnhanceData.BluePrintID;
         _bluePrintCost = _enhanceInfo.NextEnhanceData.CostBluePrint;
-        //_bluePrintID = equipment.CurrentEnhanceData.blueprint_id;
-        //_bluePrintCost = equipment.CurrentEnhanceData.cost_blueprint;
 
         OnSetEquipment?.Invoke(_enhanceInfo);
     }
@@ -81,7 +76,12 @@ public class EnhanceSystem : MonoBehaviour
 
 
             OnEnhance?.Invoke(_enhanceInfo);
+            EnhanceSuccessSound();
             Debug.Log("강화성공!");
+        }
+        else
+        {
+            EnhanceFailSound();
         }
     }
 
@@ -143,6 +143,18 @@ public class EnhanceSystem : MonoBehaviour
             WarningText.ShowText("강화 재료가 부족합니다.");
             Debug.Log("강화 재료가 부족합니다.");
         }
+    }
+    
+    // 강화 성공 사운드
+    private void EnhanceSuccessSound()
+    {
+        if (SoundManager.Instance) SoundManager.Instance.PlayUISFX(UISFXName.EnhanceSuccess);
+    }
+
+    // 강화 성공 사운드
+    private void EnhanceFailSound()
+    {
+        if (SoundManager.Instance) SoundManager.Instance.PlayUISFX(UISFXName.EnhanceFail);
     }
 }
 

@@ -1,18 +1,37 @@
 ﻿using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
-using UnityEngine.UIElements.Experimental;
 
 public class ExitPanel : MonoBehaviour
 {
-    [SerializeField] private Button _exitButton;
+    [SerializeField] private Button _dungeonExitButton;
     [SerializeField] private Button _settingExitBtn;
     [SerializeField] private Button _saveSetting;
     [SerializeField] private Slider _bgmSlider;
     [SerializeField] private Slider _sfxSlider;
+    [SerializeField] private Button _horizontalBtn;
+    [SerializeField] private Button _verticalBtn;
 
     public void Start()
     {
-        if (_exitButton != null) _exitButton.onClick.AddListener(OnClickExit);
+        if (_dungeonExitButton != null) _dungeonExitButton.onClick.AddListener(OnClickExit);
+        if (_settingExitBtn != null) _settingExitBtn.onClick.AddListener(OnClickExitSetting);
+        if (_saveSetting != null) _saveSetting.onClick.AddListener(OnClickSaveSetting); 
+        UpdateButton();
+
+        _horizontalBtn.onClick.AddListener(() =>
+        {
+            UIManager.Instance.SetOrientation(false); // 가로
+            UpdateButton();
+        });
+
+        _verticalBtn.onClick.AddListener(() =>
+        {
+            UIManager.Instance.SetOrientation(true); // 세로
+            UpdateButton();
+        });
+
+       LoadSettings();
     }
 
     private void OnEnable()
@@ -45,11 +64,69 @@ public class ExitPanel : MonoBehaviour
 
     private void OnClickExit()
     {
-        if (StageController.Instance != null)
+        if(SceneManager.GetActiveScene().name != "StageScene")
         {
-            StageController.Instance.EndStage(StageResult.Abandon, StageFailReason.기타);
+            UIManager.Instance.ChangeStateImpossiblePanel();
+            UIManager.Instance.ImpossiblePanel.SetText("나갏 수 있는 공간이 아니에요!");
+            UIManager.Instance.ImpossiblePanel.SetListeners(() => UIManager.Instance.ChangeStateImpossiblePanel());
+            
+            return;
+        }
+        else
+        {
+            UIManager.Instance.ChangeStateConfirmPanel();
+            UIManager.Instance.ConfirmPanel.SetText("던전을 나가시겠습니까?");
+            UIManager.Instance.ConfirmPanel.SetListeners(() =>
+            {
+                 if (StageController.Instance != null)
+                {
+                    StageController.Instance.EndStage(StageResult.Abandon, StageFailReason.기타);
+                }
+
+                UIManager.Instance.GoToLobby();
+                UIManager.Instance.ChangeStateConfirmPanel();
+            }, () => UIManager.Instance.ChangeStateConfirmPanel());
+
+           
+        } 
+    }
+    private void UpdateButton()
+    {
+        bool isVertical = UIManager.Instance.IsVertical;
+        _horizontalBtn.interactable = isVertical;   
+        _verticalBtn.interactable = !isVertical; 
+    }
+    private void OnClickExitSetting()
+    {
+       gameObject.SetActive(false);
+    }
+    private void OnClickSaveSetting()
+    {
+        PlayerPrefs.SetFloat("BGMVolume", _bgmSlider.value);
+        PlayerPrefs.SetFloat("SFXVolume", _sfxSlider.value);
+        PlayerPrefs.SetInt("IsVertical", UIManager.Instance.IsVertical ? 1 : 0);
+        PlayerPrefs.Save();
+    }
+
+    private void LoadSettings()
+    {
+        if (PlayerPrefs.HasKey("BGMVolume"))
+        {
+            float bgmVolume = PlayerPrefs.GetFloat("BGMVolume");
+            if (SoundManager.Instance != null) SoundManager.Instance.SetBGMVolume(bgmVolume);
         }
 
-        UIManager.Instance.GoToLobby();
+        if (PlayerPrefs.HasKey("SFXVolume"))
+        {
+            float sfxVolume = PlayerPrefs.GetFloat("SFXVolume");
+            if (SoundManager.Instance != null) SoundManager.Instance.SetSFXVolume(sfxVolume);
+        }
+
+        if (PlayerPrefs.HasKey("IsVertical"))
+        {
+            bool isVertical = PlayerPrefs.GetInt("IsVertical") == 1;
+            UIManager.Instance.SetOrientation(isVertical);
+            UpdateButton();
+        }
     }
 }

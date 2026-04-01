@@ -9,7 +9,7 @@ public class ItemCurrency : MonoBehaviour
 
     [SerializeField] private int _goldAmount = 1000;
 
-    [SerializeField] private const int _defaultGoldAmount = 10000;
+    [SerializeField] private const int _defaultGoldAmount = 0;
 
     public int GoldAmount
     {
@@ -23,9 +23,7 @@ public class ItemCurrency : MonoBehaviour
 
     private void Awake()
     {
-        _onSellingItem.AddListener(GainGold);
-        
-        
+        _onSellingItem.AddListener(GainGold);  
     }
     private void Start()
     {
@@ -43,7 +41,6 @@ public class ItemCurrency : MonoBehaviour
         }
     }
 
-
     public ItemInstance GetGold()
     {
         var gold = new ItemInstance(ItemID.Gold);
@@ -56,7 +53,6 @@ public class ItemCurrency : MonoBehaviour
         _goldAmount += amount;
         _onChangeGold.OnStartEvent();
         _ = SaveGold();
-        
     }
 
     public void UseGold(int amount)

@@ -4,13 +4,32 @@ using TMPro;
 using System;
 using UnityEngine.SceneManagement;
 using System.Threading.Tasks;
+using UnityEngine.UI;
 
-public interface UIContainer { }
+
+public interface IUIContainer { }
+public interface IOrientationHandler
+{
+    void OnOrientationChanged(bool isVertical);
+}
 
 public class UIManager : MonoBehaviour
 {
     private static UIManager instance;
     public static UIManager Instance { get => instance; private set => instance = value; }
+    
+    public event Action<bool> OnOrientationChanged; // 가로/세로 변경 이벤트
+    private bool _isVertical;
+    public bool IsVertical
+    {
+        get => _isVertical;
+        set
+        {
+            if( _isVertical == value ) return; // 값이 변경되지 않았으면 이벤트 발생 안함
+            _isVertical = value;
+            OnOrientationChanged?.Invoke(_isVertical); // 이벤트 발생
+        }
+    }
 
     private void Awake()
     {
@@ -70,30 +89,42 @@ public class UIManager : MonoBehaviour
 
     private void SetUpReference(GameObject sceneUI)
     {
-        if (sceneUI.TryGetComponent(out UIContainer container))
+        if (sceneUI.TryGetComponent(out IUIContainer container))
         {
             if (container is StageUIContainer stageUI)
             {
-                this._stageTimer = stageUI.TimerUI.GetComponent<StageTimerTextUI>();
-                this._gameOverPanel = stageUI.GameOverPanel;
-                this._stageClearPanel = stageUI.StageClearPanel;
-                this._BossHP = stageUI.BossHP;
-                this._stageWaveBanner = stageUI.WaveBannerUI;
-
-                // [추가] 결과 보상 UI 참조 연결
-                this._clearRewardUI = stageUI.ClearRewardUI;
+                UpdateStageUIReference(stageUI);
+                OnOrientationChanged += _=> UpdateStageUIReference(stageUI);
             }
 
             if (container is LobbyUIContainer lobbyUI)
             {
-                this._dungeonSelect = lobbyUI.DungeonSelect;
-                this._stageSelect = lobbyUI.StageSelect;
+                UpdateLobbyUIReference(lobbyUI);
+                OnOrientationChanged += _ => UpdateLobbyUIReference(lobbyUI);
             }
         }
     }
     #endregion
 
     [SerializeField] private VoidEventChannelSO _onStartInGame;
+
+    public void UpdateStageUIReference(StageUIContainer stageUI)
+    {
+        var reference = stageUI.Current;
+        this._stageTimer = reference.TimerUI;
+        this._gameOverPanel = reference.GameOverPanel;
+        this._stageClearPanel = reference.StageClearPanel;
+        this._BossHP = reference.BossHP;
+        this._stageWaveBanner = reference.WaveBannerUI;
+        this._clearRewardUI = reference.ClearRewardUI;
+    }
+
+    public void UpdateLobbyUIReference(LobbyUIContainer lobbyUI)
+    {
+        var reference = lobbyUI.Current;
+        this._dungeonSelect = lobbyUI.DungeonSelect;
+        this._stageSelect = lobbyUI.StageSelect;
+    }
 
     public async Task LoadDataAndGoToLobby()
     {
@@ -133,6 +164,37 @@ public class UIManager : MonoBehaviour
         Application.Quit();
 #endif
     }
+    #region Orientation
+    [SerializeField] private ItemUI _HorizontalItem;
+    [SerializeField] private ItemUI _VerticalItem;
+    private ItemUI _currentItemUI;
+
+    [SerializeField] private CanvasScaler _canvasScaler;
+    private void Start()
+    {
+        // 초기 화면 방향 설정
+        bool isVertical = PlayerPrefs.GetInt("IsVertical", 0) == 1;
+        SetOrientation(isVertical); 
+    }
+
+    public void SetOrientation(bool isVertical)
+    {
+        Screen.orientation = isVertical
+            ? ScreenOrientation.Portrait
+            : ScreenOrientation.LandscapeLeft;
+
+        if (_canvasScaler != null)
+        {
+            _canvasScaler.referenceResolution = isVertical
+                ? new Vector2(1080, 1920)
+                : new Vector2(1920, 1080);
+        }
+        _currentItemUI = isVertical ? _VerticalItem : _HorizontalItem;
+
+        IsVertical = isVertical;
+    }
+
+    #endregion
 
     #region SettingPanel
     private GameObject _settingPanel;
@@ -228,40 +290,33 @@ public class UIManager : MonoBehaviour
     #endregion
 
     #region ItemManager
-    [SerializeField] public GameObject _inventoryUI;
-    [SerializeField] public GameObject _relicUI;
-    [SerializeField] public GameObject _equipUI;
-    [SerializeField] public GameObject _myStatsUI;
+    [SerializeField] private GameObject _myStatsUI;
+    [SerializeField] private GameObject _verticalmyStatsUI; 
 
     public void ChangeStateInventory()
     {
-        if (_inventoryUI != null)
-        {
-            _inventoryUI.SetActive(!_inventoryUI.activeSelf);
-        }
+        _currentItemUI._inventoryUI.SetActive(!_currentItemUI._inventoryUI.activeSelf); 
     }
 
     public void ChangeStateRelic()
     {
-        if (_relicUI != null)
-        {
-            _relicUI.SetActive(!_relicUI.activeSelf);
-        }
+        _currentItemUI._playerRelicUI.SetActive(!_currentItemUI._playerRelicUI  .activeSelf); 
     }
 
     public void ChangeStateEquipUI()
     {
-        if (_equipUI != null)
-        {
-            _equipUI.SetActive(!_equipUI.activeSelf);
-        }
+       _currentItemUI._playerEquipUI.SetActive(!_currentItemUI._playerEquipUI.activeSelf);
     }
     public void ChangeStateMyStatsUI()
     {
-        if (_myStatsUI != null)
+        if (_myStatsUI != null && !IsVertical)
         {
             _myStatsUI.SetActive(!_myStatsUI.activeSelf);
         }
+        else if(_verticalmyStatsUI != null && IsVertical)
+        {
+            _verticalmyStatsUI.SetActive(!_verticalmyStatsUI.activeSelf);
+        }  
     }
     #endregion
 
@@ -279,4 +334,54 @@ public class UIManager : MonoBehaviour
     public RewardSystemUI FailRewardUI => _failRewardUI;
     #endregion
 
+    #region ImpossiblePanel
+    private ImpossibelPannel _impossiblePanel;
+    public ImpossibelPannel  ImpossiblePanel => _impossiblePanel;
+    [SerializeField] private GameObject _impossiblePrefab;
+
+    public void ChangeStateImpossiblePanel()
+    {
+        if (_impossiblePanel == null)
+        {
+            if (_impossiblePrefab == null)
+            {
+                Debug.LogError("_impossiblePrefab이 할당되지 않았습니다!");
+                return;
+            }
+
+            _impossiblePanel = Instantiate(_impossiblePrefab, this.transform).GetComponent<ImpossibelPannel>();
+            _impossiblePanel.transform.SetAsLastSibling();
+            _impossiblePanel.gameObject.SetActive(true);
+        }
+        else
+        {
+            _impossiblePanel.gameObject.SetActive(!_impossiblePanel.gameObject.activeSelf);
+        }
+    }
+    #endregion
+
+    #region ConfirmPanel
+    private ConfirmPannel _confirmPanel;
+    public ConfirmPannel ConfirmPanel => _confirmPanel;
+    [SerializeField] private GameObject _confirmPrefab;
+
+    public void ChangeStateConfirmPanel()
+    {
+        if (_confirmPanel == null)
+        {
+            if (_confirmPrefab == null)
+            {
+                Debug.LogError("_confirmPrefab 이 할당되지 않았습니다!");
+                return;
+            }
+            _confirmPanel = Instantiate(_confirmPrefab, this.transform).GetComponent<ConfirmPannel>();
+            _confirmPanel.transform.SetAsLastSibling();
+            _confirmPanel.gameObject.SetActive(true);
+        }
+        else
+        {
+            _confirmPanel.gameObject.SetActive(!_confirmPanel.gameObject.activeSelf);
+        }
+    }
+    #endregion    
 }

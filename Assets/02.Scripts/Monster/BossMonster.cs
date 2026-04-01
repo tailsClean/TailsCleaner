@@ -1386,4 +1386,8 @@ public class BossMonster : MonsterBase, ILaserable
                 lineRenderer.enabled = false;
         }
     }
+
+
+    // 보스는 넉백 X
+    public override void Knockback(Vector2 direction, float force) { }
 }
