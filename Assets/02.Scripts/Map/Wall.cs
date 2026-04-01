@@ -7,7 +7,6 @@ public class wall : MonoBehaviour
 
     void OnTriggerExit2D(Collider2D collision)
     {
-        Debug.Log(collision);
         Bounds b = col.bounds;
         Vector3 pos = collision.transform.position;
 

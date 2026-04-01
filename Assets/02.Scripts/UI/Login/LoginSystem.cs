@@ -7,6 +7,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using System;
 using Firebase.Extensions;
+using Firebase.Database;
 
 public class LoginSystem : MonoBehaviour
 {
@@ -53,19 +54,22 @@ public class LoginSystem : MonoBehaviour
         {
             if (task.Result == DependencyStatus.Available)
             {
+                FirebaseDatabase.DefaultInstance.SetPersistenceEnabled(false);
                 _auth = FirebaseAuth.DefaultInstance;
                 _auth.StateChanged += ChangeLoginState;
 
                 _isLoggedIn  = _auth.CurrentUser != null;
-                Debug.Log("Firebase 초기화 완료");
+                //Debug.Log("Firebase 초기화 완료");
                 _logoutBtn.gameObject.SetActive(false);
+                if (_auth.CurrentUser != null)
+                {
+                    _isLoggedIn = true;
+                    _logoutBtn.gameObject.SetActive(true);
+                }
             }
-            if (_auth.CurrentUser != null)
-            {
-                _isLoggedIn = true;
-                _logoutBtn.gameObject.SetActive(true);
-            }
+            
         }); 
+        
     }
 
     private void OnEnable()
@@ -173,7 +177,11 @@ public class LoginSystem : MonoBehaviour
     private void OnEnterBtn()
     {
         if (_isLoggedIn)
-            _loadingScreen.SetActive(true);
+        {
+            FirebaseManager.Instance.InitDB();
+            GameManager.Instance.InitDB();
+            _loadingScreen.SetActive(true);   
+        }
         else
            _login1.SetActive(true);
     }
@@ -249,13 +257,30 @@ public class LoginSystem : MonoBehaviour
     {
         _isLoggedIn = _auth.CurrentUser != null;
         _logoutBtn.gameObject.SetActive(_isLoggedIn);
-        Debug.Log($"StateChanged 호출 | _isLoggedIn: {_isLoggedIn}");
+        //Debug.Log($"StateChanged 호출 | _isLoggedIn: {_isLoggedIn}");
        
     }
 
     private void OnLogout()
     {
-        _auth.SignOut();
+        FirebaseUser user = _auth.CurrentUser;
+
+        if (user != null && user.IsAnonymous)
+        {
+            user.DeleteAsync().ContinueWithOnMainThread(task =>
+            {
+                if (task.IsFaulted || task.IsCanceled)
+                {
+                    Debug.LogError($"게스트 계정 삭제 실패: {task.Exception}");
+                    return;
+                }
+                Debug.Log("게스트 계정 삭제 완료");
+            });
+        }
+        else
+        {
+            _auth.SignOut();
+        }
     }
 
 }

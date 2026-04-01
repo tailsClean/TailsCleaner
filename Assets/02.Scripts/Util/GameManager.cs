@@ -44,7 +44,7 @@ public class GameManager : MonoBehaviour
 
         DontDestroyOnLoad(gameObject);
         _maxEnergy = _energySystem.MaxEnergy;
-        db = FirebaseDatabase.DefaultInstance.RootReference;
+        
     }
     
     private void Start()
@@ -60,6 +60,11 @@ public class GameManager : MonoBehaviour
             FirebaseManager.Instance.RemoveSaveData(SaveEnergyCount);
         }
     }
+    public void InitDB()
+    {
+        FirebaseDatabase.DefaultInstance.SetPersistenceEnabled(false);
+        db = FirebaseDatabase.DefaultInstance.RootReference;
+    }
 
 
     public void EnterStage()
@@ -74,6 +79,7 @@ public class GameManager : MonoBehaviour
     {
         EnergyCount = energy;
         OnEnergyChange.OnStartEvent();
+        _ = SaveEnergyCount();
     }
 
     public async Task SaveEnergyCount()
@@ -137,6 +143,7 @@ public class GameManager : MonoBehaviour
 
         var snapshot = await db.Child("users").Child(UID)
                                .Child("dungeon").GetValueAsync();
+        Debug.Log($"UID: {UID} ");
 
         if(!snapshot.Exists)
         {

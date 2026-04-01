@@ -52,7 +52,7 @@ public static class DataParser
 
             if (values.Length != headers.Length)
             {
-                Debug.LogWarning($"[DataParser] 헤더/값 개수 불일치. path={loadPath}, row={i + 1}");
+                //Debug.LogWarning($"[DataParser] 헤더/값 개수 불일치. path={loadPath}, row={i + 1}");
                 continue;
             }
 
@@ -142,7 +142,7 @@ public static class DataParser
             data.Add(item);
         }
 
-        Debug.Log($"[DataParser] parsed {typeof(T).Name} count={data.Count}, path={loadPath}");
+        //Debug.Log($"[DataParser] parsed {typeof(T).Name} count={data.Count}, path={loadPath}");
         return data;
     }
 }

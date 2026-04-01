@@ -152,7 +152,7 @@ public class UIManager : MonoBehaviour
 
         SceneManager.sceneLoaded -= OnStageLoaded;
 
-        Debug.Log("StartEvent 받음");
+        //Debug.Log("StartEvent 받음");
         _onStartInGame.OnStartEvent();
     }
 

@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 7111629145082241229}
   - component: {fileID: 5788087072149151941}
   - component: {fileID: 7353398939643815460}
+  - component: {fileID: 6534148989862536659}
   m_Layer: 0
   m_Name: object_02_44 (5)
   m_TagString: Wall
@@ -121,7 +122,7 @@ BoxCollider2D:
   m_CallbackLayers:
     serializedVersion: 2
     m_Bits: 4294967295
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
@@ -137,6 +138,19 @@ BoxCollider2D:
   m_AutoTiling: 0
   m_Size: {x: 0.92, y: 0.86}
   m_EdgeRadius: 0
+--- !u!114 &6534148989862536659
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 955729470444234857}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3d5c494dadf7b5240b09eb43fd68c795, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ColliderObject
+  col: {fileID: 0}
 --- !u!1 &1011613667461897400
 GameObject:
   m_ObjectHideFlags: 0
@@ -148,6 +162,7 @@ GameObject:
   - component: {fileID: 1384042487579632241}
   - component: {fileID: 8879259679374028449}
   - component: {fileID: 7664326931115206508}
+  - component: {fileID: 1035597342869510151}
   m_Layer: 0
   m_Name: object_02_44
   m_TagString: Wall
@@ -258,7 +273,7 @@ BoxCollider2D:
   m_CallbackLayers:
     serializedVersion: 2
     m_Bits: 4294967295
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
@@ -274,6 +289,19 @@ BoxCollider2D:
   m_AutoTiling: 0
   m_Size: {x: 0.92, y: 0.86}
   m_EdgeRadius: 0
+--- !u!114 &1035597342869510151
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1011613667461897400}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3d5c494dadf7b5240b09eb43fd68c795, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ColliderObject
+  col: {fileID: 0}
 --- !u!1 &1112258621375656039
 GameObject:
   m_ObjectHideFlags: 0
@@ -557,6 +585,7 @@ GameObject:
   - component: {fileID: 5089351340057233443}
   - component: {fileID: 7596017098229229891}
   - component: {fileID: 7043699097188251401}
+  - component: {fileID: 8114447384836785769}
   m_Layer: 0
   m_Name: object_02_44 (3)
   m_TagString: Wall
@@ -667,7 +696,7 @@ BoxCollider2D:
   m_CallbackLayers:
     serializedVersion: 2
     m_Bits: 4294967295
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
@@ -683,6 +712,19 @@ BoxCollider2D:
   m_AutoTiling: 0
   m_Size: {x: 0.92, y: 0.86}
   m_EdgeRadius: 0
+--- !u!114 &8114447384836785769
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1672778515216645870}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3d5c494dadf7b5240b09eb43fd68c795, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ColliderObject
+  col: {fileID: 0}
 --- !u!1 &1828021439269106019
 GameObject:
   m_ObjectHideFlags: 0
@@ -2079,9 +2121,7 @@ Tilemap:
   m_TileAssetArray:
   - m_RefCount: 126
     m_Data: {fileID: 11400000, guid: 864aa488ffca9fb45977466766089687, type: 2}
-  m_TileSpriteArray:
-  - m_RefCount: 0
-    m_Data: {fileID: 0}
+  m_TileSpriteArray: []
   m_TileMatrixArray:
   - m_RefCount: 126
     m_Data:
@@ -2642,6 +2682,7 @@ GameObject:
   - component: {fileID: 499802217992095646}
   - component: {fileID: 8098426696253230572}
   - component: {fileID: 4474737747178808815}
+  - component: {fileID: 2918792353339567867}
   m_Layer: 0
   m_Name: object_02_44 (7)
   m_TagString: Wall
@@ -2752,7 +2793,7 @@ BoxCollider2D:
   m_CallbackLayers:
     serializedVersion: 2
     m_Bits: 4294967295
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
@@ -2768,6 +2809,19 @@ BoxCollider2D:
   m_AutoTiling: 0
   m_Size: {x: 0.92, y: 0.86}
   m_EdgeRadius: 0
+--- !u!114 &2918792353339567867
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3375572340902207371}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3d5c494dadf7b5240b09eb43fd68c795, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ColliderObject
+  col: {fileID: 0}
 --- !u!1 &3510196043949857507
 GameObject:
   m_ObjectHideFlags: 0
@@ -2779,6 +2833,7 @@ GameObject:
   - component: {fileID: 3945759703939030049}
   - component: {fileID: 1666443768352407042}
   - component: {fileID: 1555845991876446248}
+  - component: {fileID: 8083115771533428166}
   m_Layer: 0
   m_Name: object_02_44 (1)
   m_TagString: Wall
@@ -2889,7 +2944,7 @@ BoxCollider2D:
   m_CallbackLayers:
     serializedVersion: 2
     m_Bits: 4294967295
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
@@ -2905,6 +2960,19 @@ BoxCollider2D:
   m_AutoTiling: 0
   m_Size: {x: 0.92, y: 0.86}
   m_EdgeRadius: 0
+--- !u!114 &8083115771533428166
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3510196043949857507}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3d5c494dadf7b5240b09eb43fd68c795, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ColliderObject
+  col: {fileID: 0}
 --- !u!1 &3685736948883772759
 GameObject:
   m_ObjectHideFlags: 0
@@ -3096,6 +3164,7 @@ GameObject:
   - component: {fileID: 919939118772794415}
   - component: {fileID: 7168362290004295072}
   - component: {fileID: 4852159720789885063}
+  - component: {fileID: 4000333064869404480}
   m_Layer: 0
   m_Name: object_02_44 (4)
   m_TagString: Wall
@@ -3206,7 +3275,7 @@ BoxCollider2D:
   m_CallbackLayers:
     serializedVersion: 2
     m_Bits: 4294967295
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
@@ -3222,6 +3291,19 @@ BoxCollider2D:
   m_AutoTiling: 0
   m_Size: {x: 0.92, y: 0.86}
   m_EdgeRadius: 0
+--- !u!114 &4000333064869404480
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4197229896744590703}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3d5c494dadf7b5240b09eb43fd68c795, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ColliderObject
+  col: {fileID: 0}
 --- !u!1 &4205651836143701817
 GameObject:
   m_ObjectHideFlags: 0
@@ -4591,6 +4673,7 @@ GameObject:
   - component: {fileID: 3598837704843638479}
   - component: {fileID: 1752940049645579009}
   - component: {fileID: 3998631994092944498}
+  - component: {fileID: 2966842040631155257}
   m_Layer: 0
   m_Name: object_02_44 (6)
   m_TagString: Wall
@@ -4701,7 +4784,7 @@ BoxCollider2D:
   m_CallbackLayers:
     serializedVersion: 2
     m_Bits: 4294967295
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
@@ -4717,6 +4800,19 @@ BoxCollider2D:
   m_AutoTiling: 0
   m_Size: {x: 0.92, y: 0.86}
   m_EdgeRadius: 0
+--- !u!114 &2966842040631155257
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7095560705731200860}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3d5c494dadf7b5240b09eb43fd68c795, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ColliderObject
+  col: {fileID: 0}
 --- !u!1 &7253342545730746736
 GameObject:
   m_ObjectHideFlags: 0
@@ -5679,6 +5775,7 @@ GameObject:
   - component: {fileID: 1419492201596939838}
   - component: {fileID: 6187517861477588127}
   - component: {fileID: 5015989611449300970}
+  - component: {fileID: 4063003921850370669}
   m_Layer: 0
   m_Name: object_02_44 (2)
   m_TagString: Wall
@@ -5789,7 +5886,7 @@ BoxCollider2D:
   m_CallbackLayers:
     serializedVersion: 2
     m_Bits: 4294967295
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
@@ -5805,3 +5902,16 @@ BoxCollider2D:
   m_AutoTiling: 0
   m_Size: {x: 0.92, y: 0.86}
   m_EdgeRadius: 0
+--- !u!114 &4063003921850370669
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9168180197466515690}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3d5c494dadf7b5240b09eb43fd68c795, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ColliderObject
+  col: {fileID: 0}

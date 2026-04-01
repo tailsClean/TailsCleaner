@@ -16,6 +16,10 @@ public class TitleUIContainer : MonoBehaviour, IUIContainer
 
         OnOrientationChanged(UIManager.Instance.IsVertical);
         UIManager.Instance.OnOrientationChanged += OnOrientationChanged;
+
+        UIManager.Instance.ChangeStateSettingPanel();
+        UIManager.Instance.ChangeStateSettingPanel();
+
     }
 
     private void OnDestroy()
