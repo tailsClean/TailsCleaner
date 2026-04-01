@@ -29,6 +29,12 @@ public class FirebaseManager : MonoBehaviour
         }
 
         DontDestroyOnLoad(gameObject);
+        
+        
+    }
+    public void InitDB()
+    {
+        FirebaseDatabase.DefaultInstance.SetPersistenceEnabled(false);
         db = FirebaseDatabase.DefaultInstance.RootReference;
     }
 

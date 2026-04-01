@@ -176,7 +176,7 @@ public class StageController : MonoBehaviour
 
         if (UIManager.Instance != null && UIManager.Instance.StageWaveBanner != null)
         {
-            Debug.Log("[StageController] PlayStageStart 호출");
+            //Debug.Log("[StageController] PlayStageStart 호출");
             StartCoroutine(UIManager.Instance.StageWaveBanner.PlayStageStart());
         }
         else
@@ -304,7 +304,7 @@ public class StageController : MonoBehaviour
         IsSkillSelectOpen = true;
         SetPaused(true);
 
-        Debug.Log("[Stage] SkillSelect opened -> game paused");
+        //Debug.Log("[Stage] SkillSelect opened -> game paused");
     }
 
     public void NotifySkillSelectClosed()

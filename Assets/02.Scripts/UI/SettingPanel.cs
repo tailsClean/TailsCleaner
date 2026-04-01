@@ -12,7 +12,7 @@ public class ExitPanel : MonoBehaviour
     [SerializeField] private Button _horizontalBtn;
     [SerializeField] private Button _verticalBtn;
 
-    public void Start()
+    private void Start()
     {
         if (_dungeonExitButton != null) _dungeonExitButton.onClick.AddListener(OnClickExit);
         if (_settingExitBtn != null) _settingExitBtn.onClick.AddListener(OnClickExitSetting);
@@ -30,8 +30,7 @@ public class ExitPanel : MonoBehaviour
             UIManager.Instance.SetOrientation(true); // 세로
             UpdateButton();
         });
-
-       LoadSettings();
+        
     }
 
     private void OnEnable()
@@ -45,11 +44,14 @@ public class ExitPanel : MonoBehaviour
         if (_bgmSlider != null) _bgmSlider.onValueChanged.AddListener(OnBgmVolumeChanged);
         if (_sfxSlider != null) _sfxSlider.onValueChanged.AddListener(OnSfxVolumeChanged);
 
+        LoadSettings();
+        Time.timeScale = 0f; 
     }
     private void OnDisable()
     {
         if (_bgmSlider != null) _bgmSlider.onValueChanged.RemoveListener(OnBgmVolumeChanged);
         if (_sfxSlider != null) _sfxSlider.onValueChanged.RemoveListener(OnSfxVolumeChanged);
+        Time.timeScale = 1f; 
     }
 
     private void OnBgmVolumeChanged(float value)
@@ -67,7 +69,7 @@ public class ExitPanel : MonoBehaviour
         if(SceneManager.GetActiveScene().name != "StageScene")
         {
             UIManager.Instance.ChangeStateImpossiblePanel();
-            UIManager.Instance.ImpossiblePanel.SetText("나갏 수 있는 공간이 아니에요!");
+            UIManager.Instance.ImpossiblePanel.SetText("나갈 수 있는 공간이 아니에요!");
             UIManager.Instance.ImpossiblePanel.SetListeners(() => UIManager.Instance.ChangeStateImpossiblePanel());
             
             return;

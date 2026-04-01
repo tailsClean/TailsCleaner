@@ -48,7 +48,7 @@ public class PlayerHpSystem : IRevive
 
     public void Hit(float damage)
     {
-        Debug.Log("현재" + CurrentHp);
+        //Debug.Log("현재" + CurrentHp);
         if (damage < 0)
         { Debug.LogError("데미지가 음수값으로 들어왔습니다."); return; }
 
@@ -122,8 +122,8 @@ public class PlayerHpSystem : IRevive
     public void Init(float maxHp)
     {
         _currentHp = MaxHp;
-        Debug.Log("현재 체력" + _currentHp);
-        Debug.Log("현재 체력 프로퍼티" + CurrentHp);
+       // Debug.Log("현재 체력" + _currentHp);
+        //Debug.Log("현재 체력 프로퍼티" + CurrentHp);
     }
 
 

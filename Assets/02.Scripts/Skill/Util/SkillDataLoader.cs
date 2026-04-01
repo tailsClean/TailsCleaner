@@ -37,7 +37,7 @@ public static class SkillDataLoader     // 사실상 스킬 데이터 매니저 
         LoadActiveSkills();     // 액티브
         LoadPassiveSkills();    // 패시브
         LoadActiveUpgrades();   // 액티브 업그레이드
-        Debug.Log($"[SkillDataLoader] 액티브 {_activeSkillMap.Count}개, 패시브 {_passiveSkillMap.Count}개 로드 완료.");
+        //Debug.Log($"[SkillDataLoader] 액티브 {_activeSkillMap.Count}개, 패시브 {_passiveSkillMap.Count}개 로드 완료.");
     }
     
     // 액티브 스킬 불러오기
@@ -132,8 +132,8 @@ public static class SkillDataLoader     // 사실상 스킬 데이터 매니저 
             }
         }
 
-        Debug.Log($"[SkillDataLoader] ActiveUpgradeData {_upgradeDataMap.Count}개 로드, " +
-                  $"upgradeMap {_upgradeMap.Count}개 스킬 빌드 완료.");
+        //Debug.Log($"[SkillDataLoader] ActiveUpgradeData {_upgradeDataMap.Count}개 로드, " +
+                //   $"upgradeMap {_upgradeMap.Count}개 스킬 빌드 완료.");
     }
 
     // 업그레이드 거름망 

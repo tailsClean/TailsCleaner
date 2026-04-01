@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 
 public class UIScaleChanger : MonoBehaviour
 {
@@ -9,7 +9,6 @@ public class UIScaleChanger : MonoBehaviour
     private RectTransform _myRect;
     private int _screenWidth;
     private int _screenHeight;
-
 
 
     private void Awake()
@@ -29,8 +28,6 @@ public class UIScaleChanger : MonoBehaviour
             UIManager.Instance.OnOrientationChanged -= _ => ScaleChange();
         }
     }
-
-
 
     public void ScaleChange()
     {

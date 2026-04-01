@@ -20,7 +20,7 @@ public class EnergySystem : MonoBehaviour
     private float _timer;
 
     public int Timer => (int)_timer;
-    public bool IsStartInGame => _currentEnergy > 0;
+    public bool IsStartInGame => _currentEnergy > 9;
     private async void Start()
     {
         FirebaseManager.Instance.AddLoadData(LoadEnergy);
@@ -28,7 +28,7 @@ public class EnergySystem : MonoBehaviour
     }
     private void OnEnable()
     {
-        Debug.Log($"[EnergySystem] OnEnable instance={GetInstanceID()}");
+        //Debug.Log($"[EnergySystem] OnEnable instance={GetInstanceID()}");
         _onIncreaseEnergy.AddListener(IncreaseEnergy);
         _onStartStage.AddPriorityListener(SpendEnergy, 0);
     }
@@ -105,7 +105,7 @@ public class EnergySystem : MonoBehaviour
 
     public void SpendEnergy()
     {
-        Debug.Log($"[EnergySystem] SpendEnergy called. instance={GetInstanceID()}, before={_currentEnergy}");
+        //Debug.Log($"[EnergySystem] SpendEnergy called. instance={GetInstanceID()}, before={_currentEnergy}");
 
         if (!CanSpendEnergy())
         {
@@ -118,7 +118,7 @@ public class EnergySystem : MonoBehaviour
         _currentEnergy -= GameManager.SPEND_ENERGY;
         GameManager.Instance.UpdateEnergyCount(_currentEnergy);
 
-        Debug.Log($"[EnergySystem] SpendEnergy finished. after={_currentEnergy}");
+        //Debug.Log($"[EnergySystem] SpendEnergy finished. after={_currentEnergy}");
     }
 
     [ContextMenu("에너지 초기화")]
@@ -158,11 +158,13 @@ public class EnergySystem : MonoBehaviour
             _currentEnergy = DEFAULT_ENERGY;
         }
 
+        Debug.Log($"{_currentEnergy} 현재 에너지");
+
         var timeChild = snapshot.Child("CancelTime");
 
         if (timeChild.Exists)
         {
-            
+        
             long cancelTime = EnergyCancelTimeCalculate(timeChild.Value.ToString());
             long now = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
             long elapsedSeconds = now - cancelTime;
@@ -174,7 +176,7 @@ public class EnergySystem : MonoBehaviour
              
 
         }
-        Debug.Log($"{_currentEnergy} 현재 에너지");
+        
 
         GameManager.Instance.UpdateEnergyCount(_currentEnergy);
     }

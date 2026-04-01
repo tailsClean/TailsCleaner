@@ -65,7 +65,7 @@ public class StageEntry : MonoBehaviour
             return;
         }
 
-        Debug.Log($"[StageEntry] mapResource={plan.mapResource}");
+        //Debug.Log($"[StageEntry] mapResource={plan.mapResource}");
 
         if (_mapLoader != null)
         {
@@ -117,7 +117,7 @@ public class StageEntry : MonoBehaviour
         _loadingPanelInstance = Instantiate(_loadingPanelPrefab);
         _loadingPanelInstance.name = $"{_loadingPanelPrefab.name}_Instance";
 
-        Debug.Log("[StageEntry] Loading panel shown.");
+        //Debug.Log("[StageEntry] Loading panel shown.");
     }
 
     private void HideLoadingPanel()
@@ -126,7 +126,7 @@ public class StageEntry : MonoBehaviour
         {
             Destroy(_loadingPanelInstance);
             _loadingPanelInstance = null;
-            Debug.Log("[StageEntry] Loading panel hidden.");
+            //Debug.Log("[StageEntry] Loading panel hidden.");
         }
     }
 
@@ -148,7 +148,7 @@ public class StageEntry : MonoBehaviour
         if (gm._currentStage != null)
         {
             _stageId = gm._currentStage.stage_id;
-            Debug.Log($"[StageEntry] stageId ← GameManager(stage) = {_stageId}");
+            //Debug.Log($"[StageEntry] stageId ← GameManager(stage) = {_stageId}");
         }
         else if (gm._currentStageId > 0)
         {

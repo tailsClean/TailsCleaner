@@ -27,7 +27,7 @@ public class StageMapLoader : MonoBehaviour
         }
 
         mapResource = mapResource.Trim();
-        Debug.Log($"[StageMapLoader] load address = '{mapResource}'");
+        //Debug.Log($"[StageMapLoader] load address = '{mapResource}'");
 
         ClearMap();
 
@@ -105,7 +105,7 @@ public class StageMapLoader : MonoBehaviour
             if (wallCollider != null)
             {
                 _spawner.SetSpawnBounds(wallCollider.bounds);
-                Debug.Log($"[StageMapLoader] Spawn bounds bound from wall collider: {wallCollider.name}");
+                //Debug.Log($"[StageMapLoader] Spawn bounds bound from wall collider: {wallCollider.name}");
                 return;
             }
         }

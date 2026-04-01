@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using TMPro;
 public class GoldText: MonoBehaviour
 {
@@ -21,6 +21,4 @@ public class GoldText: MonoBehaviour
     {
         _goldTxt.text = $"{_currency.GoldAmount}";
     } 
-
-
 }

@@ -68,7 +68,7 @@ public class RuleBasedMonsterSpawner : MonoBehaviour, IMonsterSpawnSystem
         _spawnBounds = bounds;
         _hasBounds = true;
 
-        Debug.Log($"[Spawner] Bounds set: min={bounds.min}, max={bounds.max}");
+        //Debug.Log($"[Spawner] Bounds set: min={bounds.min}, max={bounds.max}");
     }
 
     public void SetSpawningEnabled(bool _isenabled)
@@ -161,7 +161,7 @@ public class RuleBasedMonsterSpawner : MonoBehaviour, IMonsterSpawnSystem
             _typeToBaseExp[typeRows[i].monster_type] = typeRows[i].base_exp;
 
         _expCacheReady = true;
-        Debug.Log($"[ExpCache] Ready. monsterMap={_monsterIdToType.Count}, typeMap={_typeToBaseExp.Count}");
+        //Debug.Log($"[ExpCache] Ready. monsterMap={_monsterIdToType.Count}, typeMap={_typeToBaseExp.Count}");
     }
 
     private int CalcExp(int monsterId)
@@ -199,7 +199,7 @@ public class RuleBasedMonsterSpawner : MonoBehaviour, IMonsterSpawnSystem
             return null;
         }
 
-        Debug.Log($"[Spawner] SpawnPrefab / name={_name}, monsterId={_monsterId}, type={_monster.GetType().Name}");
+        //Debug.Log($"[Spawner] SpawnPrefab / name={_name}, monsterId={_monsterId}, type={_monster.GetType().Name}");
 
         _monster.name = _name;
         _monster.SetMonsterId(_monsterId);

@@ -66,7 +66,7 @@ public class StageSelectPanel : MonoBehaviour
             return;
         }
 
-        Debug.Log($"[StageSelectPanel] BindRewards stage={stage.stage_index}, reward_group_id={rewardGroupId}");
+        //Debug.Log($"[StageSelectPanel] BindRewards stage={stage.stage_index}, reward_group_id={rewardGroupId}");
         _rewardPreviewUI.SetSlots(rewardGroupId);
     }
 
