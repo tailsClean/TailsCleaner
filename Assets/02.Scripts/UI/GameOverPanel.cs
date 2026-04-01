@@ -37,6 +37,7 @@ public class GameOverPAnel : MonoBehaviour
     {
         if(GameManager.Instance.EnergyCount <= 0)
         {
+            UIManager.Instance.ChangeStateImpossiblePanel();
             UIManager.Instance.ImpossiblePanel.SetText("에너지가 부족합니다.");
             UIManager.Instance.ImpossiblePanel.SetListeners(() => OnExitGame());
             return;

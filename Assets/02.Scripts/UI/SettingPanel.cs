@@ -66,12 +66,15 @@ public class ExitPanel : MonoBehaviour
     {
         if(SceneManager.GetActiveScene().name != "StageScene")
         {
+            UIManager.Instance.ChangeStateImpossiblePanel();
             UIManager.Instance.ImpossiblePanel.SetText("나갏 수 있는 공간이 아니에요!");
             UIManager.Instance.ImpossiblePanel.SetListeners(() => UIManager.Instance.ChangeStateImpossiblePanel());
+            
             return;
         }
         else
         {
+            UIManager.Instance.ChangeStateConfirmPanel();
             UIManager.Instance.ConfirmPanel.SetText("던전을 나가시겠습니까?");
             UIManager.Instance.ConfirmPanel.SetListeners(() =>
             {
@@ -82,6 +85,8 @@ public class ExitPanel : MonoBehaviour
 
                 UIManager.Instance.GoToLobby();
             }, () => UIManager.Instance.ChangeStateConfirmPanel());
+
+           
         } 
     }
     private void UpdateButton()

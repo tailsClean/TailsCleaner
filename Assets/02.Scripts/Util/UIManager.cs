@@ -336,7 +336,7 @@ public class UIManager : MonoBehaviour
 
     #region ImpossiblePanel
     private ImpossibelPannel _impossiblePanel;
-    public ImpossibelPannel ImpossiblePanel => _impossiblePanel;
+    public ImpossibelPannel  ImpossiblePanel => _impossiblePanel;
     [SerializeField] private GameObject _impossiblePrefab;
 
     public void ChangeStateImpossiblePanel()
