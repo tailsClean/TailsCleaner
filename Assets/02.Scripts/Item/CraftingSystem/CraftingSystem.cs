@@ -101,15 +101,15 @@ public partial class CraftingSystem : MonoBehaviour
     public void OnStartCrafting()
     {
         if(_mainCraftSlot == null)
-        { WarningText.ShowText("합성 대상 장비가 없습니다."); return; }    
+        { WarningText.ShowText("합성 대상 장비가 없습니다."); CraftingFailSound(); return; }    
 
         // 최대 등급 확인
         if (_mainCraftSlot.IsMaxGrade)
-        { WarningText.ShowText("최대 등급의 장비입니다."); return; }
+        { WarningText.ShowText("최대 등급의 장비입니다."); CraftingFailSound(); return; }
 
         // 필요 재료 갯수 확인
         if (Array.Exists(_resourceCraftSlots, x => x == null))
-        { WarningText.ShowText("재료장비의 개수가 부족합니다."); return;}
+        { WarningText.ShowText("재료장비의 개수가 부족합니다."); CraftingFailSound(); return; }
 
 
         // 착용 장비의 경우
@@ -136,6 +136,7 @@ public partial class CraftingSystem : MonoBehaviour
         }
 
         OnCrafting?.Invoke(_mainCraftSlot);
+        CraftingSuccessSound();
         Debug.Log("등급 업그레이드 성공!");
     }
 
@@ -183,6 +184,19 @@ public partial class CraftingSystem : MonoBehaviour
 
         Debug.Log("지우려는 아이템이 합성 리스트에 없습니다.");
     }
+    
+    // 합성 성공 사운드
+    private void CraftingSuccessSound()
+    {
+        if (SoundManager.Instance) SoundManager.Instance.PlayUISFX(UISFXName.CraftingSuccess);
+    }
+
+    // 합성 실패 사운드
+    private void CraftingFailSound()
+    {
+        if (SoundManager.Instance) SoundManager.Instance.PlayUISFX(UISFXName.CraftingFail);
+    }
+
 
 }
 

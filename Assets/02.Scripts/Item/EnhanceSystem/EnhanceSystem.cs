@@ -76,7 +76,12 @@ public class EnhanceSystem : MonoBehaviour
 
 
             OnEnhance?.Invoke(_enhanceInfo);
+            EnhanceSuccessSound();
             Debug.Log("강화성공!");
+        }
+        else
+        {
+            EnhanceFailSound();
         }
     }
 
@@ -138,6 +143,18 @@ public class EnhanceSystem : MonoBehaviour
             WarningText.ShowText("강화 재료가 부족합니다.");
             Debug.Log("강화 재료가 부족합니다.");
         }
+    }
+    
+    // 강화 성공 사운드
+    private void EnhanceSuccessSound()
+    {
+        if (SoundManager.Instance) SoundManager.Instance.PlayUISFX(UISFXName.EnhanceSuccess);
+    }
+
+    // 강화 성공 사운드
+    private void EnhanceFailSound()
+    {
+        if (SoundManager.Instance) SoundManager.Instance.PlayUISFX(UISFXName.EnhanceFail);
     }
 }
 

@@ -1640,6 +1640,7 @@ GameObject:
   - component: {fileID: 5747541252158443909}
   - component: {fileID: 4054347494273505683}
   - component: {fileID: 5684980786510221914}
+  - component: {fileID: -2612073944564422267}
   m_Layer: 5
   m_Name: SettingPanel(Vertical)
   m_TagString: Untagged
@@ -1717,11 +1718,25 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 691041d94cfef684a94d56201f683832, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ExitPanel
-  _exitButton: {fileID: 6471474756159055650}
+  _dungeonExitButton: {fileID: 0}
   _settingExitBtn: {fileID: 0}
   _saveSetting: {fileID: 0}
-  _bGMSlider: {fileID: 3612606491799629562}
-  _skillSFXSlider: {fileID: 0}
+  _bgmSlider: {fileID: 0}
+  _sfxSlider: {fileID: 0}
+  _horizontalBtn: {fileID: 0}
+  _verticalBtn: {fileID: 0}
+--- !u!114 &-2612073944564422267
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3352019412835559087}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ec329b1e69812c949aba74b364f97cbc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::UISoundBinder
 --- !u!1 &3375290555386884786
 GameObject:
   m_ObjectHideFlags: 0
