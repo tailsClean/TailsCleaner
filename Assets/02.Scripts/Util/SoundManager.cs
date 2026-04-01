@@ -23,9 +23,7 @@ public enum UISFXName
 }
 public enum PlayerSFXName
 { 
-    Move_Tower1,
-    Move_Tower2,
-    Move_Tower3,
+    Move,
     Clean,
     LevelUp,
     Hit,
@@ -84,26 +82,35 @@ public class SoundManager : MonoBehaviour
     [SerializeField] private AudioSource _bgmPlayer;
     [SerializeField] private BGMClipInfo[] _bgmClips;
 
-    [Header("인게임 스테이지 BGM")]
+    [Header("Stage BGMs")]
     [SerializeField] private AudioClip[] _stageBgmList;
 
     [Header("Skill SFX")]
     [SerializeField] private AudioSource _skillSfxPlayer;
 
     [Header("Player SFX")]
-    [SerializeField] private AudioSource _playerSfxPlayer;
+    [SerializeField] private AudioSource _playerActionSfxPlayer; // 이동, 청소용
+    [SerializeField] private AudioSource _playerEventSfxPlayer;  // 레벨업, 피격용
     [SerializeField] private PlayerSFXClipInfo[] _playerSfxClips;
-    private Coroutine _playerSFXCoroutine;
+    private Coroutine _playerActionCoroutine;
+    private Coroutine _playerEventCoroutine;
+    
+    [Header("Footstep SFX")]
+    [SerializeField, Tooltip("발소리 재생 간격")]
+    private float _footstepInterval = 0.5f;
+    private WaitForSeconds _footstepDelay;   // 발소리 대기 간격
 
     [Header("Monster SFX")]
     [SerializeField] private AudioSource _monsterSfxPlayer;
     [SerializeField] private MonsterSFXClipInfo[] _monsterSfxClips;
 
     [Header("UI SFX")]
-    [SerializeField] private AudioSource _uiSfxPlayer;
+    [SerializeField] private AudioSource _uiClickPlayer; // 클릭
+    [SerializeField] private AudioSource _uiEventPlayer; // 강화, 합성
     [SerializeField] private UISFXClipInfo[] _uiSfxClips;
+    private Coroutine _uiClickCoroutine;
 
-    [Header("같은 클립 최소 재생 간격")]
+    [Header("스킬 동일 클립 최소 재생 간격")]
     [SerializeField] private float _debounceInterval = 0.1f;
 
     [Header("볼륨 설정 비율")]
@@ -129,10 +136,10 @@ public class SoundManager : MonoBehaviour
     private int _shuffleIndex = 0;
     private int _lastStageBGMIndex = -1;
 
-    private Dictionary<BGMName, AudioClip> _bgmDict = new Dictionary<BGMName, AudioClip>();
-    private Dictionary<UISFXName, AudioClip> _uiSfxDict = new Dictionary<UISFXName, AudioClip>();
-    private Dictionary<PlayerSFXName, AudioClip> _playerSfxDict = new Dictionary<PlayerSFXName, AudioClip>();
-    private Dictionary<MonsterSFXName, AudioClip> _monsterSfxDict = new Dictionary<MonsterSFXName, AudioClip>();
+    private Dictionary<BGMName, AudioClip> _bgmDict = new();
+    private Dictionary<UISFXName, AudioClip> _uiSfxDict = new();
+    private Dictionary<PlayerSFXName, AudioClip> _playerSfxDict = new();
+    private Dictionary<MonsterSFXName, AudioClip> _monsterSfxDict = new();
 
     // 스킬 관련
     private List<AudioSource> _loopPool = new();                                     // 루프 
@@ -154,10 +161,10 @@ public class SoundManager : MonoBehaviour
         _instance = this;
         DontDestroyOnLoad(gameObject);
 
-        foreach (var info in _bgmClips) _bgmDict[info.name] = info.clip;
-        foreach (var info in _uiSfxClips) _uiSfxDict[info.name] = info.clip;
-        foreach (var info in _playerSfxClips) _playerSfxDict[info.name] = info.clip;
-        foreach (var info in _monsterSfxClips) _monsterSfxDict[info.name] = info.clip;
+        foreach (var info in _bgmClips)          _bgmDict[info.name]          = info.clip;
+        foreach (var info in _uiSfxClips)        _uiSfxDict[info.name]        = info.clip;
+        foreach (var info in _playerSfxClips)    _playerSfxDict[info.name]    = info.clip;
+        foreach (var info in _monsterSfxClips)   _monsterSfxDict[info.name]   = info.clip;
 
         LoadVolumes();
     }
@@ -165,6 +172,8 @@ public class SoundManager : MonoBehaviour
     private void Start()
     {
         PlaySceneBGM(SceneManager.GetActiveScene().name);
+
+        _footstepDelay = new WaitForSeconds(_footstepInterval);
     }
 
     private void Update()
@@ -323,49 +332,101 @@ public class SoundManager : MonoBehaviour
     {
         if (_uiSfxDict.TryGetValue(sfxName, out AudioClip clip))
         {
-            if (CanPlayClip(clip) == false) return;
+            // 클릭음 (이전 클릭음 덮어쓰기)
+            if (sfxName == UISFXName.Click)
+            {
+                // 재생 중지
+                StopTrackedCoroutine(ref _uiClickCoroutine);
 
-            _uiSfxPlayer.PlayOneShot(clip, volume);
-            StartCoroutine(TrackSFXDuration(clip.length));
+                _uiClickPlayer.clip = clip;
+                _uiClickPlayer.volume = volume;
+                _uiClickPlayer.Play();
+
+                // 재생 후 콜백으로 코루틴 비우기
+                _uiClickCoroutine = StartCoroutine(TrackAndClearSFX(clip.length, () => _uiClickCoroutine = null));
+            }
+            // 강화, 합성 (재생 중이면 무시하고 원샷)
+            else
+            {
+                if (CanPlayClip(clip) == false) return;
+
+                _uiEventPlayer.PlayOneShot(clip, volume);
+                StartCoroutine(TrackSFXDuration(clip.length));
+            }
         }
     }
 
     public void PlayPlayerSFX(PlayerSFXName sfxName, float volume = 1f)
     {
-        if (_playerSfxDict.TryGetValue(sfxName, out AudioClip clip))
+        switch (sfxName)
         {
-            // 재생 중인 이동 효과음이나 코루틴 초기화
-            StopPlayerSFXInternal();
+            case PlayerSFXName.Move:
+                PlayMoveLoopSFX(volume);
+                break;
 
-            _playerSfxPlayer.clip = clip;
-            _playerSfxPlayer.volume = volume;
-            _playerSfxPlayer.Play();
+            case PlayerSFXName.Clean:
+                if (_playerSfxDict.TryGetValue(sfxName, out AudioClip cleanClip))
+                    PlayActionSFX(cleanClip, volume);
+                break;
 
-            _playerSFXCoroutine = StartCoroutine(TrackPlayerSFX(clip.length));
+            case PlayerSFXName.LevelUp:
+            case PlayerSFXName.Hit:
+                if (_playerSfxDict.TryGetValue(sfxName, out AudioClip eventClip))
+                    PlayEventSFX(eventClip, volume);
+                break;
         }
     }
 
+    // 걷기
+    private void PlayMoveLoopSFX(float volume)
+    {
+    }
+
+    // 청소
+    private void PlayActionSFX(AudioClip clip, float volume)
+    {
+        StopTrackedCoroutine(ref _playerActionCoroutine);
+
+        _playerActionSfxPlayer.clip = clip;
+        _playerActionSfxPlayer.volume = volume;
+        _playerActionSfxPlayer.Play();
+
+        _playerActionCoroutine = StartCoroutine(TrackAndClearSFX(clip.length, () => _playerActionCoroutine = null));
+    }
+
+    // 피격, 레벨업
+    private void PlayEventSFX(AudioClip clip, float volume)
+    {
+        StopTrackedCoroutine(ref _playerEventCoroutine);
+
+        _playerEventSfxPlayer.clip = clip;
+        _playerEventSfxPlayer.volume = volume;
+        _playerEventSfxPlayer.Play();
+
+        _playerEventCoroutine = StartCoroutine(TrackAndClearSFX(clip.length, () => _playerEventCoroutine = null));
+    }
+
+    // 중지
     public void StopPlayerSFX()
     {
-        if (_playerSfxPlayer.isPlaying)
-        {
-            _playerSfxPlayer.Stop();
-            StopPlayerSFXInternal();
-        }
+        _playerActionSfxPlayer.Stop();
+        StopTrackedCoroutine(ref _playerActionCoroutine);
     }
-    private void StopPlayerSFXInternal()
-    {
-        if (_playerSFXCoroutine != null)
-        {
-            StopCoroutine(_playerSFXCoroutine);
-            _playerSFXCoroutine = null;
 
+    // Player, UI SFX 중지
+    private void StopTrackedCoroutine(ref Coroutine tracker)
+    {
+        if (tracker != null)
+        {
+            StopCoroutine(tracker);
+            tracker = null;
             _activeSFXCount = Mathf.Max(0, _activeSFXCount - 1);
             UpdateMixerVolumes();
         }
     }
 
-    private IEnumerator TrackPlayerSFX(float duration)
+    // Player, UI SFX 재생 추적
+    private IEnumerator TrackAndClearSFX(float duration, System.Action onComplete)
     {
         _activeSFXCount++;
         UpdateMixerVolumes();
@@ -375,7 +436,25 @@ public class SoundManager : MonoBehaviour
         _activeSFXCount = Mathf.Max(0, _activeSFXCount - 1);
         UpdateMixerVolumes();
 
-        _playerSFXCoroutine = null;
+        // 코루틴 비우기
+        onComplete?.Invoke();
+    }
+
+    // 발소리 전용
+    private IEnumerator TrackFootstepLoop(AudioClip clip, float volume)
+    {
+        _activeSFXCount++;
+        UpdateMixerVolumes();
+
+        while (true)
+        {
+            _playerActionSfxPlayer.clip = clip;
+            _playerActionSfxPlayer.volume = volume;
+            _playerActionSfxPlayer.Play();
+
+            // 인스펙터에서 설정한 간격만큼 대기
+            yield return _footstepDelay;
+        }
     }
     #endregion
 
@@ -534,4 +613,5 @@ public class SoundManager : MonoBehaviour
     }
 
     #endregion
+
 }
