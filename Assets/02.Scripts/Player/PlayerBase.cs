@@ -150,7 +150,10 @@ public class PlayerBase : MonoBehaviour, IDamageable, ISkillable, ISkillStat, IP
         _onGainInGameExp.OnStartEvent(_levelSystem.InGameCurrentExp);
 
         if (isLevelUp)
+        {
+            _stateMachine.MoveInput(Vector2.zero);
             _onInGameLevelUp.OnStartEvent(_levelSystem.InGameLevel);
+        }
     }
 
 

@@ -96,8 +96,7 @@ public class EnhanceSystem : MonoBehaviour
 
         if (!_isEnhancable)
         {
-            WarningText.ShowText("강화수치가 최대입니다.");
-            Debug.Log("강화수치가 최대입니다.");
+            OnImpossiblePanel("더 이상 강화할 수 없는 장비에요!");
         }
     }
 
@@ -111,10 +110,7 @@ public class EnhanceSystem : MonoBehaviour
         int cost = _enhanceInfo.NextEnhanceData.CostGold;
 
         if (cost < 0)
-        {
-            WarningText.ShowText("골드 코스트가 음수입니다!");
-            Debug.LogError("골드 코스트가 음수입니다!"); return; 
-        }
+        { Debug.LogError("골드 코스트가 음수입니다!"); return; }
 
         _isEnhancable = _currency.TryUseGold(cost);
 
@@ -140,8 +136,7 @@ public class EnhanceSystem : MonoBehaviour
 
         if (!_isEnhancable)
         {
-            WarningText.ShowText("강화 재료가 부족합니다.");
-            Debug.Log("강화 재료가 부족합니다.");
+            OnImpossiblePanel("강화에 사용할 아이템이 부족해요!");
         }
     }
     
@@ -155,6 +150,17 @@ public class EnhanceSystem : MonoBehaviour
     private void EnhanceFailSound()
     {
         if (SoundManager.Instance) SoundManager.Instance.PlayUISFX(UISFXName.EnhanceFail);
+    }
+
+    // 강화 불가능 패널 띄우기
+    private void OnImpossiblePanel(string text)
+    {
+        var impossiblePanel = UIManager.Instance.ImpossiblePanel;
+
+        impossiblePanel.SetText(text);
+        impossiblePanel.SetListeners(() => impossiblePanel.gameObject.SetActive(false));
+
+        UIManager.Instance.ChangeStateImpossiblePanel();
     }
 }
 

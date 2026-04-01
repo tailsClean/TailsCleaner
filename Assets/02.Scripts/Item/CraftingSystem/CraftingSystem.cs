@@ -105,7 +105,11 @@ public partial class CraftingSystem : MonoBehaviour
 
         // 최대 등급 확인
         if (_mainCraftSlot.IsMaxGrade)
-        { WarningText.ShowText("최대 등급의 장비입니다."); CraftingFailSound(); return; }
+        {
+            OnImpossiblePanel();
+            CraftingFailSound(); 
+            return; 
+        }
 
         // 필요 재료 갯수 확인
         if (Array.Exists(_resourceCraftSlots, x => x == null))
@@ -195,6 +199,17 @@ public partial class CraftingSystem : MonoBehaviour
     private void CraftingFailSound()
     {
         if (SoundManager.Instance) SoundManager.Instance.PlayUISFX(UISFXName.CraftingFail);
+    }
+
+    // 합성 불가 패널 띄우기
+    private void OnImpossiblePanel()
+    {
+        var impossiblePanel = UIManager.Instance.ImpossiblePanel;
+
+        impossiblePanel.SetText("더 이상 합성할 수 없는 장비에요!");
+        impossiblePanel.SetListeners(() => impossiblePanel.gameObject.SetActive(false));
+
+        UIManager.Instance.ChangeStateImpossiblePanel();
     }
 
 
