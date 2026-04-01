@@ -84,6 +84,7 @@ public class ExitPanel : MonoBehaviour
                 }
 
                 UIManager.Instance.GoToLobby();
+                UIManager.Instance.ChangeStateConfirmPanel();
             }, () => UIManager.Instance.ChangeStateConfirmPanel());
 
            
