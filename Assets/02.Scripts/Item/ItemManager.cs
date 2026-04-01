@@ -36,6 +36,9 @@ public partial class ItemManager : MonoBehaviour
 
     }
 
+    // 유물 전용 소지 여부 확인용
+    public bool HasRelic(int id) => Inventory.HasRelic(id);
+
     public void OpenUI(UI_GROUP group)
     {
         foreach (var uiGroup in _uiGroupList)

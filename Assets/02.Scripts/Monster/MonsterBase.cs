@@ -873,6 +873,11 @@ public abstract class MonsterBase : PoolObject, IDamageable, IMonsterStatus, IPu
             handler.AddReward(scoreReward, goldReward);
         }
 
+        if (MonsterId > 0 && RelicDropManager.Instance != null)
+        {
+            RelicDropManager.Instance.TryDropRelic(MonsterId, transform.position);
+        }
+
         if (TestItem != null && ObjectPoolManager.Instance != null)
         {
             var itemObj = ObjectPoolManager.Instance.Spawn(TestItem, transform.position, Quaternion.identity);
