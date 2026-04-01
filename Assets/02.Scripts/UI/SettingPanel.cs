@@ -18,6 +18,7 @@ public class ExitPanel : MonoBehaviour
     {
         if (_dungeonExitButton != null) _dungeonExitButton.onClick.AddListener(OnClickExit);
         if (_settingExitBtn != null) _settingExitBtn.onClick.AddListener(OnClickExitSetting);
+        if (_saveSetting != null) _saveSetting.onClick.AddListener(OnClickSaveSetting); 
         UpdateButton();
 
         _horizontalBtn.onClick.AddListener(() =>
@@ -31,6 +32,8 @@ public class ExitPanel : MonoBehaviour
             UIManager.Instance.SetOrientation(true); // 세로
             UpdateButton();
         });
+
+       LoadSettings();
 
     }
 
@@ -74,11 +77,40 @@ public class ExitPanel : MonoBehaviour
     private void UpdateButton()
     {
         bool isVertical = UIManager.Instance.IsVertical;
-        _horizontalBtn.interactable = isVertical;   // 세로일 때 가로버튼 활성
+        _horizontalBtn.interactable = isVertical;   
         _verticalBtn.interactable = !isVertical; 
     }
     private void OnClickExitSetting()
     {
        gameObject.SetActive(false);
+    }
+    private void OnClickSaveSetting()
+    {
+        PlayerPrefs.SetFloat("BGMVolume", _bgmSlider.value);
+        PlayerPrefs.SetFloat("SFXVolume", _sfxSlider.value);
+        PlayerPrefs.SetInt("IsVertical", UIManager.Instance.IsVertical ? 1 : 0);
+        PlayerPrefs.Save();
+    }
+
+    private void LoadSettings()
+    {
+        if (PlayerPrefs.HasKey("BGMVolume"))
+        {
+            float bgmVolume = PlayerPrefs.GetFloat("BGMVolume");
+            if (SoundManager.Instance != null) SoundManager.Instance.SetBGMVolume(bgmVolume);
+        }
+
+        if (PlayerPrefs.HasKey("SFXVolume"))
+        {
+            float sfxVolume = PlayerPrefs.GetFloat("SFXVolume");
+            if (SoundManager.Instance != null) SoundManager.Instance.SetSFXVolume(sfxVolume);
+        }
+
+        if (PlayerPrefs.HasKey("IsVertical"))
+        {
+            bool isVertical = PlayerPrefs.GetInt("IsVertical") == 1;
+            UIManager.Instance.SetOrientation(isVertical);
+            UpdateButton();
+        }
     }
 }
