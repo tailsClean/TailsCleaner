@@ -19,14 +19,14 @@ MonoBehaviour:
     pattern_type: 1
     pattern_logic_type: move_zigzag
     stat_target: 2
-    stat_value: 0.8
+    stat_value: 2
     duration: 0
     cast_time: 0
     cooldown: 0
     damage_multiply: 0
     detect_range: 0
     move_time: 0
-    zigzag_width: 0.5
+    zigzag_width: 2
     jump_height: 0
     chase_time: 0
     escape_target: 0
@@ -65,14 +65,14 @@ MonoBehaviour:
     pattern_type: 1
     pattern_logic_type: move_zigzag
     stat_target: 2
-    stat_value: 0.8
+    stat_value: 3
     duration: 0
     cast_time: 0
     cooldown: 0
     damage_multiply: 0
     detect_range: 0
     move_time: 0
-    zigzag_width: 0.5
+    zigzag_width: 4
     jump_height: 0
     chase_time: 0
     escape_target: 0
@@ -111,15 +111,15 @@ MonoBehaviour:
     pattern_type: 1
     pattern_logic_type: move_jump
     stat_target: 2
-    stat_value: 1.5
+    stat_value: 8
     duration: 0
-    cast_time: 3
+    cast_time: 2
     cooldown: 0
     damage_multiply: 2
-    detect_range: 2
+    detect_range: 12
     move_time: 0
     zigzag_width: 0
-    jump_height: 2
+    jump_height: 3
     chase_time: 0
     escape_target: 0
     rush_speed: 0
@@ -157,12 +157,12 @@ MonoBehaviour:
     pattern_type: 1
     pattern_logic_type: move_jump
     stat_target: 2
-    stat_value: 1.5
+    stat_value: 6
     duration: 0
-    cast_time: 3
+    cast_time: 2
     cooldown: 0
     damage_multiply: 2
-    detect_range: 2
+    detect_range: 10
     move_time: 0
     zigzag_width: 0
     jump_height: 2
@@ -203,12 +203,12 @@ MonoBehaviour:
     pattern_type: 1
     pattern_logic_type: move_jump
     stat_target: 2
-    stat_value: 1.5
+    stat_value: 6
     duration: 0
-    cast_time: 3
+    cast_time: 2
     cooldown: 0
     damage_multiply: 2
-    detect_range: 2
+    detect_range: 10
     move_time: 0
     zigzag_width: 0
     jump_height: 2
@@ -249,13 +249,13 @@ MonoBehaviour:
     pattern_type: 1
     pattern_logic_type: move_escape
     stat_target: 2
-    stat_value: 1.5
+    stat_value: 2.5
     duration: 0
-    cast_time: 3
+    cast_time: 2
     cooldown: 0
     damage_multiply: 0
-    detect_range: 4
-    move_time: 8
+    detect_range: 3
+    move_time: 6
     zigzag_width: 0
     jump_height: 0
     chase_time: 0
@@ -300,7 +300,7 @@ MonoBehaviour:
     cast_time: 0
     cooldown: 0
     damage_multiply: 1.2
-    detect_range: 1.5
+    detect_range: 30
     move_time: 0
     zigzag_width: 0
     jump_height: 0
@@ -308,9 +308,9 @@ MonoBehaviour:
     escape_target: 0
     rush_speed: 0
     projectile_type: 0
-    projectile_speed: 1.5
-    projectile_size: 0.1
-    projectile_count: 1
+    projectile_speed: 10
+    projectile_size: 0.5
+    projectile_count: 5
     fire_interval: 0.2
     life_time: 2
     pierce_type: 0
@@ -345,8 +345,8 @@ MonoBehaviour:
     duration: 0
     cast_time: 0
     cooldown: 0
-    damage_multiply: 1.2
-    detect_range: 1.5
+    damage_multiply: 1.5
+    detect_range: 30
     move_time: 0
     zigzag_width: 0
     jump_height: 0
@@ -354,11 +354,11 @@ MonoBehaviour:
     escape_target: 0
     rush_speed: 0
     projectile_type: 0
-    projectile_speed: 1.5
-    projectile_size: 0.1
+    projectile_speed: 10
+    projectile_size: 0.5
     projectile_count: 2
-    fire_interval: 0.2
-    life_time: 2
+    fire_interval: 0.4
+    life_time: 3
     pierce_type: 0
     follow: 0
     arc_height: 0
@@ -392,7 +392,7 @@ MonoBehaviour:
     cast_time: 0
     cooldown: 0
     damage_multiply: 2
-    detect_range: 2
+    detect_range: 30
     move_time: 0
     zigzag_width: 0
     jump_height: 0
@@ -400,10 +400,10 @@ MonoBehaviour:
     escape_target: 0
     rush_speed: 0
     projectile_type: 0
-    projectile_speed: 1.2
-    projectile_size: 0.2
+    projectile_speed: 8
+    projectile_size: 0.5
     projectile_count: 5
-    fire_interval: 0.5
+    fire_interval: 0.2
     life_time: 3
     pierce_type: 1
     follow: 0
@@ -438,7 +438,7 @@ MonoBehaviour:
     cast_time: 0
     cooldown: 0
     damage_multiply: 2
-    detect_range: 2
+    detect_range: 30
     move_time: 0
     zigzag_width: 0
     jump_height: 0
@@ -446,10 +446,10 @@ MonoBehaviour:
     escape_target: 0
     rush_speed: 0
     projectile_type: 0
-    projectile_speed: 1.2
-    projectile_size: 0.2
+    projectile_speed: 8
+    projectile_size: 0.5
     projectile_count: 5
-    fire_interval: 0.5
+    fire_interval: 0.2
     life_time: 3
     pierce_type: 1
     follow: 0
@@ -484,7 +484,7 @@ MonoBehaviour:
     cast_time: 0
     cooldown: 0
     damage_multiply: 2
-    detect_range: 2
+    detect_range: 30
     move_time: 0
     zigzag_width: 0
     jump_height: 0
@@ -492,11 +492,11 @@ MonoBehaviour:
     escape_target: 0
     rush_speed: 0
     projectile_type: 0
-    projectile_speed: 0.8
-    projectile_size: 0.2
-    projectile_count: 5
-    fire_interval: 0.5
-    life_time: 2
+    projectile_speed: 8
+    projectile_size: 0.5
+    projectile_count: 6
+    fire_interval: 0.6
+    life_time: 3
     pierce_type: 2
     follow: 0
     arc_height: 0
@@ -530,7 +530,7 @@ MonoBehaviour:
     cast_time: 0
     cooldown: 0
     damage_multiply: 2
-    detect_range: 2.5
+    detect_range: 30
     move_time: 0
     zigzag_width: 0
     jump_height: 0
@@ -538,11 +538,11 @@ MonoBehaviour:
     escape_target: 0
     rush_speed: 0
     projectile_type: 0
-    projectile_speed: 0.8
-    projectile_size: 0.2
+    projectile_speed: 7
+    projectile_size: 1
     projectile_count: 1
-    fire_interval: 10
-    life_time: 5
+    fire_interval: 8
+    life_time: 6
     pierce_type: 1
     follow: 1
     arc_height: 0
@@ -575,8 +575,8 @@ MonoBehaviour:
     duration: 0
     cast_time: 0
     cooldown: 0
-    damage_multiply: 2
-    detect_range: 2.5
+    damage_multiply: 3
+    detect_range: 30
     move_time: 0
     zigzag_width: 0
     jump_height: 0
@@ -584,11 +584,11 @@ MonoBehaviour:
     escape_target: 0
     rush_speed: 0
     projectile_type: 0
-    projectile_speed: 0.8
-    projectile_size: 0.2
+    projectile_speed: 9
+    projectile_size: 1
     projectile_count: 1
-    fire_interval: 10
-    life_time: 5
+    fire_interval: 8
+    life_time: 4
     pierce_type: 1
     follow: 1
     arc_height: 0
@@ -621,8 +621,8 @@ MonoBehaviour:
     duration: 0
     cast_time: 0
     cooldown: 0
-    damage_multiply: 2
-    detect_range: 2
+    damage_multiply: 4
+    detect_range: 30
     move_time: 0
     zigzag_width: 0
     jump_height: 0
@@ -630,14 +630,14 @@ MonoBehaviour:
     escape_target: 0
     rush_speed: 0
     projectile_type: 1
-    projectile_speed: 0.8
-    projectile_size: 0.4
+    projectile_speed: 8
+    projectile_size: 0.8
     projectile_count: 2
-    fire_interval: 0.8
-    life_time: 7
+    fire_interval: 0.9
+    life_time: 8
     pierce_type: 1
     follow: 0
-    arc_height: 2
+    arc_height: 3
     projectile_radius: 0
     area_radius: 0
     area_damage_interval: 0
@@ -664,10 +664,10 @@ MonoBehaviour:
     pattern_logic_type: explode_self
     stat_target: 2
     stat_value: 1.5
-    duration: 3
+    duration: 5
     cast_time: 0
     cooldown: 0
-    damage_multiply: 2
+    damage_multiply: 3
     detect_range: 0
     move_time: 0
     zigzag_width: 0
@@ -688,7 +688,7 @@ MonoBehaviour:
     area_radius: 0
     area_damage_interval: 0
     area_target_type: 0
-    explode_range: 0.5
+    explode_range: 3
     summon_monster_id: 0
     summon_count: 0
     summon_radius: 0
@@ -714,7 +714,7 @@ MonoBehaviour:
     cast_time: 0
     cooldown: 0
     damage_multiply: 2
-    detect_range: 2.5
+    detect_range: 30
     move_time: 0
     zigzag_width: 0
     jump_height: 0
@@ -722,10 +722,10 @@ MonoBehaviour:
     escape_target: 0
     rush_speed: 0
     projectile_type: 0
-    projectile_speed: 0.8
-    projectile_size: 0.2
-    projectile_count: 1
-    fire_interval: 10
+    projectile_speed: 6
+    projectile_size: 1
+    projectile_count: 2
+    fire_interval: 8
     life_time: 5
     pierce_type: 1
     follow: 1
@@ -760,7 +760,7 @@ MonoBehaviour:
     cast_time: 0
     cooldown: 0
     damage_multiply: 2
-    detect_range: 2.5
+    detect_range: 30
     move_time: 0
     zigzag_width: 0
     jump_height: 0
@@ -768,11 +768,11 @@ MonoBehaviour:
     escape_target: 0
     rush_speed: 0
     projectile_type: 0
-    projectile_speed: 0.8
-    projectile_size: 0.2
+    projectile_speed: 6
+    projectile_size: 1
     projectile_count: 2
-    fire_interval: 10
-    life_time: 5
+    fire_interval: 5
+    life_time: 7
     pierce_type: 1
     follow: 1
     arc_height: 0
@@ -805,8 +805,8 @@ MonoBehaviour:
     duration: 0
     cast_time: 0
     cooldown: 0
-    damage_multiply: 2
-    detect_range: 2.5
+    damage_multiply: 3
+    detect_range: 30
     move_time: 0
     zigzag_width: 0
     jump_height: 0
@@ -814,11 +814,11 @@ MonoBehaviour:
     escape_target: 0
     rush_speed: 0
     projectile_type: 0
-    projectile_speed: 0.8
-    projectile_size: 0.2
-    projectile_count: 2
-    fire_interval: 10
-    life_time: 5
+    projectile_speed: 7
+    projectile_size: 1
+    projectile_count: 3
+    fire_interval: 5
+    life_time: 7
     pierce_type: 1
     follow: 1
     arc_height: 0
@@ -861,7 +861,7 @@ MonoBehaviour:
     rush_speed: 0
     projectile_type: 0
     projectile_speed: 0
-    projectile_size: 0.5
+    projectile_size: 2
     projectile_count: 5
     fire_interval: 0
     life_time: 0
@@ -897,8 +897,8 @@ MonoBehaviour:
     duration: 0
     cast_time: 0
     cooldown: 0
-    damage_multiply: 2
-    detect_range: 2.5
+    damage_multiply: 3
+    detect_range: 30
     move_time: 0
     zigzag_width: 0
     jump_height: 0
@@ -906,11 +906,11 @@ MonoBehaviour:
     escape_target: 0
     rush_speed: 0
     projectile_type: 0
-    projectile_speed: 0.8
-    projectile_size: 0.2
-    projectile_count: 2
+    projectile_speed: 7
+    projectile_size: 1
+    projectile_count: 3
     fire_interval: 10
-    life_time: 5
+    life_time: 9
     pierce_type: 1
     follow: 1
     arc_height: 0
@@ -953,7 +953,7 @@ MonoBehaviour:
     rush_speed: 0
     projectile_type: 0
     projectile_speed: 0
-    projectile_size: 0.5
+    projectile_size: 2
     projectile_count: 5
     fire_interval: 0
     life_time: 0
@@ -989,8 +989,8 @@ MonoBehaviour:
     duration: 0
     cast_time: 0
     cooldown: 0
-    damage_multiply: 2
-    detect_range: 2.5
+    damage_multiply: 3
+    detect_range: 30
     move_time: 0
     zigzag_width: 0
     jump_height: 0
@@ -998,11 +998,11 @@ MonoBehaviour:
     escape_target: 0
     rush_speed: 0
     projectile_type: 0
-    projectile_speed: 0.8
-    projectile_size: 0.2
-    projectile_count: 2
+    projectile_speed: 7
+    projectile_size: 1
+    projectile_count: 3
     fire_interval: 10
-    life_time: 5
+    life_time: 9
     pierce_type: 1
     follow: 1
     arc_height: 0
@@ -1045,7 +1045,7 @@ MonoBehaviour:
     rush_speed: 0
     projectile_type: 0
     projectile_speed: 0
-    projectile_size: 0.5
+    projectile_size: 2
     projectile_count: 6
     fire_interval: 0
     life_time: 0
@@ -1091,8 +1091,8 @@ MonoBehaviour:
     rush_speed: 0
     projectile_type: 0
     projectile_speed: 0
-    projectile_size: 0.5
-    projectile_count: 8
+    projectile_size: 3
+    projectile_count: 5
     fire_interval: 0
     life_time: 0
     pierce_type: 0
@@ -1127,8 +1127,8 @@ MonoBehaviour:
     duration: 0
     cast_time: 0
     cooldown: 0
-    damage_multiply: 2
-    detect_range: 2.5
+    damage_multiply: 3
+    detect_range: 30
     move_time: 0
     zigzag_width: 0
     jump_height: 0
@@ -1136,11 +1136,11 @@ MonoBehaviour:
     escape_target: 0
     rush_speed: 0
     projectile_type: 0
-    projectile_speed: 0.8
-    projectile_size: 0.2
-    projectile_count: 2
+    projectile_speed: 7
+    projectile_size: 1
+    projectile_count: 4
     fire_interval: 10
-    life_time: 5
+    life_time: 9
     pierce_type: 1
     follow: 1
     arc_height: 0
@@ -1183,7 +1183,7 @@ MonoBehaviour:
     rush_speed: 0
     projectile_type: 0
     projectile_speed: 0
-    projectile_size: 0.5
+    projectile_size: 2
     projectile_count: 6
     fire_interval: 0
     life_time: 0
@@ -1229,8 +1229,8 @@ MonoBehaviour:
     rush_speed: 0
     projectile_type: 0
     projectile_speed: 0
-    projectile_size: 0.5
-    projectile_count: 6
+    projectile_size: 3
+    projectile_count: 5
     fire_interval: 0
     life_time: 0
     pierce_type: 0
@@ -1265,8 +1265,8 @@ MonoBehaviour:
     duration: 0
     cast_time: 0
     cooldown: 0
-    damage_multiply: 2
-    detect_range: 2.5
+    damage_multiply: 3
+    detect_range: 30
     move_time: 0
     zigzag_width: 0
     jump_height: 0
@@ -1274,11 +1274,11 @@ MonoBehaviour:
     escape_target: 0
     rush_speed: 0
     projectile_type: 0
-    projectile_speed: 0.8
-    projectile_size: 0.2
-    projectile_count: 2
+    projectile_speed: 7
+    projectile_size: 1
+    projectile_count: 4
     fire_interval: 10
-    life_time: 5
+    life_time: 9
     pierce_type: 1
     follow: 1
     arc_height: 0
@@ -1321,7 +1321,7 @@ MonoBehaviour:
     rush_speed: 0
     projectile_type: 0
     projectile_speed: 0
-    projectile_size: 0.5
+    projectile_size: 2
     projectile_count: 7
     fire_interval: 0
     life_time: 0
@@ -1367,7 +1367,7 @@ MonoBehaviour:
     rush_speed: 0
     projectile_type: 0
     projectile_speed: 0
-    projectile_size: 0.5
+    projectile_size: 3
     projectile_count: 5
     fire_interval: 0
     life_time: 0
@@ -1403,8 +1403,8 @@ MonoBehaviour:
     duration: 0
     cast_time: 0
     cooldown: 0
-    damage_multiply: 2
-    detect_range: 2.5
+    damage_multiply: 3
+    detect_range: 30
     move_time: 0
     zigzag_width: 0
     jump_height: 0
@@ -1412,11 +1412,11 @@ MonoBehaviour:
     escape_target: 0
     rush_speed: 0
     projectile_type: 0
-    projectile_speed: 0.8
-    projectile_size: 0.2
-    projectile_count: 2
+    projectile_speed: 8
+    projectile_size: 1
+    projectile_count: 5
     fire_interval: 10
-    life_time: 5
+    life_time: 11
     pierce_type: 1
     follow: 1
     arc_height: 0
@@ -1459,7 +1459,7 @@ MonoBehaviour:
     rush_speed: 0
     projectile_type: 0
     projectile_speed: 0
-    projectile_size: 0.5
+    projectile_size: 2
     projectile_count: 7
     fire_interval: 0
     life_time: 0
@@ -1505,7 +1505,7 @@ MonoBehaviour:
     rush_speed: 0
     projectile_type: 0
     projectile_speed: 0
-    projectile_size: 0.5
+    projectile_size: 2
     projectile_count: 4
     fire_interval: 0
     life_time: 0
@@ -1539,7 +1539,7 @@ MonoBehaviour:
     stat_target: 0
     stat_value: 0
     duration: 0
-    cast_time: 4
+    cast_time: 5
     cooldown: 0
     damage_multiply: 0
     detect_range: 0
@@ -1587,8 +1587,8 @@ MonoBehaviour:
     duration: 0
     cast_time: 0
     cooldown: 0
-    damage_multiply: 2
-    detect_range: 2.5
+    damage_multiply: 3
+    detect_range: 30
     move_time: 0
     zigzag_width: 0
     jump_height: 0
@@ -1596,11 +1596,11 @@ MonoBehaviour:
     escape_target: 0
     rush_speed: 0
     projectile_type: 0
-    projectile_speed: 0.8
-    projectile_size: 0.2
-    projectile_count: 2
+    projectile_speed: 8
+    projectile_size: 1
+    projectile_count: 5
     fire_interval: 10
-    life_time: 5
+    life_time: 11
     pierce_type: 1
     follow: 1
     arc_height: 0
@@ -1643,7 +1643,7 @@ MonoBehaviour:
     rush_speed: 0
     projectile_type: 0
     projectile_speed: 0
-    projectile_size: 0.5
+    projectile_size: 2
     projectile_count: 8
     fire_interval: 0
     life_time: 0
@@ -1689,8 +1689,8 @@ MonoBehaviour:
     rush_speed: 0
     projectile_type: 0
     projectile_speed: 0
-    projectile_size: 0.5
-    projectile_count: 3
+    projectile_size: 2
+    projectile_count: 4
     fire_interval: 0
     life_time: 0
     pierce_type: 0
@@ -1723,7 +1723,7 @@ MonoBehaviour:
     stat_target: 0
     stat_value: 0
     duration: 0
-    cast_time: 4
+    cast_time: 5
     cooldown: 0
     damage_multiply: 0
     detect_range: 0
@@ -1771,8 +1771,8 @@ MonoBehaviour:
     duration: 0
     cast_time: 0
     cooldown: 0
-    damage_multiply: 2
-    detect_range: 2.5
+    damage_multiply: 3
+    detect_range: 30
     move_time: 0
     zigzag_width: 0
     jump_height: 0
@@ -1780,11 +1780,11 @@ MonoBehaviour:
     escape_target: 0
     rush_speed: 0
     projectile_type: 0
-    projectile_speed: 0.8
-    projectile_size: 0.2
-    projectile_count: 2
+    projectile_speed: 8
+    projectile_size: 1
+    projectile_count: 5
     fire_interval: 10
-    life_time: 5
+    life_time: 11
     pierce_type: 1
     follow: 1
     arc_height: 0
@@ -1827,7 +1827,7 @@ MonoBehaviour:
     rush_speed: 0
     projectile_type: 0
     projectile_speed: 0
-    projectile_size: 0.5
+    projectile_size: 2
     projectile_count: 8
     fire_interval: 0
     life_time: 0
@@ -1837,7 +1837,7 @@ MonoBehaviour:
     projectile_radius: 0
     area_radius: 0
     area_damage_interval: 0.2
-    area_target_type: 0
+    area_target_type: 1
     explode_range: 0
     summon_monster_id: 0
     summon_count: 0
@@ -1873,8 +1873,8 @@ MonoBehaviour:
     rush_speed: 0
     projectile_type: 0
     projectile_speed: 0
-    projectile_size: 0.5
-    projectile_count: 2
+    projectile_size: 2
+    projectile_count: 3
     fire_interval: 0
     life_time: 0
     pierce_type: 0
@@ -1883,7 +1883,7 @@ MonoBehaviour:
     projectile_radius: 0
     area_radius: 0
     area_damage_interval: 0.2
-    area_target_type: 1
+    area_target_type: 0
     explode_range: 0
     summon_monster_id: 0
     summon_count: 0
@@ -1907,7 +1907,7 @@ MonoBehaviour:
     stat_target: 0
     stat_value: 0
     duration: 0
-    cast_time: 4
+    cast_time: 5
     cooldown: 0
     damage_multiply: 0
     detect_range: 0
@@ -1951,14 +1951,14 @@ MonoBehaviour:
     pattern_type: 1
     pattern_logic_type: move_zigzag
     stat_target: 2
-    stat_value: 0.8
+    stat_value: 3
     duration: 0
     cast_time: 0
     cooldown: 0
     damage_multiply: 0
     detect_range: 0
     move_time: 0
-    zigzag_width: 0.5
+    zigzag_width: 2
     jump_height: 0
     chase_time: 0
     escape_target: 0
@@ -1997,14 +1997,14 @@ MonoBehaviour:
     pattern_type: 1
     pattern_logic_type: move_zigzag
     stat_target: 2
-    stat_value: 0.8
+    stat_value: 2
     duration: 0
     cast_time: 0
     cooldown: 0
     damage_multiply: 0
     detect_range: 0
     move_time: 0
-    zigzag_width: 0.5
+    zigzag_width: 4
     jump_height: 0
     chase_time: 0
     escape_target: 0
@@ -2043,15 +2043,15 @@ MonoBehaviour:
     pattern_type: 1
     pattern_logic_type: move_jump
     stat_target: 2
-    stat_value: 1.5
+    stat_value: 8
     duration: 0
-    cast_time: 3
+    cast_time: 2
     cooldown: 0
     damage_multiply: 2
-    detect_range: 2
+    detect_range: 10
     move_time: 0
     zigzag_width: 0
-    jump_height: 2
+    jump_height: 3
     chase_time: 0
     escape_target: 0
     rush_speed: 0
@@ -2089,12 +2089,12 @@ MonoBehaviour:
     pattern_type: 1
     pattern_logic_type: move_jump
     stat_target: 2
-    stat_value: 1.5
+    stat_value: 6
     duration: 0
-    cast_time: 3
+    cast_time: 2
     cooldown: 0
     damage_multiply: 2
-    detect_range: 2
+    detect_range: 8
     move_time: 0
     zigzag_width: 0
     jump_height: 2
@@ -2135,12 +2135,12 @@ MonoBehaviour:
     pattern_type: 1
     pattern_logic_type: move_jump
     stat_target: 2
-    stat_value: 1.5
+    stat_value: 6
     duration: 0
-    cast_time: 3
+    cast_time: 2
     cooldown: 0
     damage_multiply: 2
-    detect_range: 2
+    detect_range: 8
     move_time: 0
     zigzag_width: 0
     jump_height: 2
@@ -2181,13 +2181,13 @@ MonoBehaviour:
     pattern_type: 1
     pattern_logic_type: move_escape
     stat_target: 2
-    stat_value: 1.5
+    stat_value: 2.5
     duration: 0
-    cast_time: 3
+    cast_time: 2
     cooldown: 0
     damage_multiply: 0
-    detect_range: 4
-    move_time: 8
+    detect_range: 3
+    move_time: 6
     zigzag_width: 0
     jump_height: 0
     chase_time: 0
@@ -2232,7 +2232,7 @@ MonoBehaviour:
     cast_time: 0
     cooldown: 0
     damage_multiply: 1.2
-    detect_range: 1.5
+    detect_range: 30
     move_time: 0
     zigzag_width: 0
     jump_height: 0
@@ -2240,9 +2240,9 @@ MonoBehaviour:
     escape_target: 0
     rush_speed: 0
     projectile_type: 0
-    projectile_speed: 1.5
-    projectile_size: 0.1
-    projectile_count: 3
+    projectile_speed: 10
+    projectile_size: 0.5
+    projectile_count: 5
     fire_interval: 0.2
     life_time: 2
     pierce_type: 0
@@ -2277,8 +2277,8 @@ MonoBehaviour:
     duration: 0
     cast_time: 0
     cooldown: 0
-    damage_multiply: 1.2
-    detect_range: 1.5
+    damage_multiply: 1.5
+    detect_range: 30
     move_time: 0
     zigzag_width: 0
     jump_height: 0
@@ -2286,11 +2286,11 @@ MonoBehaviour:
     escape_target: 0
     rush_speed: 0
     projectile_type: 0
-    projectile_speed: 1.5
-    projectile_size: 0.1
-    projectile_count: 4
-    fire_interval: 0.2
-    life_time: 2
+    projectile_speed: 10
+    projectile_size: 0.5
+    projectile_count: 3
+    fire_interval: 0.4
+    life_time: 3
     pierce_type: 0
     follow: 0
     arc_height: 0
@@ -2324,7 +2324,7 @@ MonoBehaviour:
     cast_time: 0
     cooldown: 0
     damage_multiply: 2
-    detect_range: 2
+    detect_range: 30
     move_time: 0
     zigzag_width: 0
     jump_height: 0
@@ -2332,10 +2332,10 @@ MonoBehaviour:
     escape_target: 0
     rush_speed: 0
     projectile_type: 0
-    projectile_speed: 1.2
-    projectile_size: 0.2
-    projectile_count: 5
-    fire_interval: 0.5
+    projectile_speed: 9
+    projectile_size: 0.5
+    projectile_count: 6
+    fire_interval: 0.2
     life_time: 3
     pierce_type: 1
     follow: 0
@@ -2370,7 +2370,7 @@ MonoBehaviour:
     cast_time: 0
     cooldown: 0
     damage_multiply: 2
-    detect_range: 2
+    detect_range: 30
     move_time: 0
     zigzag_width: 0
     jump_height: 0
@@ -2378,10 +2378,10 @@ MonoBehaviour:
     escape_target: 0
     rush_speed: 0
     projectile_type: 0
-    projectile_speed: 1.2
-    projectile_size: 0.2
-    projectile_count: 5
-    fire_interval: 0.5
+    projectile_speed: 9
+    projectile_size: 0.5
+    projectile_count: 6
+    fire_interval: 0.2
     life_time: 3
     pierce_type: 1
     follow: 0
@@ -2416,7 +2416,7 @@ MonoBehaviour:
     cast_time: 0
     cooldown: 0
     damage_multiply: 2
-    detect_range: 2
+    detect_range: 30
     move_time: 0
     zigzag_width: 0
     jump_height: 0
@@ -2424,11 +2424,11 @@ MonoBehaviour:
     escape_target: 0
     rush_speed: 0
     projectile_type: 0
-    projectile_speed: 0.8
-    projectile_size: 0.2
-    projectile_count: 5
-    fire_interval: 0.5
-    life_time: 2
+    projectile_speed: 8
+    projectile_size: 0.5
+    projectile_count: 6
+    fire_interval: 0.6
+    life_time: 3
     pierce_type: 2
     follow: 0
     arc_height: 0
@@ -2462,7 +2462,7 @@ MonoBehaviour:
     cast_time: 0
     cooldown: 0
     damage_multiply: 2
-    detect_range: 2.5
+    detect_range: 30
     move_time: 0
     zigzag_width: 0
     jump_height: 0
@@ -2470,11 +2470,11 @@ MonoBehaviour:
     escape_target: 0
     rush_speed: 0
     projectile_type: 0
-    projectile_speed: 0.8
-    projectile_size: 0.2
+    projectile_speed: 8
+    projectile_size: 1
     projectile_count: 1
-    fire_interval: 10
-    life_time: 5
+    fire_interval: 6
+    life_time: 6
     pierce_type: 1
     follow: 1
     arc_height: 0
@@ -2507,8 +2507,8 @@ MonoBehaviour:
     duration: 0
     cast_time: 0
     cooldown: 0
-    damage_multiply: 2
-    detect_range: 2.5
+    damage_multiply: 3
+    detect_range: 30
     move_time: 0
     zigzag_width: 0
     jump_height: 0
@@ -2516,11 +2516,11 @@ MonoBehaviour:
     escape_target: 0
     rush_speed: 0
     projectile_type: 0
-    projectile_speed: 0.8
-    projectile_size: 0.2
+    projectile_speed: 9
+    projectile_size: 1
     projectile_count: 1
-    fire_interval: 10
-    life_time: 5
+    fire_interval: 6
+    life_time: 4
     pierce_type: 1
     follow: 1
     arc_height: 0
@@ -2553,8 +2553,8 @@ MonoBehaviour:
     duration: 0
     cast_time: 0
     cooldown: 0
-    damage_multiply: 2
-    detect_range: 2
+    damage_multiply: 4
+    detect_range: 30
     move_time: 0
     zigzag_width: 0
     jump_height: 0
@@ -2562,14 +2562,14 @@ MonoBehaviour:
     escape_target: 0
     rush_speed: 0
     projectile_type: 1
-    projectile_speed: 0.8
-    projectile_size: 0.4
+    projectile_speed: 8
+    projectile_size: 0.8
     projectile_count: 2
-    fire_interval: 0.8
-    life_time: 7
+    fire_interval: 0.9
+    life_time: 8
     pierce_type: 1
     follow: 0
-    arc_height: 2
+    arc_height: 3
     projectile_radius: 0
     area_radius: 0
     area_damage_interval: 0
@@ -2596,10 +2596,10 @@ MonoBehaviour:
     pattern_logic_type: explode_self
     stat_target: 2
     stat_value: 1.5
-    duration: 3
+    duration: 5
     cast_time: 0
     cooldown: 0
-    damage_multiply: 2
+    damage_multiply: 3
     detect_range: 0
     move_time: 0
     zigzag_width: 0
@@ -2620,7 +2620,7 @@ MonoBehaviour:
     area_radius: 0
     area_damage_interval: 0
     area_target_type: 0
-    explode_range: 0.5
+    explode_range: 3
     summon_monster_id: 0
     summon_count: 0
     summon_radius: 0
@@ -2645,8 +2645,8 @@ MonoBehaviour:
     duration: 0
     cast_time: 0
     cooldown: 0
-    damage_multiply: 2
-    detect_range: 2.5
+    damage_multiply: 1.5
+    detect_range: 30
     move_time: 0
     zigzag_width: 0
     jump_height: 0
@@ -2654,13 +2654,13 @@ MonoBehaviour:
     escape_target: 0
     rush_speed: 0
     projectile_type: 0
-    projectile_speed: 0.8
-    projectile_size: 0.2
-    projectile_count: 2
-    fire_interval: 10
-    life_time: 5
+    projectile_speed: 6
+    projectile_size: 1
+    projectile_count: 1
+    fire_interval: 0
+    life_time: 8
     pierce_type: 1
-    follow: 0
+    follow: 1
     arc_height: 0
     projectile_radius: 0
     area_radius: 0
@@ -2691,8 +2691,8 @@ MonoBehaviour:
     duration: 0
     cast_time: 0
     cooldown: 0
-    damage_multiply: 2
-    detect_range: 2.5
+    damage_multiply: 1.5
+    detect_range: 30
     move_time: 0
     zigzag_width: 0
     jump_height: 0
@@ -2700,13 +2700,13 @@ MonoBehaviour:
     escape_target: 0
     rush_speed: 0
     projectile_type: 0
-    projectile_speed: 0.8
-    projectile_size: 0.2
-    projectile_count: 2
-    fire_interval: 10
-    life_time: 5
+    projectile_speed: 6
+    projectile_size: 1
+    projectile_count: 1
+    fire_interval: 0
+    life_time: 8
     pierce_type: 1
-    follow: 0
+    follow: 1
     arc_height: 0
     projectile_radius: 0
     area_radius: 0
@@ -2737,8 +2737,8 @@ MonoBehaviour:
     duration: 0
     cast_time: 0
     cooldown: 0
-    damage_multiply: 2
-    detect_range: 2.5
+    damage_multiply: 1.5
+    detect_range: 30
     move_time: 0
     zigzag_width: 0
     jump_height: 0
@@ -2746,13 +2746,13 @@ MonoBehaviour:
     escape_target: 0
     rush_speed: 0
     projectile_type: 0
-    projectile_speed: 0.8
-    projectile_size: 0.2
+    projectile_speed: 6
+    projectile_size: 1
     projectile_count: 2
-    fire_interval: 10
-    life_time: 5
+    fire_interval: 5
+    life_time: 8
     pierce_type: 1
-    follow: 0
+    follow: 1
     arc_height: 0
     projectile_radius: 0
     area_radius: 0
@@ -2793,8 +2793,8 @@ MonoBehaviour:
     rush_speed: 0
     projectile_type: 0
     projectile_speed: 0
-    projectile_size: 0.8
-    projectile_count: 8
+    projectile_size: 1.8
+    projectile_count: 4
     fire_interval: 0
     life_time: 0
     pierce_type: 0
@@ -2810,9 +2810,9 @@ MonoBehaviour:
     summon_radius: 0
     summon_position_type: 0
     debuff_type: 0
-    debuff_duration: 0
-    debuff_value: 0
-    debuff_damage_interval: 0
+    debuff_duration: 5
+    debuff_value: 5
+    debuff_damage_interval: 0.2
     barrier_target_type: 0
     barrier_shape: 0
     barrier_size_x: 0
@@ -2829,8 +2829,8 @@ MonoBehaviour:
     duration: 0
     cast_time: 0
     cooldown: 0
-    damage_multiply: 2
-    detect_range: 2.5
+    damage_multiply: 1.5
+    detect_range: 30
     move_time: 0
     zigzag_width: 0
     jump_height: 0
@@ -2838,13 +2838,13 @@ MonoBehaviour:
     escape_target: 0
     rush_speed: 0
     projectile_type: 0
-    projectile_speed: 0.8
-    projectile_size: 0.2
+    projectile_speed: 6
+    projectile_size: 1
     projectile_count: 2
-    fire_interval: 10
-    life_time: 5
+    fire_interval: 5
+    life_time: 8
     pierce_type: 1
-    follow: 0
+    follow: 1
     arc_height: 0
     projectile_radius: 0
     area_radius: 0
@@ -2885,8 +2885,8 @@ MonoBehaviour:
     rush_speed: 0
     projectile_type: 0
     projectile_speed: 0
-    projectile_size: 0.8
-    projectile_count: 8
+    projectile_size: 1.8
+    projectile_count: 4
     fire_interval: 0
     life_time: 0
     pierce_type: 0
@@ -2902,9 +2902,9 @@ MonoBehaviour:
     summon_radius: 0
     summon_position_type: 0
     debuff_type: 0
-    debuff_duration: 0
-    debuff_value: 0
-    debuff_damage_interval: 0
+    debuff_duration: 5
+    debuff_value: 5
+    debuff_damage_interval: 0.2
     barrier_target_type: 0
     barrier_shape: 0
     barrier_size_x: 0
@@ -2922,7 +2922,7 @@ MonoBehaviour:
     cast_time: 0
     cooldown: 0
     damage_multiply: 2
-    detect_range: 2.5
+    detect_range: 30
     move_time: 0
     zigzag_width: 0
     jump_height: 0
@@ -2930,11 +2930,11 @@ MonoBehaviour:
     escape_target: 0
     rush_speed: 0
     projectile_type: 0
-    projectile_speed: 0.8
-    projectile_size: 0.2
-    projectile_count: 2
-    fire_interval: 10
-    life_time: 5
+    projectile_speed: 7
+    projectile_size: 1
+    projectile_count: 3
+    fire_interval: 5
+    life_time: 8
     pierce_type: 1
     follow: 1
     arc_height: 0
@@ -2977,8 +2977,8 @@ MonoBehaviour:
     rush_speed: 0
     projectile_type: 0
     projectile_speed: 0
-    projectile_size: 0.8
-    projectile_count: 8
+    projectile_size: 1.8
+    projectile_count: 4
     fire_interval: 0
     life_time: 0
     pierce_type: 0
@@ -2995,7 +2995,7 @@ MonoBehaviour:
     summon_position_type: 0
     debuff_type: 0
     debuff_duration: 5
-    debuff_value: 10
+    debuff_value: 5
     debuff_damage_interval: 0.2
     barrier_target_type: 0
     barrier_shape: 0
@@ -3011,7 +3011,7 @@ MonoBehaviour:
     stat_target: 0
     stat_value: 0
     duration: 5
-    cast_time: 8
+    cast_time: 5
     cooldown: 0
     damage_multiply: 2
     detect_range: 0
@@ -3023,7 +3023,7 @@ MonoBehaviour:
     rush_speed: 0
     projectile_type: 0
     projectile_speed: 0
-    projectile_size: 0.5
+    projectile_size: 2
     projectile_count: 6
     fire_interval: 0
     life_time: 0
@@ -3033,7 +3033,7 @@ MonoBehaviour:
     projectile_radius: 0
     area_radius: 0
     area_damage_interval: 0.2
-    area_target_type: 0
+    area_target_type: 1
     explode_range: 0
     summon_monster_id: 0
     summon_count: 0
@@ -3060,7 +3060,7 @@ MonoBehaviour:
     cast_time: 0
     cooldown: 0
     damage_multiply: 2
-    detect_range: 2.5
+    detect_range: 30
     move_time: 0
     zigzag_width: 0
     jump_height: 0
@@ -3068,11 +3068,11 @@ MonoBehaviour:
     escape_target: 0
     rush_speed: 0
     projectile_type: 0
-    projectile_speed: 0.8
-    projectile_size: 0.2
-    projectile_count: 2
-    fire_interval: 10
-    life_time: 5
+    projectile_speed: 7
+    projectile_size: 1
+    projectile_count: 3
+    fire_interval: 5
+    life_time: 10
     pierce_type: 1
     follow: 1
     arc_height: 0
@@ -3105,7 +3105,7 @@ MonoBehaviour:
     duration: 3
     cast_time: 3
     cooldown: 0
-    damage_multiply: 1.5
+    damage_multiply: 2
     detect_range: 0
     move_time: 0
     zigzag_width: 0
@@ -3115,8 +3115,8 @@ MonoBehaviour:
     rush_speed: 0
     projectile_type: 0
     projectile_speed: 0
-    projectile_size: 0.8
-    projectile_count: 8
+    projectile_size: 1.8
+    projectile_count: 6
     fire_interval: 0
     life_time: 0
     pierce_type: 0
@@ -3149,7 +3149,7 @@ MonoBehaviour:
     stat_target: 0
     stat_value: 0
     duration: 5
-    cast_time: 8
+    cast_time: 5
     cooldown: 0
     damage_multiply: 2
     detect_range: 0
@@ -3161,7 +3161,7 @@ MonoBehaviour:
     rush_speed: 0
     projectile_type: 0
     projectile_speed: 0
-    projectile_size: 0.5
+    projectile_size: 2
     projectile_count: 6
     fire_interval: 0
     life_time: 0
@@ -3171,7 +3171,7 @@ MonoBehaviour:
     projectile_radius: 0
     area_radius: 0
     area_damage_interval: 0.2
-    area_target_type: 0
+    area_target_type: 1
     explode_range: 0
     summon_monster_id: 0
     summon_count: 0
@@ -3198,7 +3198,7 @@ MonoBehaviour:
     cast_time: 0
     cooldown: 0
     damage_multiply: 2
-    detect_range: 2.5
+    detect_range: 30
     move_time: 0
     zigzag_width: 0
     jump_height: 0
@@ -3206,11 +3206,11 @@ MonoBehaviour:
     escape_target: 0
     rush_speed: 0
     projectile_type: 0
-    projectile_speed: 0.8
-    projectile_size: 0.2
-    projectile_count: 2
-    fire_interval: 10
-    life_time: 5
+    projectile_speed: 7
+    projectile_size: 1
+    projectile_count: 3
+    fire_interval: 5
+    life_time: 10
     pierce_type: 1
     follow: 1
     arc_height: 0
@@ -3240,10 +3240,10 @@ MonoBehaviour:
     pattern_logic_type: laser_dot
     stat_target: 0
     stat_value: 0
-    duration: 3
+    duration: 5
     cast_time: 3
     cooldown: 0
-    damage_multiply: 1.5
+    damage_multiply: 2
     detect_range: 0
     move_time: 0
     zigzag_width: 0
@@ -3253,7 +3253,7 @@ MonoBehaviour:
     rush_speed: 0
     projectile_type: 0
     projectile_speed: 0
-    projectile_size: 0.8
+    projectile_size: 1.8
     projectile_count: 6
     fire_interval: 0
     life_time: 0
@@ -3287,7 +3287,7 @@ MonoBehaviour:
     stat_target: 0
     stat_value: 0
     duration: 5
-    cast_time: 8
+    cast_time: 5
     cooldown: 0
     damage_multiply: 2
     detect_range: 0
@@ -3299,7 +3299,7 @@ MonoBehaviour:
     rush_speed: 0
     projectile_type: 0
     projectile_speed: 0
-    projectile_size: 0.5
+    projectile_size: 2
     projectile_count: 7
     fire_interval: 0
     life_time: 0
@@ -3309,7 +3309,7 @@ MonoBehaviour:
     projectile_radius: 0
     area_radius: 0
     area_damage_interval: 0.2
-    area_target_type: 0
+    area_target_type: 1
     explode_range: 0
     summon_monster_id: 0
     summon_count: 0
@@ -3335,8 +3335,8 @@ MonoBehaviour:
     duration: 0
     cast_time: 0
     cooldown: 0
-    damage_multiply: 2
-    detect_range: 2.5
+    damage_multiply: 3
+    detect_range: 30
     move_time: 0
     zigzag_width: 0
     jump_height: 0
@@ -3344,11 +3344,11 @@ MonoBehaviour:
     escape_target: 0
     rush_speed: 0
     projectile_type: 0
-    projectile_speed: 0.8
-    projectile_size: 0.2
-    projectile_count: 2
-    fire_interval: 10
-    life_time: 5
+    projectile_speed: 8
+    projectile_size: 1
+    projectile_count: 4
+    fire_interval: 5
+    life_time: 10
     pierce_type: 1
     follow: 1
     arc_height: 0
@@ -3378,10 +3378,10 @@ MonoBehaviour:
     pattern_logic_type: laser_dot
     stat_target: 0
     stat_value: 0
-    duration: 3
+    duration: 5
     cast_time: 3
     cooldown: 0
-    damage_multiply: 1.5
+    damage_multiply: 2
     detect_range: 0
     move_time: 0
     zigzag_width: 0
@@ -3391,7 +3391,7 @@ MonoBehaviour:
     rush_speed: 0
     projectile_type: 0
     projectile_speed: 0
-    projectile_size: 0.8
+    projectile_size: 1.8
     projectile_count: 6
     fire_interval: 0
     life_time: 0
@@ -3409,7 +3409,7 @@ MonoBehaviour:
     summon_position_type: 0
     debuff_type: 0
     debuff_duration: 5
-    debuff_value: 10
+    debuff_value: 15
     debuff_damage_interval: 0.2
     barrier_target_type: 0
     barrier_shape: 0
@@ -3424,8 +3424,8 @@ MonoBehaviour:
     pattern_logic_type: area_danger
     stat_target: 0
     stat_value: 0
-    duration: 5
-    cast_time: 8
+    duration: 10
+    cast_time: 5
     cooldown: 0
     damage_multiply: 2
     detect_range: 0
@@ -3437,8 +3437,8 @@ MonoBehaviour:
     rush_speed: 0
     projectile_type: 0
     projectile_speed: 0
-    projectile_size: 0.5
-    projectile_count: 7
+    projectile_size: 3
+    projectile_count: 8
     fire_interval: 0
     life_time: 0
     pierce_type: 0
@@ -3447,7 +3447,7 @@ MonoBehaviour:
     projectile_radius: 0
     area_radius: 0
     area_damage_interval: 0.2
-    area_target_type: 0
+    area_target_type: 1
     explode_range: 0
     summon_monster_id: 0
     summon_count: 0
@@ -3470,7 +3470,7 @@ MonoBehaviour:
     pattern_logic_type: trigger_dirty_spawn
     stat_target: 0
     stat_value: 0
-    duration: 20
+    duration: 15
     cast_time: 4
     cooldown: 0
     damage_multiply: 0
@@ -3496,8 +3496,8 @@ MonoBehaviour:
     area_target_type: 0
     explode_range: 0
     summon_monster_id: 0
-    summon_count: 5
-    summon_radius: 3
+    summon_count: 10
+    summon_radius: 10
     summon_position_type: 0
     debuff_type: 0
     debuff_duration: 0
@@ -3519,8 +3519,8 @@ MonoBehaviour:
     duration: 0
     cast_time: 0
     cooldown: 0
-    damage_multiply: 2
-    detect_range: 2.5
+    damage_multiply: 3
+    detect_range: 30
     move_time: 0
     zigzag_width: 0
     jump_height: 0
@@ -3528,11 +3528,11 @@ MonoBehaviour:
     escape_target: 0
     rush_speed: 0
     projectile_type: 0
-    projectile_speed: 0.8
-    projectile_size: 0.2
-    projectile_count: 2
-    fire_interval: 10
-    life_time: 5
+    projectile_speed: 8
+    projectile_size: 1
+    projectile_count: 4
+    fire_interval: 5
+    life_time: 10
     pierce_type: 1
     follow: 1
     arc_height: 0
@@ -3562,10 +3562,10 @@ MonoBehaviour:
     pattern_logic_type: laser_dot
     stat_target: 0
     stat_value: 0
-    duration: 3
+    duration: 5
     cast_time: 3
     cooldown: 0
-    damage_multiply: 1.5
+    damage_multiply: 3
     detect_range: 0
     move_time: 0
     zigzag_width: 0
@@ -3575,8 +3575,8 @@ MonoBehaviour:
     rush_speed: 0
     projectile_type: 0
     projectile_speed: 0
-    projectile_size: 0.8
-    projectile_count: 4
+    projectile_size: 1.5
+    projectile_count: 8
     fire_interval: 0
     life_time: 0
     pierce_type: 0
@@ -3593,7 +3593,7 @@ MonoBehaviour:
     summon_position_type: 0
     debuff_type: 0
     debuff_duration: 5
-    debuff_value: 10
+    debuff_value: 15
     debuff_damage_interval: 0.2
     barrier_target_type: 0
     barrier_shape: 0
@@ -3608,8 +3608,8 @@ MonoBehaviour:
     pattern_logic_type: area_danger
     stat_target: 0
     stat_value: 0
-    duration: 5
-    cast_time: 8
+    duration: 10
+    cast_time: 5
     cooldown: 0
     damage_multiply: 2
     detect_range: 0
@@ -3621,7 +3621,7 @@ MonoBehaviour:
     rush_speed: 0
     projectile_type: 0
     projectile_speed: 0
-    projectile_size: 0.5
+    projectile_size: 3
     projectile_count: 8
     fire_interval: 0
     life_time: 0
@@ -3631,7 +3631,7 @@ MonoBehaviour:
     projectile_radius: 0
     area_radius: 0
     area_damage_interval: 0.2
-    area_target_type: 0
+    area_target_type: 1
     explode_range: 0
     summon_monster_id: 0
     summon_count: 0
@@ -3654,7 +3654,7 @@ MonoBehaviour:
     pattern_logic_type: trigger_dirty_spawn
     stat_target: 0
     stat_value: 0
-    duration: 20
+    duration: 15
     cast_time: 4
     cooldown: 0
     damage_multiply: 0
@@ -3680,8 +3680,8 @@ MonoBehaviour:
     area_target_type: 0
     explode_range: 0
     summon_monster_id: 0
-    summon_count: 6
-    summon_radius: 3
+    summon_count: 10
+    summon_radius: 10
     summon_position_type: 0
     debuff_type: 0
     debuff_duration: 0
@@ -3703,8 +3703,8 @@ MonoBehaviour:
     duration: 0
     cast_time: 0
     cooldown: 0
-    damage_multiply: 2
-    detect_range: 2.5
+    damage_multiply: 3
+    detect_range: 30
     move_time: 0
     zigzag_width: 0
     jump_height: 0
@@ -3712,11 +3712,11 @@ MonoBehaviour:
     escape_target: 0
     rush_speed: 0
     projectile_type: 0
-    projectile_speed: 0.8
-    projectile_size: 0.2
-    projectile_count: 2
-    fire_interval: 10
-    life_time: 5
+    projectile_speed: 8
+    projectile_size: 1
+    projectile_count: 5
+    fire_interval: 5
+    life_time: 10
     pierce_type: 1
     follow: 1
     arc_height: 0
@@ -3746,10 +3746,10 @@ MonoBehaviour:
     pattern_logic_type: laser_dot
     stat_target: 0
     stat_value: 0
-    duration: 3
+    duration: 5
     cast_time: 3
     cooldown: 0
-    damage_multiply: 1.5
+    damage_multiply: 3
     detect_range: 0
     move_time: 0
     zigzag_width: 0
@@ -3759,8 +3759,8 @@ MonoBehaviour:
     rush_speed: 0
     projectile_type: 0
     projectile_speed: 0
-    projectile_size: 0.8
-    projectile_count: 4
+    projectile_size: 1.5
+    projectile_count: 8
     fire_interval: 0
     life_time: 0
     pierce_type: 0
@@ -3777,7 +3777,7 @@ MonoBehaviour:
     summon_position_type: 0
     debuff_type: 0
     debuff_duration: 5
-    debuff_value: 10
+    debuff_value: 15
     debuff_damage_interval: 0.2
     barrier_target_type: 0
     barrier_shape: 0
@@ -3792,8 +3792,8 @@ MonoBehaviour:
     pattern_logic_type: area_danger
     stat_target: 0
     stat_value: 0
-    duration: 5
-    cast_time: 8
+    duration: 10
+    cast_time: 5
     cooldown: 0
     damage_multiply: 2
     detect_range: 0
@@ -3805,8 +3805,8 @@ MonoBehaviour:
     rush_speed: 0
     projectile_type: 0
     projectile_speed: 0
-    projectile_size: 0.5
-    projectile_count: 8
+    projectile_size: 3
+    projectile_count: 9
     fire_interval: 0
     life_time: 0
     pierce_type: 0
@@ -3815,7 +3815,7 @@ MonoBehaviour:
     projectile_radius: 0
     area_radius: 0
     area_damage_interval: 0.2
-    area_target_type: 0
+    area_target_type: 1
     explode_range: 0
     summon_monster_id: 0
     summon_count: 0
@@ -3838,7 +3838,7 @@ MonoBehaviour:
     pattern_logic_type: trigger_dirty_spawn
     stat_target: 0
     stat_value: 0
-    duration: 20
+    duration: 15
     cast_time: 4
     cooldown: 0
     damage_multiply: 0
@@ -3864,8 +3864,8 @@ MonoBehaviour:
     area_target_type: 0
     explode_range: 0
     summon_monster_id: 0
-    summon_count: 7
-    summon_radius: 3
+    summon_count: 10
+    summon_radius: 10
     summon_position_type: 0
     debuff_type: 0
     debuff_duration: 0
@@ -3883,14 +3883,14 @@ MonoBehaviour:
     pattern_type: 1
     pattern_logic_type: move_zigzag
     stat_target: 2
-    stat_value: 0.8
+    stat_value: 3
     duration: 0
     cast_time: 0
     cooldown: 0
     damage_multiply: 0
     detect_range: 0
     move_time: 0
-    zigzag_width: 0.5
+    zigzag_width: 2
     jump_height: 0
     chase_time: 0
     escape_target: 0
@@ -3929,14 +3929,14 @@ MonoBehaviour:
     pattern_type: 1
     pattern_logic_type: move_zigzag
     stat_target: 2
-    stat_value: 0.8
+    stat_value: 2
     duration: 0
     cast_time: 0
     cooldown: 0
     damage_multiply: 0
     detect_range: 0
     move_time: 0
-    zigzag_width: 0.5
+    zigzag_width: 4
     jump_height: 0
     chase_time: 0
     escape_target: 0
@@ -3975,15 +3975,15 @@ MonoBehaviour:
     pattern_type: 1
     pattern_logic_type: move_jump
     stat_target: 2
-    stat_value: 1.5
+    stat_value: 8
     duration: 0
-    cast_time: 3
+    cast_time: 2
     cooldown: 0
     damage_multiply: 2
-    detect_range: 2
+    detect_range: 10
     move_time: 0
     zigzag_width: 0
-    jump_height: 2
+    jump_height: 3
     chase_time: 0
     escape_target: 0
     rush_speed: 0
@@ -4021,12 +4021,12 @@ MonoBehaviour:
     pattern_type: 1
     pattern_logic_type: move_jump
     stat_target: 2
-    stat_value: 1.5
+    stat_value: 6
     duration: 0
-    cast_time: 3
+    cast_time: 2
     cooldown: 0
     damage_multiply: 2
-    detect_range: 2
+    detect_range: 8
     move_time: 0
     zigzag_width: 0
     jump_height: 2
@@ -4067,12 +4067,12 @@ MonoBehaviour:
     pattern_type: 1
     pattern_logic_type: move_jump
     stat_target: 2
-    stat_value: 1.5
+    stat_value: 6
     duration: 0
-    cast_time: 3
+    cast_time: 2
     cooldown: 0
     damage_multiply: 2
-    detect_range: 2
+    detect_range: 8
     move_time: 0
     zigzag_width: 0
     jump_height: 2
@@ -4113,13 +4113,13 @@ MonoBehaviour:
     pattern_type: 1
     pattern_logic_type: move_escape
     stat_target: 2
-    stat_value: 1.5
+    stat_value: 2.5
     duration: 0
-    cast_time: 3
+    cast_time: 2
     cooldown: 0
     damage_multiply: 0
-    detect_range: 4
-    move_time: 8
+    detect_range: 3
+    move_time: 6
     zigzag_width: 0
     jump_height: 0
     chase_time: 0
@@ -4164,7 +4164,7 @@ MonoBehaviour:
     cast_time: 0
     cooldown: 0
     damage_multiply: 1.2
-    detect_range: 1.5
+    detect_range: 30
     move_time: 0
     zigzag_width: 0
     jump_height: 0
@@ -4172,9 +4172,9 @@ MonoBehaviour:
     escape_target: 0
     rush_speed: 0
     projectile_type: 0
-    projectile_speed: 1.5
-    projectile_size: 0.1
-    projectile_count: 5
+    projectile_speed: 10
+    projectile_size: 0.5
+    projectile_count: 7
     fire_interval: 0.2
     life_time: 2
     pierce_type: 0
@@ -4209,8 +4209,8 @@ MonoBehaviour:
     duration: 0
     cast_time: 0
     cooldown: 0
-    damage_multiply: 1.2
-    detect_range: 1.5
+    damage_multiply: 1.5
+    detect_range: 30
     move_time: 0
     zigzag_width: 0
     jump_height: 0
@@ -4218,11 +4218,11 @@ MonoBehaviour:
     escape_target: 0
     rush_speed: 0
     projectile_type: 0
-    projectile_speed: 1.5
-    projectile_size: 0.1
-    projectile_count: 6
-    fire_interval: 0.2
-    life_time: 2
+    projectile_speed: 10
+    projectile_size: 0.5
+    projectile_count: 4
+    fire_interval: 0.4
+    life_time: 3
     pierce_type: 0
     follow: 0
     arc_height: 0
@@ -4256,7 +4256,7 @@ MonoBehaviour:
     cast_time: 0
     cooldown: 0
     damage_multiply: 2
-    detect_range: 2
+    detect_range: 30
     move_time: 0
     zigzag_width: 0
     jump_height: 0
@@ -4264,10 +4264,10 @@ MonoBehaviour:
     escape_target: 0
     rush_speed: 0
     projectile_type: 0
-    projectile_speed: 1.2
-    projectile_size: 0.2
-    projectile_count: 5
-    fire_interval: 0.5
+    projectile_speed: 10
+    projectile_size: 0.5
+    projectile_count: 7
+    fire_interval: 0.2
     life_time: 3
     pierce_type: 1
     follow: 0
@@ -4302,7 +4302,7 @@ MonoBehaviour:
     cast_time: 0
     cooldown: 0
     damage_multiply: 2
-    detect_range: 2
+    detect_range: 30
     move_time: 0
     zigzag_width: 0
     jump_height: 0
@@ -4310,10 +4310,10 @@ MonoBehaviour:
     escape_target: 0
     rush_speed: 0
     projectile_type: 0
-    projectile_speed: 1.2
-    projectile_size: 0.2
-    projectile_count: 5
-    fire_interval: 0.5
+    projectile_speed: 10
+    projectile_size: 0.5
+    projectile_count: 7
+    fire_interval: 0.2
     life_time: 3
     pierce_type: 1
     follow: 0
@@ -4347,8 +4347,8 @@ MonoBehaviour:
     duration: 0
     cast_time: 0
     cooldown: 0
-    damage_multiply: 2
-    detect_range: 2
+    damage_multiply: 2.5
+    detect_range: 30
     move_time: 0
     zigzag_width: 0
     jump_height: 0
@@ -4356,11 +4356,11 @@ MonoBehaviour:
     escape_target: 0
     rush_speed: 0
     projectile_type: 0
-    projectile_speed: 0.8
-    projectile_size: 0.2
-    projectile_count: 5
-    fire_interval: 0.5
-    life_time: 2
+    projectile_speed: 8
+    projectile_size: 0.5
+    projectile_count: 8
+    fire_interval: 0.4
+    life_time: 4
     pierce_type: 2
     follow: 0
     arc_height: 0
@@ -4394,7 +4394,7 @@ MonoBehaviour:
     cast_time: 0
     cooldown: 0
     damage_multiply: 2
-    detect_range: 2.5
+    detect_range: 30
     move_time: 0
     zigzag_width: 0
     jump_height: 0
@@ -4402,11 +4402,11 @@ MonoBehaviour:
     escape_target: 0
     rush_speed: 0
     projectile_type: 0
-    projectile_speed: 0.8
-    projectile_size: 0.2
+    projectile_speed: 7
+    projectile_size: 1
     projectile_count: 1
-    fire_interval: 10
-    life_time: 5
+    fire_interval: 5
+    life_time: 8
     pierce_type: 1
     follow: 1
     arc_height: 0
@@ -4439,8 +4439,8 @@ MonoBehaviour:
     duration: 0
     cast_time: 0
     cooldown: 0
-    damage_multiply: 2
-    detect_range: 2.5
+    damage_multiply: 4
+    detect_range: 30
     move_time: 0
     zigzag_width: 0
     jump_height: 0
@@ -4448,10 +4448,10 @@ MonoBehaviour:
     escape_target: 0
     rush_speed: 0
     projectile_type: 0
-    projectile_speed: 0.8
-    projectile_size: 0.2
+    projectile_speed: 9
+    projectile_size: 1
     projectile_count: 1
-    fire_interval: 10
+    fire_interval: 5
     life_time: 5
     pierce_type: 1
     follow: 1
@@ -4485,8 +4485,8 @@ MonoBehaviour:
     duration: 0
     cast_time: 0
     cooldown: 0
-    damage_multiply: 2
-    detect_range: 2
+    damage_multiply: 5
+    detect_range: 30
     move_time: 0
     zigzag_width: 0
     jump_height: 0
@@ -4494,14 +4494,14 @@ MonoBehaviour:
     escape_target: 0
     rush_speed: 0
     projectile_type: 1
-    projectile_speed: 0.8
-    projectile_size: 0.4
-    projectile_count: 2
-    fire_interval: 0.8
+    projectile_speed: 8
+    projectile_size: 0.8
+    projectile_count: 4
+    fire_interval: 0.7
     life_time: 7
     pierce_type: 1
     follow: 0
-    arc_height: 2
+    arc_height: 3
     projectile_radius: 0
     area_radius: 0
     area_damage_interval: 0
@@ -4527,11 +4527,11 @@ MonoBehaviour:
     pattern_type: 6
     pattern_logic_type: explode_self
     stat_target: 2
-    stat_value: 1.5
-    duration: 3
+    stat_value: 1.2
+    duration: 10
     cast_time: 0
     cooldown: 0
-    damage_multiply: 2
+    damage_multiply: 4
     detect_range: 0
     move_time: 0
     zigzag_width: 0
@@ -4552,7 +4552,7 @@ MonoBehaviour:
     area_radius: 0
     area_damage_interval: 0
     area_target_type: 0
-    explode_range: 0.5
+    explode_range: 5
     summon_monster_id: 0
     summon_count: 0
     summon_radius: 0
@@ -4578,7 +4578,7 @@ MonoBehaviour:
     cast_time: 0
     cooldown: 0
     damage_multiply: 2
-    detect_range: 2
+    detect_range: 30
     move_time: 0
     zigzag_width: 0
     jump_height: 0
@@ -4586,11 +4586,11 @@ MonoBehaviour:
     escape_target: 0
     rush_speed: 0
     projectile_type: 0
-    projectile_speed: 0.8
-    projectile_size: 0.2
-    projectile_count: 5
+    projectile_speed: 7
+    projectile_size: 0.5
+    projectile_count: 2
     fire_interval: 0.5
-    life_time: 2
+    life_time: 3
     pierce_type: 2
     follow: 0
     arc_height: 0
@@ -4624,7 +4624,7 @@ MonoBehaviour:
     cast_time: 0
     cooldown: 0
     damage_multiply: 2
-    detect_range: 2
+    detect_range: 30
     move_time: 0
     zigzag_width: 0
     jump_height: 0
@@ -4632,11 +4632,11 @@ MonoBehaviour:
     escape_target: 0
     rush_speed: 0
     projectile_type: 0
-    projectile_speed: 0.8
-    projectile_size: 0.2
-    projectile_count: 5
+    projectile_speed: 7
+    projectile_size: 0.5
+    projectile_count: 2
     fire_interval: 0.5
-    life_time: 2
+    life_time: 3
     pierce_type: 2
     follow: 0
     arc_height: 0
@@ -4665,12 +4665,12 @@ MonoBehaviour:
     pattern_type: 1
     pattern_logic_type: move_blink
     stat_target: 2
-    stat_value: 2
+    stat_value: 6
     duration: 0
-    cast_time: 3
+    cast_time: 2
     cooldown: 0
     damage_multiply: 0
-    detect_range: 2.5
+    detect_range: 5
     move_time: 0
     zigzag_width: 0
     jump_height: 0
@@ -4716,7 +4716,7 @@ MonoBehaviour:
     cast_time: 0
     cooldown: 0
     damage_multiply: 2
-    detect_range: 2
+    detect_range: 30
     move_time: 0
     zigzag_width: 0
     jump_height: 0
@@ -4724,11 +4724,11 @@ MonoBehaviour:
     escape_target: 0
     rush_speed: 0
     projectile_type: 0
-    projectile_speed: 0.8
-    projectile_size: 0.2
-    projectile_count: 5
+    projectile_speed: 7
+    projectile_size: 0.5
+    projectile_count: 3
     fire_interval: 0.5
-    life_time: 2
+    life_time: 3
     pierce_type: 2
     follow: 0
     arc_height: 0
@@ -4757,12 +4757,12 @@ MonoBehaviour:
     pattern_type: 1
     pattern_logic_type: move_blink
     stat_target: 2
-    stat_value: 2
+    stat_value: 6
     duration: 0
-    cast_time: 3
+    cast_time: 2
     cooldown: 0
     damage_multiply: 0
-    detect_range: 2.5
+    detect_range: 5
     move_time: 0
     zigzag_width: 0
     jump_height: 0
@@ -4808,7 +4808,7 @@ MonoBehaviour:
     cast_time: 0
     cooldown: 0
     damage_multiply: 2
-    detect_range: 2
+    detect_range: 30
     move_time: 0
     zigzag_width: 0
     jump_height: 0
@@ -4816,11 +4816,11 @@ MonoBehaviour:
     escape_target: 0
     rush_speed: 0
     projectile_type: 0
-    projectile_speed: 0.8
-    projectile_size: 0.2
-    projectile_count: 5
+    projectile_speed: 8
+    projectile_size: 0.5
+    projectile_count: 3
     fire_interval: 0.5
-    life_time: 2
+    life_time: 3
     pierce_type: 2
     follow: 0
     arc_height: 0
@@ -4849,12 +4849,12 @@ MonoBehaviour:
     pattern_type: 1
     pattern_logic_type: move_blink
     stat_target: 2
-    stat_value: 2
+    stat_value: 6
     duration: 0
-    cast_time: 3
+    cast_time: 2
     cooldown: 0
     damage_multiply: 0
-    detect_range: 2.5
+    detect_range: 5
     move_time: 0
     zigzag_width: 0
     jump_height: 0
@@ -4900,7 +4900,7 @@ MonoBehaviour:
     cast_time: 0
     cooldown: 0
     damage_multiply: 2
-    detect_range: 2
+    detect_range: 30
     move_time: 0
     zigzag_width: 0
     jump_height: 0
@@ -4908,11 +4908,11 @@ MonoBehaviour:
     escape_target: 0
     rush_speed: 0
     projectile_type: 0
-    projectile_speed: 0.8
-    projectile_size: 0.2
-    projectile_count: 5
+    projectile_speed: 8
+    projectile_size: 0.5
+    projectile_count: 4
     fire_interval: 0.5
-    life_time: 2
+    life_time: 3
     pierce_type: 2
     follow: 0
     arc_height: 0
@@ -4942,11 +4942,11 @@ MonoBehaviour:
     pattern_logic_type: barrier
     stat_target: 0
     stat_value: 0
-    duration: 10
-    cast_time: 3
+    duration: 20
+    cast_time: 5
     cooldown: 0
     damage_multiply: 2
-    detect_range: 1
+    detect_range: 3
     move_time: 0
     zigzag_width: 0
     jump_height: 0
@@ -4975,11 +4975,11 @@ MonoBehaviour:
     debuff_duration: 0
     debuff_value: 0
     debuff_damage_interval: 0
-    barrier_target_type: 3
+    barrier_target_type: 0
     barrier_shape: 0
-    barrier_size_x: 6
-    barrier_size_y: 1
-    barrier_damage: 1
+    barrier_size_x: 8
+    barrier_size_y: 7
+    barrier_damage: 10
     barrier_collision_block: 0
   - pattern_id: 221026
     index: 4_B_06
@@ -4987,12 +4987,12 @@ MonoBehaviour:
     pattern_type: 1
     pattern_logic_type: move_blink
     stat_target: 2
-    stat_value: 2
+    stat_value: 6
     duration: 0
-    cast_time: 3
+    cast_time: 2
     cooldown: 0
     damage_multiply: 0
-    detect_range: 2.5
+    detect_range: 5
     move_time: 0
     zigzag_width: 0
     jump_height: 0
@@ -5038,7 +5038,7 @@ MonoBehaviour:
     cast_time: 0
     cooldown: 0
     damage_multiply: 2
-    detect_range: 2
+    detect_range: 30
     move_time: 0
     zigzag_width: 0
     jump_height: 0
@@ -5046,11 +5046,11 @@ MonoBehaviour:
     escape_target: 0
     rush_speed: 0
     projectile_type: 0
-    projectile_speed: 0.8
-    projectile_size: 0.2
-    projectile_count: 5
+    projectile_speed: 8
+    projectile_size: 0.5
+    projectile_count: 4
     fire_interval: 0.5
-    life_time: 2
+    life_time: 3
     pierce_type: 2
     follow: 0
     arc_height: 0
@@ -5080,8 +5080,8 @@ MonoBehaviour:
     pattern_logic_type: barrier
     stat_target: 0
     stat_value: 0
-    duration: 10
-    cast_time: 3
+    duration: 20
+    cast_time: 5
     cooldown: 0
     damage_multiply: 2
     detect_range: 0
@@ -5113,11 +5113,11 @@ MonoBehaviour:
     debuff_duration: 0
     debuff_value: 0
     debuff_damage_interval: 0
-    barrier_target_type: 1
-    barrier_shape: 1
-    barrier_size_x: 6
-    barrier_size_y: 0
-    barrier_damage: 1
+    barrier_target_type: 0
+    barrier_shape: 0
+    barrier_size_x: 8
+    barrier_size_y: 7
+    barrier_damage: 10
     barrier_collision_block: 0
   - pattern_id: 221027
     index: 4_B_07
@@ -5125,12 +5125,12 @@ MonoBehaviour:
     pattern_type: 1
     pattern_logic_type: move_blink
     stat_target: 2
-    stat_value: 3
+    stat_value: 9
     duration: 0
-    cast_time: 3
+    cast_time: 2
     cooldown: 0
     damage_multiply: 0
-    detect_range: 2.5
+    detect_range: 7
     move_time: 0
     zigzag_width: 0
     jump_height: 0
@@ -5176,7 +5176,7 @@ MonoBehaviour:
     cast_time: 0
     cooldown: 0
     damage_multiply: 2
-    detect_range: 2
+    detect_range: 30
     move_time: 0
     zigzag_width: 0
     jump_height: 0
@@ -5184,11 +5184,11 @@ MonoBehaviour:
     escape_target: 0
     rush_speed: 0
     projectile_type: 0
-    projectile_speed: 0.8
-    projectile_size: 0.2
-    projectile_count: 5
-    fire_interval: 0.5
-    life_time: 2
+    projectile_speed: 8
+    projectile_size: 0.5
+    projectile_count: 4
+    fire_interval: 0.2
+    life_time: 4
     pierce_type: 2
     follow: 0
     arc_height: 0
@@ -5218,8 +5218,8 @@ MonoBehaviour:
     pattern_logic_type: barrier
     stat_target: 0
     stat_value: 0
-    duration: 10
-    cast_time: 3
+    duration: 30
+    cast_time: 5
     cooldown: 0
     damage_multiply: 2
     detect_range: 0
@@ -5251,11 +5251,11 @@ MonoBehaviour:
     debuff_duration: 0
     debuff_value: 0
     debuff_damage_interval: 0
-    barrier_target_type: 1
-    barrier_shape: 1
+    barrier_target_type: 0
+    barrier_shape: 0
     barrier_size_x: 7
-    barrier_size_y: 0
-    barrier_damage: 1
+    barrier_size_y: 7
+    barrier_damage: 30
     barrier_collision_block: 0
   - pattern_id: 221028
     index: 4_B_08
@@ -5263,12 +5263,12 @@ MonoBehaviour:
     pattern_type: 1
     pattern_logic_type: move_blink
     stat_target: 2
-    stat_value: 3
+    stat_value: 9
     duration: 0
-    cast_time: 3
+    cast_time: 2
     cooldown: 0
     damage_multiply: 0
-    detect_range: 2.5
+    detect_range: 7
     move_time: 0
     zigzag_width: 0
     jump_height: 0
@@ -5314,7 +5314,7 @@ MonoBehaviour:
     cast_time: 0
     cooldown: 0
     damage_multiply: 2
-    detect_range: 2
+    detect_range: 30
     move_time: 0
     zigzag_width: 0
     jump_height: 0
@@ -5322,11 +5322,11 @@ MonoBehaviour:
     escape_target: 0
     rush_speed: 0
     projectile_type: 0
-    projectile_speed: 0.8
-    projectile_size: 0.2
+    projectile_speed: 8
+    projectile_size: 0.5
     projectile_count: 5
-    fire_interval: 0.5
-    life_time: 2
+    fire_interval: 0.2
+    life_time: 4
     pierce_type: 2
     follow: 0
     arc_height: 0
@@ -5356,7 +5356,7 @@ MonoBehaviour:
     pattern_logic_type: laser_slow
     stat_target: 0
     stat_value: 0
-    duration: 3
+    duration: 5
     cast_time: 3
     cooldown: 0
     damage_multiply: 1.5
@@ -5370,7 +5370,7 @@ MonoBehaviour:
     projectile_type: 0
     projectile_speed: 0
     projectile_size: 0.8
-    projectile_count: 8
+    projectile_count: 10
     fire_interval: 0
     life_time: 0
     pierce_type: 0
@@ -5402,8 +5402,8 @@ MonoBehaviour:
     pattern_logic_type: barrier
     stat_target: 0
     stat_value: 0
-    duration: 10
-    cast_time: 3
+    duration: 30
+    cast_time: 5
     cooldown: 0
     damage_multiply: 2
     detect_range: 0
@@ -5436,10 +5436,10 @@ MonoBehaviour:
     debuff_value: 0
     debuff_damage_interval: 0
     barrier_target_type: 0
-    barrier_shape: 1
+    barrier_shape: 0
     barrier_size_x: 7
-    barrier_size_y: 0
-    barrier_damage: 1
+    barrier_size_y: 7
+    barrier_damage: 30
     barrier_collision_block: 0
   - pattern_id: 221029
     index: 4_B_09
@@ -5447,12 +5447,12 @@ MonoBehaviour:
     pattern_type: 1
     pattern_logic_type: move_blink
     stat_target: 2
-    stat_value: 3
+    stat_value: 9
     duration: 0
-    cast_time: 3
+    cast_time: 2
     cooldown: 0
     damage_multiply: 0
-    detect_range: 2.5
+    detect_range: 7
     move_time: 0
     zigzag_width: 0
     jump_height: 0
@@ -5498,7 +5498,7 @@ MonoBehaviour:
     cast_time: 0
     cooldown: 0
     damage_multiply: 2
-    detect_range: 2
+    detect_range: 30
     move_time: 0
     zigzag_width: 0
     jump_height: 0
@@ -5506,11 +5506,11 @@ MonoBehaviour:
     escape_target: 0
     rush_speed: 0
     projectile_type: 0
-    projectile_speed: 0.8
-    projectile_size: 0.2
+    projectile_speed: 8
+    projectile_size: 0.5
     projectile_count: 5
-    fire_interval: 0.5
-    life_time: 2
+    fire_interval: 0.2
+    life_time: 4
     pierce_type: 2
     follow: 0
     arc_height: 0
@@ -5540,7 +5540,7 @@ MonoBehaviour:
     pattern_logic_type: laser_slow
     stat_target: 0
     stat_value: 0
-    duration: 3
+    duration: 5
     cast_time: 3
     cooldown: 0
     damage_multiply: 1.5
@@ -5553,7 +5553,7 @@ MonoBehaviour:
     rush_speed: 0
     projectile_type: 0
     projectile_speed: 0
-    projectile_size: 0.8
+    projectile_size: 1
     projectile_count: 8
     fire_interval: 0
     life_time: 0
@@ -5586,8 +5586,8 @@ MonoBehaviour:
     pattern_logic_type: barrier
     stat_target: 0
     stat_value: 0
-    duration: 10
-    cast_time: 3
+    duration: 40
+    cast_time: 5
     cooldown: 0
     damage_multiply: 2
     detect_range: 0
@@ -5620,10 +5620,10 @@ MonoBehaviour:
     debuff_value: 0
     debuff_damage_interval: 0
     barrier_target_type: 0
-    barrier_shape: 1
-    barrier_size_x: 8
-    barrier_size_y: 0
-    barrier_damage: 1
+    barrier_shape: 0
+    barrier_size_x: 6
+    barrier_size_y: 5
+    barrier_damage: 40
     barrier_collision_block: 0
   - pattern_id: 221030
     index: 4_B_10
@@ -5631,12 +5631,12 @@ MonoBehaviour:
     pattern_type: 1
     pattern_logic_type: move_blink
     stat_target: 2
-    stat_value: 3
+    stat_value: 9
     duration: 0
-    cast_time: 3
+    cast_time: 2
     cooldown: 0
     damage_multiply: 0
-    detect_range: 2.5
+    detect_range: 7
     move_time: 0
     zigzag_width: 0
     jump_height: 0
@@ -5682,7 +5682,7 @@ MonoBehaviour:
     cast_time: 0
     cooldown: 0
     damage_multiply: 2
-    detect_range: 2
+    detect_range: 30
     move_time: 0
     zigzag_width: 0
     jump_height: 0
@@ -5690,11 +5690,11 @@ MonoBehaviour:
     escape_target: 0
     rush_speed: 0
     projectile_type: 0
-    projectile_speed: 0.8
-    projectile_size: 0.2
+    projectile_speed: 9
+    projectile_size: 0.5
     projectile_count: 5
-    fire_interval: 0.5
-    life_time: 2
+    fire_interval: 0.2
+    life_time: 5
     pierce_type: 2
     follow: 0
     arc_height: 0
@@ -5724,7 +5724,7 @@ MonoBehaviour:
     pattern_logic_type: laser_slow
     stat_target: 0
     stat_value: 0
-    duration: 3
+    duration: 10
     cast_time: 3
     cooldown: 0
     damage_multiply: 1.5
@@ -5737,7 +5737,7 @@ MonoBehaviour:
     rush_speed: 0
     projectile_type: 0
     projectile_speed: 0
-    projectile_size: 0.8
+    projectile_size: 2
     projectile_count: 6
     fire_interval: 0
     life_time: 0
@@ -5754,7 +5754,7 @@ MonoBehaviour:
     summon_radius: 0
     summon_position_type: 0
     debuff_type: 2
-    debuff_duration: 5
+    debuff_duration: 10
     debuff_value: 0.6
     debuff_damage_interval: 0
     barrier_target_type: 0
@@ -5770,8 +5770,8 @@ MonoBehaviour:
     pattern_logic_type: barrier
     stat_target: 0
     stat_value: 0
-    duration: 10
-    cast_time: 3
+    duration: 40
+    cast_time: 5
     cooldown: 0
     damage_multiply: 2
     detect_range: 0
@@ -5804,10 +5804,10 @@ MonoBehaviour:
     debuff_value: 0
     debuff_damage_interval: 0
     barrier_target_type: 0
-    barrier_shape: 1
-    barrier_size_x: 8
-    barrier_size_y: 0
-    barrier_damage: 1
+    barrier_shape: 0
+    barrier_size_x: 6
+    barrier_size_y: 5
+    barrier_damage: 40
     barrier_collision_block: 0
   - pattern_id: 221031
     index: 5_S_01
@@ -5815,14 +5815,14 @@ MonoBehaviour:
     pattern_type: 1
     pattern_logic_type: move_zigzag
     stat_target: 2
-    stat_value: 0.8
+    stat_value: 3
     duration: 0
     cast_time: 0
     cooldown: 0
     damage_multiply: 0
     detect_range: 0
     move_time: 0
-    zigzag_width: 0.5
+    zigzag_width: 2
     jump_height: 0
     chase_time: 0
     escape_target: 0
@@ -5861,14 +5861,14 @@ MonoBehaviour:
     pattern_type: 1
     pattern_logic_type: move_zigzag
     stat_target: 2
-    stat_value: 0.8
+    stat_value: 2
     duration: 0
     cast_time: 0
     cooldown: 0
     damage_multiply: 0
     detect_range: 0
     move_time: 0
-    zigzag_width: 0.5
+    zigzag_width: 4
     jump_height: 0
     chase_time: 0
     escape_target: 0
@@ -5907,15 +5907,15 @@ MonoBehaviour:
     pattern_type: 1
     pattern_logic_type: move_jump
     stat_target: 2
-    stat_value: 1.5
+    stat_value: 8
     duration: 0
-    cast_time: 3
+    cast_time: 2
     cooldown: 0
     damage_multiply: 2
-    detect_range: 2
+    detect_range: 10
     move_time: 0
     zigzag_width: 0
-    jump_height: 2
+    jump_height: 3
     chase_time: 0
     escape_target: 0
     rush_speed: 0
@@ -5953,12 +5953,12 @@ MonoBehaviour:
     pattern_type: 1
     pattern_logic_type: move_jump
     stat_target: 2
-    stat_value: 1.5
+    stat_value: 6
     duration: 0
-    cast_time: 3
+    cast_time: 2
     cooldown: 0
     damage_multiply: 2
-    detect_range: 2
+    detect_range: 8
     move_time: 0
     zigzag_width: 0
     jump_height: 2
@@ -5999,12 +5999,12 @@ MonoBehaviour:
     pattern_type: 1
     pattern_logic_type: move_jump
     stat_target: 2
-    stat_value: 1.5
+    stat_value: 6
     duration: 0
-    cast_time: 3
+    cast_time: 2
     cooldown: 0
     damage_multiply: 2
-    detect_range: 2
+    detect_range: 8
     move_time: 0
     zigzag_width: 0
     jump_height: 2
@@ -6045,13 +6045,13 @@ MonoBehaviour:
     pattern_type: 1
     pattern_logic_type: move_escape
     stat_target: 2
-    stat_value: 1.5
+    stat_value: 2.5
     duration: 0
-    cast_time: 3
+    cast_time: 2
     cooldown: 0
     damage_multiply: 0
-    detect_range: 4
-    move_time: 8
+    detect_range: 3
+    move_time: 6
     zigzag_width: 0
     jump_height: 0
     chase_time: 0
@@ -6096,7 +6096,7 @@ MonoBehaviour:
     cast_time: 0
     cooldown: 0
     damage_multiply: 1.2
-    detect_range: 1.5
+    detect_range: 30
     move_time: 0
     zigzag_width: 0
     jump_height: 0
@@ -6104,8 +6104,8 @@ MonoBehaviour:
     escape_target: 0
     rush_speed: 0
     projectile_type: 0
-    projectile_speed: 1.5
-    projectile_size: 0.1
+    projectile_speed: 10
+    projectile_size: 0.5
     projectile_count: 7
     fire_interval: 0.2
     life_time: 2
@@ -6141,8 +6141,8 @@ MonoBehaviour:
     duration: 0
     cast_time: 0
     cooldown: 0
-    damage_multiply: 1.2
-    detect_range: 1.5
+    damage_multiply: 1.5
+    detect_range: 30
     move_time: 0
     zigzag_width: 0
     jump_height: 0
@@ -6150,11 +6150,11 @@ MonoBehaviour:
     escape_target: 0
     rush_speed: 0
     projectile_type: 0
-    projectile_speed: 1.5
-    projectile_size: 0.1
-    projectile_count: 8
-    fire_interval: 0.2
-    life_time: 2
+    projectile_speed: 10
+    projectile_size: 0.5
+    projectile_count: 4
+    fire_interval: 0.4
+    life_time: 3
     pierce_type: 0
     follow: 0
     arc_height: 0
@@ -6188,7 +6188,7 @@ MonoBehaviour:
     cast_time: 0
     cooldown: 0
     damage_multiply: 2
-    detect_range: 2
+    detect_range: 30
     move_time: 0
     zigzag_width: 0
     jump_height: 0
@@ -6196,10 +6196,10 @@ MonoBehaviour:
     escape_target: 0
     rush_speed: 0
     projectile_type: 0
-    projectile_speed: 1.2
-    projectile_size: 0.2
-    projectile_count: 5
-    fire_interval: 0.5
+    projectile_speed: 10
+    projectile_size: 0.5
+    projectile_count: 8
+    fire_interval: 0.2
     life_time: 3
     pierce_type: 1
     follow: 0
@@ -6234,7 +6234,7 @@ MonoBehaviour:
     cast_time: 0
     cooldown: 0
     damage_multiply: 2
-    detect_range: 2
+    detect_range: 30
     move_time: 0
     zigzag_width: 0
     jump_height: 0
@@ -6242,10 +6242,10 @@ MonoBehaviour:
     escape_target: 0
     rush_speed: 0
     projectile_type: 0
-    projectile_speed: 1.2
-    projectile_size: 0.2
-    projectile_count: 5
-    fire_interval: 0.5
+    projectile_speed: 10
+    projectile_size: 0.5
+    projectile_count: 8
+    fire_interval: 0.2
     life_time: 3
     pierce_type: 1
     follow: 0
@@ -6279,8 +6279,8 @@ MonoBehaviour:
     duration: 0
     cast_time: 0
     cooldown: 0
-    damage_multiply: 2
-    detect_range: 2
+    damage_multiply: 2.5
+    detect_range: 30
     move_time: 0
     zigzag_width: 0
     jump_height: 0
@@ -6288,11 +6288,11 @@ MonoBehaviour:
     escape_target: 0
     rush_speed: 0
     projectile_type: 0
-    projectile_speed: 0.8
-    projectile_size: 0.2
-    projectile_count: 5
-    fire_interval: 0.5
-    life_time: 2
+    projectile_speed: 9
+    projectile_size: 0.5
+    projectile_count: 8
+    fire_interval: 0.4
+    life_time: 4
     pierce_type: 2
     follow: 0
     arc_height: 0
@@ -6326,7 +6326,7 @@ MonoBehaviour:
     cast_time: 0
     cooldown: 0
     damage_multiply: 2
-    detect_range: 2.5
+    detect_range: 30
     move_time: 0
     zigzag_width: 0
     jump_height: 0
@@ -6334,11 +6334,11 @@ MonoBehaviour:
     escape_target: 0
     rush_speed: 0
     projectile_type: 0
-    projectile_speed: 0.8
-    projectile_size: 0.2
+    projectile_speed: 7
+    projectile_size: 1
     projectile_count: 1
-    fire_interval: 10
-    life_time: 5
+    fire_interval: 4
+    life_time: 8
     pierce_type: 1
     follow: 1
     arc_height: 0
@@ -6371,8 +6371,8 @@ MonoBehaviour:
     duration: 0
     cast_time: 0
     cooldown: 0
-    damage_multiply: 2
-    detect_range: 2.5
+    damage_multiply: 4
+    detect_range: 30
     move_time: 0
     zigzag_width: 0
     jump_height: 0
@@ -6380,10 +6380,10 @@ MonoBehaviour:
     escape_target: 0
     rush_speed: 0
     projectile_type: 0
-    projectile_speed: 0.8
-    projectile_size: 0.2
+    projectile_speed: 9
+    projectile_size: 1
     projectile_count: 1
-    fire_interval: 10
+    fire_interval: 4
     life_time: 5
     pierce_type: 1
     follow: 1
@@ -6417,8 +6417,8 @@ MonoBehaviour:
     duration: 0
     cast_time: 0
     cooldown: 0
-    damage_multiply: 2
-    detect_range: 2
+    damage_multiply: 5
+    detect_range: 30
     move_time: 0
     zigzag_width: 0
     jump_height: 0
@@ -6426,14 +6426,14 @@ MonoBehaviour:
     escape_target: 0
     rush_speed: 0
     projectile_type: 1
-    projectile_speed: 0.8
-    projectile_size: 0.4
-    projectile_count: 2
-    fire_interval: 0.8
+    projectile_speed: 8
+    projectile_size: 0.8
+    projectile_count: 4
+    fire_interval: 0.7
     life_time: 7
     pierce_type: 1
     follow: 0
-    arc_height: 2
+    arc_height: 3
     projectile_radius: 0
     area_radius: 0
     area_damage_interval: 0
@@ -6459,11 +6459,11 @@ MonoBehaviour:
     pattern_type: 6
     pattern_logic_type: explode_self
     stat_target: 2
-    stat_value: 1.5
-    duration: 3
+    stat_value: 1.2
+    duration: 10
     cast_time: 0
     cooldown: 0
-    damage_multiply: 2
+    damage_multiply: 4
     detect_range: 0
     move_time: 0
     zigzag_width: 0
@@ -6484,7 +6484,7 @@ MonoBehaviour:
     area_radius: 0
     area_damage_interval: 0
     area_target_type: 0
-    explode_range: 0.5
+    explode_range: 5
     summon_monster_id: 0
     summon_count: 0
     summon_radius: 0
@@ -6510,7 +6510,7 @@ MonoBehaviour:
     cast_time: 0
     cooldown: 0
     damage_multiply: 2
-    detect_range: 2
+    detect_range: 30
     move_time: 0
     zigzag_width: 0
     jump_height: 0
@@ -6518,11 +6518,11 @@ MonoBehaviour:
     escape_target: 0
     rush_speed: 0
     projectile_type: 0
-    projectile_speed: 1.2
-    projectile_size: 0.2
-    projectile_count: 5
+    projectile_speed: 8
+    projectile_size: 0.5
+    projectile_count: 4
     fire_interval: 0.5
-    life_time: 3
+    life_time: 5
     pierce_type: 1
     follow: 0
     arc_height: 0
@@ -6556,7 +6556,7 @@ MonoBehaviour:
     cast_time: 0
     cooldown: 0
     damage_multiply: 2
-    detect_range: 2
+    detect_range: 30
     move_time: 0
     zigzag_width: 0
     jump_height: 0
@@ -6564,11 +6564,11 @@ MonoBehaviour:
     escape_target: 0
     rush_speed: 0
     projectile_type: 0
-    projectile_speed: 1.2
-    projectile_size: 0.2
-    projectile_count: 5
+    projectile_speed: 8
+    projectile_size: 0.5
+    projectile_count: 4
     fire_interval: 0.5
-    life_time: 3
+    life_time: 5
     pierce_type: 1
     follow: 0
     arc_height: 0
@@ -6602,7 +6602,7 @@ MonoBehaviour:
     cast_time: 0
     cooldown: 0
     damage_multiply: 2
-    detect_range: 2
+    detect_range: 30
     move_time: 0
     zigzag_width: 0
     jump_height: 0
@@ -6610,11 +6610,11 @@ MonoBehaviour:
     escape_target: 0
     rush_speed: 0
     projectile_type: 0
-    projectile_speed: 1.2
-    projectile_size: 0.2
-    projectile_count: 5
+    projectile_speed: 8
+    projectile_size: 0.5
+    projectile_count: 4
     fire_interval: 0.5
-    life_time: 3
+    life_time: 5
     pierce_type: 1
     follow: 0
     arc_height: 0
@@ -6645,7 +6645,7 @@ MonoBehaviour:
     stat_target: 0
     stat_value: 0
     duration: 5
-    cast_time: 8
+    cast_time: 5
     cooldown: 0
     damage_multiply: 2
     detect_range: 0
@@ -6657,7 +6657,7 @@ MonoBehaviour:
     rush_speed: 0
     projectile_type: 0
     projectile_speed: 0
-    projectile_size: 0.5
+    projectile_size: 1
     projectile_count: 5
     fire_interval: 0
     life_time: 0
@@ -6694,7 +6694,7 @@ MonoBehaviour:
     cast_time: 0
     cooldown: 0
     damage_multiply: 2
-    detect_range: 2
+    detect_range: 30
     move_time: 0
     zigzag_width: 0
     jump_height: 0
@@ -6702,11 +6702,11 @@ MonoBehaviour:
     escape_target: 0
     rush_speed: 0
     projectile_type: 0
-    projectile_speed: 1.2
-    projectile_size: 0.2
-    projectile_count: 5
+    projectile_speed: 8
+    projectile_size: 0.5
+    projectile_count: 6
     fire_interval: 0.5
-    life_time: 3
+    life_time: 5
     pierce_type: 1
     follow: 0
     arc_height: 0
@@ -6737,7 +6737,7 @@ MonoBehaviour:
     stat_target: 0
     stat_value: 0
     duration: 5
-    cast_time: 8
+    cast_time: 5
     cooldown: 0
     damage_multiply: 2
     detect_range: 0
@@ -6749,7 +6749,7 @@ MonoBehaviour:
     rush_speed: 0
     projectile_type: 0
     projectile_speed: 0
-    projectile_size: 0.5
+    projectile_size: 1
     projectile_count: 5
     fire_interval: 0
     life_time: 0
@@ -6786,7 +6786,7 @@ MonoBehaviour:
     cast_time: 0
     cooldown: 0
     damage_multiply: 2
-    detect_range: 2
+    detect_range: 30
     move_time: 0
     zigzag_width: 0
     jump_height: 0
@@ -6794,11 +6794,11 @@ MonoBehaviour:
     escape_target: 0
     rush_speed: 0
     projectile_type: 0
-    projectile_speed: 1.2
-    projectile_size: 0.2
-    projectile_count: 5
-    fire_interval: 0.5
-    life_time: 3
+    projectile_speed: 8
+    projectile_size: 0.5
+    projectile_count: 6
+    fire_interval: 0.7
+    life_time: 6
     pierce_type: 1
     follow: 0
     arc_height: 0
@@ -6828,10 +6828,10 @@ MonoBehaviour:
     pattern_logic_type: projectile_turn
     stat_target: 0
     stat_value: 0
-    duration: 7
+    duration: 10
     cast_time: 0
     cooldown: 0
-    damage_multiply: 2
+    damage_multiply: 1.5
     detect_range: 0
     move_time: 0
     zigzag_width: 0
@@ -6840,15 +6840,15 @@ MonoBehaviour:
     escape_target: 0
     rush_speed: 0
     projectile_type: 2
-    projectile_speed: 1
-    projectile_size: 0.3
+    projectile_speed: 5
+    projectile_size: 0.5
     projectile_count: 6
     fire_interval: 0
     life_time: 0
     pierce_type: 0
     follow: 0
     arc_height: 0
-    projectile_radius: 1
+    projectile_radius: 5
     area_radius: 0
     area_damage_interval: 0
     area_target_type: 0
@@ -6875,7 +6875,7 @@ MonoBehaviour:
     stat_target: 0
     stat_value: 0
     duration: 5
-    cast_time: 8
+    cast_time: 5
     cooldown: 0
     damage_multiply: 2
     detect_range: 0
@@ -6887,8 +6887,8 @@ MonoBehaviour:
     rush_speed: 0
     projectile_type: 0
     projectile_speed: 0
-    projectile_size: 0.5
-    projectile_count: 6
+    projectile_size: 1
+    projectile_count: 5
     fire_interval: 0
     life_time: 0
     pierce_type: 0
@@ -6924,7 +6924,7 @@ MonoBehaviour:
     cast_time: 0
     cooldown: 0
     damage_multiply: 2
-    detect_range: 2
+    detect_range: 30
     move_time: 0
     zigzag_width: 0
     jump_height: 0
@@ -6932,11 +6932,11 @@ MonoBehaviour:
     escape_target: 0
     rush_speed: 0
     projectile_type: 0
-    projectile_speed: 1.2
-    projectile_size: 0.2
-    projectile_count: 5
-    fire_interval: 0.5
-    life_time: 3
+    projectile_speed: 9
+    projectile_size: 0.5
+    projectile_count: 6
+    fire_interval: 0.7
+    life_time: 6
     pierce_type: 1
     follow: 0
     arc_height: 0
@@ -6966,10 +6966,10 @@ MonoBehaviour:
     pattern_logic_type: projectile_turn
     stat_target: 0
     stat_value: 0
-    duration: 7
+    duration: 10
     cast_time: 0
     cooldown: 0
-    damage_multiply: 2
+    damage_multiply: 1.5
     detect_range: 0
     move_time: 0
     zigzag_width: 0
@@ -6978,15 +6978,15 @@ MonoBehaviour:
     escape_target: 0
     rush_speed: 0
     projectile_type: 2
-    projectile_speed: 1
-    projectile_size: 0.3
+    projectile_speed: 5
+    projectile_size: 0.5
     projectile_count: 6
     fire_interval: 0
     life_time: 0
     pierce_type: 0
     follow: 0
     arc_height: 0
-    projectile_radius: 1
+    projectile_radius: 5
     area_radius: 0
     area_damage_interval: 0
     area_target_type: 0
@@ -7013,7 +7013,7 @@ MonoBehaviour:
     stat_target: 0
     stat_value: 0
     duration: 5
-    cast_time: 8
+    cast_time: 5
     cooldown: 0
     damage_multiply: 2
     detect_range: 0
@@ -7025,7 +7025,7 @@ MonoBehaviour:
     rush_speed: 0
     projectile_type: 0
     projectile_speed: 0
-    projectile_size: 0.5
+    projectile_size: 1
     projectile_count: 6
     fire_interval: 0
     life_time: 0
@@ -7062,7 +7062,7 @@ MonoBehaviour:
     cast_time: 0
     cooldown: 0
     damage_multiply: 2
-    detect_range: 2
+    detect_range: 30
     move_time: 0
     zigzag_width: 0
     jump_height: 0
@@ -7070,11 +7070,11 @@ MonoBehaviour:
     escape_target: 0
     rush_speed: 0
     projectile_type: 0
-    projectile_speed: 1.2
-    projectile_size: 0.2
-    projectile_count: 5
-    fire_interval: 0.5
-    life_time: 3
+    projectile_speed: 8
+    projectile_size: 0.5
+    projectile_count: 8
+    fire_interval: 0.7
+    life_time: 6
     pierce_type: 1
     follow: 0
     arc_height: 0
@@ -7104,10 +7104,10 @@ MonoBehaviour:
     pattern_logic_type: projectile_turn
     stat_target: 0
     stat_value: 0
-    duration: 7
+    duration: 15
     cast_time: 0
     cooldown: 0
-    damage_multiply: 2
+    damage_multiply: 1.5
     detect_range: 0
     move_time: 0
     zigzag_width: 0
@@ -7116,15 +7116,15 @@ MonoBehaviour:
     escape_target: 0
     rush_speed: 0
     projectile_type: 2
-    projectile_speed: 1
-    projectile_size: 0.3
-    projectile_count: 6
+    projectile_speed: 5
+    projectile_size: 0.5
+    projectile_count: 7
     fire_interval: 0
     life_time: 0
     pierce_type: 0
     follow: 0
     arc_height: 0
-    projectile_radius: 1
+    projectile_radius: 6
     area_radius: 0
     area_damage_interval: 0
     area_target_type: 0
@@ -7150,8 +7150,8 @@ MonoBehaviour:
     pattern_logic_type: area_danger
     stat_target: 0
     stat_value: 0
-    duration: 5
-    cast_time: 8
+    duration: 10
+    cast_time: 5
     cooldown: 0
     damage_multiply: 2
     detect_range: 0
@@ -7163,8 +7163,8 @@ MonoBehaviour:
     rush_speed: 0
     projectile_type: 0
     projectile_speed: 0
-    projectile_size: 0.5
-    projectile_count: 7
+    projectile_size: 2
+    projectile_count: 6
     fire_interval: 0
     life_time: 0
     pierce_type: 0
@@ -7200,7 +7200,7 @@ MonoBehaviour:
     cast_time: 0
     cooldown: 0
     damage_multiply: 2
-    detect_range: 2
+    detect_range: 30
     move_time: 0
     zigzag_width: 0
     jump_height: 0
@@ -7208,11 +7208,11 @@ MonoBehaviour:
     escape_target: 0
     rush_speed: 0
     projectile_type: 0
-    projectile_speed: 1.2
-    projectile_size: 0.2
-    projectile_count: 5
+    projectile_speed: 9
+    projectile_size: 0.5
+    projectile_count: 8
     fire_interval: 0.5
-    life_time: 3
+    life_time: 7
     pierce_type: 1
     follow: 0
     arc_height: 0
@@ -7242,7 +7242,7 @@ MonoBehaviour:
     pattern_logic_type: projectile_turn
     stat_target: 0
     stat_value: 0
-    duration: 7
+    duration: 15
     cast_time: 0
     cooldown: 0
     damage_multiply: 2
@@ -7254,15 +7254,15 @@ MonoBehaviour:
     escape_target: 0
     rush_speed: 0
     projectile_type: 2
-    projectile_speed: 1
-    projectile_size: 0.3
-    projectile_count: 6
+    projectile_speed: 9
+    projectile_size: 0.5
+    projectile_count: 7
     fire_interval: 0
     life_time: 0
     pierce_type: 0
     follow: 0
     arc_height: 0
-    projectile_radius: 1
+    projectile_radius: 6
     area_radius: 0
     area_damage_interval: 0
     area_target_type: 0
@@ -7288,8 +7288,8 @@ MonoBehaviour:
     pattern_logic_type: laser_stun
     stat_target: 0
     stat_value: 0
-    duration: 3
-    cast_time: 3
+    duration: 4
+    cast_time: 5
     cooldown: 0
     damage_multiply: 2
     detect_range: 0
@@ -7301,8 +7301,8 @@ MonoBehaviour:
     rush_speed: 0
     projectile_type: 0
     projectile_speed: 0
-    projectile_size: 0.8
-    projectile_count: 6
+    projectile_size: 2
+    projectile_count: 4
     fire_interval: 0
     life_time: 0
     pierce_type: 0
@@ -7334,8 +7334,8 @@ MonoBehaviour:
     pattern_logic_type: area_danger
     stat_target: 0
     stat_value: 0
-    duration: 5
-    cast_time: 8
+    duration: 10
+    cast_time: 5
     cooldown: 0
     damage_multiply: 2
     detect_range: 0
@@ -7347,8 +7347,8 @@ MonoBehaviour:
     rush_speed: 0
     projectile_type: 0
     projectile_speed: 0
-    projectile_size: 0.5
-    projectile_count: 7
+    projectile_size: 2
+    projectile_count: 6
     fire_interval: 0
     life_time: 0
     pierce_type: 0
@@ -7384,7 +7384,7 @@ MonoBehaviour:
     cast_time: 0
     cooldown: 0
     damage_multiply: 2
-    detect_range: 2
+    detect_range: 30
     move_time: 0
     zigzag_width: 0
     jump_height: 0
@@ -7392,11 +7392,11 @@ MonoBehaviour:
     escape_target: 0
     rush_speed: 0
     projectile_type: 0
-    projectile_speed: 1.2
-    projectile_size: 0.2
-    projectile_count: 5
+    projectile_speed: 9
+    projectile_size: 0.5
+    projectile_count: 10
     fire_interval: 0.5
-    life_time: 3
+    life_time: 7
     pierce_type: 1
     follow: 0
     arc_height: 0
@@ -7426,7 +7426,7 @@ MonoBehaviour:
     pattern_logic_type: projectile_turn
     stat_target: 0
     stat_value: 0
-    duration: 7
+    duration: 20
     cast_time: 0
     cooldown: 0
     damage_multiply: 2
@@ -7438,15 +7438,15 @@ MonoBehaviour:
     escape_target: 0
     rush_speed: 0
     projectile_type: 2
-    projectile_speed: 1
-    projectile_size: 0.3
-    projectile_count: 6
+    projectile_speed: 9
+    projectile_size: 0.5
+    projectile_count: 8
     fire_interval: 0
     life_time: 0
     pierce_type: 0
     follow: 0
     arc_height: 0
-    projectile_radius: 1
+    projectile_radius: 7
     area_radius: 0
     area_damage_interval: 0
     area_target_type: 0
@@ -7472,8 +7472,8 @@ MonoBehaviour:
     pattern_logic_type: laser_stun
     stat_target: 0
     stat_value: 0
-    duration: 3
-    cast_time: 3
+    duration: 6
+    cast_time: 5
     cooldown: 0
     damage_multiply: 2
     detect_range: 0
@@ -7485,8 +7485,8 @@ MonoBehaviour:
     rush_speed: 0
     projectile_type: 0
     projectile_speed: 0
-    projectile_size: 0.8
-    projectile_count: 4
+    projectile_size: 2
+    projectile_count: 6
     fire_interval: 0
     life_time: 0
     pierce_type: 0
@@ -7518,8 +7518,8 @@ MonoBehaviour:
     pattern_logic_type: area_danger
     stat_target: 0
     stat_value: 0
-    duration: 5
-    cast_time: 8
+    duration: 10
+    cast_time: 5
     cooldown: 0
     damage_multiply: 2
     detect_range: 0
@@ -7531,8 +7531,8 @@ MonoBehaviour:
     rush_speed: 0
     projectile_type: 0
     projectile_speed: 0
-    projectile_size: 0.5
-    projectile_count: 8
+    projectile_size: 2
+    projectile_count: 7
     fire_interval: 0
     life_time: 0
     pierce_type: 0
@@ -7568,7 +7568,7 @@ MonoBehaviour:
     cast_time: 0
     cooldown: 0
     damage_multiply: 2
-    detect_range: 2
+    detect_range: 30
     move_time: 0
     zigzag_width: 0
     jump_height: 0
@@ -7576,11 +7576,11 @@ MonoBehaviour:
     escape_target: 0
     rush_speed: 0
     projectile_type: 0
-    projectile_speed: 1.2
-    projectile_size: 0.2
-    projectile_count: 5
+    projectile_speed: 9
+    projectile_size: 0.5
+    projectile_count: 10
     fire_interval: 0.5
-    life_time: 3
+    life_time: 7
     pierce_type: 1
     follow: 0
     arc_height: 0
@@ -7610,7 +7610,7 @@ MonoBehaviour:
     pattern_logic_type: projectile_turn
     stat_target: 0
     stat_value: 0
-    duration: 7
+    duration: 20
     cast_time: 0
     cooldown: 0
     damage_multiply: 2
@@ -7622,15 +7622,15 @@ MonoBehaviour:
     escape_target: 0
     rush_speed: 0
     projectile_type: 2
-    projectile_speed: 1
-    projectile_size: 0.3
-    projectile_count: 6
+    projectile_speed: 9
+    projectile_size: 0.5
+    projectile_count: 8
     fire_interval: 0
     life_time: 0
     pierce_type: 0
     follow: 0
     arc_height: 0
-    projectile_radius: 1
+    projectile_radius: 7
     area_radius: 0
     area_damage_interval: 0
     area_target_type: 0
@@ -7656,8 +7656,8 @@ MonoBehaviour:
     pattern_logic_type: laser_stun
     stat_target: 0
     stat_value: 0
-    duration: 3
-    cast_time: 3
+    duration: 8
+    cast_time: 5
     cooldown: 0
     damage_multiply: 2
     detect_range: 0
@@ -7669,8 +7669,8 @@ MonoBehaviour:
     rush_speed: 0
     projectile_type: 0
     projectile_speed: 0
-    projectile_size: 0.8
-    projectile_count: 4
+    projectile_size: 2
+    projectile_count: 6
     fire_interval: 0
     life_time: 0
     pierce_type: 0
@@ -7702,8 +7702,8 @@ MonoBehaviour:
     pattern_logic_type: area_danger
     stat_target: 0
     stat_value: 0
-    duration: 5
-    cast_time: 8
+    duration: 10
+    cast_time: 5
     cooldown: 0
     damage_multiply: 2
     detect_range: 0
@@ -7715,8 +7715,8 @@ MonoBehaviour:
     rush_speed: 0
     projectile_type: 0
     projectile_speed: 0
-    projectile_size: 0.5
-    projectile_count: 8
+    projectile_size: 2
+    projectile_count: 7
     fire_interval: 0
     life_time: 0
     pierce_type: 0
@@ -7747,14 +7747,14 @@ MonoBehaviour:
     pattern_type: 1
     pattern_logic_type: move_zigzag
     stat_target: 2
-    stat_value: 0.8
+    stat_value: 3
     duration: 0
     cast_time: 0
     cooldown: 0
     damage_multiply: 0
     detect_range: 0
     move_time: 0
-    zigzag_width: 0.5
+    zigzag_width: 2
     jump_height: 0
     chase_time: 0
     escape_target: 0
@@ -7793,14 +7793,14 @@ MonoBehaviour:
     pattern_type: 1
     pattern_logic_type: move_zigzag
     stat_target: 2
-    stat_value: 0.8
+    stat_value: 2
     duration: 0
     cast_time: 0
     cooldown: 0
     damage_multiply: 0
     detect_range: 0
     move_time: 0
-    zigzag_width: 0.5
+    zigzag_width: 4
     jump_height: 0
     chase_time: 0
     escape_target: 0
@@ -7839,15 +7839,15 @@ MonoBehaviour:
     pattern_type: 1
     pattern_logic_type: move_jump
     stat_target: 2
-    stat_value: 1.5
+    stat_value: 8
     duration: 0
-    cast_time: 3
+    cast_time: 2
     cooldown: 0
     damage_multiply: 2
-    detect_range: 2
+    detect_range: 10
     move_time: 0
     zigzag_width: 0
-    jump_height: 2
+    jump_height: 3
     chase_time: 0
     escape_target: 0
     rush_speed: 0
@@ -7885,12 +7885,12 @@ MonoBehaviour:
     pattern_type: 1
     pattern_logic_type: move_jump
     stat_target: 2
-    stat_value: 1.5
+    stat_value: 6
     duration: 0
-    cast_time: 3
+    cast_time: 2
     cooldown: 0
     damage_multiply: 2
-    detect_range: 2
+    detect_range: 8
     move_time: 0
     zigzag_width: 0
     jump_height: 2
@@ -7931,12 +7931,12 @@ MonoBehaviour:
     pattern_type: 1
     pattern_logic_type: move_jump
     stat_target: 2
-    stat_value: 1.5
+    stat_value: 6
     duration: 0
-    cast_time: 3
+    cast_time: 2
     cooldown: 0
     damage_multiply: 2
-    detect_range: 2
+    detect_range: 8
     move_time: 0
     zigzag_width: 0
     jump_height: 2
@@ -7977,13 +7977,13 @@ MonoBehaviour:
     pattern_type: 1
     pattern_logic_type: move_escape
     stat_target: 2
-    stat_value: 1.5
+    stat_value: 2.5
     duration: 0
-    cast_time: 3
+    cast_time: 2
     cooldown: 0
     damage_multiply: 0
-    detect_range: 4
-    move_time: 8
+    detect_range: 3
+    move_time: 6
     zigzag_width: 0
     jump_height: 0
     chase_time: 0
@@ -8028,7 +8028,7 @@ MonoBehaviour:
     cast_time: 0
     cooldown: 0
     damage_multiply: 1.2
-    detect_range: 1.5
+    detect_range: 30
     move_time: 0
     zigzag_width: 0
     jump_height: 0
@@ -8036,9 +8036,9 @@ MonoBehaviour:
     escape_target: 0
     rush_speed: 0
     projectile_type: 0
-    projectile_speed: 1.5
-    projectile_size: 0.1
-    projectile_count: 5
+    projectile_speed: 10
+    projectile_size: 0.5
+    projectile_count: 15
     fire_interval: 0.2
     life_time: 2
     pierce_type: 0
@@ -8073,8 +8073,8 @@ MonoBehaviour:
     duration: 0
     cast_time: 0
     cooldown: 0
-    damage_multiply: 1.2
-    detect_range: 1.5
+    damage_multiply: 1.5
+    detect_range: 30
     move_time: 0
     zigzag_width: 0
     jump_height: 0
@@ -8082,11 +8082,11 @@ MonoBehaviour:
     escape_target: 0
     rush_speed: 0
     projectile_type: 0
-    projectile_speed: 1.5
-    projectile_size: 0.1
+    projectile_speed: 10
+    projectile_size: 0.5
     projectile_count: 10
-    fire_interval: 0.2
-    life_time: 2
+    fire_interval: 0.4
+    life_time: 3
     pierce_type: 0
     follow: 0
     arc_height: 0
@@ -8120,7 +8120,7 @@ MonoBehaviour:
     cast_time: 0
     cooldown: 0
     damage_multiply: 2
-    detect_range: 2
+    detect_range: 30
     move_time: 0
     zigzag_width: 0
     jump_height: 0
@@ -8128,10 +8128,10 @@ MonoBehaviour:
     escape_target: 0
     rush_speed: 0
     projectile_type: 0
-    projectile_speed: 1.2
-    projectile_size: 0.2
-    projectile_count: 5
-    fire_interval: 0.5
+    projectile_speed: 11
+    projectile_size: 0.5
+    projectile_count: 9
+    fire_interval: 0.2
     life_time: 3
     pierce_type: 1
     follow: 0
@@ -8166,7 +8166,7 @@ MonoBehaviour:
     cast_time: 0
     cooldown: 0
     damage_multiply: 2
-    detect_range: 2
+    detect_range: 30
     move_time: 0
     zigzag_width: 0
     jump_height: 0
@@ -8174,10 +8174,10 @@ MonoBehaviour:
     escape_target: 0
     rush_speed: 0
     projectile_type: 0
-    projectile_speed: 1.2
-    projectile_size: 0.2
-    projectile_count: 5
-    fire_interval: 0.5
+    projectile_speed: 11
+    projectile_size: 0.5
+    projectile_count: 9
+    fire_interval: 0.2
     life_time: 3
     pierce_type: 1
     follow: 0
@@ -8211,8 +8211,8 @@ MonoBehaviour:
     duration: 0
     cast_time: 0
     cooldown: 0
-    damage_multiply: 2
-    detect_range: 2
+    damage_multiply: 3
+    detect_range: 30
     move_time: 0
     zigzag_width: 0
     jump_height: 0
@@ -8220,11 +8220,11 @@ MonoBehaviour:
     escape_target: 0
     rush_speed: 0
     projectile_type: 0
-    projectile_speed: 0.8
-    projectile_size: 0.2
-    projectile_count: 5
-    fire_interval: 0.5
-    life_time: 2
+    projectile_speed: 9
+    projectile_size: 0.5
+    projectile_count: 10
+    fire_interval: 0.2
+    life_time: 5
     pierce_type: 2
     follow: 0
     arc_height: 0
@@ -8258,7 +8258,7 @@ MonoBehaviour:
     cast_time: 0
     cooldown: 0
     damage_multiply: 2
-    detect_range: 2.5
+    detect_range: 30
     move_time: 0
     zigzag_width: 0
     jump_height: 0
@@ -8266,11 +8266,11 @@ MonoBehaviour:
     escape_target: 0
     rush_speed: 0
     projectile_type: 0
-    projectile_speed: 0.8
-    projectile_size: 0.2
+    projectile_speed: 7
+    projectile_size: 1
     projectile_count: 1
-    fire_interval: 10
-    life_time: 5
+    fire_interval: 3
+    life_time: 10
     pierce_type: 1
     follow: 1
     arc_height: 0
@@ -8303,8 +8303,8 @@ MonoBehaviour:
     duration: 0
     cast_time: 0
     cooldown: 0
-    damage_multiply: 2
-    detect_range: 2.5
+    damage_multiply: 5
+    detect_range: 30
     move_time: 0
     zigzag_width: 0
     jump_height: 0
@@ -8312,11 +8312,11 @@ MonoBehaviour:
     escape_target: 0
     rush_speed: 0
     projectile_type: 0
-    projectile_speed: 0.8
-    projectile_size: 0.2
+    projectile_speed: 9
+    projectile_size: 1
     projectile_count: 1
-    fire_interval: 10
-    life_time: 5
+    fire_interval: 3
+    life_time: 6
     pierce_type: 1
     follow: 1
     arc_height: 0
@@ -8349,8 +8349,8 @@ MonoBehaviour:
     duration: 0
     cast_time: 0
     cooldown: 0
-    damage_multiply: 2
-    detect_range: 2
+    damage_multiply: 6
+    detect_range: 30
     move_time: 0
     zigzag_width: 0
     jump_height: 0
@@ -8358,14 +8358,14 @@ MonoBehaviour:
     escape_target: 0
     rush_speed: 0
     projectile_type: 1
-    projectile_speed: 0.8
-    projectile_size: 0.4
-    projectile_count: 2
-    fire_interval: 0.8
-    life_time: 7
+    projectile_speed: 9
+    projectile_size: 0.8
+    projectile_count: 6
+    fire_interval: 0.5
+    life_time: 6
     pierce_type: 1
     follow: 0
-    arc_height: 2
+    arc_height: 3
     projectile_radius: 0
     area_radius: 0
     area_damage_interval: 0
@@ -8391,8 +8391,8 @@ MonoBehaviour:
     pattern_type: 6
     pattern_logic_type: explode_self
     stat_target: 2
-    stat_value: 1.5
-    duration: 3
+    stat_value: 1.6
+    duration: 5
     cast_time: 0
     cooldown: 0
     damage_multiply: 2
@@ -8416,7 +8416,7 @@ MonoBehaviour:
     area_radius: 0
     area_damage_interval: 0
     area_target_type: 0
-    explode_range: 0.5
+    explode_range: 4
     summon_monster_id: 0
     summon_count: 0
     summon_radius: 0
@@ -8433,16 +8433,16 @@ MonoBehaviour:
     barrier_collision_block: 0
   - pattern_id: 224001
     index: 6_B_01
-    resource_id: 241014
-    pattern_type: 4
-    pattern_logic_type: summon_basic
+    resource_id: 241011
+    pattern_type: 2
+    pattern_logic_type: projectile_reflect
     stat_target: 0
     stat_value: 0
     duration: 0
     cast_time: 0
     cooldown: 0
-    damage_multiply: 0
-    detect_range: 1.5
+    damage_multiply: 2
+    detect_range: 30
     move_time: 0
     zigzag_width: 0
     jump_height: 0
@@ -8450,23 +8450,23 @@ MonoBehaviour:
     escape_target: 0
     rush_speed: 0
     projectile_type: 0
-    projectile_speed: 0
-    projectile_size: 0
-    projectile_count: 0
-    fire_interval: 0
-    life_time: 0
-    pierce_type: 0
+    projectile_speed: 10
+    projectile_size: 0.5
+    projectile_count: 7
+    fire_interval: 1
+    life_time: 7
+    pierce_type: 2
     follow: 0
     arc_height: 0
     projectile_radius: 0
     area_radius: 0
-    area_damage_interval: 4
+    area_damage_interval: 0
     area_target_type: 0
     explode_range: 0
-    summon_monster_id: 201067
-    summon_count: 6
-    summon_radius: 3
-    summon_position_type: 1
+    summon_monster_id: 0
+    summon_count: 0
+    summon_radius: 0
+    summon_position_type: 0
     debuff_type: 0
     debuff_duration: 0
     debuff_value: 0
@@ -8479,16 +8479,16 @@ MonoBehaviour:
     barrier_collision_block: 0
   - pattern_id: 224002
     index: 6_B_02
-    resource_id: 241014
-    pattern_type: 4
-    pattern_logic_type: summon_basic
+    resource_id: 241011
+    pattern_type: 2
+    pattern_logic_type: projectile_reflect
     stat_target: 0
     stat_value: 0
     duration: 0
     cast_time: 0
     cooldown: 0
-    damage_multiply: 0
-    detect_range: 1.5
+    damage_multiply: 2
+    detect_range: 30
     move_time: 0
     zigzag_width: 0
     jump_height: 0
@@ -8496,23 +8496,23 @@ MonoBehaviour:
     escape_target: 0
     rush_speed: 0
     projectile_type: 0
-    projectile_speed: 0
-    projectile_size: 0
-    projectile_count: 0
-    fire_interval: 0
-    life_time: 0
-    pierce_type: 0
+    projectile_speed: 10
+    projectile_size: 0.5
+    projectile_count: 7
+    fire_interval: 1
+    life_time: 7
+    pierce_type: 2
     follow: 0
     arc_height: 0
     projectile_radius: 0
     area_radius: 0
-    area_damage_interval: 4
+    area_damage_interval: 0
     area_target_type: 0
     explode_range: 0
-    summon_monster_id: 201067
-    summon_count: 6
-    summon_radius: 3
-    summon_position_type: 1
+    summon_monster_id: 0
+    summon_count: 0
+    summon_radius: 0
+    summon_position_type: 0
     debuff_type: 0
     debuff_duration: 0
     debuff_value: 0
@@ -8533,8 +8533,8 @@ MonoBehaviour:
     duration: 0
     cast_time: 0
     cooldown: 0
-    damage_multiply: 1.4
-    detect_range: 1.5
+    damage_multiply: 1.3
+    detect_range: 30
     move_time: 0
     zigzag_width: 0
     jump_height: 0
@@ -8542,11 +8542,11 @@ MonoBehaviour:
     escape_target: 0
     rush_speed: 0
     projectile_type: 0
-    projectile_speed: 1.5
-    projectile_size: 0.1
-    projectile_count: 3
+    projectile_speed: 9
+    projectile_size: 0.5
+    projectile_count: 10
     fire_interval: 0.2
-    life_time: 2
+    life_time: 3
     pierce_type: 0
     follow: 0
     arc_height: 0
@@ -8571,16 +8571,16 @@ MonoBehaviour:
     barrier_collision_block: 0
   - pattern_id: 224003
     index: 6_B_03
-    resource_id: 241014
-    pattern_type: 4
-    pattern_logic_type: summon_basic
+    resource_id: 241011
+    pattern_type: 2
+    pattern_logic_type: projectile_reflect
     stat_target: 0
     stat_value: 0
     duration: 0
     cast_time: 0
     cooldown: 0
-    damage_multiply: 0
-    detect_range: 1.5
+    damage_multiply: 2
+    detect_range: 30
     move_time: 0
     zigzag_width: 0
     jump_height: 0
@@ -8588,23 +8588,23 @@ MonoBehaviour:
     escape_target: 0
     rush_speed: 0
     projectile_type: 0
-    projectile_speed: 0
-    projectile_size: 0
-    projectile_count: 0
-    fire_interval: 0
-    life_time: 0
-    pierce_type: 0
+    projectile_speed: 10
+    projectile_size: 0.5
+    projectile_count: 7
+    fire_interval: 1
+    life_time: 7
+    pierce_type: 2
     follow: 0
     arc_height: 0
     projectile_radius: 0
     area_radius: 0
-    area_damage_interval: 4
+    area_damage_interval: 0
     area_target_type: 0
     explode_range: 0
-    summon_monster_id: 201067
-    summon_count: 6
-    summon_radius: 3
-    summon_position_type: 1
+    summon_monster_id: 0
+    summon_count: 0
+    summon_radius: 0
+    summon_position_type: 0
     debuff_type: 0
     debuff_duration: 0
     debuff_value: 0
@@ -8625,8 +8625,8 @@ MonoBehaviour:
     duration: 0
     cast_time: 0
     cooldown: 0
-    damage_multiply: 1.4
-    detect_range: 1.5
+    damage_multiply: 1.3
+    detect_range: 30
     move_time: 0
     zigzag_width: 0
     jump_height: 0
@@ -8634,11 +8634,11 @@ MonoBehaviour:
     escape_target: 0
     rush_speed: 0
     projectile_type: 0
-    projectile_speed: 1.5
-    projectile_size: 0.1
-    projectile_count: 4
+    projectile_speed: 9
+    projectile_size: 0.5
+    projectile_count: 10
     fire_interval: 0.2
-    life_time: 2
+    life_time: 3
     pierce_type: 0
     follow: 0
     arc_height: 0
@@ -8663,16 +8663,16 @@ MonoBehaviour:
     barrier_collision_block: 0
   - pattern_id: 224004
     index: 6_B_04
-    resource_id: 241014
-    pattern_type: 4
-    pattern_logic_type: summon_basic
+    resource_id: 241011
+    pattern_type: 2
+    pattern_logic_type: projectile_reflect
     stat_target: 0
     stat_value: 0
     duration: 0
     cast_time: 0
     cooldown: 0
-    damage_multiply: 0
-    detect_range: 1.5
+    damage_multiply: 3
+    detect_range: 30
     move_time: 0
     zigzag_width: 0
     jump_height: 0
@@ -8680,23 +8680,23 @@ MonoBehaviour:
     escape_target: 0
     rush_speed: 0
     projectile_type: 0
-    projectile_speed: 0
-    projectile_size: 0
-    projectile_count: 0
-    fire_interval: 0
-    life_time: 0
-    pierce_type: 0
+    projectile_speed: 10
+    projectile_size: 0.5
+    projectile_count: 8
+    fire_interval: 1
+    life_time: 7
+    pierce_type: 2
     follow: 0
     arc_height: 0
     projectile_radius: 0
     area_radius: 0
-    area_damage_interval: 3
+    area_damage_interval: 0
     area_target_type: 0
     explode_range: 0
-    summon_monster_id: 201067
-    summon_count: 6
-    summon_radius: 3
-    summon_position_type: 1
+    summon_monster_id: 0
+    summon_count: 0
+    summon_radius: 0
+    summon_position_type: 0
     debuff_type: 0
     debuff_duration: 0
     debuff_value: 0
@@ -8709,16 +8709,16 @@ MonoBehaviour:
     barrier_collision_block: 0
   - pattern_id: 224005
     index: 6_B_04
-    resource_id: 241015
-    pattern_type: 4
-    pattern_logic_type: summon_shield
+    resource_id: 241009
+    pattern_type: 2
+    pattern_logic_type: projectile_follow
     stat_target: 0
     stat_value: 0
-    duration: 20
-    cast_time: 3
+    duration: 0
+    cast_time: 0
     cooldown: 0
-    damage_multiply: 0
-    detect_range: 0
+    damage_multiply: 2
+    detect_range: 30
     move_time: 0
     zigzag_width: 0
     jump_height: 0
@@ -8726,22 +8726,22 @@ MonoBehaviour:
     escape_target: 0
     rush_speed: 0
     projectile_type: 0
-    projectile_speed: 0
-    projectile_size: 0
-    projectile_count: 0
-    fire_interval: 0
-    life_time: 0
-    pierce_type: 0
-    follow: 0
+    projectile_speed: 7
+    projectile_size: 1
+    projectile_count: 3
+    fire_interval: 5
+    life_time: 10
+    pierce_type: 1
+    follow: 1
     arc_height: 0
     projectile_radius: 0
     area_radius: 0
     area_damage_interval: 0
     area_target_type: 0
     explode_range: 0
-    summon_monster_id: 200007
-    summon_count: 20
-    summon_radius: 3
+    summon_monster_id: 0
+    summon_count: 0
+    summon_radius: 0
     summon_position_type: 0
     debuff_type: 0
     debuff_duration: 0
@@ -8763,8 +8763,8 @@ MonoBehaviour:
     duration: 0
     cast_time: 0
     cooldown: 0
-    damage_multiply: 1.4
-    detect_range: 1.5
+    damage_multiply: 1.3
+    detect_range: 30
     move_time: 0
     zigzag_width: 0
     jump_height: 0
@@ -8772,11 +8772,11 @@ MonoBehaviour:
     escape_target: 0
     rush_speed: 0
     projectile_type: 0
-    projectile_speed: 1.5
-    projectile_size: 0.1
-    projectile_count: 5
+    projectile_speed: 9
+    projectile_size: 0.5
+    projectile_count: 10
     fire_interval: 0.2
-    life_time: 2
+    life_time: 3
     pierce_type: 0
     follow: 0
     arc_height: 0
@@ -8801,16 +8801,16 @@ MonoBehaviour:
     barrier_collision_block: 0
   - pattern_id: 224006
     index: 6_B_05
-    resource_id: 241014
-    pattern_type: 4
-    pattern_logic_type: summon_basic
+    resource_id: 241011
+    pattern_type: 2
+    pattern_logic_type: projectile_reflect
     stat_target: 0
     stat_value: 0
     duration: 0
     cast_time: 0
     cooldown: 0
-    damage_multiply: 0
-    detect_range: 1.5
+    damage_multiply: 3
+    detect_range: 30
     move_time: 0
     zigzag_width: 0
     jump_height: 0
@@ -8818,23 +8818,23 @@ MonoBehaviour:
     escape_target: 0
     rush_speed: 0
     projectile_type: 0
-    projectile_speed: 0
-    projectile_size: 0
-    projectile_count: 0
-    fire_interval: 0
-    life_time: 0
-    pierce_type: 0
+    projectile_speed: 10
+    projectile_size: 0.5
+    projectile_count: 8
+    fire_interval: 1
+    life_time: 7
+    pierce_type: 2
     follow: 0
     arc_height: 0
     projectile_radius: 0
     area_radius: 0
-    area_damage_interval: 3
+    area_damage_interval: 0
     area_target_type: 0
     explode_range: 0
-    summon_monster_id: 201067
-    summon_count: 6
-    summon_radius: 3
-    summon_position_type: 1
+    summon_monster_id: 0
+    summon_count: 0
+    summon_radius: 0
+    summon_position_type: 0
     debuff_type: 0
     debuff_duration: 0
     debuff_value: 0
@@ -8847,16 +8847,16 @@ MonoBehaviour:
     barrier_collision_block: 0
   - pattern_id: 224007
     index: 6_B_05
-    resource_id: 241015
-    pattern_type: 4
-    pattern_logic_type: summon_shield
+    resource_id: 241009
+    pattern_type: 2
+    pattern_logic_type: projectile_follow
     stat_target: 0
     stat_value: 0
-    duration: 20
-    cast_time: 3
+    duration: 0
+    cast_time: 0
     cooldown: 0
-    damage_multiply: 0
-    detect_range: 0
+    damage_multiply: 2
+    detect_range: 30
     move_time: 0
     zigzag_width: 0
     jump_height: 0
@@ -8864,22 +8864,22 @@ MonoBehaviour:
     escape_target: 0
     rush_speed: 0
     projectile_type: 0
-    projectile_speed: 0
-    projectile_size: 0
-    projectile_count: 0
-    fire_interval: 0
-    life_time: 0
-    pierce_type: 0
-    follow: 0
+    projectile_speed: 7
+    projectile_size: 1
+    projectile_count: 3
+    fire_interval: 5
+    life_time: 10
+    pierce_type: 1
+    follow: 1
     arc_height: 0
     projectile_radius: 0
     area_radius: 0
     area_damage_interval: 0
     area_target_type: 0
     explode_range: 0
-    summon_monster_id: 200007
-    summon_count: 20
-    summon_radius: 3
+    summon_monster_id: 0
+    summon_count: 0
+    summon_radius: 0
     summon_position_type: 0
     debuff_type: 0
     debuff_duration: 0
@@ -8898,10 +8898,10 @@ MonoBehaviour:
     pattern_logic_type: area_safe
     stat_target: 0
     stat_value: 0
-    duration: 5
-    cast_time: 8
+    duration: 8
+    cast_time: 5
     cooldown: 0
-    damage_multiply: 2
+    damage_multiply: 3
     detect_range: 0
     move_time: 0
     zigzag_width: 0
@@ -8911,8 +8911,8 @@ MonoBehaviour:
     rush_speed: 0
     projectile_type: 0
     projectile_speed: 0
-    projectile_size: 0.5
-    projectile_count: 8
+    projectile_size: 3
+    projectile_count: 5
     fire_interval: 0
     life_time: 0
     pierce_type: 0
@@ -8947,8 +8947,8 @@ MonoBehaviour:
     duration: 0
     cast_time: 0
     cooldown: 0
-    damage_multiply: 1.4
-    detect_range: 1.5
+    damage_multiply: 1.3
+    detect_range: 30
     move_time: 0
     zigzag_width: 0
     jump_height: 0
@@ -8956,11 +8956,11 @@ MonoBehaviour:
     escape_target: 0
     rush_speed: 0
     projectile_type: 0
-    projectile_speed: 1.5
-    projectile_size: 0.1
-    projectile_count: 6
+    projectile_speed: 9
+    projectile_size: 0.5
+    projectile_count: 12
     fire_interval: 0.2
-    life_time: 2
+    life_time: 3
     pierce_type: 0
     follow: 0
     arc_height: 0
@@ -8985,16 +8985,16 @@ MonoBehaviour:
     barrier_collision_block: 0
   - pattern_id: 224008
     index: 6_B_06
-    resource_id: 241014
-    pattern_type: 4
-    pattern_logic_type: summon_basic
+    resource_id: 241011
+    pattern_type: 2
+    pattern_logic_type: projectile_reflect
     stat_target: 0
     stat_value: 0
     duration: 0
     cast_time: 0
     cooldown: 0
-    damage_multiply: 0
-    detect_range: 1.5
+    damage_multiply: 3
+    detect_range: 30
     move_time: 0
     zigzag_width: 0
     jump_height: 0
@@ -9002,22 +9002,22 @@ MonoBehaviour:
     escape_target: 0
     rush_speed: 0
     projectile_type: 0
-    projectile_speed: 0
-    projectile_size: 0
-    projectile_count: 0
-    fire_interval: 0
-    life_time: 0
-    pierce_type: 0
+    projectile_speed: 10
+    projectile_size: 0.5
+    projectile_count: 8
+    fire_interval: 1
+    life_time: 10
+    pierce_type: 2
     follow: 0
     arc_height: 0
     projectile_radius: 0
     area_radius: 0
-    area_damage_interval: 3
+    area_damage_interval: 0
     area_target_type: 0
     explode_range: 0
-    summon_monster_id: 201067
-    summon_count: 6
-    summon_radius: 3
+    summon_monster_id: 0
+    summon_count: 0
+    summon_radius: 0
     summon_position_type: 0
     debuff_type: 0
     debuff_duration: 0
@@ -9031,16 +9031,16 @@ MonoBehaviour:
     barrier_collision_block: 0
   - pattern_id: 224009
     index: 6_B_06
-    resource_id: 241015
-    pattern_type: 4
-    pattern_logic_type: summon_shield
+    resource_id: 241009
+    pattern_type: 2
+    pattern_logic_type: projectile_follow
     stat_target: 0
     stat_value: 0
-    duration: 20
-    cast_time: 3
+    duration: 0
+    cast_time: 0
     cooldown: 0
-    damage_multiply: 0
-    detect_range: 0
+    damage_multiply: 2
+    detect_range: 30
     move_time: 0
     zigzag_width: 0
     jump_height: 0
@@ -9048,22 +9048,22 @@ MonoBehaviour:
     escape_target: 0
     rush_speed: 0
     projectile_type: 0
-    projectile_speed: 0
-    projectile_size: 0
-    projectile_count: 0
-    fire_interval: 0
-    life_time: 0
-    pierce_type: 0
-    follow: 0
+    projectile_speed: 7
+    projectile_size: 1
+    projectile_count: 3
+    fire_interval: 5
+    life_time: 10
+    pierce_type: 1
+    follow: 1
     arc_height: 0
     projectile_radius: 0
     area_radius: 0
     area_damage_interval: 0
     area_target_type: 0
     explode_range: 0
-    summon_monster_id: 200007
-    summon_count: 20
-    summon_radius: 3
+    summon_monster_id: 0
+    summon_count: 0
+    summon_radius: 0
     summon_position_type: 0
     debuff_type: 0
     debuff_duration: 0
@@ -9082,10 +9082,10 @@ MonoBehaviour:
     pattern_logic_type: area_safe
     stat_target: 0
     stat_value: 0
-    duration: 5
-    cast_time: 8
+    duration: 8
+    cast_time: 5
     cooldown: 0
-    damage_multiply: 2
+    damage_multiply: 3
     detect_range: 0
     move_time: 0
     zigzag_width: 0
@@ -9095,8 +9095,8 @@ MonoBehaviour:
     rush_speed: 0
     projectile_type: 0
     projectile_speed: 0
-    projectile_size: 0.5
-    projectile_count: 6
+    projectile_size: 3
+    projectile_count: 5
     fire_interval: 0
     life_time: 0
     pierce_type: 0
@@ -9131,8 +9131,8 @@ MonoBehaviour:
     duration: 0
     cast_time: 0
     cooldown: 0
-    damage_multiply: 1.4
-    detect_range: 1.5
+    damage_multiply: 1.5
+    detect_range: 30
     move_time: 0
     zigzag_width: 0
     jump_height: 0
@@ -9140,11 +9140,11 @@ MonoBehaviour:
     escape_target: 0
     rush_speed: 0
     projectile_type: 0
-    projectile_speed: 1.5
-    projectile_size: 0.1
-    projectile_count: 7
+    projectile_speed: 11
+    projectile_size: 0.5
+    projectile_count: 12
     fire_interval: 0.2
-    life_time: 2
+    life_time: 5
     pierce_type: 0
     follow: 0
     arc_height: 0
@@ -9169,16 +9169,16 @@ MonoBehaviour:
     barrier_collision_block: 0
   - pattern_id: 224010
     index: 6_B_07
-    resource_id: 241014
-    pattern_type: 4
-    pattern_logic_type: summon_basic
+    resource_id: 241011
+    pattern_type: 2
+    pattern_logic_type: projectile_reflect
     stat_target: 0
     stat_value: 0
     duration: 0
     cast_time: 0
     cooldown: 0
-    damage_multiply: 0
-    detect_range: 1.5
+    damage_multiply: 3
+    detect_range: 30
     move_time: 0
     zigzag_width: 0
     jump_height: 0
@@ -9186,22 +9186,22 @@ MonoBehaviour:
     escape_target: 0
     rush_speed: 0
     projectile_type: 0
-    projectile_speed: 0
-    projectile_size: 0
-    projectile_count: 0
-    fire_interval: 0
-    life_time: 0
-    pierce_type: 0
+    projectile_speed: 10
+    projectile_size: 0.5
+    projectile_count: 8
+    fire_interval: 1
+    life_time: 10
+    pierce_type: 2
     follow: 0
     arc_height: 0
     projectile_radius: 0
     area_radius: 0
-    area_damage_interval: 2
+    area_damage_interval: 0
     area_target_type: 0
     explode_range: 0
-    summon_monster_id: 201067
-    summon_count: 6
-    summon_radius: 3
+    summon_monster_id: 0
+    summon_count: 0
+    summon_radius: 0
     summon_position_type: 0
     debuff_type: 0
     debuff_duration: 0
@@ -9215,16 +9215,16 @@ MonoBehaviour:
     barrier_collision_block: 0
   - pattern_id: 224011
     index: 6_B_07
-    resource_id: 241015
-    pattern_type: 4
-    pattern_logic_type: summon_shield
+    resource_id: 241009
+    pattern_type: 2
+    pattern_logic_type: projectile_follow
     stat_target: 0
     stat_value: 0
-    duration: 20
-    cast_time: 3
+    duration: 0
+    cast_time: 0
     cooldown: 0
-    damage_multiply: 0
-    detect_range: 0
+    damage_multiply: 2
+    detect_range: 30
     move_time: 0
     zigzag_width: 0
     jump_height: 0
@@ -9232,23 +9232,23 @@ MonoBehaviour:
     escape_target: 0
     rush_speed: 0
     projectile_type: 0
-    projectile_speed: 0
-    projectile_size: 0
-    projectile_count: 0
-    fire_interval: 0
-    life_time: 0
-    pierce_type: 0
-    follow: 0
+    projectile_speed: 7
+    projectile_size: 1
+    projectile_count: 3
+    fire_interval: 5
+    life_time: 10
+    pierce_type: 1
+    follow: 1
     arc_height: 0
     projectile_radius: 0
     area_radius: 0
     area_damage_interval: 0
     area_target_type: 0
     explode_range: 0
-    summon_monster_id: 200007
-    summon_count: 20
-    summon_radius: 3
-    summon_position_type: 1
+    summon_monster_id: 0
+    summon_count: 0
+    summon_radius: 0
+    summon_position_type: 0
     debuff_type: 0
     debuff_duration: 0
     debuff_value: 0
@@ -9266,10 +9266,10 @@ MonoBehaviour:
     pattern_logic_type: area_safe
     stat_target: 0
     stat_value: 0
-    duration: 5
-    cast_time: 8
+    duration: 8
+    cast_time: 5
     cooldown: 0
-    damage_multiply: 2
+    damage_multiply: 3
     detect_range: 0
     move_time: 0
     zigzag_width: 0
@@ -9279,8 +9279,8 @@ MonoBehaviour:
     rush_speed: 0
     projectile_type: 0
     projectile_speed: 0
-    projectile_size: 0.5
-    projectile_count: 5
+    projectile_size: 3
+    projectile_count: 4
     fire_interval: 0
     life_time: 0
     pierce_type: 0
@@ -9315,8 +9315,8 @@ MonoBehaviour:
     duration: 0
     cast_time: 0
     cooldown: 0
-    damage_multiply: 1.4
-    detect_range: 1.5
+    damage_multiply: 1.5
+    detect_range: 30
     move_time: 0
     zigzag_width: 0
     jump_height: 0
@@ -9324,11 +9324,11 @@ MonoBehaviour:
     escape_target: 0
     rush_speed: 0
     projectile_type: 0
-    projectile_speed: 1.5
-    projectile_size: 0.1
-    projectile_count: 8
+    projectile_speed: 11
+    projectile_size: 0.5
+    projectile_count: 15
     fire_interval: 0.2
-    life_time: 2
+    life_time: 5
     pierce_type: 0
     follow: 0
     arc_height: 0
@@ -9353,16 +9353,16 @@ MonoBehaviour:
     barrier_collision_block: 0
   - pattern_id: 224012
     index: 6_B_08
-    resource_id: 241014
-    pattern_type: 4
-    pattern_logic_type: summon_basic
+    resource_id: 241011
+    pattern_type: 2
+    pattern_logic_type: projectile_reflect
     stat_target: 0
     stat_value: 0
     duration: 0
     cast_time: 0
     cooldown: 0
-    damage_multiply: 0
-    detect_range: 1.5
+    damage_multiply: 3
+    detect_range: 30
     move_time: 0
     zigzag_width: 0
     jump_height: 0
@@ -9370,22 +9370,22 @@ MonoBehaviour:
     escape_target: 0
     rush_speed: 0
     projectile_type: 0
-    projectile_speed: 0
-    projectile_size: 0
-    projectile_count: 0
-    fire_interval: 0
-    life_time: 0
-    pierce_type: 0
+    projectile_speed: 10
+    projectile_size: 0.5
+    projectile_count: 10
+    fire_interval: 1
+    life_time: 10
+    pierce_type: 2
     follow: 0
     arc_height: 0
     projectile_radius: 0
     area_radius: 0
-    area_damage_interval: 2
+    area_damage_interval: 0
     area_target_type: 0
     explode_range: 0
-    summon_monster_id: 201067
-    summon_count: 6
-    summon_radius: 3
+    summon_monster_id: 0
+    summon_count: 0
+    summon_radius: 0
     summon_position_type: 0
     debuff_type: 0
     debuff_duration: 0
@@ -9399,16 +9399,16 @@ MonoBehaviour:
     barrier_collision_block: 0
   - pattern_id: 224013
     index: 6_B_08
-    resource_id: 241015
-    pattern_type: 4
-    pattern_logic_type: summon_shield
+    resource_id: 241009
+    pattern_type: 2
+    pattern_logic_type: projectile_follow
     stat_target: 0
     stat_value: 0
-    duration: 20
-    cast_time: 3
+    duration: 0
+    cast_time: 0
     cooldown: 0
-    damage_multiply: 0
-    detect_range: 0
+    damage_multiply: 3
+    detect_range: 30
     move_time: 0
     zigzag_width: 0
     jump_height: 0
@@ -9416,23 +9416,23 @@ MonoBehaviour:
     escape_target: 0
     rush_speed: 0
     projectile_type: 0
-    projectile_speed: 0
-    projectile_size: 0
-    projectile_count: 0
-    fire_interval: 0
-    life_time: 0
-    pierce_type: 0
-    follow: 0
+    projectile_speed: 7
+    projectile_size: 1
+    projectile_count: 5
+    fire_interval: 3
+    life_time: 12
+    pierce_type: 1
+    follow: 1
     arc_height: 0
     projectile_radius: 0
     area_radius: 0
     area_damage_interval: 0
     area_target_type: 0
     explode_range: 0
-    summon_monster_id: 200007
-    summon_count: 20
-    summon_radius: 3
-    summon_position_type: 1
+    summon_monster_id: 0
+    summon_count: 0
+    summon_radius: 0
+    summon_position_type: 0
     debuff_type: 0
     debuff_duration: 0
     debuff_value: 0
@@ -9450,10 +9450,10 @@ MonoBehaviour:
     pattern_logic_type: area_safe
     stat_target: 0
     stat_value: 0
-    duration: 5
-    cast_time: 8
+    duration: 10
+    cast_time: 5
     cooldown: 0
-    damage_multiply: 2
+    damage_multiply: 3
     detect_range: 0
     move_time: 0
     zigzag_width: 0
@@ -9463,7 +9463,7 @@ MonoBehaviour:
     rush_speed: 0
     projectile_type: 0
     projectile_speed: 0
-    projectile_size: 0.5
+    projectile_size: 2
     projectile_count: 4
     fire_interval: 0
     life_time: 0
@@ -9522,8 +9522,8 @@ MonoBehaviour:
     area_target_type: 0
     explode_range: 0
     summon_monster_id: 0
-    summon_count: 8
-    summon_radius: 2
+    summon_count: 15
+    summon_radius: 12
     summon_position_type: 1
     debuff_type: 0
     debuff_duration: 0
@@ -9545,8 +9545,8 @@ MonoBehaviour:
     duration: 0
     cast_time: 0
     cooldown: 0
-    damage_multiply: 1.4
-    detect_range: 1.5
+    damage_multiply: 1.5
+    detect_range: 30
     move_time: 0
     zigzag_width: 0
     jump_height: 0
@@ -9554,11 +9554,11 @@ MonoBehaviour:
     escape_target: 0
     rush_speed: 0
     projectile_type: 0
-    projectile_speed: 1.5
-    projectile_size: 0.1
-    projectile_count: 9
+    projectile_speed: 11
+    projectile_size: 0.5
+    projectile_count: 15
     fire_interval: 0.2
-    life_time: 2
+    life_time: 5
     pierce_type: 0
     follow: 0
     arc_height: 0
@@ -9583,16 +9583,16 @@ MonoBehaviour:
     barrier_collision_block: 0
   - pattern_id: 224014
     index: 6_B_09
-    resource_id: 241014
-    pattern_type: 4
-    pattern_logic_type: summon_basic
+    resource_id: 241011
+    pattern_type: 2
+    pattern_logic_type: projectile_reflect
     stat_target: 0
     stat_value: 0
     duration: 0
     cast_time: 0
     cooldown: 0
-    damage_multiply: 0
-    detect_range: 1.5
+    damage_multiply: 3
+    detect_range: 30
     move_time: 0
     zigzag_width: 0
     jump_height: 0
@@ -9600,22 +9600,22 @@ MonoBehaviour:
     escape_target: 0
     rush_speed: 0
     projectile_type: 0
-    projectile_speed: 0
-    projectile_size: 0
-    projectile_count: 0
-    fire_interval: 0
-    life_time: 0
-    pierce_type: 0
+    projectile_speed: 10
+    projectile_size: 0.5
+    projectile_count: 10
+    fire_interval: 1
+    life_time: 10
+    pierce_type: 2
     follow: 0
     arc_height: 0
     projectile_radius: 0
     area_radius: 0
-    area_damage_interval: 2
+    area_damage_interval: 0
     area_target_type: 0
     explode_range: 0
-    summon_monster_id: 201067
-    summon_count: 6
-    summon_radius: 3
+    summon_monster_id: 0
+    summon_count: 0
+    summon_radius: 0
     summon_position_type: 0
     debuff_type: 0
     debuff_duration: 0
@@ -9629,16 +9629,16 @@ MonoBehaviour:
     barrier_collision_block: 0
   - pattern_id: 224015
     index: 6_B_09
-    resource_id: 241015
-    pattern_type: 4
-    pattern_logic_type: summon_shield
+    resource_id: 241009
+    pattern_type: 2
+    pattern_logic_type: projectile_follow
     stat_target: 0
     stat_value: 0
-    duration: 20
-    cast_time: 3
+    duration: 0
+    cast_time: 0
     cooldown: 0
-    damage_multiply: 0
-    detect_range: 0
+    damage_multiply: 3
+    detect_range: 30
     move_time: 0
     zigzag_width: 0
     jump_height: 0
@@ -9646,23 +9646,23 @@ MonoBehaviour:
     escape_target: 0
     rush_speed: 0
     projectile_type: 0
-    projectile_speed: 0
-    projectile_size: 0
-    projectile_count: 0
-    fire_interval: 0
-    life_time: 0
-    pierce_type: 0
-    follow: 0
+    projectile_speed: 7
+    projectile_size: 1
+    projectile_count: 5
+    fire_interval: 3
+    life_time: 12
+    pierce_type: 1
+    follow: 1
     arc_height: 0
     projectile_radius: 0
     area_radius: 0
     area_damage_interval: 0
     area_target_type: 0
     explode_range: 0
-    summon_monster_id: 200007
-    summon_count: 20
-    summon_radius: 3
-    summon_position_type: 1
+    summon_monster_id: 0
+    summon_count: 0
+    summon_radius: 0
+    summon_position_type: 0
     debuff_type: 0
     debuff_duration: 0
     debuff_value: 0
@@ -9680,10 +9680,10 @@ MonoBehaviour:
     pattern_logic_type: area_safe
     stat_target: 0
     stat_value: 0
-    duration: 5
-    cast_time: 8
+    duration: 10
+    cast_time: 5
     cooldown: 0
-    damage_multiply: 2
+    damage_multiply: 3
     detect_range: 0
     move_time: 0
     zigzag_width: 0
@@ -9693,7 +9693,7 @@ MonoBehaviour:
     rush_speed: 0
     projectile_type: 0
     projectile_speed: 0
-    projectile_size: 0.5
+    projectile_size: 2
     projectile_count: 3
     fire_interval: 0
     life_time: 0
@@ -9752,8 +9752,8 @@ MonoBehaviour:
     area_target_type: 0
     explode_range: 0
     summon_monster_id: 0
-    summon_count: 9
-    summon_radius: 2
+    summon_count: 15
+    summon_radius: 12
     summon_position_type: 1
     debuff_type: 0
     debuff_duration: 0
@@ -9775,8 +9775,8 @@ MonoBehaviour:
     duration: 0
     cast_time: 0
     cooldown: 0
-    damage_multiply: 1.4
-    detect_range: 1.5
+    damage_multiply: 1.5
+    detect_range: 30
     move_time: 0
     zigzag_width: 0
     jump_height: 0
@@ -9784,11 +9784,11 @@ MonoBehaviour:
     escape_target: 0
     rush_speed: 0
     projectile_type: 0
-    projectile_speed: 1.5
-    projectile_size: 0.1
-    projectile_count: 10
+    projectile_speed: 11
+    projectile_size: 0.5
+    projectile_count: 15
     fire_interval: 0.2
-    life_time: 2
+    life_time: 5
     pierce_type: 0
     follow: 0
     arc_height: 0
@@ -9813,16 +9813,16 @@ MonoBehaviour:
     barrier_collision_block: 0
   - pattern_id: 224016
     index: 6_B_10
-    resource_id: 241014
-    pattern_type: 4
-    pattern_logic_type: summon_basic
+    resource_id: 241011
+    pattern_type: 2
+    pattern_logic_type: projectile_reflect
     stat_target: 0
     stat_value: 0
     duration: 0
     cast_time: 0
     cooldown: 0
-    damage_multiply: 0
-    detect_range: 1.5
+    damage_multiply: 3
+    detect_range: 30
     move_time: 0
     zigzag_width: 0
     jump_height: 0
@@ -9830,22 +9830,22 @@ MonoBehaviour:
     escape_target: 0
     rush_speed: 0
     projectile_type: 0
-    projectile_speed: 0
-    projectile_size: 0
-    projectile_count: 0
-    fire_interval: 0
-    life_time: 0
-    pierce_type: 0
+    projectile_speed: 10
+    projectile_size: 0.5
+    projectile_count: 10
+    fire_interval: 1
+    life_time: 10
+    pierce_type: 2
     follow: 0
     arc_height: 0
     projectile_radius: 0
     area_radius: 0
-    area_damage_interval: 2
+    area_damage_interval: 0
     area_target_type: 0
     explode_range: 0
-    summon_monster_id: 201067
-    summon_count: 6
-    summon_radius: 3
+    summon_monster_id: 0
+    summon_count: 0
+    summon_radius: 0
     summon_position_type: 0
     debuff_type: 0
     debuff_duration: 0
@@ -9859,16 +9859,16 @@ MonoBehaviour:
     barrier_collision_block: 0
   - pattern_id: 224017
     index: 6_B_10
-    resource_id: 241015
-    pattern_type: 4
-    pattern_logic_type: summon_shield
+    resource_id: 241009
+    pattern_type: 2
+    pattern_logic_type: projectile_follow
     stat_target: 0
     stat_value: 0
-    duration: 20
-    cast_time: 3
+    duration: 0
+    cast_time: 0
     cooldown: 0
-    damage_multiply: 0
-    detect_range: 0
+    damage_multiply: 3
+    detect_range: 30
     move_time: 0
     zigzag_width: 0
     jump_height: 0
@@ -9876,23 +9876,23 @@ MonoBehaviour:
     escape_target: 0
     rush_speed: 0
     projectile_type: 0
-    projectile_speed: 0
-    projectile_size: 0
-    projectile_count: 0
-    fire_interval: 0
-    life_time: 0
-    pierce_type: 0
-    follow: 0
+    projectile_speed: 7
+    projectile_size: 1
+    projectile_count: 5
+    fire_interval: 3
+    life_time: 12
+    pierce_type: 1
+    follow: 1
     arc_height: 0
     projectile_radius: 0
     area_radius: 0
     area_damage_interval: 0
     area_target_type: 0
     explode_range: 0
-    summon_monster_id: 200007
-    summon_count: 20
-    summon_radius: 3
-    summon_position_type: 1
+    summon_monster_id: 0
+    summon_count: 0
+    summon_radius: 0
+    summon_position_type: 0
     debuff_type: 0
     debuff_duration: 0
     debuff_value: 0
@@ -9910,10 +9910,10 @@ MonoBehaviour:
     pattern_logic_type: area_safe
     stat_target: 0
     stat_value: 0
-    duration: 5
-    cast_time: 8
+    duration: 10
+    cast_time: 5
     cooldown: 0
-    damage_multiply: 2
+    damage_multiply: 3
     detect_range: 0
     move_time: 0
     zigzag_width: 0
@@ -9923,8 +9923,8 @@ MonoBehaviour:
     rush_speed: 0
     projectile_type: 0
     projectile_speed: 0
-    projectile_size: 0.5
-    projectile_count: 2
+    projectile_size: 2
+    projectile_count: 3
     fire_interval: 0
     life_time: 0
     pierce_type: 0
@@ -9982,8 +9982,8 @@ MonoBehaviour:
     area_target_type: 0
     explode_range: 0
     summon_monster_id: 0
-    summon_count: 10
-    summon_radius: 2
+    summon_count: 15
+    summon_radius: 12
     summon_position_type: 1
     debuff_type: 0
     debuff_duration: 0
@@ -10001,14 +10001,14 @@ MonoBehaviour:
     pattern_type: 1
     pattern_logic_type: move_zigzag
     stat_target: 2
-    stat_value: 0.8
+    stat_value: 3
     duration: 0
     cast_time: 0
     cooldown: 0
     damage_multiply: 0
     detect_range: 0
     move_time: 0
-    zigzag_width: 0.5
+    zigzag_width: 2
     jump_height: 0
     chase_time: 0
     escape_target: 0
@@ -10047,14 +10047,14 @@ MonoBehaviour:
     pattern_type: 1
     pattern_logic_type: move_zigzag
     stat_target: 2
-    stat_value: 0.8
+    stat_value: 2
     duration: 0
     cast_time: 0
     cooldown: 0
     damage_multiply: 0
     detect_range: 0
     move_time: 0
-    zigzag_width: 0.5
+    zigzag_width: 4
     jump_height: 0
     chase_time: 0
     escape_target: 0
@@ -10093,15 +10093,15 @@ MonoBehaviour:
     pattern_type: 1
     pattern_logic_type: move_jump
     stat_target: 2
-    stat_value: 1.5
+    stat_value: 8
     duration: 0
-    cast_time: 3
+    cast_time: 2
     cooldown: 0
     damage_multiply: 2
-    detect_range: 2
+    detect_range: 10
     move_time: 0
     zigzag_width: 0
-    jump_height: 2
+    jump_height: 3
     chase_time: 0
     escape_target: 0
     rush_speed: 0
@@ -10139,12 +10139,12 @@ MonoBehaviour:
     pattern_type: 1
     pattern_logic_type: move_jump
     stat_target: 2
-    stat_value: 1.5
+    stat_value: 6
     duration: 0
-    cast_time: 3
+    cast_time: 2
     cooldown: 0
     damage_multiply: 2
-    detect_range: 2
+    detect_range: 8
     move_time: 0
     zigzag_width: 0
     jump_height: 2
@@ -10185,12 +10185,12 @@ MonoBehaviour:
     pattern_type: 1
     pattern_logic_type: move_jump
     stat_target: 2
-    stat_value: 1.5
+    stat_value: 6
     duration: 0
-    cast_time: 3
+    cast_time: 2
     cooldown: 0
     damage_multiply: 2
-    detect_range: 2
+    detect_range: 8
     move_time: 0
     zigzag_width: 0
     jump_height: 2
@@ -10231,13 +10231,13 @@ MonoBehaviour:
     pattern_type: 1
     pattern_logic_type: move_escape
     stat_target: 2
-    stat_value: 1.5
+    stat_value: 2.5
     duration: 0
-    cast_time: 3
+    cast_time: 2
     cooldown: 0
     damage_multiply: 0
-    detect_range: 4
-    move_time: 8
+    detect_range: 3
+    move_time: 6
     zigzag_width: 0
     jump_height: 0
     chase_time: 0
@@ -10281,8 +10281,8 @@ MonoBehaviour:
     duration: 0
     cast_time: 0
     cooldown: 0
-    damage_multiply: 1.4
-    detect_range: 1.5
+    damage_multiply: 1.2
+    detect_range: 30
     move_time: 0
     zigzag_width: 0
     jump_height: 0
@@ -10290,9 +10290,9 @@ MonoBehaviour:
     escape_target: 0
     rush_speed: 0
     projectile_type: 0
-    projectile_speed: 1.5
-    projectile_size: 0.1
-    projectile_count: 1
+    projectile_speed: 10
+    projectile_size: 0.5
+    projectile_count: 20
     fire_interval: 0.2
     life_time: 2
     pierce_type: 0
@@ -10327,8 +10327,8 @@ MonoBehaviour:
     duration: 0
     cast_time: 0
     cooldown: 0
-    damage_multiply: 1.4
-    detect_range: 1.5
+    damage_multiply: 1.5
+    detect_range: 30
     move_time: 0
     zigzag_width: 0
     jump_height: 0
@@ -10336,11 +10336,11 @@ MonoBehaviour:
     escape_target: 0
     rush_speed: 0
     projectile_type: 0
-    projectile_speed: 1.5
-    projectile_size: 0.1
-    projectile_count: 2
-    fire_interval: 0.2
-    life_time: 2
+    projectile_speed: 10
+    projectile_size: 0.5
+    projectile_count: 15
+    fire_interval: 0.4
+    life_time: 3
     pierce_type: 0
     follow: 0
     arc_height: 0
@@ -10374,7 +10374,7 @@ MonoBehaviour:
     cast_time: 0
     cooldown: 0
     damage_multiply: 2
-    detect_range: 2
+    detect_range: 30
     move_time: 0
     zigzag_width: 0
     jump_height: 0
@@ -10382,10 +10382,10 @@ MonoBehaviour:
     escape_target: 0
     rush_speed: 0
     projectile_type: 0
-    projectile_speed: 1.2
-    projectile_size: 0.2
-    projectile_count: 5
-    fire_interval: 0.5
+    projectile_speed: 12
+    projectile_size: 0.5
+    projectile_count: 10
+    fire_interval: 0.2
     life_time: 3
     pierce_type: 1
     follow: 0
@@ -10420,7 +10420,7 @@ MonoBehaviour:
     cast_time: 0
     cooldown: 0
     damage_multiply: 2
-    detect_range: 2
+    detect_range: 30
     move_time: 0
     zigzag_width: 0
     jump_height: 0
@@ -10428,10 +10428,10 @@ MonoBehaviour:
     escape_target: 0
     rush_speed: 0
     projectile_type: 0
-    projectile_speed: 1.2
-    projectile_size: 0.2
-    projectile_count: 5
-    fire_interval: 0.5
+    projectile_speed: 12
+    projectile_size: 0.5
+    projectile_count: 10
+    fire_interval: 0.2
     life_time: 3
     pierce_type: 1
     follow: 0
@@ -10465,8 +10465,8 @@ MonoBehaviour:
     duration: 0
     cast_time: 0
     cooldown: 0
-    damage_multiply: 2
-    detect_range: 2
+    damage_multiply: 3
+    detect_range: 30
     move_time: 0
     zigzag_width: 0
     jump_height: 0
@@ -10474,11 +10474,11 @@ MonoBehaviour:
     escape_target: 0
     rush_speed: 0
     projectile_type: 0
-    projectile_speed: 0.8
-    projectile_size: 0.2
-    projectile_count: 5
-    fire_interval: 0.5
-    life_time: 2
+    projectile_speed: 9
+    projectile_size: 0.5
+    projectile_count: 10
+    fire_interval: 0.2
+    life_time: 5
     pierce_type: 2
     follow: 0
     arc_height: 0
@@ -10512,7 +10512,7 @@ MonoBehaviour:
     cast_time: 0
     cooldown: 0
     damage_multiply: 2
-    detect_range: 2.5
+    detect_range: 30
     move_time: 0
     zigzag_width: 0
     jump_height: 0
@@ -10520,11 +10520,11 @@ MonoBehaviour:
     escape_target: 0
     rush_speed: 0
     projectile_type: 0
-    projectile_speed: 0.8
-    projectile_size: 0.2
+    projectile_speed: 7
+    projectile_size: 1
     projectile_count: 1
-    fire_interval: 10
-    life_time: 5
+    fire_interval: 2
+    life_time: 12
     pierce_type: 1
     follow: 1
     arc_height: 0
@@ -10557,8 +10557,8 @@ MonoBehaviour:
     duration: 0
     cast_time: 0
     cooldown: 0
-    damage_multiply: 2
-    detect_range: 2.5
+    damage_multiply: 5
+    detect_range: 30
     move_time: 0
     zigzag_width: 0
     jump_height: 0
@@ -10566,11 +10566,11 @@ MonoBehaviour:
     escape_target: 0
     rush_speed: 0
     projectile_type: 0
-    projectile_speed: 0.8
-    projectile_size: 0.2
+    projectile_speed: 9
+    projectile_size: 1
     projectile_count: 1
-    fire_interval: 10
-    life_time: 5
+    fire_interval: 2
+    life_time: 7
     pierce_type: 1
     follow: 1
     arc_height: 0
@@ -10603,8 +10603,8 @@ MonoBehaviour:
     duration: 0
     cast_time: 0
     cooldown: 0
-    damage_multiply: 2
-    detect_range: 2
+    damage_multiply: 6
+    detect_range: 30
     move_time: 0
     zigzag_width: 0
     jump_height: 0
@@ -10612,14 +10612,14 @@ MonoBehaviour:
     escape_target: 0
     rush_speed: 0
     projectile_type: 1
-    projectile_speed: 0.8
-    projectile_size: 0.4
-    projectile_count: 2
-    fire_interval: 0.8
-    life_time: 7
+    projectile_speed: 9
+    projectile_size: 0.8
+    projectile_count: 6
+    fire_interval: 0.5
+    life_time: 6
     pierce_type: 1
     follow: 0
-    arc_height: 2
+    arc_height: 3
     projectile_radius: 0
     area_radius: 0
     area_damage_interval: 0
@@ -10645,8 +10645,8 @@ MonoBehaviour:
     pattern_type: 6
     pattern_logic_type: explode_self
     stat_target: 2
-    stat_value: 1.5
-    duration: 3
+    stat_value: 1.6
+    duration: 5
     cast_time: 0
     cooldown: 0
     damage_multiply: 2
@@ -10670,7 +10670,7 @@ MonoBehaviour:
     area_radius: 0
     area_damage_interval: 0
     area_target_type: 0
-    explode_range: 0.5
+    explode_range: 4
     summon_monster_id: 0
     summon_count: 0
     summon_radius: 0
@@ -10691,15 +10691,15 @@ MonoBehaviour:
     pattern_type: 1
     pattern_logic_type: move_jump
     stat_target: 2
-    stat_value: 1.5
+    stat_value: 6
     duration: 0
-    cast_time: 3
+    cast_time: 2
     cooldown: 0
     damage_multiply: 2
-    detect_range: 2
+    detect_range: 12
     move_time: 0
     zigzag_width: 0
-    jump_height: 2
+    jump_height: 3
     chase_time: 0
     escape_target: 0
     rush_speed: 0
@@ -10737,15 +10737,15 @@ MonoBehaviour:
     pattern_type: 1
     pattern_logic_type: move_jump
     stat_target: 2
-    stat_value: 1.5
+    stat_value: 6
     duration: 0
-    cast_time: 3
+    cast_time: 2
     cooldown: 0
     damage_multiply: 2
-    detect_range: 2
+    detect_range: 12
     move_time: 0
     zigzag_width: 0
-    jump_height: 2
+    jump_height: 3
     chase_time: 0
     escape_target: 0
     rush_speed: 0
@@ -10783,15 +10783,15 @@ MonoBehaviour:
     pattern_type: 1
     pattern_logic_type: move_jump
     stat_target: 2
-    stat_value: 1.5
+    stat_value: 6
     duration: 0
-    cast_time: 3
+    cast_time: 2
     cooldown: 0
     damage_multiply: 2
-    detect_range: 2
+    detect_range: 12
     move_time: 0
     zigzag_width: 0
-    jump_height: 2
+    jump_height: 3
     chase_time: 0
     escape_target: 0
     rush_speed: 0
@@ -10834,7 +10834,7 @@ MonoBehaviour:
     cast_time: 0
     cooldown: 0
     damage_multiply: 2
-    detect_range: 2
+    detect_range: 30
     move_time: 0
     zigzag_width: 0
     jump_height: 0
@@ -10842,14 +10842,14 @@ MonoBehaviour:
     escape_target: 0
     rush_speed: 0
     projectile_type: 1
-    projectile_speed: 0.8
-    projectile_size: 0.4
-    projectile_count: 2
-    fire_interval: 0.8
-    life_time: 7
+    projectile_speed: 7
+    projectile_size: 0.8
+    projectile_count: 3
+    fire_interval: 0.5
+    life_time: 8
     pierce_type: 1
     follow: 0
-    arc_height: 2
+    arc_height: 4
     projectile_radius: 0
     area_radius: 0
     area_damage_interval: 0
@@ -10875,15 +10875,15 @@ MonoBehaviour:
     pattern_type: 1
     pattern_logic_type: move_jump
     stat_target: 2
-    stat_value: 1.5
+    stat_value: 6
     duration: 0
-    cast_time: 3
+    cast_time: 2
     cooldown: 0
     damage_multiply: 2
-    detect_range: 2
+    detect_range: 12
     move_time: 0
     zigzag_width: 0
-    jump_height: 2
+    jump_height: 3
     chase_time: 0
     escape_target: 0
     rush_speed: 0
@@ -10926,7 +10926,7 @@ MonoBehaviour:
     cast_time: 0
     cooldown: 0
     damage_multiply: 2
-    detect_range: 2
+    detect_range: 30
     move_time: 0
     zigzag_width: 0
     jump_height: 0
@@ -10934,14 +10934,14 @@ MonoBehaviour:
     escape_target: 0
     rush_speed: 0
     projectile_type: 1
-    projectile_speed: 0.8
-    projectile_size: 0.4
-    projectile_count: 2
-    fire_interval: 0.8
-    life_time: 7
+    projectile_speed: 7
+    projectile_size: 0.8
+    projectile_count: 3
+    fire_interval: 0.5
+    life_time: 8
     pierce_type: 1
     follow: 0
-    arc_height: 2
+    arc_height: 4
     projectile_radius: 0
     area_radius: 0
     area_damage_interval: 0
@@ -10969,7 +10969,7 @@ MonoBehaviour:
     stat_target: 0
     stat_value: 0
     duration: 5
-    cast_time: 8
+    cast_time: 5
     cooldown: 0
     damage_multiply: 2
     detect_range: 0
@@ -10981,7 +10981,7 @@ MonoBehaviour:
     rush_speed: 0
     projectile_type: 0
     projectile_speed: 0
-    projectile_size: 0.5
+    projectile_size: 2
     projectile_count: 5
     fire_interval: 0
     life_time: 0
@@ -10991,7 +10991,7 @@ MonoBehaviour:
     projectile_radius: 0
     area_radius: 0
     area_damage_interval: 0.2
-    area_target_type: 1
+    area_target_type: 0
     explode_range: 0
     summon_monster_id: 0
     summon_count: 0
@@ -11013,15 +11013,15 @@ MonoBehaviour:
     pattern_type: 1
     pattern_logic_type: move_jump
     stat_target: 2
-    stat_value: 1.5
+    stat_value: 6
     duration: 0
-    cast_time: 3
+    cast_time: 2
     cooldown: 0
     damage_multiply: 2
-    detect_range: 2
+    detect_range: 12
     move_time: 0
     zigzag_width: 0
-    jump_height: 2
+    jump_height: 3
     chase_time: 0
     escape_target: 0
     rush_speed: 0
@@ -11064,7 +11064,7 @@ MonoBehaviour:
     cast_time: 0
     cooldown: 0
     damage_multiply: 2
-    detect_range: 2
+    detect_range: 30
     move_time: 0
     zigzag_width: 0
     jump_height: 0
@@ -11072,14 +11072,14 @@ MonoBehaviour:
     escape_target: 0
     rush_speed: 0
     projectile_type: 1
-    projectile_speed: 0.8
-    projectile_size: 0.4
-    projectile_count: 2
-    fire_interval: 0.8
-    life_time: 7
+    projectile_speed: 8
+    projectile_size: 0.8
+    projectile_count: 5
+    fire_interval: 0.5
+    life_time: 8
     pierce_type: 1
     follow: 0
-    arc_height: 2
+    arc_height: 4
     projectile_radius: 0
     area_radius: 0
     area_damage_interval: 0
@@ -11107,7 +11107,7 @@ MonoBehaviour:
     stat_target: 0
     stat_value: 0
     duration: 5
-    cast_time: 8
+    cast_time: 5
     cooldown: 0
     damage_multiply: 2
     detect_range: 0
@@ -11119,7 +11119,7 @@ MonoBehaviour:
     rush_speed: 0
     projectile_type: 0
     projectile_speed: 0
-    projectile_size: 0.5
+    projectile_size: 2
     projectile_count: 5
     fire_interval: 0
     life_time: 0
@@ -11129,7 +11129,7 @@ MonoBehaviour:
     projectile_radius: 0
     area_radius: 0
     area_damage_interval: 0.2
-    area_target_type: 1
+    area_target_type: 0
     explode_range: 0
     summon_monster_id: 0
     summon_count: 0
@@ -11151,12 +11151,12 @@ MonoBehaviour:
     pattern_type: 1
     pattern_logic_type: move_jump
     stat_target: 2
-    stat_value: 1.5
+    stat_value: 8
     duration: 0
-    cast_time: 3
+    cast_time: 2
     cooldown: 0
-    damage_multiply: 2
-    detect_range: 2
+    damage_multiply: 3
+    detect_range: 16
     move_time: 0
     zigzag_width: 0
     jump_height: 2
@@ -11202,7 +11202,7 @@ MonoBehaviour:
     cast_time: 0
     cooldown: 0
     damage_multiply: 2
-    detect_range: 2
+    detect_range: 30
     move_time: 0
     zigzag_width: 0
     jump_height: 0
@@ -11210,14 +11210,14 @@ MonoBehaviour:
     escape_target: 0
     rush_speed: 0
     projectile_type: 1
-    projectile_speed: 0.8
-    projectile_size: 0.4
-    projectile_count: 2
-    fire_interval: 0.8
-    life_time: 7
+    projectile_speed: 8
+    projectile_size: 0.8
+    projectile_count: 5
+    fire_interval: 0.5
+    life_time: 8
     pierce_type: 1
     follow: 0
-    arc_height: 2
+    arc_height: 4
     projectile_radius: 0
     area_radius: 0
     area_damage_interval: 0
@@ -11245,7 +11245,7 @@ MonoBehaviour:
     stat_target: 0
     stat_value: 0
     duration: 5
-    cast_time: 8
+    cast_time: 5
     cooldown: 0
     damage_multiply: 2
     detect_range: 0
@@ -11257,7 +11257,7 @@ MonoBehaviour:
     rush_speed: 0
     projectile_type: 0
     projectile_speed: 0
-    projectile_size: 0.5
+    projectile_size: 2
     projectile_count: 6
     fire_interval: 0
     life_time: 0
@@ -11267,7 +11267,7 @@ MonoBehaviour:
     projectile_radius: 0
     area_radius: 0
     area_damage_interval: 0.2
-    area_target_type: 1
+    area_target_type: 0
     explode_range: 0
     summon_monster_id: 0
     summon_count: 0
@@ -11290,11 +11290,11 @@ MonoBehaviour:
     pattern_logic_type: barrier
     stat_target: 0
     stat_value: 0
-    duration: 10
-    cast_time: 3
+    duration: 30
+    cast_time: 5
     cooldown: 0
     damage_multiply: 2
-    detect_range: 1
+    detect_range: 2
     move_time: 0
     zigzag_width: 0
     jump_height: 0
@@ -11325,9 +11325,9 @@ MonoBehaviour:
     debuff_damage_interval: 0
     barrier_target_type: 2
     barrier_shape: 0
-    barrier_size_x: 7
-    barrier_size_y: 6
-    barrier_damage: 0
+    barrier_size_x: 0
+    barrier_size_y: 0
+    barrier_damage: 50
     barrier_collision_block: 1
   - pattern_id: 221055
     index: 7_B_07
@@ -11335,12 +11335,12 @@ MonoBehaviour:
     pattern_type: 1
     pattern_logic_type: move_jump
     stat_target: 2
-    stat_value: 1.5
+    stat_value: 8
     duration: 0
-    cast_time: 3
+    cast_time: 2
     cooldown: 0
-    damage_multiply: 2
-    detect_range: 2
+    damage_multiply: 3
+    detect_range: 16
     move_time: 0
     zigzag_width: 0
     jump_height: 2
@@ -11386,7 +11386,7 @@ MonoBehaviour:
     cast_time: 0
     cooldown: 0
     damage_multiply: 2
-    detect_range: 2
+    detect_range: 30
     move_time: 0
     zigzag_width: 0
     jump_height: 0
@@ -11394,14 +11394,14 @@ MonoBehaviour:
     escape_target: 0
     rush_speed: 0
     projectile_type: 1
-    projectile_speed: 0.8
-    projectile_size: 0.4
-    projectile_count: 2
-    fire_interval: 0.8
-    life_time: 7
+    projectile_speed: 8
+    projectile_size: 0.8
+    projectile_count: 5
+    fire_interval: 0.5
+    life_time: 8
     pierce_type: 1
     follow: 0
-    arc_height: 2
+    arc_height: 5
     projectile_radius: 0
     area_radius: 0
     area_damage_interval: 0
@@ -11429,9 +11429,9 @@ MonoBehaviour:
     stat_target: 0
     stat_value: 0
     duration: 5
-    cast_time: 8
+    cast_time: 5
     cooldown: 0
-    damage_multiply: 2
+    damage_multiply: 3
     detect_range: 0
     move_time: 0
     zigzag_width: 0
@@ -11441,7 +11441,7 @@ MonoBehaviour:
     rush_speed: 0
     projectile_type: 0
     projectile_speed: 0
-    projectile_size: 0.5
+    projectile_size: 2
     projectile_count: 6
     fire_interval: 0
     life_time: 0
@@ -11451,7 +11451,7 @@ MonoBehaviour:
     projectile_radius: 0
     area_radius: 0
     area_damage_interval: 0.2
-    area_target_type: 1
+    area_target_type: 0
     explode_range: 0
     summon_monster_id: 0
     summon_count: 0
@@ -11474,11 +11474,11 @@ MonoBehaviour:
     pattern_logic_type: barrier
     stat_target: 0
     stat_value: 0
-    duration: 10
-    cast_time: 3
+    duration: 30
+    cast_time: 5
     cooldown: 0
     damage_multiply: 2
-    detect_range: 1
+    detect_range: 2
     move_time: 0
     zigzag_width: 0
     jump_height: 0
@@ -11509,9 +11509,9 @@ MonoBehaviour:
     debuff_damage_interval: 0
     barrier_target_type: 2
     barrier_shape: 0
-    barrier_size_x: 7
-    barrier_size_y: 6
-    barrier_damage: 0
+    barrier_size_x: 0
+    barrier_size_y: 0
+    barrier_damage: 50
     barrier_collision_block: 1
   - pattern_id: 221056
     index: 7_B_08
@@ -11519,12 +11519,12 @@ MonoBehaviour:
     pattern_type: 1
     pattern_logic_type: move_jump
     stat_target: 2
-    stat_value: 1.5
+    stat_value: 8
     duration: 0
-    cast_time: 3
+    cast_time: 2
     cooldown: 0
-    damage_multiply: 2
-    detect_range: 2
+    damage_multiply: 3
+    detect_range: 16
     move_time: 0
     zigzag_width: 0
     jump_height: 2
@@ -11570,7 +11570,7 @@ MonoBehaviour:
     cast_time: 0
     cooldown: 0
     damage_multiply: 2
-    detect_range: 2
+    detect_range: 30
     move_time: 0
     zigzag_width: 0
     jump_height: 0
@@ -11578,14 +11578,14 @@ MonoBehaviour:
     escape_target: 0
     rush_speed: 0
     projectile_type: 1
-    projectile_speed: 0.8
-    projectile_size: 0.4
-    projectile_count: 2
-    fire_interval: 0.8
-    life_time: 7
+    projectile_speed: 9
+    projectile_size: 0.8
+    projectile_count: 7
+    fire_interval: 0.5
+    life_time: 8
     pierce_type: 1
     follow: 0
-    arc_height: 2
+    arc_height: 5
     projectile_radius: 0
     area_radius: 0
     area_damage_interval: 0
@@ -11612,10 +11612,10 @@ MonoBehaviour:
     pattern_logic_type: area_danger
     stat_target: 0
     stat_value: 0
-    duration: 5
-    cast_time: 8
+    duration: 10
+    cast_time: 5
     cooldown: 0
-    damage_multiply: 2
+    damage_multiply: 3
     detect_range: 0
     move_time: 0
     zigzag_width: 0
@@ -11625,7 +11625,7 @@ MonoBehaviour:
     rush_speed: 0
     projectile_type: 0
     projectile_speed: 0
-    projectile_size: 0.5
+    projectile_size: 3
     projectile_count: 7
     fire_interval: 0
     life_time: 0
@@ -11635,7 +11635,7 @@ MonoBehaviour:
     projectile_radius: 0
     area_radius: 0
     area_damage_interval: 0.2
-    area_target_type: 1
+    area_target_type: 0
     explode_range: 0
     summon_monster_id: 0
     summon_count: 0
@@ -11658,11 +11658,11 @@ MonoBehaviour:
     pattern_logic_type: barrier
     stat_target: 0
     stat_value: 0
-    duration: 10
-    cast_time: 3
+    duration: 40
+    cast_time: 5
     cooldown: 0
     damage_multiply: 2
-    detect_range: 1
+    detect_range: 2
     move_time: 0
     zigzag_width: 0
     jump_height: 0
@@ -11693,9 +11693,9 @@ MonoBehaviour:
     debuff_damage_interval: 0
     barrier_target_type: 2
     barrier_shape: 0
-    barrier_size_x: 7
-    barrier_size_y: 6
-    barrier_damage: 3
+    barrier_size_x: 0
+    barrier_size_y: 0
+    barrier_damage: 50
     barrier_collision_block: 1
   - pattern_id: 225010
     index: 7_B_08
@@ -11705,7 +11705,7 @@ MonoBehaviour:
     stat_target: 0
     stat_value: 0
     duration: 0
-    cast_time: 4
+    cast_time: 3
     cooldown: 0
     damage_multiply: 0
     detect_range: 0
@@ -11749,12 +11749,12 @@ MonoBehaviour:
     pattern_type: 1
     pattern_logic_type: move_jump
     stat_target: 2
-    stat_value: 1.5
+    stat_value: 8
     duration: 0
-    cast_time: 3
+    cast_time: 2
     cooldown: 0
-    damage_multiply: 2
-    detect_range: 2
+    damage_multiply: 3
+    detect_range: 16
     move_time: 0
     zigzag_width: 0
     jump_height: 2
@@ -11800,7 +11800,7 @@ MonoBehaviour:
     cast_time: 0
     cooldown: 0
     damage_multiply: 2
-    detect_range: 2
+    detect_range: 30
     move_time: 0
     zigzag_width: 0
     jump_height: 0
@@ -11808,14 +11808,14 @@ MonoBehaviour:
     escape_target: 0
     rush_speed: 0
     projectile_type: 1
-    projectile_speed: 0.8
-    projectile_size: 0.4
-    projectile_count: 2
-    fire_interval: 0.8
-    life_time: 7
+    projectile_speed: 9
+    projectile_size: 0.8
+    projectile_count: 7
+    fire_interval: 0.5
+    life_time: 8
     pierce_type: 1
     follow: 0
-    arc_height: 2
+    arc_height: 5
     projectile_radius: 0
     area_radius: 0
     area_damage_interval: 0
@@ -11842,10 +11842,10 @@ MonoBehaviour:
     pattern_logic_type: area_danger
     stat_target: 0
     stat_value: 0
-    duration: 5
-    cast_time: 8
+    duration: 10
+    cast_time: 5
     cooldown: 0
-    damage_multiply: 2
+    damage_multiply: 3
     detect_range: 0
     move_time: 0
     zigzag_width: 0
@@ -11855,7 +11855,7 @@ MonoBehaviour:
     rush_speed: 0
     projectile_type: 0
     projectile_speed: 0
-    projectile_size: 0.5
+    projectile_size: 3
     projectile_count: 7
     fire_interval: 0
     life_time: 0
@@ -11865,7 +11865,7 @@ MonoBehaviour:
     projectile_radius: 0
     area_radius: 0
     area_damage_interval: 0.2
-    area_target_type: 1
+    area_target_type: 0
     explode_range: 0
     summon_monster_id: 0
     summon_count: 0
@@ -11888,11 +11888,11 @@ MonoBehaviour:
     pattern_logic_type: barrier
     stat_target: 0
     stat_value: 0
-    duration: 10
-    cast_time: 3
+    duration: 40
+    cast_time: 5
     cooldown: 0
     damage_multiply: 2
-    detect_range: 1
+    detect_range: 2
     move_time: 0
     zigzag_width: 0
     jump_height: 0
@@ -11923,9 +11923,9 @@ MonoBehaviour:
     debuff_damage_interval: 0
     barrier_target_type: 2
     barrier_shape: 0
-    barrier_size_x: 7
-    barrier_size_y: 6
-    barrier_damage: 3
+    barrier_size_x: 0
+    barrier_size_y: 0
+    barrier_damage: 100
     barrier_collision_block: 1
   - pattern_id: 225011
     index: 7_B_09
@@ -11935,7 +11935,7 @@ MonoBehaviour:
     stat_target: 0
     stat_value: 0
     duration: 0
-    cast_time: 4
+    cast_time: 3
     cooldown: 0
     damage_multiply: 0
     detect_range: 0
@@ -11979,12 +11979,12 @@ MonoBehaviour:
     pattern_type: 1
     pattern_logic_type: move_jump
     stat_target: 2
-    stat_value: 1.5
+    stat_value: 8
     duration: 0
-    cast_time: 3
+    cast_time: 2
     cooldown: 0
-    damage_multiply: 2
-    detect_range: 2
+    damage_multiply: 3
+    detect_range: 16
     move_time: 0
     zigzag_width: 0
     jump_height: 2
@@ -12030,7 +12030,7 @@ MonoBehaviour:
     cast_time: 0
     cooldown: 0
     damage_multiply: 2
-    detect_range: 2
+    detect_range: 30
     move_time: 0
     zigzag_width: 0
     jump_height: 0
@@ -12038,14 +12038,14 @@ MonoBehaviour:
     escape_target: 0
     rush_speed: 0
     projectile_type: 1
-    projectile_speed: 0.8
-    projectile_size: 0.4
-    projectile_count: 2
-    fire_interval: 0.8
-    life_time: 7
+    projectile_speed: 9
+    projectile_size: 0.8
+    projectile_count: 7
+    fire_interval: 0.5
+    life_time: 8
     pierce_type: 1
     follow: 0
-    arc_height: 2
+    arc_height: 5
     projectile_radius: 0
     area_radius: 0
     area_damage_interval: 0
@@ -12072,10 +12072,10 @@ MonoBehaviour:
     pattern_logic_type: area_danger
     stat_target: 0
     stat_value: 0
-    duration: 5
-    cast_time: 8
+    duration: 10
+    cast_time: 5
     cooldown: 0
-    damage_multiply: 2
+    damage_multiply: 3
     detect_range: 0
     move_time: 0
     zigzag_width: 0
@@ -12085,7 +12085,7 @@ MonoBehaviour:
     rush_speed: 0
     projectile_type: 0
     projectile_speed: 0
-    projectile_size: 0.5
+    projectile_size: 3
     projectile_count: 8
     fire_interval: 0
     life_time: 0
@@ -12095,7 +12095,7 @@ MonoBehaviour:
     projectile_radius: 0
     area_radius: 0
     area_damage_interval: 0.2
-    area_target_type: 1
+    area_target_type: 0
     explode_range: 0
     summon_monster_id: 0
     summon_count: 0
@@ -12118,11 +12118,11 @@ MonoBehaviour:
     pattern_logic_type: barrier
     stat_target: 0
     stat_value: 0
-    duration: 10
-    cast_time: 3
+    duration: 40
+    cast_time: 5
     cooldown: 0
     damage_multiply: 2
-    detect_range: 1
+    detect_range: 2
     move_time: 0
     zigzag_width: 0
     jump_height: 0
@@ -12153,9 +12153,9 @@ MonoBehaviour:
     debuff_damage_interval: 0
     barrier_target_type: 2
     barrier_shape: 0
-    barrier_size_x: 7
-    barrier_size_y: 6
-    barrier_damage: 3
+    barrier_size_x: 0
+    barrier_size_y: 0
+    barrier_damage: 100
     barrier_collision_block: 1
   - pattern_id: 225012
     index: 7_B_10
@@ -12165,7 +12165,7 @@ MonoBehaviour:
     stat_target: 0
     stat_value: 0
     duration: 0
-    cast_time: 4
+    cast_time: 3
     cooldown: 0
     damage_multiply: 0
     detect_range: 0
@@ -12209,14 +12209,14 @@ MonoBehaviour:
     pattern_type: 1
     pattern_logic_type: move_zigzag
     stat_target: 2
-    stat_value: 0.8
+    stat_value: 1.5
     duration: 0
     cast_time: 0
     cooldown: 0
     damage_multiply: 0
     detect_range: 0
     move_time: 0
-    zigzag_width: 0.5
+    zigzag_width: 4
     jump_height: 0
     chase_time: 0
     escape_target: 0
@@ -12255,14 +12255,14 @@ MonoBehaviour:
     pattern_type: 1
     pattern_logic_type: move_zigzag
     stat_target: 2
-    stat_value: 0.8
+    stat_value: 1.5
     duration: 0
     cast_time: 0
     cooldown: 0
     damage_multiply: 0
     detect_range: 0
     move_time: 0
-    zigzag_width: 0.5
+    zigzag_width: 3
     jump_height: 0
     chase_time: 0
     escape_target: 0
@@ -12301,14 +12301,14 @@ MonoBehaviour:
     pattern_type: 1
     pattern_logic_type: move_zigzag
     stat_target: 2
-    stat_value: 0.8
+    stat_value: 1.5
     duration: 0
     cast_time: 0
     cooldown: 0
     damage_multiply: 0
     detect_range: 0
     move_time: 0
-    zigzag_width: 0.5
+    zigzag_width: 3
     jump_height: 0
     chase_time: 0
     escape_target: 0
@@ -12352,7 +12352,7 @@ MonoBehaviour:
     cast_time: 0
     cooldown: 0
     damage_multiply: 1.2
-    detect_range: 1.5
+    detect_range: 30
     move_time: 0
     zigzag_width: 0
     jump_height: 0
@@ -12360,11 +12360,11 @@ MonoBehaviour:
     escape_target: 0
     rush_speed: 0
     projectile_type: 0
-    projectile_speed: 1.5
-    projectile_size: 0.1
-    projectile_count: 1
+    projectile_speed: 9
+    projectile_size: 0.5
+    projectile_count: 5
     fire_interval: 0.2
-    life_time: 2
+    life_time: 3
     pierce_type: 0
     follow: 0
     arc_height: 0
@@ -12393,14 +12393,14 @@ MonoBehaviour:
     pattern_type: 1
     pattern_logic_type: move_zigzag
     stat_target: 2
-    stat_value: 0.8
+    stat_value: 2
     duration: 0
     cast_time: 0
     cooldown: 0
     damage_multiply: 0
     detect_range: 0
     move_time: 0
-    zigzag_width: 0.5
+    zigzag_width: 2
     jump_height: 0
     chase_time: 0
     escape_target: 0
@@ -12444,7 +12444,7 @@ MonoBehaviour:
     cast_time: 0
     cooldown: 0
     damage_multiply: 1.2
-    detect_range: 1.5
+    detect_range: 30
     move_time: 0
     zigzag_width: 0
     jump_height: 0
@@ -12452,11 +12452,11 @@ MonoBehaviour:
     escape_target: 0
     rush_speed: 0
     projectile_type: 0
-    projectile_speed: 1.5
-    projectile_size: 0.1
+    projectile_speed: 9
+    projectile_size: 0.5
     projectile_count: 2
     fire_interval: 0.2
-    life_time: 2
+    life_time: 4
     pierce_type: 0
     follow: 0
     arc_height: 0
@@ -12485,14 +12485,14 @@ MonoBehaviour:
     pattern_type: 1
     pattern_logic_type: move_zigzag
     stat_target: 2
-    stat_value: 0.8
+    stat_value: 2
     duration: 0
     cast_time: 0
     cooldown: 0
     damage_multiply: 0
     detect_range: 0
     move_time: 0
-    zigzag_width: 0.5
+    zigzag_width: 2
     jump_height: 0
     chase_time: 0
     escape_target: 0
@@ -12536,7 +12536,7 @@ MonoBehaviour:
     cast_time: 0
     cooldown: 0
     damage_multiply: 1.2
-    detect_range: 1.5
+    detect_range: 30
     move_time: 0
     zigzag_width: 0
     jump_height: 0
@@ -12544,11 +12544,11 @@ MonoBehaviour:
     escape_target: 0
     rush_speed: 0
     projectile_type: 0
-    projectile_speed: 1.5
-    projectile_size: 0.1
+    projectile_speed: 9
+    projectile_size: 0.5
     projectile_count: 3
     fire_interval: 0.2
-    life_time: 2
+    life_time: 5
     pierce_type: 0
     follow: 0
     arc_height: 0
@@ -12579,9 +12579,9 @@ MonoBehaviour:
     stat_target: 0
     stat_value: 0
     duration: 5
-    cast_time: 8
+    cast_time: 10
     cooldown: 0
-    damage_multiply: 2
+    damage_multiply: 3
     detect_range: 0
     move_time: 0
     zigzag_width: 0
@@ -12591,7 +12591,7 @@ MonoBehaviour:
     rush_speed: 0
     projectile_type: 0
     projectile_speed: 0
-    projectile_size: 0.5
+    projectile_size: 1
     projectile_count: 4
     fire_interval: 0
     life_time: 0
@@ -13408,190 +13408,6 @@ MonoBehaviour:
     stat_value: 3
     duration: 0
     cast_time: 0
-    cooldown: 0
-    damage_multiply: 0
-    detect_range: 0
-    move_time: 0
-    zigzag_width: 0
-    jump_height: 0
-    chase_time: 0
-    escape_target: 0
-    rush_speed: 0
-    projectile_type: 0
-    projectile_speed: 0
-    projectile_size: 0
-    projectile_count: 0
-    fire_interval: 0
-    life_time: 0
-    pierce_type: 0
-    follow: 0
-    arc_height: 0
-    projectile_radius: 0
-    area_radius: 0
-    area_damage_interval: 0
-    area_target_type: 0
-    explode_range: 0
-    summon_monster_id: 0
-    summon_count: 0
-    summon_radius: 0
-    summon_position_type: 0
-    debuff_type: 0
-    debuff_duration: 0
-    debuff_value: 0
-    debuff_damage_interval: 0
-    barrier_target_type: 0
-    barrier_shape: 0
-    barrier_size_x: 0
-    barrier_size_y: 0
-    barrier_damage: 0
-    barrier_collision_block: 0
-  - pattern_id: 225013
-    index: "2_B_01_\uD14C\uC2A4\uD2B8\uC6A9"
-    resource_id: 0
-    pattern_type: 5
-    pattern_logic_type: trigger_exp_absorb
-    stat_target: 0
-    stat_value: 0
-    duration: 0
-    cast_time: 3
-    cooldown: 0
-    damage_multiply: 0
-    detect_range: 0
-    move_time: 0
-    zigzag_width: 0
-    jump_height: 0
-    chase_time: 0
-    escape_target: 0
-    rush_speed: 0
-    projectile_type: 0
-    projectile_speed: 0
-    projectile_size: 0
-    projectile_count: 0
-    fire_interval: 0
-    life_time: 0
-    pierce_type: 0
-    follow: 0
-    arc_height: 0
-    projectile_radius: 0
-    area_radius: 0
-    area_damage_interval: 0
-    area_target_type: 0
-    explode_range: 0
-    summon_monster_id: 0
-    summon_count: 0
-    summon_radius: 0
-    summon_position_type: 0
-    debuff_type: 0
-    debuff_duration: 0
-    debuff_value: 0
-    debuff_damage_interval: 0
-    barrier_target_type: 0
-    barrier_shape: 0
-    barrier_size_x: 0
-    barrier_size_y: 0
-    barrier_damage: 0
-    barrier_collision_block: 0
-  - pattern_id: 225014
-    index: "2_B_01_\uD14C\uC2A4\uD2B8\uC6A9"
-    resource_id: 0
-    pattern_type: 5
-    pattern_logic_type: trigger_dirty_spawn
-    stat_target: 0
-    stat_value: 0
-    duration: 10
-    cast_time: 3
-    cooldown: 0
-    damage_multiply: 0
-    detect_range: 0
-    move_time: 0
-    zigzag_width: 0
-    jump_height: 0
-    chase_time: 0
-    escape_target: 0
-    rush_speed: 0
-    projectile_type: 0
-    projectile_speed: 0
-    projectile_size: 0
-    projectile_count: 0
-    fire_interval: 0
-    life_time: 0
-    pierce_type: 0
-    follow: 0
-    arc_height: 0
-    projectile_radius: 0
-    area_radius: 0
-    area_damage_interval: 0
-    area_target_type: 0
-    explode_range: 0
-    summon_monster_id: 0
-    summon_count: 5
-    summon_radius: 5
-    summon_position_type: 0
-    debuff_type: 0
-    debuff_duration: 0
-    debuff_value: 0
-    debuff_damage_interval: 0
-    barrier_target_type: 0
-    barrier_shape: 0
-    barrier_size_x: 0
-    barrier_size_y: 0
-    barrier_damage: 0
-    barrier_collision_block: 0
-  - pattern_id: 225015
-    index: "2_B_01_\uD14C\uC2A4\uD2B8\uC6A9"
-    resource_id: 0
-    pattern_type: 5
-    pattern_logic_type: trigger_dirty_spawn
-    stat_target: 0
-    stat_value: 0
-    duration: 15
-    cast_time: 3
-    cooldown: 0
-    damage_multiply: 0
-    detect_range: 0
-    move_time: 0
-    zigzag_width: 0
-    jump_height: 0
-    chase_time: 0
-    escape_target: 0
-    rush_speed: 0
-    projectile_type: 0
-    projectile_speed: 0
-    projectile_size: 0
-    projectile_count: 0
-    fire_interval: 0
-    life_time: 0
-    pierce_type: 0
-    follow: 0
-    arc_height: 0
-    projectile_radius: 0
-    area_radius: 0
-    area_damage_interval: 0
-    area_target_type: 0
-    explode_range: 0
-    summon_monster_id: 0
-    summon_count: 3
-    summon_radius: 3
-    summon_position_type: 1
-    debuff_type: 0
-    debuff_duration: 0
-    debuff_value: 0
-    debuff_damage_interval: 0
-    barrier_target_type: 0
-    barrier_shape: 0
-    barrier_size_x: 0
-    barrier_size_y: 0
-    barrier_damage: 0
-    barrier_collision_block: 0
-  - pattern_id: 225016
-    index: "2_B_01_\uD14C\uC2A4\uD2B8\uC6A9"
-    resource_id: 0
-    pattern_type: 5
-    pattern_logic_type: trigger_enrage
-    stat_target: 0
-    stat_value: 0
-    duration: 0
-    cast_time: 3
     cooldown: 0
     damage_multiply: 0
     detect_range: 0
