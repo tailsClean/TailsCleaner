@@ -51,8 +51,8 @@ public abstract class EnhanceSystemUI : UIGroup
     protected override void Start()
     {
         base.Start();
-        _inventory = _enhanceSystem.UsingInventory;
-        _currency = _enhanceSystem.UsingCurrency;
+        _inventory = ItemManager.Instance.Inventory;
+        _currency = ItemManager.Instance.Currency;
         UpdateCurrentGold();
         UpdateResourceUI();
     }

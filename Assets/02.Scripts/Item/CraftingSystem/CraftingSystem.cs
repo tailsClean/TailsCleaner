@@ -23,6 +23,7 @@ public partial class CraftingSystem : MonoBehaviour
 
     private void Start()
     {
+        _inventory = ItemManager.Instance.Inventory;
         _loadout = PlayerStatManager.Instance.Loadout;
     }
 
