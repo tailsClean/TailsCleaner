@@ -130,6 +130,17 @@ public class UIManager : MonoBehaviour
     {
         await GameManager.Instance.LoadStageProgress();
         SceneManager.LoadScene("LobbyScene");
+        if(_confirmPanel != null)
+        {
+            Destroy(_confirmPanel);
+            _confirmPanel = null;
+        }
+
+        if(_impossiblePanel != null)
+        {
+            Destroy(_impossiblePanel);
+            _impossiblePanel = null;
+        }
 
         await FirebaseManager.Instance.Load();
     }
@@ -137,6 +148,16 @@ public class UIManager : MonoBehaviour
     public void GoToLobby() 
     {
         SceneManager.LoadScene("LobbyScene");
+         if(_confirmPanel != null)
+        {
+            Destroy(_confirmPanel);
+            _confirmPanel = null;
+        }
+        if(_impossiblePanel != null)
+        {
+            Destroy(_impossiblePanel);
+            _impossiblePanel = null;
+        }
     }
 
     public void GoToStage()
@@ -144,6 +165,16 @@ public class UIManager : MonoBehaviour
         SceneManager.sceneLoaded -= OnStageLoaded; // [추가] 중복 등록 방지
         SceneManager.sceneLoaded += OnStageLoaded;
         SceneManager.LoadScene("StageScene");
+        if(_confirmPanel != null)
+        {
+            Destroy(_confirmPanel);
+            _confirmPanel = null;
+        }
+        if(_impossiblePanel != null)
+        {
+            Destroy(_impossiblePanel);
+            _impossiblePanel = null;
+        }
     }
 
     private void OnStageLoaded(Scene scene, LoadSceneMode mode)
@@ -367,6 +398,7 @@ public class UIManager : MonoBehaviour
 
     public void ChangeStateConfirmPanel()
     {
+        if (_confirmPanel != null && _confirmPanel.gameObject == null) _confirmPanel = null;
         if (_confirmPanel == null)
         {
             if (_confirmPrefab == null)

@@ -85,11 +85,9 @@ public class ExitPanel : MonoBehaviour
                     StageController.Instance.EndStage(StageResult.Abandon, StageFailReason.기타);
                 }
 
-                UIManager.Instance.GoToLobby();
                 UIManager.Instance.ChangeStateConfirmPanel();
+                UIManager.Instance.GoToLobby();
             }, () => UIManager.Instance.ChangeStateConfirmPanel());
-
-           
         } 
     }
     private void UpdateButton()
