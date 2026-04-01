@@ -204,12 +204,12 @@ public partial class CraftingSystem : MonoBehaviour
     // 합성 불가 패널 띄우기
     private void OnImpossiblePanel()
     {
+        UIManager.Instance.ChangeStateImpossiblePanel();
         var impossiblePanel = UIManager.Instance.ImpossiblePanel;
 
         impossiblePanel.SetText("더 이상 합성할 수 없는 장비에요!");
         impossiblePanel.SetListeners(() => impossiblePanel.gameObject.SetActive(false));
 
-        UIManager.Instance.ChangeStateImpossiblePanel();
     }
 
 

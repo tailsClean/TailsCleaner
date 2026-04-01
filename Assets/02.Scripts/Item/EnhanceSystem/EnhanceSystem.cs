@@ -155,12 +155,12 @@ public class EnhanceSystem : MonoBehaviour
     // 강화 불가능 패널 띄우기
     private void OnImpossiblePanel(string text)
     {
+        UIManager.Instance.ChangeStateImpossiblePanel();
         var impossiblePanel = UIManager.Instance.ImpossiblePanel;
 
         impossiblePanel.SetText(text);
         impossiblePanel.SetListeners(() => impossiblePanel.gameObject.SetActive(false));
 
-        UIManager.Instance.ChangeStateImpossiblePanel();
     }
 }
 
