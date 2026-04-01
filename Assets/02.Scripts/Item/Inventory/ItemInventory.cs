@@ -98,6 +98,34 @@ public class ItemInventory : MonoBehaviour
     #region 유물 아이템
 
 
+    public void AddRelic(int id)
+    {
+        // 이미 가지고 있는지 확인 
+        if (HasRelic(id))
+        {
+            Debug.LogWarning($"[Relic] ID:{id} 유물은 이미 소지 중이라 추가하지 않습니다.");
+            return;
+        }
+
+        // 딕셔너리에 추가
+        _inventory.Add(new ItemInstance(id, 0, GRADE.None), 1);
+
+        // 데이터가 변했으니 이벤트 발생 및 저장
+        _onChangeInventory?.OnStartEvent();
+        _ = SaveInventory(); // Firebase 저장 (비동기 호출)
+
+        Debug.Log($"[Relic] ID:{id} 유물 인벤토리에 추가 완료!");
+    }
+
+
+    // 유물 아이템 소지 여부 확인
+    public bool HasRelic(int id)
+    {
+        var item = SearchItem(id, 0, GRADE.None);
+        return HasItem(item);
+    }
+
+
     /// 유물 아이템 읽기
     public bool TryGetRelic(int id, int enhanceLevel, out ItemInstance item) =>
         TryGetItem(id, enhanceLevel, GRADE.None, out item);

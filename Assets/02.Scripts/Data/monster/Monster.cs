@@ -3,7 +3,7 @@ using MonsterEnum;
 
 
 [Serializable]
-public class Monster
+public class Monster : ItemDataBase
 {
     public int monster_id;
     public string index;
