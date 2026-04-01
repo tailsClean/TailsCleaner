@@ -88,7 +88,9 @@ public class DungeonSelect : MonoBehaviour
     }
     private void OnSelect()
     {
-        GameManager.Instance._currentTower = _towerData.dataList[_currentIndex];
+        TowerTable tower = _towerData.dataList[_currentIndex];
+        GameManager.Instance._currentTower = tower;
+        if (SoundManager.Instance) SoundManager.Instance.SetTowerMoveSFX(tower.move_type);
         this.gameObject.SetActive(false);
         UIManager.Instance.ChangeStateStageSelect();
     }

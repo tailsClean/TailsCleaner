@@ -10,5 +10,6 @@ public class TowerTable
     public float power_modifier;
     public string tower_icon_resource;
     public string bgm_resource;
+    public TowerMoveSFXType move_type;
     
 }
