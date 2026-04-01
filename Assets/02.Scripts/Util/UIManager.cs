@@ -164,15 +164,17 @@ public class UIManager : MonoBehaviour
         Application.Quit();
 #endif
     }
-
     #region Orientation
+    [SerializeField] private ItemUI _HorizontalItem;
+    [SerializeField] private ItemUI _VerticalItem;
+    private ItemUI _currentItemUI;
+
     [SerializeField] private CanvasScaler _canvasScaler;
     private void Start()
     {
         // 초기 화면 방향 설정
-        bool isVertical = PlayerPrefs.GetInt("Orientation", 0) == 1;
+        bool isVertical = PlayerPrefs.GetInt("IsVertical", 0) == 1;
         SetOrientation(isVertical); 
-        
     }
 
     public void SetOrientation(bool isVertical)
@@ -187,6 +189,7 @@ public class UIManager : MonoBehaviour
                 ? new Vector2(1080, 1920)
                 : new Vector2(1920, 1080);
         }
+        _currentItemUI = isVertical ? _VerticalItem : _HorizontalItem;
 
         IsVertical = isVertical;
     }
@@ -296,7 +299,7 @@ public class UIManager : MonoBehaviour
     {
         if (_inventoryUI != null)
         {
-            _inventoryUI.SetActive(!_inventoryUI.activeSelf);
+            _currentItemUI._inventoryUI.SetActive(!_inventoryUI.activeSelf);
         }
     }
 
@@ -304,7 +307,7 @@ public class UIManager : MonoBehaviour
     {
         if (_relicUI != null)
         {
-            _relicUI.SetActive(!_relicUI.activeSelf);
+            _currentItemUI._playerRelicUI.SetActive(!_relicUI.activeSelf);
         }
     }
 
@@ -312,7 +315,7 @@ public class UIManager : MonoBehaviour
     {
         if (_equipUI != null)
         {
-            _equipUI.SetActive(!_equipUI.activeSelf);
+            _currentItemUI._playerEquipUI.SetActive(!_equipUI.activeSelf);
         }
     }
     public void ChangeStateMyStatsUI()
