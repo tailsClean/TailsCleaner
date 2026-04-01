@@ -2,13 +2,16 @@
 using UnityEngine.AddressableAssets;
 using UnityEngine.ResourceManagement.AsyncOperations;
 
-public class FieldRelicItem : MonoBehaviour
+public class FieldRelicItem : MonoBehaviour, IPickable
 {
     [Header("유물 설정")]
     [SerializeField] private int _relicId;
 
     [Header("렌더링")]
     [SerializeField] private SpriteRenderer _spriteRenderer;
+
+    public Transform MyTransform => transform;
+    public int RelicId => _relicId;
 
     private void Awake()
     {

@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using Unity.VisualScripting;
+using UnityEngine;
 using UnityEngine.InputSystem;
 
 public class PlayerBase : MonoBehaviour, IDamageable, ISkillable, ISkillStat, IPlayerAni
@@ -26,6 +27,7 @@ public class PlayerBase : MonoBehaviour, IDamageable, ISkillable, ISkillStat, IP
     private PlayerStateMachine _stateMachine;
     private PlayerAnimation _playerAni;
 
+    private ItemInventory _inventory;
 
     public float CurrentHp => _hpSystem.CurrentHp;
     public int InGameLevel => _levelSystem.InGameLevel;
@@ -80,6 +82,7 @@ public class PlayerBase : MonoBehaviour, IDamageable, ISkillable, ISkillStat, IP
     {
         _hpSystem.Init(MaxHp);
         _itemPickupSystem.SetColliderRange(Data.PickupRange);
+        _inventory = ItemManager.Instance.Inventory;
         AttackDir = new Vector2(0, -1);
     }
 
@@ -90,6 +93,14 @@ public class PlayerBase : MonoBehaviour, IDamageable, ISkillable, ISkillStat, IP
             return;
 
         _stateMachine.Update();
+    }
+
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (!collision.TryGetComponent<FieldRelicItem>(out var relic))
+            return;
+
+        _inventory.GetRelic(relic.RelicId, 0);
     }
 
 
