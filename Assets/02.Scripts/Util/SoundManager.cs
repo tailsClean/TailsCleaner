@@ -638,6 +638,14 @@ public class SoundManager : MonoBehaviour
     #endregion
 
 
+    // 스테이지 결과용
+    public void PlayStageResult(BGMName bgmName)
+    {
+        PlayBGM(bgmName, false);
+        StopAllSFX();
+    }
+
+
     // 모든 SFX 강제 종료
     public void StopAllSFX()
     {

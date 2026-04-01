@@ -16,6 +16,7 @@ public class FailState : IStageState
         Debug.Log($"[Stage] Enter FailState reason={Reason}");
         UIManager.Instance.OpenGameOver();
 
+        if (SoundManager.Instance) SoundManager.Instance.PlayStageResult(BGMName.Stage_Clear);
     }
 
     public void Tick(float _deltaTime) { }

@@ -31,6 +31,8 @@ public class BossState : IStageState
             return;
         }
 
+        if (SoundManager.Instance) SoundManager.Instance.PlayBGM(BGMName.Boss_Normal, false);
+
         _controller.StartCoroutine(CoEnterBossWave());
     }
 
