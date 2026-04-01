@@ -5,8 +5,6 @@ using UnityEngine.UI;
 
 public class ItemInventoryUI : UIGroup
 {
-    [SerializeField] private ItemInventory _inventory;
-
     [Header("아이템 팝업UI")]
     [SerializeField] private List<ItemPopupBase> _itemPopupUI;
 
@@ -18,6 +16,7 @@ public class ItemInventoryUI : UIGroup
     [SerializeField] private VoidEventChannelSO _onChangeInventory;
     [SerializeField] private ItemInstanceEventChannelSO _onItemPopUp;
 
+    private ItemInventory _inventory;
     private Dictionary<UI_GROUP, InventorySlotHandler> _uiGroupDict;
     private InventorySlotHandler _currentShowUI;
 
@@ -31,6 +30,9 @@ public class ItemInventoryUI : UIGroup
     protected override void Start()
     {
         base.Start();
+
+        _inventory = ItemManager.Instance.Inventory;
+
         foreach(var popup in _itemPopupUI)
         {
             popup.gameObject.SetActive(false);
