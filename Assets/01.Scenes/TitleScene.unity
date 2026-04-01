@@ -468,6 +468,17 @@ Transform:
   m_Children: []
   m_Father: {fileID: 1231615606}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &613174688 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 8711953478199988750, guid: d4ea12e617ff6da40a91645cfee22035, type: 3}
+  m_PrefabInstance: {fileID: 2008231787}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0cd44c1031e13a943bb63640046fad76, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.CanvasScaler
 --- !u!1 &893762631
 GameObject:
   m_ObjectHideFlags: 0
@@ -901,6 +912,8 @@ MonoBehaviour:
     clip: {fileID: 8300000, guid: 4c3c7ba9c52ba764c9c2fa89883acf07, type: 3}
   - name: 5
     clip: {fileID: 8300000, guid: 5f2bdc65fa74e9b4886d797a9ceee2f0, type: 3}
+  - name: 0
+    clip: {fileID: 8300000, guid: c8d1f786b0c55514da2235e1f578c688, type: 3}
   _stageBgmList:
   - {fileID: 8300000, guid: b090384af8e063049a896094126b782c, type: 3}
   - {fileID: 8300000, guid: fa523b08f5deb5940b8cac8789d833b3, type: 3}
@@ -1897,6 +1910,10 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4805740166642567106, guid: d4ea12e617ff6da40a91645cfee22035, type: 3}
+      propertyPath: _canvasScaler
+      value: 
+      objectReference: {fileID: 613174688}
     - target: {fileID: 5476295843270960188, guid: d4ea12e617ff6da40a91645cfee22035, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
@@ -2259,6 +2276,10 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8148243111286992978, guid: d4ea12e617ff6da40a91645cfee22035, type: 3}
       propertyPath: m_SizeDelta.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8162015831991838962, guid: d4ea12e617ff6da40a91645cfee22035, type: 3}
+      propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8346177482109065443, guid: d4ea12e617ff6da40a91645cfee22035, type: 3}

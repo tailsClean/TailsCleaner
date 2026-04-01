@@ -20,6 +20,14 @@ public class UIScaleChanger : MonoBehaviour
     private void Start()
     {
         ScaleChange();
+        UIManager.Instance.OnOrientationChanged += _ =>  ScaleChange();
+    }
+    private void OnDestroy()
+    {
+        if (UIManager.Instance != null)
+        {
+            UIManager.Instance.OnOrientationChanged -= _ => ScaleChange();
+        }
     }
 
 
