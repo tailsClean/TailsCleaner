@@ -22,7 +22,7 @@ public enum UISFXName
     CraftingFail,
 }
 public enum PlayerSFXName
-{ 
+{
     Move,
     Clean,
     LevelUp,
@@ -35,6 +35,12 @@ public enum MonsterSFXName
     Monster_Die,
     Monster_Hit,
     Monster_Roar,
+}
+public enum TowerMoveSFXType
+{
+    Type1,
+    Type2,
+    Type3,
 }
 
 [System.Serializable]
@@ -59,10 +65,10 @@ public struct UISFXClipInfo
 }
 
 [System.Serializable]
-public struct PlayerSFXClipInfo 
-{ 
+public struct PlayerSFXClipInfo
+{
     public PlayerSFXName name;
-    public AudioClip clip; 
+    public AudioClip clip;
 }
 
 public class SoundManager : MonoBehaviour
@@ -94,10 +100,11 @@ public class SoundManager : MonoBehaviour
     [SerializeField] private PlayerSFXClipInfo[] _playerSfxClips;
     private Coroutine _playerActionCoroutine;
     private Coroutine _playerEventCoroutine;
-    
+
     [Header("Footstep SFX")]
     [SerializeField, Tooltip("발소리 재생 간격")]
     private float _footstepInterval = 0.5f;
+    private TowerMoveSFXType _currentTowerMoveType = TowerMoveSFXType.Type1;    // 현재 타워 발소리 타입
     private WaitForSeconds _footstepDelay;   // 발소리 대기 간격
 
     [Header("Monster SFX")]
@@ -126,7 +133,7 @@ public class SoundManager : MonoBehaviour
     private float _uiMasterVolume = 1.0f;
     private float _uiBgmVolume = 1.0f;
     private float _uiSfxVolume = 1.0f;
-    
+
     public float UIBGMVolume => _uiBgmVolume;
     public float UISFXVolume => _uiSfxVolume;
 
@@ -161,10 +168,10 @@ public class SoundManager : MonoBehaviour
         _instance = this;
         DontDestroyOnLoad(gameObject);
 
-        foreach (var info in _bgmClips)          _bgmDict[info.name]          = info.clip;
-        foreach (var info in _uiSfxClips)        _uiSfxDict[info.name]        = info.clip;
-        foreach (var info in _playerSfxClips)    _playerSfxDict[info.name]    = info.clip;
-        foreach (var info in _monsterSfxClips)   _monsterSfxDict[info.name]   = info.clip;
+        foreach (var info in _bgmClips) _bgmDict[info.name] = info.clip;
+        foreach (var info in _uiSfxClips) _uiSfxDict[info.name] = info.clip;
+        foreach (var info in _playerSfxClips) _playerSfxDict[info.name] = info.clip;
+        foreach (var info in _monsterSfxClips) _monsterSfxDict[info.name] = info.clip;
 
         LoadVolumes();
     }
@@ -308,7 +315,7 @@ public class SoundManager : MonoBehaviour
         if (clip == null) return false;
 
         float currentTime = Time.time;
-        if (_clipEndTimes.TryGetValue(clip, out float endTime) && currentTime<endTime)
+        if (_clipEndTimes.TryGetValue(clip, out float endTime) && currentTime < endTime)
         {
             return false; // 아직 재생 중이므로 생략
         }
@@ -380,6 +387,7 @@ public class SoundManager : MonoBehaviour
     // 걷기
     private void PlayMoveLoopSFX(float volume)
     {
+        // 잠시 보류
     }
 
     // 청소
@@ -613,5 +621,10 @@ public class SoundManager : MonoBehaviour
     }
 
     #endregion
+
+
+    // 발소리 설정
+    public void SetTowerMoveSFX(TowerMoveSFXType type)
+        => _currentTowerMoveType = type;
 
 }
