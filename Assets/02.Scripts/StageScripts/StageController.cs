@@ -211,7 +211,7 @@ public class StageController : MonoBehaviour
             return;
         }
 
-        IStageState bossState = new BossState(this, _timer, _registry, _spawner, _plan.bossId);
+        IStageState bossState = new BossState(this, _timer, _registry, _spawner, _plan.bossId, _plan.isFinalBoss);
         _stateMachine.ChangeState(bossState);
     }
 

@@ -5,7 +5,7 @@ public class StagePlanBuilder
 {
     private const int NO_BOSS_ID = -1; // 보스가 없는 경우의 ID
 
-    public StagePlan Build(StageTableRow _stage, List<MonsterWaveRow> _waveRows, List<SpecialMonsterRow> specialRows)
+    public StagePlan Build(StageTableRow _stage, List<MonsterWaveRow> _waveRows, List<SpecialMonsterRow> specialRows, List<StageTableRow> allStageRows)
     {
         if (_stage == null || _waveRows == null)
             return null;
@@ -59,6 +59,22 @@ public class StagePlanBuilder
 
         _waves.Sort((a, b) => a.waveIndex.CompareTo(b.waveIndex));
 
+        // 탑 ID의 가장 높은 스테이지 체크
+        // 탑의 최종 스테이지 보스인지
+        bool isFinalBoss = false;
+        if (allStageRows != null)
+        {
+            int maxIndex = -1;
+            foreach (var s in allStageRows)
+            {
+                if (s.tower_id == _stage.tower_id)
+                    if (s.stage_index > maxIndex)
+                        maxIndex = s.stage_index;
+            }
+
+            isFinalBoss = (_stage.stage_index == maxIndex);
+        }
+
         return new StagePlan
         {
             stageId = _stage.stage_id,
@@ -79,6 +95,8 @@ public class StagePlanBuilder
 
             mapResource = _stage.map_resource,
             expGain = Mathf.Max(0, _stage.exp_gain),
+
+            isFinalBoss = isFinalBoss,
         };
     }
 }
