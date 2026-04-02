@@ -10,7 +10,6 @@ public class MoveState : PlayerState
     public MoveState(PlayerBase player)
     {
         _player = player;
-        _moveSpeed = player.MoveSpeed;
     }
 
     public override void Enter() 
@@ -31,6 +30,7 @@ public class MoveState : PlayerState
 
     private void OnMove()
     {
+        _moveSpeed = _player.MoveSpeed;
         _player.transform.Translate(_moveDir * Time.deltaTime * _moveSpeed);
 
         ChangeFlip();
