@@ -20,6 +20,7 @@ public class LaserBase : MonoBehaviour
     {
         _isAttackable = false;
         _isPlayerStayed = false;
+        _player.SetInvincibleTime(PlayerHpSystem.INVINCIBLE_TIME);
     }
 
     private void Update()
