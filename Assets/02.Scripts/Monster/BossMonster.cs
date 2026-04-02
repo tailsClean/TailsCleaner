@@ -406,12 +406,15 @@ public class BossMonster : MonsterBase, ILaserable
 
     protected override void FixedUpdate()
     {
+        //일시정지 체크
         if (isPaused)
         {
             if (rb2D != null)
                 rb2D.linearVelocity = Vector2.zero;
             return;
         }
+
+        // 데이터 초기화
         if (!isDataInitialized)
         {
             if (MonsterId > 0)
@@ -424,11 +427,14 @@ public class BossMonster : MonsterBase, ILaserable
             }
         }
 
+        // 타겟 부재 및 사망 체크
         if (target == null || this.hp <= 0)
         {
             rb2D.linearVelocity = Vector2.zero;
             return;
         }
+
+        UpdateFacingDirection();
 
         // --- 패턴 로직 실행 ---
         // 트리거 패턴 중 보스 정지 하기
@@ -1029,6 +1035,24 @@ public class BossMonster : MonsterBase, ILaserable
             return moveDir.normalized;
 
         return finalDir.normalized;
+    }
+
+    private void UpdateFacingDirection()
+    {
+        if (target == null || visualChild == null) return;
+
+        float direction = target.position.x - transform.position.x;
+
+        if (direction > 0.01f)
+        {
+            // 오른쪽을 바라보게 함
+            visualChild.localScale = new Vector3(-Mathf.Abs(visualChild.localScale.x), visualChild.localScale.y, visualChild.localScale.z);
+        }
+        else if (direction < -0.01f)
+        {
+            // 왼쪽을 바라보게 함
+            visualChild.localScale = new Vector3(Mathf.Abs(visualChild.localScale.x), visualChild.localScale.y, visualChild.localScale.z);
+        }
     }
 
     private void MoveProcess()

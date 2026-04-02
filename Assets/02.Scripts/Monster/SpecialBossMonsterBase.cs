@@ -152,6 +152,8 @@ public abstract class SpecialBossMonsterBase : MonsterBase
             return;
         }
 
+        UpdateFacingDirection();
+
         // --- 애니메이션 판정을 위한 상태 변수 ---
         bool isMovingNow = false;
 
@@ -501,6 +503,25 @@ public abstract class SpecialBossMonsterBase : MonsterBase
             return moveDir.normalized;
 
         return finalDir.normalized;
+    }
+
+    private void UpdateFacingDirection()
+    {
+        if (target == null || visualChild == null) return;
+
+        float lookX;
+
+        // 도망 상태일 때는 이동 방향을 보고, 그 외에는 플레이어를 봄
+        if (isFleeingState)
+            lookX = rb2D.linearVelocity.x;
+        else
+            lookX = target.position.x - transform.position.x;
+
+        if (Mathf.Abs(lookX) > 0.01f)
+        {
+            float scaleX = (lookX > 0) ? Mathf.Abs(visualChild.localScale.x) : -Mathf.Abs(visualChild.localScale.x);
+            visualChild.localScale = new Vector3(scaleX, visualChild.localScale.y, visualChild.localScale.z);
+        }
     }
 
     protected override void MoveToTarget()
