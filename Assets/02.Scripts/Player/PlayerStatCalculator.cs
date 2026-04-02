@@ -36,7 +36,7 @@ public class PlayerStatCalculator
         float divisionStat = _playerLoadout.GetRelicDivisionValue(stat);
 
 
-        return baseStat + plusStat + multipleStat + divisionStat;
+        return (baseStat + plusStat + divisionStat) * multipleStat;
     }
 }
 
