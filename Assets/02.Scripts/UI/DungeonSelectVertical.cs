@@ -32,6 +32,7 @@ public class DungeonSelectVertical : MonoBehaviour
 
     [Header("데이터")]
     private TowerTableSO _towerData;
+    private StringSO _stringData;
 
     [Header("애니메이션")]
     [SerializeField] private float _moveDuration = 0.25f;
@@ -54,6 +55,7 @@ public class DungeonSelectVertical : MonoBehaviour
         _btnSetting.onClick.AddListener(UIManager.Instance.ChangeStateSettingPanel);
 
         _towerData = DataManager.Instance.GetSOData<TowerTableSO>();
+        _stringData = DataManager.Instance.GetSOData<StringSO>();
         Refresh(animate: false);
     }
 
@@ -116,7 +118,8 @@ public class DungeonSelectVertical : MonoBehaviour
 
         var data = _towerData.dataList[index];
         var imgName = data.tower_icon_resource;
-        txt.text = $"{index + 1}번 탑";
+        var towerName = _stringData.GetById(data.tower_string_key).kr;
+        txt.text = towerName;
     }
 
     private void AnimateSlot(RectTransform rt, Vector2 targetPos, Vector2 targetSize, bool animate)
