@@ -33,11 +33,42 @@ public class PlayerStatUI : MonoBehaviour
             if (!_statDict.TryGetValue(slot.playerStat, out float statValue))
                 continue;
 
-            slot.SetStlot(statKey, statValue);
+            slot.SetStlot(statKey, ChangeStatToPercent(slot.playerStat, statValue));
         }
     }
 
     #region 내부 메서드
+
+    private string ChangeStatToPercent(PLAYER_STAT stat, float value)
+    {
+        var basicStat = DataManager.Instance.GetSOData<CharManageTableSO>().GetById(1);
+
+
+        return stat switch
+        {
+            PLAYER_STAT.CriticalChance => value.ToString() + "%",
+            PLAYER_STAT.CriticalDamageMultiplier => (value * 100).ToString() + "%",
+            PLAYER_STAT.CriticalResistance => value.ToString() + "%",
+            PLAYER_STAT.EvasionChance => value.ToString() + "%",
+            PLAYER_STAT.MoveSpeed => (value / basicStat.char_move_speed * 100) + "%",
+            PLAYER_STAT.AttackSpeed => (value / basicStat.char_attack_speed * 100) + "%",
+            PLAYER_STAT.HealthRegen => (value / basicStat.char_hp_regain * 100) + "%",
+            PLAYER_STAT.PickupRange => (value / basicStat.char_item_range * 100) + "%",
+            PLAYER_STAT.GoldGainRate => (value / basicStat.char_dropbonus_gold * 100) + "%",
+            PLAYER_STAT.ItemDropRate => (value / basicStat.char_dropbonus_equip * 100) + "%",
+            PLAYER_STAT.ExpGainRate => (value / basicStat.char_dropbonus_exp * 100) + "%",
+            _ => ((int)value).ToString()
+        };
+    }
+
+
+    //        이동속도
+    //공격속도
+    //체력회복량
+    //아이템 획득 범위
+    //골드획득량
+    //아이템 획득량
+    //경험치 획득량
 
     // 출력할 스탯 이름 지정
     private string GetStatKey(PLAYER_STAT stat)
@@ -55,7 +86,7 @@ public class PlayerStatUI : MonoBehaviour
             PLAYER_STAT.AttackSpeed =>              "공격 속도",
             PLAYER_STAT.HealthRegen =>              "체력 회복량",
             PLAYER_STAT.PickupRange =>              "아이템 획득 범위",
-            PLAYER_STAT.GoldGainRate =>             "골드 획득량",
+            PLAYER_STAT.GoldGainRate =>             "금화 획득량",
             PLAYER_STAT.ItemDropRate =>             "아이템 획득량",
             PLAYER_STAT.EquipmentDropRate =>        "장비 획득량",
             PLAYER_STAT.ExpGainRate =>              "경험치 획득량",
@@ -73,7 +104,7 @@ public class PlayerStatUI : MonoBehaviour
         public UISlotAddedText uiSlot;      // 메인 아이콘 없이 텍스트 사용
         public PLAYER_STAT playerStat;
 
-        public void SetStlot(string statName, float value)
+        public void SetStlot(string statName, string value)
         {
             if (uiSlot == null)
                 return;
@@ -83,3 +114,4 @@ public class PlayerStatUI : MonoBehaviour
         }
     }
 }
+
