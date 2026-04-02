@@ -131,6 +131,9 @@ public class StageWaveBannerUI : MonoBehaviour
 
     public IEnumerator PlayBanner(Sprite sprite, string message)
     {
+        EnsureBannerHierarchyActive();
+        transform.SetAsLastSibling();
+
         gameObject.SetActive(true);
         transform.SetAsLastSibling();
 
@@ -364,5 +367,18 @@ public class StageWaveBannerUI : MonoBehaviour
 
         SetWarningOverlayAlpha(0f);
         yield return FadeCanvasGroup(_bannerCanvasGroup, 1f, 0f, _bannerFadeDuration);
+    }
+
+    private void EnsureBannerHierarchyActive()
+    {
+        Transform current = transform;
+
+        while (current != null)
+        {
+            if (!current.gameObject.activeSelf)
+                current.gameObject.SetActive(true);
+
+            current = current.parent;
+        }
     }
 }
