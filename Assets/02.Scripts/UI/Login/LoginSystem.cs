@@ -30,6 +30,7 @@ public class LoginSystem : MonoBehaviour
     [SerializeField] Button _guestLoginBtn;
     [SerializeField] Button _enterBtn;
     [SerializeField] Button _logoutBtn;
+    
 
     private const string WEB_CLIENT_ID = "769814245650-db36h61fdh23dv03gbj5atkgk47ldhgq.apps.googleusercontent.com";
     private FirebaseAuth _auth;
@@ -261,26 +262,30 @@ public class LoginSystem : MonoBehaviour
        
     }
 
-    private void OnLogout()
+    private async void OnLogout()
     {
         FirebaseUser user = _auth.CurrentUser;
 
         if (user != null && user.IsAnonymous)
         {
-            user.DeleteAsync().ContinueWithOnMainThread(task =>
+            var DB = FirebaseDatabase.DefaultInstance.RootReference;
+             
+             await DB.Child("users")
+            .Child(user.UserId)
+            .RemoveValueAsync();
+
+            await _auth.CurrentUser.DeleteAsync().ContinueWithOnMainThread(task =>
             {
                 if (task.IsFaulted || task.IsCanceled)
                 {
                     Debug.LogError($"게스트 계정 삭제 실패: {task.Exception}");
                     return;
                 }
-                Debug.Log("게스트 계정 삭제 완료");
+
+                Debug.Log("게스트 계정이 삭제되었습니다.");
             });
         }
-        else
-        {
-            _auth.SignOut();
-        }
+        _auth.SignOut();
+        gameObject.SetActive(true);
     }
-
 }
