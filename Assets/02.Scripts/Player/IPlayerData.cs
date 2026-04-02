@@ -25,6 +25,11 @@ public interface IDamageable
     void TakeDamage(float damage);
 }
 
+public interface IInvincible : IDamageable
+{
+    void SetInvincibleTime(float time);
+}
+
 public interface IRevive
 {
     void OnRevive();

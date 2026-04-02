@@ -1,8 +1,7 @@
-﻿using Unity.VisualScripting;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.InputSystem;
 
-public class PlayerBase : MonoBehaviour, IDamageable, ISkillable, ISkillStat, IPlayerAni
+public class PlayerBase : MonoBehaviour, IInvincible, ISkillable, ISkillStat, IPlayerAni
 {
     public IPlayerData Data { get; private set; }
 
@@ -210,4 +209,6 @@ public class PlayerBase : MonoBehaviour, IDamageable, ISkillable, ISkillStat, IP
     {
         _stateMachine.MoveInput(Vector2.zero);
     }
+
+    public void SetInvincibleTime(float time) => _hpSystem.SetInvincibleTime(time);
 }

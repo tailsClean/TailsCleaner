@@ -13,11 +13,12 @@ public class LaserHandler : MonoBehaviour
 
     [Header("<color=green>================== 보기용 필드(수정해도 의미 없음) ==============================")]
     [Header("레이저 발사 데이터")]
+    [SerializeField] private float _firstDamage;        // 최초 대미지
     [SerializeField] private float _damage;             // 레이저 데미지
     [SerializeField] private float _laserDuration;      // 레이저 지속시간
     [SerializeField] private float _laserCastTime;      // 레이저 시전 전 경로 표시 시간
     
-    private SpriteRenderer _castLaserSprite;                // 깜빡임 효과를 위한 레이저 스프라이트렌더러
+    private SpriteRenderer _castLaserSprite;            // 깜빡임 효과를 위한 레이저 스프라이트렌더러
 
 
 
@@ -47,13 +48,14 @@ public class LaserHandler : MonoBehaviour
 
 
     // 레이저 발사용 값 추가
-    public void SetLaser(float att, float duration, float castingTime)
+    public void SetLaser(float att, float attMultiple, float duration, float castingTime)
     {
+        _firstDamage = att * attMultiple;
         _damage = att;
         _laserDuration = duration;
         _laserCastTime = castingTime;
 
-        _laser.Init(_damage);
+        _laser.Init(_firstDamage, _damage);
     }
 
 

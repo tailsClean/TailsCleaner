@@ -6,11 +6,12 @@ public class LaserPattern
 {
     private const string LaserPrefab = "LaserPrefab";
 
-    public float _attackPower = 10;             // 레이저 공격 데미지
-    public float _laserDuration = 3.0f;         // 레이저 지속시간
-    public float _laserCastTime = 2.5f;         // 레이저 시전 전 경로 표시 시간
-    public float _laserSize = 1.8f;
-    public int _laserCount = 6;
+    private float _attackPower = 10;             // 레이저 공격 데미지
+    private float _attackMultiple = 1.5f;        // 데미지 배율
+    private float _laserDuration = 3.0f;         // 레이저 지속시간
+    private float _laserCastTime = 2.5f;         // 레이저 시전 전 경로 표시 시간
+    private float _laserSize = 1.8f;
+    private int _laserCount = 6;
 
     private ILaserable _bossMonster;
     private Vector2 _startPos;
@@ -56,7 +57,7 @@ public class LaserPattern
             var handle = Addressables.InstantiateAsync(LaserPrefab);
             LaserHandler laserObj = handle.Result.GetComponent<LaserHandler>();
             laserObj.transform.localScale = new Vector3(1, _laserSize * 0.5f, 0);
-            laserObj.SetLaser(_attackPower, _laserDuration, _laserCastTime);
+            laserObj.SetLaser(_attackPower, _attackMultiple, _laserDuration, _laserCastTime);
             SetLaserCast(laserObj, angle * i);
         }
     }
