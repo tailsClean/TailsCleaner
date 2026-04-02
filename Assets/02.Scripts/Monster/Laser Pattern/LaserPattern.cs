@@ -27,14 +27,16 @@ public class LaserPattern
 
     // 레이저 발사 시, 해당 파라미터값들을 기준으로 레이저 패턴 실행
     public void OnLaserPattern(
-        float finalDamage, 
+        float att, 
+        float attMultiple,
         float laserDuration,
         float laserCastTime,
         float laserSize,
         int laserCount
         )
     {
-        _attackPower = finalDamage;
+        _attackPower = att;
+        _attackMultiple = attMultiple;
         _laserDuration = laserDuration;
         _laserCastTime = laserCastTime;
         _laserSize = laserSize;

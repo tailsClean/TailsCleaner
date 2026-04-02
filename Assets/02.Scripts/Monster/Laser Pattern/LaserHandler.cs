@@ -75,6 +75,7 @@ public class LaserHandler : MonoBehaviour
 
         // 캐스팅 종료 후 레이저 발사
         ChangeLaser(isCasting: false);
+        Debug.Log("듀레이션" + _laserDuration);
         yield return new WaitForSeconds(_laserDuration);
         Destroy(gameObject);
     }
