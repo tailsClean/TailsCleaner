@@ -13,14 +13,16 @@ public class BossState : IStageState
 
 
     private int _bossId;
+    private bool _isFinalBoss;
 
-    public BossState(StageController controller, StageTimer timer, IMonsterRegistry registry, IMonsterSpawnSystem spawner, int bossId)
+    public BossState(StageController controller, StageTimer timer, IMonsterRegistry registry, IMonsterSpawnSystem spawner, int bossId, bool isFinalBoss)
     {
         _controller = controller;
         this._timer = timer;
         this._registry = registry;
         this._spawner = spawner;
         this._bossId = bossId;                // 보스 타이머 시작
+        this._isFinalBoss = isFinalBoss;
     }
 
     public void Enter()
@@ -31,7 +33,8 @@ public class BossState : IStageState
             return;
         }
 
-        if (SoundManager.Instance) SoundManager.Instance.PlayBGM(BGMName.Boss_Normal, false);
+        BGMName bgm = _isFinalBoss ? BGMName.Boss_Final : BGMName.Boss_Normal;
+        if (SoundManager.Instance) SoundManager.Instance.PlayBGM(bgm);
 
         _controller.StartCoroutine(CoEnterBossWave());
     }
