@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class PlayerHpSystem : IRevive
 {
+    public const float INVINCIBLE_TIME = 1.2f;
+
     private PlayerBase _player;
     private PlayerStatCalculator _calculator;
     private SpriteRenderer _playerSprite;
@@ -11,6 +13,7 @@ public class PlayerHpSystem : IRevive
     private int _maxSield;
     private float _currentHp;
     private int _currentSield;
+    private float _invincibleTime = 1.2f;
 
     public bool IsDead => _currentHp <= 0;
     public bool IsInvincible { get; private set; }         // 피격시, 잠시 무적(true)이 됨
@@ -75,8 +78,10 @@ public class PlayerHpSystem : IRevive
     {
         IsInvincible = true;
 
+        float invincible = _invincibleTime / 6;
+
         // 깜빡이는 메서드
-        var wait = new WaitForSeconds(0.2f);
+        var wait = new WaitForSeconds(invincible);
         Color original = _playerSprite.color;
         for (int i = 0; i < 3; i++)
         {
@@ -122,10 +127,9 @@ public class PlayerHpSystem : IRevive
     public void Init(float maxHp)
     {
         _currentHp = MaxHp;
-       // Debug.Log("현재 체력" + _currentHp);
-        //Debug.Log("현재 체력 프로퍼티" + CurrentHp);
     }
 
+    public void SetInvincibleTime(float time) => _invincibleTime = time;
 
 }
 
