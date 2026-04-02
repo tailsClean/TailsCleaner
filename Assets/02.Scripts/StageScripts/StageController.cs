@@ -54,7 +54,8 @@ public class StageController : MonoBehaviour
 
     private void Start()
     {
-        _timerUI = UIManager.Instance.StageTimer;
+        InitTimer(true);
+        UIManager.Instance.OnOrientationChanged += InitTimer;
     }
 
     private void OnDestroy()
@@ -83,6 +84,16 @@ public class StageController : MonoBehaviour
 
         if (_onPlayerDead != null)
             _onPlayerDead.RemoveListener(HandlePlayerDead);
+    }
+    private void InitTimer(bool temp)
+    {
+        if (_timerUI != null)
+        _timerUI.Bind(null); 
+
+        _timerUI = UIManager.Instance.StageTimer;
+
+        if (_timerUI != null && _events != null)
+            _timerUI.Bind(_events);
     }
 
     private void Update()
