@@ -7,6 +7,8 @@ public class PlayerStatUI : MonoBehaviour
 {
     [SerializeField] private List<SlotBundle> _uiSlots;
 
+
+    private PlayerStatTransfer _statTransfer;
     private Dictionary<PLAYER_STAT, float> _statDict;
 
 
@@ -21,8 +23,9 @@ public class PlayerStatUI : MonoBehaviour
     // 슬롯리스트에 해당 값을 넣는 메서드
     private void SetSlots()
     {
-        if (_statDict == null)
-            _statDict = PlayerStatManager.Instance.StatTransfer.StatDict;
+        _statTransfer = PlayerStatManager.Instance.StatTransfer;
+
+        _statDict = _statTransfer.StatDict;
 
         foreach(var slot in _uiSlots)
         {

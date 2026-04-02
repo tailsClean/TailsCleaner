@@ -9,20 +9,6 @@ public class PlayerStatTransfer : IPlayerData
 
 
     private int _id;
-    //private float _maxhp;
-    //private float _attackPower;
-    //private float _defensePower;
-    //private float _evasionChance;                   // 회피율
-    //private float _criticalChance;
-    //private float _criticalDamageMultiplier;        // 치명타 피해 배율
-    //private float _criticalResistance;              // 치명 저항
-    //private float _healthRegain;                    // Hp 회복량
-    //private float _pickupRange;                     // 아이템 줍는 범위
-    //private float _moveSpeed;
-    //private float _attackSpeed;
-    //private float _itemDropRate;
-    //private float _goldGainRate;
-    //private float _expGainRate;
 
     private CharManageTableSO _dataTable;           // 데이터매니저에서 데이터 캐싱
 
@@ -41,27 +27,6 @@ public class PlayerStatTransfer : IPlayerData
     #region 외부 참조 데이터
 
     public int ID => _id;
-
-    //// 공격 관련 데이터
-    //public float AttackPower => _attackPower;
-    //public float CriticalChance => _criticalChance;
-    //public float CriticalDamageMultiplier => _criticalDamageMultiplier;
-    //public float AttackSpeed => _attackSpeed;
-
-    //// 방어 관련 데이터
-    //public float Maxhp => _maxhp;
-    //public float DefensePower => _defensePower;
-    //public float EvasionChance => _evasionChance;
-    //public float CriticalResistance => _criticalResistance;
-
-    //// 유틸리티 데이터
-    //public float HealthRegen => _healthRegain;
-    //public float PickupRange => _pickupRange;
-    //public float MoveSpeed => _moveSpeed;
-    //public float ItemDropRate => _itemDropRate;
-    //public float GoldGainRate => _goldGainRate;
-    //public float HealthRegain => _healthRegain;
-    //public float ExpGainRate => _expGainRate;
 
     public float Maxhp => _statDict[PLAYER_STAT.MaxHp];
     public float AttackPower => _statDict[PLAYER_STAT.AttackPower];
@@ -120,8 +85,6 @@ public class PlayerStatTransfer : IPlayerData
     // 착용 중인 장비, 유물의 스탯 반영
     public void SetLoadoutStat(PlayerLoadout loadout)
     {
-        
-
         // 장비로 상승하는 값
         _statDict[PLAYER_STAT.MaxHp] += loadout.GetIncreaseStat(EQUIP_STAT_TYPE.MaxHP);
         _statDict[PLAYER_STAT.AttackPower] += loadout.GetIncreaseStat(EQUIP_STAT_TYPE.Attack);
@@ -129,20 +92,11 @@ public class PlayerStatTransfer : IPlayerData
         _statDict[PLAYER_STAT.EvasionChance] += loadout.GetIncreaseStat(EQUIP_STAT_TYPE.Dodge);
         _statDict[PLAYER_STAT.CriticalChance] += loadout.GetIncreaseStat(EQUIP_STAT_TYPE.CriticalRate);
         _statDict[PLAYER_STAT.MoveSpeed] += loadout.GetIncreaseStat(EQUIP_STAT_TYPE.MoveSpeed);
-        //_maxhp += loadout.GetIncreaseStat(EQUIP_STAT_TYPE.MaxHP);
-        //_attackPower += loadout.GetIncreaseStat(EQUIP_STAT_TYPE.Attack);
-        //_defensePower += loadout.GetIncreaseStat(EQUIP_STAT_TYPE.Defense);
-        //_criticalChance += loadout.GetIncreaseStat(EQUIP_STAT_TYPE.CriticalRate);
-        //_evasionChance += loadout.GetIncreaseStat(EQUIP_STAT_TYPE.Dodge);
-        //_moveSpeed += loadout.GetIncreaseStat(EQUIP_STAT_TYPE.MoveSpeed);
 
         // 유물로 상승하는 값
         _statDict[PLAYER_STAT.ItemDropRate] += loadout.GetIncreaseStat(STAT_TYPE.ItemRange);
         _statDict[PLAYER_STAT.GoldGainRate] += loadout.GetIncreaseStat(STAT_TYPE.Gold);
         _statDict[PLAYER_STAT.ExpGainRate] += loadout.GetIncreaseStat(STAT_TYPE.Exp);
-        //_goldGainRate += loadout.GetIncreaseStat(STAT_TYPE.Gold);
-        //_itemDropRate += loadout.GetIncreaseStat(STAT_TYPE.ItemRange);
-        //_expGainRate += loadout.GetIncreaseStat(STAT_TYPE.Exp);
 
         RelicDivisionStat(loadout);
     }
