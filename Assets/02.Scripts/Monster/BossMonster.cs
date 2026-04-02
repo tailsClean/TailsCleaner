@@ -131,6 +131,28 @@ public class BossMonster : MonsterBase, ILaserable
 
     private BossMonsterShooter shooter;
 
+    protected override void Awake()
+    {
+        // MonsterBase에 있는 rb2D, _animator, stats 초기화 로직을 실행함
+        base.Awake();
+    }
+
+    // 2. MoveToTarget: 부모의 FixedUpdate에서 호출되는 이동 함수를 제어
+    protected override void MoveToTarget()
+    {
+        // 공격 중이거나 스턴 상태일 때는 이동 로직(애니메이터 포함) 차단
+        if (isAttacking || IsStunned || IsKnockbacked)
+        {
+            if (rb2D != null) rb2D.linearVelocity = Vector2.zero;
+
+            // 이동 중이 아니므로 애니메이터 파라미터를 강제로 false로 고정
+            if (_animator != null) _animator.SetBool("IsMove", false);
+            return;
+        }
+
+        // 이동 가능한 상태일 때만 부모의 StraightChase()를 실행하여 물리 이동과 IsMove = true 처리.
+        base.MoveToTarget();
+    }
 
     private float GetMinimumOrbitRadius()
     {
@@ -161,36 +183,21 @@ public class BossMonster : MonsterBase, ILaserable
         }
     }
 
+
     protected override void ApplyAnimatorResource(MonsterResource resourceData)
     {
-        Debug.Log($"<color=cyan>[Step 1]</color> 보스 데이터 수신: {resourceData.resource_id} / Cast: {resourceData.cast_animation}");
+        // base 호출을 잠시 주석 처리하고 테스트!
+        // base.ApplyAnimatorResource(resourceData); 
 
-        // 1. 부모(MonsterBase)가 move_animation을 처리하도록 먼저 실행
-        base.ApplyAnimatorResource(resourceData);
+        if (_animator == null || _baseAnimatorController == null) return;
 
-        // 2. 보스 전용: 캐스팅(Cast) 애니메이션 로드
-        if (!string.IsNullOrEmpty(resourceData.cast_animation))
-        {
-            Debug.Log($"<color=yellow>[Step 2]</color> 애니메이션 로드 시도 주소: {resourceData.cast_animation}");
-            // "CastBase"는 Animator Override Controller에 설정된 원본 클립 이름과 같아야 합니다.
-            LoadAndApplyAnimationClip(resourceData.cast_animation, "Cast_Base",
-                handle => _castClipHandle = handle);
-        }
+        // 여기서 직접 새로 생성해서 할당
+        _overrideController = new AnimatorOverrideController(_baseAnimatorController);
+        _animator.runtimeAnimatorController = _overrideController;
 
-        // 3. 보스 전용: 공격(Attack) 애니메이션 로드
-        if (!string.IsNullOrEmpty(resourceData.attack_animation))
-        {
-            // "AttackBase" 역시 애니메이터에 설정된 이름 확인 필요
-            LoadAndApplyAnimationClip(resourceData.attack_animation, "Attack_Base",
-                handle => _attackClipHandle = handle);
-        }
-
-        // 4. 사망(Death) 애니메이션도 필요하다면 추가
-        if (!string.IsNullOrEmpty(resourceData.death_animation))
-        {
-            LoadAndApplyAnimationClip(resourceData.death_animation, "Death_Base",
-                handle => _deathClipHandle = handle);
-        }
+        // Move와 Cast만 명시적으로 로드
+        LoadAndApplyAnimationClip(resourceData.move_animation, "Move_Base", h => _moveClipHandle = h);
+        LoadAndApplyAnimationClip(resourceData.cast_animation, "Cast_Base", h => _castClipHandle = h);
     }
 
     protected override void Start()
@@ -460,6 +467,21 @@ public class BossMonster : MonsterBase, ILaserable
             HandleBarricadeLogic();
 
         HandleAreaPatternLogic();
+
+ 
+
+        if (_animator != null)
+        {
+            if (rb2D.linearVelocity.magnitude < 0.1f || isAttacking || isWaitingBlink || isWaitingJump)
+            {
+                _animator.SetBool("IsMove", false);
+            }
+            else
+            {
+                // 이동 중일 때 
+                _animator.SetBool("IsMove", true);
+            }
+        }
     }
 
     #region 데이터 적용 함수

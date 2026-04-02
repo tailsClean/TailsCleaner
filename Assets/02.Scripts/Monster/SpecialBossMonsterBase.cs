@@ -130,54 +130,80 @@ public abstract class SpecialBossMonsterBase : MonsterBase
 
     protected override void FixedUpdate()
     {
-        if (!isDataInitialized)
+        // 기본 상태 체크 
+        if (isPaused)
         {
-            if (MonsterId <= 0)
-            {
-                return;
-            }
-
-            InitializeMonsterData();
-
-            if (!isDataInitialized)
-            {
-                return;
-            }
-
-            Debug.Log($"[SpecialBossMonsterBase] FixedUpdate ACTIVE / name:{name}, MonsterId:{MonsterId}, hp:{hp}, targetNull:{target == null}");
-        }
-
-        if (target == null) return;
-        if (hasExploded) return;
-
-        if (hp <= 0)
-        {
-            rb2D.linearVelocity = Vector2.zero;
+            if (rb2D != null) rb2D.linearVelocity = Vector2.zero;
             return;
         }
 
+        if (!isDataInitialized)
+        {
+            if (MonsterId <= 0) return;
+            InitializeMonsterData();
+            if (!isDataInitialized) return;
+        }
+
+        // 생존 및 타겟 체크
+        if (target == null || hp <= 0 || hasExploded)
+        {
+            if (rb2D != null) rb2D.linearVelocity = Vector2.zero;
+            // 사망 시 애니메이션은 별도의 Die() 로직에서 처리하므로 여기선 리턴
+            return;
+        }
+
+        // --- 애니메이션 판정을 위한 상태 변수 ---
+        bool isMovingNow = false;
+
+        // 패턴 및 이동 로직 실행
         if (isSuicideUnit)
         {
+            // [자폭 유닛] 캐스팅 중일 때만 타겟을 향해 이동
             if (currentCastTimer > 0f)
             {
                 currentCastTimer -= Time.fixedDeltaTime;
                 MoveToTarget();
+                isMovingNow = true;
             }
             else
             {
                 ExecuteExplosion();
+                return; // 폭발 후 로직 종료
             }
+        }
+        else if (isAttacking)
+        {
+            // [공격 중] 물리 이동 정지
+            rb2D.linearVelocity = Vector2.zero;
+            isMovingNow = false;
+        }
+        else
+        {
+            // [일반 및 특수 이동 패턴]
+            MoveToTarget();
 
-            return;
+            // 실제 이동 중인지 판정 
+            if (rb2D.linearVelocity.magnitude > 0.1f || isJumping || isFleeingState)
+            {
+                isMovingNow = true;
+            }
         }
 
-        if (!isAttacking)
+        // 최종 애니메이터 파라미터 제어 
+        if (_animator != null)
         {
-            MoveToTarget();
+            if (isAttacking || isWaiting || isWaitingFlee || IsStunned || IsKnockbacked)
+            {
+                _animator.SetBool("IsMove", false);
+            }
+            else
+            {
+                _animator.SetBool("IsMove", isMovingNow);
+            }
         }
     }
 
-    
+
     public override void OnSpawn()
     {
         base.OnSpawn();
