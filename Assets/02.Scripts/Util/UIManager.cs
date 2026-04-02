@@ -5,6 +5,7 @@ using System;
 using UnityEngine.SceneManagement;
 using System.Threading.Tasks;
 using UnityEngine.UI;
+using UnityEditor.Experimental.GraphView;
 
 
 public interface IUIContainer { }
@@ -135,7 +136,6 @@ public class UIManager : MonoBehaviour
         while (!asyncLoad.isDone)
             await Task.Yield();
 
-        // 씬의 Start()가 끝날 때까지 한 프레임 더 대기
         await Task.Yield();
 
         if(_confirmPanel != null) { Destroy(_confirmPanel); _confirmPanel = null; }
@@ -204,6 +204,7 @@ public class UIManager : MonoBehaviour
     {
         // 초기 화면 방향 설정
         bool isVertical = PlayerPrefs.GetInt("IsVertical", 0) == 1;
+        OnOrientationChanged += DestroyConfirmAndImpossiblePanels; 
         SetOrientation(isVertical); 
     }
 
@@ -222,6 +223,12 @@ public class UIManager : MonoBehaviour
         _currentItemUI = isVertical ? _VerticalItem : _HorizontalItem;
 
         IsVertical = isVertical;
+        
+    }
+    public void DestroyConfirmAndImpossiblePanels(bool temp)
+    {
+        if(_confirmPanel != null) { Destroy(_confirmPanel); _confirmPanel = null; }
+        if(_impossiblePanel != null) { Destroy(_impossiblePanel); _impossiblePanel = null; }
     }
 
     #endregion

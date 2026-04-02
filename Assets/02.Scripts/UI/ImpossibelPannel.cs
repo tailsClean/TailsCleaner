@@ -18,4 +18,9 @@ public class ImpossibelPannel : MonoBehaviour
         _cofirmBtn.onClick.AddListener(action);
     }
 
+    private void OnDisable()
+    {
+        _cofirmBtn.onClick.RemoveAllListeners();
+    }
+
 }

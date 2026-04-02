@@ -585,10 +585,11 @@ public class SoundManager : MonoBehaviour
 
     #region 오디오 믹서 제어, 볼륨 저장
 
-    private void LoadVolumes()
+    public void LoadVolumes()
     {
         _uiBgmVolume = PlayerPrefs.GetFloat(BGM_VOLUME_PARAM, 1.0f);
         _uiSfxVolume = PlayerPrefs.GetFloat(SFX_VOLUME_PARAM, 1.0f);
+        UpdateMixerVolumes();
     }
 
     private void UpdateMixerVolumes()
@@ -625,14 +626,20 @@ public class SoundManager : MonoBehaviour
     public void SetBGMVolume(float vol)
     {
         _uiBgmVolume = Mathf.Clamp01(vol);
-        PlayerPrefs.SetFloat(BGM_VOLUME_PARAM, _uiBgmVolume);
         UpdateMixerVolumes();
     }
     public void SetSFXVolume(float vol)
     {
         _uiSfxVolume = Mathf.Clamp01(vol);
+        UpdateMixerVolumes();
+        
+    }
+    public void SaveVolumes()
+    {
+        PlayerPrefs.SetFloat(BGM_VOLUME_PARAM, _uiBgmVolume);
         PlayerPrefs.SetFloat(SFX_VOLUME_PARAM, _uiSfxVolume);
         UpdateMixerVolumes();
+        
     }
 
     #endregion
