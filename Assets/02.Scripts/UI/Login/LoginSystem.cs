@@ -30,13 +30,16 @@ public class LoginSystem : MonoBehaviour
     [SerializeField] Button _guestLoginBtn;
     [SerializeField] Button _enterBtn;
     [SerializeField] Button _logoutBtn;
-    
+
+    private static bool _isFirebaseReady = false;
+    private static bool _isFirebaseInitializing = false;
+    private static FirebaseAuth _auth;
+    private static event Action OnFirebaseReady;
 
     private const string WEB_CLIENT_ID = "769814245650-db36h61fdh23dv03gbj5atkgk47ldhgq.apps.googleusercontent.com";
-    private FirebaseAuth _auth;
     private bool _isLoggedIn;
 
-    private void Awake()
+   private void Awake()
     {
         _loginButton.interactable = false;
 
@@ -46,31 +49,46 @@ public class LoginSystem : MonoBehaviour
             checkBox.SetAction(ActiveLogin);
         }
 
+        
         _googleLoginBtn.onClick.AddListener(OnGoogleLogin);
         _guestLoginBtn.onClick.AddListener(OnGuestLogin);
         _enterBtn.onClick.AddListener(OnEnterBtn);
         _logoutBtn.onClick.AddListener(OnLogout);
 
+        if (_isFirebaseReady)
+        {
+            SetupAuth();
+            return;
+        }
+
+        OnFirebaseReady += SetupAuth; 
+
+        if (_isFirebaseInitializing) return;
+
+        _isFirebaseInitializing = true;
+
         FirebaseApp.CheckAndFixDependenciesAsync().ContinueWithOnMainThread(task =>
         {
+            _isFirebaseInitializing = false;
             if (task.Result == DependencyStatus.Available)
             {
                 FirebaseDatabase.DefaultInstance.SetPersistenceEnabled(false);
                 _auth = FirebaseAuth.DefaultInstance;
-                _auth.StateChanged += ChangeLoginState;
-
-                _isLoggedIn  = _auth.CurrentUser != null;
-                //Debug.Log("Firebase 초기화 완료");
-                _logoutBtn.gameObject.SetActive(false);
-                if (_auth.CurrentUser != null)
-                {
-                    _isLoggedIn = true;
-                    _logoutBtn.gameObject.SetActive(true);
-                }
+                _isFirebaseReady = true;
             }
-            
-        }); 
-        
+
+            OnFirebaseReady?.Invoke(); 
+            OnFirebaseReady = null;
+        });
+    }
+
+    private void SetupAuth()
+    {
+        if (_auth == null) return; // 혹시 모를 null 방어
+
+        _auth.StateChanged += ChangeLoginState;
+        _isLoggedIn = _auth.CurrentUser != null;
+        _logoutBtn.gameObject.SetActive(_isLoggedIn);
     }
 
     private void OnEnable()
