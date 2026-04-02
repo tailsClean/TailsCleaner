@@ -18,6 +18,9 @@ public class LevelUpSelectUI : MonoBehaviour
     [SerializeField] string _healDesc = "최대 체력의 30%를 회복한다";
     [SerializeField] Sprite _healIcon;
 
+    [Header("화면 모드")]
+    [SerializeField] bool _isVertical;
+
     private LevelUpSelect _levelUpSelect;
 
     private void Start()
@@ -56,6 +59,8 @@ public class LevelUpSelectUI : MonoBehaviour
                 return;
             }
         }
+         
+        if (_isVertical != UIManager.Instance.IsVertical) return;
 
         // 새로운 선택지 생성
         _levelUpSelect.GenerateOptions(level);
