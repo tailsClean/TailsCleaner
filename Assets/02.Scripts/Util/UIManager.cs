@@ -128,19 +128,18 @@ public class UIManager : MonoBehaviour
 
     public async Task LoadDataAndGoToLobby()
     {
-        await GameManager.Instance.LoadStageProgress();
-        SceneManager.LoadScene("LobbyScene");
-        if(_confirmPanel != null)
-        {
-            Destroy(_confirmPanel);
-            _confirmPanel = null;
-        }
+         await GameManager.Instance.LoadStageProgress();
 
-        if(_impossiblePanel != null)
-        {
-            Destroy(_impossiblePanel);
-            _impossiblePanel = null;
-        }
+        // 씬이 완전히 로드될 때까지 대기
+        var asyncLoad = SceneManager.LoadSceneAsync("LobbyScene");
+        while (!asyncLoad.isDone)
+            await Task.Yield();
+
+        // 씬의 Start()가 끝날 때까지 한 프레임 더 대기
+        await Task.Yield();
+
+        if(_confirmPanel != null) { Destroy(_confirmPanel); _confirmPanel = null; }
+        if(_impossiblePanel != null) { Destroy(_impossiblePanel); _impossiblePanel = null; }
 
         await FirebaseManager.Instance.Load();
     }

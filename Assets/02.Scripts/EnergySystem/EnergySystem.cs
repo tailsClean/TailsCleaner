@@ -10,7 +10,7 @@ public class EnergySystem : MonoBehaviour
 
     [SerializeField] private int _maxEnergy = 999;
     public int MaxEnergy => _maxEnergy;
-    [SerializeField] private float _increaseEnergyTime = 360f;
+    [SerializeField] private float _increaseEnergyTime = 180f;
     [SerializeField] private IntEventChannelSO _onIncreaseEnergy;
     [SerializeField] private VoidEventChannelSO _onStartStage;
 
