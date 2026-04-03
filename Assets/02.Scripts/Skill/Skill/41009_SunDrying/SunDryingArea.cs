@@ -81,8 +81,25 @@ public class SunDryingArea : SkillArea<SunDryingModifierData>
             if (_overlapBuffer[i].CompareTag("Monster") &&
                 _overlapBuffer[i].TryGetComponent(out MonsterBase monster))
             {
-                TryKnockback(monster);
+                TryActiveKnockback(monster);
             }
         }
+    }
+    
+    
+    // 넉백 적용
+    protected void TryActiveKnockback(MonsterBase monster)
+    {
+        // 넉백 없으면 스킵
+        if (_modifierData.KnockbackForce <= 0f) return;
+
+        // 넉백 방향 투사체에서 몬스터 방향
+        Vector2 dir = (monster.Position - _rigidbody.position).normalized;
+
+        // 혹시 겹쳐서 방향 없으면 아래로
+        if (dir == Vector2.zero) dir = Vector2.down;
+
+        // 넉백 적용
+        monster.Knockback(dir, _modifierData.KnockbackForce);
     }
 }

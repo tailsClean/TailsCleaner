@@ -8,6 +8,7 @@ public class SunDryingModifierData
 
     // 이불 털기 - 켜질 때 범위 내 적 넉백
     public bool KnockbackOnActivate = false;
+    public float KnockbackForce = 0f;
 
     // 으슬으슬 - 시전 중 적 슬로우
     public bool SlowOnArea = false;
@@ -42,9 +43,13 @@ public class SunDryingDamagePerTickModifier : ActiveModifier<SunDryingSkill>
 // 40051 이불 털기 / 켜질 때 범위 내 적 넉백
 public class SunDryingKnockbackModifier : ActiveModifier<SunDryingSkill>
 {
+    [Header("넉백 강도")]
+    public float KnockBackForce = 1f;
+
     public override void ApplyModifier(SunDryingSkill skill, ActiveUpgradeData upgradeData)
     {
         skill._modifierData.KnockbackOnActivate = true;
+        skill._modifierData.KnockbackForce += KnockBackForce;
     }
 }
 
