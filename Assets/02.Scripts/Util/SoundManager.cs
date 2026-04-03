@@ -194,7 +194,10 @@ public class SoundManager : MonoBehaviour
 
     private void Update()
     {
-        if (_isPlayingStageBGM && !_bgmPlayer.isPlaying && _stageBgmList.Length > 0)
+        if (_isPlayingStageBGM      == true
+            && _bgmPlayer.isPlaying == false
+            && _bgmPlayer.time      == 0f
+            && _stageBgmList.Length >  0)
         {
             PlayNextStageBGM();
         }
