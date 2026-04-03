@@ -128,7 +128,7 @@ public class SkillObjectBase : PoolObject
     {
         // 만료 상태면 아무것도 하지 않음
         if (_expired == true) return;
-
+    
         // 이동
         // 방향 벡터 제곱 길이가 0보다 클 때만
         if (_dir.sqrMagnitude > 0f)

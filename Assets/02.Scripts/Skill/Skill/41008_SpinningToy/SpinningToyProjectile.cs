@@ -12,7 +12,7 @@ public class SpinningToyProjectile : SkillProjectile<SpinningToyModifierData>
     private float _orbitAngle;        // 현재 공전 각도
     private float _orbitRadius;       // 공전 반지름
 
-    
+
     // 공전모드로 초기화
     public void InitOrbit(ActiveSkill owner, SpinningToyModifierData modifierData,
         SpinningToySkill.TOY_TYPE toyType, float angleDeg, float radius)
@@ -36,6 +36,8 @@ public class SpinningToyProjectile : SkillProjectile<SpinningToyModifierData>
         // 풀 사용 시
         // 공전상태 남아있는 상황일 수 있으니까
         _isOrbiting = false;
+
+        toySkill = owner as SpinningToySkill;
 
         base.Init(owner, modifierData, dir);
     }
@@ -85,16 +87,20 @@ public class SpinningToyProjectile : SkillProjectile<SpinningToyModifierData>
     {
         if (_expired) return;
 
-        // 공전 모드
-        if (_isOrbiting)
-        {
-            // 공전 갱신
-            UpdateOrbit();
-        }
         // 비행 모드
-        else
+        if (_isOrbiting == false)
         {
             base.FixedUpdate();
+        }
+    }
+
+    protected void LateUpdate()
+    {
+        if (_expired) return;
+
+        if (_isOrbiting)
+        {
+            UpdateOrbit();
         }
     }
 
@@ -104,7 +110,8 @@ public class SpinningToyProjectile : SkillProjectile<SpinningToyModifierData>
     public void TransitionToFly(Vector2 dir)
     {
         _isOrbiting = false;
-        _createTime = Time.time;   // 수명 초기화
+        _lastDurationTickTime = Time.time; // 스노우볼링용 초기화
+        _createTime = Time.time;           // 수명 초기화
         _expired = false;
 
         // 방향 설정
@@ -116,7 +123,7 @@ public class SpinningToyProjectile : SkillProjectile<SpinningToyModifierData>
     public void ForceExpire()
     {
         if (_expired == false)
-            ExpireObject();
+            ExpireObject(); 
     }
 
     // 버스트 실행
@@ -160,7 +167,6 @@ public class SpinningToyProjectile : SkillProjectile<SpinningToyModifierData>
             bool isLastBurst = (burst == burstCount - 1);
 
             // 방향 (바깥쪽)
-            //Vector2 dir = (transform.position - SkillManager.Instance.Player.transform.position).normalized;
             Vector2 dir = (transform.position - SkillManager.Instance.Player.transform.position).normalized;
             if (dir == Vector2.zero) dir = Vector2.right;   // 제로 방지
 
@@ -175,7 +181,7 @@ public class SpinningToyProjectile : SkillProjectile<SpinningToyModifierData>
             {
                 // 복사본 발사
                 // 자신은 공전 유지
-                toySkill.SpawnBurstCopy(transform.position, dir, _toyType);
+                toySkill.SpawnBurstCopy(_rigidbody.position, dir, _toyType);
 
                 // 버스트 대기 시간
                 yield return _modifierData.BurstDelay;
@@ -189,10 +195,9 @@ public class SpinningToyProjectile : SkillProjectile<SpinningToyModifierData>
         // 각도 갱신
         // 선속도(ProjectileSpeed)를 반지름으로 나누면 라디안 각속도가 나옴
         // 그걸 일반 각도(Deg)로 변환
-        _orbitAngle += (_runtimeFinalStat.ProjectileSpeed / _orbitRadius) * Mathf.Rad2Deg * Time.fixedDeltaTime;
+        _orbitAngle += (_runtimeFinalStat.ProjectileSpeed / _orbitRadius) * Mathf.Rad2Deg * Time.deltaTime;
 
         // 플레이어 기준 위치 계산
-        //Vector2 playerPos = SkillManager.Instance.Player.transform.position;
         Vector2 playerPos = GetPlayerPos();
 
         float rad = _orbitAngle * Mathf.Deg2Rad;
@@ -202,6 +207,6 @@ public class SpinningToyProjectile : SkillProjectile<SpinningToyModifierData>
         Vector2 nextPos = playerPos + new Vector2(Mathf.Cos(rad), Mathf.Sin(rad)) * _orbitRadius;
 
         // 이동
-        _rigidbody.MovePosition(nextPos);
+        transform.position = nextPos;
     }
 }
