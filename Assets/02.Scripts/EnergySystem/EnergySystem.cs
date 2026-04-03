@@ -1,15 +1,17 @@
-using System;
+﻿using System;
 using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.UI;
 
 
-public class EnergySystem : MonoBehaviour
+public class EnergySystem : MonoBehaviour, IConsumItemTarget
 {
     public static EnergySystem Instance;
 
     [SerializeField] private int _maxEnergy = 999;
     public int MaxEnergy => _maxEnergy;
+    public bool IsMaxValue => _currentEnergy == _maxEnergy;
+
     [SerializeField] private float _increaseEnergyTime = 180f;
     [SerializeField] private IntEventChannelSO _onIncreaseEnergy;
     [SerializeField] private VoidEventChannelSO _onStartStage;
@@ -21,6 +23,8 @@ public class EnergySystem : MonoBehaviour
 
     public int Timer => (int)_timer;
     public bool IsStartInGame => _currentEnergy > 9;
+
+
     private async void Start()
     {
         FirebaseManager.Instance.AddLoadData(LoadEnergy);
@@ -200,6 +204,8 @@ public class EnergySystem : MonoBehaviour
                                          .Child("CancelTime")
                                          .SetValueAsync(cancelTime); 
     }
+
+    public void IncreaseValue(float value) => IncreaseEnergy((int)value);
 }
     
 

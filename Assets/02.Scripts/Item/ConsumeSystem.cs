@@ -1,6 +1,12 @@
 ﻿using UnityEngine;
 
 
+public interface IConsumItemTarget
+{
+    public void IncreaseValue(float value);
+    public bool IsMaxValue { get; }
+}
+
 public class ConsumeSystem
 {
     private EnergySystem _energySystem => GameManager.Instance._energySystem;             // 에너지 회복용도
@@ -25,7 +31,6 @@ public class ConsumeSystem
         if (!ItemDB.TryGetData<ItemManageData>(item.ID, out var consumItem))
             return;
 
-        Debug.Log("콘슘 체크" + consumItem.Consume);
         if (consumItem.Consume == null)
             return;
 
@@ -38,7 +43,6 @@ public class ConsumeSystem
             UseItem(consumItem, item);
         }
 
-        UsedText(consumItem);
         isConsume = true;
     }
 
@@ -46,23 +50,37 @@ public class ConsumeSystem
     private void UseItem(ItemManageData consumItem, ItemInstance item)
     {
         var consum = consumItem.Consume;
+        bool isUseable = false;
         switch (consum.item_stat_type)
         {
             // 에너지 증가
             case ITEM_CONSUME_TYPE.EnergyUp:
-                _energySystem.IncreaseEnergy(consum.item_opt);
+                isUseable = CheckConsumable(_energySystem, consum.item_opt);
                 break;
 
             // 아웃게임 경험치 증가
             case ITEM_CONSUME_TYPE.Exp:
-                _levelSystem.GainExp(consum.item_opt);
+                isUseable = CheckConsumable(_levelSystem, consum.item_opt);
                 break;
 
             default:
                 return;
         }
 
-        _inventory.UseStackItem(item.ID, 1);
+        if(isUseable)
+        {
+            _inventory.UseStackItem(item.ID, 1);
+            UsedText(consumItem);
+        }
+    }
+
+    private bool CheckConsumable(IConsumItemTarget consumItemTarget, float value)
+    {
+        if (consumItemTarget.IsMaxValue)
+        { WarningText.ShowText("최대치 이상으로 회복할 수 없습니다."); return false; }
+
+        consumItemTarget.IncreaseValue(value);
+        return true;
     }
 
     private void UsedText(ItemManageData consumItem)
@@ -77,8 +95,7 @@ public class ConsumeSystem
 
             // 아웃게임 경험치 증가
             case ITEM_CONSUME_TYPE.Exp:
-                _levelSystem.GainExp(consum.item_opt);
-                //WarningText.ShowText("<color=green>경험치 아이템을 사용했습니다.</color>");
+                WarningText.ShowText("<color=green>경험치 아이템을 사용했습니다.</color>");
                 break;
 
             default:

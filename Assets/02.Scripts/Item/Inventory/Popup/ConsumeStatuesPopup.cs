@@ -1,5 +1,4 @@
-﻿
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.UI;
 using static UISlotAddedText;
 
@@ -72,6 +71,15 @@ public class ConsumeStatuesPopup : ItemPopupBase
         _consumeSystem.UseItem(_currentItem, 1, out bool isConsume);
         if(isConsume)
             _currentItem.SetAmount(_currentItem.Amount - 1);
+
+        CheckAllUsing();
+    }
+
+    // 아이템 모두 소진 시, 팝업 종료
+    private void CheckAllUsing()
+    {
+        if(!_inventory.TryGetStackItem(_currentItem.ID, out var item))
+            gameObject.SetActive(false);
     }
 
     private void Init()
