@@ -65,6 +65,18 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 3973763706811971243}
     m_Modifications:
+    - target: {fileID: 1743506877217716559, guid: c0505da2becce984a8772485663647cc, type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1743506877217716559, guid: c0505da2becce984a8772485663647cc, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1743506877217716559, guid: c0505da2becce984a8772485663647cc, type: 3}
+      propertyPath: m_SizeDelta.y
+      value: -17
+      objectReference: {fileID: 0}
     - target: {fileID: 2261315767129107782, guid: c0505da2becce984a8772485663647cc, type: 3}
       propertyPath: m_Vertical
       value: 0
@@ -161,11 +173,21 @@ PrefabInstance:
       propertyPath: m_Name
       value: Pnl_UnlockedStagePanel(Vertical)
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
-    m_RemovedGameObjects: []
+    m_RemovedComponents:
+    - {fileID: 2261315767129107782, guid: c0505da2becce984a8772485663647cc, type: 3}
+    m_RemovedGameObjects:
+    - {fileID: 557823396837395774, guid: c0505da2becce984a8772485663647cc, type: 3}
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 8749958275098794029, guid: c0505da2becce984a8772485663647cc, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 2740182956005082827}
   m_SourcePrefab: {fileID: 100100000, guid: c0505da2becce984a8772485663647cc, type: 3}
+--- !u!224 &363662268756203896 stripped
+RectTransform:
+  m_CorrespondingSourceObject: {fileID: 1743506877217716559, guid: c0505da2becce984a8772485663647cc, type: 3}
+  m_PrefabInstance: {fileID: 2105945938751004727}
+  m_PrefabAsset: {fileID: 0}
 --- !u!114 &460753097530079115 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 1971800571230738364, guid: c0505da2becce984a8772485663647cc, type: 3}
@@ -198,12 +220,52 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 6088376061258559196, guid: c0505da2becce984a8772485663647cc, type: 3}
   m_PrefabInstance: {fileID: 2105945938751004727}
   m_PrefabAsset: {fileID: 0}
+--- !u!224 &6836429952602912433 stripped
+RectTransform:
+  m_CorrespondingSourceObject: {fileID: 4892653563069765254, guid: c0505da2becce984a8772485663647cc, type: 3}
+  m_PrefabInstance: {fileID: 2105945938751004727}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &7230469953905686554 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 8749958275098794029, guid: c0505da2becce984a8772485663647cc, type: 3}
+  m_PrefabInstance: {fileID: 2105945938751004727}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &2740182956005082827
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7230469953905686554}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1aa08ab6e0800fa44ae55d278d1423e3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.ScrollRect
+  m_Content: {fileID: 6836429952602912433}
+  m_Horizontal: 1
+  m_Vertical: 0
+  m_MovementType: 1
+  m_Elasticity: 0.1
+  m_Inertia: 1
+  m_DecelerationRate: 0.135
+  m_ScrollSensitivity: 1
+  m_Viewport: {fileID: 363662268756203896}
+  m_HorizontalScrollbar: {fileID: 0}
+  m_VerticalScrollbar: {fileID: 0}
+  m_HorizontalScrollbarVisibility: 2
+  m_VerticalScrollbarVisibility: 2
+  m_HorizontalScrollbarSpacing: -3
+  m_VerticalScrollbarSpacing: -3
+  m_OnValueChanged:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!114 &7967173544529377539 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 8334127216342210868, guid: c0505da2becce984a8772485663647cc, type: 3}
   m_PrefabInstance: {fileID: 2105945938751004727}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
+  m_GameObject: {fileID: 7230469953905686554}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 0e414d08b554b904688848517b12d07a, type: 3}
