@@ -12,15 +12,18 @@ public class SpinningToyProjectile : SkillProjectile<SpinningToyModifierData>
     private float _orbitAngle;        // 현재 공전 각도
     private float _orbitRadius;       // 공전 반지름
 
+    private int _waveId;            // 시전 ID
+
 
     // 공전모드로 초기화
     public void InitOrbit(ActiveSkill owner, SpinningToyModifierData modifierData,
-        SpinningToySkill.TOY_TYPE toyType, float angleDeg, float radius)
+        SpinningToySkill.TOY_TYPE toyType, float angleDeg, float radius, int waveId)
     {
         _toyType = toyType;
         _orbitAngle = angleDeg;
         _orbitRadius = radius;
         _isOrbiting = true;
+        _waveId = waveId;
 
         toySkill = owner as SpinningToySkill;
 
@@ -127,11 +130,12 @@ public class SpinningToyProjectile : SkillProjectile<SpinningToyModifierData>
     }
 
     // 버스트 실행
-    public void TriggerBurst()
+    public void TriggerBurst(int requestWaveId)
     {
-        // 강제 만료 상태가 아닐 때, 하이어라키에 있을 때 안전장치
-        if (_expired == false && gameObject.activeInHierarchy)
+        // 강제 만료 상태가 아닐 때, 하이어라키에 있을 때, waveID가 같을 때 안전장치
+        if (_expired == false && gameObject.activeInHierarchy && _waveId == requestWaveId)
         {
+            _waveId = -1;   // 중복 실행 방지
             StartCoroutine(BurstCoroutine());
         }
     }
