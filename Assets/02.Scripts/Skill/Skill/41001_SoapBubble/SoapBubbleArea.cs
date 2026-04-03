@@ -155,14 +155,12 @@ public class SoapBubbleArea : SkillArea<SoapBubbleModifierData>
     private void ApplyPlayerDefense()
     {
         SkillManager.Instance.SkillStatHandler.AddRuntimeStat(BUFF_KEY_BUBBLEBUBBLE, _soapBubbleSkill.BubbleBonus);
-        Debug.Log($"[SoapBubble] 버블버블 적용. 방어력 + {_modifierData.PlayerDefenseBonus}");
     }
 
     // 버블버블 방어력 제거
     private void RemovePlayerDefense()
     {
         SkillManager.Instance.SkillStatHandler.RemoveRuntime(BUFF_KEY_BUBBLEBUBBLE);
-        Debug.Log($"[SoapBubble] 버블버블 해제. 방어력 - {_modifierData.PlayerDefenseBonus}");
     }
 
 

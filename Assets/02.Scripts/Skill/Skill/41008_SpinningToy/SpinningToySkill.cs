@@ -90,7 +90,7 @@ public class SpinningToySkill : ActiveSkill<SpinningToyProjectile, SpinningToyMo
 
             if (toy != null)
             {
-                Debug.Log($"[회전장난감] {waveId}번 시전의 {i + 1}/{count} 번째 투사체 생성 성공! (현재속도: {_finalStat.ProjectileSpeed})");
+                //Debug.Log($"[회전장난감] {waveId}번 시전의 {i + 1}/{count} 번째 투사체 생성 성공! (현재속도: {_finalStat.ProjectileSpeed})");
 
                 // 공전체 하나당 사운드
                 PlaySpecialSFX();
