@@ -24,11 +24,13 @@ public class SpinningToySkill : ActiveSkill<SpinningToyProjectile, SpinningToyMo
     [Header("스프라이트")]
     [SerializeField] Sprite[] _sprites; // TOY_TYPE 순서대로
 
-    // 스폰 리스트 버퍼
-    private List<TOY_TYPE> _spawnListBuffer = new();
-
     // 해적선 적 강화 수치
     public float MonsterStrengthBonus => _modifierData.PirateMonsterStr;
+
+    private int _currentWaveId = 0;
+
+
+
 
     protected override void OnActive(int index, int totalCount) { }
 
@@ -41,11 +43,20 @@ public class SpinningToySkill : ActiveSkill<SpinningToyProjectile, SpinningToyMo
         // 투사체 수
         int count = spawnList.Count;
 
+        // 시전 ID 증가
+        _currentWaveId++;
+
+        // 이번 시전 ID
+        int waveId = _currentWaveId;
+
         // 이번 발사 때 생성될 장난감
         List<SpinningToyProjectile> currentWaveToys = new List<SpinningToyProjectile>();
 
+        // 속도 절대값 처리, 0.1 보장
+        float safeSpeed = Mathf.Max(0.1f, Mathf.Abs(_finalStat.ProjectileSpeed));
+
         // 투사체의 공전 각속도 (초당 몇 도)
-        float angularSpeedDeg = (_finalStat.ProjectileSpeed / _orbitRadius) * Mathf.Rad2Deg;
+        float angularSpeedDeg = (safeSpeed / Mathf.Max(0.1f, _orbitRadius)) * Mathf.Rad2Deg;
 
         // 투사체 간 벌어져야 하는 간격
         float anglePerItem = count > 0 ? 360f / count : 0f;
@@ -75,16 +86,17 @@ public class SpinningToySkill : ActiveSkill<SpinningToyProjectile, SpinningToyMo
             Vector2 spawnPos = (Vector2)transform.position + GetOrbitOffset(angle);
 
             // 투사체 생성
-            //SpinningToyProjectile toy = Instantiate(_skillObjectPrefab, spawnPos, Quaternion.identity);
-            SpinningToyProjectile toy = SpawnFromPool<SpinningToyProjectile>(_skillObjectPrefab, spawnPos, Quaternion.identity);
+            SpinningToyProjectile toy = SpawnFromPool(_skillObjectPrefab, spawnPos, Quaternion.identity);
 
             if (toy != null)
             {
+                Debug.Log($"[회전장난감] {waveId}번 시전의 {i + 1}/{count} 번째 투사체 생성 성공! (현재속도: {_finalStat.ProjectileSpeed})");
+
                 // 공전체 하나당 사운드
                 PlaySpecialSFX();
 
                 // 공전상태로 초기화
-                toy.InitOrbit(this, _modifierData, spawnList[i], angle, _orbitRadius);
+                toy.InitOrbit(this, _modifierData, spawnList[i], angle, _orbitRadius, waveId);
 
                 // 생성된 장난감에 추가
                 currentWaveToys.Add(toy);
@@ -116,7 +128,7 @@ public class SpinningToySkill : ActiveSkill<SpinningToyProjectile, SpinningToyMo
             if (toy != null)
             {
                 // 버스트
-                toy.TriggerBurst();
+                toy.TriggerBurst(waveId);
             }
         }
     }
@@ -125,8 +137,8 @@ public class SpinningToySkill : ActiveSkill<SpinningToyProjectile, SpinningToyMo
     // 양손잡이로 투사체 두배되었을 때 비율 알아내서 나누는 과정
     private List<TOY_TYPE> BuildSpawnList()
     {
-        // 스폰할 투사체 리스트 청소
-        _spawnListBuffer.Clear();
+        // 스폰할 투사체 리스트
+        List<TOY_TYPE> spawnList = new();
 
         // 기본 투사체 수
         int basePart = _baseStat.ProjectileCount * _commonStat.ProjectileCount;
@@ -149,21 +161,21 @@ public class SpinningToySkill : ActiveSkill<SpinningToyProjectile, SpinningToyMo
         // 기본 장난감을 뻥튀기 배율만큼 넣기
         int finalBaseCount = Mathf.RoundToInt(basePart * finalProjectileMul);
         for (int i = 0; i < finalBaseCount; i++)
-            _spawnListBuffer.Add(TOY_TYPE.Default);
+            spawnList.Add(TOY_TYPE.Default);
 
         // 특수 장난감들도 각각 배율만큼 넣기
         foreach (var (type, count) in _modifierData.AddedToys)
         {
             int typeCount = Mathf.RoundToInt(count * finalProjectileMul);
             for (int i = 0; i < typeCount; i++)
-                _spawnListBuffer.Add(type);
+                spawnList.Add(type);
         }
 
         // 혹시나 0개 들어간 특수 장난감은 디폴트로 넣음
-        if (_spawnListBuffer.Count == 0)
-            _spawnListBuffer.Add(TOY_TYPE.Default);
+        if (spawnList.Count == 0)
+            spawnList.Add(TOY_TYPE.Default);
 
-        return _spawnListBuffer;
+        return spawnList;
     }
 
 
@@ -171,8 +183,7 @@ public class SpinningToySkill : ActiveSkill<SpinningToyProjectile, SpinningToyMo
     public void SpawnBurstCopy(Vector2 spawnPos, Vector2 dir, TOY_TYPE type)
     {
         // 복사본 생성
-        //SpinningToyProjectile copy = Instantiate(_skillObjectPrefab, spawnPos, Quaternion.identity);
-        SpinningToyProjectile copy = SpawnFromPool<SpinningToyProjectile>(_skillObjectPrefab, spawnPos, Quaternion.identity);
+        SpinningToyProjectile copy = SpawnFromPool(_skillObjectPrefab, spawnPos, Quaternion.identity);
 
         // 초기화
         if(copy != null) copy.InitBurst(this, _modifierData, dir, type);

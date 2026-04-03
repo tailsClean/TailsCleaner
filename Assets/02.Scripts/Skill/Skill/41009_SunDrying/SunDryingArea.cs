@@ -12,12 +12,17 @@ public class SunDryingArea : SkillArea<SunDryingModifierData>
         base.Init(owner, modifierData, dir);
     }
 
-    protected override void FixedUpdate()
+    //protected override void FixedUpdate()
+    //{
+    //    // 플레이어 위치 따라다님
+    //    //transform.position = SkillManager.Instance.Player.transform.position;
+    //    //_rigidbody.MovePosition(SkillManager.Instance.Player.transform.position);
+    //    _rigidbody.MovePosition(GetPlayerPos());
+    //}
+    protected void LateUpdate()
     {
         // 플레이어 위치 따라다님
-        //transform.position = SkillManager.Instance.Player.transform.position;
-        //_rigidbody.MovePosition(SkillManager.Instance.Player.transform.position);
-        _rigidbody.MovePosition(GetPlayerPos());
+        transform.position = GetPlayerPos();
     }
 
     // 틱마다
