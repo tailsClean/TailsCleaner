@@ -261,23 +261,45 @@ public class BossMonster : MonsterBase, ILaserable
             return;
         }
 
+        MonsterSO monsterSO = DataManager.Instance.GetSOData<MonsterSO>();
+        Monster monsterData = monsterSO?.GetById(MonsterId);
+
         isDataInitialized = true;
         isWaitingForMonsterId = false;
 
         Debug.Log($"[BossMonster] InitializeBossData / MonsterId:{MonsterId}");
 
-        MonsterSO monsterSO = DataManager.Instance.GetSOData<MonsterSO>();
         if (monsterSO == null)
         {
             Debug.LogError("[BossMonster] MonsterSO를 찾을 수 없습니다.");
             return;
         }
 
-        Monster monsterData = monsterSO.GetById(MonsterId);
         if (monsterData == null)
         {
             Debug.LogError($"[BossMonster] 몬스터 데이터 없음. MonsterId:{MonsterId}");
             return;
+        }
+
+        // 부모 스케일 1로 고정
+        this.transform.localScale = Vector3.one;
+
+        // MonsterTypeSO에서 mass(크기) 데이터 가져오기
+        MonsterTypeSO monsterTypeSO = DataManager.Instance.GetSOData<MonsterTypeSO>();
+
+        if (visualChild != null)
+        {
+            visualChild.localPosition = Vector3.zero; 
+            visualChild.localScale = new Vector3(this.mass, this.mass, 0f);
+        }
+
+        if (monsterTypeSO != null)
+        {
+            var typeData = monsterTypeSO.dataList.Find(x => x.monster_type == monsterData.monster_type);
+            if (typeData != null)
+            {
+                this.mass = typeData.type_mass; // MonsterBase의 mass 변수에 저장
+            }
         }
 
         pattern_group_id = monsterData.pattern_group_id;
@@ -1043,15 +1065,16 @@ public class BossMonster : MonsterBase, ILaserable
 
         float direction = target.position.x - transform.position.x;
 
+        // 현재 설정된 mass 값을 기준으로 스케일 방향 결정
+        float currentMass = this.mass > 0 ? this.mass : 1f;
+
         if (direction > 0.01f)
         {
-            // 오른쪽을 바라보게 함
-            visualChild.localScale = new Vector3(-Mathf.Abs(visualChild.localScale.x), visualChild.localScale.y, visualChild.localScale.z);
+            visualChild.localScale = new Vector3(-currentMass, currentMass, 0f);
         }
         else if (direction < -0.01f)
         {
-            // 왼쪽을 바라보게 함
-            visualChild.localScale = new Vector3(Mathf.Abs(visualChild.localScale.x), visualChild.localScale.y, visualChild.localScale.z);
+            visualChild.localScale = new Vector3(currentMass, currentMass, 0f);
         }
     }
 
@@ -1218,14 +1241,17 @@ public class BossMonster : MonsterBase, ILaserable
             float p = elp / dur;
 
             rb2D.MovePosition(Vector2.Lerp(start, dest, p));
+
             if (visualChild != null)
-                visualChild.localPosition = new Vector3(0f, Mathf.Sin(p * Mathf.PI) * jump_height, visualChild.localPosition.z);
+            {
+                visualChild.localPosition = new Vector3(0f, Mathf.Sin(p * Mathf.PI) * jump_height, 0f);
+            }
 
             yield return new WaitForFixedUpdate();
         }
 
         if (visualChild != null)
-            visualChild.localPosition = Vector2.zero;
+            visualChild.localPosition = Vector3.zero;
 
         isJumping = false;
         jumpCooldownTimer = pattern_cooldown;
@@ -1327,6 +1353,11 @@ public class BossMonster : MonsterBase, ILaserable
             rb2D.linearVelocity = Vector2.zero;
             rb2D.angularVelocity = 0f;
         }
+
+        transform.localScale = Vector3.one;
+
+        if (visualChild != null)
+            visualChild.localPosition = Vector3.zero;
 
         foreach (var orbit in activeOrbits)
         {

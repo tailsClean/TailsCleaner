@@ -1,6 +1,7 @@
 ﻿using MonsterEnum;
 using System.Collections.Generic;
 using UnityEngine;
+using System.Linq;
 
 public abstract class SpecialBossMonsterBase : MonsterBase
 {
@@ -232,14 +233,13 @@ public abstract class SpecialBossMonsterBase : MonsterBase
         Debug.Log($"[SpecialBossMonsterBase] InitializeMonsterData / name:{name}, instanceId:{GetInstanceID()}, MonsterId:{MonsterId}");
 
         MonsterSO monsterSO = DataManager.Instance.GetSOData<MonsterSO>();
+        Monster monsterData = monsterSO?.GetById(MonsterId);
+
         if (monsterSO == null)
         {
             Debug.LogError("[SpecialBossMonsterBase] MonsterSO를 찾을 수 없습니다.");
             return;
         }
-
-        // 실제 데이터 조회
-        Monster monsterData = monsterSO.GetById(MonsterId);
 
         // 데이터 없음 → 원인 추적 로그
         if (monsterData == null)
@@ -258,12 +258,31 @@ public abstract class SpecialBossMonsterBase : MonsterBase
             return;
         }
 
+        MonsterTypeSO monsterTypeSO = DataManager.Instance.GetSOData<MonsterTypeSO>();
+        if (monsterTypeSO != null)
+        {
+            // LINQ를 사용하여 몬스터 타입에 맞는 공통 데이터 추출
+            var typeData = monsterTypeSO.dataList.FirstOrDefault(x => x.monster_type == monsterData.monster_type);
+            if (typeData != null)
+            {
+                this.mass = typeData.type_mass; // MonsterBase의 mass 변수에 저장
+            }
+        }
+
         // 정상 데이터 로딩
         pattern_group_id = monsterData.pattern_group_id;
 
         if (monsterData.monster_type == MONSTERTYPE.Elite && pattern_group_id <= 0)
         {
             Debug.Log($"[SpecialBossMonsterBase] >>> Elite fallback ENTER <<< name:{name}, MonsterId:{MonsterId}, pattern_group_id:{pattern_group_id}");
+
+            this.transform.localScale = Vector3.one;
+
+            if (visualChild != null)
+            {
+                visualChild.localPosition = Vector2.zero;
+                visualChild.localScale = new Vector3(this.mass, this.mass, 1f);
+            }
 
             currentPattern = null;
             isSuicideUnit = false;
@@ -278,9 +297,6 @@ public abstract class SpecialBossMonsterBase : MonsterBase
 
             if (!activeMonsters.Contains(this))
                 activeMonsters.Add(this);
-
-            if (visualChild != null)
-                visualChild.localPosition = Vector2.zero;
 
             if (target == null)
             {
@@ -400,6 +416,14 @@ public abstract class SpecialBossMonsterBase : MonsterBase
             }
         }
 
+        this.transform.localScale = Vector3.one;
+
+        if (visualChild != null)
+        {
+            visualChild.localPosition = Vector2.zero;
+            visualChild.localScale = new Vector3(this.mass, this.mass, 0f);
+        }
+
         if (!activeMonsters.Contains(this))
             activeMonsters.Add(this);
 
@@ -412,9 +436,6 @@ public abstract class SpecialBossMonsterBase : MonsterBase
         {
             currentState = MonsterState.MOVE;
         }
-
-        if (visualChild != null)
-            visualChild.localPosition = Vector2.zero;
 
         if (target == null)
         {
@@ -510,8 +531,6 @@ public abstract class SpecialBossMonsterBase : MonsterBase
         if (target == null || visualChild == null) return;
 
         float lookX;
-
-        // 도망 상태일 때는 이동 방향을 보고, 그 외에는 플레이어를 봄
         if (isFleeingState)
             lookX = rb2D.linearVelocity.x;
         else
@@ -519,8 +538,9 @@ public abstract class SpecialBossMonsterBase : MonsterBase
 
         if (Mathf.Abs(lookX) > 0.01f)
         {
-            float scaleX = (lookX > 0) ? Mathf.Abs(visualChild.localScale.x) : -Mathf.Abs(visualChild.localScale.x);
-            visualChild.localScale = new Vector3(scaleX, visualChild.localScale.y, visualChild.localScale.z);
+            float finalScaleX = (lookX > 0) ? this.mass : -this.mass;
+
+            visualChild.localScale = new Vector3(finalScaleX, this.mass, 1f);
         }
     }
 

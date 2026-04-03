@@ -5,6 +5,7 @@ using UnityEngine;
 using static UnityEngine.RuleTile.TilingRuleOutput;
 using UnityEngine.AddressableAssets;
 using UnityEngine.ResourceManagement.AsyncOperations;
+using System.Linq;
 
 [RequireComponent(typeof(Rigidbody2D), typeof(Collider2D))]
 public abstract class MonsterBase : PoolObject, IDamageable, IMonsterStatus, IPullable
@@ -125,8 +126,6 @@ public abstract class MonsterBase : PoolObject, IDamageable, IMonsterStatus, IPu
 
     private void TryApplyMonsterResource()
     {
-        //Debug.Log($"[{name}] TryApplyMonsterResource 호출 / MonsterId:{MonsterId}");
-
         if (MonsterId <= 0)
         {
             Debug.LogWarning($"[{name}] TryApplyMonsterResource 실패: MonsterId invalid = {MonsterId}");
@@ -134,20 +133,36 @@ public abstract class MonsterBase : PoolObject, IDamageable, IMonsterStatus, IPu
         }
 
         MonsterSO monsterSO = DataManager.Instance.GetSOData<MonsterSO>();
+        Monster monsterData = monsterSO?.GetById(MonsterId);
+
+
         if (monsterSO == null)
         {
             Debug.LogError($"[{name}] MonsterSO를 찾을 수 없습니다.");
             return;
         }
 
-        Monster monsterData = monsterSO.GetById(MonsterId);
+        
         if (monsterData == null)
         {
             Debug.LogError($"[{name}] 몬스터 데이터 없음. MonsterId:{MonsterId}");
             return;
         }
 
+        MonsterTypeSO monsterTypeSO = DataManager.Instance.GetSOData<MonsterTypeSO>();
+
+        if (monsterTypeSO != null)
+        {
+            MonsterType typeData = monsterTypeSO.dataList.FirstOrDefault(x => x.monster_type == monsterData.monster_type);
+
+            if (typeData != null)
+            {
+                this.mass = typeData.type_mass;
+            }
+        }
+
         MonsterResourceSO monsterResourceSO = DataManager.Instance.GetSOData<MonsterResourceSO>();
+
         if (monsterResourceSO == null)
         {
             Debug.LogError($"[{name}] MonsterResourceSO를 찾을 수 없습니다.");
@@ -286,6 +301,8 @@ public abstract class MonsterBase : PoolObject, IDamageable, IMonsterStatus, IPu
         deathAnimationName = resourceData.death_animation;
         attackEffectName = resourceData.attack_effect;
 
+        ApplyScale();
+
         ApplyAnimatorResource(resourceData);
 
         // Debug.Log(
@@ -294,6 +311,13 @@ public abstract class MonsterBase : PoolObject, IDamageable, IMonsterStatus, IPu
         //     $"index:{resourceData.index}, " +
         //     $"cast:{castAnimationName}, move:{moveAnimationName}, attack:{attackAnimationName}, death:{deathAnimationName}"
         // );
+    }
+
+    private void ApplyScale()
+    {
+        // mass 값이 0이면 보이지 않으므로 기본값 1 처리
+        float s = mass > 0 ? mass : 1.0f;
+        transform.localScale = new Vector3(s, s, 1f);
     }
 
     protected virtual void ApplySprite(MonsterResource resourceData)
