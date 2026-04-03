@@ -4,21 +4,22 @@ public class SunDryingArea : SkillArea<SunDryingModifierData>
 {
     private SunDryingSkill _sunDryingSkill;
 
+
+    // 넉백용 overlap 버퍼
+    private static readonly Collider2D[] _overlapBuffer = new Collider2D[64];
+
     public override void Init(ActiveSkill owner, SunDryingModifierData modifierData, Vector2 dir = default)
     {
         // 형변환 후 캐싱
         _sunDryingSkill = owner as SunDryingSkill;
 
         base.Init(owner, modifierData, dir);
+
+        // 이불 털기 - 시전 순간 넉백
+        if (_modifierData.KnockbackOnActivate)
+            KnockbackOnActivate();
     }
 
-    //protected override void FixedUpdate()
-    //{
-    //    // 플레이어 위치 따라다님
-    //    //transform.position = SkillManager.Instance.Player.transform.position;
-    //    //_rigidbody.MovePosition(SkillManager.Instance.Player.transform.position);
-    //    _rigidbody.MovePosition(GetPlayerPos());
-    //}
     protected void LateUpdate()
     {
         // 플레이어 위치 따라다님
@@ -63,5 +64,25 @@ public class SunDryingArea : SkillArea<SunDryingModifierData>
 
         //Skill에 꺼짐 알림
        if(_sunDryingSkill != null) _sunDryingSkill.OnAreaExpired();
+    }
+    
+    
+    // 시전 순간 콜라이더 범위 내 몬스터 즉시 넉백
+    private void KnockbackOnActivate()
+    {
+        if (_collider == null) return;
+
+        var filter = new ContactFilter2D();
+        filter.useTriggers = true;
+
+        int count = Physics2D.OverlapCollider(_collider, filter, _overlapBuffer);
+        for (int i = 0; i < count; i++)
+        {
+            if (_overlapBuffer[i].CompareTag("Monster") &&
+                _overlapBuffer[i].TryGetComponent(out MonsterBase monster))
+            {
+                TryKnockback(monster);
+            }
+        }
     }
 }
