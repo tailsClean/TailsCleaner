@@ -24,10 +24,15 @@ public abstract class SwingArea<TModifierData> : SkillArea<TModifierData> where 
         base.Init(owner, modifierData, dir);
     }
 
-    protected override void FixedUpdate()
+    //protected override void FixedUpdate()
+    //{
+    //    // 플레이어 위치 따라가기
+    //    _rigidbody.MovePosition(GetPlayerPos() + _dirOffset);
+    //}
+    protected void LateUpdate()
     {
         // 플레이어 위치 따라가기
-        _rigidbody.MovePosition(GetPlayerPos() + _dirOffset);
+        transform.position = GetPlayerPos() + _dirOffset;
     }
 
     // 장판에 적 투사체 들어올시

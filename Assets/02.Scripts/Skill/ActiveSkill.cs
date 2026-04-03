@@ -145,7 +145,7 @@ public abstract class ActiveSkill : MonoBehaviour
     {
         float cooldown = (SkillManager.Instance.Player.AttackSpeed / 100f) * _finalStat.Cooldown;
         
-        float actualCooldown = Mathf.Max(MIN_SKILL_COOLDOWN, _finalStat.Cooldown);
+        float actualCooldown = Mathf.Max(MIN_SKILL_COOLDOWN, cooldown);
         return Time.time >= _lastActiveTime + actualCooldown;
     }
 
