@@ -48,7 +48,7 @@ GameObject:
   - component: {fileID: 9040104264805589184}
   - component: {fileID: 2582801263216574238}
   m_Layer: 7
-  m_Name: NormalMonster
+  m_Name: Monster
   m_TagString: Monster
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -215,13 +215,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::NormalMonster
   target: {fileID: 5385765747078865120, guid: 1d22e24c33ab46e4386a4162918e7702, type: 3}
   stoppingDistance: 0.1
-  hp: 1
-  maxHp: 1
+  hp: 100
+  maxHp: 100
   power: 1
   moveSpeed: 1
   hitBox: 1
   mass: 1
-  KBResist: 1
+  KBResist: 0
   knockbackUnitToPx: 100
   avoidanceRadius: 1.5
   avoidanceForce: 2

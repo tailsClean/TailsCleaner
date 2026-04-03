@@ -132,7 +132,7 @@ GameObject:
   - component: {fileID: -5357901628026673190}
   - component: {fileID: -3921241016024252799}
   m_Layer: 7
-  m_Name: BossMonster
+  m_Name: Boss
   m_TagString: Monster
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -241,13 +241,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::BossMonster
   target: {fileID: 0}
   stoppingDistance: 0.1
-  hp: 2000
-  maxHp: 2000
+  hp: 100
+  maxHp: 100
   power: 1
   moveSpeed: 1
   hitBox: 1
   mass: 1
-  KBResist: 1
+  KBResist: 0
   knockbackUnitToPx: 100
   avoidanceRadius: 1.5
   avoidanceForce: 2

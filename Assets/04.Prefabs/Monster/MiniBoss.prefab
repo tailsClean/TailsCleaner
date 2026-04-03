@@ -18,7 +18,7 @@ GameObject:
   - component: {fileID: 3178603656011100005}
   - component: {fileID: -6309030999690592268}
   m_Layer: 7
-  m_Name: MidBossMonster
+  m_Name: MiniBoss
   m_TagString: Monster
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -185,13 +185,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::SpecialMonster
   target: {fileID: 0}
   stoppingDistance: 0.1
-  hp: 1
-  maxHp: 1
+  hp: 100
+  maxHp: 100
   power: 1
   moveSpeed: 1
   hitBox: 1
   mass: 1
-  KBResist: 1
+  KBResist: 0
   knockbackUnitToPx: 100
   avoidanceRadius: 1.5
   avoidanceForce: 2
@@ -232,11 +232,6 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  avoidanceRadius: 1.5
-  avoidanceForce: 2
-  monsterLayer:
-    serializedVersion: 2
-    m_Bits: 128
   pattern_group_id: 0
   detect_range: 0
   pattern_cooldown: 0
