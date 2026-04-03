@@ -12,6 +12,8 @@ public class ExitPanel : MonoBehaviour
     [SerializeField] private Button _horizontalBtn;
     [SerializeField] private Button _verticalBtn;
 
+    private bool _isSaved = false;
+
     private void Start()
     {
         if (_dungeonExitButton != null) _dungeonExitButton.onClick.AddListener(OnClickExit);
@@ -35,6 +37,8 @@ public class ExitPanel : MonoBehaviour
 
     private void OnEnable()
     {
+        _isSaved = false;
+
         if (SoundManager.Instance != null)
         {
             if (_bgmSlider != null) _bgmSlider.value = SoundManager.Instance.UIBGMVolume;
@@ -51,7 +55,13 @@ public class ExitPanel : MonoBehaviour
     {
         if (_bgmSlider != null) _bgmSlider.onValueChanged.RemoveListener(OnBgmVolumeChanged);
         if (_sfxSlider != null) _sfxSlider.onValueChanged.RemoveListener(OnSfxVolumeChanged);
+
         Time.timeScale = 1f; 
+
+        if (_isSaved == false)
+        {
+            LoadSettings();
+        }
     }
 
     private void OnBgmVolumeChanged(float value)
@@ -85,11 +95,9 @@ public class ExitPanel : MonoBehaviour
                     StageController.Instance.EndStage(StageResult.Abandon, StageFailReason.기타);
                 }
 
-                UIManager.Instance.GoToLobby();
                 UIManager.Instance.ChangeStateConfirmPanel();
+                UIManager.Instance.GoToLobby();
             }, () => UIManager.Instance.ChangeStateConfirmPanel());
-
-           
         } 
     }
     private void UpdateButton()
@@ -100,29 +108,35 @@ public class ExitPanel : MonoBehaviour
     }
     private void OnClickExitSetting()
     {
-       gameObject.SetActive(false);
+       if(PlayerPrefs.GetFloat("BGMVolume") != _bgmSlider.value||
+          PlayerPrefs.GetFloat("SFXVolume") != _sfxSlider.value ||
+          PlayerPrefs.GetInt("IsVertical") != (UIManager.Instance.IsVertical ? 1 : 0))
+       {
+           UIManager.Instance.ChangeStateConfirmPanel();
+           UIManager.Instance.ConfirmPanel.SetText("변경사항이 저장되지 않았어요. \n 그래도 나가시겠어요?");
+           UIManager.Instance.ConfirmPanel.SetListeners(() =>
+           {
+               UIManager.Instance.ChangeStateConfirmPanel();
+               UIManager.Instance.ChangeStateSettingPanel();
+               LoadSettings();
+           }, () => UIManager.Instance.ChangeStateConfirmPanel());
+       }
+       else
+       {
+           UIManager.Instance.ChangeStateSettingPanel();
+       }
     }
     private void OnClickSaveSetting()
     {
-        PlayerPrefs.SetFloat("BGMVolume", _bgmSlider.value);
-        PlayerPrefs.SetFloat("SFXVolume", _sfxSlider.value);
+        _isSaved = true;
+        SoundManager.Instance.SaveVolumes();
         PlayerPrefs.SetInt("IsVertical", UIManager.Instance.IsVertical ? 1 : 0);
         PlayerPrefs.Save();
     }
 
     private void LoadSettings()
     {
-        if (PlayerPrefs.HasKey("BGMVolume"))
-        {
-            float bgmVolume = PlayerPrefs.GetFloat("BGMVolume");
-            if (SoundManager.Instance != null) SoundManager.Instance.SetBGMVolume(bgmVolume);
-        }
-
-        if (PlayerPrefs.HasKey("SFXVolume"))
-        {
-            float sfxVolume = PlayerPrefs.GetFloat("SFXVolume");
-            if (SoundManager.Instance != null) SoundManager.Instance.SetSFXVolume(sfxVolume);
-        }
+        SoundManager.Instance.LoadVolumes();
 
         if (PlayerPrefs.HasKey("IsVertical"))
         {
@@ -131,4 +145,10 @@ public class ExitPanel : MonoBehaviour
             UpdateButton();
         }
     }
+
+
+
+
+
+
 }

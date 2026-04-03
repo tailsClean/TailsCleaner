@@ -7,7 +7,7 @@ public class ItemCurrency : MonoBehaviour
     [SerializeField] private VoidEventChannelSO _onChangeGold;
     [SerializeField] private IntEventChannelSO _onSellingItem;
 
-    [SerializeField] private int _goldAmount = 1000;
+    [SerializeField] private int _goldAmount = 0;
 
     [SerializeField] private const int _defaultGoldAmount = 0;
 
@@ -104,9 +104,11 @@ public class ItemCurrency : MonoBehaviour
             .Child("Gold")
             .GetValueAsync();
 
-        _goldAmount = snapshot.Exists
+        int gaingold = snapshot.Exists
             ? int.Parse(snapshot.Value.ToString())
             : _defaultGoldAmount; // 신규 유저 기본값
+            
+       GainGold(gaingold);
     }
 
     #endregion

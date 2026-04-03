@@ -126,9 +126,7 @@ GameObject:
   - component: {fileID: 1857852035658448591}
   - component: {fileID: 492828993154934014}
   - component: {fileID: 7885350804614567511}
-  - component: {fileID: 6748436144544715757}
   - component: {fileID: 8510998505703091447}
-  - component: {fileID: 8578096174376587721}
   - component: {fileID: 430370679149709318}
   - component: {fileID: 3269241917968746854}
   m_Layer: 6
@@ -258,7 +256,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 309561c5c5a7bad498453460d92c4fdd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerBase
-  <Data>k__BackingField: {fileID: 11400000, guid: 27af8b211ef6dfe448ca20594bb69f97, type: 2}
   _itemPickupSystem: {fileID: 2632319729818317982}
   _onHit: {fileID: 11400000, guid: 3cc90d4d43686484ab87715c305268d8, type: 2}
   _onHeal: {fileID: 11400000, guid: a93c6fbcf96e1014d912e78ba650f318, type: 2}
@@ -473,18 +470,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::UpgradeSelect
   _onHealSelect: {fileID: 11400000, guid: b8e7bd45a54139346bb1cc0f3c11fbf4, type: 2}
---- !u!114 &6748436144544715757
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8060241405893911967}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 67b9962fa6fd36746bbabed359551e87, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::SkillStatHandler
 --- !u!114 &8510998505703091447
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -500,19 +485,6 @@ MonoBehaviour:
   _monsterLayer:
     serializedVersion: 2
     m_Bits: 128
---- !u!114 &8578096174376587721
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8060241405893911967}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f05535cfd6a2c37448a511e453216851, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::UpgradeSelect
-  _onHealSelect: {fileID: 11400000, guid: b8e7bd45a54139346bb1cc0f3c11fbf4, type: 2}
 --- !u!114 &430370679149709318
 MonoBehaviour:
   m_ObjectHideFlags: 0

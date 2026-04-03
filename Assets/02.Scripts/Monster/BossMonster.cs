@@ -366,13 +366,14 @@ public class BossMonster : MonsterBase, ILaserable
                     break;
 
                 case PATTERN_TYPE.Layser:
-                    float finalDmg = this.power * (patternData.damage_multiply > 0 ? patternData.damage_multiply : 1.0f);
+                    float finalDmg = this.power;
                     float duration = patternData.duration; // 레이저 지속시간
+                    float damageMultiply = patternData.damage_multiply > 0 ? patternData.damage_multiply : 1.0f;
                     float castTime = patternData.cast_time; // 예고 시간
                     float size = patternData.projectile_size; // 레이저 굵기
                     int count = patternData.projectile_count; // 레이저 개수
 
-                    _laserPattern.OnLaserPattern(finalDmg, duration, castTime, size, count);
+                    _laserPattern.OnLaserPattern(finalDmg, damageMultiply, duration, castTime, size, count);
                     Debug.Log($"[BossMonster] Laser 패턴 감지: {patternData.pattern_logic_type} (아직 미연동)");
                     break;
 

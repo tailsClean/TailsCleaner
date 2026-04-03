@@ -8,7 +8,7 @@ public class KISTest : MonoBehaviour
     public ItemCurrency currency;
     public CraftingSystem craftingSystem;
     public int Id;
-    public int Amount = 10000000;
+    public int Amount = 0;
 
 
     private void Start()
@@ -51,7 +51,24 @@ public class KISTest : MonoBehaviour
         inventory.GainRelic(33004, 0);
         inventory.GainRelic(33005, 0);
         inventory.GainRelic(33006, 0);
-
+        inventory.GainRelic(33101, 0);
+        inventory.GainRelic(33102, 0);  
+        inventory.GainRelic(33103, 0);
+        inventory.GainRelic(33104, 0);
+        inventory.GainRelic(33105, 0);
+        inventory.GainRelic(33106, 0);
+        inventory.GainRelic(33201, 0);
+        inventory.GainRelic(33202, 0);
+        inventory.GainRelic(33203, 0);
+        inventory.GainRelic(33204, 0);
+        inventory.GainRelic(33205, 0);
+        inventory.GainRelic(33206, 0);
+        inventory.GainRelic(33301, 0);
+        inventory.GainRelic(33302, 0);
+        inventory.GainRelic(33303, 0);
+        inventory.GainRelic(33304, 0);
+        inventory.GainRelic(33305, 0);
+        inventory.GainRelic(33306, 0);
     }
 
     [ContextMenu("합성 장비 획득")]
@@ -136,8 +153,7 @@ public class KISTest : MonoBehaviour
     [ContextMenu("골드 추가 및 소모")]
     public void AASD()
     {
-        currency.GainGold(100 + Amount);
-        Debug.Log("골드 " + currency.GoldAmount);
+        currency.GainGold(0 + Amount);
     }
 
 }

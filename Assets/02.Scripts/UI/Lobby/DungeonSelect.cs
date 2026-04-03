@@ -39,8 +39,9 @@ public class DungeonSelect : MonoBehaviour
     [SerializeField] private Image _ImgNext;
  
     [Header("데이터")]
-     private TowerTableSO _towerData;
- 
+    private TowerTableSO _towerData;
+    private StringSO _stringData;
+
     [Header("애니메이션")]
     [SerializeField] private float    _moveDuration = 0.25f;
     [SerializeField] private Ease     _moveEase     = Ease.OutCubic;
@@ -63,6 +64,8 @@ public class DungeonSelect : MonoBehaviour
         _btnSetting.onClick.AddListener(UIManager.Instance.ChangeStateSettingPanel);
         
         _towerData = DataManager.Instance.GetSOData<TowerTableSO>();
+        _stringData = DataManager.Instance.GetSOData<StringSO>();
+
         Refresh(animate: false);
     }
  
@@ -127,7 +130,8 @@ public class DungeonSelect : MonoBehaviour
         var data = _towerData.dataList[index];
         var imgName = data.tower_icon_resource; 
         image.sprite = Resources.Load<Sprite>($"Stage/Tower_Image/{imgName}");
-        if(isSelect) _txtSelect.text = $"{index + 1}번 탑"; 
+        var towerName = _stringData.GetById(data.tower_string_key).kr;
+        _txtSelect.text = towerName;
     }
 
 

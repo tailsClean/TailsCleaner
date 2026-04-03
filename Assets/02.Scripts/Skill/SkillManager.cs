@@ -28,8 +28,7 @@ public class SkillManager : MonoBehaviour
 
 
     public PlayerBase Player { get; private set; }                  // 플레이어
-    public Rigidbody2D PlayerRigidbody { get; private set; }        // 플레이어 리지드바디
-    public Vector2 CurrentPlayerPos => PlayerRigidbody.position;    // 플레이어 위치
+    public Vector2 CurrentPlayerPos => Player.transform.position;   // 플레이어 위치
     public TargetingSystem TargetingSystem { get; private set; }    // 타겟 시스템 (사용 안 할 예정)
     public SkillStatHandler SkillStatHandler { get; private set; }
     public LayerMask MonsterLayer => _monsterLayer;
@@ -51,7 +50,6 @@ public class SkillManager : MonoBehaviour
     {
         Instance = this;
         Player = GetComponent<PlayerBase>();
-        PlayerRigidbody = GetComponent<Rigidbody2D>();
         SkillStatHandler = GetComponent<SkillStatHandler>();
         TargetingSystem = new TargetingSystem(Player.transform, _monsterLayer);
 
@@ -140,13 +138,22 @@ public class SkillManager : MonoBehaviour
         //ApplyActiveOption(41010, SkillDataLoader.GetActiveUpgradeData(40061));  // 방수코팅
         //ApplyActiveOption(41010, SkillDataLoader.GetActiveUpgradeData(40062));  // 키친건!
 
+        //ApplyActiveOption(41008, SkillDataLoader.GetActiveUpgradeData(40065));  // 쿨타임
+        //ApplyActiveOption(41008, SkillDataLoader.GetActiveUpgradeData(40065));  // 쿨타임
+        //ApplyActiveOption(41008, SkillDataLoader.GetActiveUpgradeData(40065));  // 쿨타임
         //ApplyActiveOption(41005, SkillDataLoader.GetActiveUpgradeData(40066));  // 지속 시간
+        //ApplyActiveOption(41005, SkillDataLoader.GetActiveUpgradeData(40066));  // 지속 시간
+        //ApplyActiveOption(41005, SkillDataLoader.GetActiveUpgradeData(40066));  // 지속 시간
+        //ApplyActiveOption(41008, SkillDataLoader.GetActiveUpgradeData(40066));  // 지속 시간
+        //ApplyActiveOption(41008, SkillDataLoader.GetActiveUpgradeData(40066));  // 지속 시간
+        //ApplyActiveOption(41008, SkillDataLoader.GetActiveUpgradeData(40066));  // 지속 시간
         //ApplyActiveOption(41001, SkillDataLoader.GetActiveUpgradeData(40067));  // 연사
         //ApplyActiveOption(41001, SkillDataLoader.GetActiveUpgradeData(40067));  // 연사
         //ApplyActiveOption(41001, SkillDataLoader.GetActiveUpgradeData(40067));  // 연사
         //ApplyActiveOption(41002, SkillDataLoader.GetActiveUpgradeData(40067));  // 연사
         //ApplyActiveOption(41003, SkillDataLoader.GetActiveUpgradeData(40067));  // 연사
         //ApplyActiveOption(41004, SkillDataLoader.GetActiveUpgradeData(40067));  // 연사
+        //ApplyActiveOption(41008, SkillDataLoader.GetActiveUpgradeData(40067));  // 연사
         //ApplyActiveOption(41008, SkillDataLoader.GetActiveUpgradeData(40067));  // 연사
         //ApplyActiveOption(41001, SkillDataLoader.GetActiveUpgradeData(40067));  // 연사
         //ApplyActiveOption(41002, SkillDataLoader.GetActiveUpgradeData(40067));  // 연사

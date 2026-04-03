@@ -54,7 +54,8 @@ public class StageController : MonoBehaviour
 
     private void Start()
     {
-        _timerUI = UIManager.Instance.StageTimer;
+        InitTimer(true);
+        UIManager.Instance.OnOrientationChanged += InitTimer;
     }
 
     private void OnDestroy()
@@ -83,6 +84,16 @@ public class StageController : MonoBehaviour
 
         if (_onPlayerDead != null)
             _onPlayerDead.RemoveListener(HandlePlayerDead);
+    }
+    private void InitTimer(bool temp)
+    {
+        if (_timerUI != null)
+        _timerUI.Bind(null); 
+
+        _timerUI = UIManager.Instance.StageTimer;
+
+        if (_timerUI != null && _events != null)
+            _timerUI.Bind(_events);
     }
 
     private void Update()
@@ -176,7 +187,6 @@ public class StageController : MonoBehaviour
 
         if (UIManager.Instance != null && UIManager.Instance.StageWaveBanner != null)
         {
-            //Debug.Log("[StageController] PlayStageStart 호출");
             StartCoroutine(UIManager.Instance.StageWaveBanner.PlayStageStart());
         }
         else
@@ -212,7 +222,7 @@ public class StageController : MonoBehaviour
             return;
         }
 
-        IStageState bossState = new BossState(this, _timer, _registry, _spawner, _plan.bossId);
+        IStageState bossState = new BossState(this, _timer, _registry, _spawner, _plan.bossId, _plan.isFinalBoss);
         _stateMachine.ChangeState(bossState);
     }
 

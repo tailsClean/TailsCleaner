@@ -24,10 +24,15 @@ public abstract class SwingArea<TModifierData> : SkillArea<TModifierData> where 
         base.Init(owner, modifierData, dir);
     }
 
-    protected override void FixedUpdate()
+    //protected override void FixedUpdate()
+    //{
+    //    // 플레이어 위치 따라가기
+    //    _rigidbody.MovePosition(GetPlayerPos() + _dirOffset);
+    //}
+    protected void LateUpdate()
     {
         // 플레이어 위치 따라가기
-        _rigidbody.MovePosition(GetPlayerPos() + _dirOffset);
+        transform.position = GetPlayerPos() + _dirOffset;
     }
 
     // 장판에 적 투사체 들어올시
@@ -55,7 +60,6 @@ public abstract class SwingArea<TModifierData> : SkillArea<TModifierData> where 
         if (_modifierData.SlowOnHit)
         {
             monster.ApplySlow(SwingModifierData.DEBUFF_KEY_SLOW, _modifierData.SlowAmount, _modifierData.SlowDuration);
-            Debug.Log($"[SwingArea] 젖은 걸레 - 슬로우 {_modifierData.SlowAmount * 100f}% / {_modifierData.SlowDuration} 초");
 
             // 집중공략 (약화 적 최대체력 감소)
             foreach (var passive in _passiveModifiers)
@@ -66,7 +70,6 @@ public abstract class SwingArea<TModifierData> : SkillArea<TModifierData> where 
         if (_modifierData.StunOnHit)
         {
             monster.ApplyStun(_modifierData.StunDuration);
-            Debug.Log($"[SwingArea] 어질어질 - 기절 {_modifierData.StunDuration} 초");
         }
     }
 }

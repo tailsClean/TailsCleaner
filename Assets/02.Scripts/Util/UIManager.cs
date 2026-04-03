@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using UnityEngine.UI;
 
 
+
 public interface IUIContainer { }
 public interface IOrientationHandler
 {
@@ -128,8 +129,17 @@ public class UIManager : MonoBehaviour
 
     public async Task LoadDataAndGoToLobby()
     {
-        await GameManager.Instance.LoadStageProgress();
-        SceneManager.LoadScene("LobbyScene");
+         await GameManager.Instance.LoadStageProgress();
+
+        // 씬이 완전히 로드될 때까지 대기
+        var asyncLoad = SceneManager.LoadSceneAsync("LobbyScene");
+        while (!asyncLoad.isDone)
+            await Task.Yield();
+
+        await Task.Yield();
+
+        if(_confirmPanel != null) { Destroy(_confirmPanel); _confirmPanel = null; }
+        if(_impossiblePanel != null) { Destroy(_impossiblePanel); _impossiblePanel = null; }
 
         await FirebaseManager.Instance.Load();
     }
@@ -137,6 +147,16 @@ public class UIManager : MonoBehaviour
     public void GoToLobby() 
     {
         SceneManager.LoadScene("LobbyScene");
+         if(_confirmPanel != null)
+        {
+            Destroy(_confirmPanel);
+            _confirmPanel = null;
+        }
+        if(_impossiblePanel != null)
+        {
+            Destroy(_impossiblePanel);
+            _impossiblePanel = null;
+        }
     }
 
     public void GoToStage()
@@ -144,6 +164,16 @@ public class UIManager : MonoBehaviour
         SceneManager.sceneLoaded -= OnStageLoaded; // [추가] 중복 등록 방지
         SceneManager.sceneLoaded += OnStageLoaded;
         SceneManager.LoadScene("StageScene");
+        if(_confirmPanel != null)
+        {
+            Destroy(_confirmPanel);
+            _confirmPanel = null;
+        }
+        if(_impossiblePanel != null)
+        {
+            Destroy(_impossiblePanel);
+            _impossiblePanel = null;
+        }
     }
 
     private void OnStageLoaded(Scene scene, LoadSceneMode mode)
@@ -174,6 +204,7 @@ public class UIManager : MonoBehaviour
     {
         // 초기 화면 방향 설정
         bool isVertical = PlayerPrefs.GetInt("IsVertical", 0) == 1;
+        OnOrientationChanged += DestroyConfirmAndImpossiblePanels; 
         SetOrientation(isVertical); 
     }
 
@@ -192,6 +223,12 @@ public class UIManager : MonoBehaviour
         _currentItemUI = isVertical ? _VerticalItem : _HorizontalItem;
 
         IsVertical = isVertical;
+        
+    }
+    public void DestroyConfirmAndImpossiblePanels(bool temp)
+    {
+        if(_confirmPanel != null) { Destroy(_confirmPanel); _confirmPanel = null; }
+        if(_impossiblePanel != null) { Destroy(_impossiblePanel); _impossiblePanel = null; }
     }
 
     #endregion
@@ -367,6 +404,7 @@ public class UIManager : MonoBehaviour
 
     public void ChangeStateConfirmPanel()
     {
+        if (_confirmPanel != null && _confirmPanel.gameObject == null) _confirmPanel = null;
         if (_confirmPanel == null)
         {
             if (_confirmPrefab == null)

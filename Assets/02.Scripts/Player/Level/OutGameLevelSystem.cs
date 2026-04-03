@@ -3,15 +3,27 @@ using UnityEngine;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-public class OutGameLevelSystem : MonoBehaviour
+public class OutGameLevelSystem : MonoBehaviour, IConsumItemTarget
 {
     public static OutGameLevelSystem Instance;
 
     private CharLevelTableSO _levelData;
 
-    public bool IsMaxLevel { get; private set; }
-    public int CurrentLevel { get; private set; }
+    public bool IsMaxValue => IsMaxLevel;
+
+    [field: SerializeField] public int CurrentLevel { get; private set; }
     public float CurrentExp { get; private set; }
+    [field: SerializeField] public bool IsMaxLevel
+    {
+        get
+        {
+
+            if (_levelData == null)
+                _levelData = DataManager.Instance.GetSOData<CharLevelTableSO>();
+
+            return CurrentLevel >= _levelData.dataList.Count;
+        }
+    }
 
     public float MaxExp
     {
@@ -58,6 +70,8 @@ public class OutGameLevelSystem : MonoBehaviour
     }
 
 
+    // 인터페이스 구현 메서드
+    public void IncreaseValue(float value) => GainExp(value);
 
     public void GainExp(float gainExp)
     {
@@ -75,14 +89,12 @@ public class OutGameLevelSystem : MonoBehaviour
         }
 
         _ =SaveLevel();
-
     }
     private void LevelUp()
     {
         // 최대 레벨인지 확인
-        if (CurrentLevel >= _levelData.dataList.Count)
+        if (IsMaxLevel)
         {
-            IsMaxLevel = true;
             CurrentExp = MaxExp;
             return;
         }
@@ -92,9 +104,9 @@ public class OutGameLevelSystem : MonoBehaviour
         
     }
 
+
     public void Init()
     {
-        IsMaxLevel = false;
         CurrentLevel = 1;
         CurrentExp = 0;
     }
@@ -132,8 +144,9 @@ public class OutGameLevelSystem : MonoBehaviour
 
         CurrentLevel = int.Parse(snapshot.Child("level").Value.ToString());
         CurrentExp = float.Parse(snapshot.Child("exp").Value.ToString());
-        IsMaxLevel = CurrentLevel >= _levelData.dataList.Count;
+        //IsMaxLevel = CurrentLevel >= _levelData.dataList.Count;
     }
+
 
     #endregion
 }

@@ -68,7 +68,7 @@ public sealed class DataParserStagePlanProvider : IStagePlanProvider
             return null;
         }
 
-        StagePlan builtPlan = _builder.Build(_stage, _group, specialGroup);
+        StagePlan builtPlan = _builder.Build(_stage, _group, specialGroup, _stages);
 
         if (builtPlan == null)
         {

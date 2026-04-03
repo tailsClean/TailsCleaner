@@ -15,6 +15,11 @@ public class ConfirmPannel : MonoBehaviour
         _confirmBtn.onClick.AddListener(confirmAction);
         _cancelBtn.onClick.AddListener(cancelAction);
     }
+    private void OnDisable()
+    {
+        _confirmBtn.onClick.RemoveAllListeners();
+        _cancelBtn.onClick.RemoveAllListeners();
+    }
 }
 
 

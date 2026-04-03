@@ -13,6 +13,8 @@ public class PlayerStatManager : MonoBehaviour
     [SerializeField] private VoidEventChannelSO _onChangeLoadout;
 
     public PlayerLoadout Loadout => _playerLoadout;
+
+    // 필요할 때마다 읽어서 갱신이 되어야 함
     public PlayerStatTransfer StatTransfer => GetStatTransfer();
 
 
@@ -57,9 +59,6 @@ public class PlayerStatManager : MonoBehaviour
 
     private void SetLoadout()
     {
-        if (_playerLoadout == null)
-            _playerLoadout = PlayerStatManager.Instance.Loadout;
-
         _statTransfer.SetLoadoutStat(_playerLoadout);
     }
 

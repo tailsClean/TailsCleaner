@@ -2,7 +2,8 @@
 
 public class SunDryingSkill : ActiveSkill<SunDryingArea, SunDryingModifierData>
 {
-    private const string BUFF_KEY_BLANKEY = "BlanketWrap";
+    private const string BUFF_KEY_BLANKEY = "BlanketWrap";      // 이불두르기
+    private const string DEBUFF_KEY_SLOW = "SunDryingSlow";     // 으슬으슬
 
 
     // 현재 활성화된 일광건조 수 (0 이면 꺼진 상태)
@@ -18,7 +19,7 @@ public class SunDryingSkill : ActiveSkill<SunDryingArea, SunDryingModifierData>
     protected override void OnActive(int index, int totalCount)
     {
         // 일광건조 장판 생성
-        SunDryingArea area = SpawnFromPool<SunDryingArea>(_skillObjectPrefab, transform.position, Quaternion.identity);
+        SunDryingArea area = SpawnFromPool(_skillObjectPrefab, transform.position, Quaternion.identity);
 
         // 초기화
         if(area != null) area.Init(this, _modifierData);
@@ -45,14 +46,6 @@ public class SunDryingSkill : ActiveSkill<SunDryingArea, SunDryingModifierData>
         if (_modifierData.HealOnActivate)
         {
             SkillStatHandler.HealByRatio(_modifierData.HealRatio);
-            Debug.Log("[SunDrying] 기상! - 체력 회복");
-        }
-
-        // 이불 털기
-        // 켜질 때 범위 내 적 넉백
-        if (_modifierData.KnockbackOnActivate)
-        {
-            Debug.Log("[SunDrying] 이불 털기 - 넉백");
         }
     }
 
@@ -63,13 +56,13 @@ public class SunDryingSkill : ActiveSkill<SunDryingArea, SunDryingModifierData>
         if (_modifierData.DefenseOnInactive)
         {
             SkillStatHandler.RemoveRuntime(BUFF_KEY_BLANKEY);
-            Debug.Log("[SunDrying] 이불 두르기 - 방어력 버프 해제");
         }
 
         // 으슬으슬
         if (_modifierData.SlowOnArea)
         {
-            Debug.Log("[SunDrying] 으슬으슬 - 전체 적 슬로우 적용 시작");
+            ApplySlowAllMonster();
+            MonsterManager.Instance.OnMonsterSpawned += SlowSpawnMonster;
         }
     }
 
@@ -86,7 +79,6 @@ public class SunDryingSkill : ActiveSkill<SunDryingArea, SunDryingModifierData>
         if (_modifierData.ShieldOnDeactivate)
         {
             SkillStatHandler.TryAddShield(1);
-            Debug.Log("[SunDrying] 두꺼운 이불 - 방어막 생성");
         }
 
         // 활성화 일광건조 감소
@@ -114,14 +106,40 @@ public class SunDryingSkill : ActiveSkill<SunDryingArea, SunDryingModifierData>
                 _lastDefenseBonus = _modifierData.DefenseBonus;
             }
             SkillStatHandler.AddRuntimeStat(BUFF_KEY_BLANKEY, _blanketFlat);
-            Debug.Log("[SunDrying] 이불 두르기 - 방어력 증가");
         }
 
         // 으슬으슬
         // 맵 전체 적 슬로우 해제
         if (_modifierData.SlowOnArea)
         {
-            Debug.Log("[SunDrying] 으슬으슬 - 전체 적 슬로우 해제");
+            MonsterManager.Instance.OnMonsterSpawned -= SlowSpawnMonster;
+            RemoveSlowAllMonster();
         }
+    }
+    
+    // 전체 슬로우 적용
+    private void ApplySlowAllMonster()
+    {
+        foreach (var monster in MonsterManager.Instance.activeMonsters)
+        {
+            if (monster == null) continue;
+            monster.EnterSlowArea(DEBUFF_KEY_SLOW, _modifierData.SlowAmount);
+        }
+    }
+
+    // 전체 슬로우 해제
+    private void RemoveSlowAllMonster()
+    {
+        foreach (var monster in MonsterManager.Instance.activeMonsters)
+        {
+            if (monster == null) continue;
+            monster.ExitSlowArea(DEBUFF_KEY_SLOW);
+        }
+    }
+
+    // 새로 스폰된 몬스터에게도 슬로우
+    private void SlowSpawnMonster(MonsterBase monster)
+    {
+        monster.EnterSlowArea(DEBUFF_KEY_SLOW, _modifierData.SlowAmount);
     }
 }
