@@ -79,6 +79,7 @@ public abstract class MonsterBase : PoolObject, IDamageable, IMonsterStatus, IPu
     private int _expReward;
 
     protected Rigidbody2D rb2D;
+    protected Collider2D _monsterCollider;
     protected bool isAttacking = false;
 
     public Vector2 Position => rb2D.position;
@@ -158,6 +159,10 @@ public abstract class MonsterBase : PoolObject, IDamageable, IMonsterStatus, IPu
             if (typeData != null)
             {
                 this.mass = typeData.type_mass;
+                this.hitBox = typeData.type_hit_box;
+
+                ApplyScale();
+                ApplyHitBox();
             }
         }
 
@@ -320,6 +325,22 @@ public abstract class MonsterBase : PoolObject, IDamageable, IMonsterStatus, IPu
         transform.localScale = new Vector3(s, s, 1f);
     }
 
+    private void ApplyHitBox()
+    {
+        if (_monsterCollider == null) return;
+
+        // 원형 콜라이더일 경우
+        if (_monsterCollider is CircleCollider2D circle)
+        {
+            circle.radius = hitBox;
+        }
+        // 박스 콜라이더일 경우
+        else if (_monsterCollider is BoxCollider2D box)
+        {
+            box.size = new Vector2(hitBox, hitBox);
+        }
+    }
+
     protected virtual void ApplySprite(MonsterResource resourceData)
     {
         if (_monsterSprite == null)
@@ -417,6 +438,8 @@ public abstract class MonsterBase : PoolObject, IDamageable, IMonsterStatus, IPu
     protected virtual void Awake()
     {
         rb2D = GetComponent<Rigidbody2D>();
+
+        _monsterCollider = GetComponent<Collider2D>();
 
         if (_monsterSprite == null)
             _monsterSprite = GetComponentInChildren<SpriteRenderer>(true);
