@@ -12,12 +12,13 @@ GameObject:
   - component: {fileID: 9085124006550590065}
   - component: {fileID: 7069551867210678986}
   - component: {fileID: 5676767321155858366}
-  - component: {fileID: 4623907807441698298}
+  - component: {fileID: -9015206204577113263}
   - component: {fileID: 5514830495199837496}
-  - component: {fileID: 7039035210718007216}
-  - component: {fileID: -8369415291307709180}
+  - component: {fileID: 6612712607612896099}
+  - component: {fileID: 3178603656011100005}
+  - component: {fileID: -6309030999690592268}
   m_Layer: 7
-  m_Name: Test_MiniBoss
+  m_Name: MiniBoss
   m_TagString: Monster
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -32,7 +33,7 @@ Transform:
   m_GameObject: {fileID: 899191179583652646}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 9.63, y: -8.53316, z: 0}
+  m_LocalPosition: {x: 5.26106, y: -8.53316, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -86,12 +87,12 @@ SpriteRenderer:
   m_SortingLayerID: -985789361
   m_SortingLayer: 4
   m_SortingOrder: 0
-  m_Sprite: {fileID: -543440774144996595, guid: 3114087356348124e8bf10542bc46033, type: 3}
-  m_Color: {r: 0.7008996, g: 0, b: 1, a: 1}
+  m_Sprite: {fileID: -6885945728193905203, guid: 9bc5d3c423ef74d40bf2619a6073c575, type: 3}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
-  m_Size: {x: 1, y: 1}
+  m_Size: {x: 0.5439453, y: 0.5654297}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 0
@@ -158,19 +159,19 @@ BoxCollider2D:
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
-  m_Offset: {x: 0, y: 0.21133333}
+  m_Offset: {x: -0.49999976, y: 0.21133327}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 6.75, y: 5.43}
-    newSize: {x: 1, y: 1}
+    oldSize: {x: 6.46, y: 5.75}
+    newSize: {x: 0.5439453, y: 0.5654297}
     adaptiveTilingThreshold: 0.5
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
-  m_Size: {x: 1, y: 1}
+  m_Size: {x: 6.0000005, y: 7}
   m_EdgeRadius: 0
---- !u!114 &4623907807441698298
+--- !u!114 &-9015206204577113263
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -184,25 +185,25 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::SpecialMonster
   target: {fileID: 0}
   stoppingDistance: 0.1
-  hp: 1
-  maxHp: 1
+  hp: 100
+  maxHp: 100
   power: 1
   moveSpeed: 1
   hitBox: 1
   mass: 1
-  KBResist: 1
+  KBResist: 0
   knockbackUnitToPx: 100
   avoidanceRadius: 1.5
   avoidanceForce: 2
   monsterLayer:
     serializedVersion: 2
     m_Bits: 128
-  TestItem: {fileID: 7621293018972681884, guid: 7bd74e2913a4ea44aa66ef718bc20d47, type: 3}
+  TestItem: {fileID: 0}
   damageCooldown: 1
   scoreReward: 1000
   goldReward: 500
   _monsterSprite: {fileID: 0}
-  _animator: {fileID: -8369415291307709180}
+  _animator: {fileID: -6309030999690592268}
   _knockbackDuration: 0.1
   _wallLayerMask:
     serializedVersion: 2
@@ -231,11 +232,6 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  avoidanceRadius: 1.5
-  avoidanceForce: 2
-  monsterLayer:
-    serializedVersion: 2
-    m_Bits: 128
   pattern_group_id: 0
   detect_range: 0
   pattern_cooldown: 0
@@ -261,7 +257,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 91e90c980cd2b54429434b66344f9b0c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::MonsterShooter
-  projectilePrefab: {fileID: 2559287183428765651, guid: 7b877991fe532504184f3d2ef78a026a, type: 3}
+  projectilePrefab: {fileID: 2559287183428765651, guid: 2bae763d4c0fa8942b75f3ff111dbc6f, type: 3}
   firePoint: {fileID: 8364492714931052297}
   playerTarget: {fileID: 0}
   pattern_cooldown: 5
@@ -275,7 +271,7 @@ MonoBehaviour:
   pierce_type: 0
   arc_height: 0
   state: 0
---- !u!114 &7039035210718007216
+--- !u!114 &6612712607612896099
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -287,7 +283,24 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cba0c930577f8e240a095f334c21bc3e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PoolObject
---- !u!95 &-8369415291307709180
+--- !u!114 &3178603656011100005
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 899191179583652646}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 69f67a59712802844be664ca423c4c41, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::BarricadeSpawner
+  barricadePrefab: {fileID: 8461779969420871315, guid: 324193de02afd244086bf02906f5df83, type: 3}
+  warningPrefab: {fileID: 6383617728571696591, guid: 5f468878613da5548bda63fe56d158e8, type: 3}
+  warningDuration: 1.5
+  minRandomRadius: 5
+  maxRandomRadius: 10
+--- !u!95 &-6309030999690592268
 Animator:
   serializedVersion: 7
   m_ObjectHideFlags: 0
