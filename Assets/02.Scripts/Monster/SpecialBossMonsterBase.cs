@@ -281,7 +281,7 @@ public abstract class SpecialBossMonsterBase : MonsterBase
             if (visualChild != null)
             {
                 visualChild.localPosition = Vector2.zero;
-                visualChild.localScale = new Vector3(this.mass, this.mass, 1f);
+                visualChild.localScale = new Vector3(this.mass, this.mass, 0f);
             }
 
             currentPattern = null;
@@ -540,7 +540,7 @@ public abstract class SpecialBossMonsterBase : MonsterBase
         {
             float finalScaleX = (lookX > 0) ? this.mass : -this.mass;
 
-            visualChild.localScale = new Vector3(finalScaleX, this.mass, 1f);
+            visualChild.localScale = new Vector3(finalScaleX, this.mass, 0f);
         }
     }
 
