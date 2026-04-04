@@ -1071,11 +1071,11 @@ public class BossMonster : MonsterBase, ILaserable
 
         if (direction > 0.01f)
         {
-            visualChild.localScale = new Vector3(-currentMass, currentMass, 0f);
+            visualChild.localScale = new Vector3(currentMass, currentMass, 0f);
         }
         else if (direction < -0.01f)
         {
-            visualChild.localScale = new Vector3(currentMass, currentMass, 0f);
+            visualChild.localScale = new Vector3(-currentMass, currentMass, 0f);
         }
     }
 
