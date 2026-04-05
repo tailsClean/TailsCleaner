@@ -404,9 +404,9 @@ public class BossMonster : MonsterBase, ILaserable
 
     public override void OnDespawn()
     {
-        base.OnDespawn();
-
         StopAllCoroutines();
+
+        base.OnDespawn();
 
         foreach (var orbit in activeOrbits)
         {
@@ -752,9 +752,17 @@ public class BossMonster : MonsterBase, ILaserable
     {
         useBarricade = true;
 
+        // 기본 타이머 및 지속시간
         barricadeInterval = patternData.cooldown > 0f ? patternData.cooldown : barricadeInterval;
         barDuration = patternData.duration > 0f ? patternData.duration : barDuration;
 
+        // 예고 시간 할당 (코루틴에서 사용됨)
+        cast_time = patternData.cast_time > 0f ? patternData.cast_time : 0.5f;
+
+        // 데미지 계산 (보스 기본 공격력 * 패턴 배율)
+        pattern_damage = this.power * (patternData.stat_value > 0f ? patternData.stat_value : 1f);
+
+        // 형태 및 크기 설정
         barShape = patternData.barrier_shape == BarrierShapeType.Circle
             ? BarricadeSpawner.BarricadeShape.Circle
             : BarricadeSpawner.BarricadeShape.Rectangle;
@@ -764,35 +772,21 @@ public class BossMonster : MonsterBase, ILaserable
             patternData.barrier_size_y > 0f ? patternData.barrier_size_y : barSize.y
         );
 
+        // 소환 위치 결정
         switch (patternData.barrier_target_type)
         {
-            case BARRIER_TARGET_TYPE.Player:
-                spawnLoc = BarricadeSpawner.SpawnLocation.Player;
-                break;
-            case BARRIER_TARGET_TYPE.Boss:
-                spawnLoc = BarricadeSpawner.SpawnLocation.Boss;
-                break;
-            case BARRIER_TARGET_TYPE.Both:
-                spawnLoc = BarricadeSpawner.SpawnLocation.Both;
-                break;
-            case BARRIER_TARGET_TYPE.Nobody:
-                spawnLoc = BarricadeSpawner.SpawnLocation.None;
-                break;
+            case BARRIER_TARGET_TYPE.Player: spawnLoc = BarricadeSpawner.SpawnLocation.Player; break;
+            case BARRIER_TARGET_TYPE.Boss: spawnLoc = BarricadeSpawner.SpawnLocation.Boss; break;
+            case BARRIER_TARGET_TYPE.Both: spawnLoc = BarricadeSpawner.SpawnLocation.Both; break;
+            case BARRIER_TARGET_TYPE.Nobody: spawnLoc = BarricadeSpawner.SpawnLocation.None; break;
         }
 
+        // 충돌 물리 설정
         barInteraction = patternData.barrier_collision_block
             ? BarricadeSpawner.InteractionType.BlockedWithDamage
             : BarricadeSpawner.InteractionType.PassableWithDamage;
 
-
-        Debug.Log($"[Boss Barrier 적용 완료] " +
-            $"PatternId:{patternData.pattern_id}, " +
-            $"Cooldown:{barricadeInterval}, Duration:{barDuration}, " +
-            $"Shape:{barShape}, Size:{barSize}, SpawnLoc:{spawnLoc}, Interaction:{barInteraction}"
-        );
-
-
-
+        Debug.Log($"[Boss Barrier 적용] ID:{patternData.pattern_id}, Dmg:{pattern_damage}, Cast:{cast_time}");
     }
     #endregion
 
@@ -981,17 +975,29 @@ public class BossMonster : MonsterBase, ILaserable
 
     private void HandleBarricadeLogic()
     {
-        // 이미 소환 대기 중이거나 일시정지 상태면 스킵
-        if (isWaitingBarricade || isPaused) return;
+        if (isPaused || IsStunned || hp <= 0) return;
 
-        if (barricadeTimer > 0f)
+        barricadeTimer -= Time.fixedDeltaTime;
+        if (barricadeTimer <= 0f)
         {
-            barricadeTimer -= Time.fixedDeltaTime;
-            return;
-        }
+            barricadeTimer = barricadeInterval;
 
-        // 타이머가 다 되면 코루틴 실행
-        StartCoroutine(BarricadePatternRoutine());
+            if (barricadeSpawner != null)
+            {
+                Vector2 targetPos = barricadeSpawner.GetSpawnPosition(spawnLoc, target, transform);
+
+              
+                barricadeSpawner.SpawnBarricade(
+                    targetPos,      
+                    barShape,
+                    barSize,
+                    barDuration,
+                    barInteraction,
+                    pattern_damage,
+                    cast_time
+                );
+            }
+        }
     }
 
     private Vector2 GetSpawnPosition(BarricadeSpawner.SpawnLocation loc)
@@ -1181,40 +1187,45 @@ public class BossMonster : MonsterBase, ILaserable
         }
     }
 
-    private IEnumerator BarricadePatternRoutine()
+    private IEnumerator BarricadePatternRoutine(Pattern currentPattern) 
     {
-        isWaitingBarricade = true; // 소환 프로세스 시작
+        isWaitingBarricade = true;
 
-        // cast_time만큼 대기 (이 시간 동안 보스는 MoveProcess에 의해 계속 이동함)
         float elapsed = 0f;
-        while (elapsed < cast_time)
+        while (elapsed < currentPattern.cast_time)
         {
-            if (!isPaused) // 일시정지 체크
+            if (!isPaused)
             {
                 elapsed += Time.deltaTime;
             }
             yield return null;
         }
 
-        // 예고 시간이 끝난 '지금' 위치를 확정 
-        Vector2 spawnPosition = GetSpawnPosition(spawnLoc);
+        // 위치 계산
+        Vector2 spawnPosition = GetSpawnPosition((BarricadeSpawner.SpawnLocation)currentPattern.barrier_target_type);
 
-        // 실제 소환
         if (barricadeSpawner != null)
         {
+            // 모양 변환
+            BarricadeSpawner.BarricadeShape shape = (currentPattern.barrier_shape == BarrierShapeType.Circle)
+                ? BarricadeSpawner.BarricadeShape.Circle
+                : BarricadeSpawner.BarricadeShape.Rectangle;
+
+            // 실제 소환
             barricadeSpawner.SpawnBarricade(
                 spawnPosition,
-                barShape,
-                barSize,
-                barDuration,
-                barInteraction,
-                this.power
+                shape,
+                new Vector2(currentPattern.barrier_size_x, currentPattern.barrier_size_y), 
+                currentPattern.duration,       
+                currentPattern.barrier_collision_block ? BarricadeSpawner.InteractionType.SolidWall : BarricadeSpawner.InteractionType.PassableWithDamage,
+                currentPattern.barrier_damage,  
+                currentPattern.cast_time        
             );
         }
 
-        // 상태 초기화 및 쿨타임 설정
         isWaitingBarricade = false;
-        barricadeTimer = barricadeInterval;
+     
+        barricadeTimer = currentPattern.cooldown;
     }
 
     private IEnumerator JumpRoutine()
@@ -1332,6 +1343,7 @@ public class BossMonster : MonsterBase, ILaserable
         isBlinking = false;
         isWaitingBlink = false;
         isOrbiting = false;
+        isWaitingBarricade = false;
 
         jumpCooldownTimer = 0f;
         fleeCooldownTimer = 0f;

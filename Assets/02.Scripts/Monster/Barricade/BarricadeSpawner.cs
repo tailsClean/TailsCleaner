@@ -62,9 +62,10 @@ public class BarricadeSpawner : MonoBehaviour
         Vector2 size,
         float duration,
         InteractionType interaction,
-        float bossPower)
+        float bossPower,
+        float castTime)
     {
-        StartCoroutine(BarricadeRoutine(pos, shape, size, duration, interaction, bossPower));
+        StartCoroutine(BarricadeRoutine(pos, shape, size, duration, interaction, bossPower, castTime));
     }
 
     private IEnumerator BarricadeRoutine(
@@ -73,7 +74,8 @@ public class BarricadeSpawner : MonoBehaviour
     Vector2 size,
     float duration,
     InteractionType interaction,
-    float bossPower)
+    float bossPower,
+    float castTime)
     {
         if (warningPrefab != null)
         {
@@ -87,7 +89,8 @@ public class BarricadeSpawner : MonoBehaviour
                 col.enabled = false;
             }
 
-            yield return new WaitForSeconds(warningDuration);
+            float waitTime = castTime > 0f ? castTime : warningDuration;
+            yield return new WaitForSeconds(waitTime);
 
             if (warning != null)
             {
