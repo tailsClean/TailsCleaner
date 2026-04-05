@@ -11,8 +11,8 @@ public class BarricadeSpawner : MonoBehaviour
     [Header("Prefabs")]
     public GameObject barricadePrefab;   // 실제 벽 오브젝트
     public GameObject warningPrefab;     // 생성 전 예고 이펙트
-    public GameObject circleTilePrefab;  
-    public GameObject warningTilePrefab;
+    public PoolObject circleTilePrefab;  
+    public PoolObject warningTilePrefab;
 
     [Header("Settings")]
     public float warningDuration = 1.5f; // 예고 시간이 지난 후 벽 생성
@@ -126,7 +126,7 @@ public class BarricadeSpawner : MonoBehaviour
         }
     }
 
-    private void BuildBarricadeVisual(Transform target, BarricadeShape shape, Vector2 size, GameObject tilePrefab)
+    private void BuildBarricadeVisual(Transform target, BarricadeShape shape, Vector2 size, PoolObject tilePrefab)
     {
         if (shape == BarricadeShape.Rectangle)
         {
@@ -138,7 +138,7 @@ public class BarricadeSpawner : MonoBehaviour
         }
     }
 
-    private void BuildRectangleVisual(Transform target, Vector2 size, GameObject tilePrefab)
+    private void BuildRectangleVisual(Transform target, Vector2 size, PoolObject tilePrefab)
     {
         Transform rectGroup = target.Find("RectGroup");
         if (rectGroup == null) return;
@@ -163,7 +163,7 @@ public class BarricadeSpawner : MonoBehaviour
         SetupRectSide(right, new Vector2(size.x / 2f, 0f), new Vector2(thick, size.y + thick), new Vector2(0f, -size.y / 2f), new Vector2(0f, size.y / 2f), spacing, tilePrefab);
     }
 
-    private void BuildCircleVisual(Transform target, Vector2 size, GameObject tilePrefab)
+    private void BuildCircleVisual(Transform target, Vector2 size, PoolObject tilePrefab)
     {
         Transform circleGroup = target.Find("CircleGroup");
         if (circleGroup == null) return;
@@ -192,7 +192,7 @@ public class BarricadeSpawner : MonoBehaviour
     Vector2 lineStart,
     Vector2 lineEnd,
     float spacing,
-    GameObject tilePrefab)
+    PoolObject tilePrefab)
     {
         if (side == null) return;
 
@@ -210,7 +210,7 @@ public class BarricadeSpawner : MonoBehaviour
         BuildLineWithCircles(side, lineStart, lineEnd, spacing, tilePrefab);
     }
 
-    private void BuildLineWithCircles(Transform parent, Vector2 start, Vector2 end, float spacing, GameObject tilePrefab)
+    private void BuildLineWithCircles(Transform parent, Vector2 start, Vector2 end, float spacing, PoolObject tilePrefab)
     {
         if (parent == null || tilePrefab == null) return;
 
@@ -224,14 +224,15 @@ public class BarricadeSpawner : MonoBehaviour
             float t = (count == 1) ? 0f : (float)i / (count - 1);
             Vector2 pos = Vector2.Lerp(start, end, t);
 
-            GameObject dot = Instantiate(tilePrefab, parent);
+            PoolObject dot = ObjectPoolManager.Instance.Spawn(tilePrefab, Vector3.zero, Quaternion.identity);
+            dot.transform.SetParent(parent, false);
             dot.transform.localPosition = pos;
             dot.transform.localRotation = Quaternion.identity;
             dot.transform.localScale = Vector3.one;
         }
     }
 
-    private void BuildRingWithCircles(Transform parent, float radius, float spacing, GameObject tilePrefab)
+    private void BuildRingWithCircles(Transform parent, float radius, float spacing, PoolObject tilePrefab)
     {
         if (parent == null || tilePrefab == null) return;
 
@@ -249,12 +250,15 @@ public class BarricadeSpawner : MonoBehaviour
                 Mathf.Sin(angle) * radius
             );
 
-            GameObject dot = Instantiate(tilePrefab, parent);
+            PoolObject dot = ObjectPoolManager.Instance.Spawn(tilePrefab, Vector3.zero, Quaternion.identity);
+            dot.transform.SetParent(parent, false);
             dot.transform.localPosition = pos;
             dot.transform.localRotation = Quaternion.identity;
             dot.transform.localScale = Vector3.one;
         }
     }
+
+
 
     private void ClearChildren(Transform parent)
     {
@@ -262,7 +266,17 @@ public class BarricadeSpawner : MonoBehaviour
 
         for (int i = parent.childCount - 1; i >= 0; i--)
         {
-            Destroy(parent.GetChild(i).gameObject);
+            Transform child = parent.GetChild(i);
+
+            if (child.TryGetComponent<PoolObject>(out var poolObj))
+            {
+                child.SetParent(ObjectPoolManager.Instance.transform);
+                ObjectPoolManager.Instance.ReturnObject(poolObj);
+            }
+            else
+            {
+                Destroy(child.gameObject);
+            }
         }
     }
 }

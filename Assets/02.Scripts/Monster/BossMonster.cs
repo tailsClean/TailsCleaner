@@ -349,7 +349,7 @@ public class BossMonster : MonsterBase, ILaserable
                     ApplyBossProjectilePattern(patternData, composition.pattern_cooldown);
                     break;
 
-                case PATTERN_TYPE.Barricade:
+                case PATTERN_TYPE.Barrier:
                     ApplyBossBarricadePattern(patternData);
                     break;
 
