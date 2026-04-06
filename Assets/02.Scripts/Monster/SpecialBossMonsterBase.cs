@@ -669,6 +669,7 @@ public abstract class SpecialBossMonsterBase : MonsterBase
     {
         float distance = Vector2.Distance(target.position, rb2D.position);
 
+        // [1] 상태 진입: 점프 준비
         if (!isJumping && !isWaiting)
         {
             if (distance > detect_range || stateTimer < pattern_cooldown)
@@ -684,6 +685,7 @@ public abstract class SpecialBossMonsterBase : MonsterBase
             return;
         }
 
+        // [2] 대기 중 (캐스팅 타임)
         if (isWaiting)
         {
             rb2D.linearVelocity = Vector2.zero;
@@ -693,23 +695,39 @@ public abstract class SpecialBossMonsterBase : MonsterBase
                 isWaiting = false;
                 isJumping = true;
                 hasHitTargetInCurrentJump = false;
-                jumpStartPos = rb2D.position;
-                jumpTargetPos = target.position;
                 jumpProgress = 0f;
                 stateTimer = 0f;
-            }
 
+                // --- Raycast 위치 보정 Logic 시작 ---
+                jumpStartPos = rb2D.position;
+                Vector2 rawTargetPos = (Vector2)target.position;
+                Vector2 direction = (rawTargetPos - jumpStartPos).normalized;
+                float targetDistance = Vector2.Distance(jumpStartPos, rawTargetPos);
+            
+                int wallMask = LayerMask.GetMask("Wall");
+                RaycastHit2D hit = Physics2D.Raycast(jumpStartPos, direction, targetDistance, wallMask);
+
+                if (hit.collider != null)
+                {
+                    // 벽에 걸렸다면 벽 지점에서 약간(0.5f) 앞에서 멈추도록 설정
+                    jumpTargetPos = hit.point - (direction * 0.5f);
+
+                    //Debug.DrawLine(jumpStartPos, hit.point, Color.red, 1.0f);
+                }
+                else
+                {
+                    // 경로에 벽이 없다면 정상적으로 타겟 위치까지 점프
+                    jumpTargetPos = rawTargetPos;
+                }
+                // --- Logic 끝 ---
+            }
             return;
         }
 
+        // 점프 중 (이동 실행)
         if (isJumping)
         {
-            float actualSpeed = moveSpeed * pattern_multiply;
-            float totalDistance = Vector2.Distance(jumpStartPos, jumpTargetPos);
-            float duration = (totalDistance > 0f && actualSpeed > 0f) ? totalDistance / actualSpeed : 0.1f;
-
-            jumpProgress += Time.fixedDeltaTime / duration;
-
+            // 사망 체크
             if (hp <= 0)
             {
                 if (visualChild != null) visualChild.localPosition = Vector2.zero;
@@ -718,23 +736,39 @@ public abstract class SpecialBossMonsterBase : MonsterBase
                 return;
             }
 
+            float actualSpeed = moveSpeed * pattern_multiply;
+            float totalDistance = Vector2.Distance(jumpStartPos, jumpTargetPos);
+
+            // 거리나 속도가 0일 때의 예외 처리
+            float duration = (totalDistance > 0.01f && actualSpeed > 0f) ? totalDistance / actualSpeed : 0.1f;
+
+            jumpProgress += Time.fixedDeltaTime / duration;
+
             if (jumpProgress >= 1f)
             {
+                // [착지 완료]
                 rb2D.linearVelocity = Vector2.zero;
                 rb2D.position = jumpTargetPos;
                 isJumping = false;
                 currentState = MonsterState.MOVE;
                 stateTimer = 0f;
 
+                if (GetComponent<Collider2D>() != null)
+                    GetComponent<Collider2D>().isTrigger = false;
+
                 if (visualChild != null)
                     visualChild.localPosition = Vector2.zero;
             }
             else
             {
+                // [공중 이동]
                 Vector2 nextTargetPos = Vector2.Lerp(jumpStartPos, jumpTargetPos, jumpProgress);
                 Vector2 moveDir = nextTargetPos - rb2D.position;
+
+                // 물리 엔진과 충돌을 최소화하기 위해 Velocity를 계산하여 적용
                 rb2D.linearVelocity = moveDir / Time.fixedDeltaTime;
 
+                // 시각적인 높이 표현 (포물선)
                 if (visualChild != null)
                 {
                     float currentHeight = Mathf.Sin(jumpProgress * Mathf.PI) * jump_height;
