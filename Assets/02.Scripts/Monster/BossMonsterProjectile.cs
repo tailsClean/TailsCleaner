@@ -12,6 +12,7 @@ public class BossMonsterProjectile : PoolObject
     private float reflectTimer = 0f;
     private bool isHomingActive = false; // 포물선 비행 중 유도 활성화 여부
     private float finalDamage;
+    private Camera mainCam;
 
     [Header("--- 프리팹 원본 참조 ---")]
     public GameObject originPrefab;
@@ -104,6 +105,8 @@ public class BossMonsterProjectile : PoolObject
             return;
         }
 
+        CheckScreenBounds();
+
         if (is_homing && target != null)
         {
             HandleHomingLogic();
@@ -113,6 +116,56 @@ public class BossMonsterProjectile : PoolObject
 
         if (rb2D.linearVelocity.sqrMagnitude > 0.1f)
             lastVelocity = rb2D.linearVelocity;
+    }
+
+    private void CheckScreenBounds()
+    {
+        // 반사 타입이 아니거나 반사 횟수를 다 썼으면 체크 안 함
+        if (pierce_type != PIERCE_TYPE.Reflect || currentBounce >= reflect_count) return;
+        if (reflectTimer > 0) return; // 반사 직후 쿨타임 중이면 무시
+
+        // 월드 좌표를 0~1 사이의 화면 좌표로 변환
+        Vector3 viewportPos = mainCam.WorldToViewportPoint(transform.position);
+        bool reflected = false;
+        Vector2 currentVel = rb2D.linearVelocity;
+        float margin = 0.03f; // 화면 끝에서 3% 지점을 벽으로 인식 (끼임 방지)
+
+        // 좌우 벽 체크 및 위치 강제 보정
+        if (viewportPos.x <= margin)
+        {
+            currentVel.x = Mathf.Abs(currentVel.x); // 무조건 오른쪽으로
+            viewportPos.x = margin + 0.01f;        // 안전지대로 밀어넣기
+            reflected = true;
+        }
+        else if (viewportPos.x >= 1f - margin)
+        {
+            currentVel.x = -Mathf.Abs(currentVel.x); // 무조건 왼쪽으로
+            viewportPos.x = 1f - margin - 0.01f;
+            reflected = true;
+        }
+
+        // 상하 벽 체크 및 위치 강제 보정
+        if (viewportPos.y <= margin)
+        {
+            currentVel.y = Mathf.Abs(currentVel.y); // 무조건 위쪽으로
+            viewportPos.y = margin + 0.01f;
+            reflected = true;
+        }
+        else if (viewportPos.y >= 1f - margin)
+        {
+            currentVel.y = -Mathf.Abs(currentVel.y); // 무조건 아래쪽으로
+            viewportPos.y = 1f - margin - 0.01f;
+            reflected = true;
+        }
+
+        if (reflected)
+        {
+            rb2D.linearVelocity = currentVel;
+            // 보정된 Viewport 좌표를 다시 월드 좌표로 바꿔서 위치 고정
+            transform.position = mainCam.ViewportToWorldPoint(viewportPos);
+            currentBounce++;
+            reflectTimer = 0.15f; // 반사 직후 짧은 유도 잠금 타임
+        }
     }
 
     private void HandleHomingLogic()
@@ -183,6 +236,7 @@ public class BossMonsterProjectile : PoolObject
                 Vector2 reflectDir = Vector2.Reflect(lastVelocity.normalized, normal);
                 rb2D.linearVelocity = reflectDir * projectile_speed;
 
+                transform.position = (Vector2)transform.position + (normal * 0.1f);
                 reflectTimer = 0.15f;
                 currentBounce++;
                 return;

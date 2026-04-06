@@ -812,6 +812,9 @@ public class BossMonster : MonsterBase, ILaserable
         isWaitingBlink = true;
         rb2D.linearVelocity = Vector2.zero;
 
+        // 예고 시작 시점의 플레이어 위치를 미리 저장
+        Vector2 lockedTargetPosition = target.position;
+
         if (lineRenderer != null)
         {
             lineRenderer.enabled = true;
@@ -830,10 +833,11 @@ public class BossMonster : MonsterBase, ILaserable
 
             elapsedCast += Time.deltaTime;
 
-            if (lineRenderer != null && target != null)
+            if (lineRenderer != null)
             {
+                // 실시간 플레이어 위치가 아닌, 고정된 lockedTargetPosition을 향해 라인을 그립니다.
                 Vector3 s = transform.position;
-                Vector3 e = target.position;
+                Vector3 e = (Vector3)lockedTargetPosition;
                 s.z = transform.position.z;
                 e.z = transform.position.z;
 
@@ -844,8 +848,9 @@ public class BossMonster : MonsterBase, ILaserable
             yield return null;
         }
 
+        // 이동 시작 위치와 미리 저장해둔 타겟 위치 설정
         Vector2 moveStart = rb2D.position;
-        Vector2 moveTarget = target.position;
+        Vector2 moveTarget = lockedTargetPosition;
 
         if (lineRenderer != null)
             lineRenderer.enabled = false;
@@ -854,7 +859,11 @@ public class BossMonster : MonsterBase, ILaserable
         isBlinking = true;
 
         float distance = Vector2.Distance(moveStart, moveTarget);
-        float duration = distance / (move_speed * blink_speed_multiplier);
+
+        // 이동 속도가 0인 경우 방어 로직
+        float currentMoveSpeed = move_speed * blink_speed_multiplier;
+        float duration = distance > 0.01f ? distance / currentMoveSpeed : 0.1f;
+
         float elapsed = 0f;
 
         while (elapsed < duration && this.hp > 0)
