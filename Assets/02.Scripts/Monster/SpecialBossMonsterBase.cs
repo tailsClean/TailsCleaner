@@ -226,230 +226,112 @@ public abstract class SpecialBossMonsterBase : MonsterBase
 
         if (MonsterId <= 0)
         {
-            Debug.LogError($"[SpecialBossMonsterBase] 유효하지 않은 MonsterId: {MonsterId}, name:{name}, instanceId:{GetInstanceID()}");
+            Debug.LogError($"[SpecialBossMonsterBase] 유효하지 않은 MonsterId: {MonsterId}, name:{name}");
             return;
         }
-
-        Debug.Log($"[SpecialBossMonsterBase] InitializeMonsterData / name:{name}, instanceId:{GetInstanceID()}, MonsterId:{MonsterId}");
 
         MonsterSO monsterSO = DataManager.Instance.GetSOData<MonsterSO>();
         Monster monsterData = monsterSO?.GetById(MonsterId);
 
-        if (monsterSO == null)
+        if (monsterSO == null || monsterData == null)
         {
-            Debug.LogError("[SpecialBossMonsterBase] MonsterSO를 찾을 수 없습니다.");
+            Debug.LogError($"[SpecialBossMonsterBase] 몬스터 데이터 로드 실패. MonsterId:{MonsterId}");
             return;
         }
 
-        // 데이터 없음 → 원인 추적 로그
-        if (monsterData == null)
-        {
-            Debug.LogError($"[SpecialBossMonsterBase] 몬스터 데이터 없음. MonsterId:{MonsterId}, name:{name}");
-
-            // 디버그용: 특정 ID들 존재 여부 확인
-            int[] debugIds = { 102001, 102002, 200001, 201001, 202001 };
-
-            foreach (int id in debugIds)
-            {
-                Monster test = monsterSO.GetById(id);
-                Debug.Log($"[MonsterSO Check] id:{id}, exists:{test != null}");
-            }
-
-            return;
-        }
-
+        // 1. 몬스터 타입 데이터 적용 (Mass 등)
         MonsterTypeSO monsterTypeSO = DataManager.Instance.GetSOData<MonsterTypeSO>();
         if (monsterTypeSO != null)
         {
-            // LINQ를 사용하여 몬스터 타입에 맞는 공통 데이터 추출
             var typeData = monsterTypeSO.dataList.FirstOrDefault(x => x.monster_type == monsterData.monster_type);
             if (typeData != null)
             {
-                this.mass = typeData.type_mass; // MonsterBase의 mass 변수에 저장
+                this.mass = typeData.type_mass;
             }
         }
 
-        // 정상 데이터 로딩
         pattern_group_id = monsterData.pattern_group_id;
 
-        if (monsterData.monster_type == MONSTERTYPE.Elite && pattern_group_id <= 0)
-        {
-            Debug.Log($"[SpecialBossMonsterBase] >>> Elite fallback ENTER <<< name:{name}, MonsterId:{MonsterId}, pattern_group_id:{pattern_group_id}");
-
-            this.transform.localScale = Vector3.one;
-
-            if (visualChild != null)
-            {
-                visualChild.localPosition = Vector2.zero;
-                visualChild.localScale = new Vector3(this.mass, this.mass, 0f);
-            }
-
-            currentPattern = null;
-            isSuicideUnit = false;
-            currentState = MonsterState.MOVE;
-            currentCastTimer = 0f;
-
-            MonsterShooter fallbackShooter = GetComponent<MonsterShooter>();
-            if (fallbackShooter != null)
-            {
-                fallbackShooter.DisableShooter();
-            }
-
-            if (!activeMonsters.Contains(this))
-                activeMonsters.Add(this);
-
-            if (target == null)
-            {
-                GameObject playerObj = GameObject.FindWithTag("Player");
-                if (playerObj != null)
-                    target = playerObj.transform;
-            }
-
-            isDataInitialized = true;
-            isWaitingForMonsterId = false;
-
-            Debug.Log($"[SpecialBossMonsterBase] >>> Elite fallback COMPLETE <<< name:{name}, MonsterId:{MonsterId}, isDataInitialized:{isDataInitialized}, targetNull:{target == null}");
-
-            return;
-        }
-
-
-        if (pattern_group_id <= 0)
-        {
-            Debug.LogError($"[SpecialBossMonsterBase] pattern_group_id invalid. MonsterId:{MonsterId}, pattern_group_id:{pattern_group_id}");
-            return;
-        }
-
+        // 2. 패턴 그룹 데이터 가져오기
         PatternGroupCompositionSO compositionSO = DataManager.Instance.GetSOData<PatternGroupCompositionSO>();
-        if (compositionSO == null)
-        {
-            Debug.LogError("[SpecialBossMonsterBase] PatternGroupCompositionSO를 찾을 수 없습니다.");
-            return;
-        }
-
-        List<PatternGroupComposition> compositionList = compositionSO.GetAllByGroupId(pattern_group_id);
-
-        if (compositionList == null || compositionList.Count == 0)
-        {
-            Debug.LogError($"[SpecialBossMonsterBase] composition 데이터 없음. pattern_group_id:{pattern_group_id}");
-            return;
-        }
-
-        Debug.Log($"[Composition 개수] pattern_group_id:{pattern_group_id}, count:{compositionList.Count}");
-
-        foreach (var comp in compositionList)
-        {
-            Debug.Log($"[Composition] group:{comp.pattern_group_id}, pattern:{comp.pattern_id}, priority:{comp.priority}");
-        }
-
+        List<PatternGroupComposition> compositionList = compositionSO?.GetAllByGroupId(pattern_group_id);
         PatternSO patternSO = DataManager.Instance.GetSOData<PatternSO>();
-        if (patternSO == null)
+
+        // [핵심 수정] 패턴이 1가지만 존재하므로, 첫 번째 유효한 패턴을 바로 선택
+        Pattern selectedPattern = null;
+        if (compositionList != null && compositionList.Count > 0)
         {
-            Debug.LogError("[SpecialBossMonsterBase] PatternSO를 찾을 수 없습니다.");
-            return;
-        }
-
-        Pattern movePattern = null;
-        Pattern projectilePattern = null;
-
-        foreach (var composition in compositionList)
-        {
-            Pattern pattern = patternSO.GetById(composition.pattern_id);
-            if (pattern == null) continue;
-
-            Debug.Log($"[Pattern 확인] pattern_id:{pattern.pattern_id}, type:{pattern.pattern_type}, logic:{pattern.pattern_logic_type}");
-
-            if (pattern.pattern_type == PATTERN_TYPE.Projectile && projectilePattern == null)
+            foreach (var comp in compositionList)
             {
-                projectilePattern = pattern;
-            }
-            else if (pattern.pattern_type == PATTERN_TYPE.Move && movePattern == null)
-            {
-                movePattern = pattern;
+                selectedPattern = patternSO?.GetById(comp.pattern_id);
+                if (selectedPattern != null) break;
             }
         }
 
         MonsterShooter shooter = GetComponent<MonsterShooter>();
 
-        // Projectile 우선
-        if (projectilePattern != null)
+        // 3. 패턴 데이터 적용 및 상태 결정
+        if (selectedPattern != null)
         {
-            currentPattern = null;
-            ResetRuntimeState();
+            // ApplyPatternData 내부에서 isSuicideUnit 판정(SelfDestruct 체크 등)이 이루어짐
+            ApplyPatternData(selectedPattern);
 
-            isSuicideUnit = false;
-            damage_multiply = projectilePattern.damage_multiply > 0f ? projectilePattern.damage_multiply : 1f;
-            detect_range = projectilePattern.detect_range > 0f ? projectilePattern.detect_range : detect_range;
-            cast_time = 0f;
-            explosion_range = 0f;
-
-            if (shooter != null)
+            if (selectedPattern.pattern_type == PATTERN_TYPE.Projectile)
             {
-                shooter.ApplyProjectilePattern(projectilePattern);
+                // [투사체 유닛]
+                currentPattern = null;
+                isSuicideUnit = false;
+                if (shooter != null) shooter.ApplyProjectilePattern(selectedPattern);
+                currentState = MonsterState.MOVE;
+            }
+            else
+            {
+                // [이동 또는 자폭 유닛]
+                currentPattern = selectedPattern;
+                if (shooter != null) shooter.DisableShooter();
+
+                if (isSuicideUnit)
+                {
+                    // 자폭 유닛 전용 초기화
+                    currentCastTimer = cast_time;
+                    currentState = MonsterState.PATTERN;
+                    Debug.Log($"[{name}] 자폭 유닛 설정 완료! 패턴ID: {selectedPattern.pattern_id}, 캐스팅: {cast_time}s");
+                }
+                else
+                {
+                    currentState = MonsterState.MOVE;
+                }
             }
         }
         else
         {
-            if (shooter != null)
-            {
-                shooter.DisableShooter();
-            }
-
-            if (movePattern != null)
-            {
-                currentPattern = movePattern;
-                ApplyPatternData(movePattern);
-
-                Debug.Log(
-                    $"[Move 적용 완료] " +
-                    $"MonsterId:{MonsterId}, PatternGroupId:{pattern_group_id}, PatternId:{movePattern.pattern_id}, Logic:{movePattern.pattern_logic_type}, " +
-                    $"Cooldown:{pattern_cooldown}, Cast:{cast_time}, SpeedMul:{pattern_multiply}, Detect:{detect_range}, " +
-                    $"ZigzagWidth:{zigzag_width}, JumpHeight:{jump_height}, ExplosionRange:{explosion_range}, DamageMul:{damage_multiply}"
-                );
-            }
-            else
-            {
-                currentPattern = null;
-                ResetRuntimeState();
-
-                Debug.Log($"[기본 이동 적용] MonsterId:{MonsterId}, PatternGroupId:{pattern_group_id}");
-            }
+            // 패턴이 없거나 엘리트 폴백 처리
+            Debug.Log($"[{name}] 기본 이동 모드 적용 (패턴 없음)");
+            currentPattern = null;
+            isSuicideUnit = false;
+            currentState = MonsterState.MOVE;
+            if (shooter != null) shooter.DisableShooter();
         }
 
+        // 4. 공통 시각 설정 및 타겟 할당
         this.transform.localScale = Vector3.one;
-
         if (visualChild != null)
         {
             visualChild.localPosition = Vector2.zero;
-            visualChild.localScale = new Vector3(this.mass, this.mass, 0f);
+            visualChild.localScale = new Vector3(this.mass, this.mass, 1f);
         }
 
         if (!activeMonsters.Contains(this))
             activeMonsters.Add(this);
 
-        if (isSuicideUnit)
-        {
-            currentCastTimer = cast_time;
-            currentState = MonsterState.PATTERN;
-        }
-        else
-        {
-            currentState = MonsterState.MOVE;
-        }
-
         if (target == null)
         {
             GameObject playerObj = GameObject.FindWithTag("Player");
-            if (playerObj != null)
-                target = playerObj.transform;
+            if (playerObj != null) target = playerObj.transform;
         }
 
         isDataInitialized = true;
         isWaitingForMonsterId = false;
-
-        Debug.Log($"[SpecialBossMonsterBase] >>> Elite fallback COMPLETE <<< name:{name}, MonsterId:{MonsterId}, isDataInitialized:{isDataInitialized}, targetNull:{target == null}");
-
-        return;
     }
 
     public override void OnDespawn()
@@ -980,8 +862,8 @@ public abstract class SpecialBossMonsterBase : MonsterBase
 
     private void ApplyPatternData(Pattern patternData)
     {
+        // 1. 기본 수치 할당
         pattern_cooldown = patternData.cooldown;
-        cast_time = patternData.cast_time;
         damage_multiply = (patternData.damage_multiply > 0f) ? patternData.damage_multiply : 1f;
         zigzag_width = patternData.zigzag_width;
         explosion_range = patternData.explode_range;
@@ -989,7 +871,27 @@ public abstract class SpecialBossMonsterBase : MonsterBase
         jump_height = (patternData.jump_height > 0f) ? patternData.jump_height : jump_height;
         pattern_multiply = ResolvePatternMultiply(patternData);
 
-        isSuicideUnit = (patternData.pattern_type == PATTERN_TYPE.SelfDestruct);
+        isSuicideUnit = (patternData.pattern_type == PATTERN_TYPE.SelfDestruct ||
+                         (patternData.pattern_logic_type != null && patternData.pattern_logic_type.ToLower().Contains("self")));
+
+ 
+        if (patternData.duration > 0f)
+        {
+            this.cast_time = patternData.duration;
+        }
+        else if (patternData.cast_time > 0f)
+        {
+            this.cast_time = patternData.cast_time;
+        }
+        else
+        {
+            this.cast_time = isSuicideUnit ? 3.0f : 0f;
+
+            if (isSuicideUnit)
+                Debug.LogWarning($"[{patternData.pattern_id}] 자폭 데이터(duration/cast_time)가 0입니다. 기본값 3s를 적용합니다.");
+        }
+
+        Debug.Log($"[ApplyPatternData] ID: {patternData.pattern_id}, Type: {patternData.pattern_type}, Final CastTime: {this.cast_time}s");
     }
 
     private void ResetRuntimeState()
