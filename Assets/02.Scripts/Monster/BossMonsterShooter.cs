@@ -8,20 +8,9 @@ public class BossMonsterShooter : MonoBehaviour
     public Transform firePoint;
     public Transform playerTarget;
 
-    [Header("--- 패턴 데이터 ---")]
-    public float pattern_cooldown = 3.0f;
-    public float detect_range = 15.0f;
-    public int projectile_count = 5;
-    public float fire_interval = 0.15f;
-    public float damage_multiply = 1.2f;
-
-    [Header("--- 투사체 데이터 ---")]
-    public float projectile_speed = 10f;
-    public float projectile_size = 1f;
-    public float life_time = 5f;
-    public bool is_homing = false;
-    public BossMonsterProjectile.PierceType pierce_type = BossMonsterProjectile.PierceType.DISAPPEAR;
-    public float arc_height = 0f;
+    [Header("--- 패턴 데이터 연동 ---")]
+    private Pattern currentPatternData; 
+    private float pattern_cooldown;     // 계산된 최종 쿨타임
 
     [Header("--- 상태 관리 ---")]
     public MonsterState state = MonsterState.MOVE;
@@ -39,22 +28,27 @@ public class BossMonsterShooter : MonoBehaviour
 
     void Update()
     {
-        if (!enabled) return;
-        if (!isPatternReady) return;
+        if (!enabled || !isPatternReady || currentPatternData == null) return;
 
+        // 쿨타임 상시 검사
         if (current_cooldown > 0f)
             current_cooldown -= Time.deltaTime;
 
+        // 쿨타임이 끝났고 플레이어가 사거리 안에 있으면 패턴 시작
         if (state == MonsterState.MOVE && current_cooldown <= 0f)
         {
+            // 기획서의 detect_range 참조
             if (playerTarget != null &&
-                Vector2.Distance(transform.position, playerTarget.position) <= detect_range)
+                Vector2.Distance(transform.position, playerTarget.position) <= currentPatternData.detect_range)
             {
                 StartCoroutine(BossAttackRoutine());
             }
         }
     }
 
+    /// <summary>
+    /// 패턴 SO 데이터를 보스 슈터에 주입합니다.
+    /// </summary>
     public void ApplyProjectilePattern(Pattern patternData, float compositionCooldown = -1f)
     {
         if (patternData == null)
@@ -63,51 +57,24 @@ public class BossMonsterShooter : MonoBehaviour
             return;
         }
 
+        currentPatternData = patternData;
+
         pattern_cooldown = compositionCooldown > 0f
             ? compositionCooldown
             : (patternData.cooldown > 0f ? patternData.cooldown : 1f);
-
-        detect_range = patternData.detect_range > 0f ? patternData.detect_range : 10f;
-        projectile_count = patternData.projectile_count > 0 ? patternData.projectile_count : 1;
-        fire_interval = patternData.fire_interval > 0f ? patternData.fire_interval : 0.2f;
-        damage_multiply = patternData.damage_multiply > 0f ? patternData.damage_multiply : 1f;
-
-        projectile_speed = patternData.projectile_speed > 0f ? patternData.projectile_speed : 10f;
-        projectile_size = patternData.projectile_size > 0f ? patternData.projectile_size : 1f;
-        life_time = patternData.life_time > 0f ? patternData.life_time : 5f;
-        is_homing = patternData.follow;
-        arc_height = patternData.arc_height;
-
-        switch (patternData.pierce_type)
-        {
-            case PIERCE_TYPE.Extinction:
-                pierce_type = BossMonsterProjectile.PierceType.DISAPPEAR;
-                break;
-            case PIERCE_TYPE.Piece:
-                pierce_type = BossMonsterProjectile.PierceType.PIERCE;
-                break;
-            case PIERCE_TYPE.Reflect:
-                pierce_type = BossMonsterProjectile.PierceType.REFLECT;
-                break;
-        }
 
         current_cooldown = 0f;
         state = MonsterState.MOVE;
         isPatternReady = true;
         enabled = true;
 
-        Debug.Log(
-            $"[BossShooter 적용 완료] " +
-            $"PatternId:{patternData.pattern_id}, Logic:{patternData.pattern_logic_type}, " +
-            $"Cooldown:{pattern_cooldown}, Detect:{detect_range}, Count:{projectile_count}, Interval:{fire_interval}, " +
-            $"DamageMul:{damage_multiply}, Speed:{projectile_speed}, Size:{projectile_size}, Life:{life_time}, " +
-            $"Follow:{is_homing}, Pierce:{pierce_type}, Arc:{arc_height}"
-        );
+        Debug.Log($"[BossShooter 연동] ID: {patternData.pattern_id}, 감지범위: {patternData.detect_range}, 쿨타임: {pattern_cooldown}");
     }
 
     public void DisableShooter()
     {
         StopAllCoroutines();
+        currentPatternData = null;
         current_cooldown = 0f;
         state = MonsterState.MOVE;
         isPatternReady = false;
@@ -118,10 +85,13 @@ public class BossMonsterShooter : MonoBehaviour
     {
         state = MonsterState.PATTERN;
 
-        for (int i = 0; i < projectile_count; i++)
+        int count = currentPatternData.projectile_count > 0 ? currentPatternData.projectile_count : 1;
+        float interval = currentPatternData.fire_interval > 0f ? currentPatternData.fire_interval : 0.2f;
+
+        for (int i = 0; i < count; i++)
         {
             Shoot();
-            yield return new WaitForSeconds(fire_interval);
+            yield return new WaitForSeconds(interval);
         }
 
         state = MonsterState.MOVE;
@@ -130,7 +100,7 @@ public class BossMonsterShooter : MonoBehaviour
 
     public void Shoot()
     {
-        if (projectilePrefab == null || playerTarget == null) return;
+        if (projectilePrefab == null || playerTarget == null || currentPatternData == null) return;
 
         BossMonster boss = GetComponent<BossMonster>();
         if (boss == null)
@@ -139,28 +109,22 @@ public class BossMonsterShooter : MonoBehaviour
             return;
         }
 
+        // 발사 위치 설정
         Vector2 dirToPlayer = (playerTarget.position - transform.position).normalized;
         float offsetDistance = 1.2f;
         Vector3 spawnPos = (firePoint != null)
             ? firePoint.position
             : transform.position + (Vector3)(dirToPlayer * offsetDistance);
 
+ 
         BossMonsterProjectile projectile = ObjectPoolManager.Instance.Spawn(projectilePrefab, spawnPos, Quaternion.identity);
 
         if (projectile != null)
         {
-            float finalDamage = boss.power * damage_multiply;
+            projectile.ApplyProjectileData(currentPatternData, boss.power);
 
-            projectile.ApplyProjectileData(
-                projectile_speed,
-                projectile_size,
-                life_time,
-                is_homing,
-                pierce_type,
-                arc_height
-            );
-
-            projectile.Launch(playerTarget, finalDamage);
+            // 발사 실행 
+            projectile.Launch(playerTarget);
         }
     }
 }
