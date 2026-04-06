@@ -128,10 +128,14 @@ public class DungeonSelect : MonoBehaviour
         if (_towerData == null || index < 0 || index >= TowerCount) return;
  
         var data = _towerData.dataList[index];
+        Debug.Log($"Binding slot {index}: {data.tower_string_key}");
         var imgName = data.tower_icon_resource; 
         image.sprite = Resources.Load<Sprite>($"Stage/Tower_Image/{imgName}");
-        var towerName = _stringData.GetById(data.tower_string_key).kr;
-        _txtSelect.text = towerName;
+        if(isSelect)
+        {
+            var towerName = _stringData.GetById(data.tower_string_key).kr;
+            _txtSelect.text = towerName;
+        }
     }
 
 
