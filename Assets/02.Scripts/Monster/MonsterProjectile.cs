@@ -10,6 +10,8 @@ public class MonsterProjectile : PoolObject, IPullable
     private bool isInitialized = false;
     private float reflectTimer = 0f;
     private float finalDamage;
+    private Camera mainCam;
+
 
     [Header("--- 프리팹 원본 참조 ---")]
     [Tooltip("반납할 때 필요한 이 투사체의 원본 프리팹")]
@@ -33,6 +35,7 @@ public class MonsterProjectile : PoolObject, IPullable
     void Awake()
     {
         rb2D = GetComponent<Rigidbody2D>();
+        mainCam = Camera.main;
 
         // 충돌 감지를 위해 Trigger 설정
         if (GetComponent<Collider2D>() != null)
@@ -110,6 +113,9 @@ public class MonsterProjectile : PoolObject, IPullable
             return;
         }
 
+        // 화면 체크
+        CheckScreenBounds();
+
         // 유도탄 로직: 직선탄 타입이면서 유도 옵션이 켜져 있을 때만 작동
         if (is_homing && target != null && projectile_type == PROJECTILE_TYPE.Straight)
         {
@@ -126,6 +132,58 @@ public class MonsterProjectile : PoolObject, IPullable
 
         if (rb2D.linearVelocity.sqrMagnitude > 0.1f)
             lastVelocity = rb2D.linearVelocity;
+    }
+
+    private void CheckScreenBounds()
+    {
+        if (pierce_type != PIERCE_TYPE.Reflect || currentBounce >= reflect_count) return;
+        if (reflectTimer > 0) return;
+
+        Vector3 viewportPos = mainCam.WorldToViewportPoint(transform.position);
+        bool reflected = false;
+        Vector2 currentVel = rb2D.linearVelocity;
+
+        // 마진(Margin): 투사체 반지름 정도의 여유를 둡니다 (예: 화면의 3%)
+        float margin = 0.03f;
+
+        // 좌우 벽 체크 및 보정
+        if (viewportPos.x <= margin)
+        {
+            currentVel.x = Mathf.Abs(currentVel.x); // 무조건 오른쪽으로
+            viewportPos.x = margin + 0.01f;        // 화면 안쪽으로 위치 강제 이동
+            reflected = true;
+        }
+        else if (viewportPos.x >= 1f - margin)
+        {
+            currentVel.x = -Mathf.Abs(currentVel.x); // 무조건 왼쪽으로
+            viewportPos.x = 1f - margin - 0.01f;
+            reflected = true;
+        }
+
+        // 상하 벽 체크 및 보정
+        if (viewportPos.y <= margin)
+        {
+            currentVel.y = Mathf.Abs(currentVel.y); // 무조건 위쪽으로
+            viewportPos.y = margin + 0.01f;
+            reflected = true;
+        }
+        else if (viewportPos.y >= 1f - margin)
+        {
+            currentVel.y = -Mathf.Abs(currentVel.y); // 무조건 아래쪽으로
+            viewportPos.y = 1f - margin - 0.01f;
+            reflected = true;
+        }
+
+        if (reflected)
+        {
+            // 속도 적용
+            rb2D.linearVelocity = currentVel;
+            // 위치 강제 보정 (World 좌표로 다시 변환)
+            transform.position = mainCam.ViewportToWorldPoint(viewportPos);
+            // 반사 횟수 및 쿨타임
+            currentBounce++;
+            reflectTimer = 0.2f;
+        }
     }
 
     private void UpdateRotation()
