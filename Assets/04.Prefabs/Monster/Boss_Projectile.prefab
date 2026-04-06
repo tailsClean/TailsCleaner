@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 6245087012642157629}
   - component: {fileID: 5699680820878641477}
   - component: {fileID: 275366871046023992}
+  - component: {fileID: 7460454241840938204}
   m_Layer: 10
   m_Name: Boss_Projectile
   m_TagString: Untagged
@@ -106,13 +107,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::BossMonsterProjectile
   originPrefab: {fileID: 3789541983955085391}
+  projectile_type: 0
   projectile_speed: 3
   life_time: 20
   is_homing: 1
   homing_steer_strength: 5
-  pierce_flags: 0
+  pierce_type: 0
   reflect_count: 3
   arc_height: 3
+  projectile_size: 1
 --- !u!50 &5699680820878641477
 Rigidbody2D:
   serializedVersion: 5
@@ -121,7 +124,7 @@ Rigidbody2D:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3789541983955085391}
-  m_BodyType: 1
+  m_BodyType: 0
   m_Simulated: 1
   m_UseFullKinematicContacts: 0
   m_UseAutoMass: 0
@@ -176,3 +179,15 @@ CircleCollider2D:
   m_CompositeOrder: 0
   m_Offset: {x: 0, y: -0.5}
   m_Radius: 1
+--- !u!114 &7460454241840938204
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3789541983955085391}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cba0c930577f8e240a095f334c21bc3e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PoolObject

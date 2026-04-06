@@ -73,6 +73,10 @@ PrefabInstance:
       propertyPath: m_AnchorMax.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 2034475515852120274, guid: b8ff255ca2082fd49b6cfd7cb380da60, type: 3}
+      propertyPath: m_AnchorMin.x
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 2289438427888782087, guid: b8ff255ca2082fd49b6cfd7cb380da60, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5
@@ -165,15 +169,33 @@ PrefabInstance:
       propertyPath: m_SizeDelta.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4229753654177189823, guid: b8ff255ca2082fd49b6cfd7cb380da60, type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 500
+      objectReference: {fileID: 0}
+    - target: {fileID: 4229753654177189823, guid: b8ff255ca2082fd49b6cfd7cb380da60, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: -0.0000048056245
+      objectReference: {fileID: 0}
+    - target: {fileID: 6622182759114154880, guid: b8ff255ca2082fd49b6cfd7cb380da60, type: 3}
+      propertyPath: m_MovementType
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 7340561490086548988, guid: b8ff255ca2082fd49b6cfd7cb380da60, type: 3}
       propertyPath: m_Name
       value: Pnl_UnlockedStagePanel
       objectReference: {fileID: 0}
-    m_RemovedComponents:
-    - {fileID: 6622182759114154880, guid: b8ff255ca2082fd49b6cfd7cb380da60, type: 3}
+    - target: {fileID: 8659975169023102630, guid: b8ff255ca2082fd49b6cfd7cb380da60, type: 3}
+      propertyPath: m_Size
+      value: 1
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 7340561490086548988, guid: b8ff255ca2082fd49b6cfd7cb380da60, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 2332569437309202359}
     - targetCorrespondingSourceObject: {fileID: 5246324939581776653, guid: b8ff255ca2082fd49b6cfd7cb380da60, type: 3}
       insertIndex: -1
       addedObject: {fileID: 4961076704826640364}
@@ -220,6 +242,20 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 7340561490086548988, guid: b8ff255ca2082fd49b6cfd7cb380da60, type: 3}
   m_PrefabInstance: {fileID: 3213734644396956439}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &2332569437309202359
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5280351168590040811}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5608cfcc331dfca4ab06a6aae23d7c68, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::NestedScrollHandler
+  _parentScroll: {fileID: 0}
+  _childScroll: {fileID: 8610814884664490135}
 --- !u!114 &6104368888499590577 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 8659975169023102630, guid: b8ff255ca2082fd49b6cfd7cb380da60, type: 3}
@@ -277,6 +313,17 @@ MonoBehaviour:
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls: []
+--- !u!114 &8610814884664490135 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 6622182759114154880, guid: b8ff255ca2082fd49b6cfd7cb380da60, type: 3}
+  m_PrefabInstance: {fileID: 3213734644396956439}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5280351168590040811}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1aa08ab6e0800fa44ae55d278d1423e3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.ScrollRect
 --- !u!1001 &9216236214781944366
 PrefabInstance:
   m_ObjectHideFlags: 0

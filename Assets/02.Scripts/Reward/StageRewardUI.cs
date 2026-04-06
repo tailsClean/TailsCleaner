@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 
 public class StageRewardUI : MonoBehaviour
@@ -13,6 +14,12 @@ public class StageRewardUI : MonoBehaviour
     private void Awake()
     {
         _checkDuplications = new();
+    }
+
+    [ContextMenu("ㅁㅇ")]
+    public void asd()
+    {
+        Debug.Log(GetComponent<ScrollRect>().enabled);
     }
 
     // 해당 보상그룹ID를 넣어서 슬롯을 UI출력

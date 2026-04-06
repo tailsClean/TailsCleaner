@@ -9,15 +9,25 @@ public class BarricadeSpawner : MonoBehaviour
     public enum SpawnLocation { Player, Boss, Both, None }
 
     [Header("Prefabs")]
-    public GameObject barricadePrefab; // 실제 벽 오브젝트
-    public GameObject warningPrefab;   // 생성 전 예고 이펙트
+    public GameObject barricadePrefab;   // 실제 벽 오브젝트
+    public GameObject warningPrefab;     // 생성 전 예고 이펙트
+    public PoolObject circleTilePrefab;  
+    public PoolObject warningTilePrefab;
 
     [Header("Settings")]
     public float warningDuration = 1.5f; // 예고 시간이 지난 후 벽 생성
 
+    [Header("Visual Settings")]
+    [Tooltip("원형 타일 사이 간격")]
+    public float tileSpacing = 0.4f;
+
+    [Tooltip("사각형 벽 콜라이더 두께")]
+    public float rectangleThickness = 0.2f;
+
     [Header("Random Spawn Settings (None)")]
     [Tooltip("무작위 생성 시 보스로부터의 최소 거리")]
     public float minRandomRadius = 5f;
+
     [Tooltip("무작위 생성 시 보스로부터의 최대 거리")]
     public float maxRandomRadius = 10f;
 
@@ -28,19 +38,15 @@ public class BarricadeSpawner : MonoBehaviour
         switch (location)
         {
             case SpawnLocation.Player:
-                // 플레이어 중심
                 return player.position;
 
             case SpawnLocation.Boss:
-                // 보스 중심
                 return boss.position;
 
             case SpawnLocation.Both:
-                // 플레이어와 보스의 중간 지점
                 return Vector2.Lerp(player.position, boss.position, 0.5f);
 
             case SpawnLocation.None:
-                // 무작위: 보스 기준 인스펙터에서 설정한 반경 내
                 Vector2 randomDir = Random.insideUnitCircle.normalized;
                 float randomDist = Random.Range(minRandomRadius, maxRandomRadius);
                 return (Vector2)boss.position + (randomDir * randomDist);
@@ -50,98 +56,229 @@ public class BarricadeSpawner : MonoBehaviour
         }
     }
 
-    public void SpawnBarricade(Vector2 pos, BarricadeShape shape, Vector2 size, float duration, InteractionType interaction, float bossPower)
+    public void SpawnBarricade(
+        Vector2 pos,
+        BarricadeShape shape,
+        Vector2 size,
+        float duration,
+        InteractionType interaction,
+        float bossPower,
+        float castTime)
     {
-        StartCoroutine(BarricadeRoutine(pos, shape, size, duration, interaction, bossPower));
+        StartCoroutine(BarricadeRoutine(pos, shape, size, duration, interaction, bossPower, castTime));
     }
 
-    private IEnumerator BarricadeRoutine(Vector2 pos, BarricadeShape shape, Vector2 size, float duration, InteractionType interaction, float bossPower)
+    private IEnumerator BarricadeRoutine(
+    Vector2 pos,
+    BarricadeShape shape,
+    Vector2 size,
+    float duration,
+    InteractionType interaction,
+    float bossPower,
+    float castTime)
     {
-        // 1. 예고 단계 (Warning)
         if (warningPrefab != null)
         {
             GameObject warning = Instantiate(warningPrefab, pos, Quaternion.identity);
-            Set2DScale(warning.transform, shape, size);
 
-            var warningScript = warning.GetComponent<BarricadeObject>();
-            if (warningScript != null)
+            BuildBarricadeVisual(warning.transform, shape, size, warningTilePrefab);
+
+            Collider2D[] warningCols = warning.GetComponentsInChildren<Collider2D>(true);
+            foreach (var col in warningCols)
             {
-                warningScript.Setup(warningDuration, interaction, shape, size, bossPower);
+                col.enabled = false;
+            }
+
+            float waitTime = castTime > 0f ? castTime : warningDuration;
+            yield return new WaitForSeconds(waitTime);
+
+            if (warning != null)
+            {
+                warning.SetActive(false);
+                Destroy(warning);
+            }
+
+            yield return null;
+        }
+
+        if (barricadePrefab != null)
+        {
+            Debug.Log("[BARRICADE] 생성 시작");
+
+            GameObject barricade = Instantiate(barricadePrefab, pos, Quaternion.identity);
+            Debug.Log($"[BARRICADE] instantiate 성공: {barricade.name}");
+
+            Debug.Log($"[BARRICADE] circleTilePrefab 연결됨? {circleTilePrefab != null}");
+            Debug.Log($"[BARRICADE] RectGroup 있음? {barricade.transform.Find("RectGroup") != null}");
+            Debug.Log($"[BARRICADE] CircleGroup 있음? {barricade.transform.Find("CircleGroup") != null}");
+
+            BuildBarricadeVisual(barricade.transform, shape, size, circleTilePrefab);
+
+            BarricadeObject objScript = barricade.GetComponent<BarricadeObject>();
+            Debug.Log($"[BARRICADE] BarricadeObject 있음? {objScript != null}");
+
+            if (objScript != null)
+            {
+                objScript.Setup(duration, interaction, shape, size, bossPower);
+                Debug.Log("[BARRICADE] Setup 호출 완료");
+            }
+        }
+        else
+        {
+            Debug.LogWarning("[BARRICADE] barricadePrefab이 비어 있음");
+        }
+    }
+
+    private void BuildBarricadeVisual(Transform target, BarricadeShape shape, Vector2 size, PoolObject tilePrefab)
+    {
+        if (shape == BarricadeShape.Rectangle)
+        {
+            BuildRectangleVisual(target, size, tilePrefab);
+        }
+        else
+        {
+            BuildCircleVisual(target, size, tilePrefab);
+        }
+    }
+
+    private void BuildRectangleVisual(Transform target, Vector2 size, PoolObject tilePrefab)
+    {
+        Transform rectGroup = target.Find("RectGroup");
+        if (rectGroup == null) return;
+
+        Transform circleGroup = target.Find("CircleGroup");
+        if (circleGroup != null)
+            circleGroup.gameObject.SetActive(false);
+
+        rectGroup.gameObject.SetActive(true);
+
+        Transform top = rectGroup.Find("Top");
+        Transform bottom = rectGroup.Find("Bottom");
+        Transform left = rectGroup.Find("Left");
+        Transform right = rectGroup.Find("Right");
+
+        float thick = rectangleThickness;
+        float spacing = tileSpacing;
+
+        SetupRectSide(top, new Vector2(0f, size.y / 2f), new Vector2(size.x + thick, thick), new Vector2(-size.x / 2f, 0f), new Vector2(size.x / 2f, 0f), spacing, tilePrefab);
+        SetupRectSide(bottom, new Vector2(0f, -size.y / 2f), new Vector2(size.x + thick, thick), new Vector2(-size.x / 2f, 0f), new Vector2(size.x / 2f, 0f), spacing, tilePrefab);
+        SetupRectSide(left, new Vector2(-size.x / 2f, 0f), new Vector2(thick, size.y + thick), new Vector2(0f, -size.y / 2f), new Vector2(0f, size.y / 2f), spacing, tilePrefab);
+        SetupRectSide(right, new Vector2(size.x / 2f, 0f), new Vector2(thick, size.y + thick), new Vector2(0f, -size.y / 2f), new Vector2(0f, size.y / 2f), spacing, tilePrefab);
+    }
+
+    private void BuildCircleVisual(Transform target, Vector2 size, PoolObject tilePrefab)
+    {
+        Transform circleGroup = target.Find("CircleGroup");
+        if (circleGroup == null) return;
+
+        Transform rectGroup = target.Find("RectGroup");
+        if (rectGroup != null)
+            rectGroup.gameObject.SetActive(false);
+
+        circleGroup.gameObject.SetActive(true);
+
+        Transform wallVisual = circleGroup.Find("Wall_Visual");
+        if (wallVisual == null) return;
+
+        Transform holeMask = circleGroup.Find("Hole_Mask");
+        if (holeMask != null)
+            holeMask.gameObject.SetActive(false);
+
+        float radius = size.x / 2f;
+        BuildRingWithCircles(wallVisual, radius, tileSpacing, tilePrefab);
+    }
+
+    private void SetupRectSide(
+    Transform side,
+    Vector2 localPos,
+    Vector2 colliderSize,
+    Vector2 lineStart,
+    Vector2 lineEnd,
+    float spacing,
+    PoolObject tilePrefab)
+    {
+        if (side == null) return;
+
+        side.localPosition = localPos;
+        side.localRotation = Quaternion.identity;
+        side.localScale = Vector3.one;
+
+        BoxCollider2D col = side.GetComponent<BoxCollider2D>();
+        if (col != null)
+        {
+            col.size = colliderSize;
+            col.offset = Vector2.zero;
+        }
+
+        BuildLineWithCircles(side, lineStart, lineEnd, spacing, tilePrefab);
+    }
+
+    private void BuildLineWithCircles(Transform parent, Vector2 start, Vector2 end, float spacing, PoolObject tilePrefab)
+    {
+        if (parent == null || tilePrefab == null) return;
+
+        ClearChildren(parent);
+
+        float distance = Vector2.Distance(start, end);
+        int count = Mathf.Max(2, Mathf.RoundToInt(distance / spacing) + 1);
+
+        for (int i = 0; i < count; i++)
+        {
+            float t = (count == 1) ? 0f : (float)i / (count - 1);
+            Vector2 pos = Vector2.Lerp(start, end, t);
+
+            PoolObject dot = ObjectPoolManager.Instance.Spawn(tilePrefab, Vector3.zero, Quaternion.identity);
+            dot.transform.SetParent(parent, false);
+            dot.transform.localPosition = pos;
+            dot.transform.localRotation = Quaternion.identity;
+            dot.transform.localScale = Vector3.one;
+        }
+    }
+
+    private void BuildRingWithCircles(Transform parent, float radius, float spacing, PoolObject tilePrefab)
+    {
+        if (parent == null || tilePrefab == null) return;
+
+        ClearChildren(parent);
+
+        float circumference = 2f * Mathf.PI * radius;
+        int count = Mathf.Max(8, Mathf.RoundToInt(circumference / spacing));
+
+        for (int i = 0; i < count; i++)
+        {
+            float angle = (2f * Mathf.PI * i) / count;
+
+            Vector2 pos = new Vector2(
+                Mathf.Cos(angle) * radius,
+                Mathf.Sin(angle) * radius
+            );
+
+            PoolObject dot = ObjectPoolManager.Instance.Spawn(tilePrefab, Vector3.zero, Quaternion.identity);
+            dot.transform.SetParent(parent, false);
+            dot.transform.localPosition = pos;
+            dot.transform.localRotation = Quaternion.identity;
+            dot.transform.localScale = Vector3.one;
+        }
+    }
+
+
+
+    private void ClearChildren(Transform parent)
+    {
+        if (parent == null) return;
+
+        for (int i = parent.childCount - 1; i >= 0; i--)
+        {
+            Transform child = parent.GetChild(i);
+
+            if (child.TryGetComponent<PoolObject>(out var poolObj))
+            {
+                child.SetParent(ObjectPoolManager.Instance.transform);
+                ObjectPoolManager.Instance.ReturnObject(poolObj);
             }
             else
             {
-                Destroy(warning, warningDuration);
-            }
-
-            yield return new WaitForSeconds(warningDuration);
-            if (warning != null) Destroy(warning);
-        }
-
-        // 실제 생성 단계 (Barricade)
-        if (barricadePrefab != null)
-        {
-            GameObject barricade = Instantiate(barricadePrefab, pos, Quaternion.identity);
-            Set2DScale(barricade.transform, shape, size);
-
-            BarricadeObject objScript = barricade.GetComponent<BarricadeObject>();
-            if (objScript != null)
-            {
-                
-                objScript.Setup(duration, interaction, shape, size, bossPower);
-            }
-        }
-    }
-    private void Set2DScale(Transform target, BarricadeShape shape, Vector2 size)
-    {
-        target.localScale = Vector3.one;
-
-        if (shape == BarricadeShape.Rectangle)
-        {
-            // 사각형 그룹 찾기
-            Transform rectGroup = target.Find("RectGroup");
-            if (rectGroup == null) return;
-
-            // 사각형일 때는 원형 그룹 끄기
-            target.Find("CircleGroup")?.gameObject.SetActive(false);
-            rectGroup.gameObject.SetActive(true);
-
-            Transform t = rectGroup.Find("Top");
-            Transform b = rectGroup.Find("Bottom");
-            Transform l = rectGroup.Find("Left");
-            Transform r = rectGroup.Find("Right");
-
-            if (t != null && b != null && l != null && r != null)
-            {
-                float thick = 0.2f; // 벽 두께
-                t.localPosition = new Vector2(0, size.y / 2f);
-                b.localPosition = new Vector2(0, -size.y / 2f);
-                l.localPosition = new Vector2(-size.x / 2f, 0);
-                r.localPosition = new Vector2(size.x / 2f, 0);
-
-                t.localScale = new Vector2(size.x + thick, thick);
-                b.localScale = new Vector2(size.x + thick, thick);
-                l.localScale = new Vector2(thick, size.y + thick);
-                r.localScale = new Vector2(thick, size.y + thick);
-            }
-        }
-        else // Circle (도넛 모양)
-        {
-            // 원형 그룹 찾기
-            Transform circleGroup = target.Find("CircleGroup");
-            if (circleGroup == null) return;
-
-            // 원형일 때는 사각형 그룹 끄기
-            target.Find("RectGroup")?.gameObject.SetActive(false);
-            circleGroup.gameObject.SetActive(true);
-
-            Transform visual = circleGroup.Find("Wall_Visual");
-            Transform mask = circleGroup.Find("Hole_Mask");
-
-            if (visual != null && mask != null)
-            {
-                float diameter = size.x;
-                visual.localScale = new Vector2(diameter, diameter);
-                mask.localScale = new Vector2(diameter * 0.9f, diameter * 0.9f); // 90% 크기로 구멍
+                Destroy(child.gameObject);
             }
         }
     }

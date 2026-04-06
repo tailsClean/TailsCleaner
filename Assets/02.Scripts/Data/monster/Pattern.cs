@@ -10,7 +10,7 @@ public enum PATTERN_TYPE
     Trigger = 5, //트리거 
     SelfDestruct = 6, //자폭
     Layser = 7, //레이저
-    Barricade = 8, //바리케이드
+    Barrier = 8, //바리케이드
 }
 
 public enum STAT_TARGET

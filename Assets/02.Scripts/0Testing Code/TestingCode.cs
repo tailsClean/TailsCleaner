@@ -1,32 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
-public class TestingCode : MonoBehaviour
+public class TestingCode : MonoBehaviour, IBeginDragHandler
 {
-    [Header("에너지")]
-    public int value;
-    [Header("아웃게임 레벨")]
-    public float Level;
-    public float currentEXP;
-
-    [Header("===========================================================")]
-    [Header("참조")]
-    public EnergySystem energy;
-    public OutGameLevelSystem level;
-
-    private void Awake()
+    [ContextMenu("가자")]
+    public void OnBeginDrag(PointerEventData eventData)
     {
-        if (energy == null)
-            energy = EnergySystem.Instance;
-        if(level == null)
-            level = OutGameLevelSystem.Instance;
-    }
-
-    private void Update()
-    {
-        value = energy.CurrentEnergy;
-        Level = level.CurrentLevel;
-        currentEXP = level.CurrentExp;
+        Debug.Log("자식 드래그 시작");
     }
 }
