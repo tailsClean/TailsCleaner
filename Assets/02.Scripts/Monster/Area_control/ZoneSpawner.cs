@@ -101,7 +101,13 @@ public class ZoneSpawner : MonoBehaviour
             SafeZone zone = spawned.GetComponent<SafeZone>();
             if (zone != null)
             {
+                // 기존 장판 수치 초기화
                 zone.InitializeSafe(radius, previewTime, activeTime);
+
+                if (SafeZonePatternController.Instance != null)
+                {
+                    SafeZonePatternController.Instance.StartPattern(previewTime, activeTime, 10f, 0.5f);
+                }
             }
         }
     }

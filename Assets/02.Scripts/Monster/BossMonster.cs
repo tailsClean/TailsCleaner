@@ -655,25 +655,43 @@ public class BossMonster : MonsterBase, ILaserable
 
     private void ExecuteAreaPattern(BossAreaPatternRuntime pattern)
     {
-        // 스폰 위치 결정 (플레이어 타겟이면 target, 보스 타겟이면 보스 자신)
+        // 1. 스폰 위치 결정
         Transform spawnTarget = (pattern.targetType == ZoneTestCaller.SpawnTarget.Player) ? target : transform;
 
         if (pattern.isSafeZone)
         {
-            // 안전지대 패턴 실행 (SafeZonePatternController가 있는 경우)
-            SafeZonePatternController.Instance?.StartPattern(
-                pattern.previewTime, pattern.activeTime, pattern.damagePerTick, pattern.damageInterval);
+            // 2. [전역 데미지] 컨트롤러 실행 (여기서 주황색 로그가 찍힙니다!)
+            if (SafeZonePatternController.Instance != null)
+            {
+                // 중복 실행 방지 로직은 Controller 내부에 이미 있으므로 그냥 호출합니다.
+                SafeZonePatternController.Instance.StartPattern(
+                    pattern.previewTime,
+                    pattern.activeTime,
+                    pattern.damagePerTick, // BossAreaPatternRuntime에 정의된 변수명 사용
+                    pattern.damageInterval
+                );
 
-            // 실제 안전지대 오브젝트 생성
+                Debug.Log($"<color=orange>[Boss]</color> 전역 안전지대 패턴 시작 명령 발송!");
+            }
+
+            // 3. [장판 생성] 여러 개 소환
+            // zoneSpawner.SpawnSafeZones 내부에서 pattern.count만큼 루프를 돌며 소환합니다.
             zoneSpawner.SpawnSafeZones(
-                null, spawnTarget, pattern.count, pattern.range, pattern.radius, pattern.previewTime, pattern.activeTime);
+                null,
+                spawnTarget,
+                pattern.count,      // 기획서의 개수 데이터
+                pattern.range,      // 소환 범위
+                pattern.radius,     // 장판 크기
+                pattern.previewTime,
+                pattern.activeTime
+            );
         }
         else
         {
-            // 위험지대(데미지 존) 오브젝트 생성
+            // 위험지대 로직 
             zoneSpawner.SpawnDangerZones(
-                null, spawnTarget, pattern.count, pattern.range, pattern.radius, pattern.previewTime, pattern.activeTime,
-                pattern.damagePerTick, pattern.damageInterval);
+                null, spawnTarget, pattern.count, pattern.range, pattern.radius,
+                pattern.previewTime, pattern.activeTime, pattern.damagePerTick, pattern.damageInterval);
         }
     }
 
