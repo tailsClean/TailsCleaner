@@ -74,8 +74,8 @@ MonoBehaviour:
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4281479730
-  m_fontColor: {r: 0.19607843, g: 0.19607843, b: 0.19607843, a: 1}
+    rgba: 4294967295
+  m_fontColor: {r: 1, g: 1, b: 1, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
   m_fontColorGradient:
@@ -284,6 +284,7 @@ GameObject:
   - component: {fileID: 452697149318123364}
   - component: {fileID: 5188167388631274534}
   - component: {fileID: 5942823652426767179}
+  - component: {fileID: 9155331172548761120}
   m_Layer: 5
   m_Name: Equip Img
   m_TagString: Untagged
@@ -362,6 +363,24 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::UISlot
   _amountText: {fileID: 6306954969064182202}
+--- !u!114 &9155331172548761120
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1763944846823127950}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: eb4dfaa08f55cc4459536368d41bccb5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::UISlotAddedText
+  _amountText: {fileID: 0}
+  _textList:
+  - text: {fileID: 2485768514835129289}
+    textType: 0
+  - text: {fileID: 46941453935181021}
+    textType: 1
 --- !u!1 &3119956960059659822
 GameObject:
   m_ObjectHideFlags: 0
@@ -501,17 +520,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1b5d98c099cd5a140988aafdf2866f8c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ItemPopup
-  <ItemType>k__BackingField: 0
   _background: {fileID: 6854652626554664906}
   _itemSlot: {fileID: 0}
   _openButton:
-  - <PushButton>k__BackingField: {fileID: 1030579389094995643}
-    <OpenGroup>k__BackingField: 8
   - <PushButton>k__BackingField: {fileID: 462263469557573911}
     <OpenGroup>k__BackingField: 7
-  _sellingButton: {fileID: 0}
+  <ItemType>k__BackingField: 0
+  _sellingButton: {fileID: 1030579389094995643}
   _sellingPopup: {fileID: 0}
-  _releaseRelic: {fileID: 0}
 --- !u!1 &3766537215351882398
 GameObject:
   m_ObjectHideFlags: 0
@@ -586,8 +602,8 @@ MonoBehaviour:
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4281479730
-  m_fontColor: {r: 0.19607843, g: 0.19607843, b: 0.19607843, a: 1}
+    rgba: 4294967295
+  m_fontColor: {r: 1, g: 1, b: 1, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
   m_fontColorGradient:
@@ -855,8 +871,8 @@ MonoBehaviour:
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4281479730
-  m_fontColor: {r: 0.19607843, g: 0.19607843, b: 0.19607843, a: 1}
+    rgba: 4294967295
+  m_fontColor: {r: 1, g: 1, b: 1, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
   m_fontColorGradient:
@@ -991,8 +1007,8 @@ MonoBehaviour:
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4281479730
-  m_fontColor: {r: 0.19607843, g: 0.19607843, b: 0.19607843, a: 1}
+    rgba: 4294967295
+  m_fontColor: {r: 1, g: 1, b: 1, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
   m_fontColorGradient:

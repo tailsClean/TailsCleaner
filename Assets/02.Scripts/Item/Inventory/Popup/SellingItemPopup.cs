@@ -35,7 +35,8 @@ public class SellingItemPopup : ItemPopupBase
 
     protected override void Start()
     {
-        // 부모 클래스의 스타트 메서드 실행을 하지 않기 위함
+        if (_inventory == null)
+            _inventory = ItemManager.Instance.Inventory;
     }    
 
 

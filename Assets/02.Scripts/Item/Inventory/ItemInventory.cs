@@ -135,17 +135,33 @@ public class ItemInventory : MonoBehaviour
     // 유물 아이템 획득
     public void GainRelic(int id, int enhanceLevel)
     {
-        var item = SearchItem(id, enhanceLevel, GRADE.None);
-
-        // 아이템을 소지하고 있었을 때
-        if (HasItem(item))
-            Debug.LogWarning($"{id} 유물은 더이상 획득할 수 없습니다.");
-
-        // 아이템을 소지하지 않았을 때
-        else
+        ItemInstance item = default;
+        for(int i = 0; i < 10; i++)
         {
-            _inventory.Add(new ItemInstance(id, enhanceLevel, GRADE.None), 1);
+            item = SearchItem(id, i, GRADE.None);
+
+            if (!HasItem(item))
+                continue;
+
+            else
+            {
+                Debug.LogWarning($"{id} 유물은 더이상 획득할 수 없습니다.");
+                break;
+            }
         }
+
+        if(!HasItem(item))
+            _inventory.Add(new ItemInstance(id, enhanceLevel, GRADE.None), 1);
+
+        //// 아이템을 소지하고 있었을 때
+        //if (HasItem(item))
+
+
+            // 아이템을 소지하지 않았을 때
+        //else
+        //{
+        //    _inventory.Add(new ItemInstance(id, enhanceLevel, GRADE.None), 1);
+        //}
 
         _onChangeInventory.OnStartEvent();
         _ = SaveInventory();
