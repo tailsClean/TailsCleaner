@@ -75,8 +75,7 @@ public class OutGameLevelSystem : MonoBehaviour, IConsumItemTarget
 
     public void GainExp(float gainExp)
     {
-        if (IsMaxLevel)
-        { WarningText.ShowText("계정레벨이 최대 레벨입니다."); return; }
+        if (IsMaxLevel) return;
 
         CurrentExp += gainExp;
 

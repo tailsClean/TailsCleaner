@@ -31,9 +31,9 @@ public class PlayerStatUI : MonoBehaviour
         {
             string statKey = GetStatKey(slot.playerStat);
             if (!_statDict.TryGetValue(slot.playerStat, out float statValue))
-                continue;
-
-            slot.SetStlot(statKey, ChangeStatToPercent(slot.playerStat, statValue));
+                slot.SetStlot("-", "-");
+            else
+                slot.SetStlot(statKey, ChangeStatToPercent(slot.playerStat, statValue));
         }
     }
 
@@ -60,15 +60,6 @@ public class PlayerStatUI : MonoBehaviour
             _ => ((int)value).ToString()
         };
     }
-
-
-    //        이동속도
-    //공격속도
-    //체력회복량
-    //아이템 획득 범위
-    //골드획득량
-    //아이템 획득량
-    //경험치 획득량
 
     // 출력할 스탯 이름 지정
     private string GetStatKey(PLAYER_STAT stat)

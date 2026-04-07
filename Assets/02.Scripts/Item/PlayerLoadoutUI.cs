@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Text;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -11,6 +12,7 @@ public class PlayerLoadoutUI : UIGroup
 
     [Header("유물일 경우 세팅하는 슬롯")]
     [SerializeField] private List<UISlot> _loadoutRelicSlots;
+    [SerializeField] private TextMeshProUGUI _relicStatText;
     [SerializeField] private TextMeshProUGUI _relicDivisionSlot;
     [SerializeField] private TextMeshProUGUI _relicDivisionDesc;
 
@@ -23,7 +25,7 @@ public class PlayerLoadoutUI : UIGroup
 
 
     private PlayerLoadout _loadout;
-
+    private StringBuilder _stringBuilder = new StringBuilder();
 
 
     private void OnEnable()
@@ -95,8 +97,28 @@ public class PlayerLoadoutUI : UIGroup
             }
         }
 
-
+        UpdateRelicStat();
         UpdateRelicDivision();
+    }
+
+    // 유물 스탯 증가량 출력
+    private void UpdateRelicStat()
+    {
+        if (_relicStatText == null)
+            return;
+
+        float goldGainRate = _loadout.GetIncreaseStat(STAT_TYPE.Gold);
+        float equipGainRate = _loadout.GetIncreaseStat(STAT_TYPE.Equipment);
+        float expGainRate = _loadout.GetIncreaseStat(STAT_TYPE.Exp);
+        float itemRange = _loadout.GetIncreaseStat(STAT_TYPE.ItemRange);
+
+        _stringBuilder.Clear();
+        _stringBuilder.AppendLine($"골드 획득량 증가 +{goldGainRate}%");
+        _stringBuilder.AppendLine($"장비 획득량 증가 +{equipGainRate}%");
+        _stringBuilder.AppendLine($"경험치 획득량 증가 +{expGainRate}%");
+        _stringBuilder.AppendLine($"아이템 획득범위 증가 +{itemRange}%");
+
+        _relicStatText.text = _stringBuilder.ToString();
     }
 
     // 유물 공명 효과 출력
@@ -116,25 +138,25 @@ public class PlayerLoadoutUI : UIGroup
                 case RELIC_TYPE.Twinkle:
                     value = divisionData.GetById(RelicDivision.TWINKLE).value;
                     _relicDivisionSlot.text = "반짝반짝 공명";
-                    _relicDivisionDesc.text = $"골드 획득량 증가 + {value}";
+                    _relicDivisionDesc.text = $"골드 획득량 증가 +{value}%";
                     break;
 
                 case RELIC_TYPE.Smooth:
                     value = divisionData.GetById(RelicDivision.SMOOTH).value;
                     _relicDivisionSlot.text = "매끈매끈 공명";
-                    _relicDivisionDesc.text = $"장비획득량 증가 + {value}";
+                    _relicDivisionDesc.text = $"장비획득량 증가 +{value}%";
                     break;
                 case RELIC_TYPE.Swish:
 
                     value = divisionData.GetById(RelicDivision.SWISH).value;
                     _relicDivisionSlot.text = "쓱싹쓱싹 공명";
-                    _relicDivisionDesc.text = $"경험치 획득량 증가 + {value}";
+                    _relicDivisionDesc.text = $"경험치 획득량 증가 +{value}%";
                     break;
 
                 case RELIC_TYPE.Floating:
                     value = divisionData.GetById(RelicDivision.FLOATING).value;
                     _relicDivisionSlot.text = "둥실둥실 공명";
-                    _relicDivisionDesc.text = $"아이템 획득 범위 증가 + {value}";
+                    _relicDivisionDesc.text = $"아이템 획득 범위 증가 +{value}%";
                     break;
             }
 
