@@ -20,10 +20,6 @@ public class PlayerStatTransfer : IPlayerData
     }
 
 
-
-
-
-
     #region 외부 참조 데이터
 
     public int ID => _id;
@@ -87,8 +83,8 @@ public class PlayerStatTransfer : IPlayerData
     {
         // 장비로 상승하는 값
         _statDict[PLAYER_STAT.MaxHp] += loadout.GetIncreaseStat(EQUIP_STAT_TYPE.MaxHP);
-        _statDict[PLAYER_STAT.AttackPower] += loadout.GetIncreaseStat(EQUIP_STAT_TYPE.Attack);
-        _statDict[PLAYER_STAT.DefensePower] += loadout.GetIncreaseStat(EQUIP_STAT_TYPE.Defense);
+        _statDict[PLAYER_STAT.AttackPower] *= loadout.GetIncreaseStat(EQUIP_STAT_TYPE.Attack);
+        _statDict[PLAYER_STAT.DefensePower] *= loadout.GetIncreaseStat(EQUIP_STAT_TYPE.Defense);
         _statDict[PLAYER_STAT.EvasionChance] += loadout.GetIncreaseStat(EQUIP_STAT_TYPE.Dodge);
         _statDict[PLAYER_STAT.CriticalChance] += loadout.GetIncreaseStat(EQUIP_STAT_TYPE.CriticalRate);
         _statDict[PLAYER_STAT.MoveSpeed] += loadout.GetIncreaseStat(EQUIP_STAT_TYPE.MoveSpeed);

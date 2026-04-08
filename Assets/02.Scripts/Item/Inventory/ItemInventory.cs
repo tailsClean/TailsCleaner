@@ -31,18 +31,21 @@ public class ItemInventory : MonoBehaviour
     }
     private void Start()
     {
+        Debug.Log($"ItemInventory Start - FirebaseManager: {FirebaseManager.Instance}");
         FirebaseManager.Instance.AddLoadData(LoadInventory);
         FirebaseManager.Instance.AddSaveData(SaveInventory);
+        Debug.Log("SaveInventory 등록 완료");
     }
+
     private void OnDestroy()
     {
         if (FirebaseManager.Instance != null)
         {
+            
             FirebaseManager.Instance.RemoveLoadData(LoadInventory);
             FirebaseManager.Instance.RemoveSaveData(SaveInventory);
         }
     }
-
 
 
     public void InitEvent()
@@ -167,6 +170,40 @@ public class ItemInventory : MonoBehaviour
         _ = SaveInventory();
     }
 
+     public void GainRelicNoSave(int id, int enhanceLevel)
+    {
+        ItemInstance item = default;
+        for(int i = 0; i < 10; i++)
+        {
+            item = SearchItem(id, i, GRADE.None);
+
+            if (!HasItem(item))
+                continue;
+
+            else
+            {
+                Debug.LogWarning($"{id} 유물은 더이상 획득할 수 없습니다.");
+                break;
+            }
+        }
+
+        if(!HasItem(item))
+            _inventory.Add(new ItemInstance(id, enhanceLevel, GRADE.None), 1);
+
+        //// 아이템을 소지하고 있었을 때
+        //if (HasItem(item))
+
+
+            // 아이템을 소지하지 않았을 때
+        //else
+        //{
+        //    _inventory.Add(new ItemInstance(id, enhanceLevel, GRADE.None), 1);
+        //}
+
+        _onChangeInventory.OnStartEvent();
+        
+    }
+
 
     // 유물 아이템 삭제
     public bool RemoveRelic(int id, int enhanceLevel)
@@ -201,7 +238,10 @@ public class ItemInventory : MonoBehaviour
     {
         GainItem(id, ItemInstance.NoneEnhanceLevel, GRADE.None, amount);
     }
-
+    public void GainStackItemNoSave(int id, int amount = 1)
+    {
+        GainItemNoSave(id, ItemInstance.NoneEnhanceLevel, GRADE.None, amount);
+    }
 
     // 스택형 아이템 사용
     public bool UseStackItem(int id, int amount) => 
@@ -255,7 +295,21 @@ public class ItemInventory : MonoBehaviour
             _inventory.Add(new ItemInstance(id, enhanceLevel, grad), amount);
 
         _onChangeInventory.OnStartEvent();
-         _ = SaveInventory();
+        _ = SaveInventory();
+    }
+
+    private void GainItemNoSave(int id, int enhanceLevel, GRADE grad, int amount)
+    {
+        var item = SearchItem(id, enhanceLevel, grad);
+
+        if (HasItem(item))
+            _inventory[item] += amount;
+
+        else
+            _inventory.Add(new ItemInstance(id, enhanceLevel, grad), amount);
+
+        _onChangeInventory.OnStartEvent();
+        
     }
 
     // 인벤토리 내부전용 아이템 사용 메서드
@@ -307,9 +361,19 @@ public class ItemInventory : MonoBehaviour
     #endregion
 
     #region  firebase 저장/로드
+
+    private bool _isLoading = false;
+
     public async Task SaveInventory()
     {
-        var data = new Dictionary<string, object>();
+        if (_isLoading) return;
+        
+        var inventoryData = new Dictionary<string, object>
+        {
+            { "Equipments", new Dictionary<string, object>() },
+            { "Relics", new Dictionary<string, object>() },
+            { "Stacks", new Dictionary<string, object>() }
+        };
 
         int equipIndex = 0;
         int relicIndex = 0;
@@ -323,7 +387,7 @@ public class ItemInventory : MonoBehaviour
             switch (item.ItemType)
             {
                 case ITEM_TYPE.Equipment:
-                    data[$"Equipments/{equipIndex}"] = new Dictionary<string, object>
+                    ((Dictionary<string, object>)inventoryData["Equipments"])[$"{equipIndex}"] = new Dictionary<string, object>
                     {
                         { "id", item.ID },
                         { "enhanceLevel", item.EnhanceLevel },
@@ -334,7 +398,7 @@ public class ItemInventory : MonoBehaviour
                     break;
 
                 case ITEM_TYPE.Relic:
-                    data[$"Relics/{relicIndex}"] = new Dictionary<string, object>
+                    ((Dictionary<string, object>)inventoryData["Relics"])[$"{relicIndex}"] = new Dictionary<string, object>
                     {
                         { "id", item.ID },
                         { "enhanceLevel", item.EnhanceLevel }
@@ -343,39 +407,38 @@ public class ItemInventory : MonoBehaviour
                     break;
 
                 default:
-                    data[$"Stacks/{stackIndex}"] = new Dictionary<string, object>
+                    ((Dictionary<string, object>)inventoryData["Stacks"])[$"{stackIndex}"] = new Dictionary<string, object>
                     {
                         { "id", item.ID },
                         { "amount", amount }
                     };
                     stackIndex++;
                     break;
-            }
         }
+    }
 
-        // 기존 데이터 초기화 후 저장
-        await FirebaseManager.Instance.DB
-            .Child("users")
-            .Child(FirebaseManager.Instance.UID)
-            .Child("Inventory")
-            .RemoveValueAsync();
-
-        await FirebaseManager.Instance.DB
-            .Child("users")
-            .Child(FirebaseManager.Instance.UID)
-            .Child("Inventory")
-            .UpdateChildrenAsync(data);
+    await FirebaseManager.Instance.DB
+        .Child("users")
+        .Child(FirebaseManager.Instance.UID)
+        .Child("Inventory")
+        .SetValueAsync(inventoryData); 
+        
     }
 
     public async Task LoadInventory()
     {
+        _isLoading = true;
         var snapshot = await FirebaseManager.Instance.DB
             .Child("users")
             .Child(FirebaseManager.Instance.UID)
             .Child("Inventory")
             .GetValueAsync();
 
-        if (!snapshot.Exists) return;
+        if (!snapshot.Exists) 
+        {
+            _isLoading = false;
+            return;
+        }
 
         // 장비 로드
         var equipSnapshot = snapshot.Child("Equipments");
@@ -386,7 +449,7 @@ public class ItemInventory : MonoBehaviour
             GRADE grade = (GRADE)int.Parse(child.Child("grade").Value.ToString());
             int amount = int.Parse(child.Child("amount").Value.ToString());
 
-            GainItem(id, enhanceLevel, grade, amount);
+            GainItemNoSave(id, enhanceLevel, grade, amount);
         }
 
         // 유물 로드
@@ -396,7 +459,7 @@ public class ItemInventory : MonoBehaviour
             int id = int.Parse(child.Child("id").Value.ToString());
             int enhanceLevel = int.Parse(child.Child("enhanceLevel").Value.ToString());
 
-            GainRelic(id, enhanceLevel);
+            GainRelicNoSave(id, enhanceLevel);
         }
 
         // 스택형 아이템 로드
@@ -406,10 +469,11 @@ public class ItemInventory : MonoBehaviour
             int id = int.Parse(child.Child("id").Value.ToString());
             int amount = int.Parse(child.Child("amount").Value.ToString());
 
-            GainStackItem(id, amount);
+            GainStackItemNoSave(id, amount);
         }
 
         _onChangeInventory.OnStartEvent();
+        _isLoading = false;
     }
 
 #endregion

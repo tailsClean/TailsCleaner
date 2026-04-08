@@ -146,7 +146,6 @@ public class PlayerLoadout
                 WarningText.ShowText($"<color=yellow>{relic.Data.Name} 장착</color>");
                 Debug.Log(relic.Data.Name + " 장착!");
                 _onChangeLoadout.OnStartEvent();
-                _ = SaveEquipment();
                 return;
             }
         }
@@ -168,6 +167,7 @@ public class PlayerLoadout
                 _myRelics.Add(_relicZero);
                 _onChangeLoadout.OnStartEvent();
                 WarningText.ShowText($"<color=yellow>{relic.Data.Name}이 착용해제 돠었습니다.</color>");
+               
                 return;
             }
         }
@@ -191,12 +191,12 @@ public class PlayerLoadout
     #region Firebase 저장/로드
     public async Task SaveEquipment()
     {
-        var data = new Dictionary<string, object>();
+        var equipData = new Dictionary<string, object>();
+        var relicData = new Dictionary<string, object>();
 
-        // 장비 저장 (id + enhanceLevel + grade만)
         foreach (var kvp in _myEquipments)
         {
-            data[$"Equipments/{kvp.Key}"] = new Dictionary<string, object>
+            equipData[kvp.Key.ToString()] = new Dictionary<string, object>
             {
                 { "id", kvp.Value.Data.UniqueID },
                 { "enhanceLevel", kvp.Value.EnhanceLevel },
@@ -204,24 +204,31 @@ public class PlayerLoadout
             };
         }
 
-        // 유물 저장 (빈 슬롯 제외)
         for (int i = 0; i < _myRelics.Count; i++)
         {
             if (_myRelics[i] == _relicZero) continue;
 
-            data[$"Relics/{i}"] = new Dictionary<string, object>
+            relicData[i.ToString()] = new Dictionary<string, object>
             {
                 { "id", _myRelics[i].Data.UniqueID },
                 { "enhanceLevel", _myRelics[i].CurrentEnhanceLevel }
             };
         }
 
+        var inventoryData = new Dictionary<string, object>
+        {
+            { "Equipments", equipData },
+            { "Relics", relicData }
+        };
+
         await FirebaseManager.Instance.DB
             .Child("users")
             .Child(FirebaseManager.Instance.UID)
             .Child("Equipment")
-            .UpdateChildrenAsync(data);
+            .SetValueAsync(inventoryData);
     }
+    
+    
 
     public async Task LoadEquipment()
     {

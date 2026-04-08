@@ -67,6 +67,9 @@ public class RewardSystem
             case ITEM_TYPE.Reinforcement:
                 _inventory.GainStackItem(item.ID, item.Amount);
                 break;
+            case ITEM_TYPE.Relic:
+                _inventory.AddRelic(item.ID);
+                break;
         }
     }
 }

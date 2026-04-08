@@ -7,7 +7,6 @@ using System.Threading.Tasks;
 using UnityEngine.UI;
 
 
-
 public interface IUIContainer { }
 public interface IOrientationHandler
 {
@@ -138,10 +137,14 @@ public class UIManager : MonoBehaviour
 
         await Task.Yield();
 
-        if(_confirmPanel != null) { Destroy(_confirmPanel); _confirmPanel = null; }
-        if(_impossiblePanel != null) { Destroy(_impossiblePanel); _impossiblePanel = null; }
+        DestroyConfirmAndImpossiblePanels(true);
 
         await FirebaseManager.Instance.Load();
+        
+        if(Time.deltaTime == 0)
+        {
+            Time.timeScale = 1f;
+        }
     }
 
     public void GoToLobby() 
@@ -149,13 +152,17 @@ public class UIManager : MonoBehaviour
         SceneManager.LoadScene("LobbyScene");
          if(_confirmPanel != null)
         {
-            Destroy(_confirmPanel);
+            Destroy(_confirmPanel.gameObject);
             _confirmPanel = null;
         }
         if(_impossiblePanel != null)
         {
-            Destroy(_impossiblePanel);
+            Destroy(_impossiblePanel.gameObject);
             _impossiblePanel = null;
+        }
+        if(Time.deltaTime == 0)
+        {
+            Time.timeScale = 1f;
         }
     }
 
@@ -173,6 +180,10 @@ public class UIManager : MonoBehaviour
         {
             Destroy(_impossiblePanel);
             _impossiblePanel = null;
+        }
+        if(Time.deltaTime == 0)
+        {
+            Time.timeScale = 1f;
         }
     }
 
@@ -227,8 +238,8 @@ public class UIManager : MonoBehaviour
     }
     public void DestroyConfirmAndImpossiblePanels(bool temp)
     {
-        if(_confirmPanel != null) { Destroy(_confirmPanel); _confirmPanel = null; }
-        if(_impossiblePanel != null) { Destroy(_impossiblePanel); _impossiblePanel = null; }
+        if(_confirmPanel != null) { Destroy(_confirmPanel.gameObject); _confirmPanel = null; }
+        if(_impossiblePanel != null) { Destroy(_impossiblePanel.gameObject); _impossiblePanel = null; }
     }
 
     #endregion

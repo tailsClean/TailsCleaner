@@ -225,7 +225,7 @@ BoxCollider2D:
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
-  m_Size: {x: 7, y: 7}
+  m_Size: {x: 10, y: 10}
   m_EdgeRadius: 0
 --- !u!114 &2741787303902298619
 MonoBehaviour:
@@ -241,13 +241,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::BossMonster
   target: {fileID: 0}
   stoppingDistance: 0.1
-  hp: 100
-  maxHp: 100
-  power: 1
+  hp: 5000
+  maxHp: 5000
+  power: 3.2
   moveSpeed: 1
-  hitBox: 1
-  mass: 1
-  KBResist: 0
+  hitBox: 2
+  mass: 3
+  KBResist: 5
   knockbackUnitToPx: 100
   avoidanceRadius: 1.5
   avoidanceForce: 2

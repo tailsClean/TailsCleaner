@@ -57,6 +57,8 @@ public class PlayerHpSystem : IRevive
 
         if (IsInvincible)
             return;
+        float defense = _calculator.GetFinalSat(_player.Data.DefensePower, PLAYER_STAT.DefensePower);
+        damage = Mathf.Max(0, damage - defense);
 
         damage = AddShield(-damage);
         CurrentHp -= damage;

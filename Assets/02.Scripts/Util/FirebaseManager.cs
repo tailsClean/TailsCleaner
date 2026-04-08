@@ -13,8 +13,8 @@ public class FirebaseManager : MonoBehaviour
     private DatabaseReference db;
     public DatabaseReference DB => db;
     public string UID => FirebaseAuth.DefaultInstance.CurrentUser?.UserId;
-    [SerializeField] private AsyncEventChannel _onGameStart;
-    [SerializeField] private AsyncEventChannel _onGameEnd;
+    [SerializeField] private AsyncEventChannelSO _onGameStart;
+    [SerializeField] private AsyncEventChannelSO _onGameEnd;
 
     private void Awake()
     {
@@ -36,6 +36,7 @@ public class FirebaseManager : MonoBehaviour
     {
         FirebaseDatabase.DefaultInstance.SetPersistenceEnabled(false);
         db = FirebaseDatabase.DefaultInstance.RootReference;
+        Debug.Log("InitDB 완료");
     }
 
     public async Task Load()

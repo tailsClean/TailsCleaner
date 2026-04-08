@@ -7,7 +7,7 @@ public class OutGameLevelSystem : MonoBehaviour, IConsumItemTarget
 {
     public static OutGameLevelSystem Instance;
 
-    private CharLevelTableSO _levelData;
+    private CharManageTableSO _levelData;
 
     public bool IsMaxValue => IsMaxLevel;
 
@@ -19,7 +19,7 @@ public class OutGameLevelSystem : MonoBehaviour, IConsumItemTarget
         {
 
             if (_levelData == null)
-                _levelData = DataManager.Instance.GetSOData<CharLevelTableSO>();
+                _levelData = DataManager.Instance.GetSOData<CharManageTableSO>();
 
             return CurrentLevel >= _levelData.dataList.Count;
         }
@@ -31,7 +31,7 @@ public class OutGameLevelSystem : MonoBehaviour, IConsumItemTarget
         {
             // 데이터 테이블에서 값을 읽어오기
             if (_levelData == null)
-                _levelData = DataManager.Instance.GetSOData<CharLevelTableSO>();
+                _levelData = DataManager.Instance.GetSOData<CharManageTableSO>();
 
             return _levelData.GetById(CurrentLevel).char_exp_limit;
         }
@@ -50,9 +50,8 @@ public class OutGameLevelSystem : MonoBehaviour, IConsumItemTarget
         Instance = this;
         DontDestroyOnLoad(gameObject);
         #endregion
-
         Init();
-    
+
     }
     private void Start()
     {
@@ -94,12 +93,13 @@ public class OutGameLevelSystem : MonoBehaviour, IConsumItemTarget
         // 최대 레벨인지 확인
         if (IsMaxLevel)
         {
-            CurrentExp = MaxExp;
+            CurrentExp = _levelData.GetById(CurrentLevel).char_exp_limit; 
             return;
         }
 
-        CurrentExp -= MaxExp;
+        float prvExp = MaxExp;
         CurrentLevel++;
+        CurrentExp -= prvExp;
         
     }
 
@@ -138,6 +138,7 @@ public class OutGameLevelSystem : MonoBehaviour, IConsumItemTarget
         if (!snapshot.Exists)
         {
             Init(); // 신규 유저 기본값
+            await SaveLevel();
             return;
         }
 

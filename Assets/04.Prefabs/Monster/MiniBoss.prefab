@@ -185,13 +185,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::SpecialMonster
   target: {fileID: 0}
   stoppingDistance: 0.1
-  hp: 100
-  maxHp: 100
-  power: 1
-  moveSpeed: 1
-  hitBox: 1
-  mass: 1
-  KBResist: 0
+  hp: 2000
+  maxHp: 2000
+  power: 2
+  moveSpeed: 0.8
+  hitBox: 1.5
+  mass: 2
+  KBResist: 1
   knockbackUnitToPx: 100
   avoidanceRadius: 1.5
   avoidanceForce: 2
@@ -260,16 +260,6 @@ MonoBehaviour:
   projectilePrefab: {fileID: 2559287183428765651, guid: 2bae763d4c0fa8942b75f3ff111dbc6f, type: 3}
   firePoint: {fileID: 8364492714931052297}
   playerTarget: {fileID: 0}
-  pattern_cooldown: 5
-  detect_range: 10
-  projectile_count: 3
-  fire_interval: 0.2
-  projectile_speed: 10
-  projectile_size: 1
-  life_time: 5
-  is_homing: 0
-  pierce_type: 0
-  arc_height: 0
   state: 0
 --- !u!114 &6612712607612896099
 MonoBehaviour:
@@ -297,7 +287,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::BarricadeSpawner
   barricadePrefab: {fileID: 8461779969420871315, guid: 324193de02afd244086bf02906f5df83, type: 3}
   warningPrefab: {fileID: 6383617728571696591, guid: 5f468878613da5548bda63fe56d158e8, type: 3}
+  circleTilePrefab: {fileID: 0}
+  warningTilePrefab: {fileID: 0}
   warningDuration: 1.5
+  tileSpacing: 0.4
+  rectangleThickness: 0.2
   minRandomRadius: 5
   maxRandomRadius: 10
 --- !u!95 &-6309030999690592268

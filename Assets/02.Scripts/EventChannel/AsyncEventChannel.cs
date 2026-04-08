@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 
 [CreateAssetMenu(fileName = "AsyncEventChannel", menuName = "EventChannel/AsyncEventChannel")]
-public class AsyncEventChannel : ScriptableObject
+public class AsyncEventChannelSO : ScriptableObject
 {
     private readonly SortedList<int, List<Func<Task>>> _priorityListeners = new();
     private event Func<Task> _eventChannel;

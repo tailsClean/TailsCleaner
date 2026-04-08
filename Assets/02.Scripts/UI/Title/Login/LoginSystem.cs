@@ -72,7 +72,7 @@ public class LoginSystem : MonoBehaviour
             _isFirebaseInitializing = false;
             if (task.Result == DependencyStatus.Available)
             {
-                FirebaseDatabase.DefaultInstance.SetPersistenceEnabled(false);
+                
                 _auth = FirebaseAuth.DefaultInstance;
                 _isFirebaseReady = true;
             }

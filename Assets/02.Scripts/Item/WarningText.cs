@@ -27,6 +27,10 @@ public static class WarningText
 
     private static IEnumerator SetTextAndMove(GameObject gameObject, string warnigText)
     {
+        if(Time.deltaTime == 0)
+        {
+            Time.timeScale = 1f;
+        }
         TextMeshProUGUI text = gameObject.GetComponentInChildren<TextMeshProUGUI>();
         text.text = warnigText;
         text.color = Color.red;
@@ -40,6 +44,7 @@ public static class WarningText
             yield return null;
         }
 
+        Addressables.ReleaseInstance(gameObject);
         GameObject.Destroy(gameObject);
     }
 }
