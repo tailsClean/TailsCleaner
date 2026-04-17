@@ -2,8 +2,11 @@
 %TAG !u! tag:unity3d.com,2011:
 --- !u!78 &1
 TagManager:
-  serializedVersion: 2
-  tags: []
+  serializedVersion: 3
+  tags:
+  - Monster
+  - Wall
+  - MonsterBullet
   layers:
   - Default
   - TransparentFX
@@ -11,13 +14,13 @@ TagManager:
   - 
   - Water
   - UI
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
+  - Player
+  - Monster
+  - Item
+  - PlayerProjectile
+  - MonsterProjectile
+  - SafeZone
+  - Wall
   - 
   - 
   - 
@@ -41,6 +44,24 @@ TagManager:
   - name: Default
     uniqueID: 0
     locked: 0
+  - name: SkillArea
+    uniqueID: 61444975
+    locked: 0
+  - name: Item
+    uniqueID: 3994195643
+    locked: 0
+  - name: Player
+    uniqueID: 2260721997
+    locked: 0
+  - name: Monster
+    uniqueID: 3309177935
+    locked: 0
+  - name: MonsterBullet
+    uniqueID: 2723135879
+    locked: 0
+  - name: SkillProjectile
+    uniqueID: 2417450299
+    locked: 0
   m_RenderingLayers:
   - Default
   - Light Layer 1
@@ -50,27 +71,3 @@ TagManager:
   - Light Layer 5
   - Light Layer 6
   - Light Layer 7
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 

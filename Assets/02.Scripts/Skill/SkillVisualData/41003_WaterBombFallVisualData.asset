@@ -1,0 +1,61 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b2bff64b6ddf4bc499f7986dc4c37b5a, type: 3}
+  m_Name: 41003_WaterBombFallVisualData
+  m_EditorClassIdentifier: Assembly-CSharp::SkillVisualData
+  onActivate:
+  - type: 0
+    sprites:
+    - {fileID: 21300000, guid: b4a10eaac4631304686affd58794b049, type: 3}
+    duration: 0.1
+    curve:
+      serializedVersion: 2
+      m_Curve: []
+      m_PreInfinity: 0
+      m_PostInfinity: 0
+      m_RotationOrder: 0
+    prefab: {fileID: 0}
+    loop: 0
+    fps: 0
+  onDuration:
+  - type: 0
+    sprites:
+    - {fileID: 21300000, guid: 969c78b014057134289d50405b173e4f, type: 3}
+    duration: -1
+    curve:
+      serializedVersion: 2
+      m_Curve: []
+      m_PreInfinity: 0
+      m_PostInfinity: 0
+      m_RotationOrder: 0
+    prefab: {fileID: 0}
+    loop: 1
+    fps: 0
+  onExpire:
+  - type: 0
+    sprites:
+    - {fileID: 21300000, guid: 4651257c03ecaa94bae341f1ec74b853, type: 3}
+    - {fileID: 21300000, guid: 075c066ea4bf93f48b1f2bc11424fc47, type: 3}
+    - {fileID: 21300000, guid: 5a3e21d6557acb544bfa14cc1d303dff, type: 3}
+    - {fileID: 21300000, guid: efa092e74631f5444b5d0c30c3d273f9, type: 3}
+    - {fileID: 21300000, guid: 8e813a23147f20445837a04c9fd3f895, type: 3}
+    duration: 0.8
+    curve:
+      serializedVersion: 2
+      m_Curve: []
+      m_PreInfinity: 0
+      m_PostInfinity: 0
+      m_RotationOrder: 0
+    prefab: {fileID: 0}
+    loop: 0
+    fps: 0
+  onHit: []

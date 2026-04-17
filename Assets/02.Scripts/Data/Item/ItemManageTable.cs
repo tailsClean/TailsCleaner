@@ -1,0 +1,14 @@
+﻿
+using System;
+
+[Serializable]
+public class ItemManageTable
+{
+    public int item_id;
+    public string desc;
+    public ITEM_TYPE item_type;
+    public int max_stack;
+    public int item_name_key;
+    public string item_img;
+    public string item_script_key;
+}

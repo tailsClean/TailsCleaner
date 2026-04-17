@@ -1,0 +1,117 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &3138916660115402083
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 4876952429100216835}
+  - component: {fileID: 8378636438619606636}
+  m_Layer: 0
+  m_Name: PoolManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &4876952429100216835
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3138916660115402083}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &8378636438619606636
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3138916660115402083}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f1fd55e4a2d04a1458176f300010b9dd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ObjectPoolManager
+  poolInfos:
+  - tag: 41001
+    prefab: {fileID: 9029001925625824753, guid: 883c46a4e803a0441aa84c1c0711bc7f, type: 3}
+    defaultCapacity: 16
+    maxSize: 32
+    defaultSpawnDelay: 0
+  - tag: 41002
+    prefab: {fileID: 8058755425168676450, guid: ae25a63334bf73344aa47b1f1190a4c3, type: 3}
+    defaultCapacity: 32
+    maxSize: 64
+    defaultSpawnDelay: 0
+  - tag: 41003
+    prefab: {fileID: 7628259304275206489, guid: 390205471969a7b45afe756268ccb3bd, type: 3}
+    defaultCapacity: 16
+    maxSize: 32
+    defaultSpawnDelay: 0
+  - tag: 41003_Splash
+    prefab: {fileID: 9029001925625824753, guid: 288262c97fe2013488c66e1764e448ce, type: 3}
+    defaultCapacity: 64
+    maxSize: 128
+    defaultSpawnDelay: 0
+  - tag: 41003_Vortex
+    prefab: {fileID: 9029001925625824753, guid: e6cb529b3339b1e4bacc71b7c485c76e, type: 3}
+    defaultCapacity: 16
+    maxSize: 32
+    defaultSpawnDelay: 0
+  - tag: 41004
+    prefab: {fileID: 3614114946197026233, guid: 690af3079c3adb14da476f638b39c5ea, type: 3}
+    defaultCapacity: 8
+    maxSize: 16
+    defaultSpawnDelay: 0
+  - tag: 41004_Crescent
+    prefab: {fileID: 1457600225023999490, guid: 1801ee8c477953449b205c9e1c2e403c, type: 3}
+    defaultCapacity: 16
+    maxSize: 32
+    defaultSpawnDelay: 0
+  - tag: 41005
+    prefab: {fileID: 1457600225023999490, guid: 02fd30252728c5443aa63a4886aaec65, type: 3}
+    defaultCapacity: 8
+    maxSize: 16
+    defaultSpawnDelay: 0
+  - tag: 41005_Crescent
+    prefab: {fileID: 1457600225023999490, guid: e2eeb0c326e82094eb931fcc7f174c08, type: 3}
+    defaultCapacity: 16
+    maxSize: 32
+    defaultSpawnDelay: 0
+  - tag: 41006
+    prefab: {fileID: 575676798541847759, guid: 408cbed5c817f294ea24c149b4039567, type: 3}
+    defaultCapacity: 64
+    maxSize: 128
+    defaultSpawnDelay: 0
+  - tag: 41007
+    prefab: {fileID: 7604796157883618154, guid: 7f152a28be6a38646ac014c7590f08f5, type: 3}
+    defaultCapacity: 64
+    maxSize: 128
+    defaultSpawnDelay: 0
+  - tag: 41008
+    prefab: {fileID: 2368835823504542135, guid: 6f8f66867a720574c971e2f14bd3c73c, type: 3}
+    defaultCapacity: 32
+    maxSize: 64
+    defaultSpawnDelay: 0
+  - tag: 41009
+    prefab: {fileID: 4550554079236758630, guid: 6d0f56cbb6fb6d946bab1ed751078142, type: 3}
+    defaultCapacity: 8
+    maxSize: 16
+    defaultSpawnDelay: 0
+  - tag: 41010
+    prefab: {fileID: 2888618989803605063, guid: 0ed98bc5d60184b4c8dc27e9edee1897, type: 3}
+    defaultCapacity: 64
+    maxSize: 128
+    defaultSpawnDelay: 0

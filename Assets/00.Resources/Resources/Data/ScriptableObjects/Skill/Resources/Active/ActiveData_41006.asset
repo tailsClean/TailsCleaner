@@ -1,0 +1,90 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 518aadcd99d59244b926a53624b75d00, type: 3}
+  m_Name: ActiveData_41006
+  m_EditorClassIdentifier: Assembly-CSharp::ActiveSkillData
+  MainTag: 41006
+  SkillName: "\uC138\uD0C1  \uD30C\uB3C4"
+  NameStringId: 44006
+  AttackType: 4102
+  TargetingType: 4201
+  Icon: {fileID: 21300000, guid: 109394949af6c59499835be5e03dbc0e, type: 3}
+  SkillPrefab: {fileID: 8778598552576457465, guid: 15fbf43a9b59cbe45946f01fd04d9558, type: 3}
+  SkillProjectilePrefab: {fileID: 575676798541847759, guid: 408cbed5c817f294ea24c149b4039567, type: 3}
+  SoundData: {fileID: 11400000, guid: 65b2f5ae84a3ad948b3bda5b963b68eb, type: 2}
+  PlayerAniType: 2
+  UpgradeModifierDatas:
+  - Name: "\uC138\uD0C1 \uD30C\uB3C4"
+    UpgradeId: 40031
+    Desc: "\uC774\uB3D9 \uBC29\uD5A5\uC73C\uB85C \uAC70\uD488 \uD30C\uB3C4\uAC00
+      \uB098\uD0C0\uB098 \uD654\uBA74\uC744 \uAC00\uB85C\uC9C0\uB974\uBA70 \uC9C0\uB098\uAC11\uB2C8\uB2E4."
+    DescStringId: 44041
+    Modifier:
+      rid: -2
+  - Name: "\uB04C\uACE0\uC624\uB294 \uD30C\uB3C4"
+    UpgradeId: 40032
+    Desc: "\uC801\uC774 \uAC15\uD574\uC9C0\uACE0 \uACBD\uD5D8\uCE58\uAC00 \uC99D\uAC00\uB429\uB2C8\uB2E4."
+    DescStringId: 44042
+    Modifier:
+      rid: 5077775108280156258
+  - Name: "\uBC00\uBB3C \uC370\uBB3C"
+    UpgradeId: 40033
+    Desc: "\uD30C\uB3C4\uAC00 \uD55C \uBC88 \uC655\uBCF5\uD569\uB2C8\uB2E4. \uC801\uC774
+      \uAC15\uD574\uC9C0\uACE0 \uACBD\uD5D8\uCE58\uAC00 \uC99D\uAC00\uB429\uB2C8\uB2E4."
+    DescStringId: 44043
+    Modifier:
+      rid: 5077775108280156259
+  - Name: "\uD0C8\uC218"
+    UpgradeId: 40034
+    Desc: "\uBAA8\uB4E0 \uB300\uC0C1 \uCCB4\uB825\uC774 \uC9C0\uC18D\uC801\uC73C\uB85C
+      \uAC10\uC18C\uD569\uB2C8\uB2E4. \uC801\uC774 \uAC15\uD574\uC9C0\uACE0 \uACBD\uD5D8\uCE58\uAC00
+      \uC99D\uAC00\uB429\uB2C8\uB2E4."
+    DescStringId: 44044
+    Modifier:
+      rid: 5077775108280156260
+  - Name: "\uCC28\uC624\uB974\uB294 \uCCB4\uB825"
+    UpgradeId: 40035
+    Desc: "\uD30C\uB3C4\uAC00 \uB098\uD0C0\uB0A0 \uB54C \uB9C8\uB2E4 \uCCB4\uB825\uC744
+      \uD68C\uBCF5\uD569\uB2C8\uB2E4.\uC801\uC774 \uAC15\uD574\uC9C0\uACE0 \uACBD\uD5D8\uCE58\uAC00
+      \uC99D\uAC00\uB429\uB2C8\uB2E4."
+    DescStringId: 44045
+    Modifier:
+      rid: 5077775108280156261
+  references:
+    version: 2
+    RefIds:
+    - rid: -2
+      type: {class: , ns: , asm: }
+    - rid: 5077775108280156258
+      type: {class: WashWaveCurseModifier, ns: , asm: Assembly-CSharp}
+      data:
+        EnemyStrengthBonus: 1
+        ExpGainBonus: 5
+    - rid: 5077775108280156259
+      type: {class: WashWaveReturnModifier, ns: , asm: Assembly-CSharp}
+      data:
+        ReturnDelay: 2
+        EnemyStrengthBonus: 1
+        ExpGainBonus: 5
+    - rid: 5077775108280156260
+      type: {class: WashWaveDrainModifier, ns: , asm: Assembly-CSharp}
+      data:
+        DrainDelay: 1
+        DrainAmount: 0.01
+        EnemyStrengthBonus: 1
+        ExpGainBonus: 5
+    - rid: 5077775108280156261
+      type: {class: WashWaveHealModifier, ns: , asm: Assembly-CSharp}
+      data:
+        HealRatio: 0.1
+        EnemyStrengthBonus: 1
+        ExpGainBonus: 5

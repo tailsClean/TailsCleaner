@@ -1,0 +1,48 @@
+﻿using UnityEngine;
+
+public class MoveState : PlayerState
+{
+    private PlayerBase _player;
+    private float _moveSpeed;
+    private Vector2 _moveDir;
+    
+
+    public MoveState(PlayerBase player)
+    {
+        _player = player;
+    }
+
+    public override void Enter() 
+    {
+        _player.PlayAni(PlayerAnimation.Move);
+    }
+
+    public override void Tick()
+    {
+        OnMove();
+    }
+
+    public override void HandleInput(PlayerInputData input)
+    {
+        _moveDir = input.MoveDir;
+    }
+
+
+    private void OnMove()
+    {
+        _moveSpeed = _player.MoveSpeed;
+        _player.transform.Translate(_moveDir * Time.deltaTime * _moveSpeed);
+
+        ChangeFlip();
+    }
+
+    private void ChangeFlip()
+    {
+        if (_moveDir.x < 0)
+            _player.transform.localScale = new Vector3(-1, 1, 1);
+        else if (_moveDir.x > 0)
+            _player.transform.localScale = new Vector3(1, 1, 1);
+    }
+
+
+}

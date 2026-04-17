@@ -1,0 +1,50 @@
+﻿using System;
+
+public class StageEvents
+{
+    // 스테이지 시간을 진행을 위한 이벤트
+    public event Action<int> OnMainSecondTick;
+    public event Action OnMainTimerReachedLimit;
+
+    // 보스 타이머 관련 이벤트
+    // - UI 표시(남은 시간) 및 타임오버 패배 처리에 사용
+    public event Action<int> OnBossSecondTick;
+    public event Action OnBossTimerExpired;
+
+    //웨이브 바뀌는 이벤트
+    public event Action<int> OnWaveChanged;
+
+    //스테이지 클리어/실패 이벤트
+    public event Action OnStageCleared;
+    public event Action<StageFailReason> OnStageFailed;
+
+    public event Action<StageResult, StageFailReason> OnStageResult;
+
+    public void RaiseMainSecondTick(int _seconds) => OnMainSecondTick?.Invoke(_seconds);
+    public void RaiseMainTimerReachedLimit() => OnMainTimerReachedLimit?.Invoke();
+
+    public void RaiseBossSecondTick(int _secondsLeft) => OnBossSecondTick?.Invoke(_secondsLeft);
+    public void RaiseBossTimerExpired() => OnBossTimerExpired?.Invoke();
+
+    public void RaiseWaveChanged(int _waveIndex) => OnWaveChanged?.Invoke(_waveIndex);
+
+    public void RaiseStageResult(StageResult result, StageFailReason reason)
+      => OnStageResult?.Invoke(result, reason);
+
+    public void RaiseStageCleared() => OnStageCleared?.Invoke();
+    public void RaiseStageFailed(StageFailReason reason) => OnStageFailed?.Invoke(reason);
+}
+
+public enum StageResult
+{
+    Clear,
+    Fail,
+    Abandon // 탈주
+}
+
+public enum StageFailReason
+{
+    BossTimeout,     // 보스 타임오버
+    PlayerDead,      // 플레이어 사망
+    기타
+}

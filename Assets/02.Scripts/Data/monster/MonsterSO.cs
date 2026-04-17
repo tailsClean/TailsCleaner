@@ -1,0 +1,12 @@
+﻿
+using System.Collections.Generic;
+using UnityEngine;
+
+[CreateAssetMenu(fileName = "MonsterSO", menuName = "Data/MonsterSO")]
+public class MonsterSO : ScriptableObject
+{
+    public List<Monster> dataList = new List<Monster>();
+
+    public Monster GetById(int id)
+        => dataList.Find(x => x.monster_id == id);
+}
